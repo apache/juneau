@@ -14,10 +14,10 @@ package org.apache.juneau.junit;
 
 import static java.util.stream.Collectors.*;
 import static java.util.stream.StreamSupport.*;
-import static java.lang.Integer.*;
 import static java.time.format.DateTimeFormatter.*;
 import static java.util.Collections.*;
 import static java.util.Optional.*;
+import static org.apache.juneau.junit.Utils.*;
 
 import java.io.*;
 
@@ -25,14 +25,12 @@ import static java.util.Spliterators.*;
 
 import java.lang.reflect.*;
 import java.nio.file.*;
-import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
 
 /**
  * Default implementation of {@link BeanConverter} for Bean-Centric Test (BCT) object conversion.
@@ -191,7 +189,6 @@ import org.apache.juneau.common.internal.*;
  * </ul>
  *
  * @see BeanConverter
- * @see TestUtils
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class BasicBeanConverter implements BeanConverter {
@@ -213,6 +210,7 @@ public class BasicBeanConverter implements BeanConverter {
 	private final List<StringifierEntry<?>> stringifiers;
 	private final List<ListifierEntry<?>> listifiers;
 	private final List<SwapperEntry<?>> swappers;
+	private final List<PropertyExtractor> propertyExtractors;
 	private final Map<String,Object> settings;
 
 	private final ConcurrentHashMap<Class,Optional<Stringifier<?>>> stringifierMap = new ConcurrentHashMap<>();
@@ -223,10 +221,12 @@ public class BasicBeanConverter implements BeanConverter {
 		stringifiers = new ArrayList<>(b.stringifiers);
 		listifiers = new ArrayList<>(b.listifiers);
 		swappers = new ArrayList<>(b.swappers);
+		propertyExtractors = new ArrayList<>(b.propertyExtractors);
 		settings = new HashMap<>(b.settings);
 		Collections.reverse(stringifiers);
 		Collections.reverse(listifiers);
 		Collections.reverse(swappers);
+		Collections.reverse(propertyExtractors);
 	}
 
 	/**
@@ -246,29 +246,23 @@ public class BasicBeanConverter implements BeanConverter {
 		o = swap(o);
 		if (o == null)
 			return getSetting(SETTING_nullValue, null);
-		Class<?> c = o.getClass();
+		var c = o.getClass();
 		var stringifier = stringifierMap.computeIfAbsent(c, this::findStringifier);
 		if (stringifier.isEmpty()) {
-			if (c.isArray())
-				return stringify(arrayToList(o));
-			if (canListify(o)) {
-				stringifier = of((o2, bs) -> bs.stringify(bs.listify(o2)));
-			} else {
-				stringifier = of((o2, bs) -> o2.toString());
-			}
+			stringifier = of(canListify(o) ? (bc, o2) -> bc.stringify(bc.listify(o2)) : (bc, o2) -> o2.toString());
 			stringifierMap.putIfAbsent(c, stringifier);
 		}
 		var o2 = o;
-		return stringifier.map(x -> (Stringifier)x).map(x -> x.apply(o2, this)).map(Object::toString).orElse(null);
+		return stringifier.map(x -> (Stringifier)x).map(x -> x.apply(this, o2)).map(Object::toString).orElse(null);
 	}
 
 	@Override
 	public Object swap(Object o) {
 		if (o == null) return null;
-		Class<?> c = o.getClass();
+		var c = o.getClass();
 		var swapper = swapperMap.computeIfAbsent(c, this::findSwapper);
 		if (swapper.isPresent())
-			return swap(swapper.map(x -> (Swapper)x).map(x -> x.apply(o, this)).orElse(null));
+			return swap(swapper.map(x -> (Swapper)x).map(x -> x.apply(this, o)).orElse(null));
 		return o;
 	}
 
@@ -277,21 +271,22 @@ public class BasicBeanConverter implements BeanConverter {
 		o = swap(o);
 		if (o == null)
 			return null;
-		Class<?> c = o.getClass();
-		if (c.isArray())
-			return arrayToList(o);
 		if (o instanceof List)
 			return (List<Object>)o;
+		var c = o.getClass();
+		if (c.isArray())
+			return arrayToList(o);
 		var o2 = o;
-		return listifierMap.computeIfAbsent(c, this::findListifier).map(x -> (Listifier)x).map(x -> (List<Object>)x.apply(o2, this)).orElse(null);
+		return listifierMap.computeIfAbsent(c, this::findListifier).map(x -> (Listifier)x).map(x -> (List<Object>)x.apply(this, o2)).orElse(null);
 	}
 
 	@Override
 	public boolean canListify(Object o) {
 		o = swap(o);
-		if (o == null) return false;
-		Class<?> c = o.getClass();
-		return c.isArray() || listifierMap.computeIfAbsent(c, this::findListifier).isPresent();
+		if (o == null)
+			return false;
+		var c = o.getClass();
+		return o instanceof List || c.isArray() || listifierMap.computeIfAbsent(c, this::findListifier).isPresent();
 	}
 
 	@Override
@@ -300,57 +295,14 @@ public class BasicBeanConverter implements BeanConverter {
 	}
 
 	@Override
-	public Object getEntry(Object object, String name) {
-		return safe(() -> {
-			var o = swap(object);
-			if (o instanceof Map o2) {
-				if (o2.containsKey(name)) return o2.get(name);
-				if ("size".equals(name)) return o2.size();
-			} else if (canListify(o)) {
-				var l = listify(o);
-				if (name.matches("-?\\d+"))
-					return l.get(parseInt(name));
-				if (o.getClass().isArray()) {
-					if ("length".equals(name)) return l.size();
-					if ("size".equals(name)) return l.size();
-				} else {
-					if ("size".equals(name)) return l.size();
-				}
-			}
-			var f = (Field)null;
-			var c = o.getClass();
-			var n = Character.toUpperCase(name.charAt(0)) + name.substring(1);
-			var m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("is"+n) && x.getParameterCount() == 0).findFirst().orElse(null);
-			if (m != null) {
-				m.setAccessible(true);
-				return m.invoke(o);
-			}
-			m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get"+n) && x.getParameterCount() == 0).findFirst().orElse(null);
-			if (m != null) {
-				m.setAccessible(true);
-				return m.invoke(o);
-			}
-			m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get") && x.getParameterCount() == 1 && x.getParameterTypes()[0] == String.class).findFirst().orElse(null);
-			if (m != null) {
-				m.setAccessible(true);
-				return m.invoke(o, name);
-			}
-			var c2 = c;
-			while (f == null && c2 != null) {
-				f = Arrays.stream(c2.getDeclaredFields()).filter(x -> x.getName().equals(name)).findFirst().orElse(null);
-				c2 = c2.getSuperclass();
-			}
-			if (f != null) {
-				f.setAccessible(true);
-				return f.get(o);
-			}
-			m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals(name) && x.getParameterCount() == 0).findFirst().orElse(null);
-			if (m != null) {
-				m.setAccessible(true);
-				return m.invoke(o);
-			}
-			throw new RuntimeException(f("Property {0} not found on object of type {1}", name, o.getClass().getSimpleName()));
-		});
+	public Object getProperty(Object object, String name) {
+		var o = swap(object);
+		return propertyExtractors
+			.stream()
+			.filter(x -> x.canExtract(this, o, name))
+			.findFirst()
+			.orElseThrow(()->new RuntimeException(f("Could not find extractor for object of type {0}", o.getClass().getName())))
+			.extract(this, o, name);
 	}
 
 	private Optional<Stringifier<?>> findStringifier(Class<?> c) {
@@ -395,6 +347,7 @@ public class BasicBeanConverter implements BeanConverter {
 		return findSwapper(c.getSuperclass());
 	}
 
+	@Override
 	public <T> T getSetting(String key, T def) {
 		return (T)settings.getOrDefault(key, def);
 	}
@@ -452,6 +405,10 @@ public class BasicBeanConverter implements BeanConverter {
 	 */
 	public static class Builder {
 		private Map<String,Object> settings = new HashMap<>();
+		private List<StringifierEntry<?>> stringifiers = new ArrayList<>();
+		private List<ListifierEntry<?>> listifiers = new ArrayList<>();
+		private List<SwapperEntry<?>> swappers = new ArrayList<>();
+		private List<PropertyExtractor> propertyExtractors = new ArrayList<>();
 
 		/**
 		 * Adds a configuration setting to the converter.
@@ -461,8 +418,6 @@ public class BasicBeanConverter implements BeanConverter {
 		 * @return This builder for method chaining
 		 */
 		public Builder addSetting(String key, Object value) { settings.put(key, value); return this; }
-
-		private List<StringifierEntry<?>> stringifiers = new ArrayList<>();
 
 		/**
 		 * Registers a custom stringifier for a specific type.
@@ -477,8 +432,6 @@ public class BasicBeanConverter implements BeanConverter {
 		 */
 		public <T> Builder addStringifier(Class<T> c, Stringifier<T> s) { stringifiers.add(new StringifierEntry<>(c, s)); return this; }
 
-		private List<ListifierEntry<?>> listifiers = new ArrayList<>();
-
 		/**
 		 * Registers a custom listifier for a specific type.
 		 *
@@ -491,8 +444,6 @@ public class BasicBeanConverter implements BeanConverter {
 		 * @return This builder for method chaining
 		 */
 		public <T> Builder addListifier(Class<T> c, Listifier<T> l) { listifiers.add(new ListifierEntry<>(c, l)); return this; }
-
-		private List<SwapperEntry<?>> swappers = new ArrayList<>();
 
 		/**
 		 * Registers a custom swapper for a specific type.
@@ -507,6 +458,8 @@ public class BasicBeanConverter implements BeanConverter {
 		 * @return This builder for method chaining
 		 */
 		public <T> Builder addSwapper(Class<T> c, Swapper<T> s) { swappers.add(new SwapperEntry<>(c, s)); return this; }
+
+		public <T> Builder addPropertyExtractor(PropertyExtractor e) { propertyExtractors.add(e); return this; }
 
 		/**
 		 * Adds default handlers and settings for common Java types.
@@ -541,30 +494,34 @@ public class BasicBeanConverter implements BeanConverter {
 			addSetting(SETTING_emptyValue, "<empty>");
 			addSetting(SETTING_classNameFormat, "simple");
 
-			addStringifier(Map.Entry.class, (o, bs) -> bs.stringify(o.getKey()) + bs.getSetting(SETTING_mapEntrySeparator, "=") + bs.stringify(o.getValue()));
-			addStringifier(GregorianCalendar.class, (o, bs) ->  o.toZonedDateTime().format(bs.getSetting(SETTING_calendarFormat, ISO_INSTANT)));
-			addStringifier(Date.class, (o, bs) ->  o.toInstant().toString());
-			addStringifier(InputStream.class, (o, bs) ->  stringify(o));
-			addStringifier(byte[].class, (o, bs) ->  stringify(o));
-			addStringifier(Reader.class, (o, bs) -> stringify(o));
-			addStringifier(File.class, (o, bs) -> stringify(o));
-			addStringifier(Enum.class, (o, bs) -> o.name());
-			addStringifier(Class.class, (o, bs) -> stringify(o, bs));
-			addStringifier(Constructor.class, (o, bs) -> stringify(o, bs));
-			addStringifier(Method.class, (o, bs) -> stringify(o, bs));
-			addStringifier(List.class, (o, bs) -> ((List<?>)o).stream().map(bs::stringify).collect(joining(bs.getSetting(SETTING_fieldSeparator, ","), bs.getSetting(SETTING_collectionPrefix, "["), bs.getSetting(SETTING_collectionSuffix, "]"))));
-			addStringifier(Map.class, (o, bs) -> ((Map<?,?>)o).entrySet().stream().map(bs::stringify).collect(joining(bs.getSetting(SETTING_fieldSeparator, ","), bs.getSetting(SETTING_mapPrefix, "{"), bs.getSetting(SETTING_mapSuffix, "}"))));
+			addStringifier(Map.Entry.class, (bc, o) -> bc.stringify(o.getKey()) + bc.getSetting(SETTING_mapEntrySeparator, "=") + bc.stringify(o.getValue()));
+			addStringifier(GregorianCalendar.class, (bc, o) ->  o.toZonedDateTime().format(bc.getSetting(SETTING_calendarFormat, ISO_INSTANT)));
+			addStringifier(Date.class, (bc, o) ->  o.toInstant().toString());
+			addStringifier(InputStream.class, (bc, o) ->  stringify(o));
+			addStringifier(byte[].class, (bc, o) ->  stringify(o));
+			addStringifier(Reader.class, (bc, o) -> stringify(o));
+			addStringifier(File.class, (bc, o) -> stringify(o));
+			addStringifier(Enum.class, (bc, o) -> o.name());
+			addStringifier(Class.class, (bc, o) -> stringify(bc, o));
+			addStringifier(Constructor.class, (bc, o) -> stringify(bc, o));
+			addStringifier(Method.class, (bc, o) -> stringify(bc, o));
+			addStringifier(List.class, (bc, o) -> ((List<?>)o).stream().map(bc::stringify).collect(joining(bc.getSetting(SETTING_fieldSeparator, ","), bc.getSetting(SETTING_collectionPrefix, "["), bc.getSetting(SETTING_collectionSuffix, "]"))));
+			addStringifier(Map.class, (bc, o) -> ((Map<?,?>)o).entrySet().stream().map(bc::stringify).collect(joining(bc.getSetting(SETTING_fieldSeparator, ","), bc.getSetting(SETTING_mapPrefix, "{"), bc.getSetting(SETTING_mapSuffix, "}"))));
 
-			addListifier(Collection.class, (o, bs) -> new ArrayList<>(o));
-			addListifier(Iterable.class, (o, bs) -> stream(((Iterable<Object>)o).spliterator(), false).toList());
-			addListifier(Iterator.class, (o, bs) -> stream(spliteratorUnknownSize(o, 0), false).toList());
-			addListifier(Enumeration.class, (o, bs) -> list(o));
-			addListifier(Stream.class, (o, bs) -> o.toList());
-			addListifier(Optional.class, (o, bs) -> o.isEmpty() ? emptyList() : singletonList(o.get()));
-			addListifier(Map.class, (o, bs) -> new ArrayList<>(((Map<?,?>)o).entrySet()));
+			addListifier(Collection.class, (bc, o) -> new ArrayList<>(o));
+			addListifier(Iterable.class, (bc, o) -> stream(((Iterable<Object>)o).spliterator(), false).toList());
+			addListifier(Iterator.class, (bc, o) -> stream(spliteratorUnknownSize(o, 0), false).toList());
+			addListifier(Enumeration.class, (bc, o) -> list(o));
+			addListifier(Stream.class, (bc, o) -> o.toList());
+			addListifier(Optional.class, (bc, o) -> o.isEmpty() ? emptyList() : singletonList(o.get()));
+			addListifier(Map.class, (bc, o) -> new ArrayList<>(((Map<?,?>)o).entrySet()));
 
-			addSwapper(Optional.class, (o, bs) -> o.orElse(null));
-			addSwapper(Supplier.class, (o, bs) -> o.get());
+			addSwapper(Optional.class, (bc, o) -> o.orElse(null));
+			addSwapper(Supplier.class, (bc, o) -> o.get());
+
+			addPropertyExtractor(new PropertyExtractors.ObjectPropertyExtractor());
+			addPropertyExtractor(new PropertyExtractors.ListPropertyExtractor());
+			addPropertyExtractor(new PropertyExtractors.MapPropertyExtractor());
 
 			return this;
 		}
@@ -619,22 +576,22 @@ public class BasicBeanConverter implements BeanConverter {
 
 	private static final char[] HEX = "0123456789ABCDEF".toCharArray();
 
-	private static String stringify(byte[] bytes) {
-		var sb = new StringBuilder(bytes.length * 2);
-		for (var element : bytes) {
+	private static String stringify(byte[] o) {
+		var sb = new StringBuilder(o.length * 2);
+		for (var element : o) {
 			var v = element & 0xFF;
 			sb.append(HEX[v >>> 4]).append(HEX[v & 0x0F]);
 		}
 		return sb.toString();
 	}
 
-	private static String stringify(InputStream is) {
+	private static String stringify(InputStream o) {
 		return safe(() -> {
-			try (var is2 = is) {
+			try (var o2 = o) {
 				var buff = new ByteArrayOutputStream(1024);
 				var nRead = 0;
 				var b = new byte[1024];
-				while ((nRead = is2.read(b, 0, b.length)) != -1)
+				while ((nRead = o2.read(b, 0, b.length)) != -1)
 					buff.write(b, 0, nRead);
 				buff.flush();
 				return stringify(buff.toByteArray());
@@ -642,67 +599,40 @@ public class BasicBeanConverter implements BeanConverter {
 		});
 	}
 
-	private static String stringify(Reader in) {
+	private static String stringify(Reader o) {
 		return safe(() -> {
-			try (var in2 = in) {
+			try (var o2 = o) {
 				var sb = new StringBuilder();
 				var buf = new char[1024];
 				var i = 0;
-				while ((i = in2.read(buf)) != -1)
+				while ((i = o2.read(buf)) != -1)
 					sb.append(buf, 0, i);
 				return sb.toString();
 			}
 		});
 	}
 
-	private static String stringify(File in) {
-		return safe(()->stringify(Files.newBufferedReader(in.toPath())));
+	private static String stringify(File o) {
+		return safe(()->stringify(Files.newBufferedReader(o.toPath())));
 	}
 
-	private static String stringify(Class<?> in, BasicBeanConverter bs) {
-		return switch(bs.getSetting(SETTING_classNameFormat, "")) {
-			case "simple" -> in.getSimpleName();
-			case "canonical" -> in.getCanonicalName();
-			default -> in.getName();
+	private static String stringify(BeanConverter bc, Class<?> o) {
+		return switch(bc.getSetting(SETTING_classNameFormat, "default")) {
+			case "simple" -> o.getSimpleName();
+			case "canonical" -> o.getCanonicalName();
+			default -> o.getName();
 		};
 	}
 
-	private static String stringify(Constructor o, BasicBeanConverter bs) {
-		return new StringBuilder().append(stringify(o.getDeclaringClass(), bs)).append('(').append(stringify(o.getParameterTypes(), bs)).append(')').toString();
+	private static String stringify(BeanConverter bc, Constructor o) {
+		return new StringBuilder().append(stringify(bc, o.getDeclaringClass())).append('(').append(stringify(bc, o.getParameterTypes())).append(')').toString();
 	}
 
-	private static String stringify(Method o, BasicBeanConverter bs) {
-		return new StringBuilder().append(o.getName()).append('(').append(stringify(o.getParameterTypes(), bs)).append(')').toString();
+	private static String stringify(BeanConverter bc, Method o) {
+		return new StringBuilder().append(o.getName()).append('(').append(stringify(bc, o.getParameterTypes())).append(')').toString();
 	}
 
-	private static String stringify(Class[] o, BasicBeanConverter bs) {
-		var sb = new StringBuilder();
-		for (int i = 0; i < o.length; i++) {
-			if (i > 0)
-				sb.append(',');
-			sb.append(stringify(o[i], bs));
-		}
-		return sb.toString();
-	}
-
-	private static String f(String msg, Object...args) {
-		return args.length == 0 ? msg : MessageFormat.format(msg, args);
-	}
-
-	private static <T> T safe(ThrowingSupplier<T> s) {
-		try {
-			return s.get();
-		} catch (RuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private static List<Object> arrayToList(Object o) {
-		var l = new ArrayList<>();
-		for (var i = 0; i < Array.getLength(o); i++)
-			l.add(Array.get(o, i));
-		return l;
+	private static String stringify(BeanConverter bc, Class[] o) {
+		return Arrays.stream(o).map(x -> stringify(bc, x)).collect(joining(","));
 	}
 }

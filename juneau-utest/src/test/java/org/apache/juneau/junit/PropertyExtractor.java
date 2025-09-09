@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit;
 
-import java.util.*;
-import java.util.function.*;
+public interface PropertyExtractor {
 
-@FunctionalInterface
-public interface Listifier<T> extends BiFunction<BeanConverter,T,List<Object>> {}
+	boolean canExtract(BeanConverter converter, Object o, String key);
+
+	Object extract(BeanConverter converter, Object o, String key);
+}

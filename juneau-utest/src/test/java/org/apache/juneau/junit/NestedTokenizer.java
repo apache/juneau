@@ -14,10 +14,10 @@ package org.apache.juneau.junit;
 
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.junit.Utils.*;
 import static org.apache.juneau.junit.NestedTokenizer.ParseState.*;
 
 import java.util.*;
-import java.util.function.*;
 
 /**
  * Splits a nested comma-delimited string into a list of Token objects using a state machine parser.
@@ -245,21 +245,5 @@ public class NestedTokenizer {
 		public int hashCode() {
 			return Objects.hash(value, nested);
 		}
-	}
-
-	//---------------------------------------------------------------------------------------------
-	// Helper methods.
-	//---------------------------------------------------------------------------------------------
-
-	private static <T,U> boolean eq(T o1, U o2, BiPredicate<T,U> test) {
-		if (o1 == null) { return o2 == null; }
-		if (o2 == null) { return false; }
-		if (o1 == o2) { return true; }
-		return test.test(o1, o2);
-	}
-
-	@SuppressWarnings("unlikely-arg-type")
-	private static <T,U> boolean eq(T o1, U o2) {
-		return Objects.equals(o1, o2);
 	}
 }

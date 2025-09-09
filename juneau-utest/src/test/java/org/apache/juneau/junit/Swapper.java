@@ -15,4 +15,4 @@ package org.apache.juneau.junit;
 import java.util.function.*;
 
 @FunctionalInterface
-public interface Swapper<T> extends BiFunction<T,BasicBeanConverter,Object> {}
+public interface Swapper<T> extends BiFunction<BeanConverter,T,Object> {}

@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit;
 
-import java.util.*;
-import java.util.function.*;
-
+/**
+ * A supplier that throws an exception.
+ */
 @FunctionalInterface
-public interface Listifier<T> extends BiFunction<BeanConverter,T,List<Object>> {}
+public interface ThrowingSupplier<T> {
+	T get() throws Exception;
+}

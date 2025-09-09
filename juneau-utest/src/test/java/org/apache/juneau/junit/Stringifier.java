@@ -15,4 +15,4 @@ package org.apache.juneau.junit;
 import java.util.function.*;
 
 @FunctionalInterface
-public interface Stringifier<T> extends BiFunction<T,BasicBeanConverter,String> {}
+public interface Stringifier<T> extends BiFunction<BeanConverter,T,String> {}

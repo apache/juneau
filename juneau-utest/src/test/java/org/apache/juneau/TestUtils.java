@@ -936,7 +936,7 @@ public class TestUtils extends Utils2 {
 		var i = name.indexOf("{");
 		var pn = i == -1 ? name : name.substring(0, i);
 		var spn = i == -1 ? null : splitNestedInner(name);
-		var e = ofNullable(converter.getEntry(o, pn.equals("<NULL>") ? null : pn)).orElse(null);
+		var e = ofNullable(converter.getProperty(o, pn.equals("<NULL>") ? null : pn)).orElse(null);
 		if (spn == null || e == null) return converter.stringify(e);
 		return spn.stream().map(x -> getEntry(converter, e, x)).map(converter::stringify).collect(joining(",","{","}"));
 	}

@@ -18,12 +18,12 @@ import org.apache.juneau.*;
 
 /**
  * Abstract interface for Bean-Centric Test (BCT) object conversion and property access.
- * 
- * <p>This interface defines the core contract for converting objects to strings and lists, 
- * and for accessing object properties in a uniform way. It forms the foundation of the BCT 
- * testing framework, enabling consistent object introspection and value extraction across 
+ *
+ * <p>This interface defines the core contract for converting objects to strings and lists,
+ * and for accessing object properties in a uniform way. It forms the foundation of the BCT
+ * testing framework, enabling consistent object introspection and value extraction across
  * different object types and structures.</p>
- * 
+ *
  * <p>The BeanConverter is designed to handle a wide variety of Java objects including:</p>
  * <ul>
  * 	<li><b>Primitives and wrappers</b> - Numbers, booleans, characters</li>
@@ -32,24 +32,24 @@ import org.apache.juneau.*;
  * 	<li><b>Custom beans and POJOs</b> - JavaBean-style objects with getters/setters</li>
  * 	<li><b>Special objects</b> - Optional, Supplier, Date/Calendar, File, streams</li>
  * </ul>
- * 
+ *
  * <h5 class='section'>Core Conversion Operations:</h5>
  * <dl>
  * 	<dt><b>{@link #stringify(Object)}</b></dt>
  * 	<dd>Converts any object to its string representation, handling nested structures</dd>
- * 
+ *
  * 	<dt><b>{@link #listify(Object)}</b></dt>
  * 	<dd>Converts collection-like objects (arrays, Collections, Iterables, etc.) to List&lt;Object&gt;</dd>
- * 
+ *
  * 	<dt><b>{@link #swap(Object)}</b></dt>
  * 	<dd>Pre-processes objects before conversion (e.g., unwrapping Optional, calling Supplier)</dd>
- * 
- * 	<dt><b>{@link #getEntry(Object, String)}</b></dt>
+ *
+ * 	<dt><b>{@link #getProperty(Object, String)}</b></dt>
  * 	<dd>Accesses object properties using multiple fallback mechanisms</dd>
  * </dl>
- * 
+ *
  * <h5 class='section'>Property Access Strategy:</h5>
- * <p>The {@link #getEntry(Object, String)} method uses a comprehensive fallback approach:</p>
+ * <p>The {@link #getProperty(Object, String)} method uses a comprehensive fallback approach:</p>
  * <ol>
  * 	<li><b>Collection/Array access:</b> Numeric indices for arrays/lists</li>
  * 	<li><b>Universal size properties:</b> "length" and "size" for arrays, collections, and maps</li>
@@ -60,7 +60,7 @@ import org.apache.juneau.*;
  * 	<li><b>Public fields:</b> Direct field access via reflection</li>
  * 	<li><b>No-arg methods:</b> Method calls with property names</li>
  * </ol>
- * 
+ *
  * <h5 class='section'>Extensibility:</h5>
  * <p>The interface is designed to be implemented by custom converters that can:</p>
  * <ul>
@@ -70,7 +70,7 @@ import org.apache.juneau.*;
  * 	<li>Override property access mechanisms</li>
  * 	<li>Configure formatting and display options</li>
  * </ul>
- * 
+ *
  * <h5 class='section'>Primary Implementation:</h5>
  * <p>The main implementation is {@link BasicBeanConverter}, which provides:</p>
  * <ul>
@@ -79,7 +79,7 @@ import org.apache.juneau.*;
  * 	<li>Performance optimization through caching</li>
  * 	<li>Comprehensive default handling for common Java types</li>
  * </ul>
- * 
+ *
  * <h5 class='section'>Usage in BCT Framework:</h5>
  * <p>This interface is used internally by BCT assertion methods like:</p>
  * <ul>
@@ -89,7 +89,7 @@ import org.apache.juneau.*;
  * 	<li>{@link TestUtils#assertList(List, Object...)}</li>
  * 	<li>{@link TestUtils#assertBeans(Collection, String, String...)}</li>
  * </ul>
- * 
+ *
  * @see BasicBeanConverter
  * @see TestUtils
  */
@@ -97,7 +97,7 @@ public interface BeanConverter {
 
 	/**
 	 * Converts an object to its string representation.
-	 * 
+	 *
 	 * <p>This method applies swapping logic first via {@link #swap(Object)}, then determines
 	 * the appropriate string conversion based on the object's type. The conversion handles:</p>
 	 * <ul>
@@ -108,7 +108,7 @@ public interface BeanConverter {
 	 * 	<li><b>Maps:</b> Converts to brace-delimited key-value format</li>
 	 * 	<li><b>Custom objects:</b> Uses registered stringifiers or fallback toString()</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param o The object to stringify
 	 * @return The string representation of the object
 	 */
@@ -116,7 +116,7 @@ public interface BeanConverter {
 
 	/**
 	 * Converts a collection-like object to a List&lt;Object&gt;.
-	 * 
+	 *
 	 * <p>This method applies swapping logic first via {@link #swap(Object)}, then converts
 	 * collection-like objects to lists. Supported types include:</p>
 	 * <ul>
@@ -129,7 +129,7 @@ public interface BeanConverter {
 	 * 	<li><b>Optional:</b> Returns empty list or single-element list</li>
 	 * 	<li><b>Map:</b> Returns list of Map.Entry objects</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param o The object to convert to a list
 	 * @return A List containing the elements, or null if the object is null
 	 */
@@ -137,10 +137,10 @@ public interface BeanConverter {
 
 	/**
 	 * Determines if an object can be converted to a list.
-	 * 
+	 *
 	 * <p>This method checks if the object (after swapping) is a type that can be
 	 * meaningfully converted to a List&lt;Object&gt; via {@link #listify(Object)}.</p>
-	 * 
+	 *
 	 * @param o The object to test
 	 * @return True if the object can be listified, false otherwise
 	 */
@@ -148,17 +148,17 @@ public interface BeanConverter {
 
 	/**
 	 * Returns the string representation used for null values.
-	 * 
+	 *
 	 * <p>This is used by {@link #stringify(Object)} when the object (after swapping) is null.
 	 * The default implementation typically returns "&lt;null&gt;" or similar.</p>
-	 * 
+	 *
 	 * @return The null value representation
 	 */
 	String nullValue();
 
 	/**
 	 * Pre-processes objects before conversion operations.
-	 * 
+	 *
 	 * <p>This method applies object transformations before stringification or listification.
 	 * Common swapping operations include:</p>
 	 * <ul>
@@ -167,9 +167,9 @@ public interface BeanConverter {
 	 * 	<li><b>Lazy objects:</b> Forces evaluation of deferred computations</li>
 	 * 	<li><b>Wrapper types:</b> Extracts wrapped values</li>
 	 * </ul>
-	 * 
+	 *
 	 * <p>The method may be called recursively if swapping produces another swappable type.</p>
-	 * 
+	 *
 	 * @param o The object to swap
 	 * @return The swapped object, or the original object if no swapping is needed
 	 */
@@ -177,10 +177,10 @@ public interface BeanConverter {
 
 	/**
 	 * Accesses a named property or field from an object.
-	 * 
+	 *
 	 * <p>This is the core property access method used by BCT assertions. It employs
 	 * multiple fallback strategies to extract values from objects:</p>
-	 * 
+	 *
 	 * <h5 class='section'>Access Priority Order:</h5>
 	 * <ol>
 	 * 	<li><b>Map key access:</b> If object is a Map, looks up the name as a key</li>
@@ -192,7 +192,7 @@ public interface BeanConverter {
 	 * 	<li><b>Public fields:</b> Direct field access via reflection</li>
 	 * 	<li><b>No-arg methods:</b> Methods with the exact property name</li>
 	 * </ol>
-	 * 
+	 *
 	 * <h5 class='section'>Special Property Names:</h5>
 	 * <ul>
 	 * 	<li><b>"length"/"size":</b> Returns size for arrays, collections, maps</li>
@@ -200,11 +200,13 @@ public interface BeanConverter {
 	 * 	<li><b>"&lt;NULL&gt;":</b> Accesses null key in maps</li>
 	 * 	<li><b>"-1", "-2", etc.:</b> Negative indexing from end of array/list</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param object The object to access properties from
 	 * @param name The property/field name to access
 	 * @return The property value
 	 * @throws RuntimeException if the property cannot be found or accessed
 	 */
-	Object getEntry(Object object, String name);
+	Object getProperty(Object object, String name);
+
+	<T> T getSetting(String key, T defaultValue);
 }

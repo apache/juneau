@@ -541,14 +541,14 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	public static class F1 {
 
-		@Swap(TemporalCalendarSwap.IsoLocalDateTime.class)
+		@Swap(TemporalCalendarSwap.IsoInstant.class)
 		private Calendar c;
 		public Calendar getC() { return c; }
 		public void setC(Calendar v) { c = v; }
 
 		public static F1 create() {
 			var x = new F1();
-			x.setC(parseISO8601Calendar("2018-12-12T05:12:00"));
+			x.setC(parseISO8601Calendar("2018-12-12T05:12:00Z"));
 			return x;
 		}
 	}
@@ -562,17 +562,17 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		var x = F1.create();
 
 		var r = s.serialize(x);
-		assertEquals("{c:'2018-12-12T05:12:00'}", r);
+		assertEquals("{c:'2018-12-12T05:12:00Z'}", r);
 
 		x = p.parse(r, F1.class);
-		assertBean(x, "c", "2018-12-12T10:12:00Z");
+		assertBean(x, "c", "2018-12-12T05:12:00Z");
 
 		t.roundTrip(x, F1.class);
 	}
 
-	@Swap(on="Dummy1.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
-	@Swap(on="F1c.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
-	@Swap(on="Dummy2.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
+	@Swap(on="Dummy1.c", value=TemporalCalendarSwap.IsoInstant.class)
+	@Swap(on="F1c.c", value=TemporalCalendarSwap.IsoInstant.class)
+	@Swap(on="Dummy2.c", value=TemporalCalendarSwap.IsoInstant.class)
 	private static class F1cConfig {}
 
 	public static class F1c {
@@ -583,7 +583,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 		public static F1c create() {
 			var x = new F1c();
-			x.setC(parseISO8601Calendar("2018-12-12T05:12:00"));
+			x.setC(parseISO8601Calendar("2018-12-12T05:12:00Z"));
 			return x;
 		}
 	}
@@ -597,16 +597,16 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		var x = F1c.create();
 
 		var r = s.serialize(x);
-		assertEquals("{c:'2018-12-12T05:12:00'}", r);
+		assertEquals("{c:'2018-12-12T05:12:00Z'}", r);
 
 		x = p.parse(r, F1c.class);
-		assertSerialized(x, s, "{c:'2018-12-12T05:12:00'}");
+		assertSerialized(x, s, "{c:'2018-12-12T05:12:00Z'}");
 
 		t.roundTrip(x, F1c.class);
 	}
 
 	public static class F2a {
-		@Swap(TemporalCalendarSwap.IsoLocalDateTime.class)
+		@Swap(TemporalCalendarSwap.IsoInstant.class)
 		protected Calendar c;
 	}
 
@@ -617,7 +617,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 		public static F2 create() {
 			var x = new F2();
-			x.setC(parseISO8601Calendar("2018-12-12T05:12:00"));
+			x.setC(parseISO8601Calendar("2018-12-12T05:12:00Z"));
 			return x;
 		}
 	}
@@ -631,17 +631,17 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		var x = F2.create();
 
 		var r = s.serialize(x);
-		assertEquals("{c:'2018-12-12T05:12:00'}", r);
+		assertEquals("{c:'2018-12-12T05:12:00Z'}", r);
 
 		x = p.parse(r, F2.class);
-		assertBean(x, "c", "2018-12-12T10:12:00Z");
+		assertBean(x, "c", "2018-12-12T05:12:00Z");
 
 		t.roundTrip(x, F2.class);
 	}
 
-	@Swap(on="Dummy1.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
-	@Swap(on="F2ac.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
-	@Swap(on="Dummy2.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
+	@Swap(on="Dummy1.c", value=TemporalCalendarSwap.IsoInstant.class)
+	@Swap(on="F2ac.c", value=TemporalCalendarSwap.IsoInstant.class)
+	@Swap(on="Dummy2.c", value=TemporalCalendarSwap.IsoInstant.class)
 	private static class F2acConfig {}
 
 	public static class F2ac {
@@ -655,7 +655,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 		public static F2c create() {
 			var x = new F2c();
-			x.setC(parseISO8601Calendar("2018-12-12T05:12:00"));
+			x.setC(parseISO8601Calendar("2018-12-12T05:12:00Z"));
 			return x;
 		}
 	}
@@ -669,10 +669,10 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		var x = F2.create();
 
 		var r = s.serialize(x);
-		assertEquals("{c:'2018-12-12T05:12:00'}", r);
+		assertEquals("{c:'2018-12-12T05:12:00Z'}", r);
 
 		x = p.parse(r, F2.class);
-		assertBean(x, "c", "2018-12-12T10:12:00Z");
+		assertBean(x, "c", "2018-12-12T05:12:00Z");
 
 		t.roundTrip(x, F2.class);
 	}
