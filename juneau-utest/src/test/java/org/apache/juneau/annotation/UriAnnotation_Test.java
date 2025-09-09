@@ -27,23 +27,17 @@ class UriAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Uri a1 = UriAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	Uri a2 = UriAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['a'],"
-				+ "onClass:[]"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on,onClass", "[a],[b],[]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -92,15 +86,15 @@ class UriAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Uri(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D1 {}
 	Uri d1 = D1.class.getAnnotationsByType(Uri.class)[0];
 
 	@Uri(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D2 {}
 	Uri d2 = D2.class.getAnnotationsByType(Uri.class)[0];

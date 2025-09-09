@@ -209,7 +209,7 @@ class JsonParser_Test extends SimpleTestBase {
 		var r = reader("{foo:'bar'}{baz:'qux'}");
 
 		var x = p2.parse(r, JsonMap.class);
-		assertJson("{foo:'bar'}", x);
+		assertBean(x, "foo", "bar");
 		assertThrowsWithMessage(Exception.class, "Reader is closed", ()->p2.parse(r, JsonMap.class));
 	}
 
@@ -222,15 +222,15 @@ class JsonParser_Test extends SimpleTestBase {
 		var r = reader("{foo:'bar'}{baz:'qux'}");
 
 		var x = (Object)p2.parse(r, JsonMap.class);
-		assertJson("{foo:'bar'}", x);
+		assertBean(x, "foo", "bar");
 		x = p2.parse(r, JsonMap.class);
-		assertJson("{baz:'qux'}", x);
+		assertBean(x, "baz", "qux");
 
 		r = reader("[123][456]");
 		x = p2.parse(r, JsonList.class);
-		assertJson("[123]", x);
+		assertList(x, "123");
 		x = p2.parse(r, JsonList.class);
-		assertJson("[456]", x);
+		assertList(x, "456");
 	}
 
 	private Reader reader(String in) {

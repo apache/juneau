@@ -30,22 +30,17 @@ class RestInitAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestInit a1 = RestInitAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	RestInit a2 = RestInitAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['a']"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on", "[a],[b]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -88,15 +83,15 @@ class RestInitAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestInit(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D1 {}
 	RestInit d1 = D1.class.getAnnotationsByType(RestInit.class)[0];
 
 	@RestInit(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D2 {}
 	RestInit d2 = D2.class.getAnnotationsByType(RestInit.class)[0];

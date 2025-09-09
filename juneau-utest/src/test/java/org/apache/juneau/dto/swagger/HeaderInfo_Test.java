@@ -50,7 +50,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 			t.setCollectionFormat(null).setDefault(null).setDescription(null).setEnum((Set<Object>)null).setExample((String)null)
 				.setFormat(null).setItems((Items)null).setPattern(null).setRef(null).setType(null),
 			"collectionFormat,default,description,enum,example,format,items,pattern,ref,type",
-			"null,null,null,null,null,null,null,null,null,null"
+			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>"
 		);
 
 		// Empty collections
@@ -174,7 +174,9 @@ class HeaderInfo_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{}", t);
+		assertBean(t,
+			"collectionFormat,default,description,enum,exclusiveMaximum,exclusiveMinimum,format,items,maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,pattern,type,uniqueItems",
+			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
 		t
 			.set("collectionFormat", "a")

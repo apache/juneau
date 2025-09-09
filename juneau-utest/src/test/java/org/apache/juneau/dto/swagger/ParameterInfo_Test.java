@@ -51,7 +51,7 @@ class ParameterInfo_Test extends SimpleTestBase {
 			t.setCollectionFormat(null).setDefault(null).setDescription(null).setEnum((Collection<Object>)null)
 				.setFormat(null).setIn(null).setName(null).setPattern(null).setType(null),
 			"collectionFormat,default,description,enum,format,in,name,pattern,type",
-			"null,null,null,null,null,null,null,null,null"
+			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>"
 		);
 
 		// Empty collections
@@ -191,7 +191,9 @@ class ParameterInfo_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{}", t);
+		assertBean(t,
+			"default,enum,allowEmptyValue,collectionFormat,description,exclusiveMaximum,exclusiveMinimum,format,in,items,maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,name,pattern,required,type,uniqueItems",
+			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
 		t
 			.set("default", "a")

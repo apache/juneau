@@ -27,26 +27,19 @@ class UrlEncodingAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	UrlEncoding a1 = UrlEncodingAnnotation.create()
-		.description("description")
+		.description("a")
 		.expandedParams(true)
-		.on("a")
+		.on("b")
 		.build();
 
 	UrlEncoding a2 = UrlEncodingAnnotation.create()
-		.description("description")
+		.description("a")
 		.expandedParams(true)
-		.on("a")
+		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "expandedParams:true,"
-				+ "on:['a'],"
-				+ "onClass:[]"
-			+ "}", a1
-		);
+		assertBean(a1, "description,expandedParams,on,onClass", "[a],true,[b],[]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -95,17 +88,17 @@ class UrlEncodingAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@UrlEncoding(
-		description="description",
+		description="a",
 		expandedParams=true,
-		on="a"
+		on="b"
 	)
 	public static class D1 {}
 	UrlEncoding d1 = D1.class.getAnnotationsByType(UrlEncoding.class)[0];
 
 	@UrlEncoding(
-		description="description",
+		description="a",
 		expandedParams=true,
-		on="a"
+		on="b"
 	)
 	public static class D2 {}
 	UrlEncoding d2 = D2.class.getAnnotationsByType(UrlEncoding.class)[0];

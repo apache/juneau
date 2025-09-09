@@ -21,6 +21,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link SwaggerBuilder}.
+ * Ensures Swagger beans are serialized to proper JSON.
  */
 class SwaggerBuilder_Test extends SimpleTestBase {
 

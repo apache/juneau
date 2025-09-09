@@ -49,7 +49,7 @@ class Items_Test extends SimpleTestBase {
 		assertBean(
 			t.setCollectionFormat(null).setDefault(null).setEnum((Collection<Object>)null).setFormat(null).setPattern(null).setType(null),
 			"collectionFormat,default,enum,format,pattern,type",
-			"null,null,null,null,null,null"
+			"<null>,<null>,<null>,<null>,<null>,<null>"
 		);
 
 		// Empty collections
@@ -169,7 +169,9 @@ class Items_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{}", t);
+		assertBean(t,
+			"collectionFormat,default,enum,exclusiveMaximum,exclusiveMinimum,format,items,maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,pattern,type,uniqueItems",
+			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
 		t
 			.set("collectionFormat", "c")

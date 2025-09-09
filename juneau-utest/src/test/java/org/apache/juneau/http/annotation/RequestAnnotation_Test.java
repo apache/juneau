@@ -30,31 +30,23 @@ class RequestAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Request a1 = RequestAnnotation.create()
-		.description("description")
-		.on("on")
+		.description("a")
+		.on("b")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
 		.serializer(OpenApiSerializer.class)
 		.build();
 
 	Request a2 = RequestAnnotation.create()
-		.description("description")
-		.on("on")
+		.description("a")
+		.on("b")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
 		.serializer(OpenApiSerializer.class)
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"$X1'],"
-				+ "parser:'org.apache.juneau.oapi.OpenApiParser',"
-				+ "serializer:'org.apache.juneau.oapi.OpenApiSerializer'"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on,onClass,parser,serializer", "[a],[b],[X1],OpenApiParser,OpenApiSerializer");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -99,8 +91,8 @@ class RequestAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Request(
-		description={ "description" },
-		on="on",
+		description={ "a" },
+		on="b",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		serializer=OpenApiSerializer.class
@@ -109,8 +101,8 @@ class RequestAnnotation_Test extends SimpleTestBase {
 	Request d1 = D1.class.getAnnotationsByType(Request.class)[0];
 
 	@Request(
-		description={ "description" },
-		on="on",
+		description={ "a" },
+		on="b",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		serializer=OpenApiSerializer.class

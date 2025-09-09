@@ -13,8 +13,6 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -72,19 +70,13 @@ class Swagger_Body_Test extends SimpleTestBase {
 		var s = getSwagger(A.class);
 		var x = s.getParameterInfo("/a","get","body",null);
 
-		assertEquals("a\nb", x.getDescription());
-		assertJson("true", x.getRequired());
-		assertJson("{required:true,type:'string'}", x.getSchema());
+		assertBean(x, "description,required,schema{required,type}", "a\nb,true,{true,string}");
 
 		x = s.getParameterInfo("/b","put","body",null);
-		assertEquals("a\nb", x.getDescription());
-		assertJson("true", x.getRequired());
-		assertJson("{required:true,type:'string'}", x.getSchema());
+		assertBean(x, "description,required,schema{required,type}", "a\nb,true,{true,string}");
 
 		x = s.getParameterInfo("/c","post","body",null);
-		assertEquals("a\nb", x.getDescription());
-		assertJson("true", x.getRequired());
-		assertJson("{required:true,type:'string'}", x.getSchema());
+		assertBean(x, "description,required,schema{required,type}", "a\nb,true,{true,string}");
 	}
 
 	@Rest
@@ -182,19 +174,13 @@ class Swagger_Body_Test extends SimpleTestBase {
 		var s = getSwagger(D.class);
 		var x = s.getParameterInfo("/a","get","body",null);
 
-		assertEquals("a\nb", x.getDescription());
-		assertJson("true", x.getRequired());
-		assertJson("{required:true,type:'string'}", x.getSchema());
+		assertBean(x, "description,required,schema{required,type}", "a\nb,true,{true,string}");
 
 		x = s.getParameterInfo("/b","put","body",null);
-		assertEquals("a\nb", x.getDescription());
-		assertJson("true", x.getRequired());
-		assertJson("{required:true,type:'string'}", x.getSchema());
+		assertBean(x, "description,required,schema{required,type}", "a\nb,true,{true,string}");
 
 		x = s.getParameterInfo("/c","post","body",null);
-		assertEquals("b\nc", x.getDescription());
-		assertJson("true", x.getRequired());
-		assertJson("{required:true,type:'string'}", x.getSchema());
+		assertBean(x, "description,required,schema{required,type}", "b\nc,true,{true,string}");
 	}
 
 	@Rest

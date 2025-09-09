@@ -565,7 +565,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		assertEquals("{c:'2018-12-12T05:12:00'}", r);
 
 		x = p.parse(r, F1.class);
-		assertJson("{c:'2018-12-12T05:12:00'}", x);
+		assertBean(x, "c", "2018-12-12T10:12:00Z");
 
 		t.roundTrip(x, F1.class);
 	}
@@ -634,7 +634,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		assertEquals("{c:'2018-12-12T05:12:00'}", r);
 
 		x = p.parse(r, F2.class);
-		assertJson("{c:'2018-12-12T05:12:00'}", x);
+		assertBean(x, "c", "2018-12-12T10:12:00Z");
 
 		t.roundTrip(x, F2.class);
 	}
@@ -672,7 +672,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		assertEquals("{c:'2018-12-12T05:12:00'}", r);
 
 		x = p.parse(r, F2.class);
-		assertJson("{c:'2018-12-12T05:12:00'}", x);
+		assertBean(x, "c", "2018-12-12T10:12:00Z");
 
 		t.roundTrip(x, F2.class);
 	}
@@ -707,7 +707,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 	void a14_beanWithIncompleteCopyConstructor(RoundTrip_Tester t) throws Exception {
 		var x = F.create();
 		x = t.roundTrip(x);
-		assertJson("{f1:1,f2:2}", x);
+		assertBean(x, "f1,f2", "1,2");
 	}
 
 

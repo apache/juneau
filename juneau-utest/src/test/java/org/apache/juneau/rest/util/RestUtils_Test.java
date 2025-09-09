@@ -166,7 +166,7 @@ class RestUtils_Test extends SimpleTestBase {
 	@Test void h01_testParseIntoSimpleMapMultiValues() {
 		var s = "?f1&f1&f2&f2=abc&f2=def&f2";
 		var m = parseQuery(s);
-		assertJson("{f1:null,f2:['abc','def']}", m);
+		assertBean(m, "f1,f2", "<null>,[abc,def]");
 	}
 
 	@Test void h02_testEmptyString() throws Exception {

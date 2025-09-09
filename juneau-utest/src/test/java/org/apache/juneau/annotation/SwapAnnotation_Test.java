@@ -29,37 +29,27 @@ class SwapAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Swap a1 = SwapAnnotation.create()
-		.description("description")
+		.description("a")
 		.impl(X1.class)
-		.mediaTypes("mediaTypes")
-		.on("on")
+		.mediaTypes("c")
+		.on("d")
 		.onClass(X1.class)
-		.template("template")
+		.template("e")
 		.value(X1.class)
 		.build();
 
 	Swap a2 = SwapAnnotation.create()
-		.description("description")
+		.description("a")
 		.impl(X1.class)
-		.mediaTypes("mediaTypes")
-		.on("on")
+		.mediaTypes("c")
+		.on("d")
 		.onClass(X1.class)
-		.template("template")
+		.template("e")
 		.value(X1.class)
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "impl:'"+CNAME+"$X1',"
-				+ "mediaTypes:['mediaTypes'],"
-				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"$X1'],"
-				+ "template:'template',"
-				+ "value:'"+CNAME+"$X1'"
-			+ "}", a1
-		);
+		assertBean(a1, "description,impl,mediaTypes,on,onClass,template,value", "[a],X1,[c],[d],[X1],e,X1");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -107,24 +97,24 @@ class SwapAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Swap(
-		description={ "description" },
+		description={ "a" },
 		impl=X1.class,
-		mediaTypes="mediaTypes",
-		on="on",
+		mediaTypes="c",
+		on="d",
 		onClass=X1.class,
-		template="template",
+		template="e",
 		value=X1.class
 	)
 	public static class D1 {}
 	Swap d1 = D1.class.getAnnotationsByType(Swap.class)[0];
 
 	@Swap(
-		description={ "description" },
+		description={ "a" },
 		impl=X1.class,
-		mediaTypes="mediaTypes",
-		on="on",
+		mediaTypes="c",
+		on="d",
 		onClass=X1.class,
-		template="template",
+		template="e",
 		value=X1.class
 	)
 	public static class D2 {}

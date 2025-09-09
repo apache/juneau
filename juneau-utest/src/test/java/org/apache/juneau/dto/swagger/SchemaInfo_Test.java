@@ -54,7 +54,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 				.setPattern(null).setProperties((Map<String,SchemaInfo>)null).setRequiredProperties((Collection<String>)null)
 				.setTitle(null).setType(null),
 			"additionalProperties,allOf,default,description,discriminator,enum,example,format,pattern,properties,requiredProperties,title,type",
-			"null,null,null,null,null,null,null,null,null,null,null,null,null"
+			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>"
 		);
 
 		// Empty collections
@@ -68,7 +68,9 @@ class SchemaInfo_Test extends SimpleTestBase {
 		assertBean(
 			t.setDefault(Utils.sb("a")).setExample(1).setMaximum(2f).setMinimum(3f).setMultipleOf(4f),
 			"default,example,maximum,minimum,multipleOf", "a,1,2.0,3.0,4.0");
-		assertJson("{}", t.setAdditionalProperties(new SchemaInfo()).getAdditionalProperties());
+		assertBean(t.setAdditionalProperties(new SchemaInfo()).getAdditionalProperties(),
+			"default,enum,$ref,additionalProperties,allOf,description,discriminator,example,exclusiveMaximum,exclusiveMinimum,externalDocs,format,items,maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,pattern,properties,readOnly,required,title,type,uniqueItems,xml",
+			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
 		// addEnum and addAllOf
 		assertList(t.addEnum("a","b").getEnum(), "a", "b");
@@ -214,7 +216,9 @@ class SchemaInfo_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{}", t);
+		assertBean(t,
+			"default,enum,$ref,additionalProperties,allOf,description,discriminator,example,exclusiveMaximum,exclusiveMinimum,externalDocs,format,items,maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,pattern,properties,readOnly,required,title,type,uniqueItems,xml",
+			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
 		t
 			.set("default", "a")

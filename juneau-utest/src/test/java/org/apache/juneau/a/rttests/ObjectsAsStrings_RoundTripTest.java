@@ -122,7 +122,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 			assertTrue(toString(r).contains("X-2"));
 		}
 		x = t.roundTrip(x);
-		assertJson("{b1:'X1',b2:'X-2'}", x);
+		assertBean(x, "b1,b2", "X1,X2");
 	}
 
 	public static class B {

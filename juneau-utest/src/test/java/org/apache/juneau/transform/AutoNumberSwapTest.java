@@ -189,7 +189,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B01 fromInteger(Integer o) {
-			assertJson("1", o);
+			assertEquals(1, o.intValue());
 			return new B01();
 		}
 	}
@@ -198,7 +198,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B02 fromInt(int o) {
-			assertJson("1", o);
+			assertEquals(1, o);
 			return new B02();
 		}
 	}
@@ -207,7 +207,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1L;
 		}
 		public static B03 fromLong(Long o) {
-			assertJson("1", o);
+			assertEquals(1L, o.longValue());
 			return new B03();
 		}
 	}
@@ -216,7 +216,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B04 fromLong(long o) {
-			assertJson("1", o);
+			assertEquals(1L, o);
 			return new B04();
 		}
 	}
@@ -225,7 +225,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1f;
 		}
 		public static B05 fromFloat(Float o) {
-			assertJson("1.0", o);
+			assertEquals(1.0f, o.floatValue());
 			return new B05();
 		}
 	}
@@ -234,7 +234,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B06 fromFloat(float o) {
-			assertJson("1.0", o);
+			assertEquals(1.0f, o);
 			return new B06();
 		}
 	}
@@ -243,7 +243,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1d;
 		}
 		public static B07 fromDouble(Double o) {
-			assertJson("1.0", o);
+			assertEquals(1.0, o.doubleValue());
 			return new B07();
 		}
 	}
@@ -252,7 +252,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1d;
 		}
 		public static B08 fromDouble(double o) {
-			assertJson("1.0", o);
+			assertEquals(1.0, o);
 			return new B08();
 		}
 	}
@@ -261,7 +261,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B09 fromShort(Short o) {
-			assertJson("1", o);
+			assertEquals((short)1, o.shortValue());
 			return new B09();
 		}
 	}
@@ -270,7 +270,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B10 fromShort(short o) {
-			assertJson("1", o);
+			assertEquals((short)1, o);
 			return new B10();
 		}
 	}
@@ -279,7 +279,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B11 fromByte(Byte o) {
-			assertJson("1", o);
+			assertEquals((byte)1, o.byteValue());
 			return new B11();
 		}
 	}
@@ -288,7 +288,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B12 fromByte(byte o) {
-			assertJson("1", o);
+			assertEquals((byte)1, o);
 			return new B12();
 		}
 	}
@@ -297,7 +297,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B13 create(int o) {
-			assertJson("1", o);
+			assertEquals(1, o);
 			return new B13();
 		}
 	}
@@ -306,7 +306,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B14 valueOf(int o) {
-			assertJson("1", o);
+			assertEquals(1, o);
 			return new B14();
 		}
 	}
@@ -383,7 +383,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C01 {
 		public C01() {}
 		public C01(Integer o) {
-			assertJson("1", o);
+			assertEquals(1, o.intValue());
 		}
 		public Integer toInteger() {
 			return 1;
@@ -392,7 +392,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C02 {
 		public C02() {}
 		public C02(int o) {
-			assertJson("1", o);
+			assertEquals(1, o);
 		}
 		public int toInt() {
 			return 1;
@@ -401,7 +401,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C03 {
 		public C03() {}
 		public C03(Long o) {
-			assertJson("1", o);
+			assertEquals(1L, o.longValue());
 		}
 		public Long toLong() {
 			return 1L;
@@ -410,7 +410,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C04 {
 		public C04() {}
 		public C04(long o) {
-			assertJson("1", o);
+			assertEquals(1L, o);
 		}
 		public long toLong() {
 			return 1L;
@@ -419,7 +419,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C05 {
 		public C05() {}
 		public C05(Float o) {
-			assertJson("1.0", o);
+			assertEquals(1.0f, o.floatValue());
 		}
 		public Float toFloat() {
 			return 1f;
@@ -428,7 +428,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C06 {
 		public C06() {}
 		public C06(float o) {
-			assertJson("1.0", o);
+			assertEquals(1.0f, o);
 		}
 		public float toFloat() {
 			return 1f;
@@ -437,7 +437,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C07 {
 		public C07() {}
 		public C07(Double o) {
-			assertJson("1.0", o);
+			assertEquals(1.0, o.doubleValue());
 		}
 		public Double toDouble() {
 			return 1d;
@@ -446,7 +446,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C08 {
 		public C08() {}
 		public C08(double o) {
-			assertJson("1.0", o);
+			assertEquals(1.0, o);
 		}
 		public double toDouble() {
 			return 1d;
@@ -455,7 +455,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C09 {
 		public C09() {}
 		public C09(Short o) {
-			assertJson("1", o);
+			assertEquals((short)1, o.shortValue());
 		}
 		public Short toShort() {
 			return 1;
@@ -464,7 +464,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C10 {
 		public C10() {}
 		public C10(short o) {
-			assertJson("1", o);
+			assertEquals((short)1, o);
 		}
 		public short toShort() {
 			return 1;
@@ -473,7 +473,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C11 {
 		public C11() {}
 		public C11(Byte o) {
-			assertJson("1", o);
+			assertEquals((byte)1, o.byteValue());
 		}
 		public Byte toByte() {
 			return 1;
@@ -482,7 +482,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C12 {
 		public C12() {}
 		public C12(byte o) {
-			assertJson("1", o);
+			assertEquals((byte)1, o);
 		}
 		public byte toByte() {
 			return 1;

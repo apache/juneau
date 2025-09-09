@@ -29,28 +29,21 @@ class ResponseStatusAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	StatusCode a1 = StatusCodeAnnotation.create()
-		.description("description")
-		.on("on")
+		.description("a")
+		.on("b")
 		.onClass(X1.class)
 		.value(1)
 		.build();
 
 	StatusCode a2 = StatusCodeAnnotation.create()
-		.description("description")
-		.on("on")
+		.description("a")
+		.on("b")
 		.onClass(X1.class)
 		.value(1)
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"$X1'],"
-				+ "value:[1]"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on,onClass,value", "[a],[b],[X1],[1]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -97,8 +90,8 @@ class ResponseStatusAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@StatusCode(
-		description={ "description" },
-		on="on",
+		description={ "a" },
+		on="b",
 		onClass=X1.class,
 		value=1
 	)
@@ -106,8 +99,8 @@ class ResponseStatusAnnotation_Test extends SimpleTestBase {
 	StatusCode d1 = D1.class.getAnnotationsByType(StatusCode.class)[0];
 
 	@StatusCode(
-		description={ "description" },
-		on="on",
+		description={ "a" },
+		on="b",
 		onClass=X1.class,
 		value=1
 	)

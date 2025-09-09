@@ -30,32 +30,32 @@ class FormDataAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	FormData a1 = FormDataAnnotation.create()
-		.def("def")
-		.description("description")
-		.name("name")
-		.on("on")
+		.def("a")
+		.description("b")
+		.name("c")
+		.on("d")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
 		.serializer(OpenApiSerializer.class)
-		.value("value")
+		.value("e")
 		.build();
 
 	FormData a2 = FormDataAnnotation.create()
-		.def("def")
-		.description("description")
-		.name("name")
-		.on("on")
+		.def("a")
+		.description("b")
+		.name("c")
+		.on("d")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
 		.serializer(OpenApiSerializer.class)
-		.value("value")
+		.value("e")
 		.build();
 
 	@Test void a01_basic() {
 		assertBean(
 			a1,
 			"def,description,name,on,onClass{#{simpleName}},parser{simpleName},schema{description},serializer{simpleName},value",
-			"def,[description],name,[on],{[{X1}]},{OpenApiParser},{[]},{OpenApiSerializer},value"
+			"a,[b],c,[d],{[{X1}]},{OpenApiParser},{[]},{OpenApiSerializer},e"
 		);
 	}
 
@@ -105,27 +105,27 @@ class FormDataAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@FormData(
-		def="def",
-		description={ "description" },
-		name="name",
-		on="on",
+		def="a",
+		description={ "b" },
+		name="c",
+		on="d",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		serializer=OpenApiSerializer.class,
-		value="value"
+		value="e"
 	)
 	public static class D1 {}
 	FormData d1 = D1.class.getAnnotationsByType(FormData.class)[0];
 
 	@FormData(
-		def="def",
-		description={ "description" },
-		name="name",
-		on="on",
+		def="a",
+		description={ "b" },
+		name="c",
+		on="d",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		serializer=OpenApiSerializer.class,
-		value="value"
+		value="e"
 	)
 	public static class D2 {}
 	FormData d2 = D2.class.getAnnotationsByType(FormData.class)[0];

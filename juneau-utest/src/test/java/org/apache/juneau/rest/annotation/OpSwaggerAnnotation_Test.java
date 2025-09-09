@@ -26,52 +26,39 @@ class OpSwaggerAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	OpSwagger a1 = OpSwaggerAnnotation.create()
-		.consumes("consumes")
-		.deprecated("deprecated")
-		.description("description")
+		.consumes("a")
+		.deprecated("b")
+		.description("c")
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
-		.operationId("operationId")
-		.parameters("parameters")
-		.produces("produces")
-		.responses("responses")
-		.schemes("schemes")
-		.summary("summary")
-		.tags("tags")
-		.value("value")
+		.operationId("d")
+		.parameters("e")
+		.produces("f")
+		.responses("g")
+		.schemes("h")
+		.summary("i")
+		.tags("j")
+		.value("k")
 		.build();
 
 	OpSwagger a2 = OpSwaggerAnnotation.create()
-		.consumes("consumes")
-		.deprecated("deprecated")
-		.description("description")
+		.consumes("a")
+		.deprecated("b")
+		.description("c")
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
-		.operationId("operationId")
-		.parameters("parameters")
-		.produces("produces")
-		.responses("responses")
-		.schemes("schemes")
-		.summary("summary")
-		.tags("tags")
-		.value("value")
+		.operationId("d")
+		.parameters("e")
+		.produces("f")
+		.responses("g")
+		.schemes("h")
+		.summary("i")
+		.tags("j")
+		.value("k")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "consumes:['consumes'],"
-				+ "deprecated:'deprecated',"
-				+ "description:['description'],"
-				+ "externalDocs:{description:[],url:''},"
-				+ "operationId:'operationId',"
-				+ "parameters:['parameters'],"
-				+ "produces:['produces'],"
-				+ "responses:['responses'],"
-				+ "schemes:['schemes'],"
-				+ "summary:['summary'],"
-				+ "tags:['tags'],"
-				+ "value:['value']"
-			+ "}", a1
-		);
+		assertBean(a1,
+			"consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value",
+			"[a],b,[c],{[],},d,[e],[f],[g],[h],[i],[j],[k]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -99,35 +86,35 @@ class OpSwaggerAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@OpSwagger(
-		consumes="consumes",
-		deprecated="deprecated",
-		description="description",
+		consumes="a",
+		deprecated="b",
+		description="c",
 		externalDocs=@ExternalDocs,
-		operationId="operationId",
-		parameters="parameters",
-		produces="produces",
-		responses="responses",
-		schemes="schemes",
-		summary="summary",
-		tags="tags",
-		value="value"
+		operationId="d",
+		parameters="e",
+		produces="f",
+		responses="g",
+		schemes="h",
+		summary="i",
+		tags="j",
+		value="k"
 	)
 	public static class D1 {}
 	OpSwagger d1 = D1.class.getAnnotationsByType(OpSwagger.class)[0];
 
 	@OpSwagger(
-		consumes="consumes",
-		deprecated="deprecated",
-		description="description",
+		consumes="a",
+		deprecated="b",
+		description="c",
 		externalDocs=@ExternalDocs,
-		operationId="operationId",
-		parameters="parameters",
-		produces="produces",
-		responses="responses",
-		schemes="schemes",
-		summary="summary",
-		tags="tags",
-		value="value"
+		operationId="d",
+		parameters="e",
+		produces="f",
+		responses="g",
+		schemes="h",
+		summary="i",
+		tags="j",
+		value="k"
 	)
 	public static class D2 {}
 	OpSwagger d2 = D2.class.getAnnotationsByType(OpSwagger.class)[0];

@@ -80,7 +80,7 @@ class Swagger_Test extends SimpleTestBase {
 	public static class A1 {}
 
 	@Test void a01_swagger_default() throws Exception {
-		assertBean(getSwagger(new A1()), "swagger,host,basePath,schemes", "2.0,null,null,null");
+		assertBean(getSwagger(new A1()), "swagger,host,basePath,schemes", "2.0,<null>,<null>,<null>");
 	}
 	@Test void a01_swagger_default_withFile() throws Exception {
 		assertBean(getSwaggerWithFile(new A1()), "swagger,host,basePath,schemes", "0.0,s-host,s-basePath,[s-scheme]");
@@ -111,7 +111,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertBean(
 			getSwagger(new B1()).getInfo(),
 			"title,description,version,termsOfService,contact,license",
-			"a-title,a-description,null,null,null,null"
+			"a-title,a-description,<null>,<null>,<null>,<null>"
 		);
 	}
 
@@ -462,7 +462,7 @@ class Swagger_Test extends SimpleTestBase {
 			getSwaggerWithFile(new C8()).getTags(),
 			"name,description,externalDocs{description,url}",
 			"s-name,s-description,{s-description,s-url}",
-			"foo,null,null"
+			"foo,<null>,<null>"
 		);
 	}
 
@@ -481,8 +481,8 @@ class Swagger_Test extends SimpleTestBase {
 			getSwaggerWithFile(new C9()).getTags(),
 			"name,description,externalDocs{description,url}",
 			"s-name,s-description,{s-description,s-url}",
-			"foo,null,null",
-			"bar,null,null"
+			"foo,<null>,<null>",
+			"bar,<null>,<null>"
 		);
 	}
 
@@ -501,8 +501,8 @@ class Swagger_Test extends SimpleTestBase {
 			getSwaggerWithFile(new C10()).getTags(),
 			"name,description,externalDocs{description,url}",
 			"s-name,s-description,{s-description,s-url}",
-			"foo,null,null",
-			"bar,null,null"
+			"foo,<null>,<null>",
+			"bar,<null>,<null>"
 		);
 	}
 
@@ -521,8 +521,8 @@ class Swagger_Test extends SimpleTestBase {
 			getSwaggerWithFile(new C11()).getTags(),
 			"name,description,externalDocs{description,url}",
 			"s-name,s-description,{s-description,s-url}",
-			"l-foo,null,null",
-			"l-bar,null,null"
+			"l-foo,<null>,<null>",
+			"l-bar,<null>,<null>"
 		);
 	}
 
@@ -541,8 +541,8 @@ class Swagger_Test extends SimpleTestBase {
 			getSwaggerWithFile(new C12()).getTags(),
 			"name,description,externalDocs{description,url}",
 			"s-name,s-description,{s-description,s-url}",
-			"l-foo,null,null",
-			"l-bar,null,null"
+			"l-foo,<null>,<null>",
+			"l-bar,<null>,<null>"
 		);
 	}
 
@@ -637,7 +637,9 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void e01a_operation_summary_default() throws Exception {
-		assertBean(getSwagger(new E1()).getPaths().get("/path/{foo}").get("get"), "operationId,summary,description,deprecated,schemes", "a,null,null,false,null");
+		assertBean(getSwagger(new E1()).getPaths().get("/path/{foo}").get("get"),
+			"operationId,summary,description,deprecated,schemes",
+			"a,<null>,<null>,false,<null>");
 	}
 
 	@Test void e01b_operation_summary_default_withFile() throws Exception {
@@ -1249,7 +1251,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertBean(
 			getSwagger(new K1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo"),
 			"type,description,required,allowEmptyValue,exclusiveMaximum,exclusiveMinimum,uniqueItems,format,collectionFormat,pattern,maximum,minimum,multipleOf,maxLength,minLength,maxItems,minItems",
-			"object,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null"
+			"object,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>"
 		);
 	}
 	@Test void k01b_query_type_default_withFile() throws Exception {

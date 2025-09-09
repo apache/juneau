@@ -115,7 +115,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 		var x1 = new A().init();
 		var x2 = t.roundTrip(x1, A.class);
 		assertEquals(json(x1), json(x2));
-		assertBean(x2, "f3{0,1},f4{0{0,1},1}", "{FOO,null},{{FOO,null},null}");
+		assertBean(x2, "f3{0,1},f4{0{0,1},1}", "{FOO,<null>},{{FOO,<null>},<null>}");
 	}
 
 	@ParameterizedTest
@@ -124,7 +124,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 		var x1 = new B().init();
 		var x2 = t.roundTrip(x1, B.class);
 		assertEquals(json(x1), json(x2));
-		assertBean(x2, "f3{0,1},f4{0{0,1},1}", "{FOO,null},{{FOO,null},null}");
+		assertBean(x2, "f3{0,1},f4{0{0,1},1}", "{FOO,<null>},{{FOO,<null>},<null>}");
 	}
 
 

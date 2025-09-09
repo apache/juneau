@@ -25,25 +25,19 @@ class LicenseAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	License a1 = LicenseAnnotation.create()
-		.description("description")
-		.name("name")
-		.url("url")
+		.description("a")
+		.name("b")
+		.url("c")
 		.build();
 
 	License a2 = LicenseAnnotation.create()
-		.description("description")
-		.name("name")
-		.url("url")
+		.description("a")
+		.name("b")
+		.url("c")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "name:'name',"
-				+ "url:'url'"
-			+ "}", a1
-		);
+		assertBean(a1, "description,name,url", "[a],b,c");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -71,17 +65,17 @@ class LicenseAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@License(
-		description={ "description" },
-		name="name",
-		url="url"
+		description={ "a" },
+		name="b",
+		url="c"
 	)
 	public static class D1 {}
 	License d1 = D1.class.getAnnotationsByType(License.class)[0];
 
 	@License(
-		description={ "description" },
-		name="name",
-		url="url"
+		description={ "a" },
+		name="b",
+		url="c"
 	)
 	public static class D2 {}
 	License d2 = D2.class.getAnnotationsByType(License.class)[0];

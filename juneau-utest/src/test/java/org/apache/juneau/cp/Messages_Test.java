@@ -115,7 +115,7 @@ class Messages_Test extends SimpleTestBase {
 
 	@Test void a09_keySet_prefix() {
 		var x = Messages.of(MessageBundleTest1.class);
-		assertJson("['xx','xx.','xx.foo']", new TreeSet<>(x.keySet("xx")));
+		assertList(new TreeSet<>(x.keySet("xx")), "xx", "xx.", "xx.foo");
 	}
 
 	@Test void a10_getString() {
@@ -142,7 +142,7 @@ class Messages_Test extends SimpleTestBase {
 
 	@Test void a12_getKeys() {
 		var x = Messages.of(Test2.class);
-		assertJson("['file','yyy']", x.getKeys());
+		assertList(x.getKeys(), "file", "yyy");
 	}
 
 	@Test void a13_toString() {

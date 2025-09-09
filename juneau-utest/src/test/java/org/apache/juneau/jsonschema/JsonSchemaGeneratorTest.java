@@ -13,7 +13,6 @@
 package org.apache.juneau.jsonschema;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.jsonschema.TypeCategory.*;
 
 import java.util.*;

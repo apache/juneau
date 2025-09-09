@@ -27,23 +27,17 @@ class CsvAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Csv a1 = CsvAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	Csv a2 = CsvAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['a'],"
-				+ "onClass:[]"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on,onClass", "[a],[b],[]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -92,15 +86,15 @@ class CsvAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Csv(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D1 {}
 	Csv d1 = D1.class.getAnnotationsByType(Csv.class)[0];
 
 	@Csv(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D2 {}
 	Csv d2 = D2.class.getAnnotationsByType(Csv.class)[0];
@@ -111,4 +105,3 @@ class CsvAnnotation_Test extends SimpleTestBase {
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
 	}
 }
-

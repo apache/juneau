@@ -44,7 +44,7 @@ class Tag_Test extends SimpleTestBase {
 		assertBean(
 			t.setName(null).setDescription(null),
 			"name,description",
-			"null,null"
+			"<null>,<null>"
 		);
 	}
 
@@ -109,7 +109,7 @@ class Tag_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{}", t);
+		assertBean(t, "description,externalDocs,name", "<null>,<null>,<null>");
 
 		t
 			.set("description", "a")

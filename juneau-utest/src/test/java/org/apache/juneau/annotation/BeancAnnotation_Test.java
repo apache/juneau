@@ -27,25 +27,19 @@ class BeancAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Beanc a1 = BeancAnnotation.create()
-		.description("description")
-		.on("on")
-		.properties("properties")
+		.description("a")
+		.on("b")
+		.properties("c")
 		.build();
 
 	Beanc a2 = BeancAnnotation.create()
-		.description("description")
-		.on("on")
-		.properties("properties")
+		.description("a")
+		.on("b")
+		.properties("c")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['on'],"
-				+ "properties:'properties'"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on,properties", "[a],[b],c");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -84,17 +78,17 @@ class BeancAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Beanc(
-		description={ "description" },
-		on="on",
-		properties="properties"
+		description={ "a" },
+		on="b",
+		properties="c"
 	)
 	public static class D1 {}
 	Beanc d1 = D1.class.getAnnotationsByType(Beanc.class)[0];
 
 	@Beanc(
-		description={ "description" },
-		on="on",
-		properties="properties"
+		description={ "a" },
+		on="b",
+		properties="c"
 	)
 	public static class D2 {}
 	Beanc d2 = D2.class.getAnnotationsByType(Beanc.class)[0];

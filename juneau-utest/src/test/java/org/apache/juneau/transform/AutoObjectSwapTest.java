@@ -147,7 +147,7 @@ class AutoObjectSwapTest extends SimpleTestBase {
 	public static class C01 {
 		public C01() {}
 		public C01(Map<String,String> o) {
-			assertJson("{foo:'bar'}", o);
+			assertBean(o, "foo", "bar");
 		}
 		public Map<String,String> swap() {
 			return STRINGMAP;

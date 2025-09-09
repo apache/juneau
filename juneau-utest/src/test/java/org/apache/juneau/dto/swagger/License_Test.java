@@ -54,34 +54,34 @@ class License_Test extends SimpleTestBase {
 		t
 			.set("name", "a")
 			.set("url", URI.create("b"))
-			.set("$ref", "ref");
+			.set("$ref", "c");
 
 		// Comprehensive object state validation
 		assertBean(t,
 			"name,url,$ref",
-			"a,b,ref");
+			"a,b,c");
 
 		t
 			.set("name", "a")
 			.set("url", "b")
-			.set("$ref", "ref");
+			.set("$ref", "c");
 
 		assertBean(t,
 			"name,url,$ref",
-			"a,b,ref");
+			"a,b,c");
 
 		t
 			.set("name", Utils.sb("a"))
 			.set("url", Utils.sb("b"))
-			.set("$ref", Utils.sb("ref"));
+			.set("$ref", Utils.sb("c"));
 
 		assertBean(t,
 			"name,url,$ref",
-			"a,b,ref");
+			"a,b,c");
 
 		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
 			"name,url,$ref",
-			"a,b,ref");
+			"a,b,c");
 
 		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
 			"name,url,$ref",
@@ -94,8 +94,8 @@ class License_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_roundTripJson() {
-		var s = "{name:'a',url:'b','$ref':'ref'}";
-		assertJson(s, JsonParser.DEFAULT.parse(s, License.class));
+		var s = "{name:'a',url:'b','$ref':'c'}";
+		assertBean(JsonParser.DEFAULT.parse(s, License.class), "name,url,$ref", "a,b,c");
 	}
 
 	@Test void b03_copy() {
@@ -103,17 +103,17 @@ class License_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{}", t);
+		assertBean(t, "name,url", "<null>,<null>");
 
 		t
 			.set("name", "a")
 			.set("url", URI.create("b"))
-			.set("$ref", "ref")
+			.set("$ref", "c")
 			.copy();
 
 		assertBean(t,
 			"name,url,$ref",
-			"a,b,ref");
+			"a,b,c");
 	}
 
 	@Test void b04_keySet() {
@@ -124,7 +124,7 @@ class License_Test extends SimpleTestBase {
 		t
 			.set("name", "a")
 			.set("url", URI.create("b"))
-			.set("$ref", "ref");
+			.set("$ref", "c");
 
 		assertList(t.keySet(), "name", "url", "$ref");
 	}

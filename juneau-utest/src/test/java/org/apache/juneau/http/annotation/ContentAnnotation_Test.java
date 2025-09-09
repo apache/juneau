@@ -29,19 +29,19 @@ class ContentAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Content a1 = ContentAnnotation.create()
-		.description("description")
-		.on("on")
+		.description("a")
+		.on("b")
 		.onClass(X1.class)
 		.build();
 
 	Content a2 = ContentAnnotation.create()
-		.description("description")
-		.on("on")
+		.description("a")
+		.on("b")
 		.onClass(X1.class)
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,on,onClass{length,#{simpleName}},schema{description}", "[description],[on],{1,[{X1}]},{[]}");
+		assertBean(a1, "description,on,onClass{length,#{simpleName}},schema{description}", "[a],[b],{1,[{X1}]},{[]}");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -88,16 +88,16 @@ class ContentAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Content(
-		description={ "description" },
-		on="on",
+		description={ "a" },
+		on="b",
 		onClass=X1.class
 	)
 	public static class D1 {}
 	Content d1 = D1.class.getAnnotationsByType(Content.class)[0];
 
 	@Content(
-		description={ "description" },
-		on="on",
+		description={ "a" },
+		on="b",
 		onClass=X1.class
 	)
 	public static class D2 {}

@@ -30,32 +30,32 @@ class HeaderAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Header a1 = HeaderAnnotation.create()
-		.def("def")
-		.description("description")
-		.name("name")
-		.on("on")
+		.def("a")
+		.description("b")
+		.name("c")
+		.on("d")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
 		.serializer(OpenApiSerializer.class)
-		.value("value")
+		.value("e")
 		.build();
 
 	Header a2 = HeaderAnnotation.create()
-		.def("def")
-		.description("description")
-		.name("name")
-		.on("on")
+		.def("a")
+		.description("b")
+		.name("c")
+		.on("d")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
 		.serializer(OpenApiSerializer.class)
-		.value("value")
+		.value("e")
 		.build();
 
 	@Test void a01_basic() {
 		assertBean(
 			a1,
 			"def,description,name,on,onClass{#{simpleName}},parser{simpleName},serializer{simpleName},value",
-			"def,[description],name,[on],{[{X1}]},{OpenApiParser},{OpenApiSerializer},value"
+			"a,[b],c,[d],{[{X1}]},{OpenApiParser},{OpenApiSerializer},e"
 		);
 	}
 
@@ -105,27 +105,27 @@ class HeaderAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Header(
-		def="def",
-		description={ "description" },
-		name="name",
-		on="on",
+		def="a",
+		description={ "b" },
+		name="c",
+		on="d",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		serializer=OpenApiSerializer.class,
-		value="value"
+		value="e"
 	)
 	public static class D1 {}
 	Header d1 = D1.class.getAnnotationsByType(Header.class)[0];
 
 	@Header(
-		def="def",
-		description={ "description" },
-		name="name",
-		on="on",
+		def="a",
+		description={ "b" },
+		name="c",
+		on="d",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		serializer=OpenApiSerializer.class,
-		value="value"
+		value="e"
 	)
 	public static class D2 {}
 	Header d2 = D2.class.getAnnotationsByType(Header.class)[0];

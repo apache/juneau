@@ -27,23 +27,17 @@ class MsgPackAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	MsgPack a1 = MsgPackAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	MsgPack a2 = MsgPackAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-			+ "description:['description'],"
-				+ "on:['a'],"
-				+ "onClass:[]"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on,onClass", "[a],[b],[]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -92,15 +86,15 @@ class MsgPackAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@MsgPack(
-		description="description",
-		on="a"
+		description="a",
+		on="b"
 	)
 	public static class D1 {}
 	MsgPack d1 = D1.class.getAnnotationsByType(MsgPack.class)[0];
 
 	@MsgPack(
-		description="description",
-		on="a"
+		description="a",
+		on="b"
 	)
 	public static class D2 {}
 	MsgPack d2 = D2.class.getAnnotationsByType(MsgPack.class)[0];
@@ -111,4 +105,3 @@ class MsgPackAnnotation_Test extends SimpleTestBase {
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
 	}
 }
-

@@ -15,8 +15,6 @@ package org.apache.juneau;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static java.lang.Integer.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -30,13 +28,115 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.junit.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
+import org.opentest4j.*;
 
+/**
+ * Comprehensive utility class for Bean-Centric Tests (BCT) and general testing operations.
+ * 
+ * <p>This class provides the core testing infrastructure for Apache Juneau, with particular emphasis
+ * on the Bean-Centric Testing (BCT) framework. BCT enables sophisticated assertion patterns for
+ * testing object properties, collections, maps, and complex nested structures with minimal code.</p>
+ * 
+ * <h5 class='section'>Bean-Centric Testing (BCT) Framework:</h5>
+ * <p>The BCT framework consists of several key components:</p>
+ * <ul>
+ * 	<li><b>{@link BeanConverter}:</b> Core interface for object conversion and property access</li>
+ * 	<li><b>{@link BasicBeanConverter}:</b> Default implementation with extensible type handlers</li>
+ * 	<li><b>Assertion Methods:</b> High-level testing methods that leverage the converter framework</li>
+ * </ul>
+ * 
+ * <h5 class='section'>Primary BCT Assertion Methods:</h5>
+ * <dl>
+ * 	<dt><b>{@link #assertBean(Object, String, String)}</b></dt>
+ * 	<dd>Tests object properties with nested syntax support and collection iteration</dd>
+ * 	
+ * 	<dt><b>{@link #assertMap(Map, String, String)}</b></dt>
+ * 	<dd>Tests map entries with the same nested property syntax as assertBean</dd>
+ * 	
+ * 	<dt><b>{@link #assertMapped(Object, java.util.function.BiFunction, String, String)}</b></dt>
+ * 	<dd>Tests custom property access using BiFunction for non-standard objects</dd>
+ * 	
+ * 	<dt><b>{@link #assertList(List, Object...)}</b></dt>
+ * 	<dd>Tests list/collection elements with varargs for expected values</dd>
+ * 	
+ * 	<dt><b>{@link #assertBeans(Collection, String, String...)}</b></dt>
+ * 	<dd>Tests collections of objects by extracting and comparing specific fields</dd>
+ * </dl>
+ * 
+ * <h5 class='section'>BCT Advanced Features:</h5>
+ * <ul>
+ * 	<li><b>Nested Property Syntax:</b> "address{street,city}" for testing nested objects</li>
+ * 	<li><b>Collection Iteration:</b> "#{property}" syntax for testing all elements</li>
+ * 	<li><b>Universal Size Properties:</b> "length" and "size" work on all collection types</li>
+ * 	<li><b>Array/List Access:</b> Numeric indices for element-specific testing</li>
+ * 	<li><b>Method Chaining:</b> Fluent setters can be tested directly</li>
+ * 	<li><b>Direct Field Access:</b> Public fields accessed without getters</li>
+ * 	<li><b>Map Key Access:</b> Including special "&lt;NULL&gt;" syntax for null keys</li>
+ * </ul>
+ * 
+ * <h5 class='section'>Converter Extensibility:</h5>
+ * <p>The BCT framework is built on the extensible {@link BasicBeanConverter} which allows:</p>
+ * <ul>
+ * 	<li><b>Custom Stringifiers:</b> Type-specific string conversion logic</li>
+ * 	<li><b>Custom Listifiers:</b> Collection-type conversion for iteration</li>
+ * 	<li><b>Custom Swapifiers:</b> Object transformation before conversion</li>
+ * 	<li><b>Configurable Settings:</b> Formatting, delimiters, and display options</li>
+ * </ul>
+ * 
+ * <h5 class='section'>Usage Examples:</h5>
+ * 
+ * <p><b>Basic Property Testing:</b></p>
+ * <p class='bjava'>
+ * 	<jc>// Test multiple properties</jc>
+ * 	assertBean(user, <js>"name,age,active"</js>, <js>"John,30,true"</js>);
+ * 	
+ * 	<jc>// Test nested properties</jc>
+ * 	assertBean(user, <js>"address{street,city}"</js>, <js>"{123 Main St,Springfield}"</js>);
+ * </p>
+ * 
+ * <p><b>Collection and Array Testing:</b></p>
+ * <p class='bjava'>
+ * 	<jc>// Test collection size and iterate over all elements</jc>
+ * 	assertBean(order, <js>"items{length,#{name}}"</js>, <js>"{3,[{Laptop},{Phone},{Tablet}]}"</js>);
+ * 	
+ * 	<jc>// Test specific array elements</jc>
+ * 	assertBean(data, <js>"values{0,1,2}"</js>, <js>"{100,200,300}"</js>);
+ * </p>
+ * 
+ * <p><b>Map and Collection Testing:</b></p>
+ * <p class='bjava'>
+ * 	<jc>// Test map entries</jc>
+ * 	assertMap(config, <js>"timeout,retries"</js>, <js>"30000,3"</js>);
+ * 	
+ * 	<jc>// Test list elements</jc>
+ * 	assertList(tags, <js>"red"</js>, <js>"green"</js>, <js>"blue"</js>);
+ * </p>
+ * 
+ * <p><b>Custom Property Access:</b></p>
+ * <p class='bjava'>
+ * 	<jc>// Test with custom accessor function</jc>
+ * 	assertMapped(myObject, (obj, prop) -> obj.getProperty(prop), 
+ * 		<js>"prop1,prop2"</js>, <js>"value1,value2"</js>);
+ * </p>
+ * 
+ * <h5 class='section'>Performance and Thread Safety:</h5>
+ * <p>The BCT framework is designed for high performance with:</p>
+ * <ul>
+ * 	<li><b>Caching:</b> Type-to-handler mappings cached for fast lookup</li>
+ * 	<li><b>Thread Safety:</b> All operations are thread-safe for concurrent testing</li>
+ * 	<li><b>Minimal Allocation:</b> Efficient object reuse and minimal temporary objects</li>
+ * </ul>
+ * 
+ * @see BeanConverter
+ * @see BasicBeanConverter
+ */
 public class TestUtils extends Utils2 {
 
 	private static final ThreadLocal<TimeZone> SYSTEM_TIME_ZONE = new ThreadLocal<>();
@@ -46,9 +146,13 @@ public class TestUtils extends Utils2 {
 	/**
 	 * Asserts that the fields/properties on the specified bean are the specified values after being converted to {@link Utils#r readable} strings.
 	 *
-	 * <p>This is the primary method for Bean-Centric Test Modernization (BCTM), supporting extensive property validation
+	 * <p>This is the primary method for Bean-Centric Tests (BCT), supporting extensive property validation
 	 * patterns including nested objects, collections, arrays, method chaining, direct field access, collection iteration
 	 * with <js>#{property}</js> syntax, and universal <js>length</js>/<js>size</js> properties for all collection types.</p>
+	 * 
+	 * <p>The method uses the {@link BasicBeanConverter#DEFAULT} converter internally for object introspection
+	 * and value extraction. The converter provides sophisticated property access through the {@link BeanConverter}
+	 * interface, supporting multiple fallback mechanisms for accessing object properties and values.</p>
 	 *
 	 * <h5 class='section'>Basic Usage:</h5>
 	 * <p class='bjava'>
@@ -207,12 +311,18 @@ public class TestUtils extends Utils2 {
 	 * @param expected Comma-delimited list of expected values. Must match the order of fields.
 	 * @throws NullPointerException if the bean is null
 	 * @throws AssertionError if any property values don't match expected values
+	 * @see BeanConverter
+	 * @see BasicBeanConverter
 	 */
 	public static void assertBean(Object actual, String fields, String expected) {
+		assertBean(BasicBeanConverter.DEFAULT, actual, fields, expected);
+	}
+
+	public static void assertBean(BeanConverter converter, Object actual, String fields, String expected) {
 		assertNotNull(actual, "Value was null.");
 		assertArgNotNull("fields", fields);
 		assertArgNotNull("expected", expected);
-		assertEquals(expected, splitNested(fields).stream().map(x -> getEntry(actual, x)).collect(joining(",")));
+		assertEquals(expected, splitNested(fields).stream().map(x -> getEntry(converter, actual, x)).collect(joining(",")));
 	}
 
 	/**
@@ -273,21 +383,69 @@ public class TestUtils extends Utils2 {
 	 * @see #assertBean(Object, String, String)
 	 */
 	public static void assertBeans(Object actual, String fields, String...expected) {
+		assertBeans(BasicBeanConverter.DEFAULT, actual, fields, expected);
+	}
+
+	public static void assertBeans(BasicBeanConverter converter, Object actual, String fields, String...expected) {
 		assertNotNull(actual, "Value was null.");
 		assertArgNotNull("fields", fields);
 		assertArgNotNull("expected", expected);
 
-		var actual2 = toList(actual);
-		assertEquals(expected.length, actual2.size(), fms("Expected {0} rows but had actual {1}", expected.length, actual2.size()));
-
-		var r = 0;
 		var f = splitNested(fields);
-		for (var o : actual2) {
-			var a = f.stream().map(x -> getEntry(o, x)).collect(joining(","));
-			var r2 = r+1;
-			assertEquals(r(expected[r]), a, fms("Object at row {0} didn't match.", r2));
-			r++;
+		var errors = new ArrayList<AssertionFailedError>();
+		var actualList = converter.listify(actual);
+
+		if (ne(expected.length, actualList.size())) {
+			errors.add(assertionFailed(expected.length, actualList.size(), "Wrong number of beans."));
+		} else {
+			for (var i = 0; i < actualList.size(); i++) {
+				var i2 = i;
+				var a = f.stream().map(x -> getEntry(converter, actualList.get(i2), x)).collect(joining(","));
+				if (ne(r(expected[i]), a)) {
+					errors.add(assertionFailed(r(expected[i]), a, "Bean at row {0} did not match.", i));
+				}
+			}
 		}
+
+		if (errors.isEmpty()) return;
+
+		var actualStrings = new ArrayList<String>();
+		for (var o : actualList) {
+			actualStrings.add(f.stream().map(x -> getEntry(converter, o, x)).collect(joining(",")));
+		}
+
+		if (errors.size() == 1) throw errors.get(0);
+		throw assertionFailed(
+			Stream.of(expected).map(TestUtils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
+			actualStrings.stream().map(TestUtils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
+			"{0} bean assertions failed: {1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))
+		);
+	}
+
+	private static AssertionFailedError assertionFailed(Object expected, Object actual, String message, Object...args) {
+		return new AssertionFailedError(f(message, args) + f(" ==> expected: <{0}> but was: <{1}>", expected, actual), expected, actual);
+	}
+
+	private static String escapeForJava(String s) {
+		StringBuilder sb = new StringBuilder();
+		for (char c : s.toCharArray()) {
+			switch (c) {
+				case '\"': sb.append("\\\""); break;
+				case '\\': sb.append("\\\\"); break;
+				case '\n': sb.append("\\n"); break;
+				case '\r': sb.append("\\r"); break;
+				case '\t': sb.append("\\t"); break;
+				case '\f': sb.append("\\f"); break;
+				case '\b': sb.append("\\b"); break;
+				default:
+					if (c < 0x20 || c > 0x7E) {
+						sb.append(String.format("\\u%04x", (int)c));
+					} else {
+						sb.append(c);
+					}
+			}
+		}
+		return sb.toString();
 	}
 
 	/**
@@ -346,28 +504,32 @@ public class TestUtils extends Utils2 {
 	 * @throws AssertionError if the List size or contents don't match expected values
 	 * @see #l(Object) for converting other collection types to Lists
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> void assertList(Object actual, Object...expected) {
+		assertList(BasicBeanConverter.DEFAULT, actual, expected);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> void assertList(BeanConverter converter, Object actual, Object...expected) {
 		assertNotNull(actual, "Value was null.");
 		assertArgNotNull("expected", expected);
 
-		var list = toList(actual);
-		if (list.size() != expected.length)
-			fail(fms("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
+		var list = converter.listify(actual);
+		assertEquals(expected.length, list.size(), fms("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
 
 		for (var i = 0; i < expected.length; i++) {
 			var x = list.get(i);
 			if (expected[i] instanceof String e) {
-				if (ne(r(x), e))
-					fail(fms("Element at index {0} did not match.  expected={1}, actual={2}", i, e, r(x)));
+				assertEquals(e, converter.stringify(x), fms("Element at index {0} did not match.  expected={1}, actual={2}", i, e, converter.stringify(x)));
 			} else if (expected[i] instanceof Predicate e) {
-				if (! e.test(x))
-					fail(fms("Element at index {0} did pass predicate.  actual={1}", i, r(x)));
+				assertTrue(e.test(x), fms("Element at index {0} did pass predicate.  actual={1}", i, converter.stringify(x)));
 			} else {
-				if (ne(expected[i], x))
-					fail(fms("Element at index {0} did not match.  expected={1}, actual={2}", i, r(expected[i]), r(x)));
+				assertEquals(expected[i], x, fms("Element at index {0} did not match.  expected={1}({2}), actual={3}(4)", i, expected[i], t(expected[i]), x, t(x)));
 			}
 		}
+	}
+
+	private static String t(Object o) {
+		return o == null ? null : o.getClass().getSimpleName();
 	}
 
 	/**
@@ -398,14 +560,26 @@ public class TestUtils extends Utils2 {
 	 * Asserts that a collection is not null and empty.
 	 */
 	public static void assertEmpty(Object value) {
+		if (value instanceof Optional v2) {
+			assertTrue(v2.isEmpty(), "Optional was not empty");
+			return;
+		}
+		if (value instanceof Map v2) {
+			assertTrue(v2.isEmpty(), "Map was not empty");
+			return;
+		}
+		assertEmpty(BasicBeanConverter.DEFAULT, value);
+	}
+
+	public static void assertEmpty(BasicBeanConverter converter, Object value) {
 		assertNotNull(value, "Value was null.");
-		assertTrue(toList(value).isEmpty(), "Value was not empty.");
+		assertTrue(converter.canListify(value), fms("Value cannot be converted to a list.  Class={0}", value.getClass().getSimpleName()));
+		assertTrue(converter.listify(value).isEmpty(), "Value was not empty.");
 	}
 
 	public static void assertEqualsAll(Object...values) {
 		for (var i = 1; i < values.length; i++) {
-			if (ne(values[0], values[i]))
-				fail(fms("Elements at index {0} and {1} did not match.", 0, i));
+			assertEquals(values[0], values[i], fms("Elements at index {0} and {1} did not match. {0}={2}, {1}={3}", 0, i, r(values[0]), r(values[i])));
 		}
 	}
 
@@ -475,18 +649,24 @@ public class TestUtils extends Utils2 {
 	 * @throws NullPointerException if the map is null
 	 * @throws AssertionError if any map values don't match expected values
 	 * @see #assertBean(Object, String, String)
+	 * @see BeanConverter
+	 * @see BasicBeanConverter
 	 */
 	public static void assertMap(Map<?,?> actual, String fields, String expected) {
+		assertMap(BasicBeanConverter.DEFAULT, actual, fields, expected);
+	}
+
+	public static void assertMap(BeanConverter converter, Map<?,?> actual, String fields, String expected) {
 		assertNotNull(actual, "Value was null.");
 		assertArgNotNull("fields", fields);
 		assertArgNotNull("expected", expected);
-		assertEquals(expected, splitNested(fields).stream().map(x -> getEntry(actual, x)).collect(joining(",")));
+		assertEquals(expected, splitNested(fields).stream().map(x -> getEntry(converter, actual, x)).collect(joining(",")));
 	}
 
 	/**
 	 * Asserts that mapped property access on an object returns expected values using a custom BiFunction.
 	 *
-	 * <p>This is the most powerful and flexible BCTM method, designed for testing objects that don't follow
+	 * <p>This is the most powerful and flexible BCT method, designed for testing objects that don't follow
 	 * standard JavaBean patterns or require custom property access logic. The BiFunction allows complete
 	 * control over how properties are retrieved from the target object.</p>
 	 *
@@ -495,7 +675,8 @@ public class TestUtils extends Utils2 {
 	 *
 	 * <p>This method creates an intermediate LinkedHashMap to collect all property values before
 	 * delegating to assertMap(Map, String, String). This ensures consistent ordering
-	 * and supports the full nested property syntax.</p>
+	 * and supports the full nested property syntax. The {@link BasicBeanConverter#DEFAULT} is used
+	 * for value stringification and nested property access.</p>
 	 *
 	 * @param <T> The type of object being tested
 	 * @param actual The object to test properties on
@@ -505,6 +686,8 @@ public class TestUtils extends Utils2 {
 	 * @throws AssertionError if any mapped property values don't match expected values
 	 * @see #assertBean(Object, String, String)
 	 * @see #assertMap(Map, String, String)
+	 * @see BeanConverter
+	 * @see BasicBeanConverter
 	 */
 	public static <T> void assertMapped(T actual, BiFunction<T,String,Object> f, String properties, String expected) {
 		assertNotNull(actual, "Value was null.");
@@ -530,8 +713,7 @@ public class TestUtils extends Utils2 {
 	public static void assertNotEqualsAny(Object actual, Object...values) {
 		assertNotNull(actual, "Value was null.");
 		for (var i = 0; i < values.length; i++) {
-			if (eq(actual, values[i]))
-				fail(fms("Element at index {0} unexpectedly matched.  expected={1}, actual={2}", i, values[i], s(actual)));
+			assertNotEquals(values[i], actual, fms("Element at index {0} unexpectedly matched.  expected={1}, actual={2}", i, values[i], s(actual)));
 		}
 	}
 
@@ -569,8 +751,8 @@ public class TestUtils extends Utils2 {
 	 */
 	public static void assertSize(int expected, Object actual) {
 		assertNotNull(actual, "Value was null.");
-		if (actual instanceof String v2) {
-			assertEquals(expected, v2.length(), fms("Value not expected size.  Expected: {0}, Actual: {1}, Value: {2}", expected, v2.length(), v2));
+		if (actual instanceof String a2) {
+			assertEquals(expected, a2.length(), fms("Value not expected size.  Expected: {0}, Actual: {1}, Value: {2}", expected, a2.length(), a2));
 			return;
 		}
 		assertEquals(expected, toList(actual).size(), fms("Value not expected size.  Expected: {0}, Actual: {1}", expected, toList(actual).size()));
@@ -727,6 +909,11 @@ public class TestUtils extends Utils2 {
 				f.setAccessible(true);
 				return f.get(o);
 			}
+			m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals(name) && x.getParameterCount() == 0).findFirst().orElse(null);
+			if (m != null) {
+				m.setAccessible(true);
+				return m.invoke(o);
+			}
 			throw runtimeException("Property {0} not found on object of type {1}", name, classNameOf(o));
 		});
 	}
@@ -735,39 +922,23 @@ public class TestUtils extends Utils2 {
 		return Stream.iterate(t, Throwable::getCause).takeWhile(e -> e != null).map(Throwable::getMessage).collect(joining("\n"));
 	}
 
-	private static String getEntry(Object o, String name) {
+	private static String getEntry(BeanConverter converter, Object o, String name) {
+
+		if (o == null) return converter.nullValue();
 
 		// Handle #{...} syntax for iterating over collections/arrays
-		if (name.startsWith("#{") && name.endsWith("}") && isConvertibleToList(o)) {
+		if (name.startsWith("#{") && name.endsWith("}") && converter.canListify(o)) {
 			var spn = splitNestedInner(name);
-			return toList(o).stream().map(x -> spn.stream().map(x2 -> getEntry(x, x2)).collect(joining(",","{","}"))).collect(joining(",","[","]"));
+			return converter.listify(o).stream().map(x -> spn.stream().map(x2 -> getEntry(converter, x, x2)).collect(joining(",","{","}"))).collect(joining(",","[","]"));
 		}
 
 		// Original logic for regular property access
 		var i = name.indexOf("{");
 		var pn = i == -1 ? name : name.substring(0, i);
 		var spn = i == -1 ? null : splitNestedInner(name);
-		var e = ofNullable(getEntry2(o, pn.equals("<NULL>") ? null : pn)).map(Utils2::unwrap).orElse(null);
-		if (spn == null || e == null) return r(e);
-		return spn.stream().map(x -> getEntry(e, x)).map(Utils2::unwrap).map(Utils::r).collect(joining(",","{","}"));
-	}
-
-	private static Object getEntry2(Object o, String name) {
-		if (o instanceof Map o2) {
-			if (o2.containsKey(name)) return o2.get(name);
-			if ("size".equals(name)) return o2.size();
-		} else if (isConvertibleToList(o)) {
-			var l = toList(o);
-			if (isNumeric(name))
-				return l.get(parseInt(name));
-			if (isArray(o)) {
-				if ("length".equals(name)) return l.size();
-				if ("size".equals(name)) return l.size();
-			} else {
-				if ("size".equals(name)) return l.size();
-			}
-		}
-		return getBeanProp(o, name);
+		var e = ofNullable(converter.getEntry(o, pn.equals("<NULL>") ? null : pn)).orElse(null);
+		if (spn == null || e == null) return converter.stringify(e);
+		return spn.stream().map(x -> getEntry(converter, e, x)).map(converter::stringify).collect(joining(",","{","}"));
 	}
 
 	/**

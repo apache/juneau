@@ -27,23 +27,17 @@ class UonAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Uon a1 = UonAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	Uon a2 = UonAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['a'],"
-				+ "onClass:[]"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on,onClass", "[a],[b],[]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -92,15 +86,15 @@ class UonAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Uon(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D1 {}
 	Uon d1 = D1.class.getAnnotationsByType(Uon.class)[0];
 
 	@Uon(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D2 {}
 	Uon d2 = D2.class.getAnnotationsByType(Uon.class)[0];

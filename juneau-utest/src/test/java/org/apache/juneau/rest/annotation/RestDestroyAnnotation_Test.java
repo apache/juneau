@@ -27,22 +27,17 @@ class RestDestroyAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestDestroy a1 = RestDestroyAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	RestDestroy a2 = RestDestroyAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['a']"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on", "[a],[b]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -85,15 +80,15 @@ class RestDestroyAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestDestroy(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D1 {}
 	RestDestroy d1 = D1.class.getAnnotationsByType(RestDestroy.class)[0];
 
 	@RestDestroy(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D2 {}
 	RestDestroy d2 = D2.class.getAnnotationsByType(RestDestroy.class)[0];

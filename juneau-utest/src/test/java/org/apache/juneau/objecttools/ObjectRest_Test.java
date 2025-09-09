@@ -322,27 +322,49 @@ class ObjectRest_Test extends SimpleTestBase {
 		var l = JsonList.ofJson("[{a:'b'}]");
 		var m = JsonMap.ofJson("{a:'b'}");
 
-		assertMapped(model, ObjectRest::get, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,0,0,false,null,null,null,null,null,null,null");
+		assertMapped(model, ObjectRest::get,
+			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
+			"<null>,0,0,false,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
-		assertMapped(model, (r,p) -> r.getWithDefault(p, "foo"), "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "foo,0,0,false,foo,foo,foo,foo,foo,foo,foo");
+		assertMapped(model, (r,p) -> r.getWithDefault(p, "foo"),
+			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
+			"foo,0,0,false,foo,foo,foo,foo,foo,foo,foo");
 
-		assertMapped(model, ObjectRest::getString, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,0,0,false,null,null,null,null,null,null,null");
+		assertMapped(model, ObjectRest::getString,
+			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
+			"<null>,0,0,false,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
-		assertMapped(model, (r,p) -> r.getString(p, "foo"), "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "foo,0,0,false,foo,foo,foo,foo,foo,foo,foo");
+		assertMapped(model, (r,p) -> r.getString(p, "foo"),
+			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
+			"foo,0,0,false,foo,foo,foo,foo,foo,foo,foo");
 
-		assertMapped(model, ObjectRest::getInt, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,0,0,0,null,null,null,null,null,null,null");
+		assertMapped(model, ObjectRest::getInt,
+			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
+			"<null>,0,0,0,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
-		assertMapped(model, (r,p) -> r.getInt(p, 1), "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "1,0,0,0,1,1,1,1,1,1,1");
+		assertMapped(model, (r,p) -> r.getInt(p, 1),
+			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
+			"1,0,0,0,1,1,1,1,1,1,1");
 
-		assertMapped(model, ObjectRest::getLong, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,0,0,0,null,null,null,null,null,null,null");
+		assertMapped(model, ObjectRest::getLong,
+			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
+			"<null>,0,0,0,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
-		assertMapped(model, (r,p) -> r.getLong(p, 1L), "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "1,0,0,0,1,1,1,1,1,1,1");
+		assertMapped(model, (r,p) -> r.getLong(p, 1L),
+			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
+			"1,0,0,0,1,1,1,1,1,1,1");
 
-		assertMapped(model, ObjectRest::getBoolean, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,false,false,false,null,null,null,null,null,null,null");
+		assertMapped(model, ObjectRest::getBoolean,
+			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
+			"<null>,false,false,false,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
-		assertMapped(model, (r,p) -> r.getBoolean(p, true), "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "true,false,false,false,true,true,true,true,true,true,true");
+		assertMapped(model, (r,p) -> r.getBoolean(p, true),
+			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
+			"true,false,false,false,true,true,true,true,true,true,true");
 
-		assertMapped(model, ObjectRest::getMap, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,InvalidDataConversionException,InvalidDataConversionException,InvalidDataConversionException,null,null,null,null,null,null,null");
+		assertMapped(model, ObjectRest::getMap,
+			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
+			"<null>,InvalidDataConversionException,InvalidDataConversionException,InvalidDataConversionException,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
 		assertEquals("{a:'b'}", model.getMap("f1", m).toString());
 		assertThrows(InvalidDataConversionException.class, ()->model.getMap("f2", m));
@@ -356,11 +378,17 @@ class ObjectRest_Test extends SimpleTestBase {
 		assertEquals("{a:'b'}", model.getMap("f7", m).toString());
 		assertEquals("{a:'b'}", model.getMap("f8", m).toString());
 
-		assertMapped(model, (r,p) -> r.getMap(p, m), "f1,f2,f2a,f3,f3a,f4,f4a,f5,f6,f7,f8", "{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},{a=b},{a=b},{a=b},{a=b}");
+		assertMapped(model, (r,p) -> r.getMap(p, m),
+			"f1,f2,f2a,f3,f3a,f4,f4a,f5,f6,f7,f8",
+			"{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},{a=b},{a=b},{a=b},{a=b}");
 
-		assertMapped(model, ObjectRest::getJsonMap, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,InvalidDataConversionException,InvalidDataConversionException,InvalidDataConversionException,null,null,null,null,null,null,null");
+		assertMapped(model, ObjectRest::getJsonMap,
+			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
+			"<null>,InvalidDataConversionException,InvalidDataConversionException,InvalidDataConversionException,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
-		assertMapped(model, (r,p) -> r.getJsonMap(p, m), "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "{a=b},InvalidDataConversionException,InvalidDataConversionException,InvalidDataConversionException,{a=b},{a=b},{a=b},{a=b},{a=b},{a=b},{a=b}");
+		assertMapped(model, (r,p) -> r.getJsonMap(p, m),
+			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
+			"{a=b},InvalidDataConversionException,InvalidDataConversionException,InvalidDataConversionException,{a=b},{a=b},{a=b},{a=b},{a=b},{a=b},{a=b}");
 
 		assertNull(model.getList("f1"));
 		assertThrows(InvalidDataConversionException.class, ()->model.getList("f2"));

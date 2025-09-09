@@ -27,22 +27,17 @@ class RestPostCallAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestPostCall a1 = RestPostCallAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	RestPostCall a2 = RestPostCallAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['a']"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on", "[a],[b]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -85,15 +80,15 @@ class RestPostCallAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestPostCall(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D1 {}
 	RestPostCall d1 = D1.class.getAnnotationsByType(RestPostCall.class)[0];
 
 	@RestPostCall(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D2 {}
 	RestPostCall d2 = D2.class.getAnnotationsByType(RestPostCall.class)[0];

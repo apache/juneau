@@ -27,8 +27,8 @@ class XmlAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Xml a1 = XmlAnnotation.create()
-		.description("description")
 		.childName("a")
+		.description("b")
 		.format(XmlFormat.ATTR)
 		.namespace("c")
 		.on("d")
@@ -36,8 +36,8 @@ class XmlAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	Xml a2 = XmlAnnotation.create()
-		.description("description")
 		.childName("a")
+		.description("b")
 		.format(XmlFormat.ATTR)
 		.namespace("c")
 		.on("d")
@@ -45,17 +45,7 @@ class XmlAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "childName:'a',"
-				+ "description:['description'],"
-				+ "format:'ATTR',"
-				+ "namespace:'c',"
-				+ "on:['d'],"
-				+ "onClass:[],"
-				+ "prefix:'e'"
-			+ "}", a1
-		);
+		assertBean(a1, "childName,description,format,namespace,on,onClass,prefix", "a,[b],ATTR,c,[d],[],e");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -105,7 +95,7 @@ class XmlAnnotation_Test extends SimpleTestBase {
 
 	@Xml(
 		childName="a",
-		description={ "description" },
+		description={ "b" },
 		format=XmlFormat.ATTR,
 		namespace="c",
 		on="d",
@@ -116,7 +106,7 @@ class XmlAnnotation_Test extends SimpleTestBase {
 
 	@Xml(
 		childName="a",
-		description={ "description" },
+		description={ "b" },
 		format=XmlFormat.ATTR,
 		namespace="c",
 		on="d",

@@ -25,25 +25,19 @@ class HasFormDataAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	HasFormData a1 = HasFormDataAnnotation.create()
-		.description("description")
-		.name("name")
-		.value("value")
+		.description("a")
+		.name("b")
+		.value("c")
 		.build();
 
 	HasFormData a2 = HasFormDataAnnotation.create()
-		.description("description")
-		.name("name")
-		.value("value")
+		.description("a")
+		.name("b")
+		.value("c")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "name:'name',"
-				+ "value:'value'"
-			+ "}", a1
-		);
+		assertBean(a1, "description,name,value", "[a],b,c");
 	}
 
 	@Test void a02_testEquivalency() {

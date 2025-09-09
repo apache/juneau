@@ -47,7 +47,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 			t.setType(null).setDescription(null).setName(null).setIn(null).setFlow(null)
 				.setAuthorizationUrl(null).setTokenUrl(null).setScopes((Map<String,String>)null),
 			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes",
-			"null,null,null,null,null,null,null,null"
+			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>"
 		);
 
 		// Other methods
@@ -130,7 +130,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{}", t);
+		assertBean(t, "authorizationUrl,description,flow,in,name,scopes,tokenUrl,type", "<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
 		t
 			.set("authorizationUrl", "a")

@@ -31,10 +31,10 @@ class ResponseAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Response a1 = ResponseAnnotation.create()
-		.description("description")
-		.examples("examples")
+		.description("a")
+		.examples("b")
 		.headers(HeaderAnnotation.DEFAULT)
-		.on("on")
+		.on("c")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
 		.schema(SchemaAnnotation.DEFAULT)
@@ -42,10 +42,10 @@ class ResponseAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	Response a2 = ResponseAnnotation.create()
-		.description("description")
-		.examples("examples")
+		.description("a")
+		.examples("b")
 		.headers(HeaderAnnotation.DEFAULT)
-		.on("on")
+		.on("c")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
 		.schema(SchemaAnnotation.DEFAULT)
@@ -56,7 +56,7 @@ class ResponseAnnotation_Test extends SimpleTestBase {
 		assertBean(
 			a1,
 			"description,examples,on,onClass{#{simpleName}},parser{simpleName},serializer{simpleName}",
-			"[description],[examples],[on],{[{X1}]},{OpenApiParser},{OpenApiSerializer}"
+			"[a],[b],[c],{[{X1}]},{OpenApiParser},{OpenApiSerializer}"
 		);
 	}
 
@@ -104,10 +104,10 @@ class ResponseAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Response(
-		description={ "description" },
-		examples="examples",
+		description={ "a" },
+		examples="b",
 		headers=@Header,
-		on="on",
+		on="c",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		schema=@Schema,
@@ -117,10 +117,10 @@ class ResponseAnnotation_Test extends SimpleTestBase {
 	Response d1 = D1.class.getAnnotationsByType(Response.class)[0];
 
 	@Response(
-		description={ "description" },
-		examples="examples",
+		description={ "a" },
+		examples="b",
 		headers=@Header,
-		on="on",
+		on="c",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		schema=@Schema,

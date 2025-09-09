@@ -27,29 +27,21 @@ class HtmlLinkAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	HtmlLink a1 = HtmlLinkAnnotation.create()
-		.description("description")
-		.nameProperty("a")
-		.on("b")
-		.uriProperty("c")
+		.description("a")
+		.nameProperty("b")
+		.on("c")
+		.uriProperty("d")
 		.build();
 
 	HtmlLink a2 = HtmlLinkAnnotation.create()
-		.description("description")
-		.nameProperty("a")
-		.on("b")
-		.uriProperty("c")
+		.description("a")
+		.nameProperty("b")
+		.on("c")
+		.uriProperty("d")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "nameProperty:'a',"
-				+ "on:['b'],"
-				+ "onClass:[],"
-				+ "uriProperty:'c'"
-			+ "}", a1
-		);
+		assertBean(a1, "description,nameProperty,on,onClass,uriProperty", "[a],b,[c],[],d");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -94,19 +86,19 @@ class HtmlLinkAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@HtmlLink(
-		description={ "description" },
-		nameProperty="a",
-		on="b",
-		uriProperty="c"
+		description={ "a" },
+		nameProperty="b",
+		on="c",
+		uriProperty="d"
 	)
 	public static class D1 {}
 	HtmlLink d1 = D1.class.getAnnotationsByType(HtmlLink.class)[0];
 
 	@HtmlLink(
-		description={ "description" },
-		nameProperty="a",
-		on="b",
-		uriProperty="c"
+		description={ "a" },
+		nameProperty="b",
+		on="c",
+		uriProperty="d"
 	)
 	public static class D2 {}
 	HtmlLink d2 = D2.class.getAnnotationsByType(HtmlLink.class)[0];

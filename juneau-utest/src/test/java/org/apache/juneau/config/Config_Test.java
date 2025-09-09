@@ -240,7 +240,7 @@ class Config_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void getStringArray1() {
 		var c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
-		assertList(c.get("a1").as(String[].class).orElse(null), "1", "2");  // BCTM Feedback - assertArray can be used for arrays.
+		assertList(c.get("a1").as(String[].class).orElse(null), "1", "2");
 		assertList(c.get("a2").as(String[].class).orElse(null), "2", "3");
 		assertNull(c.get("a3").as(String[].class).orElse(null));
 		assertList(c.get("S/b1").as(String[].class).orElse(null), "1");
@@ -402,7 +402,7 @@ class Config_Test extends SimpleTestBase {
 	@Test void getBytes1() {
 		var c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 
-		assertList(c.get("a1").as(byte[].class).get(), (byte)102, (byte)111, (byte)111);  // BCTM - as() returns an Optional here that needs to be unwrapped.
+		assertList(c.get("a1").as(byte[].class).get(), (byte)102, (byte)111, (byte)111);
 		assertList(c.get("a2").as(byte[].class).get(), (byte)102, (byte)111, (byte)111);
 		assertEmpty(c.get("a3").as(byte[].class).get());
 		assertFalse(c.get("a4").as(byte[].class).isPresent());

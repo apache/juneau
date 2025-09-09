@@ -41,163 +41,113 @@ class RestAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Rest a1 = RestAnnotation.create()
-		.disableContentParam("disableContentParam")
-		.allowedHeaderParams("allowedHeaderParams")
-		.allowedMethodHeaders("allowedMethodHeaders")
-		.allowedMethodParams("allowedMethodParams")
+		.disableContentParam("a")
+		.allowedHeaderParams("b")
+		.allowedMethodHeaders("c")
+		.allowedMethodParams("d")
 		.beanStore(BeanStore.class)
 		.callLogger(CallLogger.class)
 		.children(RestAnnotation_Test.class)
-		.clientVersionHeader("clientVersionHeader")
-		.config("config")
-		.consumes("consumes")
+		.clientVersionHeader("e")
+		.config("f")
+		.consumes("g")
 		.converters(RestConverter.class)
-		.debug("debug")
+		.debug("h")
 		.debugEnablement(DebugEnablement.class)
-		.debugOn("debugOn")
-		.defaultAccept("defaultAccept")
-		.defaultCharset("defaultCharset")
-		.defaultContentType("defaultContentType")
-		.defaultRequestAttributes("defaultRequestAttributes")
-		.defaultRequestHeaders("defaultRequestHeaders")
-		.defaultResponseHeaders("defaultResponseHeaders")
-		.description("description")
+		.debugOn("i")
+		.defaultAccept("j")
+		.defaultCharset("k")
+		.defaultContentType("l")
+		.defaultRequestAttributes("m")
+		.defaultRequestHeaders("n")
+		.defaultResponseHeaders("o")
+		.description("p")
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
-		.maxInput("maxInput")
-		.messages("messages")
-		.on("on")
+		.maxInput("q")
+		.messages("r")
+		.on("s")
 		.onClass(RestAnnotation_Test.class)
 		.parsers(Parser.class)
 		.partParser(HttpPartParser.class)
 		.partSerializer(HttpPartSerializer.class)
-		.path("path")
-		.produces("produces")
-		.renderResponseStackTraces("renderResponseStackTraces")
+		.path("t")
+		.produces("u")
+		.renderResponseStackTraces("v")
 		.responseProcessors(ResponseProcessor.class)
 		.restChildrenClass(RestChildren.class)
 		.restOpArgs(RestOpArg.class)
 		.restOperationsClass(RestOperations.class)
-		.roleGuard("roleGuard")
-		.rolesDeclared("rolesDeclared")
+		.roleGuard("w")
+		.rolesDeclared("x")
 		.serializers(Serializer.class)
-		.siteName("siteName")
+		.siteName("y")
 		.staticFiles(StaticFiles.class)
 		.swagger(SwaggerAnnotation.DEFAULT)
 		.swaggerProvider(BasicSwaggerProvider.class)
-		.title("title")
-		.uriAuthority("uriAuthority")
-		.uriContext("uriContext")
-		.uriRelativity("uriRelativity")
-		.uriResolution("uriResolution")
+		.title("z")
+		.uriAuthority("aa")
+		.uriContext("bb")
+		.uriRelativity("cc")
+		.uriResolution("dd")
 		.build();
 
 	Rest a2 = RestAnnotation.create()
-		.disableContentParam("disableContentParam")
-		.allowedHeaderParams("allowedHeaderParams")
-		.allowedMethodHeaders("allowedMethodHeaders")
-		.allowedMethodParams("allowedMethodParams")
+		.disableContentParam("a")
+		.allowedHeaderParams("b")
+		.allowedMethodHeaders("c")
+		.allowedMethodParams("d")
 		.beanStore(BeanStore.class)
 		.callLogger(CallLogger.class)
 		.children(RestAnnotation_Test.class)
-		.clientVersionHeader("clientVersionHeader")
-		.config("config")
-		.consumes("consumes")
+		.clientVersionHeader("e")
+		.config("f")
+		.consumes("g")
 		.converters(RestConverter.class)
-		.debug("debug")
+		.debug("h")
 		.debugEnablement(DebugEnablement.class)
-		.debugOn("debugOn")
-		.defaultAccept("defaultAccept")
-		.defaultCharset("defaultCharset")
-		.defaultContentType("defaultContentType")
-		.defaultRequestAttributes("defaultRequestAttributes")
-		.defaultRequestHeaders("defaultRequestHeaders")
-		.defaultResponseHeaders("defaultResponseHeaders")
-		.description("description")
+		.debugOn("i")
+		.defaultAccept("j")
+		.defaultCharset("k")
+		.defaultContentType("l")
+		.defaultRequestAttributes("m")
+		.defaultRequestHeaders("n")
+		.defaultResponseHeaders("o")
+		.description("p")
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
-		.maxInput("maxInput")
-		.messages("messages")
-		.on("on")
+		.maxInput("q")
+		.messages("r")
+		.on("s")
 		.onClass(RestAnnotation_Test.class)
 		.parsers(Parser.class)
 		.partParser(HttpPartParser.class)
 		.partSerializer(HttpPartSerializer.class)
-		.path("path")
-		.produces("produces")
-		.renderResponseStackTraces("renderResponseStackTraces")
+		.path("t")
+		.produces("u")
+		.renderResponseStackTraces("v")
 		.responseProcessors(ResponseProcessor.class)
 		.restChildrenClass(RestChildren.class)
 		.restOpArgs(RestOpArg.class)
 		.restOperationsClass(RestOperations.class)
-		.roleGuard("roleGuard")
-		.rolesDeclared("rolesDeclared")
+		.roleGuard("w")
+		.rolesDeclared("x")
 		.serializers(Serializer.class)
-		.siteName("siteName")
+		.siteName("y")
 		.staticFiles(StaticFiles.class)
 		.swagger(SwaggerAnnotation.DEFAULT)
 		.swaggerProvider(BasicSwaggerProvider.class)
-		.title("title")
-		.uriAuthority("uriAuthority")
-		.uriContext("uriContext")
-		.uriRelativity("uriRelativity")
-		.uriResolution("uriResolution")
+		.title("z")
+		.uriAuthority("aa")
+		.uriContext("bb")
+		.uriRelativity("cc")
+		.uriResolution("dd")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "allowedHeaderParams:'allowedHeaderParams',"
-				+ "allowedMethodHeaders:'allowedMethodHeaders',"
-				+ "allowedMethodParams:'allowedMethodParams',"
-				+ "beanStore:'org.apache.juneau.cp.BeanStore',"
-				+ "callLogger:'org.apache.juneau.rest.logger.CallLogger',"
-				+ "children:['"+CNAME+"'],"
-				+ "clientVersionHeader:'clientVersionHeader',"
-				+ "config:'config',"
-				+ "consumes:['consumes'],"
-				+ "converters:['org.apache.juneau.rest.converter.RestConverter'],"
-				+ "debug:'debug',"
-				+ "debugEnablement:'org.apache.juneau.rest.debug.DebugEnablement',"
-				+ "debugOn:'debugOn',"
-				+ "defaultAccept:'defaultAccept',"
-				+ "defaultCharset:'defaultCharset',"
-				+ "defaultContentType:'defaultContentType',"
-				+ "defaultRequestAttributes:['defaultRequestAttributes'],"
-				+ "defaultRequestHeaders:['defaultRequestHeaders'],"
-				+ "defaultResponseHeaders:['defaultResponseHeaders'],"
-				+ "description:['description'],"
-				+ "disableContentParam:'disableContentParam',"
-				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
-				+ "guards:['org.apache.juneau.rest.guard.RestGuard'],"
-				+ "maxInput:'maxInput',"
-				+ "messages:'messages',"
-				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"'],"
-				+ "parsers:['org.apache.juneau.parser.Parser'],"
-				+ "partParser:'org.apache.juneau.httppart.HttpPartParser',"
-				+ "partSerializer:'org.apache.juneau.httppart.HttpPartSerializer',"
-				+ "path:'path',"
-				+ "produces:['produces'],"
-				+ "renderResponseStackTraces:'renderResponseStackTraces',"
-				+ "responseProcessors:['org.apache.juneau.rest.processor.ResponseProcessor'],"
-				+ "restChildrenClass:'org.apache.juneau.rest.RestChildren',"
-				+ "restOpArgs:['org.apache.juneau.rest.arg.RestOpArg'],"
-				+ "restOperationsClass:'org.apache.juneau.rest.RestOperations',"
-				+ "roleGuard:'roleGuard',"
-				+ "rolesDeclared:'rolesDeclared',"
-				+ "serializers:['org.apache.juneau.serializer.Serializer'],"
-				+ "siteName:'siteName',"
-				+ "staticFiles:'org.apache.juneau.rest.staticfile.StaticFiles',"
-				+ "swagger:{contact:{description:[],email:'',name:'',url:''},description:[],externalDocs:{description:[],url:''},license:{description:[],name:'',url:''},tags:[],termsOfService:[],title:[],value:[],version:''},"
-				+ "swaggerProvider:'org.apache.juneau.rest.swagger.BasicSwaggerProvider',"
-				+ "title:['title'],"
-				+ "uriAuthority:'uriAuthority',"
-				+ "uriContext:'uriContext',"
-				+ "uriRelativity:'uriRelativity',"
-				+ "uriResolution:'uriResolution'"
-			+ "}", a1
-		);
+		assertBean(a1,
+			"allowedHeaderParams,allowedMethodHeaders,allowedMethodParams,beanStore,callLogger,children,clientVersionHeader,config,consumes,converters,debug,debugEnablement,debugOn,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestHeaders,defaultResponseHeaders,description,disableContentParam,encoders,guards,maxInput,messages,on,onClass,parsers,partParser,partSerializer,path,produces,renderResponseStackTraces,responseProcessors,restChildrenClass,restOpArgs,restOperationsClass,roleGuard,rolesDeclared,serializers,siteName,staticFiles,swagger{contact{description,email,name,url},description,externalDocs{description,url},license{description,name,url},tags,termsOfService,title,value,version},swaggerProvider,title,uriAuthority,uriContext,uriRelativity,uriResolution",
+			"b,c,d,BeanStore,CallLogger,[RestAnnotation_Test],e,f,[g],[RestConverter],h,DebugEnablement,i,j,k,l,[m],[n],[o],[p],a,[Encoder],[RestGuard],q,r,[s],[RestAnnotation_Test],[Parser],HttpPartParser,HttpPartSerializer,t,[u],v,[ResponseProcessor],RestChildren,[RestOpArg],RestOperations,w,x,[Serializer],y,StaticFiles,{{[],,,},[],{[],},{[],,},[],[],[],[],},BasicSwaggerProvider,[z],aa,bb,cc,dd");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -242,109 +192,109 @@ class RestAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		disableContentParam="disableContentParam",
-		allowedHeaderParams="allowedHeaderParams",
-		allowedMethodHeaders="allowedMethodHeaders",
-		allowedMethodParams="allowedMethodParams",
+		disableContentParam="a",
+		allowedHeaderParams="b",
+		allowedMethodHeaders="c",
+		allowedMethodParams="d",
 		beanStore=BeanStore.class,
 		callLogger=CallLogger.class,
 		children=RestAnnotation_Test.class,
-		clientVersionHeader="clientVersionHeader",
-		config="config",
-		consumes="consumes",
+		clientVersionHeader="e",
+		config="f",
+		consumes="g",
 		converters=RestConverter.class,
-		debug="debug",
+		debug="h",
 		debugEnablement=DebugEnablement.class,
-		debugOn="debugOn",
-		defaultAccept="defaultAccept",
-		defaultCharset="defaultCharset",
-		defaultContentType="defaultContentType",
-		defaultRequestAttributes="defaultRequestAttributes",
-		defaultRequestHeaders="defaultRequestHeaders",
-		defaultResponseHeaders="defaultResponseHeaders",
-		description="description",
+		debugOn="i",
+		defaultAccept="j",
+		defaultCharset="k",
+		defaultContentType="l",
+		defaultRequestAttributes="m",
+		defaultRequestHeaders="n",
+		defaultResponseHeaders="o",
+		description="p",
 		encoders=Encoder.class,
 		guards=RestGuard.class,
-		maxInput="maxInput",
-		messages="messages",
-		on="on",
+		maxInput="q",
+		messages="r",
+		on="s",
 		onClass=RestAnnotation_Test.class,
 		parsers=Parser.class,
 		partParser=HttpPartParser.class,
 		partSerializer=HttpPartSerializer.class,
-		path="path",
-		produces="produces",
-		renderResponseStackTraces="renderResponseStackTraces",
+		path="t",
+		produces="u",
+		renderResponseStackTraces="v",
 		responseProcessors=ResponseProcessor.class,
 		restChildrenClass=RestChildren.class,
 		restOpArgs=RestOpArg.class,
 		restOperationsClass=RestOperations.class,
-		roleGuard="roleGuard",
-		rolesDeclared="rolesDeclared",
+		roleGuard="w",
+		rolesDeclared="x",
 		serializers=Serializer.class,
-		siteName="siteName",
+		siteName="y",
 		staticFiles=StaticFiles.class,
 		swagger=@Swagger,
 		swaggerProvider=BasicSwaggerProvider.class,
-		title="title",
-		uriAuthority="uriAuthority",
-		uriContext="uriContext",
-		uriRelativity="uriRelativity",
-		uriResolution="uriResolution"
+		title="z",
+		uriAuthority="aa",
+		uriContext="bb",
+		uriRelativity="cc",
+		uriResolution="dd"
 	)
 	public static class D1 {}
 	Rest d1 = D1.class.getAnnotationsByType(Rest.class)[0];
 
 	@Rest(
-		disableContentParam="disableContentParam",
-		allowedHeaderParams="allowedHeaderParams",
-		allowedMethodHeaders="allowedMethodHeaders",
-		allowedMethodParams="allowedMethodParams",
+		disableContentParam="a",
+		allowedHeaderParams="b",
+		allowedMethodHeaders="c",
+		allowedMethodParams="d",
 		beanStore=BeanStore.class,
 		callLogger=CallLogger.class,
 		children=RestAnnotation_Test.class,
-		clientVersionHeader="clientVersionHeader",
-		config="config",
-		consumes="consumes",
+		clientVersionHeader="e",
+		config="f",
+		consumes="g",
 		converters=RestConverter.class,
-		debug="debug",
+		debug="h",
 		debugEnablement=DebugEnablement.class,
-		debugOn="debugOn",
-		defaultAccept="defaultAccept",
-		defaultCharset="defaultCharset",
-		defaultContentType="defaultContentType",
-		defaultRequestAttributes="defaultRequestAttributes",
-		defaultRequestHeaders="defaultRequestHeaders",
-		defaultResponseHeaders="defaultResponseHeaders",
-		description="description",
+		debugOn="i",
+		defaultAccept="j",
+		defaultCharset="k",
+		defaultContentType="l",
+		defaultRequestAttributes="m",
+		defaultRequestHeaders="n",
+		defaultResponseHeaders="o",
+		description="p",
 		encoders=Encoder.class,
 		guards=RestGuard.class,
-		maxInput="maxInput",
-		messages="messages",
-		on="on",
+		maxInput="q",
+		messages="r",
+		on="s",
 		onClass=RestAnnotation_Test.class,
 		parsers=Parser.class,
 		partParser=HttpPartParser.class,
 		partSerializer=HttpPartSerializer.class,
-		path="path",
-		produces="produces",
-		renderResponseStackTraces="renderResponseStackTraces",
+		path="t",
+		produces="u",
+		renderResponseStackTraces="v",
 		responseProcessors=ResponseProcessor.class,
 		restChildrenClass=RestChildren.class,
 		restOpArgs=RestOpArg.class,
 		restOperationsClass=RestOperations.class,
-		roleGuard="roleGuard",
-		rolesDeclared="rolesDeclared",
+		roleGuard="w",
+		rolesDeclared="x",
 		serializers=Serializer.class,
-		siteName="siteName",
+		siteName="y",
 		staticFiles=StaticFiles.class,
 		swagger=@Swagger,
 		swaggerProvider=BasicSwaggerProvider.class,
-		title="title",
-		uriAuthority="uriAuthority",
-		uriContext="uriContext",
-		uriRelativity="uriRelativity",
-		uriResolution="uriResolution"
+		title="z",
+		uriAuthority="aa",
+		uriContext="bb",
+		uriRelativity="cc",
+		uriResolution="dd"
 	)
 	public static class D2 {}
 	Rest d2 = D2.class.getAnnotationsByType(Rest.class)[0];

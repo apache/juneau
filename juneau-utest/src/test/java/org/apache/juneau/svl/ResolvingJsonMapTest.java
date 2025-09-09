@@ -32,13 +32,13 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 		assertEquals("1", m.get("foo"));
 
 		m.put("foo", new String[]{"$X{a}"});
-		assertJson("['1']", m.get("foo"));
+		assertList(m.get("foo"), "1");
 
 		m.put("foo", list("$X{a}"));
-		assertJson("['1']", m.get("foo"));
+		assertList(m.get("foo"), "1");
 
 		m.put("foo", map("k1","$X{a}"));
-		assertJson("{k1:'1'}", m.get("foo"));
+		assertMap(m, "foo{k1}", "{1}");
 	}
 
 	public static class XVar extends MapVar {
@@ -58,13 +58,13 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 		assertNull(m.get("foo"));
 
 		m.put("foo", new String[]{null});
-		assertJson("[null]", m.get("foo"));
+		assertList(m.get("foo"), (Object)null);
 
 		m.put("foo", list((String)null));
-		assertJson("[null]", m.get("foo"));
+		assertList(m.get("foo"), (Object)null);
 
 		m.put("foo", map("k1",null));
-		assertJson("{k1:null}", m.get("foo"));
+		assertMap(m, "foo{k1}", "{<null>}");
 	}
 
 	//====================================================================================================
@@ -77,13 +77,13 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 		m.put("foo", FooEnum.ONE);
 		assertString("ONE", m.get("foo"));
 		m.put("foo", new Object[]{FooEnum.ONE});
-		assertJson("['ONE']", m.get("foo"));
+		assertList(m.get("foo"), "ONE");
 
 		m.put("foo", list(FooEnum.ONE));
-		assertJson("['ONE']", m.get("foo"));
+		assertList(m.get("foo"), "ONE");
 
 		m.put("foo", map(FooEnum.ONE,FooEnum.ONE));
-		assertJson("{ONE:'ONE'}", m.get("foo"));
+		assertBean(m, "foo", "{ONE=ONE}");
 	}
 
 	public enum FooEnum {
@@ -105,12 +105,12 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 		assertEquals("1", m.get("foo"));
 
 		m3.put("foo", new String[]{"$X{a}"});
-		assertJson("['1']", m.get("foo"));
+		assertList(m.get("foo"), "1");
 
 		m3.put("foo", list("$X{a}"));
-		assertJson("['1']", m.get("foo"));
+		assertList(m.get("foo"), "1");
 
 		m3.put("foo", map("k1","$X{a}"));
-		assertJson("{k1:'1'}", m.get("foo"));
+		assertMap(m, "foo{k1}", "{1}");
 	}
 }

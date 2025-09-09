@@ -27,23 +27,17 @@ class OpenApiAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	OpenApi a1 = OpenApiAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	OpenApi a2 = OpenApiAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['a'],"
-				+ "onClass:[]"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on,onClass", "[a],[b],[]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -92,15 +86,15 @@ class OpenApiAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@OpenApi(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D1 {}
 	OpenApi d1 = D1.class.getAnnotationsByType(OpenApi.class)[0];
 
 	@OpenApi(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D2 {}
 	OpenApi d2 = D2.class.getAnnotationsByType(OpenApi.class)[0];

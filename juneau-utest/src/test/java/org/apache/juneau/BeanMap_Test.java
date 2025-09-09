@@ -78,7 +78,7 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("d2", null);
 		m.put("f2", null);
 		m.put("b2", null);
-		assertBean(m, "i2,s2,l2,d2,f2,b2", "null,null,null,null,null,null");
+		assertBean(m, "i2,s2,l2,d2,f2,b2", "<null>,<null>,<null>,<null>,<null>,<null>");
 
 		// Make sure setting them all to an integer is kosher.
 		m.put("i1", 1);
@@ -136,7 +136,7 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("d2", null);
 		m.put("f2", null);
 		m.put("b2", null);
-		assertBean(m, "i2,s2,l2,d2,f2,b2", "null,null,null,null,null,null");
+		assertBean(m, "i2,s2,l2,d2,f2,b2", "<null>,<null>,<null>,<null>,<null>,<null>");
 
 		// Make sure setting them all to an integer is kosher.
 		m.put("i1", 1);
@@ -1774,7 +1774,7 @@ class BeanMap_Test extends SimpleTestBase {
 		var bm = BeanContext.DEFAULT.toBeanMap(aa);
 
 		bm.put("a", alist("x"));
-		assertJson("['x']", aa.a);
+		assertList(aa.a, "x");
 	}
 
 	public static class AA {

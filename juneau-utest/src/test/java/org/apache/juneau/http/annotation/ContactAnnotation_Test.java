@@ -25,28 +25,21 @@ class ContactAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Contact a1 = ContactAnnotation.create()
-		.description("description")
-		.email("email")
-		.name("name")
-		.url("url")
+		.description("a")
+		.email("b")
+		.name("c")
+		.url("d")
 		.build();
 
 	Contact a2 = ContactAnnotation.create()
-		.description("description")
-		.email("email")
-		.name("name")
-		.url("url")
+		.description("a")
+		.email("b")
+		.name("c")
+		.url("d")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "email:'email',"
-				+ "name:'name',"
-				+ "url:'url'"
-			+ "}", a1
-		);
+		assertBean(a1, "description,email,name,url", "[a],b,c,d");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -70,19 +63,19 @@ class ContactAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Contact(
-		description={ "description" },
-		email="email",
-		name="name",
-		url="url"
+		description={ "a" },
+		email="b",
+		name="c",
+		url="d"
 	)
 	public static class D1 {}
 	Contact d1 = D1.class.getAnnotationsByType(Contact.class)[0];
 
 	@Contact(
-		description={ "description" },
-		email="email",
-		name="name",
-		url="url"
+		description={ "a" },
+		email="b",
+		name="c",
+		url="d"
 	)
 	public static class D2 {}
 	Contact d2 = D2.class.getAnnotationsByType(Contact.class)[0];

@@ -30,73 +30,53 @@ class RestDeleteAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestDelete a1 = RestDeleteAnnotation.create()
-		.clientVersion("clientVersion")
-		.debug("debug")
-		.defaultAccept("defaultAccept")
-		.defaultCharset("defaultCharset")
-		.defaultRequestQueryData("defaultRequestQueryData")
-		.defaultRequestAttributes("defaultRequestAttributes")
-		.defaultRequestHeaders("defaultRequestHeaders")
-		.defaultResponseHeaders("defaultResponseHeaders")
-		.description("description")
+		.clientVersion("a")
+		.debug("b")
+		.defaultAccept("c")
+		.defaultCharset("d")
+		.defaultRequestQueryData("e")
+		.defaultRequestAttributes("f")
+		.defaultRequestHeaders("g")
+		.defaultResponseHeaders("h")
+		.description("i")
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
-		.on("on")
-		.path("path")
-		.roleGuard("roleGuard")
-		.rolesDeclared("rolesDeclared")
-		.summary("summary")
+		.on("j")
+		.path("k")
+		.roleGuard("l")
+		.rolesDeclared("m")
+		.summary("n")
 		.swagger(OpSwaggerAnnotation.DEFAULT)
-		.value("value")
+		.value("o")
 		.build();
 
 	RestDelete a2 = RestDeleteAnnotation.create()
-		.clientVersion("clientVersion")
-		.debug("debug")
-		.defaultAccept("defaultAccept")
-		.defaultCharset("defaultCharset")
-		.defaultRequestQueryData("defaultRequestQueryData")
-		.defaultRequestAttributes("defaultRequestAttributes")
-		.defaultRequestHeaders("defaultRequestHeaders")
-		.defaultResponseHeaders("defaultResponseHeaders")
-		.description("description")
+		.clientVersion("a")
+		.debug("b")
+		.defaultAccept("c")
+		.defaultCharset("d")
+		.defaultRequestQueryData("e")
+		.defaultRequestAttributes("f")
+		.defaultRequestHeaders("g")
+		.defaultResponseHeaders("h")
+		.description("i")
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
-		.on("on")
-		.path("path")
-		.roleGuard("roleGuard")
-		.rolesDeclared("rolesDeclared")
-		.summary("summary")
+		.on("j")
+		.path("k")
+		.roleGuard("l")
+		.rolesDeclared("m")
+		.summary("n")
 		.swagger(OpSwaggerAnnotation.DEFAULT)
-		.value("value")
+		.value("o")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "clientVersion:'clientVersion',"
-				+ "debug:'debug',"
-				+ "defaultAccept:'defaultAccept',"
-				+ "defaultCharset:'defaultCharset',"
-				+ "defaultRequestAttributes:['defaultRequestAttributes'],"
-				+ "defaultRequestHeaders:['defaultRequestHeaders'],"
-				+ "defaultRequestQueryData:['defaultRequestQueryData'],"
-				+ "defaultResponseHeaders:['defaultResponseHeaders'],"
-				+ "description:['description'],"
-				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
-				+ "guards:['org.apache.juneau.rest.guard.RestGuard'],"
-				+ "matchers:['org.apache.juneau.rest.matcher.RestMatcher'],"
-				+ "on:['on'],"
-				+ "path:['path'],"
-				+ "roleGuard:'roleGuard',"
-				+ "rolesDeclared:'rolesDeclared',"
-				+ "summary:'summary',"
-				+ "swagger:{consumes:[],deprecated:'',description:[],externalDocs:{description:[],url:''},operationId:'',parameters:[],produces:[],responses:[],schemes:[],summary:[],tags:[],value:[]},"
-				+ "value:'value'"
-			+ "}", a1
-		);
+		assertBean(a1,
+			"clientVersion,debug,defaultAccept,defaultCharset,defaultRequestAttributes,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,on,path,roleGuard,rolesDeclared,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
+			"a,b,c,d,[f],[g],[e],[h],[i],[Encoder],[RestGuard],[RestMatcher],[j],[k],l,m,n,{[],,[],{[],},,[],[],[],[],[],[],[]},o");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -141,48 +121,48 @@ class RestDeleteAnnotation_Test extends SimpleTestBase {
 	public interface D1 {
 
 		@RestDelete(
-			clientVersion="clientVersion",
-			debug="debug",
-			defaultAccept="defaultAccept",
-			defaultCharset="defaultCharset",
-			defaultRequestQueryData="defaultRequestQueryData",
-			defaultRequestAttributes="defaultRequestAttributes",
-			defaultRequestHeaders="defaultRequestHeaders",
-			defaultResponseHeaders="defaultResponseHeaders",
-			description="description",
+			clientVersion="a",
+			debug="b",
+			defaultAccept="c",
+			defaultCharset="d",
+			defaultRequestQueryData="e",
+			defaultRequestAttributes="f",
+			defaultRequestHeaders="g",
+			defaultResponseHeaders="h",
+			description="i",
 			encoders=Encoder.class,
 			guards=RestGuard.class,
 			matchers=RestMatcher.class,
-			on="on",
-			path="path",
-			roleGuard="roleGuard",
-			rolesDeclared="rolesDeclared",
-			summary="summary",
+			on="j",
+			path="k",
+			roleGuard="l",
+			rolesDeclared="m",
+			summary="n",
 			swagger=@OpSwagger,
-			value="value"
+			value="o"
 		)
 		void m1();
 
 		@RestDelete(
-			clientVersion="clientVersion",
-			debug="debug",
-			defaultAccept="defaultAccept",
-			defaultCharset="defaultCharset",
-			defaultRequestQueryData="defaultRequestQueryData",
-			defaultRequestAttributes="defaultRequestAttributes",
-			defaultRequestHeaders="defaultRequestHeaders",
-			defaultResponseHeaders="defaultResponseHeaders",
-			description="description",
+			clientVersion="a",
+			debug="b",
+			defaultAccept="c",
+			defaultCharset="d",
+			defaultRequestQueryData="e",
+			defaultRequestAttributes="f",
+			defaultRequestHeaders="g",
+			defaultResponseHeaders="h",
+			description="i",
 			encoders=Encoder.class,
 			guards=RestGuard.class,
 			matchers=RestMatcher.class,
-			on="on",
-			path="path",
-			roleGuard="roleGuard",
-			rolesDeclared="rolesDeclared",
-			summary="summary",
+			on="j",
+			path="k",
+			roleGuard="l",
+			rolesDeclared="m",
+			summary="n",
 			swagger=@OpSwagger,
-			value="value"
+			value="o"
 		)
 		void m2();
 	}

@@ -26,119 +26,81 @@ class SubItemsAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	SubItems a1 = SubItemsAnnotation.create()
-		.$ref("$ref")
-		._default("default")
-		._enum("enum")
-		.cf("cf")
-		.collectionFormat("collectionFormat")
-		.description("description")
-		.df("df")
-		.e("e")
+		.$ref("a")
+		._default("b")
+		._enum("c")
+		.cf("d")
+		.collectionFormat("e")
+		.description("f")
+		.df("g")
+		.e("h")
 		.emax(true)
 		.emin(true)
 		.exclusiveMaximum(true)
 		.exclusiveMinimum(true)
-		.f("f")
-		.format("format")
-		.max("max")
+		.f("i")
+		.format("j")
+		.max("k")
 		.maxi(1)
-		.maximum("maximum")
+		.maximum("l")
 		.maxItems(2)
 		.maxl(3)
 		.maxLength(4)
-		.min("min")
+		.min("m")
 		.mini(5)
-		.minimum("minimum")
+		.minimum("n")
 		.minItems(6)
 		.minl(7)
 		.minLength(8)
-		.mo("mo")
-		.multipleOf("multipleOf")
-		.p("p")
-		.pattern("pattern")
-		.t("t")
-		.type("type")
+		.mo("o")
+		.multipleOf("p")
+		.p("q")
+		.pattern("r")
+		.t("s")
+		.type("t")
 		.ui(true)
 		.uniqueItems(true)
 		.build();
 
 	SubItems a2 = SubItemsAnnotation.create()
-		.$ref("$ref")
-		._default("default")
-		._enum("enum")
-		.cf("cf")
-		.collectionFormat("collectionFormat")
-		.description("description")
-		.df("df")
-		.e("e")
+		.$ref("a")
+		._default("b")
+		._enum("c")
+		.cf("d")
+		.collectionFormat("e")
+		.description("f")
+		.df("g")
+		.e("h")
 		.emax(true)
 		.emin(true)
 		.exclusiveMaximum(true)
 		.exclusiveMinimum(true)
-		.f("f")
-		.format("format")
-		.max("max")
+		.f("i")
+		.format("j")
+		.max("k")
 		.maxi(1)
-		.maximum("maximum")
+		.maximum("l")
 		.maxItems(2)
 		.maxl(3)
 		.maxLength(4)
-		.min("min")
+		.min("m")
 		.mini(5)
-		.minimum("minimum")
+		.minimum("n")
 		.minItems(6)
 		.minl(7)
 		.minLength(8)
-		.mo("mo")
-		.multipleOf("multipleOf")
-		.p("p")
-		.pattern("pattern")
-		.t("t")
-		.type("type")
+		.mo("o")
+		.multipleOf("p")
+		.p("q")
+		.pattern("r")
+		.t("s")
+		.type("t")
 		.ui(true)
 		.uniqueItems(true)
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "'$ref':'$ref',"
-				+ "_default:['default'],"
-				+ "_enum:['enum'],"
-				+ "cf:'cf',"
-				+ "collectionFormat:'collectionFormat',"
-				+ "description:['description'],"
-				+ "df:['df'],"
-				+ "e:['e'],"
-				+ "emax:true,"
-				+ "emin:true,"
-				+ "exclusiveMaximum:true,"
-				+ "exclusiveMinimum:true,"
-				+ "f:'f',"
-				+ "format:'format',"
-				+ "items:[],"
-				+ "max:'max',"
-				+ "maxItems:2,"
-				+ "maxLength:4,"
-				+ "maxi:1,"
-				+ "maximum:'maximum',"
-				+ "maxl:3,"
-				+ "min:'min',"
-				+ "minItems:6,"
-				+ "minLength:8,"
-				+ "mini:5,"
-				+ "minimum:'minimum',"
-				+ "minl:7,"
-				+ "mo:'mo',"
-				+ "multipleOf:'multipleOf',"
-				+ "p:'p',"
-				+ "pattern:'pattern',"
-				+ "t:'t',"
-				+ "type:'type',"
-				+ "ui:true,"
-				+ "uniqueItems:true"
-			+ "}", a1
-		);
+		assertBean(a1, "$ref,_default,_enum,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems", "a,[b],[c],d,e,[f],[g],[h],true,true,true,true,i,j,[],k,2,4,1,l,3,m,6,8,5,n,7,o,p,q,r,s,t,true,true");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -166,38 +128,38 @@ class SubItemsAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@SubItems(
-		$ref="$ref",
-		_default="default",
-		_enum="enum",
-		cf="cf",
-		collectionFormat="collectionFormat",
-		description={ "description" },
-		df="df",
-		e="e",
+		$ref="a",
+		_default="b",
+		_enum="c",
+		cf="d",
+		collectionFormat="e",
+		description={ "f" },
+		df="g",
+		e="h",
 		emax=true,
 		emin=true,
 		exclusiveMaximum=true,
 		exclusiveMinimum=true,
-		f="f",
-		format="format",
-		max="max",
+		f="i",
+		format="j",
+		max="k",
 		maxi=1,
-		maximum="maximum",
+		maximum="l",
 		maxItems=2,
 		maxl=3,
 		maxLength=4,
-		min="min",
+		min="m",
 		mini=5,
-		minimum="minimum",
+		minimum="n",
 		minItems=6,
 		minl=7,
 		minLength=8,
-		mo="mo",
-		multipleOf="multipleOf",
-		p="p",
-		pattern="pattern",
-		t="t",
-		type="type",
+		mo="o",
+		multipleOf="p",
+		p="q",
+		pattern="r",
+		t="s",
+		type="t",
 		ui=true,
 		uniqueItems=true
 	)
@@ -205,38 +167,38 @@ class SubItemsAnnotation_Test extends SimpleTestBase {
 	SubItems d1 = D1.class.getAnnotationsByType(SubItems.class)[0];
 
 	@SubItems(
-		$ref="$ref",
-		_default="default",
-		_enum="enum",
-		cf="cf",
-		collectionFormat="collectionFormat",
-		description={ "description" },
-		df="df",
-		e="e",
+		$ref="a",
+		_default="b",
+		_enum="c",
+		cf="d",
+		collectionFormat="e",
+		description={ "f" },
+		df="g",
+		e="h",
 		emax=true,
 		emin=true,
 		exclusiveMaximum=true,
 		exclusiveMinimum=true,
-		f="f",
-		format="format",
-		max="max",
+		f="i",
+		format="j",
+		max="k",
 		maxi=1,
-		maximum="maximum",
+		maximum="l",
 		maxItems=2,
 		maxl=3,
 		maxLength=4,
-		min="min",
+		min="m",
 		mini=5,
-		minimum="minimum",
+		minimum="n",
 		minItems=6,
 		minl=7,
 		minLength=8,
-		mo="mo",
-		multipleOf="multipleOf",
-		p="p",
-		pattern="pattern",
-		t="t",
-		type="type",
+		mo="o",
+		multipleOf="p",
+		p="q",
+		pattern="r",
+		t="s",
+		type="t",
 		ui=true,
 		uniqueItems=true
 	)

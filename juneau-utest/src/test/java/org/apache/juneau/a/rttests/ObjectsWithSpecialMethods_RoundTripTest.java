@@ -36,11 +36,11 @@ class ObjectsWithSpecialMethods_RoundTripTest extends RoundTripTest_Base {
 	void a01_nameProperty(RoundTrip_Tester t) throws Exception {
 		var x = new A().init();
 		x = t.roundTrip(x);
-		assertJson("{a2:{f2:2},m:{k1:{f2:2}}}", x);
+		assertBean(x, "a2{f2},m{k1{f2}}", "{2},{{2}}");
 		if (t.isValidationOnly())
 			return;
-		assertEquals("a2", x.a2.name);
-		assertEquals("k1", x.m.get("k1").name);
+		assertBean(x, "a2{name}", "{a2}");
+		assertBean(x, "m{k1{name}}", "{{k1}}");
 	}
 
 	public static class A {

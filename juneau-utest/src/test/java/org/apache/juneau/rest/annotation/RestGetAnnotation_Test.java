@@ -32,82 +32,59 @@ class RestGetAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestGet a1 = RestGetAnnotation.create()
-		.clientVersion("clientVersion")
+		.clientVersion("a")
 		.converters(RestConverter.class)
-		.debug("debug")
-		.defaultAccept("defaultAccept")
-		.defaultCharset("defaultCharset")
-		.defaultRequestQueryData("defaultRequestQueryData")
-		.defaultRequestAttributes("defaultRequestAttributes")
-		.defaultRequestHeaders("defaultRequestHeaders")
-		.defaultResponseHeaders("defaultResponseHeaders")
-		.description("description")
+		.debug("b")
+		.defaultAccept("c")
+		.defaultCharset("d")
+		.defaultRequestQueryData("e")
+		.defaultRequestAttributes("f")
+		.defaultRequestHeaders("g")
+		.defaultResponseHeaders("h")
+		.description("i")
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
-		.on("on")
-		.path("path")
-		.produces("produces")
-		.roleGuard("roleGuard")
-		.rolesDeclared("rolesDeclared")
+		.on("j")
+		.path("k")
+		.produces("l")
+		.roleGuard("m")
+		.rolesDeclared("n")
 		.serializers(Serializer.class)
-		.summary("summary")
+		.summary("o")
 		.swagger(OpSwaggerAnnotation.DEFAULT)
-		.value("value")
+		.value("p")
 		.build();
 
 	RestGet a2 = RestGetAnnotation.create()
-		.clientVersion("clientVersion")
+		.clientVersion("a")
 		.converters(RestConverter.class)
-		.debug("debug")
-		.defaultAccept("defaultAccept")
-		.defaultCharset("defaultCharset")
-		.defaultRequestQueryData("defaultRequestQueryData")
-		.defaultRequestAttributes("defaultRequestAttributes")
-		.defaultRequestHeaders("defaultRequestHeaders")
-		.defaultResponseHeaders("defaultResponseHeaders")
-		.description("description")
+		.debug("b")
+		.defaultAccept("c")
+		.defaultCharset("d")
+		.defaultRequestQueryData("e")
+		.defaultRequestAttributes("f")
+		.defaultRequestHeaders("g")
+		.defaultResponseHeaders("h")
+		.description("i")
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
-		.on("on")
-		.path("path")
-		.produces("produces")
-		.roleGuard("roleGuard")
-		.rolesDeclared("rolesDeclared")
+		.on("j")
+		.path("k")
+		.produces("l")
+		.roleGuard("m")
+		.rolesDeclared("n")
 		.serializers(Serializer.class)
-		.summary("summary")
+		.summary("o")
 		.swagger(OpSwaggerAnnotation.DEFAULT)
-		.value("value")
+		.value("p")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "clientVersion:'clientVersion',"
-				+ "converters:['org.apache.juneau.rest.converter.RestConverter'],"
-				+ "debug:'debug',"
-				+ "defaultAccept:'defaultAccept',"
-				+ "defaultCharset:'defaultCharset',"
-				+ "defaultRequestAttributes:['defaultRequestAttributes'],"
-				+ "defaultRequestHeaders:['defaultRequestHeaders'],"
-				+ "defaultRequestQueryData:['defaultRequestQueryData'],"
-				+ "defaultResponseHeaders:['defaultResponseHeaders'],"
-				+ "description:['description'],"
-				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
-				+ "guards:['org.apache.juneau.rest.guard.RestGuard'],"
-				+ "matchers:['org.apache.juneau.rest.matcher.RestMatcher'],"
-				+ "on:['on'],"
-				+ "path:['path'],"
-				+ "produces:['produces'],"
-				+ "roleGuard:'roleGuard',"
-				+ "rolesDeclared:'rolesDeclared',"
-				+ "serializers:['org.apache.juneau.serializer.Serializer'],"
-				+ "summary:'summary',"
-				+ "swagger:{consumes:[],deprecated:'',description:[],externalDocs:{description:[],url:''},operationId:'',parameters:[],produces:[],responses:[],schemes:[],summary:[],tags:[],value:[]},"
-				+ "value:'value'"
-			+ "}", a1
-		);
+		assertBean(a1,
+			"clientVersion,converters,debug,defaultAccept,defaultCharset,defaultRequestAttributes,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,on,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
+			"a,[RestConverter],b,c,d,[f],[g],[e],[h],[i],[Encoder],[RestGuard],[RestMatcher],[j],[k],[l],m,n,[Serializer],o,{[],,[],{[],},,[],[],[],[],[],[],[]},p");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -152,54 +129,54 @@ class RestGetAnnotation_Test extends SimpleTestBase {
 	public interface D1 {
 
 		@RestGet(
-			clientVersion="clientVersion",
+			clientVersion="a",
 			converters=RestConverter.class,
-			debug="debug",
-			defaultAccept="defaultAccept",
-			defaultCharset="defaultCharset",
-			defaultRequestQueryData="defaultRequestQueryData",
-			defaultRequestAttributes="defaultRequestAttributes",
-			defaultRequestHeaders="defaultRequestHeaders",
-			defaultResponseHeaders="defaultResponseHeaders",
-			description="description",
+			debug="b",
+			defaultAccept="c",
+			defaultCharset="d",
+			defaultRequestQueryData="e",
+			defaultRequestAttributes="f",
+			defaultRequestHeaders="g",
+			defaultResponseHeaders="h",
+			description="i",
 			encoders=Encoder.class,
 			guards=RestGuard.class,
 			matchers=RestMatcher.class,
-			on="on",
-			path="path",
-			produces="produces",
-			roleGuard="roleGuard",
-			rolesDeclared="rolesDeclared",
+			on="j",
+			path="k",
+			produces="l",
+			roleGuard="m",
+			rolesDeclared="n",
 			serializers=Serializer.class,
-			summary="summary",
+			summary="o",
 			swagger=@OpSwagger,
-			value="value"
+			value="p"
 		)
 		void m1();
 
 		@RestGet(
-			clientVersion="clientVersion",
+			clientVersion="a",
 			converters=RestConverter.class,
-			debug="debug",
-			defaultAccept="defaultAccept",
-			defaultCharset="defaultCharset",
-			defaultRequestQueryData="defaultRequestQueryData",
-			defaultRequestAttributes="defaultRequestAttributes",
-			defaultRequestHeaders="defaultRequestHeaders",
-			defaultResponseHeaders="defaultResponseHeaders",
-			description="description",
+			debug="b",
+			defaultAccept="c",
+			defaultCharset="d",
+			defaultRequestQueryData="e",
+			defaultRequestAttributes="f",
+			defaultRequestHeaders="g",
+			defaultResponseHeaders="h",
+			description="i",
 			encoders=Encoder.class,
 			guards=RestGuard.class,
 			matchers=RestMatcher.class,
-			on="on",
-			path="path",
-			produces="produces",
-			roleGuard="roleGuard",
-			rolesDeclared="rolesDeclared",
+			on="j",
+			path="k",
+			produces="l",
+			roleGuard="m",
+			rolesDeclared="n",
 			serializers=Serializer.class,
-			summary="summary",
+			summary="o",
 			swagger=@OpSwagger,
-			value="value"
+			value="p"
 		)
 		void m2();
 	}

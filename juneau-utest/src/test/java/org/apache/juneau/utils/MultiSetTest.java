@@ -84,38 +84,37 @@ class MultiSetTest extends SimpleTestBase {
 		l1 = new LinkedList<>(Arrays.asList(new String[]{"1","2"}));
 		l2 = new LinkedList<>(Arrays.asList(new String[]{"3","4"}));
 		ms = new MultiSet<>(l1, l2);
-		assertJson("['1','2','3','4']", ms);
-		assertJson("['1','2','3','4']", ms.enumerator());
+		assertList(ms, "1", "2", "3", "4");
+		assertList(ms.enumerator(), "1", "2", "3", "4");
 		assertEquals(4, ms.size());
 
 		var t = ms.iterator();
 		t.next();
 		t.remove();
-		assertJson("['2','3','4']", ms.enumerator());
+		assertList(ms.enumerator(), "2", "3", "4");
 
 		t = ms.iterator();
 		t.next();
 		t.remove();
-		assertJson("['3','4']", ms.enumerator());
+		assertList(ms.enumerator(), "3", "4");
 
 		t = ms.iterator();
 		t.next();
 		t.remove();
-		assertJson("['4']", ms.enumerator());
+		assertList(ms.enumerator(), "4");
 
 		t = ms.iterator();
 		t.next();
 		t.remove();
-		assertJson("[]", ms.enumerator());
+		assertEmpty(ms.enumerator());
 		assertEquals(0, ms.size());
 
 		ms = new MultiSet<>();
-		assertJson("[]", ms);
+		assertEmpty(ms);
 		assertEquals(0, ms.size());
 
 		assertThrows(IllegalArgumentException.class, ()->new MultiSet<>((Collection<String>)null));
 		assertThrows(NoSuchElementException.class, ()->new MultiSet<String>().iterator().next());
 		assertThrows(NoSuchElementException.class, ()->new MultiSet<String>().iterator().remove());
-
 	}
 }

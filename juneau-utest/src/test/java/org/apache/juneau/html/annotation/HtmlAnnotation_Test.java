@@ -31,7 +31,7 @@ class HtmlAnnotation_Test extends SimpleTestBase {
 
 	Html a1 = HtmlAnnotation.create()
 		.anchorText("a")
-		.description("description")
+		.description("b")
 		.format(HtmlFormat.XML)
 		.link("c")
 		.noTableHeaders(true)
@@ -42,7 +42,7 @@ class HtmlAnnotation_Test extends SimpleTestBase {
 
 	Html a2 = HtmlAnnotation.create()
 		.anchorText("a")
-		.description("description")
+		.description("b")
 		.format(HtmlFormat.XML)
 		.link("c")
 		.noTableHeaders(true)
@@ -52,19 +52,7 @@ class HtmlAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "anchorText:'a',"
-				+ "description:['description'],"
-				+ "format:'XML',"
-				+ "link:'c',"
-				+ "noTableHeaders:true,"
-				+ "noTables:true,"
-				+ "on:['d'],"
-				+ "onClass:[],"
-				+ "render:'"+CNAME+"$X1'"
-			+ "}", a1
-		);
+		assertBean(a1, "anchorText,description,format,link,noTableHeaders,noTables,on,onClass,render", "a,[b],XML,c,true,true,[d],[],X1");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -114,7 +102,7 @@ class HtmlAnnotation_Test extends SimpleTestBase {
 
 	@Html(
 		anchorText="a",
-		description={ "description" },
+		description={ "b" },
 		format=HtmlFormat.XML,
 		link="c",
 		noTableHeaders=true,
@@ -127,7 +115,7 @@ class HtmlAnnotation_Test extends SimpleTestBase {
 
 	@Html(
 		anchorText="a",
-		description={ "description" },
+		description={ "b" },
 		format=HtmlFormat.XML,
 		link="c",
 		noTableHeaders=true,

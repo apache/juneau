@@ -30,7 +30,7 @@ class MockServletRequest_Test extends SimpleTestBase {
 		assertBean(
 			req,
 			"contextPath,pathInfo,pathTranslated,queryString,requestURI,requestURL,servletPath",
-			",/foo,/mock-path/foo,null,/foo,/foo,"
+			",/foo,/mock-path/foo,<null>,/foo,/foo,"
 		);
 	}
 
@@ -81,7 +81,7 @@ class MockServletRequest_Test extends SimpleTestBase {
 			"bar=baz&bing=qux,{bar=[baz],bing=[qux]},[bar,bing]"
 		);
 		assertEquals("baz", req.getParameter("bar"));
-		assertJson("['baz']", req.getParameterValues("bar"));
+		assertList(req.getParameterValues("bar"), "baz");
 	}
 
 	@Test void b02_query_multivalues() {
@@ -92,6 +92,6 @@ class MockServletRequest_Test extends SimpleTestBase {
 			"bar=baz&bar=bing,{bar=[baz,bing]},[bar]"
 		);
 		assertEquals("baz", req.getParameter("bar"));
-		assertJson("['baz','bing']", req.getParameterValues("bar"));
+		assertList(req.getParameterValues("bar"), "baz", "bing");
 	}
 }

@@ -45,7 +45,7 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 		assertBean(
 			t.setDescription(null),
 			"description",
-			"null"
+			"<null>"
 		);
 	}
 
@@ -90,7 +90,7 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{}", t);
+		assertBean(t, "description,url", "<null>,<null>");
 
 		t
 			.set("description", "a")

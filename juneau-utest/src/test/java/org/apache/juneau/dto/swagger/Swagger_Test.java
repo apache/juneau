@@ -69,7 +69,7 @@ class Swagger_Test extends SimpleTestBase {
 				.setSecurityDefinitions((Map<String,SecurityScheme>)null).setSecurity((Collection<Map<String, List<String>>>)null)
 				.setTags((Collection<Tag>)null),
 			"basePath,consumes,definitions,host,parameters,paths,produces,responses,schemes,security,securityDefinitions,swagger,tags",
-			"null,null,null,null,null,null,null,null,null,null,null,null,null"
+			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>"
 		);
 
 		// Other methods - empty collections/maps
@@ -85,17 +85,17 @@ class Swagger_Test extends SimpleTestBase {
 
 		// addX methods.
 		assertBean(t.setPaths(null).addPath("a", "a1", operation().setDescription("a2")).addPath("b", null, null),
-			"paths", "{a={a1={\"description\":\"a2\"}},b={null=null}}");
+			"paths", "{a={a1={\"description\":\"a2\"}},b={<null>=<null>}}");
 		assertBean(t.setDefinitions(null).addDefinition("a", JsonMap.of("type","a1")).addDefinition("b", (JsonMap)null).addDefinition(null, JsonMap.of("type", "c1")),
-			"definitions", "{a={type=a1},b=null,null={type=c1}}");
+			"definitions", "{a={type=a1},b=<null>,<null>={type=c1}}");
 		assertBean(t.setParameters(null).addParameter("a", parameterInfo().setIn("a1")).addParameter("b", null).addParameter(null, parameterInfo().setIn("c1")),
-			"parameters", "{a={\"in\":\"a1\"},b=null,null={\"in\":\"c1\"}}");
+			"parameters", "{a={\"in\":\"a1\"},b=<null>,<null>={\"in\":\"c1\"}}");
 		assertBean(t.setResponses(null).addResponse("a", responseInfo("a1")).addResponse(null, responseInfo("b1")).addResponse("c", null),
-			"responses", "{a={\"description\":\"a1\"},null={\"description\":\"b1\"},c=null}");
+			"responses", "{a={\"description\":\"a1\"},<null>={\"description\":\"b1\"},c=<null>}");
 		assertBean(t.setSecurityDefinitions(null).addSecurityDefinition("a", securityScheme("a1")).addSecurityDefinition("b", null).addSecurityDefinition(null, securityScheme("c1")),
-			"securityDefinitions", "{a={\"type\":\"a1\"},b=null,null={\"type\":\"c1\"}}");
+			"securityDefinitions", "{a={\"type\":\"a1\"},b=<null>,<null>={\"type\":\"c1\"}}");
 		assertBean(t.setSecurity(null).addSecurity("a", "a1", "a2").addSecurity("b", (String)null).addSecurity(null, "d1", "d2"),
-			"security", "[{a=[a1,a2]},{b=[null]},{null=[d1,d2]}]");
+			"security", "[{a=[a1,a2]},{b=[<null>]},{<null>=[d1,d2]}]");
 	}
 
 	/**
@@ -197,7 +197,9 @@ class Swagger_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{swagger:'2.0'}", t);
+		assertBean(t,
+			"swagger,basePath,consumes,definitions,externalDocs,host,info,parameters,paths,produces,responses,schemes,security,securityDefinitions,tags",
+			"2.0,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
 		t
 			.set("basePath", "a")
@@ -226,7 +228,7 @@ class Swagger_Test extends SimpleTestBase {
 	@Test void b04_keySet() {
 		var t = new Swagger();
 
-		assertJson("['swagger']", t.keySet());
+		assertList(t.keySet(), "swagger");
 
 		t
 			.set("basePath", "a")

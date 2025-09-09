@@ -27,25 +27,19 @@ class RestPostInitAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestPostInit a1 = RestPostInitAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.childFirst()
 		.build();
 
 	RestPostInit a2 = RestPostInitAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.childFirst()
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "childFirst:true,"
-				+ "description:['description'],"
-				+ "on:['a']"
-			+ "}", a1
-		);
+		assertBean(a1, "childFirst,description,on", "true,[a],[b]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -89,16 +83,16 @@ class RestPostInitAnnotation_Test extends SimpleTestBase {
 
 	@RestPostInit(
 		childFirst=true,
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D1 {}
 	RestPostInit d1 = D1.class.getAnnotationsByType(RestPostInit.class)[0];
 
 	@RestPostInit(
 		childFirst=true,
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D2 {}
 	RestPostInit d2 = D2.class.getAnnotationsByType(RestPostInit.class)[0];

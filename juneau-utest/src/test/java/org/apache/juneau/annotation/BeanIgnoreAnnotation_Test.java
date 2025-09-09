@@ -29,25 +29,19 @@ class BeanIgnoreAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	BeanIgnore a1 = BeanIgnoreAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.onClass(X1.class)
 		.build();
 
 	BeanIgnore a2 = BeanIgnoreAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.onClass(X1.class)
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['a'],"
-				+ "onClass:['"+CNAME+"$X1']"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on,onClass", "[a],[b],[X1]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -99,16 +93,16 @@ class BeanIgnoreAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@BeanIgnore(
-		description={ "description" },
-		on="a",
+		description={ "a" },
+		on="b",
 		onClass=X1.class
 	)
 	public static class D1 {}
 	BeanIgnore d1 = D1.class.getAnnotationsByType(BeanIgnore.class)[0];
 
 	@BeanIgnore(
-		description={ "description" },
-		on="a",
+		description={ "a" },
+		on="b",
 		onClass=X1.class
 	)
 	public static class D2 {}

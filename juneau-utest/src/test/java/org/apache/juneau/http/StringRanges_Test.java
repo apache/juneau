@@ -46,8 +46,8 @@ class StringRanges_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_getRanges() {
-		assertJson("['foo']", of("foo").toList());
-		assertJson("[]", of((String)null).toList());
+		assertList(of("foo").toList(), "foo");
+		assertEmpty(of((String)null).toList());
 	}
 
 	@Test void a04_toString() {

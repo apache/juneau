@@ -33,97 +33,69 @@ class RestPostAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestPost a1 = RestPostAnnotation.create()
-		.clientVersion("clientVersion")
-		.consumes("consumes")
+		.clientVersion("a")
+		.consumes("b")
 		.converters(RestConverter.class)
-		.debug("debug")
-		.defaultAccept("defaultAccept")
-		.defaultCharset("defaultCharset")
-		.defaultContentType("defaultContentType")
-		.defaultRequestFormData("defaultRequestFormData")
-		.defaultRequestQueryData("defaultRequestQueryData")
-		.defaultRequestAttributes("defaultRequestAttributes")
-		.defaultRequestHeaders("defaultRequestHeaders")
-		.defaultResponseHeaders("defaultResponseHeaders")
-		.description("description")
+		.debug("c")
+		.defaultAccept("d")
+		.defaultCharset("e")
+		.defaultContentType("f")
+		.defaultRequestFormData("g")
+		.defaultRequestQueryData("h")
+		.defaultRequestAttributes("i")
+		.defaultRequestHeaders("j")
+		.defaultResponseHeaders("k")
+		.description("l")
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
-		.maxInput("maxInput")
-		.on("on")
+		.maxInput("m")
+		.on("n")
 		.parsers(Parser.class)
-		.path("path")
-		.produces("produces")
-		.roleGuard("roleGuard")
-		.rolesDeclared("rolesDeclared")
+		.path("o")
+		.produces("p")
+		.roleGuard("q")
+		.rolesDeclared("r")
 		.serializers(Serializer.class)
-		.summary("summary")
+		.summary("s")
 		.swagger(OpSwaggerAnnotation.DEFAULT)
-		.value("value")
+		.value("t")
 		.build();
 
 	RestPost a2 = RestPostAnnotation.create()
-		.clientVersion("clientVersion")
-		.consumes("consumes")
+		.clientVersion("a")
+		.consumes("b")
 		.converters(RestConverter.class)
-		.debug("debug")
-		.defaultAccept("defaultAccept")
-		.defaultCharset("defaultCharset")
-		.defaultContentType("defaultContentType")
-		.defaultRequestFormData("defaultRequestFormData")
-		.defaultRequestQueryData("defaultRequestQueryData")
-		.defaultRequestAttributes("defaultRequestAttributes")
-		.defaultRequestHeaders("defaultRequestHeaders")
-		.defaultResponseHeaders("defaultResponseHeaders")
-		.description("description")
+		.debug("c")
+		.defaultAccept("d")
+		.defaultCharset("e")
+		.defaultContentType("f")
+		.defaultRequestFormData("g")
+		.defaultRequestQueryData("h")
+		.defaultRequestAttributes("i")
+		.defaultRequestHeaders("j")
+		.defaultResponseHeaders("k")
+		.description("l")
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
-		.maxInput("maxInput")
-		.on("on")
+		.maxInput("m")
+		.on("n")
 		.parsers(Parser.class)
-		.path("path")
-		.produces("produces")
-		.roleGuard("roleGuard")
-		.rolesDeclared("rolesDeclared")
+		.path("o")
+		.produces("p")
+		.roleGuard("q")
+		.rolesDeclared("r")
 		.serializers(Serializer.class)
-		.summary("summary")
+		.summary("s")
 		.swagger(OpSwaggerAnnotation.DEFAULT)
-		.value("value")
+		.value("t")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "clientVersion:'clientVersion',"
-				+ "consumes:['consumes'],"
-				+ "converters:['org.apache.juneau.rest.converter.RestConverter'],"
-				+ "debug:'debug',"
-				+ "defaultAccept:'defaultAccept',"
-				+ "defaultCharset:'defaultCharset',"
-				+ "defaultContentType:'defaultContentType',"
-				+ "defaultRequestAttributes:['defaultRequestAttributes'],"
-				+ "defaultRequestFormData:['defaultRequestFormData'],"
-				+ "defaultRequestHeaders:['defaultRequestHeaders'],"
-				+ "defaultRequestQueryData:['defaultRequestQueryData'],"
-				+ "defaultResponseHeaders:['defaultResponseHeaders'],"
-				+ "description:['description'],"
-				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
-				+ "guards:['org.apache.juneau.rest.guard.RestGuard'],"
-				+ "matchers:['org.apache.juneau.rest.matcher.RestMatcher'],"
-				+ "maxInput:'maxInput',"
-				+ "on:['on'],"
-				+ "parsers:['org.apache.juneau.parser.Parser'],"
-				+ "path:['path'],"
-				+ "produces:['produces'],"
-				+ "roleGuard:'roleGuard',"
-				+ "rolesDeclared:'rolesDeclared',"
-				+ "serializers:['org.apache.juneau.serializer.Serializer'],"
-				+ "summary:'summary',"
-				+ "swagger:{consumes:[],deprecated:'',description:[],externalDocs:{description:[],url:''},operationId:'',parameters:[],produces:[],responses:[],schemes:[],summary:[],tags:[],value:[]},"
-				+ "value:'value'"
-			+ "}", a1
-		);
+		assertBean(a1,
+			"clientVersion,consumes,converters,debug,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestFormData,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,maxInput,on,parsers,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
+			"a,[b],[RestConverter],c,d,e,f,[i],[g],[j],[h],[k],[l],[Encoder],[RestGuard],[RestMatcher],m,[n],[Parser],[o],[p],q,r,[Serializer],s,{[],,[],{[],},,[],[],[],[],[],[],[]},t");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -168,64 +140,64 @@ class RestPostAnnotation_Test extends SimpleTestBase {
 	public interface D1 {
 
 		@RestPost(
-			clientVersion="clientVersion",
-			consumes="consumes",
+			clientVersion="a",
+			consumes="b",
 			converters=RestConverter.class,
-			debug="debug",
-			defaultAccept="defaultAccept",
-			defaultCharset="defaultCharset",
-			defaultContentType="defaultContentType",
-			defaultRequestFormData="defaultRequestFormData",
-			defaultRequestQueryData="defaultRequestQueryData",
-			defaultRequestAttributes="defaultRequestAttributes",
-			defaultRequestHeaders="defaultRequestHeaders",
-			defaultResponseHeaders="defaultResponseHeaders",
-			description="description",
+			debug="c",
+			defaultAccept="d",
+			defaultCharset="e",
+			defaultContentType="f",
+			defaultRequestFormData="g",
+			defaultRequestQueryData="h",
+			defaultRequestAttributes="i",
+			defaultRequestHeaders="j",
+			defaultResponseHeaders="k",
+			description="l",
 			encoders=Encoder.class,
 			guards=RestGuard.class,
 			matchers=RestMatcher.class,
-			maxInput="maxInput",
-			on="on",
+			maxInput="m",
+			on="n",
 			parsers=Parser.class,
-			path="path",
-			produces="produces",
-			roleGuard="roleGuard",
-			rolesDeclared="rolesDeclared",
+			path="o",
+			produces="p",
+			roleGuard="q",
+			rolesDeclared="r",
 			serializers=Serializer.class,
-			summary="summary",
+			summary="s",
 			swagger=@OpSwagger,
-			value="value"
+			value="t"
 		)
 		void m1();
 
 		@RestPost(
-			clientVersion="clientVersion",
-			consumes="consumes",
+			clientVersion="a",
+			consumes="b",
 			converters=RestConverter.class,
-			debug="debug",
-			defaultAccept="defaultAccept",
-			defaultCharset="defaultCharset",
-			defaultContentType="defaultContentType",
-			defaultRequestFormData="defaultRequestFormData",
-			defaultRequestQueryData="defaultRequestQueryData",
-			defaultRequestAttributes="defaultRequestAttributes",
-			defaultRequestHeaders="defaultRequestHeaders",
-			defaultResponseHeaders="defaultResponseHeaders",
-			description="description",
+			debug="c",
+			defaultAccept="d",
+			defaultCharset="e",
+			defaultContentType="f",
+			defaultRequestFormData="g",
+			defaultRequestQueryData="h",
+			defaultRequestAttributes="i",
+			defaultRequestHeaders="j",
+			defaultResponseHeaders="k",
+			description="l",
 			encoders=Encoder.class,
 			guards=RestGuard.class,
 			matchers=RestMatcher.class,
-			maxInput="maxInput",
-			on="on",
+			maxInput="m",
+			on="n",
 			parsers=Parser.class,
-			path="path",
-			produces="produces",
-			roleGuard="roleGuard",
-			rolesDeclared="rolesDeclared",
+			path="o",
+			produces="p",
+			roleGuard="q",
+			rolesDeclared="r",
 			serializers=Serializer.class,
-			summary="summary",
+			summary="s",
 			swagger=@OpSwagger,
-			value="value"
+			value="t"
 		)
 		void m2();
 	}

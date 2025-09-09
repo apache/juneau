@@ -28,12 +28,12 @@ class SimpleMap_Test extends SimpleTestBase {
 		assertEquals(2, m.size());
 		assertEquals("A", m.get("a"));
 		assertEquals("B", m.get("b"));
-		assertJson("{a:'A',b:'B'}", m);
-		assertJson("['a','b']", m.keySet());
+		assertMap(m, "a,b", "A,B");
+		assertList(m.keySet(), "a", "b");
 		m.put("a", "1");
-		assertJson("{a:'1',b:'B'}", m);
+		assertMap(m, "a,b", "1,B");
 		m.entrySet().iterator().next().setValue("2");
-		assertJson("{a:'2',b:'B'}", m);
+		assertMap(m, "a,b", "2,B");
 		assertThrows(IllegalArgumentException.class, ()->m.put("c", "1"));
 
 		assertNull(m.get("c"));

@@ -31,82 +31,59 @@ class BeanAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Bean a1 = BeanAnnotation.create()
-		.description("description")
+		.description("a")
 		.dictionary(X1.class)
-		.example("example")
-		.excludeProperties("excludeProperties")
+		.example("b")
+		.excludeProperties("c")
 		.findFluentSetters(true)
 		.implClass(X1.class)
 		.interceptor(X2.class)
 		.interfaceClass(X1.class)
-		.on("on")
+		.on("d")
 		.onClass(X1.class)
-		.p("p")
-		.properties("properties")
+		.p("e")
+		.properties("f")
 		.propertyNamer(BasicPropertyNamer.class)
-		.readOnlyProperties("readOnlyProperties")
-		.ro("ro")
+		.readOnlyProperties("g")
+		.ro("h")
 		.sort(true)
 		.stopClass(X1.class)
-		.typeName("typeName")
-		.typePropertyName("typePropertyName")
-		.wo("wo")
-		.writeOnlyProperties("writeOnlyProperties")
-		.xp("xp")
+		.typeName("i")
+		.typePropertyName("j")
+		.wo("k")
+		.writeOnlyProperties("l")
+		.xp("m")
 		.build();
 
 	Bean a2 = BeanAnnotation.create()
-		.description("description")
+		.description("a")
 		.dictionary(X1.class)
-		.example("example")
-		.excludeProperties("excludeProperties")
+		.example("b")
+		.excludeProperties("c")
 		.findFluentSetters(true)
 		.implClass(X1.class)
 		.interceptor(X2.class)
 		.interfaceClass(X1.class)
-		.on("on")
+		.on("d")
 		.onClass(X1.class)
-		.p("p")
-		.properties("properties")
+		.p("e")
+		.properties("f")
 		.propertyNamer(BasicPropertyNamer.class)
-		.readOnlyProperties("readOnlyProperties")
-		.ro("ro")
+		.readOnlyProperties("g")
+		.ro("h")
 		.sort(true)
 		.stopClass(X1.class)
-		.typeName("typeName")
-		.typePropertyName("typePropertyName")
-		.wo("wo")
-		.writeOnlyProperties("writeOnlyProperties")
-		.xp("xp")
+		.typeName("i")
+		.typePropertyName("j")
+		.wo("k")
+		.writeOnlyProperties("l")
+		.xp("m")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "dictionary:['"+CNAME+"$X1'],"
-				+ "example:'example',"
-				+ "excludeProperties:'excludeProperties',"
-				+ "findFluentSetters:true,"
-				+ "implClass:'"+CNAME+"$X1',"
-				+ "interceptor:'"+CNAME+"$X2',"
-				+ "interfaceClass:'"+CNAME+"$X1',"
-				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"$X1'],"
-				+ "p:'p',"
-				+ "properties:'properties',"
-				+ "propertyNamer:'org.apache.juneau.BasicPropertyNamer',"
-				+ "readOnlyProperties:'readOnlyProperties',"
-				+ "ro:'ro',"
-				+ "sort:true,"
-				+ "stopClass:'"+CNAME+"$X1',"
-				+ "typeName:'typeName',"
-				+ "typePropertyName:'typePropertyName',"
-				+ "wo:'wo',"
-				+ "writeOnlyProperties:'writeOnlyProperties',"
-				+ "xp:'xp'"
-			+ "}", a1
-		);
+		assertBean(a1,
+			"description,dictionary,example,excludeProperties,findFluentSetters,implClass,interceptor,interfaceClass,on,onClass,p,properties,propertyNamer,readOnlyProperties,ro,sort,stopClass,typeName,typePropertyName,wo,writeOnlyProperties,xp",
+			"[a],[X1],b,c,true,X1,X2,X1,[d],[X1],e,f,BasicPropertyNamer,g,h,true,X1,i,j,k,l,m");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -146,55 +123,55 @@ class BeanAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Bean(
-		description={ "description" },
+		description={ "a" },
 		dictionary=X1.class,
-		example="example",
-		excludeProperties="excludeProperties",
+		example="b",
+		excludeProperties="c",
 		findFluentSetters=true,
 		implClass=X1.class,
 		interceptor=X2.class,
 		interfaceClass=X1.class,
-		on="on",
+		on="d",
 		onClass=X1.class,
-		p="p",
-		properties="properties",
+		p="e",
+		properties="f",
 		propertyNamer=BasicPropertyNamer.class,
-		readOnlyProperties="readOnlyProperties",
-		ro="ro",
+		readOnlyProperties="g",
+		ro="h",
 		sort=true,
 		stopClass=X1.class,
-		typeName="typeName",
-		typePropertyName="typePropertyName",
-		wo="wo",
-		writeOnlyProperties="writeOnlyProperties",
-		xp="xp"
+		typeName="i",
+		typePropertyName="j",
+		wo="k",
+		writeOnlyProperties="l",
+		xp="m"
 	)
 	public static class D1 {}
 	Bean d1 = D1.class.getAnnotationsByType(Bean.class)[0];
 
 	@Bean(
-		description={ "description" },
+		description={ "a" },
 		dictionary=X1.class,
-		example="example",
-		excludeProperties="excludeProperties",
+		example="b",
+		excludeProperties="c",
 		findFluentSetters=true,
 		implClass=X1.class,
 		interceptor=X2.class,
 		interfaceClass=X1.class,
-		on="on",
+		on="d",
 		onClass=X1.class,
-		p="p",
-		properties="properties",
+		p="e",
+		properties="f",
 		propertyNamer=BasicPropertyNamer.class,
-		readOnlyProperties="readOnlyProperties",
-		ro="ro",
+		readOnlyProperties="g",
+		ro="h",
 		sort=true,
 		stopClass=X1.class,
-		typeName="typeName",
-		typePropertyName="typePropertyName",
-		wo="wo",
-		writeOnlyProperties="writeOnlyProperties",
-		xp="xp"
+		typeName="i",
+		typePropertyName="j",
+		wo="k",
+		writeOnlyProperties="l",
+		xp="m"
 	)
 	public static class D2 {}
 	Bean d2 = D2.class.getAnnotationsByType(Bean.class)[0];

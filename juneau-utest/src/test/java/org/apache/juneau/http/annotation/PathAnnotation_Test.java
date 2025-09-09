@@ -30,32 +30,32 @@ class PathAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Path a1 = PathAnnotation.create()
-		.def("def")
-		.description("description")
-		.name("name")
-		.on("on")
+		.def("a")
+		.description("b")
+		.name("c")
+		.on("d")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
 		.serializer(OpenApiSerializer.class)
-		.value("value")
+		.value("e")
 		.build();
 
 	Path a2 = PathAnnotation.create()
-		.def("def")
-		.description("description")
-		.name("name")
-		.on("on")
+		.def("a")
+		.description("b")
+		.name("c")
+		.on("d")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
 		.serializer(OpenApiSerializer.class)
-		.value("value")
+		.value("e")
 		.build();
 
 	@Test void a01_basic() {
 		assertBean(
 			a1,
 			"def,description,name,on,onClass{#{simpleName}},parser{simpleName},serializer{simpleName},value",
-			"def,[description],name,[on],{[{X1}]},{OpenApiParser},{OpenApiSerializer},value"
+			"a,[b],c,[d],{[{X1}]},{OpenApiParser},{OpenApiSerializer},e"
 		);
 	}
 
@@ -105,27 +105,27 @@ class PathAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Path(
-		def="def",
-		description={ "description" },
-		name="name",
-		on="on",
+		def="a",
+		description={ "b" },
+		name="c",
+		on="d",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		serializer=OpenApiSerializer.class,
-		value="value"
+		value="e"
 	)
 	public static class D1 {}
 	Path d1 = D1.class.getAnnotationsByType(Path.class)[0];
 
 	@Path(
-		def="def",
-		description={ "description" },
-		name="name",
-		on="on",
+		def="a",
+		description={ "b" },
+		name="c",
+		on="d",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		serializer=OpenApiSerializer.class,
-		value="value"
+		value="e"
 	)
 	public static class D2 {}
 	Path d2 = D2.class.getAnnotationsByType(Path.class)[0];

@@ -27,22 +27,17 @@ class RestEndCallAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestEndCall a1 = RestEndCallAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	RestEndCall a2 = RestEndCallAnnotation.create()
-		.description("description")
-		.on("a")
+		.description("a")
+		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['a']"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on", "[a],[b]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -85,15 +80,15 @@ class RestEndCallAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestEndCall(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D1 {}
 	RestEndCall d1 = D1.class.getAnnotationsByType(RestEndCall.class)[0];
 
 	@RestEndCall(
-		description={ "description" },
-		on="a"
+		description={ "a" },
+		on="b"
 	)
 	public static class D2 {}
 	RestEndCall d2 = D2.class.getAnnotationsByType(RestEndCall.class)[0];

@@ -49,7 +49,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 		assertBean(
 			t.setDescription(null).setExamples((Map<String,Object>)null).setHeaders((Map<String,HeaderInfo>)null),
 			"description,examples,headers",
-			"null,null,null"
+			"<null>,<null>,<null>"
 		);
 
 		// Other methods - empty collections
@@ -61,7 +61,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 		assertMap(
 			t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples(),
 			"text/a,text/b,<NULL>",
-			"a,null,c"
+			"a,<null>,c"
 		);
 	}
 
@@ -131,7 +131,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{}", t);
+		assertBean(t, "description,examples,headers,schema", "<null>,<null>,<null>,<null>");
 
 		t
 			.set("description", "a")

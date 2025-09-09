@@ -434,7 +434,7 @@ class UrlEncodingParser_Test extends SimpleTestBase {
 		var p2 = UrlEncodingParser.DEFAULT;
 		var s = "?f1=1,2,3&f2=a,b,c&f3=true,false&f4=&f5";
 		var c = p2.parse(s, C.class);
-		assertJson("{f1:[1,2,3],f2:['a','b','c'],f3:[true,false],f4:[]}", c);
+		assertBean(c, "f1,f2,f3,f4", "[1,2,3],[a,b,c],[true,false],[]");
 	}
 
 	public static class C {
@@ -454,23 +454,23 @@ class UrlEncodingParser_Test extends SimpleTestBase {
 		// In the string below, the ~ character should not be interpreted as an escape.
 		var s = "?f1=a~b,a~b";
 		var c = p2.parse(s, C1.class);
-		assertJson("{f1:['a~b','a~b']}", c);
+		assertBean(c, "f1", "[a~b,a~b]");
 
 		s = "?f1=@(a~b,a~b)";
 		c = p2.parse(s, C1.class);
-		assertJson("{f1:['a~b','a~b']}", c);
+		assertBean(c, "f1", "[a~b,a~b]");
 
 		s = "?f1=@('a~b','a~b')";
 		c = p2.parse(s, C1.class);
-		assertJson("{f1:['a~b','a~b']}", c);
+		assertBean(c, "f1", "[a~b,a~b]");
 
 		s = "?f1=@('a~b','a~b')";
 		c = p2.parse(s, C1.class);
-		assertJson("{f1:['a~b','a~b']}", c);
+		assertBean(c, "f1", "[a~b,a~b]");
 
 		s = "?f1=@('a~b','a~b')";
 		c = p2.parse(s, C1.class);
-		assertJson("{f1:['a~b','a~b']}", c);
+		assertBean(c, "f1", "[a~b,a~b]");
 
 		s = "?f1=~~,~~";
 		c = p2.parse(s, C1.class);
@@ -560,13 +560,13 @@ class UrlEncodingParser_Test extends SimpleTestBase {
 		m = p2.parse(s, JsonMap.class);
 		assertEquals("{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 		var d = p2.parse(s, D.class);
-		assertJson("{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}", d);  // Note that JsonSerializer escapes newlines and tabs.
+		assertBean(d, "f1{f1a,f1b},f2{f2a,f2b}", "{a,b},{a,b}");
 
 		s = "?f1=(\n\tf1a='\n\t',\n\tf1b='\n\t'\n\t)\n\t&f2=(\n\tf2a='\n\t',\n\tf2b='\n\t'\n\t)\n\t";
 		m = p2.parse(s, JsonMap.class);
 		assertEquals("{f1:{f1a:'\\n\\t',f1b:'\\n\\t'},f2:{f2a:'\\n\\t',f2b:'\\n\\t'}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 		d = p2.parse(s, D.class);
-		assertJson("{f1:{f1a:'\\n\\t',f1b:'\\n\\t'},f2:{f2a:'\\n\\t',f2b:'\\n\\t'}}", d);  // Note that JsonSerializer escapes newlines and tabs.
+		assertBean(d, "f1{f1a,f1b},f2{f2a,f2b}", "{\n\t,\n\t},{\n\t,\n\t}");
 
 		s = "?f1=@(\n\tfoo,\n\tbar\n\t)\n\t&f2=@(\n\tfoo,\n\tbar\n\t)\n\t";
 		m = p2.parse(s, JsonMap.class);
@@ -574,11 +574,11 @@ class UrlEncodingParser_Test extends SimpleTestBase {
 
 		s = "f1=a,\n\tb,\n\tc\n\t&f2=1,\n\t2,\n\t3\n\t&f3=true,\n\tfalse\n\t";
 		var e = p2.parse(s, E.class);
-		assertJson("{f1:['a','b','c'],f2:[1,2,3],f3:[true,false]}", e);
+		assertBean(e, "f1,f2,f3", "[a,b,c],[1,2,3],[true,false]");
 
 		s = "f1=a%2C%0D%0Ab%2C%0D%0Ac%0D%0A&f2=1%2C%0D%0A2%2C%0D%0A3%0D%0A&f3=true%2C%0D%0Afalse%0D%0A";
 		e = p2.parse(s, E.class);
-		assertJson("{f1:['a','b','c'],f2:[1,2,3],f3:[true,false]}", e);
+		assertBean(e, "f1,f2,f3", "[a,b,c],[1,2,3],[true,false]");
 	}
 
 	public static class D {
@@ -628,29 +628,9 @@ class UrlEncodingParser_Test extends SimpleTestBase {
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 
 		var t = p2.parse(in, DTOs.B.class);
-		var e = "{"
-			+ "f01:['a','b'],"
-			+ "f02:['c','d'],"
-			+ "f03:[1,2],"
-			+ "f04:[3,4],"
-			+ "f05:[['e','f'],['g','h']],"
-			+ "f06:[['i','j'],['k','l']],"
-			+ "f07:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f08:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f09:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
-			+ "f10:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
-			+ "f11:['a','b'],"
-			+ "f12:['c','d'],"
-			+ "f13:[1,2],"
-			+ "f14:[3,4],"
-			+ "f15:[['e','f'],['g','h']],"
-			+ "f16:[['i','j'],['k','l']],"
-			+ "f17:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f18:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f19:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
-			+ "f20:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]]"
-		+"}";
-		assertJson(e, t);
+		assertBean(t,
+			"f01,f02,f03,f04,f05,f06,f07{#{a,b,c}},f08{#{a,b,c}},f09{#{#{a,b,c}}},f10{#{#{a,b,c}}},f11,f12,f13,f14,f15,f16,f17{#{a,b,c}},f18{#{a,b,c}},f19{#{#{a,b,c}}},f20{#{#{a,b,c}}}",
+			"[a,b],[c,d],[1,2],[3,4],[[e,f],[g,h]],[[i,j],[k,l]],{[{a,1,true},{b,2,false}]},{[{a,1,true},{b,2,false}]},{[{[{a,1,true}]},{[{b,2,false}]}]},{[{[{a,1,true}]},{[{b,2,false}]}]},[a,b],[c,d],[1,2],[3,4],[[e,f],[g,h]],[[i,j],[k,l]],{[{a,1,true},{b,2,false}]},{[{a,1,true},{b,2,false}]},{[{[{a,1,true}]},{[{b,2,false}]}]},{[{[{a,1,true}]},{[{b,2,false}]}]}");
 	}
 
 	@Test void a09_multiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
@@ -677,30 +657,9 @@ class UrlEncodingParser_Test extends SimpleTestBase {
 			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 
-		var t = p2.parse(in, DTOs2.B.class);
-		var e = "{"
-			+ "f01:['a','b'],"
-			+ "f02:['c','d'],"
-			+ "f03:[1,2],"
-			+ "f04:[3,4],"
-			+ "f05:[['e','f'],['g','h']],"
-			+ "f06:[['i','j'],['k','l']],"
-			+ "f07:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f08:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f09:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
-			+ "f10:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
-			+ "f11:['a','b'],"
-			+ "f12:['c','d'],"
-			+ "f13:[1,2],"
-			+ "f14:[3,4],"
-			+ "f15:[['e','f'],['g','h']],"
-			+ "f16:[['i','j'],['k','l']],"
-			+ "f17:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f18:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f19:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
-			+ "f20:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]]"
-		+"}";
-		assertJson(e, t);
+		assertBean(p2.parse(in, DTOs2.B.class),
+			"f01,f02,f03,f04,f05,f06,f07{#{a,b,c}},f08{#{a,b,c}},f09{#{#{a,b,c}}},f10{#{#{a,b,c}}},f11,f12,f13,f14,f15,f16,f17{#{a,b,c}},f18{#{a,b,c}},f19{#{#{a,b,c}}},f20{#{#{a,b,c}}}",
+			"[a,b],[c,d],[1,2],[3,4],[[e,f],[g,h]],[[i,j],[k,l]],{[{a,1,true},{b,2,false}]},{[{a,1,true},{b,2,false}]},{[{[{a,1,true}]},{[{b,2,false}]}]},{[{[{a,1,true}]},{[{b,2,false}]}]},[a,b],[c,d],[1,2],[3,4],[[e,f],[g,h]],[[i,j],[k,l]],{[{a,1,true},{b,2,false}]},{[{a,1,true},{b,2,false}]},{[{[{a,1,true}]},{[{b,2,false}]}]},{[{[{a,1,true}]},{[{b,2,false}]}]}");
 	}
 
 	//====================================================================================================
@@ -730,30 +689,9 @@ class UrlEncodingParser_Test extends SimpleTestBase {
 			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 
-		var t = p2.parse(in, DTOs.C.class);
-		var e = "{"
-			+ "f01:['a','b'],"
-			+ "f02:['c','d'],"
-			+ "f03:[1,2],"
-			+ "f04:[3,4],"
-			+ "f05:[['e','f'],['g','h']],"
-			+ "f06:[['i','j'],['k','l']],"
-			+ "f07:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f08:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f09:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
-			+ "f10:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
-			+ "f11:['a','b'],"
-			+ "f12:['c','d'],"
-			+ "f13:[1,2],"
-			+ "f14:[3,4],"
-			+ "f15:[['e','f'],['g','h']],"
-			+ "f16:[['i','j'],['k','l']],"
-			+ "f17:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f18:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f19:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
-			+ "f20:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]]"
-		+"}";
-		assertJson(e, t);
+		assertBean(p2.parse(in, DTOs.C.class),
+			"f01,f02,f03,f04,f05,f06,f07{#{a,b,c}},f08{#{a,b,c}},f09{#{#{a,b,c}}},f10{#{#{a,b,c}}},f11,f12,f13,f14,f15,f16,f17{#{a,b,c}},f18{#{a,b,c}},f19{#{#{a,b,c}}},f20{#{#{a,b,c}}}",
+			"[a,b],[c,d],[1,2],[3,4],[[e,f],[g,h]],[[i,j],[k,l]],{[{a,1,true},{b,2,false}]},{[{a,1,true},{b,2,false}]},{[{[{a,1,true}]},{[{b,2,false}]}]},{[{[{a,1,true}]},{[{b,2,false}]}]},[a,b],[c,d],[1,2],[3,4],[[e,f],[g,h]],[[i,j],[k,l]],{[{a,1,true},{b,2,false}]},{[{a,1,true},{b,2,false}]},{[{[{a,1,true}]},{[{b,2,false}]}]},{[{[{a,1,true}]},{[{b,2,false}]}]}");
 	}
 
 	@Test void a11_multiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
@@ -780,29 +718,8 @@ class UrlEncodingParser_Test extends SimpleTestBase {
 			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 
-		var t = p2.parse(in, DTOs2.C.class);
-		var e = "{"
-			+ "f01:['a','b'],"
-			+ "f02:['c','d'],"
-			+ "f03:[1,2],"
-			+ "f04:[3,4],"
-			+ "f05:[['e','f'],['g','h']],"
-			+ "f06:[['i','j'],['k','l']],"
-			+ "f07:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f08:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f09:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
-			+ "f10:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
-			+ "f11:['a','b'],"
-			+ "f12:['c','d'],"
-			+ "f13:[1,2],"
-			+ "f14:[3,4],"
-			+ "f15:[['e','f'],['g','h']],"
-			+ "f16:[['i','j'],['k','l']],"
-			+ "f17:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f18:[{a:'a',b:1,c:true},{a:'b',b:2,c:false}],"
-			+ "f19:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
-			+ "f20:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]]"
-		+"}";
-		assertJson(e, t);
+		assertBean(p2.parse(in, DTOs2.C.class),
+			"f01,f02,f03,f04,f05,f06,f07{#{a,b,c}},f08{#{a,b,c}},f09{#{#{a,b,c}}},f10{#{#{a,b,c}}},f11,f12,f13,f14,f15,f16,f17{#{a,b,c}},f18{#{a,b,c}},f19{#{#{a,b,c}}},f20{#{#{a,b,c}}}",
+			"[a,b],[c,d],[1,2],[3,4],[[e,f],[g,h]],[[i,j],[k,l]],{[{a,1,true},{b,2,false}]},{[{a,1,true},{b,2,false}]},{[{[{a,1,true}]},{[{b,2,false}]}]},{[{[{a,1,true}]},{[{b,2,false}]}]},[a,b],[c,d],[1,2],[3,4],[[e,f],[g,h]],[[i,j],[k,l]],{[{a,1,true},{b,2,false}]},{[{a,1,true},{b,2,false}]},{[{[{a,1,true}]},{[{b,2,false}]}]},{[{[{a,1,true}]},{[{b,2,false}]}]}");
 	}
 }

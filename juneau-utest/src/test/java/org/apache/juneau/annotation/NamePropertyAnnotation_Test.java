@@ -27,22 +27,17 @@ class NamePropertyAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	NameProperty a1 = NamePropertyAnnotation.create()
-		.description("description")
-		.on("on")
+		.description("a")
+		.on("b")
 		.build();
 
 	NameProperty a2 = NamePropertyAnnotation.create()
-		.description("description")
-		.on("on")
+		.description("a")
+		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['on']"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on", "[a],[b]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -89,15 +84,15 @@ class NamePropertyAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@NameProperty(
-		description={ "description" },
-		on="on"
+		description={ "a" },
+		on="b"
 	)
 	public static class D1 {}
 	NameProperty d1 = D1.class.getAnnotationsByType(NameProperty.class)[0];
 
 	@NameProperty(
-		description={ "description" },
-		on="on"
+		description={ "a" },
+		on="b"
 	)
 	public static class D2 {}
 	NameProperty d2 = D2.class.getAnnotationsByType(NameProperty.class)[0];

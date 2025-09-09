@@ -44,7 +44,7 @@ class Info_Test extends SimpleTestBase {
 		assertBean(
 			t.setTitle(null).setDescription(null).setTermsOfService(null).setVersion(null),
 			"title,description,termsOfService,version",
-			"null,null,null,null"
+			"<null>,<null>,<null>,<null>"
 		);
 	}
 
@@ -118,7 +118,7 @@ class Info_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{}", t);
+		assertBean(t, "contact,description,license,termsOfService,title,version", "<null>,<null>,<null>,<null>,<null>,<null>");
 
 		t
 			.set("contact", contact("a"))

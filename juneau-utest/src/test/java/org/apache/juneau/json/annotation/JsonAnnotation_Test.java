@@ -27,26 +27,19 @@ class JsonAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Json a1 = JsonAnnotation.create()
-		.description("description")
-		.on("a")
-		.wrapperAttr("b")
+		.description("a")
+		.on("b")
+		.wrapperAttr("c")
 		.build();
 
 	Json a2 = JsonAnnotation.create()
-		.description("description")
-		.on("a")
-		.wrapperAttr("b")
+		.description("a")
+		.on("b")
+		.wrapperAttr("c")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-			+ "description:['description'],"
-			+ "on:['a'],"
-			+ "onClass:[],"
-			+ "wrapperAttr:'b'"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on,onClass,wrapperAttr", "[a],[b],[],c");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -95,17 +88,17 @@ class JsonAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Json(
-		description={ "description" },
-		on="a",
-		wrapperAttr="b"
+		description={ "a" },
+		on="b",
+		wrapperAttr="c"
 	)
 	public static class D1 {}
 	Json d1 = D1.class.getAnnotationsByType(Json.class)[0];
 
 	@Json(
-		description={ "description" },
-		on="a",
-		wrapperAttr="b"
+		description={ "a" },
+		on="b",
+		wrapperAttr="c"
 	)
 	public static class D2 {}
 	Json d2 = D2.class.getAnnotationsByType(Json.class)[0];

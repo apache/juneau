@@ -29,31 +29,23 @@ class MarshalledAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Marshalled a1 = MarshalledAnnotation.create()
-		.description("description")
-		.example("example")
+		.description("a")
+		.example("b")
 		.implClass(X1.class)
-		.on("on")
+		.on("c")
 		.onClass(X1.class)
 		.build();
 
 	Marshalled a2 = MarshalledAnnotation.create()
-		.description("description")
-		.example("example")
+		.description("a")
+		.example("b")
 		.implClass(X1.class)
-		.on("on")
+		.on("c")
 		.onClass(X1.class)
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "example:'example',"
-				+ "implClass:'"+CNAME+"$X1',"
-				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"$X1']"
-			+ "}", a1
-		);
+		assertBean(a1, "description,example,implClass,on,onClass", "[a],b,X1,[c],[X1]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -98,20 +90,20 @@ class MarshalledAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Marshalled(
-		description={ "description" },
-		example="example",
+		description={ "a" },
+		example="b",
 		implClass=X1.class,
-		on="on",
+		on="c",
 		onClass=X1.class
 	)
 	public static class D1 {}
 	Marshalled d1 = D1.class.getAnnotationsByType(Marshalled.class)[0];
 
 	@Marshalled(
-		description={ "description" },
-		example="example",
+		description={ "a" },
+		example="b",
 		implClass=X1.class,
-		on="on",
+		on="c",
 		onClass=X1.class
 	)
 	public static class D2 {}

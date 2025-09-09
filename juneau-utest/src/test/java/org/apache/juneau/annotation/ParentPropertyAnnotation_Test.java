@@ -27,22 +27,17 @@ class ParentPropertyAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	ParentProperty a1 = ParentPropertyAnnotation.create()
-		.description("description")
-		.on("on")
+		.description("a")
+		.on("b")
 		.build();
 
 	ParentProperty a2 = ParentPropertyAnnotation.create()
-		.description("description")
-		.on("on")
+		.description("a")
+		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['on']"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on", "[a],[b]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -89,15 +84,15 @@ class ParentPropertyAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@ParentProperty(
-		description={ "description" },
-		on="on"
+		description={ "a" },
+		on="b"
 	)
 	public static class D1 {}
 	ParentProperty d1 = D1.class.getAnnotationsByType(ParentProperty.class)[0];
 
 	@ParentProperty(
-		description={ "description" },
-		on="on"
+		description={ "a" },
+		on="b"
 	)
 	public static class D2 {}
 	ParentProperty d2 = D2.class.getAnnotationsByType(ParentProperty.class)[0];

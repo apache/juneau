@@ -26,25 +26,19 @@ class TagAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Tag a1 = TagAnnotation.create()
-		.description("description")
+		.description("a")
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
-		.name("name")
+		.name("b")
 		.build();
 
 	Tag a2 = TagAnnotation.create()
-		.description("description")
+		.description("a")
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
-		.name("name")
+		.name("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "externalDocs:{description:[],url:''},"
-				+ "name:'name'"
-			+ "}", a1
-		);
+		assertBean(a1, "description,externalDocs{description,url},name", "[a],{[],},b");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -72,17 +66,17 @@ class TagAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Tag(
-		description="description",
+		description="a",
 		externalDocs=@ExternalDocs,
-		name="name"
+		name="b"
 	)
 	public static class D1 {}
 	Tag d1 = D1.class.getAnnotationsByType(Tag.class)[0];
 
 	@Tag(
-		description="description",
+		description="a",
 		externalDocs=@ExternalDocs,
-		name="name"
+		name="b"
 	)
 	public static class D2 {}
 	Tag d2 = D2.class.getAnnotationsByType(Tag.class)[0];

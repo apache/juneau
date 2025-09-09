@@ -1066,6 +1066,18 @@ public class Utils {
 			return o2.name();
 		if (o instanceof Class o2)
 			return o2.getSimpleName();
+		if (o instanceof Executable o2) {
+			var sb = new StringBuilder(64);
+			sb.append(o2 instanceof Constructor ? o2.getDeclaringClass().getSimpleName() : o2.getName()).append('(');
+			Class<?>[] pt = o2.getParameterTypes();
+			for (int i = 0; i < pt.length; i++) {
+				if (i > 0)
+					sb.append(',');
+				sb.append(pt[i].getSimpleName());
+			}
+			sb.append(')');
+			return sb.toString();
+		}
 		if (isArray(o)) {
 			var l = list();
 			for (var i = 0; i < Array.getLength(o); i++) {

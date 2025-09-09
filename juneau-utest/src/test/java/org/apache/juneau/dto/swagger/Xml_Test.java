@@ -43,7 +43,7 @@ class Xml_Test extends SimpleTestBase {
 		assertBean(
 			t.setName(null).setNamespace(null).setPrefix(null),
 			"name,namespace,prefix",
-			"null,null,null"
+			"<null>,<null>,<null>"
 		);
 	}
 
@@ -114,7 +114,7 @@ class Xml_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{}", t);
+		assertBean(t, "attribute,name,namespace,prefix,wrapped", "<null>,<null>,<null>,<null>,<null>");
 
 		t
 			.set("attribute", true)

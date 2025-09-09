@@ -29,49 +29,35 @@ class BeanpAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Beanp a1 = BeanpAnnotation.create()
-		.description("description")
+		.description("a")
 		.dictionary(X1.class)
-		.format("format")
-		.name("name")
-		.on("on")
+		.format("b")
+		.name("c")
+		.on("d")
 		.params(X1.class)
-		.properties("properties")
-		.ro("ro")
+		.properties("e")
+		.ro("f")
 		.type(X1.class)
-		.value("value")
-		.wo("wo")
+		.value("g")
+		.wo("h")
 		.build();
 
 	Beanp a2 = BeanpAnnotation.create()
-		.description("description")
+		.description("a")
 		.dictionary(X1.class)
-		.format("format")
-		.name("name")
-		.on("on")
+		.format("b")
+		.name("c")
+		.on("d")
 		.params(X1.class)
-		.properties("properties")
-		.ro("ro")
+		.properties("e")
+		.ro("f")
 		.type(X1.class)
-		.value("value")
-		.wo("wo")
+		.value("g")
+		.wo("h")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "dictionary:['"+CNAME+"$X1'],"
-				+ "format:'format',"
-				+ "name:'name',"
-				+ "on:['on'],"
-				+ "params:['"+CNAME+"$X1'],"
-				+ "properties:'properties',"
-				+ "ro:'ro',"
-				+ "type:'"+CNAME+"$X1',"
-				+ "value:'value',"
-				+ "wo:'wo'"
-			+ "}", a1
-		);
+		assertBean(a1, "description,dictionary,format,name,on,params,properties,ro,type,value,wo", "[a],[X1],b,c,[d],[X1],e,f,X1,g,h");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -118,33 +104,33 @@ class BeanpAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Beanp(
-		description={ "description" },
+		description={ "a" },
 		dictionary=X1.class,
-		format="format",
-		name="name",
-		on="on",
+		format="b",
+		name="c",
+		on="d",
 		params=X1.class,
-		properties="properties",
-		ro="ro",
+		properties="e",
+		ro="f",
 		type=X1.class,
-		value="value",
-		wo="wo"
+		value="g",
+		wo="h"
 	)
 	public static class D1 {}
 	Beanp d1 = D1.class.getAnnotationsByType(Beanp.class)[0];
 
 	@Beanp(
-		description={ "description" },
+		description={ "a" },
 		dictionary=X1.class,
-		format="format",
-		name="name",
-		on="on",
+		format="b",
+		name="c",
+		on="d",
 		params=X1.class,
-		properties="properties",
-		ro="ro",
+		properties="e",
+		ro="f",
 		type=X1.class,
-		value="value",
-		wo="wo"
+		value="g",
+		wo="h"
 	)
 	public static class D2 {}
 	Beanp d2 = D2.class.getAnnotationsByType(Beanp.class)[0];

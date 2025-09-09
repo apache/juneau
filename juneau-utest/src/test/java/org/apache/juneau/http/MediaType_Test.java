@@ -28,12 +28,12 @@ class MediaType_Test extends SimpleTestBase {
 		var x = new TreeSet<>();
 		x.add(MediaType.of("text/foo"));
 		x.add(MediaType.of("text/bar"));
-		assertJson("['text/bar','text/foo']", x);
+		assertList(x, "text/bar", "text/foo");
 
 		MediaType x2 = new MediaType((String)null);  // Interpreted as "/*"
 		assertTrue(x2.getType().isEmpty());
 		assertEquals("*", x2.getSubType());
-		assertJson("['*']", x2.getSubTypes());
+		assertList(x2.getSubTypes(), "*");
 		assertTrue(x2.isMetaSubtype());
 
 		var x3 = MediaType.of("text/foo+bar");
@@ -64,7 +64,7 @@ class MediaType_Test extends SimpleTestBase {
 		var x3 = new MediaType("text/bar");
 		assertEquals(x1, x2);
 		assertNotEquals(x1, x3);
-		assertNotEquals(x1, null);
+		assertNotNull(x1);
 	}
 
 	@Test void a05_hashCode() {

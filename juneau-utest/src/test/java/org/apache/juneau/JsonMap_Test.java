@@ -277,13 +277,13 @@ class JsonMap_Test extends SimpleTestBase {
 		var l = m.getList("a");
 		var m2 = l.getMap(0);
 		m2.put("b", "x");
-		assertJson("{a:[{b:'x'}]}", m);
+		assertBean(m, "a", "[{b=x}]");
 
 		m = JsonMap.ofJson("{a:[{b:'c'}]}");
 		for (JsonMap m3 : m.getList("a").elements(JsonMap.class))
 			m3.put("b", "y");
 
-		assertJson("{a:[{b:'y'}]}", m);
+		assertBean(m, "a", "[{b=y}]");
 	}
 
 	//====================================================================================================
@@ -311,7 +311,7 @@ class JsonMap_Test extends SimpleTestBase {
 	// JsonMap(Reader)
 	//====================================================================================================
 	@Test void a06_fromReader() throws Exception {
-		assertJson("{foo:'bar'}", JsonMap.ofJson(reader("{foo:'bar'}")));
+		assertBean(JsonMap.ofJson(reader("{foo:'bar'}")), "foo", "bar");
 	}
 
 	//====================================================================================================

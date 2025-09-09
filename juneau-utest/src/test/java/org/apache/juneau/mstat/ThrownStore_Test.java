@@ -339,8 +339,8 @@ class ThrownStore_Test extends SimpleTestBase {
 		db.add(t1);
 		db.add(t2);
 
-		assertJson("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']", db.getStats(t1).get().getStackTrace());
-		assertJson("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']", db.getStats(t2).get().getStackTrace());
+		assertList(db.getStats(t1).get().getStackTrace(), "Foo.bar(Foo.class:1)", "Foo.baz(Foo.class:2)", "<ignored>", "<ignored>", "Object.baz(Object.class:5)");
+		assertList(db.getStats(t2).get().getStackTrace(), "Foo.bar(Foo.class:1)", "Foo.baz(Foo.class:2)", "<ignored>", "<ignored>", "Object.baz(Object.class:5)");
 
 		assertEquals(2, db.getStats(t1).get().getCount());
 		assertEquals(2, db.getStats(t2).get().getCount());
@@ -350,8 +350,8 @@ class ThrownStore_Test extends SimpleTestBase {
 		db2.add(t1);
 		db2.add(t2);
 
-		assertJson("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']", db2.getStats(t1).get().getStackTrace());
-		assertJson("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']", db2.getStats(t2).get().getStackTrace());
+		assertList(db2.getStats(t1).get().getStackTrace(), "Foo.bar(Foo.class:1)", "Foo.baz(Foo.class:2)", "<ignored>", "<ignored>", "Object.baz(Object.class:5)");
+		assertList(db2.getStats(t2).get().getStackTrace(), "Foo.bar(Foo.class:1)", "Foo.baz(Foo.class:2)", "<ignored>", "<ignored>", "Object.baz(Object.class:5)");
 
 		assertEquals(2, db2.getStats(t1).get().getCount());
 		assertEquals(2, db2.getStats(t2).get().getCount());

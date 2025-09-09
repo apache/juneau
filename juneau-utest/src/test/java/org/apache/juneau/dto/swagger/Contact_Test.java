@@ -45,7 +45,7 @@ class Contact_Test extends SimpleTestBase {
 		assertBean(
 			t.setName(null).setEmail(null),
 			"name,email",
-			"null,null"
+			"<null>,<null>"
 		);
 	}
 
@@ -92,7 +92,7 @@ class Contact_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{}", t);
+		assertBean(t, "email,name,url", "<null>,<null>,<null>");
 
 		t
 			.set("name", "a")

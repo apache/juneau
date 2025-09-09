@@ -27,10 +27,7 @@ class MediaRanges_Test extends SimpleTestBase {
 	@Test void a01_extensions() {
 		var x1 = of("text/json");
 		var x2 = x1.getRange(0);
-		assertString("text/json", x2);
-		assertJson("[]", x2.getParameters());
-		assertString("1.0", x2.getQValue());
-		assertJson("[]", x2.getExtensions());
+		assertBean(x2, "toString,parameters,qValue,extensions", "text/json,[],1.0,[]");
 
 		assertNull(x1.getRange(-1));
 		assertNull(x1.getRange(1));

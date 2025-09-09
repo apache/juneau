@@ -26,23 +26,17 @@ class ExternalDocsAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	ExternalDocs a1 = ExternalDocsAnnotation.create()
-		.description("description")
-		.url("url")
+		.description("a")
+		.url("b")
 		.build();
 
 	ExternalDocs a2 = ExternalDocsAnnotation.create()
-		.description("description")
-		.url("url")
+		.description("a")
+		.url("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertString(""
-			+ "{"
-				+ "description:['description'],"
-				+ "url:'url'"
-			+ "}",
-			a1
-		);
+		assertBean(a1, "description,url", "[a],b");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -70,15 +64,15 @@ class ExternalDocsAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@ExternalDocs(
-		description="description",
-		url="url"
+		description="a",
+		url="b"
 	)
 	public static class D1 {}
 	ExternalDocs d1 = D1.class.getAnnotationsByType(ExternalDocs.class)[0];
 
 	@ExternalDocs(
-		description="description",
-		url="url"
+		description="a",
+		url="b"
 	)
 	public static class D2 {}
 	ExternalDocs d2 = D2.class.getAnnotationsByType(ExternalDocs.class)[0];

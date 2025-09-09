@@ -13,6 +13,7 @@
 package org.apache.juneau.msgpack;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
@@ -47,7 +48,7 @@ class MsgPackParser_Test extends SimpleTestBase {
 		var is = is("00 01");
 
 		var r = p.parse(is, Object.class);
-		assertJson("0", r);
+		assertEquals("0", r.toString());
 		r = p.parse(is, Object.class);
 		assertJson("1", r);
 
@@ -92,7 +93,7 @@ class MsgPackParser_Test extends SimpleTestBase {
 		assertString("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", r);
 		is = is("90 90");
 		r = p.parse(is, Object.class);
-		assertJson("[]", r);
+		assertEmpty(r);
 		r = p.parse(is, Object.class);
 		assertJson("[]", r);
 

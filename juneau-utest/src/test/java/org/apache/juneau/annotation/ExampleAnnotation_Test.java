@@ -29,28 +29,21 @@ class ExampleAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Example a1 = ExampleAnnotation.create()
-		.description("description")
-		.on("on")
+		.description("a")
+		.on("b")
 		.onClass(X1.class)
-		.value("value")
+		.value("c")
 		.build();
 
 	Example a2 = ExampleAnnotation.create()
-		.description("description")
-		.on("on")
+		.description("a")
+		.on("b")
 		.onClass(X1.class)
-		.value("value")
+		.value("c")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"$X1'],"
-				+ "value:'value'"
-			+ "}", a1
-		);
+		assertBean(a1, "description,on,onClass,value", "[a],[b],[X1],c");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -99,19 +92,19 @@ class ExampleAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Example(
-		description={ "description" },
-		on="on",
+		description={ "a" },
+		on="b",
 		onClass=X1.class,
-		value="value"
+		value="c"
 	)
 	public static class D1 {}
 	Example d1 = D1.class.getAnnotationsByType(Example.class)[0];
 
 	@Example(
-		description={ "description" },
-		on="on",
+		description={ "a" },
+		on="b",
 		onClass=X1.class,
-		value="value"
+		value="c"
 	)
 	public static class D2 {}
 	Example d2 = D2.class.getAnnotationsByType(Example.class)[0];

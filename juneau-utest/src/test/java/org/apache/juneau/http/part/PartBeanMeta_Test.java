@@ -78,23 +78,23 @@ class PartBeanMeta_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		var a1 = PartBeanMeta.of(A1.class);
 		assertSame(a1, PartBeanMeta.of(A1.class));
-		assertJson("{name:'X',value:'foo'}", a1.construct("X", "foo"));
+		assertBean(a1.construct("X", "foo"), "name,value", "X,foo");
 		assertThrowsWithMessage(Exception.class, "Constructor for type "+TNAME+"$A1 requires a name as the first argument.", ()->a1.construct("foo"));
 		assertNull(a1.getSchema().getName());
 
 		var a2 = PartBeanMeta.of(A2.class);
-		assertJson("{name:'X',value:'foo'}", a2.construct("X", "foo"));
+		assertBean(a2.construct("X", "foo"), "name,value", "X,foo");
 		assertThrowsWithMessage(Exception.class, "Constructor for type "+TNAME+"$A2 requires a name as the first argument.", ()->a2.construct("foo"));
 		assertNull(a2.getSchema().getName());
 
 		var a3 = PartBeanMeta.of(A3.class);
-		assertJson("{value:'foo'}", a3.construct("X", "foo"));
-		assertJson("{value:'foo'}", a3.construct("foo"));
+		assertBean(a3.construct("X", "foo"), "value", "foo");
+		assertBean(a3.construct("foo"), "value", "foo");
 		assertEquals("A3", a3.getSchema().getName());
 
 		var a4 = PartBeanMeta.of(A4.class);
-		assertJson("{value:'foo'}", a4.construct("X", "foo"));
-		assertJson("{value:'foo'}", a4.construct("foo"));
+		assertBean(a4.construct("X", "foo"), "value", "foo");
+		assertBean(a4.construct("foo"), "value", "foo");
 		assertEquals("A4", a4.getSchema().getName());
 
 		var a5 = PartBeanMeta.of(A5.class);

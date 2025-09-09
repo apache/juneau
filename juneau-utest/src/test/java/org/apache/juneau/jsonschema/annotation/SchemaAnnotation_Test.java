@@ -30,181 +30,123 @@ class SchemaAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Schema a1 = SchemaAnnotation.create()
-		._default("default")
-		._enum("enum")
-		.$ref("$ref")
-		.additionalProperties("additionalProperties")
-		.allOf("allOf")
-		.cf("cf")
-		.collectionFormat("collectionFormat")
-		.d("d")
-		.description("description")
-		.df("df")
-		.discriminator("discriminator")
-		.e("e")
+		._default("a")
+		._enum("b")
+		.$ref("c")
+		.additionalProperties("d")
+		.allOf("e")
+		.cf("f")
+		.collectionFormat("g")
+		.d("h")
+		.description("i")
+		.df("j")
+		.discriminator("k")
+		.e("l")
 		.emax(true)
 		.emin(true)
 		.exclusiveMaximum(true)
 		.exclusiveMinimum(true)
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
-		.f("f")
-		.format("format")
+		.f("m")
+		.format("n")
 		.ignore(true)
 		.items(ItemsAnnotation.DEFAULT)
-		.max("max")
+		.max("o")
 		.maxi(1)
-		.maximum("maximum")
+		.maximum("p")
 		.maxItems(2)
 		.maxl(3)
 		.maxLength(4)
 		.maxp(5)
 		.maxProperties(6)
-		.min("min")
+		.min("q")
 		.mini(7)
-		.minimum("minimum")
+		.minimum("r")
 		.minItems(8)
 		.minl(9)
 		.minLength(10)
 		.minp(11)
 		.minProperties(12)
-		.mo("mo")
-		.multipleOf("multipleOf")
-		.on("on")
+		.mo("s")
+		.multipleOf("t")
+		.on("u")
 		.onClass(X1.class)
-		.p("p")
-		.pattern("pattern")
-		.properties("properties")
+		.p("v")
+		.pattern("w")
+		.properties("x")
 		.r(true)
 		.readOnly(true)
 		.required(true)
 		.ro(true)
-		.t("t")
-		.title("title")
-		.type("type")
+		.t("z")
+		.title("aa")
+		.type("bb")
 		.ui(true)
 		.uniqueItems(true)
-		.xml("xml")
+		.xml("cc")
 		.build();
 
 	Schema a2 = SchemaAnnotation.create()
-		._default("default")
-		._enum("enum")
-		.$ref("$ref")
-		.additionalProperties("additionalProperties")
-		.allOf("allOf")
-		.cf("cf")
-		.collectionFormat("collectionFormat")
-		.d("d")
-		.description("description")
-		.df("df")
-		.discriminator("discriminator")
-		.e("e")
+		._default("a")
+		._enum("b")
+		.$ref("c")
+		.additionalProperties("d")
+		.allOf("e")
+		.cf("f")
+		.collectionFormat("g")
+		.d("h")
+		.description("i")
+		.df("j")
+		.discriminator("k")
+		.e("l")
 		.emax(true)
 		.emin(true)
 		.exclusiveMaximum(true)
 		.exclusiveMinimum(true)
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
-		.f("f")
-		.format("format")
+		.f("m")
+		.format("n")
 		.ignore(true)
 		.items(ItemsAnnotation.DEFAULT)
-		.max("max")
+		.max("o")
 		.maxi(1)
-		.maximum("maximum")
+		.maximum("p")
 		.maxItems(2)
 		.maxl(3)
 		.maxLength(4)
 		.maxp(5)
 		.maxProperties(6)
-		.min("min")
+		.min("q")
 		.mini(7)
-		.minimum("minimum")
+		.minimum("r")
 		.minItems(8)
 		.minl(9)
 		.minLength(10)
 		.minp(11)
 		.minProperties(12)
-		.mo("mo")
-		.multipleOf("multipleOf")
-		.on("on")
+		.mo("s")
+		.multipleOf("t")
+		.on("u")
 		.onClass(X1.class)
-		.p("p")
-		.pattern("pattern")
-		.properties("properties")
+		.p("v")
+		.pattern("w")
+		.properties("x")
 		.r(true)
 		.readOnly(true)
 		.required(true)
 		.ro(true)
-		.t("t")
-		.title("title")
-		.type("type")
+		.t("z")
+		.title("aa")
+		.type("bb")
 		.ui(true)
 		.uniqueItems(true)
-		.xml("xml")
+		.xml("cc")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "'$ref':'$ref',"
-				+ "_default:['default'],"
-				+ "_enum:['enum'],"
-				+ "additionalProperties:['additionalProperties'],"
-				+ "aev:false,"
-				+ "allOf:['allOf'],"
-				+ "allowEmptyValue:false,"
-				+ "cf:'cf',"
-				+ "collectionFormat:'collectionFormat',"
-				+ "d:['d'],"
-				+ "description:['description'],"
-				+ "df:['df'],"
-				+ "discriminator:'discriminator',"
-				+ "e:['e'],"
-				+ "emax:true,"
-				+ "emin:true,"
-				+ "exclusiveMaximum:true,"
-				+ "exclusiveMinimum:true,"
-				+ "externalDocs:{description:[],url:''},"
-				+ "f:'f',"
-				+ "format:'format',"
-				+ "ignore:true,"
-				+ "items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',description:[],df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',description:[],df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:[],max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false},max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false},"
-				+ "max:'max',"
-				+ "maxItems:2,"
-				+ "maxLength:4,"
-				+ "maxProperties:6,"
-				+ "maxi:1,"
-				+ "maximum:'maximum',"
-				+ "maxl:3,"
-				+ "maxp:5,"
-				+ "min:'min',"
-				+ "minItems:8,"
-				+ "minLength:10,"
-				+ "minProperties:12,"
-				+ "mini:7,"
-				+ "minimum:'minimum',"
-				+ "minl:9,"
-				+ "minp:11,"
-				+ "mo:'mo',"
-				+ "multipleOf:'multipleOf',"
-				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"$X1'],"
-				+ "p:'p',"
-				+ "pattern:'pattern',"
-				+ "properties:['properties'],"
-				+ "r:true,"
-				+ "readOnly:true,"
-				+ "required:true,"
-				+ "ro:true,"
-				+ "sie:false,skipIfEmpty:false,"
-				+ "t:'t',"
-				+ "title:'title',"
-				+ "type:'type',"
-				+ "ui:true,"
-				+ "uniqueItems:true,"
-				+ "xml:['xml']"
-			+ "}", a1
-		);
+		assertBean(a1,
+			"$ref,_default,_enum,additionalProperties,aev,allOf,allowEmptyValue,cf,collectionFormat,d,description,df,discriminator,e,emax,emin,exclusiveMaximum,exclusiveMinimum,externalDocs{description,url},f,format,ignore,items{$ref,_default,_enum,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items{$ref,_default,_enum,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxProperties,maxi,maximum,maxl,maxp,min,minItems,minLength,minProperties,mini,minimum,minl,minp,mo,multipleOf,on,onClass,p,pattern,properties,r,readOnly,required,ro,sie,skipIfEmpty,t,title,type,ui,uniqueItems,xml",
+			"c,[a],[b],[d],false,[e],false,f,g,[h],[i],[j],k,[l],true,true,true,true,{[],},m,n,true,{,[],[],,,[],[],[],false,false,false,false,,,{,[],[],,,[],[],[],false,false,false,false,,,[],,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},o,2,4,6,1,p,3,5,q,8,10,12,7,r,9,11,s,t,[u],[X1],v,w,[x],true,true,true,true,false,false,z,aa,bb,true,true,[cc]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -253,119 +195,119 @@ class SchemaAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Schema(
-		_default="default",
-		_enum="enum",
-		$ref="$ref",
-		additionalProperties="additionalProperties",
-		allOf="allOf",
-		cf="cf",
-		collectionFormat="collectionFormat",
-		d="d",
-		description="description",
-		df="df",
-		discriminator="discriminator",
-		e="e",
+		_default="a",
+		_enum="b",
+		$ref="c",
+		additionalProperties="d",
+		allOf="e",
+		cf="f",
+		collectionFormat="g",
+		d="h",
+		description="i",
+		df="j",
+		discriminator="k",
+		e="l",
 		emax=true,
 		emin=true,
 		exclusiveMaximum=true,
 		exclusiveMinimum=true,
 		externalDocs=@ExternalDocs,
-		f="f",
-		format="format",
+		f="m",
+		format="n",
 		ignore=true,
 		items=@Items,
-		max="max",
+		max="o",
 		maxi=1,
-		maximum="maximum",
+		maximum="p",
 		maxItems=2,
 		maxl=3,
 		maxLength=4,
 		maxp=5,
 		maxProperties=6,
-		min="min",
+		min="q",
 		mini=7,
-		minimum="minimum",
+		minimum="r",
 		minItems=8,
 		minl=9,
 		minLength=10,
 		minp=11,
 		minProperties=12,
-		mo="mo",
-		multipleOf="multipleOf",
-		on="on",
+		mo="s",
+		multipleOf="t",
+		on="u",
 		onClass=X1.class,
-		p="p",
-		pattern="pattern",
-		properties="properties",
+		p="v",
+		pattern="w",
+		properties="x",
 		r=true,
 		readOnly=true,
 		required=true,
 		ro=true,
-		t="t",
-		title="title",
-		type="type",
+		t="z",
+		title="aa",
+		type="bb",
 		ui=true,
 		uniqueItems=true,
-		xml="xml"
+		xml="cc"
 	)
 	public static class D1 {}
 	Schema d1 = D1.class.getAnnotationsByType(Schema.class)[0];
 
 	@Schema(
-		_default="default",
-		_enum="enum",
-		$ref="$ref",
-		additionalProperties="additionalProperties",
-		allOf="allOf",
-		cf="cf",
-		collectionFormat="collectionFormat",
-		d="d",
-		description="description",
-		df="df",
-		discriminator="discriminator",
-		e="e",
+		_default="a",
+		_enum="b",
+		$ref="c",
+		additionalProperties="d",
+		allOf="e",
+		cf="f",
+		collectionFormat="g",
+		d="h",
+		description="i",
+		df="j",
+		discriminator="k",
+		e="l",
 		emax=true,
 		emin=true,
 		exclusiveMaximum=true,
 		exclusiveMinimum=true,
 		externalDocs=@ExternalDocs,
-		f="f",
-		format="format",
+		f="m",
+		format="n",
 		ignore=true,
 		items=@Items,
-		max="max",
+		max="o",
 		maxi=1,
-		maximum="maximum",
+		maximum="p",
 		maxItems=2,
 		maxl=3,
 		maxLength=4,
 		maxp=5,
 		maxProperties=6,
-		min="min",
+		min="q",
 		mini=7,
-		minimum="minimum",
+		minimum="r",
 		minItems=8,
 		minl=9,
 		minLength=10,
 		minp=11,
 		minProperties=12,
-		mo="mo",
-		multipleOf="multipleOf",
-		on="on",
+		mo="s",
+		multipleOf="t",
+		on="u",
 		onClass=X1.class,
-		p="p",
-		pattern="pattern",
-		properties="properties",
+		p="v",
+		pattern="w",
+		properties="x",
 		r=true,
 		readOnly=true,
 		required=true,
 		ro=true,
-		t="t",
-		title="title",
-		type="type",
+		t="z",
+		title="aa",
+		type="bb",
 		ui=true,
 		uniqueItems=true,
-		xml="xml"
+		xml="cc"
 	)
 	public static class D2 {}
 	Schema d2 = D2.class.getAnnotationsByType(Schema.class)[0];

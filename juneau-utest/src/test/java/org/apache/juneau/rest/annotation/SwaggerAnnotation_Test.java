@@ -29,42 +29,32 @@ class SwaggerAnnotation_Test extends SimpleTestBase {
 
 	Swagger a1 = SwaggerAnnotation.create()
 		.contact(ContactAnnotation.DEFAULT)
-		.description("description")
+		.description("a")
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
 		.license(LicenseAnnotation.DEFAULT)
 		.tags(TagAnnotation.DEFAULT)
-		.termsOfService("termsOfService")
-		.title("title")
-		.value("value")
-		.version("version")
+		.termsOfService("b")
+		.title("c")
+		.value("d")
+		.version("e")
 		.build();
 
 	Swagger a2 = SwaggerAnnotation.create()
 		.contact(ContactAnnotation.DEFAULT)
-		.description("description")
+		.description("a")
 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
 		.license(LicenseAnnotation.DEFAULT)
 		.tags(TagAnnotation.DEFAULT)
-		.termsOfService("termsOfService")
-		.title("title")
-		.value("value")
-		.version("version")
+		.termsOfService("b")
+		.title("c")
+		.value("d")
+		.version("e")
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(""
-			+ "{"
-				+ "contact:{description:[],email:'',name:'',url:''},"
-				+ "description:['description'],"
-				+ "externalDocs:{description:[],url:''},"
-				+ "license:{description:[],name:'',url:''},"
-				+ "tags:[{description:[],externalDocs:{description:[],url:''},name:''}],"
-				+ "termsOfService:['termsOfService'],"
-				+ "title:['title'],"
-				+ "value:['value'],"
-				+ "version:'version'"
-			+ "}", a1
-		);
+		assertBean(a1,
+			"contact{description,email,name,url},description,externalDocs{description,url},license{description,name,url},tags{#{description,externalDocs{description,url},name}},termsOfService,title,value,version",
+			"{[],,,},[a],{[],},{[],,},{[{[],{[],},}]},[b],[c],[d],e");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -93,28 +83,28 @@ class SwaggerAnnotation_Test extends SimpleTestBase {
 
 	@Swagger(
 		contact=@Contact,
-		description="description",
+		description="a",
 		externalDocs=@ExternalDocs,
 		license=@License,
 		tags=@Tag,
-		termsOfService="termsOfService",
-		title="title",
-		value="value",
-		version="version"
+		termsOfService="b",
+		title="c",
+		value="d",
+		version="e"
 	)
 	public static class D1 {}
 	Swagger d1 = D1.class.getAnnotationsByType(Swagger.class)[0];
 
 	@Swagger(
 		contact=@Contact,
-		description="description",
+		description="a",
 		externalDocs=@ExternalDocs,
 		license=@License,
 		tags=@Tag,
-		termsOfService="termsOfService",
-		title="title",
-		value="value",
-		version="version"
+		termsOfService="b",
+		title="c",
+		value="d",
+		version="e"
 	)
 	public static class D2 {}
 	Swagger d2 = D2.class.getAnnotationsByType(Swagger.class)[0];

@@ -49,7 +49,7 @@ class Operation_Test extends SimpleTestBase {
 			t.setConsumes((Collection<MediaType>)null).setParameters((Collection<ParameterInfo>)null).setProduces((Collection<MediaType>)null)
 			.setResponses((Map<String,ResponseInfo>)null).setSchemes((Set<String>)null).setSecurity((List<Map<String,List<String>>>)null).setTags((Collection<String>)null),
 			"consumes,parameters,produces,responses,schemes,security,tags",
-			"null,null,null,null,null,null,null"
+			"<null>,<null>,<null>,<null>,<null>,<null>,<null>"
 		);
 
 		// Other methods - empty collections
@@ -161,7 +161,9 @@ class Operation_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson("{}", t);
+		assertBean(t,
+			"consumes,deprecated,description,externalDocs,operationId,parameters,produces,responses,schemes,security,summary,tags",
+			"<null>,false,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
 		t
 			.set("consumes", set(MediaType.of("text/a")))
