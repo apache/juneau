@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,11 +38,11 @@ import org.opentest4j.*;
 
 /**
  * Comprehensive utility class for Bean-Centric Tests (BCT) and general testing operations.
- * 
+ *
  * <p>This class provides the core testing infrastructure for Apache Juneau, with particular emphasis
  * on the Bean-Centric Testing (BCT) framework. BCT enables sophisticated assertion patterns for
  * testing object properties, collections, maps, and complex nested structures with minimal code.</p>
- * 
+ *
  * <h5 class='section'>Bean-Centric Testing (BCT) Framework:</h5>
  * <p>The BCT framework consists of several key components:</p>
  * <ul>
@@ -51,25 +50,25 @@ import org.opentest4j.*;
  * 	<li><b>{@link BasicBeanConverter}:</b> Default implementation with extensible type handlers</li>
  * 	<li><b>Assertion Methods:</b> High-level testing methods that leverage the converter framework</li>
  * </ul>
- * 
+ *
  * <h5 class='section'>Primary BCT Assertion Methods:</h5>
  * <dl>
  * 	<dt><b>{@link #assertBean(Object, String, String)}</b></dt>
  * 	<dd>Tests object properties with nested syntax support and collection iteration</dd>
- * 	
+ *
  * 	<dt><b>{@link #assertMap(Map, String, String)}</b></dt>
  * 	<dd>Tests map entries with the same nested property syntax as assertBean</dd>
- * 	
+ *
  * 	<dt><b>{@link #assertMapped(Object, java.util.function.BiFunction, String, String)}</b></dt>
  * 	<dd>Tests custom property access using BiFunction for non-standard objects</dd>
- * 	
+ *
  * 	<dt><b>{@link #assertList(List, Object...)}</b></dt>
  * 	<dd>Tests list/collection elements with varargs for expected values</dd>
- * 	
+ *
  * 	<dt><b>{@link #assertBeans(Collection, String, String...)}</b></dt>
  * 	<dd>Tests collections of objects by extracting and comparing specific fields</dd>
  * </dl>
- * 
+ *
  * <h5 class='section'>BCT Advanced Features:</h5>
  * <ul>
  * 	<li><b>Nested Property Syntax:</b> "address{street,city}" for testing nested objects</li>
@@ -80,7 +79,7 @@ import org.opentest4j.*;
  * 	<li><b>Direct Field Access:</b> Public fields accessed without getters</li>
  * 	<li><b>Map Key Access:</b> Including special "&lt;NULL&gt;" syntax for null keys</li>
  * </ul>
- * 
+ *
  * <h5 class='section'>Converter Extensibility:</h5>
  * <p>The BCT framework is built on the extensible {@link BasicBeanConverter} which allows:</p>
  * <ul>
@@ -89,43 +88,43 @@ import org.opentest4j.*;
  * 	<li><b>Custom Swapifiers:</b> Object transformation before conversion</li>
  * 	<li><b>Configurable Settings:</b> Formatting, delimiters, and display options</li>
  * </ul>
- * 
+ *
  * <h5 class='section'>Usage Examples:</h5>
- * 
+ *
  * <p><b>Basic Property Testing:</b></p>
  * <p class='bjava'>
  * 	<jc>// Test multiple properties</jc>
  * 	assertBean(user, <js>"name,age,active"</js>, <js>"John,30,true"</js>);
- * 	
+ *
  * 	<jc>// Test nested properties</jc>
  * 	assertBean(user, <js>"address{street,city}"</js>, <js>"{123 Main St,Springfield}"</js>);
  * </p>
- * 
+ *
  * <p><b>Collection and Array Testing:</b></p>
  * <p class='bjava'>
  * 	<jc>// Test collection size and iterate over all elements</jc>
  * 	assertBean(order, <js>"items{length,#{name}}"</js>, <js>"{3,[{Laptop},{Phone},{Tablet}]}"</js>);
- * 	
+ *
  * 	<jc>// Test specific array elements</jc>
  * 	assertBean(data, <js>"values{0,1,2}"</js>, <js>"{100,200,300}"</js>);
  * </p>
- * 
+ *
  * <p><b>Map and Collection Testing:</b></p>
  * <p class='bjava'>
  * 	<jc>// Test map entries</jc>
  * 	assertMap(config, <js>"timeout,retries"</js>, <js>"30000,3"</js>);
- * 	
+ *
  * 	<jc>// Test list elements</jc>
  * 	assertList(tags, <js>"red"</js>, <js>"green"</js>, <js>"blue"</js>);
  * </p>
- * 
+ *
  * <p><b>Custom Property Access:</b></p>
  * <p class='bjava'>
  * 	<jc>// Test with custom accessor function</jc>
- * 	assertMapped(myObject, (obj, prop) -> obj.getProperty(prop), 
+ * 	assertMapped(myObject, (obj, prop) -> obj.getProperty(prop),
  * 		<js>"prop1,prop2"</js>, <js>"value1,value2"</js>);
  * </p>
- * 
+ *
  * <h5 class='section'>Performance and Thread Safety:</h5>
  * <p>The BCT framework is designed for high performance with:</p>
  * <ul>
@@ -133,7 +132,7 @@ import org.opentest4j.*;
  * 	<li><b>Thread Safety:</b> All operations are thread-safe for concurrent testing</li>
  * 	<li><b>Minimal Allocation:</b> Efficient object reuse and minimal temporary objects</li>
  * </ul>
- * 
+ *
  * @see BeanConverter
  * @see BasicBeanConverter
  */
@@ -149,7 +148,7 @@ public class TestUtils extends Utils2 {
 	 * <p>This is the primary method for Bean-Centric Tests (BCT), supporting extensive property validation
 	 * patterns including nested objects, collections, arrays, method chaining, direct field access, collection iteration
 	 * with <js>#{property}</js> syntax, and universal <js>length</js>/<js>size</js> properties for all collection types.</p>
-	 * 
+	 *
 	 * <p>The method uses the {@link BasicBeanConverter#DEFAULT} converter internally for object introspection
 	 * and value extraction. The converter provides sophisticated property access through the {@link BeanConverter}
 	 * interface, supporting multiple fallback mechanisms for accessing object properties and values.</p>
@@ -322,7 +321,11 @@ public class TestUtils extends Utils2 {
 		assertNotNull(actual, "Value was null.");
 		assertArgNotNull("fields", fields);
 		assertArgNotNull("expected", expected);
-		assertEquals(expected, splitNested(fields).stream().map(x -> getEntry(converter, actual, x)).collect(joining(",")));
+		assertEquals(expected, tokenize(fields).stream().map(x -> converter.getNested(actual, x)).collect(joining(",")));
+	}
+
+	private static List<NestedTokenizer.Token> tokenize(String fields) {
+		return NestedTokenizer.tokenize(fields);
 	}
 
 	/**
@@ -391,7 +394,7 @@ public class TestUtils extends Utils2 {
 		assertArgNotNull("fields", fields);
 		assertArgNotNull("expected", expected);
 
-		var f = splitNested(fields);
+		var tokens = tokenize(fields);
 		var errors = new ArrayList<AssertionFailedError>();
 		var actualList = converter.listify(actual);
 
@@ -400,7 +403,7 @@ public class TestUtils extends Utils2 {
 		} else {
 			for (var i = 0; i < actualList.size(); i++) {
 				var i2 = i;
-				var a = f.stream().map(x -> getEntry(converter, actualList.get(i2), x)).collect(joining(","));
+				var a = tokens.stream().map(x -> converter.getNested(actualList.get(i2), x)).collect(joining(","));
 				if (ne(r(expected[i]), a)) {
 					errors.add(assertionFailed(r(expected[i]), a, "Bean at row {0} did not match.", i));
 				}
@@ -411,7 +414,7 @@ public class TestUtils extends Utils2 {
 
 		var actualStrings = new ArrayList<String>();
 		for (var o : actualList) {
-			actualStrings.add(f.stream().map(x -> getEntry(converter, o, x)).collect(joining(",")));
+			actualStrings.add(tokens.stream().map(x -> converter.getNested(o, x)).collect(joining(",")));
 		}
 
 		if (errors.size() == 1) throw errors.get(0);
@@ -660,7 +663,7 @@ public class TestUtils extends Utils2 {
 		assertNotNull(actual, "Value was null.");
 		assertArgNotNull("fields", fields);
 		assertArgNotNull("expected", expected);
-		assertEquals(expected, splitNested(fields).stream().map(x -> getEntry(converter, actual, x)).collect(joining(",")));
+		assertEquals(expected, tokenize(fields).stream().map(x -> converter.getNested(actual, x)).collect(joining(",")));
 	}
 
 	/**
@@ -920,25 +923,6 @@ public class TestUtils extends Utils2 {
 
 	private static String getMessages(Throwable t) {
 		return Stream.iterate(t, Throwable::getCause).takeWhile(e -> e != null).map(Throwable::getMessage).collect(joining("\n"));
-	}
-
-	private static String getEntry(BeanConverter converter, Object o, String name) {
-
-		if (o == null) return converter.nullValue();
-
-		// Handle #{...} syntax for iterating over collections/arrays
-		if (name.startsWith("#{") && name.endsWith("}") && converter.canListify(o)) {
-			var spn = splitNestedInner(name);
-			return converter.listify(o).stream().map(x -> spn.stream().map(x2 -> getEntry(converter, x, x2)).collect(joining(",","{","}"))).collect(joining(",","[","]"));
-		}
-
-		// Original logic for regular property access
-		var i = name.indexOf("{");
-		var pn = i == -1 ? name : name.substring(0, i);
-		var spn = i == -1 ? null : splitNestedInner(name);
-		var e = ofNullable(converter.getProperty(o, pn.equals("<NULL>") ? null : pn)).orElse(null);
-		if (spn == null || e == null) return converter.stringify(e);
-		return spn.stream().map(x -> getEntry(converter, e, x)).map(converter::stringify).collect(joining(",","{","}"));
 	}
 
 	/**

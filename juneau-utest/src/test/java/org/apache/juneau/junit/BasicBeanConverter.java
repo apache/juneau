@@ -197,7 +197,6 @@ public class BasicBeanConverter implements BeanConverter {
 
 	public static final String
 		SETTING_nullValue = "nullValue",
-		SETTING_emptyValue = "emptyValue",
 		SETTING_fieldSeparator = "fieldSeparator",
 		SETTING_collectionPrefix = "collectionPrefix",
 		SETTING_collectionSuffix = "collectionSuffix",
@@ -205,7 +204,7 @@ public class BasicBeanConverter implements BeanConverter {
 		SETTING_mapSuffix = "mapSuffix",
 		SETTING_mapEntrySeparator = "mapEntrySeparator",
 		SETTING_calendarFormat = "calendarFormat",
-		SETTING_classNameFormat = "short";
+		SETTING_classNameFormat = "classNameFormat";
 
 	private final List<StringifierEntry<?>> stringifiers;
 	private final List<ListifierEntry<?>> listifiers;
@@ -290,11 +289,6 @@ public class BasicBeanConverter implements BeanConverter {
 	}
 
 	@Override
-	public String nullValue() {
-		return getSetting(SETTING_nullValue, null);
-	}
-
-	@Override
 	public Object getProperty(Object object, String name) {
 		var o = swap(object);
 		return propertyExtractors
@@ -303,6 +297,23 @@ public class BasicBeanConverter implements BeanConverter {
 			.findFirst()
 			.orElseThrow(()->new RuntimeException(f("Could not find extractor for object of type {0}", o.getClass().getName())))
 			.extract(this, o, name);
+	}
+
+	@Override
+	public String getNested(Object o, NestedTokenizer.Token token) {
+
+		if (o == null) return getSetting(SETTING_nullValue, null);
+
+		// Handle #{...} syntax for iterating over collections/arrays
+		if (eq("#", token.getValue()) && canListify(o)) {
+			return listify(o).stream().map(x -> token.getNested().stream().map(x2 -> getNested(x, x2)).collect(joining(",","{","}"))).collect(joining(",","[","]"));
+		}
+
+		// Original logic for regular property access
+		var pn = token.getValue();
+		var e = ofNullable(getProperty(o, pn.equals("<NULL>") ? null : pn)).orElse(null);
+		if (e == null || ! token.hasNested()) return stringify(e);
+		return token.getNested().stream().map(x -> getNested(e, x)).map(this::stringify).collect(joining(",","{","}"));
 	}
 
 	private Optional<Stringifier<?>> findStringifier(Class<?> c) {
@@ -491,7 +502,6 @@ public class BasicBeanConverter implements BeanConverter {
 		 */
 		public Builder defaultSettings() {
 			addSetting(SETTING_nullValue, "<null>");
-			addSetting(SETTING_emptyValue, "<empty>");
 			addSetting(SETTING_classNameFormat, "simple");
 
 			addStringifier(Map.Entry.class, (bc, o) -> bc.stringify(o.getKey()) + bc.getSetting(SETTING_mapEntrySeparator, "=") + bc.stringify(o.getValue()));

@@ -147,16 +147,6 @@ public interface BeanConverter {
 	boolean canListify(Object o);
 
 	/**
-	 * Returns the string representation used for null values.
-	 *
-	 * <p>This is used by {@link #stringify(Object)} when the object (after swapping) is null.
-	 * The default implementation typically returns "&lt;null&gt;" or similar.</p>
-	 *
-	 * @return The null value representation
-	 */
-	String nullValue();
-
-	/**
 	 * Pre-processes objects before conversion operations.
 	 *
 	 * <p>This method applies object transformations before stringification or listification.
@@ -209,4 +199,6 @@ public interface BeanConverter {
 	Object getProperty(Object object, String name);
 
 	<T> T getSetting(String key, T defaultValue);
+
+	String getNested(Object o, NestedTokenizer.Token token);
 }
