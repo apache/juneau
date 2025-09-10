@@ -34,7 +34,6 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
-import org.opentest4j.*;
 
 /**
  * Comprehensive utility class for Bean-Centric Tests (BCT) and general testing operations.
@@ -314,14 +313,7 @@ public class TestUtils extends Utils2 {
 	 * @see BasicBeanConverter
 	 */
 	public static void assertBean(Object actual, String fields, String expected) {
-		assertBean(BasicBeanConverter.DEFAULT, actual, fields, expected);
-	}
-
-	public static void assertBean(BeanConverter converter, Object actual, String fields, String expected) {
-		assertNotNull(actual, "Value was null.");
-		assertArgNotNull("fields", fields);
-		assertArgNotNull("expected", expected);
-		assertEquals(expected, tokenize(fields).stream().map(x -> converter.getNested(actual, x)).collect(joining(",")));
+		Assertions2.assertBean(actual, fields, expected);
 	}
 
 	private static List<NestedTokenizer.Token> tokenize(String fields) {
@@ -386,70 +378,9 @@ public class TestUtils extends Utils2 {
 	 * @see #assertBean(Object, String, String)
 	 */
 	public static void assertBeans(Object actual, String fields, String...expected) {
-		assertBeans(BasicBeanConverter.DEFAULT, actual, fields, expected);
+		Assertions2.assertBeans(actual, fields, expected);
 	}
 
-	public static void assertBeans(BasicBeanConverter converter, Object actual, String fields, String...expected) {
-		assertNotNull(actual, "Value was null.");
-		assertArgNotNull("fields", fields);
-		assertArgNotNull("expected", expected);
-
-		var tokens = tokenize(fields);
-		var errors = new ArrayList<AssertionFailedError>();
-		var actualList = converter.listify(actual);
-
-		if (ne(expected.length, actualList.size())) {
-			errors.add(assertionFailed(expected.length, actualList.size(), "Wrong number of beans."));
-		} else {
-			for (var i = 0; i < actualList.size(); i++) {
-				var i2 = i;
-				var a = tokens.stream().map(x -> converter.getNested(actualList.get(i2), x)).collect(joining(","));
-				if (ne(r(expected[i]), a)) {
-					errors.add(assertionFailed(r(expected[i]), a, "Bean at row {0} did not match.", i));
-				}
-			}
-		}
-
-		if (errors.isEmpty()) return;
-
-		var actualStrings = new ArrayList<String>();
-		for (var o : actualList) {
-			actualStrings.add(tokens.stream().map(x -> converter.getNested(o, x)).collect(joining(",")));
-		}
-
-		if (errors.size() == 1) throw errors.get(0);
-		throw assertionFailed(
-			Stream.of(expected).map(TestUtils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
-			actualStrings.stream().map(TestUtils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
-			"{0} bean assertions failed: {1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))
-		);
-	}
-
-	private static AssertionFailedError assertionFailed(Object expected, Object actual, String message, Object...args) {
-		return new AssertionFailedError(f(message, args) + f(" ==> expected: <{0}> but was: <{1}>", expected, actual), expected, actual);
-	}
-
-	private static String escapeForJava(String s) {
-		StringBuilder sb = new StringBuilder();
-		for (char c : s.toCharArray()) {
-			switch (c) {
-				case '\"': sb.append("\\\""); break;
-				case '\\': sb.append("\\\\"); break;
-				case '\n': sb.append("\\n"); break;
-				case '\r': sb.append("\\r"); break;
-				case '\t': sb.append("\\t"); break;
-				case '\f': sb.append("\\f"); break;
-				case '\b': sb.append("\\b"); break;
-				default:
-					if (c < 0x20 || c > 0x7E) {
-						sb.append(String.format("\\u%04x", (int)c));
-					} else {
-						sb.append(c);
-					}
-			}
-		}
-		return sb.toString();
-	}
 
 	/**
 	 * Asserts that a List contains the expected values using flexible comparison logic.
@@ -508,41 +439,14 @@ public class TestUtils extends Utils2 {
 	 * @see #l(Object) for converting other collection types to Lists
 	 */
 	public static <T> void assertList(Object actual, Object...expected) {
-		assertList(BasicBeanConverter.DEFAULT, actual, expected);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> void assertList(BeanConverter converter, Object actual, Object...expected) {
-		assertNotNull(actual, "Value was null.");
-		assertArgNotNull("expected", expected);
-
-		var list = converter.listify(actual);
-		assertEquals(expected.length, list.size(), fms("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
-
-		for (var i = 0; i < expected.length; i++) {
-			var x = list.get(i);
-			if (expected[i] instanceof String e) {
-				assertEquals(e, converter.stringify(x), fms("Element at index {0} did not match.  expected={1}, actual={2}", i, e, converter.stringify(x)));
-			} else if (expected[i] instanceof Predicate e) {
-				assertTrue(e.test(x), fms("Element at index {0} did pass predicate.  actual={1}", i, converter.stringify(x)));
-			} else {
-				assertEquals(expected[i], x, fms("Element at index {0} did not match.  expected={1}({2}), actual={3}(4)", i, expected[i], t(expected[i]), x, t(x)));
-			}
-		}
-	}
-
-	private static String t(Object o) {
-		return o == null ? null : o.getClass().getSimpleName();
+		Assertions2.assertList(actual, expected);
 	}
 
 	/**
 	 * Asserts an object matches the expected string after it's been made {@link Utils#r readable}.
 	 */
 	public static void assertContains(String expected, Object actual) {
-		assertArgNotNull("expected", expected);
-		assertNotNull(actual, "Value was null.");
-		var a2 = r(actual);
-		assertTrue(a2.contains(expected), fms("String did not contain expected substring.  expected={0}, actual={1}", expected, a2));
+		Assertions2.assertContains(expected, actual);
 	}
 
 	/**
@@ -551,33 +455,15 @@ public class TestUtils extends Utils2 {
 	 * @param expected
 	 * @param actual
 	 */
-	public static void assertContainsAll(String expected, Object actual) {
-		assertArgNotNull("expected", expected);
-		assertNotNull(actual, "Value was null.");
-		var a2 = r(actual);
-		for (var e : splita(expected))
-			assertTrue(a2.contains(e), fms("String did not contain expected substring.  expected={0}, actual={1}", e, a2));
+	public static void assertContainsAll(Object actual, String...expected) {
+		Assertions2.assertContainsAll(actual, expected);
 	}
 
 	/**
 	 * Asserts that a collection is not null and empty.
 	 */
 	public static void assertEmpty(Object value) {
-		if (value instanceof Optional v2) {
-			assertTrue(v2.isEmpty(), "Optional was not empty");
-			return;
-		}
-		if (value instanceof Map v2) {
-			assertTrue(v2.isEmpty(), "Map was not empty");
-			return;
-		}
-		assertEmpty(BasicBeanConverter.DEFAULT, value);
-	}
-
-	public static void assertEmpty(BasicBeanConverter converter, Object value) {
-		assertNotNull(value, "Value was null.");
-		assertTrue(converter.canListify(value), fms("Value cannot be converted to a list.  Class={0}", value.getClass().getSimpleName()));
-		assertTrue(converter.listify(value).isEmpty(), "Value was not empty.");
+		Assertions2.assertEmpty(value);
 	}
 
 	public static void assertEqualsAll(Object...values) {
@@ -656,14 +542,7 @@ public class TestUtils extends Utils2 {
 	 * @see BasicBeanConverter
 	 */
 	public static void assertMap(Map<?,?> actual, String fields, String expected) {
-		assertMap(BasicBeanConverter.DEFAULT, actual, fields, expected);
-	}
-
-	public static void assertMap(BeanConverter converter, Map<?,?> actual, String fields, String expected) {
-		assertNotNull(actual, "Value was null.");
-		assertArgNotNull("fields", fields);
-		assertArgNotNull("expected", expected);
-		assertEquals(expected, tokenize(fields).stream().map(x -> converter.getNested(actual, x)).collect(joining(",")));
+		Assertions2.assertBean(actual, fields, expected);
 	}
 
 	/**
@@ -693,24 +572,14 @@ public class TestUtils extends Utils2 {
 	 * @see BasicBeanConverter
 	 */
 	public static <T> void assertMapped(T actual, BiFunction<T,String,Object> f, String properties, String expected) {
-		assertNotNull(actual, "Value was null.");
-		var m = new LinkedHashMap<String,Object>();
-		for (var p : split(properties)) {
-			try {
-				m.put(p, f.apply(actual, p));
-			} catch (Exception e) {
-				m.put(p, simpleClassNameOf(e));
-			}
-		}
-		assertMap(m, properties, expected);
+		Assertions2.assertMapped(actual, f, properties, expected);
 	}
 
 	/**
 	 * Asserts that a collection is not null and not empty.
 	 */
 	public static void assertNotEmpty(Object value) {
-		assertNotNull(value, "Value was null.");
-		assertFalse(toList(value).isEmpty(), "Value was empty.");
+		Assertions2.assertNotEmpty(value);
 	}
 
 	public static void assertNotEqualsAny(Object actual, Object...values) {
@@ -753,41 +622,28 @@ public class TestUtils extends Utils2 {
 	 * @throws AssertionError if the object is null or not the expected size.
 	 */
 	public static void assertSize(int expected, Object actual) {
-		assertNotNull(actual, "Value was null.");
-		if (actual instanceof String a2) {
-			assertEquals(expected, a2.length(), fms("Value not expected size.  Expected: {0}, Actual: {1}, Value: {2}", expected, a2.length(), a2));
-			return;
-		}
-		assertEquals(expected, toList(actual).size(), fms("Value not expected size.  Expected: {0}, Actual: {1}", expected, toList(actual).size()));
+		Assertions2.assertSize(expected, actual);
 	}
 
 	/**
 	 * Asserts an object matches the expected string after it's been made {@link Utils#r readable}.
 	 */
 	public static void assertString(String expected, Object actual) {
-		assertNotNull(actual, "Value was null.");
-		assertEquals(expected, r(actual));
+		Assertions2.assertString(expected, actual);
 	}
 
 	/**
 	 * Asserts value when stringified matches the specified pattern.
 	 */
-	public static Object assertMatches(String pattern, Object value) {
-		var m = getMatchPattern3(pattern).matcher(s(value));
-		if (! m.matches()) {
-			var msg = "Pattern didn't match: \n\tExpected:\n"+pattern+"\n\tActual:\n"+value;
-			System.err.println(msg);  // For easier debugging.
-			fail(msg);
-		}
-		return value;
+	public static void assertMatches(String pattern, Object value) {
+		Assertions2.assertMatches(pattern, value);
 	}
 
 	/**
 	 * Asserts an object matches the expected string after it's been made {@link Utils#r readable}.
 	 */
 	public static void assertString(String expected, Object actual, Supplier<String> messageSupplier) {
-		assertNotNull(actual, "Value was null.");
-		assertEquals(expected, r(actual), messageSupplier);
+		Assertions2.assertString(expected, actual);
 	}
 
 	public static <T extends Throwable> T assertThrowable(Class<? extends Throwable> expectedType, String expectedSubstring, T t) {

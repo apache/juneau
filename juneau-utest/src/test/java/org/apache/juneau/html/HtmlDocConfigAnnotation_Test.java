@@ -314,7 +314,7 @@ class HtmlDocConfigAnnotation_Test extends SimpleTestBase {
 		var al = AnnotationWorkList.of(sr, e.getAnnotationList());
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
 		var r = x.serialize(null).replaceAll("[\r\n]+", "|");
-		assertContainsAll("<aside>xxx</aside>,<footer>xxx</footer>,<head>xxx,<style>@import \"xxx\"; xxx zzz</style>,<nav><ol><li>xxx</li></ol>xxx</nav>,<script>xxx| yyy|</script>", r);
+		assertContainsAll(r, "<aside>xxx</aside>","<footer>xxx</footer>","<head>xxx","<style>@import \"xxx\"; xxx zzz</style>","<nav><ol><li>xxx</li></ol>xxx</nav>","<script>xxx| yyy|</script>");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

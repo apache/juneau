@@ -16,6 +16,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -362,7 +363,15 @@ class ObjectRest_Test extends SimpleTestBase {
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"true,false,false,false,true,true,true,true,true,true,true");
 
-		assertMapped(model, ObjectRest::getMap,
+		BiFunction<ObjectRest,String,Object> f1 = (r,p) -> {
+			try {
+				return r.getMap(p);
+			} catch (Exception e) {
+				return e.getClass().getSimpleName();
+			}
+		};
+
+		assertMapped(model, f1,
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"<null>,InvalidDataConversionException,InvalidDataConversionException,InvalidDataConversionException,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
@@ -378,15 +387,39 @@ class ObjectRest_Test extends SimpleTestBase {
 		assertEquals("{a:'b'}", model.getMap("f7", m).toString());
 		assertEquals("{a:'b'}", model.getMap("f8", m).toString());
 
-		assertMapped(model, (r,p) -> r.getMap(p, m),
+		BiFunction<ObjectRest,String,Object> f2 = (r,p) -> {
+			try {
+				return r.getMap(p, m);
+			} catch (Exception e) {
+				return e.getClass().getSimpleName();
+			}
+		};
+
+		assertMapped(model, f2,
 			"f1,f2,f2a,f3,f3a,f4,f4a,f5,f6,f7,f8",
 			"{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},{a=b},{a=b},{a=b},{a=b}");
 
-		assertMapped(model, ObjectRest::getJsonMap,
+		BiFunction<ObjectRest,String,Object> f3 = (r,p) -> {
+			try {
+				return r.getJsonMap(p);
+			} catch (Exception e) {
+				return e.getClass().getSimpleName();
+			}
+		};
+
+		assertMapped(model, f3,
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"<null>,InvalidDataConversionException,InvalidDataConversionException,InvalidDataConversionException,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
-		assertMapped(model, (r,p) -> r.getJsonMap(p, m),
+		BiFunction<ObjectRest,String,Object> f4 = (r,p) -> {
+			try {
+				return r.getJsonMap(p, m);
+			} catch (Exception e) {
+				return e.getClass().getSimpleName();
+			}
+		};
+
+		assertMapped(model, f4,
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"{a=b},InvalidDataConversionException,InvalidDataConversionException,InvalidDataConversionException,{a=b},{a=b},{a=b},{a=b},{a=b},{a=b},{a=b}");
 
