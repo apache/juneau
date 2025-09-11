@@ -23,140 +23,174 @@ import java.util.stream.*;
 import org.opentest4j.*;
 
 /**
-* Comprehensive utility class for Bean-Centric Tests (BCT) and general testing operations.
-*
-* <p>This class provides the core testing infrastructure for Apache Juneau, with particular emphasis
-* on the Bean-Centric Testing (BCT) framework. BCT enables sophisticated assertion patterns for
-* testing object properties, collections, maps, and complex nested structures with minimal code.</p>
-*
-* <h5 class='section'>Bean-Centric Testing (BCT) Framework:</h5>
-* <p>The BCT framework consists of several key components:</p>
-* <ul>
-* 	<li><b>{@link BeanConverter}:</b> Core interface for object conversion and property access</li>
-* 	<li><b>{@link BasicBeanConverter}:</b> Default implementation with extensible type handlers</li>
-* 	<li><b>Assertion Methods:</b> High-level testing methods that leverage the converter framework</li>
-* </ul>
-*
-* <h5 class='section'>Primary BCT Assertion Methods:</h5>
-* <dl>
-* 	<dt><b>{@link #assertBean(Object, String, String)}</b></dt>
-* 	<dd>Tests object properties with nested syntax support and collection iteration</dd>
-*
-* 	<dt><b>{@link #assertMap(Map, String, String)}</b></dt>
-* 	<dd>Tests map entries with the same nested property syntax as assertBean</dd>
-*
-* 	<dt><b>{@link #assertMapped(Object, java.util.function.BiFunction, String, String)}</b></dt>
-* 	<dd>Tests custom property access using BiFunction for non-standard objects</dd>
-*
-* 	<dt><b>{@link #assertList(List, Object...)}</b></dt>
-* 	<dd>Tests list/collection elements with varargs for expected values</dd>
-*
-* 	<dt><b>{@link #assertBeans(Collection, String, String...)}</b></dt>
-* 	<dd>Tests collections of objects by extracting and comparing specific fields</dd>
-* </dl>
-*
-* <h5 class='section'>BCT Advanced Features:</h5>
-* <ul>
-* 	<li><b>Nested Property Syntax:</b> "address{street,city}" for testing nested objects</li>
-* 	<li><b>Collection Iteration:</b> "#{property}" syntax for testing all elements</li>
-* 	<li><b>Universal Size Properties:</b> "length" and "size" work on all collection types</li>
-* 	<li><b>Array/List Access:</b> Numeric indices for element-specific testing</li>
-* 	<li><b>Method Chaining:</b> Fluent setters can be tested directly</li>
-* 	<li><b>Direct Field Access:</b> Public fields accessed without getters</li>
-* 	<li><b>Map Key Access:</b> Including special "&lt;NULL&gt;" syntax for null keys</li>
-* </ul>
-*
-* <h5 class='section'>Converter Extensibility:</h5>
-* <p>The BCT framework is built on the extensible {@link BasicBeanConverter} which allows:</p>
-* <ul>
-* 	<li><b>Custom Stringifiers:</b> Type-specific string conversion logic</li>
-* 	<li><b>Custom Listifiers:</b> Collection-type conversion for iteration</li>
-* 	<li><b>Custom Swapifiers:</b> Object transformation before conversion</li>
-* 	<li><b>Configurable Settings:</b> Formatting, delimiters, and display options</li>
-* </ul>
-*
-* <h5 class='section'>Usage Examples:</h5>
-*
-* <p><b>Basic Property Testing:</b></p>
-* <p class='bjava'>
-* 	<jc>// Test multiple properties</jc>
-* 	assertBean(user, <js>"name,age,active"</js>, <js>"John,30,true"</js>);
-*
-* 	<jc>// Test nested properties</jc>
-* 	assertBean(user, <js>"address{street,city}"</js>, <js>"{123 Main St,Springfield}"</js>);
-* </p>
-*
-* <p><b>Collection and Array Testing:</b></p>
-* <p class='bjava'>
-* 	<jc>// Test collection size and iterate over all elements</jc>
-* 	assertBean(order, <js>"items{length,#{name}}"</js>, <js>"{3,[{Laptop},{Phone},{Tablet}]}"</js>);
-*
-* 	<jc>// Test specific array elements</jc>
-* 	assertBean(data, <js>"values{0,1,2}"</js>, <js>"{100,200,300}"</js>);
-* </p>
-*
-* <p><b>Map and Collection Testing:</b></p>
-* <p class='bjava'>
-* 	<jc>// Test map entries</jc>
-* 	assertMap(config, <js>"timeout,retries"</js>, <js>"30000,3"</js>);
-*
-* 	<jc>// Test list elements</jc>
-* 	assertList(tags, <js>"red"</js>, <js>"green"</js>, <js>"blue"</js>);
-* </p>
-*
-* <p><b>Custom Property Access:</b></p>
-* <p class='bjava'>
-* 	<jc>// Test with custom accessor function</jc>
-* 	assertMapped(myObject, (obj, prop) -> obj.getProperty(prop),
-* 		<js>"prop1,prop2"</js>, <js>"value1,value2"</js>);
-* </p>
-*
-* <h5 class='section'>Performance and Thread Safety:</h5>
-* <p>The BCT framework is designed for high performance with:</p>
-* <ul>
-* 	<li><b>Caching:</b> Type-to-handler mappings cached for fast lookup</li>
-* 	<li><b>Thread Safety:</b> All operations are thread-safe for concurrent testing</li>
-* 	<li><b>Minimal Allocation:</b> Efficient object reuse and minimal temporary objects</li>
-* </ul>
-*
-* @see BeanConverter
-* @see BasicBeanConverter
-*/
+ * Comprehensive utility class for Bean-Centric Tests (BCT) and general testing operations.
+ *
+ * <p>This class extends the functionality provided by the JUnit Assertions class, with particular emphasis
+ * on the Bean-Centric Testing (BCT) framework. BCT enables sophisticated assertion patterns for
+ * testing object properties, collections, maps, and complex nested structures with minimal code.</p>
+ *
+ * <h5 class='section'>Bean-Centric Testing (BCT) Framework:</h5>
+ * <p>The BCT framework consists of several key components:</p>
+ * <ul>
+ * 	<li><b>{@link BeanConverter}:</b> Core interface for object conversion and property access</li>
+ * 	<li><b>{@link BasicBeanConverter}:</b> Default implementation with extensible type handlers</li>
+ * 	<li><b>Assertion Methods:</b> High-level testing methods that leverage the converter framework</li>
+ * </ul>
+ *
+ * <h5 class='section'>Primary BCT Assertion Methods:</h5>
+ * <dl>
+ * 	<dt><b>{@link #assertBean(Object, String, String)}</b></dt>
+ * 	<dd>Tests object properties with nested syntax support and collection iteration</dd>
+ *
+ * 	<dt><b>{@link #assertBeans(Collection, String, String...)}</b></dt>
+ * 	<dd>Tests collections of objects by extracting and comparing specific fields</dd>
+ *
+ * 	<dt><b>{@link #assertMapped(Object, java.util.function.BiFunction, String, String)}</b></dt>
+ * 	<dd>Tests custom property access using BiFunction for non-standard objects</dd>
+ *
+ * 	<dt><b>{@link #assertList(List, Object...)}</b></dt>
+ * 	<dd>Tests list/collection elements with varargs for expected values</dd>
+ * </dl>
+ *
+ * <h5 class='section'>BCT Advanced Features:</h5>
+ * <ul>
+ * 	<li><b>Nested Property Syntax:</b> "address{street,city}" for testing nested objects</li>
+ * 	<li><b>Collection Iteration:</b> "#{address{street,city}}" syntax for testing all elements</li>
+ * 	<li><b>Universal Size Properties:</b> "length" and "size" work on all collection types</li>
+ * 	<li><b>Array/List Access:</b> Numeric indices for element-specific testing</li>
+ * 	<li><b>Method Chaining:</b> Fluent setters can be tested directly</li>
+ * 	<li><b>Direct Field Access:</b> Public fields accessed without getters</li>
+ * 	<li><b>Map Key Access:</b> Including special <js>"&lt;NULL&gt;"</js> syntax for null keys</li>
+ * </ul>
+ *
+ * <h5 class='section'>Converter Extensibility:</h5>
+ * <p>The BCT framework is built on the extensible {@link BasicBeanConverter} which allows:</p>
+ * <ul>
+ * 	<li><b>Custom Stringifiers:</b> Type-specific string conversion logic</li>
+ * 	<li><b>Custom Listifiers:</b> Collection-type conversion for iteration</li>
+ * 	<li><b>Custom Swappers:</b> Object transformation before conversion</li>
+ * 	<li><b>Custom PropertyExtractors:</b> Property extraction</li>
+ * 	<li><b>Configurable Settings:</b> Formatting, delimiters, and display options</li>
+ * </ul>
+ *
+ * <h5 class='section'>Usage Examples:</h5>
+ *
+ * <p><b>Basic Property Testing:</b></p>
+ * <p class='bjava'>
+ * 	<jc>// Test multiple properties</jc>
+ * 	<jsm>assertBean</jsm>(user, <js>"name,age,active"</js>, <js>"John,30,true"</js>);
+ *
+ * 	<jc>// Test nested properties</jc>
+ * 	<jsm>assertBean</jsm>(user, <js>"name,address{street,city}"</js>, <js>"John,{123 Main St,Springfield}"</js>);
+ * </p>
+ *
+ * <p><b>Collection and Array Testing:</b></p>
+ * <p class='bjava'>
+ * 	<jc>// Test collection size and iterate over all elements</jc>
+ * 	<jsm>assertBean</jsm>(order, <js>"items{length,#{name}}"</js>, <js>"{3,[{Laptop},{Phone},{Tablet}]}"</js>);
+ *
+ * 	<jc>// Test specific array elements</jc>
+ * 	<jsm>assertBean</jsm>(listOfData, <js>"0{data},1{data}"</js>, <js>"{100},{200}"</js>);
+ * </p>
+ *
+ * <p><b>Collection Testing:</b></p>
+ * <p class='bjava'>
+ * 	<jc>// Test list elements</jc>
+ * 	<jsm>assertList</jsm>(tags, <js>"red"</js>, <js>"green"</js>, <js>"blue"</js>);
+ *
+ * 	<jc>// Test map entries using assertBean</jc>
+ * 	<jsm>assertBean</jsm>(config, <js>"timeout,retries"</js>, <js>"30000,3"</js>);
+ * </p>
+ *
+ * <p><b>Custom Property Access:</b></p>
+ * <p class='bjava'>
+ * 	<jc>// Test with custom accessor function</jc>
+ * 	<jsm>assertMapped</jsm>(<jv>myObject</jv>, (<jp>obj</jp>, <jp>prop</jp>) -> <jp>obj</jp>.getProperty(<jp>prop</jp>),
+ * 		<js>"prop1,prop2"</js>, <js>"value1,value2"</js>);
+ * </p>
+ *
+ * <h5 class='section'>Performance and Thread Safety:</h5>
+ * <p>The BCT framework is designed for high performance with:</p>
+ * <ul>
+ * 	<li><b>Caching:</b> Type-to-handler mappings cached for fast lookup</li>
+ * 	<li><b>Thread Safety:</b> All operations are thread-safe for concurrent testing</li>
+ * 	<li><b>Minimal Allocation:</b> Efficient object reuse and minimal temporary objects</li>
+ * </ul>
+ *
+ * @see BeanConverter
+ * @see BasicBeanConverter
+ */
 public class Assertions2 {
 
 	private static final BeanConverter DEFAULT_CONVERTER = BasicBeanConverter.DEFAULT;
 
+	/**
+	 * Creates a new {@link AssertionArgs} instance for configuring assertion behavior.
+	 *
+	 * <p>AssertionArgs provides fluent configuration for customizing assertion behavior, including:</p>
+	 * <ul>
+	 * 	<li><b>Custom Messages:</b> Static strings, parameterized with <code>MessageFormat</code>, or dynamic suppliers</li>
+	 * 	<li><b>Custom Bean Converters:</b> Override default object-to-string conversion behavior</li>
+	 * 	<li><b>Timeout Configuration:</b> Set timeouts for operations that may take time</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Static message</jc>
+	 * 	<jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(<js>"User validation failed"</js>),
+	 * 		<jv>user</jv>, <js>"name,age"</js>, <js>"John,30"</js>);
+	 *
+	 * 	<jc>// Parameterized message</jc>
+	 * 	<jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(<js>"Test failed for user {0}"</js>, <jv>userId</jv>),
+	 * 		<jv>user</jv>, <js>"status"</js>, <js>"ACTIVE"</js>);
+	 *
+	 * 	<jc>// Dynamic message with supplier</jc>
+	 * 	<jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(() -> <js>"Test failed at "</js> + Instant.<jsm>now</jsm>()),
+	 * 		<jv>result</jv>, <js>"success"</js>, <js>"true"</js>);
+	 *
+	 * 	<jc>// Custom bean converter</jc>
+	 * 	<jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+	 * 		.defaultSettings()
+	 * 		.addStringifier(LocalDate.<jk>class</jk>, <jp>date</jp> -> <jp>date</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE</jsf>))
+	 * 		.build();
+	 * 	<jsm>assertBean</jsm>(<jsm>args</jsm>().setBeanConverter(<jv>converter</jv>),
+	 * 		<jv>event</jv>, <js>"date"</js>, <js>"2023-12-01"</js>);
+	 * </p>
+	 *
+	 * @return A new AssertionArgs instance for fluent configuration
+	 * @see AssertionArgs
+	 */
 	public static AssertionArgs args() {
 		return new AssertionArgs();
 	}
 
 	/**
-	 * Asserts that the fields/properties on the specified bean are the specified values after being converted to {@link Utils#r readable} strings.
+	 * Asserts that the fields/properties on the specified bean are the specified values after being converted to strings.
 	 *
 	 * <p>This is the primary method for Bean-Centric Tests (BCT), supporting extensive property validation
 	 * patterns including nested objects, collections, arrays, method chaining, direct field access, collection iteration
-	 * with <js>#{property}</js> syntax, and universal <js>length</js>/<js>size</js> properties for all collection types.</p>
+	 * with <js>"#{property}"</js> syntax, and universal <js>"length"</js>/<js>"size"</js> properties for all collection types.</p>
 	 *
-	 * <p>The method uses the {@link BasicBeanConverter#DEFAULT} converter internally for object introspection
+	 * <p>The method uses the {@link BasicBeanConverter#<jsf>DEFAULT</jsf>} converter internally for object introspection
 	 * and value extraction. The converter provides sophisticated property access through the {@link BeanConverter}
 	 * interface, supporting multiple fallback mechanisms for accessing object properties and values.</p>
 	 *
 	 * <h5 class='section'>Basic Usage:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test multiple properties</jc>
-	 * 	assertBean(myBean, <js>"prop1,prop2,prop3"</js>, <js>"val1,val2,val3"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"prop1,prop2,prop3"</js>, <js>"val1,val2,val3"</js>);
 	 *
 	 * 	<jc>// Test single property</jc>
-	 * 	assertBean(myBean, <js>"name"</js>, <js>"John"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"name"</js>, <js>"John"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Nested Property Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test nested bean properties</jc>
-	 * 	assertBean(myBean, <js>"address{street,city,state}"</js>, <js>"{123 Main St,Springfield,IL}"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"address{street,city,state}"</js>, <js>"{123 Main St,Springfield,IL}"</js>);
 	 *
 	 * 	<jc>// Test arbitrarily deep nesting</jc>
-	 * 	assertBean(myBean, <js>"person{address{geo{lat,lon}}}"</js>, <js>"{{{{40.7,-74.0}}}}"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"person{address{geo{lat,lon}}}"</js>, <js>"{{{{40.7,-74.0}}}}"</js>);
 	 * </p>
 	 *
 	  * <h5 class='section'>Array, List, and Stream Testing:</h5>
@@ -305,6 +339,16 @@ public class Assertions2 {
 		assertBean(args(), actual, fields, expected);
 	}
 
+	/**
+	 * Same as {@link #assertBean(Object, String, String)} but with configurable assertion behavior.
+	 *
+	 * @param args Assertion configuration. See {@link #args()} for usage examples.
+	 * @param actual The bean to test. Must not be null.
+	 * @param fields A comma-delimited list of bean property names (supports nested syntax).
+	 * @param expected The expected property values as a comma-delimited string.
+	 * @see #assertBean(Object, String, String)
+	 * @see #args()
+	 */
 	public static void assertBean(AssertionArgs args, Object actual, String fields, String expected) {
 		assertNotNull(actual, "Actual was null.");
 		assertArgNotNull("args", args);
@@ -327,19 +371,19 @@ public class Assertions2 {
 	 * <h5 class='section'>Basic Usage:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test list of user beans</jc>
-	 * 	assertBeans(userList, <js>"name,age"</js>,
+	 * 	assertBeans(<jv>userList</jv>, <js>"name,age"</js>,
 	 * 		<js>"John,25"</js>, <js>"Jane,30"</js>, <js>"Bob,35"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Complex Property Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test nested properties across multiple beans</jc>
-	 * 	assertBeans(orderList, <js>"id,customer{name,email}"</js>,
+	 * 	assertBeans(<jv>orderList</jv>, <js>"id,customer{name,email}"</js>,
 	 * 		<js>"1,{John,john@example.com}"</js>,
 	 * 		<js>"2,{Jane,jane@example.com}"</js>);
 	 *
 	 * 	<jc>// Test collection properties within beans</jc>
-	 * 	assertBeans(cartList, <js>"items{0{name}},total"</js>,
+	 * 	assertBeans(<jv>cartList</jv>, <js>"items{0{name}},total"</js>,
 	 * 		<js>"{{Laptop}},999.99"</js>,
 	 * 		<js>"{{Phone}},599.99"</js>);
 	 * </p>
@@ -347,7 +391,7 @@ public class Assertions2 {
 	 * <h5 class='section'>Validation Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test validation results</jc>
-	 * 	assertBeans(validationErrors, <js>"field,message,code"</js>,
+	 * 	assertBeans(<jv>validationErrors</jv>, <js>"field,message,code"</js>,
 	 * 		<js>"email,Invalid email format,E001"</js>,
 	 * 		<js>"age,Must be 18 or older,E002"</js>);
 	 * </p>
@@ -355,7 +399,7 @@ public class Assertions2 {
 	  * <h5 class='section'>Collection Iteration Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test collection iteration within beans (#{...} syntax)</jc>
-	 * 	assertBeans(departmentList, <js>"name,employees{#{name}}"</js>,
+	 * 	assertBeans(<jv>departmentList</jv>, <js>"name,employees{#{name}}"</js>,
 	 * 		<js>"Engineering,[{Alice},{Bob},{Charlie}]"</js>,
 	 * 		<js>"Marketing,[{David},{Eve}]"</js>);
 	 * </p>
@@ -363,8 +407,8 @@ public class Assertions2 {
 	 * <h5 class='section'>Parser Result Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test parsed object collections</jc>
-	 * 	var parsed = JsonParser.DEFAULT.parse(jsonArray, MyBean[].class);
-	 * 	assertBeans(Arrays.asList(parsed), <js>"prop1,prop2"</js>,
+ * 	<jk>var</jk> <jv>parsed</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>jsonArray</jv>, MyBean[].class);
+ * 	assertBeans(<jsm>Arrays.asList</jsm>(<jv>parsed</jv>), <js>"prop1,prop2"</js>,
 	 * 		<js>"val1,val2"</js>, <js>"val3,val4"</js>);
 	 * </p>
 	 *
@@ -378,6 +422,16 @@ public class Assertions2 {
 		assertBeans(args(), actual, fields, expected);
 	}
 
+	/**
+	 * Same as {@link #assertBeans(Object, String, String...)} but with configurable assertion behavior.
+	 *
+	 * @param args Assertion configuration. See {@link #args()} for usage examples.
+	 * @param actual The collection of beans to test. Must not be null.
+	 * @param fields A comma-delimited list of bean property names (supports nested syntax).
+	 * @param expected Array of expected value strings, one per bean.
+	 * @see #assertBeans(Object, String, String...)
+	 * @see #args()
+	 */
 	public static void assertBeans(AssertionArgs args, Object actual, String fields, String...expected) {
 		assertNotNull(actual, "Value was null.");
 		assertArgNotNull("args", args);
@@ -429,18 +483,17 @@ public class Assertions2 {
 	 * simple class name becomes the property value for comparison (e.g., "NullPointerException").</p>
 	 *
 	 * <p>This method creates an intermediate LinkedHashMap to collect all property values before
-	 * delegating to assertMap(Map, String, String). This ensures consistent ordering
-	 * and supports the full nested property syntax. The {@link BasicBeanConverter#DEFAULT} is used
+	 * using the same logic as assertBean for comparison. This ensures consistent ordering
+	 * and supports the full nested property syntax. The {@link BasicBeanConverter#<jsf>DEFAULT</jsf>} is used
 	 * for value stringification and nested property access.</p>
 	 *
 	 * @param <T> The type of object being tested
 	 * @param actual The object to test properties on
-	 * @param function The BiFunction that extracts property values. Receives (object, propertyName) and returns the property value.
+	 * @param function The BiFunction that extracts property values. Receives (<jp>object</jp>, <jp>propertyName</jp>) and returns the property value.
 	 * @param properties Comma-delimited list of property names to test
 	 * @param expected Comma-delimited list of expected values (exceptions become simple class names)
 	 * @throws AssertionError if any mapped property values don't match expected values
 	 * @see #assertBean(Object, String, String)
-	 * @see #assertMap(Map, String, String)
 	 * @see BeanConverter
 	 * @see BasicBeanConverter
 	 */
@@ -448,6 +501,18 @@ public class Assertions2 {
 		assertMapped(args(), actual, function, properties, expected);
 	}
 
+	/**
+	 * Same as {@link #assertMapped(Object, BiFunction, String, String)} but with configurable assertion behavior.
+	 *
+	 * @param <T> The object type being tested.
+	 * @param args Assertion configuration. See {@link #args()} for usage examples.
+	 * @param actual The object to test. Must not be null.
+	 * @param function Custom property access function.
+	 * @param properties A comma-delimited list of property names.
+	 * @param expected The expected property values as a comma-delimited string.
+	 * @see #assertMapped(Object, BiFunction, String, String)
+	 * @see #args()
+	 */
 	public static <T> void assertMapped(AssertionArgs args, T actual, BiFunction<T,String,Object> function, String properties, String expected) {
 		assertNotNull(actual, "Value was null.");
 		assertArgNotNull("args", args);
@@ -465,12 +530,43 @@ public class Assertions2 {
 	}
 
 	/**
-	 * Asserts an object matches the expected string after it's been made {@link Utils#r readable}.
+	 * Asserts that the string representation of an object contains the expected substring.
+	 *
+	 * <p>This method converts the actual object to its string representation using the current
+	 * {@link BeanConverter} and then checks if it contains the expected substring. This is useful
+	 * for testing partial content matches without requiring exact string equality.</p>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Test that error message contains key information</jc>
+	 * 	<jsm>assertContains</jsm>(<js>"FileNotFoundException"</js>, exception);
+	 *
+	 * 	<jc>// Test that object string representation contains expected data</jc>
+	 * 	<jsm>assertContains</jsm>(<js>"status=ACTIVE"</js>, user);
+	 *
+	 * 	<jc>// Test partial JSON/XML content</jc>
+	 * 	<jsm>assertContains</jsm>(<js>"\"name\":\"John\""</js>, jsonResponse);
+	 * </p>
+	 *
+	 * @param expected The substring that must be present in the actual object's string representation
+	 * @param actual The object to test. Must not be null.
+	 * @throws AssertionError if the actual object is null or its string representation doesn't contain the expected substring
+	 * @see #assertContainsAll(Object, String...) for multiple substring assertions
+	 * @see #assertString(String, Object) for exact string matching
 	 */
 	public static void assertContains(String expected, Object actual) {
 		assertContains(args(), expected, actual);
 	}
 
+	/**
+	 * Same as {@link #assertContains(String, Object)} but with configurable assertion behavior.
+	 *
+	 * @param args Assertion configuration. See {@link #args()} for usage examples.
+	 * @param expected The substring that must be present.
+	 * @param actual The object to test. Must not be null.
+	 * @see #assertContains(String, Object)
+	 * @see #args()
+	 */
 	public static void assertContains(AssertionArgs args, String expected, Object actual) {
 		assertArgNotNull("args", args);
 		assertArgNotNull("expected", expected);
@@ -482,15 +578,42 @@ public class Assertions2 {
 	}
 
 	/**
-	 * Similar to {@link #assertContains(String, Object)} but allows the expected to be a comma-delimited list of strings that
-	 * all must match.
-	 * @param expected
-	 * @param actual
+	 * Asserts that the string representation of an object contains all specified substrings.
+	 *
+	 * <p>This method is similar to {@link #assertContains(String, Object)} but tests for multiple
+	 * required substrings. All provided substrings must be present in the actual object's string
+	 * representation for the assertion to pass.</p>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Test that error contains multiple pieces of information</jc>
+	 * 	<jsm>assertContainsAll</jsm>(exception, <js>"FileNotFoundException"</js>, <js>"config.xml"</js>, <js>"/etc"</js>);
+	 *
+	 * 	<jc>// Test that user object contains expected fields</jc>
+	 * 	<jsm>assertContainsAll</jsm>(user, <js>"name=John"</js>, <js>"age=30"</js>, <js>"status=ACTIVE"</js>);
+	 *
+	 * 	<jc>// Test log output contains all required entries</jc>
+	 * 	<jsm>assertContainsAll</jsm>(logOutput, <js>"INFO"</js>, <js>"Started"</js>, <js>"Successfully"</js>);
+	 * </p>
+	 *
+	 * @param actual The object to test. Must not be null.
+	 * @param expected Multiple substrings that must all be present in the actual object's string representation
+	 * @throws AssertionError if the actual object is null or its string representation doesn't contain all expected substrings
+	 * @see #assertContains(String, Object) for single substring assertions
 	 */
 	public static void assertContainsAll(Object actual, String...expected) {
 		assertContainsAll(args(), actual, expected);
 	}
 
+	/**
+	 * Same as {@link #assertContainsAll(Object, String...)} but with configurable assertion behavior.
+	 *
+	 * @param args Assertion configuration. See {@link #args()} for usage examples.
+	 * @param actual The object to test. Must not be null.
+	 * @param expected Multiple substrings that must all be present.
+	 * @see #assertContainsAll(Object, String...)
+	 * @see #args()
+	 */
 	public static void assertContainsAll(AssertionArgs args, Object actual, String...expected) {
 		assertArgNotNull("args", args);
 		assertArgNotNull("expected", expected);
@@ -502,12 +625,58 @@ public class Assertions2 {
 	}
 
 	/**
-	 * Asserts that a collection is not null and empty.
+	 * Asserts that a collection-like object or Optional is not null and empty.
+	 *
+	 * <p>This method validates that the provided object is empty according to its type:</p>
+	 * <ul>
+	 * 	<li><b>Optional:</b> Must be empty (not present)</li>
+	 * 	<li><b>Map:</b> Must have no entries</li>
+	 * 	<li><b>Collection-like objects:</b> Must be convertible to an empty List via {@link BeanConverter#listify(Object)}</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Supported Types:</h5>
+	 * <p>Any object that can be converted to a List, including:</p>
+	 * <ul>
+	 * 	<li>Collections (List, Set, Queue, etc.)</li>
+	 * 	<li>Arrays (primitive and object arrays)</li>
+	 * 	<li>Iterables, Iterators, Streams</li>
+	 * 	<li>Maps (converted to list of entries)</li>
+	 * 	<li>Optional objects</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Test empty collections</jc>
+	 * 	<jsm>assertEmpty</jsm>(Collections.<jsm>emptyList</jsm>());
+	 * 	<jsm>assertEmpty</jsm>(<jk>new</jk> ArrayList&lt;&gt;());
+	 *
+	 * 	<jc>// Test empty arrays</jc>
+	 * 	<jsm>assertEmpty</jsm>(<jk>new</jk> String[0]);
+	 *
+	 * 	<jc>// Test empty Optional</jc>
+	 * 	<jsm>assertEmpty</jsm>(Optional.<jsm>empty</jsm>());
+	 *
+	 * 	<jc>// Test empty Map</jc>
+	 * 	<jsm>assertEmpty</jsm>(<jk>new</jk> HashMap&lt;&gt;());
+	 * </p>
+	 *
+	 * @param value The object to test. Must not be null.
+	 * @throws AssertionError if the object is null or not empty
+	 * @see #assertNotEmpty(Object) for testing non-empty collections
+	 * @see #assertSize(int, Object) for testing specific sizes
 	 */
 	public static void assertEmpty(Object value) {
 		assertEmpty(args(), value);
 	}
 
+	/**
+	 * Same as {@link #assertEmpty(Object)} but with configurable assertion behavior.
+	 *
+	 * @param args Assertion configuration. See {@link #args()} for usage examples.
+	 * @param value The object to test. Must not be null.
+	 * @see #assertEmpty(Object)
+	 * @see #args()
+	 */
 	public static void assertEmpty(AssertionArgs args, Object value) {
 		assertArgNotNull("args", args);
 		assertNotNull(value, "Value was null.");
@@ -537,7 +706,7 @@ public class Assertions2 {
 	 * <h5 class='section'>Testing Non-List Collections:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test a Set using l() conversion</jc>
-	 * 	Set&lt;String&gt; <jv>mySet</jv> = Set.of(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 * 	Set&lt;String&gt; <jv>mySet</jv> = Set.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
 	 * 	assertList(l(<jv>mySet</jv>), <js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
 	 *
 	 * 	<jc>// Test an array using l() conversion</jc>
@@ -555,26 +724,26 @@ public class Assertions2 {
 	 * <h6 class='section'>1. String Comparison (Readable Format):</h6>
 	 * <p class='bjava'>
 	 * 	<jc>// Elements are converted to {@link Utils#r readable} format and compared as strings</jc>
-	 * 	assertList(List.of(1, 2, 3), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
-	 * 	assertList(List.of("a", "b"), <js>"a"</js>, <js>"b"</js>);
+ * 	assertList(List.<jsm>of</jsm>(1, 2, 3), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
+ * 	assertList(List.<jsm>of</jsm>("a", "b"), <js>"a"</js>, <js>"b"</js>);
 	 * </p>
 	 *
 	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
 	 * <p class='bjava'>
 	 * 	<jc>// Use Predicate&lt;T&gt; for functional testing</jc>
 	 * 	Predicate&lt;Integer&gt; <jv>greaterThanOne</jv> = <jv>x</jv> -&gt; <jv>x</jv> &gt; 1;
-	 * 	assertList(List.of(2, 3, 4), <jv>greaterThanOne</jv>, <jv>greaterThanOne</jv>, <jv>greaterThanOne</jv>);
+	 * 	assertList(List.<jsm>of</jsm>(2, 3, 4), <jv>greaterThanOne</jv>, <jv>greaterThanOne</jv>, <jv>greaterThanOne</jv>);
 	 *
 	 * 	<jc>// Mix predicates with other comparison types</jc>
 	 * 	Predicate&lt;String&gt; <jv>startsWithA</jv> = <jv>s</jv> -&gt; <jv>s</jv>.startsWith(<js>"a"</js>);
-	 * 	assertList(List.of(<js>"apple"</js>, <js>"banana"</js>), <jv>startsWithA</jv>, <js>"banana"</js>);
+	 * 	assertList(List.<jsm>of</jsm>(<js>"apple"</js>, <js>"banana"</js>), <jv>startsWithA</jv>, <js>"banana"</js>);
 	 * </p>
 	 *
 	 * <h6 class='section'>3. Object Equality (Direct Comparison):</h6>
 	 * <p class='bjava'>
-	 * 	<jc>// Non-String, non-Predicate objects use Objects.equals() comparison</jc>
-	 * 	assertList(List.of(1, 2, 3), 1, 2, 3); <jc>// Integer objects</jc>
-	 * 	assertList(List.of(<jv>myBean1</jv>, <jv>myBean2</jv>), <jv>myBean1</jv>, <jv>myBean2</jv>); <jc>// Custom objects</jc>
+	 * 	<jc>// Non-String, non-Predicate objects use <jsm>Objects.equals</jsm>() comparison</jc>
+ * 	assertList(List.<jsm>of</jsm>(1, 2, 3), 1, 2, 3); <jc>// Integer objects</jc>
+ * 	assertList(List.<jsm>of</jsm>(<jv>myBean1</jv>, <jv>myBean2</jv>), <jv>myBean1</jv>, <jv>myBean2</jv>); <jc>// Custom objects</jc>
 	 * </p>
 	 *
 	 * @param actual The List to test. Must not be null. For other collection types, use {@link #l(Object)} to convert first.
@@ -587,6 +756,16 @@ public class Assertions2 {
 		assertList(args(), actual, expected);
 	}
 
+	/**
+	 * Same as {@link #assertList(Object, Object...)} but with configurable assertion behavior.
+	 *
+	 * @param <T> The element type of the List.
+	 * @param args Assertion configuration. See {@link #args()} for usage examples.
+	 * @param actual The List to test. Must not be null.
+	 * @param expected Multiple arguments of expected values.
+	 * @see #assertList(Object, Object...)
+	 * @see #args()
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> void assertList(AssertionArgs args, Object actual, Object...expected) {
 		assertArgNotNull("args", args);
@@ -611,12 +790,58 @@ public class Assertions2 {
 	}
 
 	/**
-	 * Asserts that a collection is not null and not empty.
+	 * Asserts that a collection-like object or Optional is not null and not empty.
+	 *
+	 * <p>This method validates that the provided object is not empty according to its type:</p>
+	 * <ul>
+	 * 	<li><b>Optional:</b> Must be present (not empty)</li>
+	 * 	<li><b>Map:</b> Must have at least one entry</li>
+	 * 	<li><b>Collection-like objects:</b> Must convert to a non-empty List via {@link BeanConverter#listify(Object)}</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Supported Types:</h5>
+	 * <p>Any object that can be converted to a List, including:</p>
+	 * <ul>
+	 * 	<li>Collections (List, Set, Queue, etc.)</li>
+	 * 	<li>Arrays (primitive and object arrays)</li>
+	 * 	<li>Iterables, Iterators, Streams</li>
+	 * 	<li>Maps (converted to list of entries)</li>
+	 * 	<li>Optional objects</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Test non-empty collections</jc>
+	 * 	<jsm>assertNotEmpty</jsm>(List.<jsm>of</jsm>(<js>"item1"</js>, <js>"item2"</js>));
+	 * 	<jsm>assertNotEmpty</jsm>(<jk>new</jk> ArrayList&lt;&gt;(Arrays.<jsm>asList</jsm>(<js>"a"</js>)));
+	 *
+	 * 	<jc>// Test non-empty arrays</jc>
+	 * 	<jsm>assertNotEmpty</jsm>(<jk>new</jk> String[]{<js>"value"</js>});
+	 *
+	 * 	<jc>// Test present Optional</jc>
+	 * 	<jsm>assertNotEmpty</jsm>(Optional.<jsm>of</jsm>(<js>"value"</js>));
+	 *
+	 * 	<jc>// Test non-empty Map</jc>
+	 * 	<jsm>assertNotEmpty</jsm>(Map.<jsm>of</jsm>(<js>"key"</js>, <js>"value"</js>));
+	 * </p>
+	 *
+	 * @param value The object to test. Must not be null.
+	 * @throws AssertionError if the object is null or empty
+	 * @see #assertEmpty(Object) for testing empty collections
+	 * @see #assertSize(int, Object) for testing specific sizes
 	 */
 	public static void assertNotEmpty(Object value) {
 		assertNotEmpty(args(), value);
 	}
 
+	/**
+	 * Same as {@link #assertNotEmpty(Object)} but with configurable assertion behavior.
+	 *
+	 * @param args Assertion configuration. See {@link #args()} for usage examples.
+	 * @param value The object to test. Must not be null.
+	 * @see #assertNotEmpty(Object)
+	 * @see #args()
+	 */
 	public static void assertNotEmpty(AssertionArgs args, Object value) {
 		assertArgNotNull("args", args);
 		assertNotNull(value, "Value was null.");
@@ -648,7 +873,7 @@ public class Assertions2 {
 	 * 	assertSize(5, <js>"hello"</js>);
 	 *
 	 * 	<jc>// Test collection size</jc>
-	 * 	assertSize(3, List.of(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>));
+	 * 	assertSize(3, List.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>));
 	 *
 	 * 	<jc>// Test array size</jc>
 	 * 	assertSize(2, <jk>new</jk> String[]{<js>"x"</js>, <js>"y"</js>});
@@ -662,6 +887,15 @@ public class Assertions2 {
 		assertSize(args(), expected, actual);
 	}
 
+	/**
+	 * Same as {@link #assertSize(int, Object)} but with configurable assertion behavior.
+	 *
+	 * @param args Assertion configuration. See {@link #args()} for usage examples.
+	 * @param expected The expected size/length.
+	 * @param actual The object to test. Must not be null.
+	 * @see #assertSize(int, Object)
+	 * @see #args()
+	 */
 	public static void assertSize(AssertionArgs args, int expected, Object actual) {
 		assertArgNotNull("args", args);
 		assertNotNull(actual, "Value was null.");
@@ -676,12 +910,46 @@ public class Assertions2 {
 	}
 
 	/**
-	 * Asserts an object matches the expected string after it's been made {@link Utils#r readable}.
+	 * Asserts that an object's string representation exactly matches the expected value.
+	 *
+	 * <p>This method converts the actual object to its string representation using the current
+	 * {@link BeanConverter} and performs an exact equality comparison with the expected string.
+	 * This is useful for testing complete string output, formatted objects, or converted values.</p>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Test exact string conversion</jc>
+	 * 	<jsm>assertString</jsm>(<js>"John,30,true"</js>, user); <jc>// Assuming user converts to this format</jc>
+	 *
+	 * 	<jc>// Test formatted dates or numbers</jc>
+	 * 	<jsm>assertString</jsm>(<js>"2023-12-01"</js>, localDate);
+	 *
+	 * 	<jc>// Test complex object serialization</jc>
+	 * 	<jsm>assertString</jsm>(<js>"{name=John,age=30}"</js>, userMap);
+	 *
+	 * 	<jc>// Test array/collection formatting</jc>
+	 * 	<jsm>assertString</jsm>(<js>"[red,green,blue]"</js>, colors);
+	 * </p>
+	 *
+	 * @param expected The exact string that the actual object should convert to
+	 * @param actual The object to test. Must not be null.
+	 * @throws AssertionError if the actual object is null or its string representation doesn't exactly match expected
+	 * @see #assertContains(String, Object) for partial string matching
+	 * @see #assertMatches(String, Object) for pattern-based matching
 	 */
 	public static void assertString(String expected, Object actual) {
 		assertString(args(), expected, actual);
 	}
 
+	/**
+	 * Same as {@link #assertString(String, Object)} but with configurable assertion behavior.
+	 *
+	 * @param args Assertion configuration. See {@link #args()} for usage examples.
+	 * @param expected The expected string value.
+	 * @param actual The object to test. Must not be null.
+	 * @see #assertString(String, Object)
+	 * @see #args()
+	 */
 	public static void assertString(AssertionArgs args, String expected, Object actual) {
 		assertArgNotNull("args", args);
 		assertNotNull(actual, "Value was null.");
@@ -690,19 +958,62 @@ public class Assertions2 {
 	}
 
 	/**
-	 * Asserts value when stringified matches the specified pattern.
+	 * Asserts that an object's string representation matches the specified regular expression pattern.
+	 *
+	 * <p>This method converts the actual object to its string representation using the current
+	 * {@link BeanConverter} and then tests it against the provided regular expression pattern.
+	 * This is useful for testing string formats, validating patterns, or checking flexible formats.</p>
+	 *
+	 * <h5 class='section'>Pattern Syntax:</h5>
+	 * <p>The pattern parameter supports:</p>
+	 * <ul>
+	 * 	<li><b>Standard regex:</b> Full Java regular expression syntax</li>
+	 * 	<li><b>Case-insensitive:</b> Patterns ending with "/i" are automatically made case-insensitive</li>
+	 * 	<li><b>Dotall mode:</b> Patterns ending with "/s" enable dotall mode (. matches newlines)</li>
+	 * 	<li><b>Combined flags:</b> Use "/is" for both case-insensitive and dotall modes</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Test email format</jc>
+	 * 	<jsm>assertMatches</jsm>(<js>"\\w+@\\w+\\.\\w+"</js>, user.getEmail());
+	 *
+	 * 	<jc>// Test case-insensitive pattern</jc>
+	 * 	<jsm>assertMatches</jsm>(<js>"error.*timeout/i"</js>, logMessage);
+	 *
+	 * 	<jc>// Test flexible number format</jc>
+	 * 	<jsm>assertMatches</jsm>(<js>"\\d{1,3}(,\\d{3})*(\\.\\d{2})?"</js>, formattedPrice);
+	 *
+	 * 	<jc>// Test multiline content with dotall mode</jc>
+	 * 	<jsm>assertMatches</jsm>(<js>".*error.*exception.*"</js>, multiLineLog);
+	 * </p>
+	 *
+	 * @param pattern The regular expression pattern to match against. Supports "/i" and "/s" flags.
+	 * @param value The object to test. Must not be null.
+	 * @throws AssertionError if the value is null or its string representation doesn't match the pattern
+	 * @see #assertString(String, Object) for exact string matching
+	 * @see #assertContains(String, Object) for substring matching
 	 */
 	public static void assertMatches(String pattern, Object value) {
 		assertMatches(args(), pattern, value);
 	}
 
+	/**
+	 * Same as {@link #assertMatches(String, Object)} but with configurable assertion behavior.
+	 *
+	 * @param args Assertion configuration. See {@link #args()} for usage examples.
+	 * @param pattern The regular expression pattern to match against.
+	 * @param value The object to test. Must not be null.
+	 * @see #assertMatches(String, Object)
+	 * @see #args()
+	 */
 	public static void assertMatches(AssertionArgs args, String pattern, Object value) {
 		assertArgNotNull("args", args);
 		assertArgNotNull("pattern", pattern);
 		assertNotNull(value, "Value was null.");
 
 		var v = args.getBeanConverter().orElse(DEFAULT_CONVERTER).stringify(value);
-		var m = getMatchPattern3(pattern).matcher(v);
+		var m = getMatchPattern(pattern).matcher(v);
 		assertTrue(m.matches(), args.getMessage("Pattern didn't match. ==> pattern: <{0}> but was: <{1}>", pattern, v));
 	}
 }

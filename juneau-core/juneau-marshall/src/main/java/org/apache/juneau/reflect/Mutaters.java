@@ -252,7 +252,7 @@ public class Mutaters {
 
 	private static boolean isStaticCreateMethodName(MethodInfo mi, Class<?> ic) {
 		String n = mi.getSimpleName(), cn = ic.getSimpleName();
-		return isOneOf(n, "create","from","fromValue","parse","valueOf")
+		return isOneOf(n, "create","from","fromValue","parse","valueOf","builder")
 			|| (n.startsWith("from") && n.substring(4).equals(cn))
 			|| (n.startsWith("for") && n.substring(3).equals(cn))
 			|| (n.startsWith("parse") && n.substring(5).equals(cn));

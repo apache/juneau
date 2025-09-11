@@ -46,11 +46,11 @@ import java.util.*;
  * <h5 class='section'>Usage Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Simple tokens</jc>
- * 	var tokens = NestedTokenizer.splitNested(<js>"foo,bar,baz"</js>);
+ * 	<jk>var</jk> <jv>tokens</jv> = NestedTokenizer.<jsm>tokenize</jsm>(<js>"foo,bar,baz"</js>);
  * 	<jc>// tokens = [Token{value="foo"}, Token{value="bar"}, Token{value="baz"}]</jc>
  *
  * 	<jc>// Nested tokens</jc>
- * 	var nested = NestedTokenizer.splitNested(<js>"user{name,email},config{timeout,retries}"</js>);
+ * 	<jk>var</jk> <jv>nested</jv> = NestedTokenizer.<jsm>tokenize</jsm>(<js>"user{name,email},config{timeout,retries}"</js>);
  * 	<jc>// nested[0] = Token{value="user", nested=[Token{value="name"}, Token{value="email"}]}</jc>
  * 	<jc>// nested[1] = Token{value="config", nested=[Token{value="timeout"}, Token{value="retries"}]}</jc>
  * </p>
@@ -238,7 +238,7 @@ public class NestedTokenizer {
 
 		@Override
 		public boolean equals(Object o) {
-			return (o instanceof Token o2) && eq(this, o2, (x,y)->x.value.equals(y.value) && eq(x.nested, y.nested));
+			return (o instanceof Token o2) && eq(this, o2, (x,y)->eq(x.value, y.value) && eq(x.nested, y.nested));
 		}
 
 		@Override

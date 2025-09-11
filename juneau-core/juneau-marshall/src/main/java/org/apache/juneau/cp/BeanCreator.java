@@ -389,7 +389,7 @@ public class BeanCreator<T> {
 			&& m.isNotDeprecated()
 			&& m.hasReturnType(type)
 			&& m.hasNoAnnotation(BeanIgnore.class)
-			&& m.hasName("create");
+			&& (m.hasName("create") || m.hasName("builder"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

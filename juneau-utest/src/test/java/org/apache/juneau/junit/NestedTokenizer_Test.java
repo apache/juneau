@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.Assertions2.*;
 import static org.apache.juneau.junit.NestedTokenizer.*;
 import static org.junit.jupiter.api.Assertions.*;
 

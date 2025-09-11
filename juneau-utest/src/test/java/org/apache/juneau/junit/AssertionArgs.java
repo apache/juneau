@@ -37,44 +37,45 @@ import java.util.function.*;
  * <h5 class='section'>Basic Usage:</h5>
  * <p class='bjava'>
  *     <jc>// Simple usage with default settings</jc>
- *     assertBean(args(), myBean, <js>"name,age"</js>, <js>"John,30"</js>);
+ *     <jsm>assertBean</jsm>(<jsm>args</jsm>(), <jv>myBean</jv>, <js>"name,age"</js>, <js>"John,30"</js>);
  *
  *     <jc>// Custom error message</jc>
- *     assertBean(args().setMessage(<js>"User validation failed"</js>),
- *         user, <js>"email,active"</js>, <js>"john@example.com,true"</js>);
+ *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(<js>"User validation failed"</js>),
+ *         <jv>user</jv>, <js>"email,active"</js>, <js>"john@example.com,true"</js>);
  * </p>
  *
  * <h5 class='section'>Custom Bean Converter:</h5>
  * <p class='bjava'>
  *     <jc>// Use custom converter for specialized object handling</jc>
- *     var customConverter = BasicBeanConverter.builder()
- *         .addStringifier(MyClass.class, obj -> obj.getDisplayName())
+ *     <jk>var</jk> <jv>customConverter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+ *         .defaultSettings()
+ *         .addStringifier(MyClass.<jk>class</jk>, <jp>obj</jp> -> <jp>obj</jp>.getDisplayName())
  *         .build();
  *
- *     assertBean(args().setBeanConverter(customConverter),
- *         myCustomObject, <js>"property"</js>, <js>"expectedValue"</js>);
+ *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setBeanConverter(<jv>customConverter</jv>),
+ *         <jv>myCustomObject</jv>, <js>"property"</js>, <js>"expectedValue"</js>);
  * </p>
  *
  * <h5 class='section'>Advanced Error Messages:</h5>
  * <p class='bjava'>
  *     <jc>// Parameterized error messages</jc>
- *     assertBean(args().setMessage(<js>"Validation failed for user {0}"</js>, userId),
- *         user, <js>"status"</js>, <js>"ACTIVE"</js>);
+ *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(<js>"Validation failed for user {0}"</js>, <jv>userId</jv>),
+ *         <jv>user</jv>, <js>"status"</js>, <js>"ACTIVE"</js>);
  *
  *     <jc>// Dynamic error message with supplier</jc>
- *     assertBean(args().setMessage(() -> <js>"Test failed at "</js> + Instant.now()),
- *         result, <js>"success"</js>, <js>"true"</js>);
+ *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(() -> <js>"Test failed at "</js> + Instant.<jsm>now</jsm>()),
+ *         <jv>result</jv>, <js>"success"</js>, <js>"true"</js>);
  * </p>
  *
  * <h5 class='section'>Fluent Configuration:</h5>
  * <p class='bjava'>
  *     <jc>// Chain multiple configuration options</jc>
- *     var testArgs = args()
- *         .setBeanConverter(customConverter)
- *         .setMessage(<js>"Integration test failed for module {0}"</js>, moduleName);
+ *     <jk>var</jk> <jv>testArgs</jv> = args()
+ *         .setBeanConverter(<jv>customConverter</jv>)
+ *         .setMessage(<js>"Integration test failed for module {0}"</js>, <jv>moduleName</jv>);
  *
- *     assertBean(testArgs, moduleConfig, <js>"enabled,version"</js>, <js>"true,2.1.0"</js>);
- *     assertBeans(testArgs, moduleList, <js>"name,status"</js>,
+ *     <jsm>assertBean</jsm>(<jv>testArgs</jv>, <jv>moduleConfig</jv>, <js>"enabled,version"</js>, <js>"true,2.1.0"</js>);
+ *     <jsm>assertBeans</jsm>(<jv>testArgs</jv>, <jv>moduleList</jv>, <js>"name,status"</js>,
  *         <js>"ModuleA,ACTIVE"</js>, <js>"ModuleB,ACTIVE"</js>);
  * </p>
  *
@@ -136,14 +137,15 @@ public class AssertionArgs {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 *     <jc>// Create converter with custom stringifiers</jc>
-	 *     var converter = BasicBeanConverter.builder()
-	 *         .addStringifier(LocalDate.class, date -> date.format(DateTimeFormatter.ISO_LOCAL_DATE))
-	 *         .addStringifier(Money.class, money -> money.getAmount().toPlainString())
+	 *     <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+	 *         .defaultSettings()
+	 *         .addStringifier(LocalDate.<jk>class</jk>, <jp>date</jp> -> <jp>date</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE</jsf>))
+	 *         .addStringifier(Money.<jk>class</jk>, <jp>money</jp> -> <jp>money</jp>.getAmount().toPlainString())
 	 *         .build();
 	 *
 	 *     <jc>// Use in assertions</jc>
-	 *     assertBean(args().setBeanConverter(converter),
-	 *         order, <js>"date,total"</js>, <js>"2023-12-01,99.99"</js>);
+	 *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setBeanConverter(<jv>converter</jv>),
+	 *         <jv>order</jv>, <js>"date,total"</js>, <js>"2023-12-01,99.99"</js>);
 	 * </p>
 	 *
 	 * @param value The custom bean converter to use. If null, assertions will fall back to the default converter.
@@ -178,12 +180,12 @@ public class AssertionArgs {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 *     <jc>// Dynamic message with timestamp</jc>
-	 *     assertBean(args().setMessage(() -> <js>"Test failed at "</js> + Instant.now()),
-	 *         result, <js>"status"</js>, <js>"SUCCESS"</js>);
+	 *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(() -> <js>"Test failed at "</js> + Instant.<jsm>now</jsm>()),
+	 *         <jv>result</jv>, <js>"status"</js>, <js>"SUCCESS"</js>);
 	 *
 	 *     <jc>// Message with expensive computation</jc>
-	 *     assertBean(args().setMessage(() -> <js>"Failed after "</js> + computeTestDuration() + <js>" ms"</js>),
-	 *         response, <js>"error"</js>, <js>"null"</js>);
+	 *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(() -> <js>"Failed after "</js> + computeTestDuration() + <js>" ms"</js>),
+	 *         <jv>response</jv>, <js>"error"</js>, <js>"null"</js>);
 	 * </p>
 	 *
 	 * @param value The message supplier. Called only when an assertion fails.
@@ -212,16 +214,16 @@ public class AssertionArgs {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
 	 *     <jc>// Simple parameter substitution</jc>
-	 *     assertBean(args().setMessage(<js>"User {0} validation failed"</js>, userId),
-	 *         user, <js>"active"</js>, <js>"true"</js>);
+	 *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(<js>"User {0} validation failed"</js>, <jv>userId</jv>),
+	 *         <jv>user</jv>, <js>"active"</js>, <js>"true"</js>);
 	 *
 	 *     <jc>// Multiple parameters</jc>
-	 *     assertBean(args().setMessage(<js>"Test {0} failed on iteration {1}"</js>, testName, iteration),
-	 *         result, <js>"success"</js>, <js>"true"</js>);
+	 *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(<js>"Test {0} failed on iteration {1}"</js>, <jv>testName</jv>, <jv>iteration</jv>),
+	 *         <jv>result</jv>, <js>"success"</js>, <js>"true"</js>);
 	 *
 	 *     <jc>// Number formatting</jc>
-	 *     assertBean(args().setMessage(<js>"Expected {0,number,#.##} but got different value"</js>, expectedValue),
-	 *         actual, <js>"value"</js>, <js>"123.45"</js>);
+	 *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(<js>"Expected {0,number,#.##} but got different value"</js>, <jv>expectedValue</jv>),
+	 *         <jv>actual</jv>, <js>"value"</js>, <js>"123.45"</js>);
 	 * </p>
 	 *
 	 * @param message The message template with MessageFormat placeholders.
@@ -229,7 +231,7 @@ public class AssertionArgs {
 	 * @return This instance for method chaining.
 	 */
 	public AssertionArgs setMessage(String message, Object... args) {
-		messageSupplier = () -> MessageFormat.format(message, args);
+		messageSupplier = fs(message, args);
 		return this;
 	}
 

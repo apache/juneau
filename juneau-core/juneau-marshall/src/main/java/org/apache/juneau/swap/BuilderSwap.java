@@ -232,7 +232,7 @@ public class BuilderSwap<T,B> {
 	private static MethodInfo getBuilderCreateMethod(ClassInfo c) {
 		return c.getPublicMethod(
 			x -> x.isStatic()
-			&& x.hasName("create")
+			&& (x.hasName("create") || x.hasName("builder"))
 			&& ! x.hasReturnType(c)
 			&& hasConstructorThatTakesType(c, x.getReturnType())
 		);

@@ -122,7 +122,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a01_simple(RoundTrip_Tester t) throws Exception {
-		var x = A.create().f1(1).build();
+		var x = A.builder().f1(1).build();
 		x = t.roundTrip(x, A.class);
 		assertBean(x, "f1", "1");
 	}
@@ -134,7 +134,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 			this.f1 = b.f1;
 		}
 
-		public static Builder create() {
+		public static Builder builder() {
 			return new Builder();
 		}
 
@@ -155,7 +155,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a02_simple_usingConfig(RoundTrip_Tester t) throws Exception {
-		var x = Ac.create().f1(1).build();
+		var x = Ac.builder().f1(1).build();
 		x = t.roundTrip(x, Ac.class);
 		assertBean(x, "f1", "1");
 	}
@@ -172,7 +172,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 			this.f1 = b.f1;
 		}
 
-		public static Builder create() {
+		public static Builder builder() {
 			return new Builder();
 		}
 
@@ -196,7 +196,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a03_beanPropertyBuilder_simple(RoundTrip_Tester t) throws Exception {
-		var x = A2.create().f1(A.create().f1(1).build()).build();
+		var x = A2.builder().f1(A.builder().f1(1).build()).build();
 		x = t.roundTrip(x, A2.class);
 		assertBean(x, "f1{f1}", "{1}");
 	}
@@ -208,7 +208,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 			this.f1 = b.f1;
 		}
 
-		public static Builder create() {
+		public static Builder builder() {
 			return new Builder();
 		}
 
@@ -237,16 +237,16 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 		// since the value on the builder can only be set once.
 		if (t.label.contains("UrlEncoding - expanded params"))
 			return;
-		var x = A3.create()
-			.f1(new A[]{A.create().f1(1).build()})
-			.f2(singletonList(A.create().f1(2).build()))
-			.f3(singletonList(singletonList(A.create().f1(3).build())))
-			.f4(singletonList(new A[]{A.create().f1(4).build()}))
-			.f5(singletonList(singletonList(new A[]{A.create().f1(5).build()})))
-			.f6(singletonMap("foo", A.create().f1(6).build()))
-			.f7(singletonMap("foo", singletonMap("bar", A.create().f1(7).build())))
-			.f8(singletonMap("foo", new A[]{A.create().f1(8).build()}))
-			.f9(singletonMap("foo", singletonList(new A[]{A.create().f1(9).build()})))
+		var x = A3.builder()
+			.f1(new A[]{A.builder().f1(1).build()})
+			.f2(singletonList(A.builder().f1(2).build()))
+			.f3(singletonList(singletonList(A.builder().f1(3).build())))
+			.f4(singletonList(new A[]{A.builder().f1(4).build()}))
+			.f5(singletonList(singletonList(new A[]{A.builder().f1(5).build()})))
+			.f6(singletonMap("foo", A.builder().f1(6).build()))
+			.f7(singletonMap("foo", singletonMap("bar", A.builder().f1(7).build())))
+			.f8(singletonMap("foo", new A[]{A.builder().f1(8).build()}))
+			.f9(singletonMap("foo", singletonList(new A[]{A.builder().f1(9).build()})))
 			.build();
 		x = t.roundTrip(x, A3.class);
 		assertJson("{f1:[{f1:1}],f2:[{f1:2}],f3:[[{f1:3}]],f4:[[{f1:4}]],f5:[[[{f1:5}]]],f6:{foo:{f1:6}},f7:{foo:{bar:{f1:7}}},f8:{foo:[{f1:8}]},f9:{foo:[[{f1:9}]]}}", x);
@@ -278,7 +278,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 			this.f9 = b.f9;
 		}
 
-		public static Builder create() {
+		public static Builder builder() {
 			return new Builder();
 		}
 
