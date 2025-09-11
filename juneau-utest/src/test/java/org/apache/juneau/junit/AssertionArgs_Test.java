@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
  * <p>Tests the configuration and behavior of the assertion arguments class including
  * bean converter customization, error message composition, and fluent API functionality.</p>
  */
-class AssertionArgs_Test {
+class AssertionArgs_Test extends TestBase {
 
 	// Test objects for assertions
 	static class TestBean {

@@ -96,7 +96,7 @@ import java.util.stream.*;
  *
  * <p>Default swapping support includes:</p>
  * <ul>
- * 	<li><b>Optional:</b> Unwrapped to contained value or null</li>
+ * 	<li><b>Optional:</b> Unwrapped to contained value or <jk>null</jk></li>
  * 	<li><b>Supplier:</b> Called to get supplied value</li>
  * 	<li><b>Future:</b> Extracts completed result or returns "&lt;pending&gt;" for incomplete futures</li>
  * </ul>
@@ -401,23 +401,23 @@ public class BasicBeanConverter implements BeanConverter {
 	 *
 	 * <h5 class='section'>Usage Example:</h5>
 	 * <p class='bjava'>
- * 	<jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
- * 		.defaultSettings()
- * 		<jc>// Custom stringification for LocalDateTime</jc>
- * 		.addStringifier(LocalDateTime.<jk>class</jk>, (<jp>dt</jp>, <jp>conv</jp>) ->
- * 			<jp>dt</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE_TIME</jsf>))
+	 * 	<jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+	 * 		.defaultSettings()
+	 * 		<jc>// Custom stringification for LocalDateTime</jc>
+	 * 		.addStringifier(LocalDateTime.<jk>class</jk>, (<jp>dt</jp>, <jp>conv</jp>) ->
+	 * 			<jp>dt</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE_TIME</jsf>))
 	 *
 	 * 		<jc>// Custom collection handling for custom type</jc>
- * 		.addListifier(MyIterable.<jk>class</jk>, (<jp>iter</jp>, <jp>conv</jp>) ->
- * 			<jp>iter</jp>.stream().collect(toList()))
+	 * 		.addListifier(MyIterable.<jk>class</jk>, (<jp>iter</jp>, <jp>conv</jp>) ->
+	 * 			<jp>iter</jp>.stream().collect(toList()))
 	 *
 	 * 		<jc>// Custom transformation for wrapper type</jc>
- * 		.addSwapper(LazyValue.<jk>class</jk>, (<jp>lazy</jp>, <jp>conv</jp>) ->
- * 			<jp>lazy</jp>.isComputed() ? <jp>lazy</jp>.get() : null)
+	 * 		.addSwapper(LazyValue.<jk>class</jk>, (<jp>lazy</jp>, <jp>conv</jp>) ->
+	 * 			<jp>lazy</jp>.isComputed() ? <jp>lazy</jp>.get() : <jk>null</jk>)
 	 *
 	 * 		<jc>// Configure settings</jc>
- * 		.addSetting(<jsf>SETTING_nullValue</jsf>, "NULL")
- * 		.addSetting(<jsf>SETTING_fieldSeparator</jsf>, " | ")
+	 * 		.addSetting(<jsf>SETTING_nullValue</jsf>, <js>"NULL"</js>)
+	 * 		.addSetting(<jsf>SETTING_fieldSeparator</jsf>, <js>" | "</js>)
 	 *
 	 * 		<jc>// Add default handlers for common types</jc>
 	 * 		.defaultSettings()
@@ -534,7 +534,7 @@ public class BasicBeanConverter implements BeanConverter {
 		 *
 		 * <p>Property extractors enable custom property access patterns beyond standard JavaBean
 		 * conventions. The converter tries extractors in registration order until one returns
-		 * a non-null value. This allows for:</p>
+		 * a non-<jk>null</jk> value. This allows for:</p>
 		 * <ul>
 		 * 	<li><b>Custom data structures:</b> Special property access for non-standard objects</li>
 		 * 	<li><b>Database entities:</b> Property access via entity-specific methods</li>
@@ -628,6 +628,17 @@ public class BasicBeanConverter implements BeanConverter {
 
 			addSwapper(Optional.class, (bc, o) -> o.orElse(null));
 			addSwapper(Supplier.class, (bc, o) -> o.get());
+			addSwapper(Future.class, (bc, future) -> {
+				var f = (Future<?>)future;
+				if (f.isDone() && !f.isCancelled()) {
+					try {
+						return f.get();
+					} catch (Exception e) {
+						return "<error: " + e.getMessage() + ">";
+					}
+				}
+				return f.isCancelled() ? "<cancelled>" : "<pending>";
+			});
 
 			addPropertyExtractor(new PropertyExtractors.ObjectPropertyExtractor());
 			addPropertyExtractor(new PropertyExtractors.ListPropertyExtractor());

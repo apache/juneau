@@ -13,6 +13,7 @@
 package org.apache.juneau.junit;
 
 import static org.apache.juneau.junit.Utils.*;
+import static org.apache.juneau.junit.Assertions2.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -28,7 +29,7 @@ import org.junit.jupiter.api.*;
  * utility method categories.
  */
 @DisplayName("Utility Methods")
-class Utils_Test {
+class Utils_Test extends TestBase {
 
 	// ====================================================================================================
 	// Array Conversion Tests
@@ -62,13 +63,12 @@ class Utils_Test {
 		// Empty array
 		int[] emptyArray = {};
 		var result = arrayToList(emptyArray);
-		assertTrue(result.isEmpty());
+		assertEmpty(result);
 
 		// Single element
 		String[] singleElement = {"single"};
 		result = arrayToList(singleElement);
-		assertEquals(1, result.size());
-		assertEquals("single", result.get(0));
+		assertList(result, "single");
 	}
 
 	@Test
@@ -89,18 +89,12 @@ class Utils_Test {
 		// Boolean array
 		boolean[] boolArray = {true, false, true};
 		var result = arrayToList(boolArray);
-		assertEquals(3, result.size());
-		assertEquals(true, result.get(0));
-		assertEquals(false, result.get(1));
-		assertEquals(true, result.get(2));
+		assertList(result, "true","false","true");
 
 		// Double array
 		double[] doubleArray = {1.5, 2.7, 3.14};
 		result = arrayToList(doubleArray);
-		assertEquals(3, result.size());
-		assertEquals(1.5, result.get(0));
-		assertEquals(2.7, result.get(1));
-		assertEquals(3.14, result.get(2));
+		assertList(result, "1.5","2.7","3.14");
 	}
 
 	// ====================================================================================================
@@ -167,8 +161,8 @@ class Utils_Test {
 	@DisplayName("assertEqualsFailed() - Basic error creation")
 	void c01_assertEqualsFailedBasic() {
 		var error = assertEqualsFailed("expected", "actual", null);
-		assertTrue(error.getMessage().contains("expected: <expected>"));
-		assertTrue(error.getMessage().contains("but was: <actual>"));
+		assertContains("expected: <expected>", error.getMessage());
+		assertContains("but was: <actual>", error.getMessage());
 		assertEquals("expected", error.getExpected().getValue());
 		assertEquals("actual", error.getActual().getValue());
 	}
@@ -178,21 +172,19 @@ class Utils_Test {
 	void c02_assertEqualsFailedWithMessage() {
 		var msgSupplier = fs("Custom context message");
 		var error = assertEqualsFailed(100, 200, msgSupplier);
-		assertTrue(error.getMessage().contains("Custom context message"));
-		assertTrue(error.getMessage().contains("expected: <100>"));
-		assertTrue(error.getMessage().contains("but was: <200>"));
+		assertContains("Custom context message", error.getMessage());
 	}
 
 	@Test
 	@DisplayName("assertEqualsFailed() - Null values")
 	void c03_assertEqualsFailedNullValues() {
 		var error = assertEqualsFailed(null, "actual", null);
-		assertTrue(error.getMessage().contains("expected: <null>"));
-		assertTrue(error.getMessage().contains("but was: <actual>"));
+		assertContains("expected: <null>", error.getMessage());
+		assertContains("but was: <actual>", error.getMessage());
 
 		error = assertEqualsFailed("expected", null, null);
-		assertTrue(error.getMessage().contains("expected: <expected>"));
-		assertTrue(error.getMessage().contains("but was: <null>"));
+		assertContains("expected: <expected>", error.getMessage());
+		assertContains("but was: <null>", error.getMessage());
 	}
 
 	// ====================================================================================================
@@ -333,15 +325,15 @@ class Utils_Test {
 	@DisplayName("f() - Complex parameter types")
 	void f03_fComplexParameters() {
 		// Test with Boolean
-		assertEquals("Flag: true", f("Flag: {0}", true));
-		assertEquals("Flag: false", f("Flag: {0}", false));
+		assertString(f("Flag: {0}", true), "Flag: true");
+		assertString(f("Flag: {0}", false), "Flag: false");
 
 		// Test with List
 		var list = Arrays.asList("a", "b", "c");
-		assertEquals("List: [a, b, c]", f("List: {0}", list));
+		assertString(f("List: {0}", list), "List: [a, b, c]");
 
 		// Test with mixed types
-		assertEquals("User Alice (age 25) is active: true", f("User {0} (age {1}) is active: {2}", "Alice", 25, true));
+		assertString(f("User {0} (age {1}) is active: {2}", "Alice", 25, true), "User Alice (age 25) is active: true");
 	}
 
 	@Test
@@ -484,11 +476,11 @@ class Utils_Test {
 	@Test
 	@DisplayName("t() - Various object types")
 	void i01_tVariousTypes() {
-		assertEquals("String", t("hello"));
-		assertEquals("Integer", t(42));
-		assertEquals("ArrayList", t(new ArrayList<>()));
-		assertEquals("HashMap", t(new HashMap<>()));
-		assertEquals("Pattern", t(Pattern.compile("test")));
+		assertString(t("hello"), "String");
+		assertString(t(42), "Integer");
+		assertString(t(new ArrayList<>()), "ArrayList");
+		assertString(t(new HashMap<>()), "HashMap");
+		assertString(t(Pattern.compile("test")), "Pattern");
 	}
 
 	@Test
@@ -500,9 +492,9 @@ class Utils_Test {
 	@Test
 	@DisplayName("t() - Array types")
 	void i03_tArrayTypes() {
-		assertEquals("String[]", t(new String[0]));
-		assertEquals("int[]", t(new int[0]));
-		assertEquals("Object[]", t(new Object[0]));
+		assertString(t(new String[0]), "String[]");
+		assertString(t(new int[0]), "int[]");
+		assertString(t(new Object[0]), "Object[]");
 	}
 
 	// ====================================================================================================

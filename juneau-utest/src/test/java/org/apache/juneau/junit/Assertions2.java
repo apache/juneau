@@ -78,19 +78,19 @@ import org.opentest4j.*;
  * <p><b>Basic Property Testing:</b></p>
  * <p class='bjava'>
  * 	<jc>// Test multiple properties</jc>
- * 	<jsm>assertBean</jsm>(user, <js>"name,age,active"</js>, <js>"John,30,true"</js>);
+ * 	<jsm>assertBean</jsm>(<jv>user</jv>, <js>"name,age,active"</js>, <js>"John,30,true"</js>);
  *
- * 	<jc>// Test nested properties</jc>
- * 	<jsm>assertBean</jsm>(user, <js>"name,address{street,city}"</js>, <js>"John,{123 Main St,Springfield}"</js>);
+ * 	<jc>// Test nested properties - user has getAddress() returning Address with getStreet() and getCity()</jc>
+ * 	<jsm>assertBean</jsm>(<jv>user</jv>, <js>"name,address{street,city}"</js>, <js>"John,{123 Main St,Springfield}"</js>);
  * </p>
  *
  * <p><b>Collection and Array Testing:</b></p>
  * <p class='bjava'>
- * 	<jc>// Test collection size and iterate over all elements</jc>
- * 	<jsm>assertBean</jsm>(order, <js>"items{length,#{name}}"</js>, <js>"{3,[{Laptop},{Phone},{Tablet}]}"</js>);
+ * 	<jc>// Test collection size and iterate over all elements - order has getItems() returning List&lt;Product&gt; where Product has getName()</jc>
+ * 	<jsm>assertBean</jsm>(<jv>order</jv>, <js>"items{length,#{name}}"</js>, <js>"{3,[{Laptop},{Phone},{Tablet}]}"</js>);
  *
- * 	<jc>// Test specific array elements</jc>
- * 	<jsm>assertBean</jsm>(listOfData, <js>"0{data},1{data}"</js>, <js>"{100},{200}"</js>);
+ * 	<jc>// Test specific array elements - listOfData is a List&lt;DataObject&gt; where DataObject has getData()</jc>
+ * 	<jsm>assertBean</jsm>(<jv>listOfData</jv>, <js>"0{data},1{data}"</js>, <js>"{100},{200}"</js>);
  * </p>
  *
  * <p><b>Collection Testing:</b></p>
@@ -99,7 +99,7 @@ import org.opentest4j.*;
  * 	<jsm>assertList</jsm>(tags, <js>"red"</js>, <js>"green"</js>, <js>"blue"</js>);
  *
  * 	<jc>// Test map entries using assertBean</jc>
- * 	<jsm>assertBean</jsm>(config, <js>"timeout,retries"</js>, <js>"30000,3"</js>);
+ * 	<jsm>assertBean</jsm>(<jv>config</jv>, <js>"timeout,retries"</js>, <js>"30000,3"</js>);
  * </p>
  *
  * <p><b>Custom Property Access:</b></p>
@@ -187,71 +187,71 @@ public class Assertions2 {
 	 * <h5 class='section'>Nested Property Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test nested bean properties</jc>
-	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"address{street,city,state}"</js>, <js>"{123 Main St,Springfield,IL}"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"name,address{street,city,state}"</js>, <js>"John,{123 Main St,Springfield,IL}"</js>);
 	 *
 	 * 	<jc>// Test arbitrarily deep nesting</jc>
-	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"person{address{geo{lat,lon}}}"</js>, <js>"{{{{40.7,-74.0}}}}"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"name,person{address{geo{lat,lon}}}"</js>, <js>"John,{{{40.7,-74.0}}}"</js>);
 	 * </p>
 	 *
 	  * <h5 class='section'>Array, List, and Stream Testing:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Test array/list elements by index</jc>
-	 * 	assertBean(myBean, <js>"items{0,1,2}"</js>, <js>"{item1,item2,item3}"</js>);
+	 * 	<jc>// Test array/list elements by index - items is a String[] or List&lt;String&gt;</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"items{0,1,2}"</js>, <js>"{item1,item2,item3}"</js>);
 	 *
-	 * 	<jc>// Test nested properties within array elements</jc>
-	 * 	assertBean(myBean, <js>"orders{0{id,total}}"</js>, <js>"{{123,99.95}}"</js>);
+	 * 	<jc>// Test nested properties within array elements - orders is a List&lt;Order&gt; where Order has getId() and getTotal()</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"orders{0{id,total}}"</js>, <js>"{{123,99.95}}"</js>);
 	 *
-	 * 	<jc>// Test array length property</jc>
-	 * 	assertBean(myBean, <js>"items{length}"</js>, <js>"{5}"</js>);
+	 * 	<jc>// Test array length property - items can be any array or collection type</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"items{length}"</js>, <js>"{5}"</js>);
 	 *
-	 * 	<jc>// Works with any iterable type including Streams</jc>
-	 * 	assertBean(myBean, <js>"userStream{#{name}}"</js>, <js>"[{Alice},{Bob}]"</js>);
+	 * 	<jc>// Works with any iterable type including Streams - userStream returns a Stream&lt;User&gt; where User has getName()</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"userStream{#{name}}"</js>, <js>"[{Alice},{Bob}]"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Collection Iteration Syntax:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Test properties across ALL elements in a collection using #{...} syntax</jc>
-	 * 	assertBean(myBean, <js>"userList{#{name}}"</js>, <js>"[{John},{Jane},{Bob}]"</js>);
+	 * 	<jc>// Test properties across ALL elements in a collection using #{...} syntax - userList is a List&lt;User&gt; where User has getName()</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"userList{#{name}}"</js>, <js>"[{John},{Jane},{Bob}]"</js>);
 	 *
-	 * 	<jc>// Test multiple properties from each element</jc>
-	 * 	assertBean(myBean, <js>"orderList{#{id,status}}"</js>, <js>"[{123,ACTIVE},{124,PENDING}]"</js>);
+	 * 	<jc>// Test multiple properties from each element - orderList is a List&lt;Order&gt; where Order has getId() and getStatus()</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"orderList{#{id,status}}"</js>, <js>"[{123,ACTIVE},{124,PENDING}]"</js>);
 	 *
-	 * 	<jc>// Works with nested properties within each element</jc>
-	 * 	assertBean(myBean, <js>"customers{#{address{city}}}"</js>, <js>"[{{New York}},{{Los Angeles}}]"</js>);
+	 * 	<jc>// Works with nested properties within each element - customers is a List&lt;Customer&gt; where Customer has getAddress() returning Address with getCity()</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"customers{#{address{city}}}"</js>, <js>"[{{New York}},{{Los Angeles}}]"</js>);
 	 *
 	  * 	<jc>// Works with arrays and any iterable collection type (including Streams)</jc>
-	 * 	assertBean(config, <js>"itemArray{#{type}}"</js>, <js>"[{String},{Integer},{Boolean}]"</js>);
-	 * 	assertBean(data, <js>"statusSet{#{name}}"</js>, <js>"[{ACTIVE},{PENDING},{CANCELLED}]"</js>);
-	 * 	assertBean(processor, <js>"dataStream{#{value}}"</js>, <js>"[{A},{B},{C}]"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>config</jv>, <js>"itemArray{#{type}}"</js>, <js>"[{String},{Integer},{Boolean}]"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>data</jv>, <js>"statusSet{#{name}}"</js>, <js>"[{ACTIVE},{PENDING},{CANCELLED}]"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>processor</jv>, <js>"dataStream{#{value}}"</js>, <js>"[{A},{B},{C}]"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Universal Collection Size Properties:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Both 'length' and 'size' work universally across all collection types</jc>
-	 * 	assertBean(myBean, <js>"myArray{length}"</js>, <js>"{5}"</js>);        <jc>// Arrays</jc>
-	 * 	assertBean(myBean, <js>"myArray{size}"</js>, <js>"{5}"</js>);          <jc>// Also works for arrays</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"myArray{length}"</js>, <js>"{5}"</js>);        <jc>// Arrays</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"myArray{size}"</js>, <js>"{5}"</js>);          <jc>// Also works for arrays</jc>
 	 *
-	 * 	assertBean(myBean, <js>"myList{size}"</js>, <js>"{3}"</js>);           <jc>// Collections</jc>
-	 * 	assertBean(myBean, <js>"myList{length}"</js>, <js>"{3}"</js>);         <jc>// Also works for collections</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"myList{size}"</js>, <js>"{3}"</js>);           <jc>// Collections</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"myList{length}"</js>, <js>"{3}"</js>);         <jc>// Also works for collections</jc>
 	 *
-	 * 	assertBean(myBean, <js>"myMap{size}"</js>, <js>"{7}"</js>);            <jc>// Maps</jc>
-	 * 	assertBean(myBean, <js>"myMap{length}"</js>, <js>"{7}"</js>);          <jc>// Also works for maps</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"myMap{size}"</js>, <js>"{7}"</js>);            <jc>// Maps</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"myMap{length}"</js>, <js>"{7}"</js>);          <jc>// Also works for maps</jc>
 	 * </p>
 	 *
 	 * <h5 class='section'>Class Name Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test class properties (prefer simple names for maintainability)</jc>
-	 * 	assertBean(myBean, <js>"obj{class{simpleName}}"</js>, <js>"{{MyClass}}"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"obj{class{simpleName}}"</js>, <js>"{{MyClass}}"</js>);
 	 *
 	 * 	<jc>// Test full class names when needed</jc>
-	 * 	assertBean(myBean, <js>"obj{class{name}}"</js>, <js>"{{com.example.MyClass}}"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"obj{class{name}}"</js>, <js>"{{com.example.MyClass}}"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Method Chaining Support:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test fluent setter chains (returns same object)</jc>
-	 * 	assertBean(
-	 * 		item.setType(<js>"foo"</js>).setFormat(<js>"bar"</js>).setDefault(<js>"baz"</js>),
+	 * 	<jsm>assertBean</jsm>(
+	 * 		<jv>item</jv>.setType(<js>"foo"</js>).setFormat(<js>"bar"</js>).setDefault(<js>"baz"</js>),
 	 * 		<js>"type,format,default"</js>,
 	 * 		<js>"foo,bar,baz"</js>
 	 * 	);
@@ -259,50 +259,50 @@ public class Assertions2 {
 	 *
 	 * <h5 class='section'>Advanced Collection Analysis:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Combine size/length, metadata, and content iteration in single assertions</jc>
-	 * 	assertBean(myBean, <js>"users{length,class{simpleName},#{name}}"</js>,
+	 * 	<jc>// Combine size/length, metadata, and content iteration in single assertions - users is a List&lt;User&gt;</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"users{length,class{simpleName},#{name}}"</js>,
 	 * 		<js>"{3,{ArrayList},[{John},{Jane},{Bob}]}"</js>);
 	 *
-	 * 	<jc>// Comprehensive collection validation with multiple iteration patterns</jc>
-	 * 	assertBean(order, <js>"items{size,#{name},#{price}}"</js>,
+	 * 	<jc>// Comprehensive collection validation with multiple iteration patterns - items is a List&lt;Product&gt; where Product has getName() and getPrice()</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>order</jv>, <js>"items{size,#{name},#{price}}"</js>,
 	 * 		<js>"{3,[{Laptop},{Phone},{Tablet}],[{999.99},{599.99},{399.99}]}"</js>);
 	 *
-	 * 	<jc>// Perfect for validation testing - verify error count and details</jc>
-	 * 	assertBean(result, <js>"errors{length,#{field},#{code}}"</js>,
+	 * 	<jc>// Perfect for validation testing - verify error count and details; errors is a List&lt;ValidationError&gt; where ValidationError has getField() and getCode()</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>result</jv>, <js>"errors{length,#{field},#{code}}"</js>,
 	 * 		<js>"{2,[{email},{password}],[{E001},{E002}]}"</js>);
 	 *
-	 * 	<jc>// Mixed collection types with consistent syntax</jc>
-	 * 	assertBean(response, <js>"results{size},metadata{length}"</js>, <js>"{25},{4}"</js>);
+	 * 	<jc>// Mixed collection types with consistent syntax - results and metadata are different collection types</jc>
+	 * 	<jsm>assertBean</jsm>(<jv>response</jv>, <js>"results{size},metadata{length}"</js>, <js>"{25},{4}"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Direct Field Access:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test public fields directly (no getters required)</jc>
-	 * 	assertBean(myBean, <js>"f1,f2,f3"</js>, <js>"val1,val2,val3"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"f1,f2,f3"</js>, <js>"val1,val2,val3"</js>);
 	 *
 	 * 	<jc>// Test field properties with chaining</jc>
-	 * 	assertBean(myBean, <js>"f1{length},f2{class{simpleName}}"</js>, <js>"{5},{{String}}"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"f1{length},f2{class{simpleName}}"</js>, <js>"{5},{{String}}"</js>);
 	 * </p>
 	 *
 	  * <h5 class='section'>Map Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test map values by key</jc>
-	 * 	assertBean(myBean, <js>"configMap{timeout,retries}"</js>, <js>"{30000,3}"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"configMap{timeout,retries}"</js>, <js>"{30000,3}"</js>);
 	 *
 	 * 	<jc>// Test map size</jc>
-	 * 	assertBean(myBean, <js>"settings{size}"</js>, <js>"{5}"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"settings{size}"</js>, <js>"{5}"</js>);
 	 *
 	 * 	<jc>// Test null keys using special &lt;NULL&gt; syntax</jc>
-	 * 	assertBean(myBean, <js>"mapWithNullKey{&lt;NULL&gt;}"</js>, <js>"{nullKeyValue}"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"mapWithNullKey{&lt;NULL&gt;}"</js>, <js>"{nullKeyValue}"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Collection and Boolean Values:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test boolean values</jc>
-	 * 	assertBean(myBean, <js>"enabled,visible"</js>, <js>"true,false"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"enabled,visible"</js>, <js>"true,false"</js>);
 	 *
 	 * 	<jc>// Test enum collections</jc>
-	 * 	assertBean(myBean, <js>"statuses"</js>, <js>"[ACTIVE,PENDING]"</js>);
+	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"statuses"</js>, <js>"[ACTIVE,PENDING]"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Value Syntax Rules:</h5>
@@ -371,19 +371,19 @@ public class Assertions2 {
 	 * <h5 class='section'>Basic Usage:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test list of user beans</jc>
-	 * 	assertBeans(<jv>userList</jv>, <js>"name,age"</js>,
+	 * 	<jsm>assertBeans</jsm>(<jv>userList</jv>, <js>"name,age"</js>,
 	 * 		<js>"John,25"</js>, <js>"Jane,30"</js>, <js>"Bob,35"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Complex Property Testing:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Test nested properties across multiple beans</jc>
-	 * 	assertBeans(<jv>orderList</jv>, <js>"id,customer{name,email}"</js>,
+	 * 	<jc>// Test nested properties across multiple beans - orderList is a List&lt;Order&gt; where Order has getId() and getCustomer() returning Customer with getName() and getEmail()</jc>
+	 * 	<jsm>assertBeans</jsm>(<jv>orderList</jv>, <js>"id,customer{name,email}"</js>,
 	 * 		<js>"1,{John,john@example.com}"</js>,
 	 * 		<js>"2,{Jane,jane@example.com}"</js>);
 	 *
-	 * 	<jc>// Test collection properties within beans</jc>
-	 * 	assertBeans(<jv>cartList</jv>, <js>"items{0{name}},total"</js>,
+	 * 	<jc>// Test collection properties within beans - cartList is a List&lt;ShoppingCart&gt; where ShoppingCart has getItems() returning List&lt;Product&gt; and getTotal()</jc>
+	 * 	<jsm>assertBeans</jsm>(<jv>cartList</jv>, <js>"items{0{name}},total"</js>,
 	 * 		<js>"{{Laptop}},999.99"</js>,
 	 * 		<js>"{{Phone}},599.99"</js>);
 	 * </p>
@@ -391,7 +391,7 @@ public class Assertions2 {
 	 * <h5 class='section'>Validation Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test validation results</jc>
-	 * 	assertBeans(<jv>validationErrors</jv>, <js>"field,message,code"</js>,
+	 * 	<jsm>assertBeans</jsm>(<jv>validationErrors</jv>, <js>"field,message,code"</js>,
 	 * 		<js>"email,Invalid email format,E001"</js>,
 	 * 		<js>"age,Must be 18 or older,E002"</js>);
 	 * </p>
@@ -399,7 +399,7 @@ public class Assertions2 {
 	  * <h5 class='section'>Collection Iteration Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test collection iteration within beans (#{...} syntax)</jc>
-	 * 	assertBeans(<jv>departmentList</jv>, <js>"name,employees{#{name}}"</js>,
+	 * 	<jsm>assertBeans</jsm>(<jv>departmentList</jv>, <js>"name,employees{#{name}}"</js>,
 	 * 		<js>"Engineering,[{Alice},{Bob},{Charlie}]"</js>,
 	 * 		<js>"Marketing,[{David},{Eve}]"</js>);
 	 * </p>
@@ -407,8 +407,8 @@ public class Assertions2 {
 	 * <h5 class='section'>Parser Result Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test parsed object collections</jc>
- * 	<jk>var</jk> <jv>parsed</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>jsonArray</jv>, MyBean[].class);
- * 	assertBeans(<jsm>Arrays.asList</jsm>(<jv>parsed</jv>), <js>"prop1,prop2"</js>,
+	 * 	<jk>var</jk> <jv>parsed</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>jsonArray</jv>, MyBean[].class);
+	 * 	<jsm>assertBeans</jsm>(<jsm>Arrays.asList</jsm>(<jv>parsed</jv>), <js>"prop1,prop2"</js>,
 	 * 		<js>"val1,val2"</js>, <js>"val3,val4"</js>);
 	 * </p>
 	 *
@@ -539,13 +539,13 @@ public class Assertions2 {
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test that error message contains key information</jc>
-	 * 	<jsm>assertContains</jsm>(<js>"FileNotFoundException"</js>, exception);
+	 * 	<jsm>assertContains</jsm>(<js>"FileNotFoundException"</js>, <jv>exception</jv>);
 	 *
 	 * 	<jc>// Test that object string representation contains expected data</jc>
-	 * 	<jsm>assertContains</jsm>(<js>"status=ACTIVE"</js>, user);
+	 * 	<jsm>assertContains</jsm>(<js>"status=ACTIVE"</js>, <jv>user</jv>);
 	 *
 	 * 	<jc>// Test partial JSON/XML content</jc>
-	 * 	<jsm>assertContains</jsm>(<js>"\"name\":\"John\""</js>, jsonResponse);
+	 * 	<jsm>assertContains</jsm>(<js>"\"name\":\"John\""</js>, <jv>jsonResponse</jv>);
 	 * </p>
 	 *
 	 * @param expected The substring that must be present in the actual object's string representation
@@ -587,13 +587,13 @@ public class Assertions2 {
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test that error contains multiple pieces of information</jc>
-	 * 	<jsm>assertContainsAll</jsm>(exception, <js>"FileNotFoundException"</js>, <js>"config.xml"</js>, <js>"/etc"</js>);
+	 * 	<jsm>assertContainsAll</jsm>(<jv>exception</jv>, <js>"FileNotFoundException"</js>, <js>"config.xml"</js>, <js>"/etc"</js>);
 	 *
 	 * 	<jc>// Test that user object contains expected fields</jc>
-	 * 	<jsm>assertContainsAll</jsm>(user, <js>"name=John"</js>, <js>"age=30"</js>, <js>"status=ACTIVE"</js>);
+	 * 	<jsm>assertContainsAll</jsm>(<jv>user</jv>, <js>"name=John"</js>, <js>"age=30"</js>, <js>"status=ACTIVE"</js>);
 	 *
 	 * 	<jc>// Test log output contains all required entries</jc>
-	 * 	<jsm>assertContainsAll</jsm>(logOutput, <js>"INFO"</js>, <js>"Started"</js>, <js>"Successfully"</js>);
+	 * 	<jsm>assertContainsAll</jsm>(<jv>logOutput</jv>, <js>"INFO"</js>, <js>"Started"</js>, <js>"Successfully"</js>);
 	 * </p>
 	 *
 	 * @param actual The object to test. Must not be null.
@@ -707,15 +707,15 @@ public class Assertions2 {
 	 * <p class='bjava'>
 	 * 	<jc>// Test a Set using l() conversion</jc>
 	 * 	Set&lt;String&gt; <jv>mySet</jv> = Set.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
-	 * 	assertList(l(<jv>mySet</jv>), <js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 * 	<jsm>assertList</jsm>(<jsm>l</jsm>(<jv>mySet</jv>), <js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
 	 *
 	 * 	<jc>// Test an array using l() conversion</jc>
 	 * 	String[] <jv>myArray</jv> = {<js>"x"</js>, <js>"y"</js>, <js>"z"</js>};
-	 * 	assertList(l(<jv>myArray</jv>), <js>"x"</js>, <js>"y"</js>, <js>"z"</js>);
+	 * 	<jsm>assertList</jsm>(<jsm>l</jsm>(<jv>myArray</jv>), <js>"x"</js>, <js>"y"</js>, <js>"z"</js>);
 	 *
 	 * 	<jc>// Test a Stream using l() conversion</jc>
-	 * 	Stream&lt;String&gt; <jv>myStream</jv> = Stream.of(<js>"foo"</js>, <js>"bar"</js>);
-	 * 	assertList(l(<jv>myStream</jv>), <js>"foo"</js>, <js>"bar"</js>);
+	 * 	Stream&lt;String&gt; <jv>myStream</jv> = Stream.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>);
+	 * 	<jsm>assertList</jsm>(<jsm>l</jsm>(<jv>myStream</jv>), <js>"foo"</js>, <js>"bar"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Comparison Modes:</h5>
@@ -723,27 +723,27 @@ public class Assertions2 {
 	 *
 	 * <h6 class='section'>1. String Comparison (Readable Format):</h6>
 	 * <p class='bjava'>
-	 * 	<jc>// Elements are converted to {@link Utils#r readable} format and compared as strings</jc>
- * 	assertList(List.<jsm>of</jsm>(1, 2, 3), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
- * 	assertList(List.<jsm>of</jsm>("a", "b"), <js>"a"</js>, <js>"b"</js>);
+	 * 	<jc>// Elements are converted to strings using the bean converter and compared as strings</jc>
+	 * 	<jsm>assertList</jsm>(List.<jsm>of</jsm>(1, 2, 3), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
+	 * 	<jsm>assertList</jsm>(List.<jsm>of</jsm>("a", "b"), <js>"a"</js>, <js>"b"</js>);
 	 * </p>
 	 *
 	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
 	 * <p class='bjava'>
 	 * 	<jc>// Use Predicate&lt;T&gt; for functional testing</jc>
 	 * 	Predicate&lt;Integer&gt; <jv>greaterThanOne</jv> = <jv>x</jv> -&gt; <jv>x</jv> &gt; 1;
-	 * 	assertList(List.<jsm>of</jsm>(2, 3, 4), <jv>greaterThanOne</jv>, <jv>greaterThanOne</jv>, <jv>greaterThanOne</jv>);
+	 * 	<jsm>assertList</jsm>(List.<jsm>of</jsm>(2, 3, 4), <jv>greaterThanOne</jv>, <jv>greaterThanOne</jv>, <jv>greaterThanOne</jv>);
 	 *
 	 * 	<jc>// Mix predicates with other comparison types</jc>
 	 * 	Predicate&lt;String&gt; <jv>startsWithA</jv> = <jv>s</jv> -&gt; <jv>s</jv>.startsWith(<js>"a"</js>);
-	 * 	assertList(List.<jsm>of</jsm>(<js>"apple"</js>, <js>"banana"</js>), <jv>startsWithA</jv>, <js>"banana"</js>);
+	 * 	<jsm>assertList</jsm>(List.<jsm>of</jsm>(<js>"apple"</js>, <js>"banana"</js>), <jv>startsWithA</jv>, <js>"banana"</js>);
 	 * </p>
 	 *
 	 * <h6 class='section'>3. Object Equality (Direct Comparison):</h6>
 	 * <p class='bjava'>
 	 * 	<jc>// Non-String, non-Predicate objects use <jsm>Objects.equals</jsm>() comparison</jc>
- * 	assertList(List.<jsm>of</jsm>(1, 2, 3), 1, 2, 3); <jc>// Integer objects</jc>
- * 	assertList(List.<jsm>of</jsm>(<jv>myBean1</jv>, <jv>myBean2</jv>), <jv>myBean1</jv>, <jv>myBean2</jv>); <jc>// Custom objects</jc>
+	 * 	<jsm>assertList</jsm>(List.<jsm>of</jsm>(1, 2, 3), 1, 2, 3); <jc>// Integer objects</jc>
+	 * 	<jsm>assertList</jsm>(List.<jsm>of</jsm>(<jv>myBean1</jv>, <jv>myBean2</jv>), <jv>myBean1</jv>, <jv>myBean2</jv>); <jc>// Custom objects</jc>
 	 * </p>
 	 *
 	 * @param actual The List to test. Must not be null. For other collection types, use {@link #l(Object)} to convert first.
@@ -985,7 +985,7 @@ public class Assertions2 {
 	 * 	<jsm>assertMatches</jsm>(<js>"\\d{1,3}(,\\d{3})*(\\.\\d{2})?"</js>, formattedPrice);
 	 *
 	 * 	<jc>// Test multiline content with dotall mode</jc>
-	 * 	<jsm>assertMatches</jsm>(<js>".*error.*exception.*"</js>, multiLineLog);
+	 * 	<jsm>assertMatches</jsm>(<js>".*error.*exception.*"</js>, <jv>multiLineLog</jv>);
 	 * </p>
 	 *
 	 * @param pattern The regular expression pattern to match against. Supports "/i" and "/s" flags.

@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
  * 	<li>Token object functionality</li>
  * </ul>
  */
-class NestedTokenizer_Test {
+class NestedTokenizer_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tokenization tests

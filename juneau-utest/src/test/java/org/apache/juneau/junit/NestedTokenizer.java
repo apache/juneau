@@ -55,7 +55,7 @@ import java.util.*;
  * 	<jc>// nested[1] = Token{value="config", nested=[Token{value="timeout"}, Token{value="retries"}]}</jc>
  * </p>
  */
-public class NestedTokenizer {
+class NestedTokenizer {
 
 	/**
 	 * Parser states for the finite state machine.

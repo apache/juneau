@@ -143,9 +143,9 @@ public class PropertyExtractors {
 	 *
 	 * <h5 class='section'>Additional Properties:</h5>
 	 * <ul>
-	 * 	<li><b>Numeric indices:</b> {@code "0"}, {@code "1"}, {@code "2"}, etc. for element access</li>
-	 * 	<li><b>Negative indices:</b> {@code "-1"}, {@code "-2"} for reverse indexing (from end)</li>
-	 * 	<li><b>Size properties:</b> {@code "length"} and {@code "size"} return collection size</li>
+	 * 	<li><b>Numeric indices:</b> <js>"0"</js>, <js>"1"</js>, <js>"2"</js>, etc. for element access</li>
+	 * 	<li><b>Negative indices:</b> <js>"-1"</js>, <js>"-2"</js> for reverse indexing (from end)</li>
+	 * 	<li><b>Size properties:</b> <js>"length"</js> and <js>"size"</js> return collection size</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Supported Types:</h5>
@@ -184,8 +184,13 @@ public class PropertyExtractors {
 		@Override
 		public Object extract(BeanConverter converter, Object o, String name) {
 			var l = converter.listify(o);
-			if (name.matches("-?\\d+"))
-				return l.get(parseInt(name));
+			if (name.matches("-?\\d+")) {
+				var index = parseInt(name);
+				if (index < 0) {
+					index = l.size() + index; // Convert negative index to positive
+				}
+				return l.get(index);
+			}
 			if ("length".equals(name)) return l.size();
 			if ("size".equals(name)) return l.size();
 			return super.extract(converter, o, name);

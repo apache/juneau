@@ -52,10 +52,8 @@ import org.opentest4j.*;
  * </p>
  *
  * <p><b>Thread Safety:</b> All methods in this class are thread-safe as they are stateless static methods.
- *
- * @since 9.2.0
  */
-public class Utils {
+class Utils {
 
 	/**
 	 * Converts an array to a {@link List} of objects.
@@ -120,7 +118,7 @@ public class Utils {
 	 * @param <T> The argument data type.
 	 * @param name The argument name for error reporting.
 	 * @param o The object to validate.
-	 * @return The same argument if not null.
+	 * @return The same argument if not <jk>null</jk>.
 	 * @throws IllegalArgumentException If the argument is null.
 	 */
 	public static final <T> T assertArgNotNull(String name, T o) throws IllegalArgumentException {
@@ -431,7 +429,7 @@ public class Utils {
 	 * Returns the simple class name of an object, or null if the object is null.
 	 *
 	 * <p>This method provides a safe way to get type information for debugging and logging.
-	 * It handles null values gracefully by returning null instead of throwing an exception.
+	 * It handles <jk>null</jk> values gracefully by returning <jk>null</jk> instead of throwing an exception.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -441,7 +439,7 @@ public class Utils {
 	 * </p>
 	 *
 	 * @param o The object to get the type name for.
-	 * @return The simple class name of the object, or null if the object is null.
+	 * @return The simple class name of the object, or <jk>null</jk> if the object is <jk>null</jk>.
 	 */
 	public static String t(Object o) {
 		return o == null ? null : o.getClass().getSimpleName();
