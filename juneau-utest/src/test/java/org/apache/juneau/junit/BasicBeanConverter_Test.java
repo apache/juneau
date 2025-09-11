@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
  * Unit tests for BasicBeanConverter.
  */
 @DisplayName("BasicBeanConverter")
-public class BasicBeanConverter_Test extends TestBase {
+class BasicBeanConverter_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Builder Tests
@@ -35,7 +35,7 @@ public class BasicBeanConverter_Test extends TestBase {
 
 	@Nested
 	@DisplayName("Builder")
-	class BuilderTest {
+	class a_BuilderTest {
 
 		@Test
 		@DisplayName("a01_builder() creates new Builder instance")
@@ -146,7 +146,7 @@ public class BasicBeanConverter_Test extends TestBase {
 
 	@Nested
 	@DisplayName("Core Functionality")
-	class CoreFunctionalityTest {
+	class b_CoreFunctionalityTest {
 
 		private BasicBeanConverter converter;
 
@@ -266,7 +266,7 @@ public class BasicBeanConverter_Test extends TestBase {
 
 	@Nested
 	@DisplayName("Property Access")
-	class PropertyAccessTest {
+	class c_PropertyAccessTest {
 
 		private BasicBeanConverter converter;
 
@@ -306,7 +306,7 @@ public class BasicBeanConverter_Test extends TestBase {
 
 	@Nested
 	@DisplayName("Settings")
-	class SettingsTest {
+	class d_SettingsTest {
 
 		@Test
 		@DisplayName("d01_nullValue setting changes null representation")
@@ -390,7 +390,7 @@ public class BasicBeanConverter_Test extends TestBase {
 
 	@Nested
 	@DisplayName("Error Handling")
-	class ErrorHandlingTest {
+	class e_ErrorHandlingTest {
 
 		private BasicBeanConverter converter;
 
@@ -425,7 +425,7 @@ public class BasicBeanConverter_Test extends TestBase {
 
 		public String getName() { return name; }
 		public int getAge() { return age; }
-		public void setName(String name) { this.name = name; }
-		public void setAge(int age) { this.age = age; }
+		void setName(String name) { this.name = name; }
+		void setAge(int age) { this.age = age; }
 	}
 }

@@ -12,19 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit;
 
-import static java.util.stream.Collectors.*;
-import static java.util.stream.StreamSupport.*;
-import static java.time.format.DateTimeFormatter.*;
-import static java.util.Collections.*;
 import static java.util.Optional.*;
 import static org.apache.juneau.junit.Utils.*;
+import static java.util.stream.Collectors.*;
 
 import java.io.*;
-
-import static java.util.Spliterators.*;
-
 import java.lang.reflect.*;
-import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -98,7 +91,7 @@ import java.util.stream.*;
  * <ul>
  * 	<li><b>Optional:</b> Unwrapped to contained value or <jk>null</jk></li>
  * 	<li><b>Supplier:</b> Called to get supplied value</li>
- * 	<li><b>Future:</b> Extracts completed result or returns "&lt;pending&gt;" for incomplete futures</li>
+ * 	<li><b>Future:</b> Extracts completed result or returns <js>"&lt;pending&gt;"</js> for incomplete futures (via {@link Swappers#futureSwapper()})</li>
  * </ul>
  *
  * <h5 class='section'>Configuration Settings:</h5>
@@ -106,6 +99,9 @@ import java.util.stream.*;
  * <dl>
  * 	<dt><code>nullValue</code></dt>
  * 	<dd>String representation for null values (default: <js>"&lt;null&gt;"</js>)</dd>
+ *
+ * 	<dt><code>selfValue</code></dt>
+ * 	<dd>Special property name that returns the object itself (default: <js>"&lt;self&gt;"</js>)</dd>
  *
  * 	<dt><code>emptyValue</code></dt>
  * 	<dd>String representation for empty collections (default: <js>"&lt;empty&gt;"</js>)</dd>
@@ -160,6 +156,20 @@ import java.util.stream.*;
  * 	<jk>var</jk> <jv>orderCount</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"orders.length"</js>);
  * </p>
  *
+ * <p><b>Special Property Values:</b></p>
+ * <p class='bjava'>
+ * 	<jc>// Use special property names</jc>
+ * 	<jk>var</jk> <jv>userObj</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"&lt;self&gt;"</js>); <jc>// Returns the user object itself</jc>
+ * 	<jk>var</jk> <jv>nullValue</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"&lt;null&gt;"</js>); <jc>// Returns null</jc>
+ *
+ * 	<jc>// Custom self value</jc>
+ * 	<jk>var</jk> <jv>customConverter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+ * 		.defaultSettings()
+ * 		.addSetting(<jsf>SETTING_selfValue</jsf>, <js>"this"</js>)
+ * 		.build();
+ * 	<jk>var</jk> <jv>selfRef</jv> = <jv>customConverter</jv>.getEntry(<jv>user</jv>, <js>"this"</js>); <jc>// Returns user object</jc>
+ * </p>
+ *
  * <h5 class='section'>Performance Characteristics:</h5>
  * <ul>
  * 	<li><b>Handler Lookup:</b> O(1) average case via ConcurrentHashMap caching</li>
@@ -206,6 +216,7 @@ public class BasicBeanConverter implements BeanConverter {
 
 	public static final String
 		SETTING_nullValue = "nullValue",
+		SETTING_selfValue = "selfValue",
 		SETTING_fieldSeparator = "fieldSeparator",
 		SETTING_collectionPrefix = "collectionPrefix",
 		SETTING_collectionSuffix = "collectionSuffix",
@@ -320,7 +331,15 @@ public class BasicBeanConverter implements BeanConverter {
 
 		// Original logic for regular property access
 		var pn = token.getValue();
-		var e = ofNullable(getProperty(o, pn.equals("<NULL>") ? null : pn)).orElse(null);
+		var selfValue = getSetting(SETTING_selfValue, "<self>");
+
+		// Handle special values
+		Object e;
+		if (pn.equals(selfValue)) {
+			e = o; // Return the object itself
+		} else {
+			e = ofNullable(getProperty(o, pn)).orElse(null);
+		}
 		if (e == null || ! token.hasNested()) return stringify(e);
 		return token.getNested().stream().map(x -> getNested(e, x)).map(this::stringify).collect(joining(",","{","}"));
 	}
@@ -602,43 +621,33 @@ public class BasicBeanConverter implements BeanConverter {
 		 */
 		public Builder defaultSettings() {
 			addSetting(SETTING_nullValue, "<null>");
+			addSetting(SETTING_selfValue, "<self>");
 			addSetting(SETTING_classNameFormat, "simple");
 
-			addStringifier(Map.Entry.class, (bc, o) -> bc.stringify(o.getKey()) + bc.getSetting(SETTING_mapEntrySeparator, "=") + bc.stringify(o.getValue()));
-			addStringifier(GregorianCalendar.class, (bc, o) ->  o.toZonedDateTime().format(bc.getSetting(SETTING_calendarFormat, ISO_INSTANT)));
-			addStringifier(Date.class, (bc, o) ->  o.toInstant().toString());
-			addStringifier(InputStream.class, (bc, o) ->  stringify(o));
-			addStringifier(byte[].class, (bc, o) ->  stringify(o));
-			addStringifier(Reader.class, (bc, o) -> stringify(o));
-			addStringifier(File.class, (bc, o) -> stringify(o));
-			addStringifier(Enum.class, (bc, o) -> o.name());
-			addStringifier(Class.class, (bc, o) -> stringify(bc, o));
-			addStringifier(Constructor.class, (bc, o) -> stringify(bc, o));
-			addStringifier(Method.class, (bc, o) -> stringify(bc, o));
-			addStringifier(List.class, (bc, o) -> ((List<?>)o).stream().map(bc::stringify).collect(joining(bc.getSetting(SETTING_fieldSeparator, ","), bc.getSetting(SETTING_collectionPrefix, "["), bc.getSetting(SETTING_collectionSuffix, "]"))));
-			addStringifier(Map.class, (bc, o) -> ((Map<?,?>)o).entrySet().stream().map(bc::stringify).collect(joining(bc.getSetting(SETTING_fieldSeparator, ","), bc.getSetting(SETTING_mapPrefix, "{"), bc.getSetting(SETTING_mapSuffix, "}"))));
+			addStringifier(Map.Entry.class, Stringifiers.mapEntryStringifier());
+			addStringifier(GregorianCalendar.class, Stringifiers.calendarStringifier());
+			addStringifier(Date.class, Stringifiers.dateStringifier());
+			addStringifier(InputStream.class, Stringifiers.inputStreamStringifier());
+			addStringifier(byte[].class, Stringifiers.byteArrayStringifier());
+			addStringifier(Reader.class, Stringifiers.readerStringifier());
+			addStringifier(File.class, Stringifiers.fileStringifier());
+			addStringifier(Enum.class, Stringifiers.enumStringifier());
+			addStringifier(Class.class, Stringifiers.classStringifier());
+			addStringifier(Constructor.class, Stringifiers.constructorStringifier());
+			addStringifier(Method.class, Stringifiers.methodStringifier());
+			addStringifier(List.class, Stringifiers.listStringifier());
+			addStringifier(Map.class, Stringifiers.mapStringifier());
 
-			addListifier(Collection.class, (bc, o) -> new ArrayList<>(o));
-			addListifier(Iterable.class, (bc, o) -> stream(((Iterable<Object>)o).spliterator(), false).toList());
-			addListifier(Iterator.class, (bc, o) -> stream(spliteratorUnknownSize(o, 0), false).toList());
-			addListifier(Enumeration.class, (bc, o) -> list(o));
-			addListifier(Stream.class, (bc, o) -> o.toList());
-			addListifier(Optional.class, (bc, o) -> o.isEmpty() ? emptyList() : singletonList(o.get()));
-			addListifier(Map.class, (bc, o) -> new ArrayList<>(((Map<?,?>)o).entrySet()));
+			addListifier(Collection.class, Listifiers.collectionListifier());
+			addListifier(Iterable.class, Listifiers.iterableListifier());
+			addListifier(Iterator.class, Listifiers.iteratorListifier());
+			addListifier(Enumeration.class, Listifiers.enumerationListifier());
+			addListifier(Stream.class, Listifiers.streamListifier());
+			addListifier(Map.class, Listifiers.mapListifier());
 
-			addSwapper(Optional.class, (bc, o) -> o.orElse(null));
-			addSwapper(Supplier.class, (bc, o) -> o.get());
-			addSwapper(Future.class, (bc, future) -> {
-				var f = (Future<?>)future;
-				if (f.isDone() && !f.isCancelled()) {
-					try {
-						return f.get();
-					} catch (Exception e) {
-						return "<error: " + e.getMessage() + ">";
-					}
-				}
-				return f.isCancelled() ? "<cancelled>" : "<pending>";
-			});
+			addSwapper(Optional.class, Swappers.optionalSwapper());
+			addSwapper(Supplier.class, Swappers.supplierSwapper());
+			addSwapper(Future.class, Swappers.futureSwapper());
 
 			addPropertyExtractor(new PropertyExtractors.ObjectPropertyExtractor());
 			addPropertyExtractor(new PropertyExtractors.ListPropertyExtractor());
@@ -689,71 +698,5 @@ public class BasicBeanConverter implements BeanConverter {
 			this.forClass = forClass;
 			this.function = function;
 		}
-	}
-
-	//---------------------------------------------------------------------------------------------
-	// Helper methods.
-	//---------------------------------------------------------------------------------------------
-
-	private static final char[] HEX = "0123456789ABCDEF".toCharArray();
-
-	private static String stringify(byte[] o) {
-		var sb = new StringBuilder(o.length * 2);
-		for (var element : o) {
-			var v = element & 0xFF;
-			sb.append(HEX[v >>> 4]).append(HEX[v & 0x0F]);
-		}
-		return sb.toString();
-	}
-
-	private static String stringify(InputStream o) {
-		return safe(() -> {
-			try (var o2 = o) {
-				var buff = new ByteArrayOutputStream(1024);
-				var nRead = 0;
-				var b = new byte[1024];
-				while ((nRead = o2.read(b, 0, b.length)) != -1)
-					buff.write(b, 0, nRead);
-				buff.flush();
-				return stringify(buff.toByteArray());
-			}
-		});
-	}
-
-	private static String stringify(Reader o) {
-		return safe(() -> {
-			try (var o2 = o) {
-				var sb = new StringBuilder();
-				var buf = new char[1024];
-				var i = 0;
-				while ((i = o2.read(buf)) != -1)
-					sb.append(buf, 0, i);
-				return sb.toString();
-			}
-		});
-	}
-
-	private static String stringify(File o) {
-		return safe(()->stringify(Files.newBufferedReader(o.toPath())));
-	}
-
-	private static String stringify(BeanConverter bc, Class<?> o) {
-		return switch(bc.getSetting(SETTING_classNameFormat, "default")) {
-			case "simple" -> o.getSimpleName();
-			case "canonical" -> o.getCanonicalName();
-			default -> o.getName();
-		};
-	}
-
-	private static String stringify(BeanConverter bc, Constructor o) {
-		return new StringBuilder().append(stringify(bc, o.getDeclaringClass())).append('(').append(stringify(bc, o.getParameterTypes())).append(')').toString();
-	}
-
-	private static String stringify(BeanConverter bc, Method o) {
-		return new StringBuilder().append(o.getName()).append('(').append(stringify(bc, o.getParameterTypes())).append(')').toString();
-	}
-
-	private static String stringify(BeanConverter bc, Class[] o) {
-		return Arrays.stream(o).map(x -> stringify(bc, x)).collect(joining(","));
 	}
 }

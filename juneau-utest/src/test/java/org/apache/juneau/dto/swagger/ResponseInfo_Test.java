@@ -60,7 +60,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 		);
 		assertMap(
 			t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples(),
-			"text/a,text/b,<NULL>",
+			"text/a,text/b,<null>",
 			"a,<null>,c"
 		);
 	}

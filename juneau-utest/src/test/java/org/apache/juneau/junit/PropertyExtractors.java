@@ -247,6 +247,7 @@ public class PropertyExtractors {
 		@Override
 		public Object extract(BeanConverter converter, Object o, String name) {
 			var m = (Map<?,?>)o;
+			if (eq(name, converter.getSetting(BasicBeanConverter.SETTING_nullValue, "<null>"))) name = null;
 			if (m.containsKey(name)) return m.get(name);
 			if ("size".equals(name)) return m.size();
 			return super.extract(converter, o, name);

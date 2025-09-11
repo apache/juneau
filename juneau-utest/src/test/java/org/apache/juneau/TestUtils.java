@@ -316,10 +316,6 @@ public class TestUtils extends Utils2 {
 		Assertions2.assertBean(actual, fields, expected);
 	}
 
-	private static List<NestedTokenizer.Token> tokenize(String fields) {
-		return NestedTokenizer.tokenize(fields);
-	}
-
 	/**
 	 * Asserts that multiple beans in a collection have the expected property values.
 	 *
@@ -633,10 +629,10 @@ public class TestUtils extends Utils2 {
 	}
 
 	/**
-	 * Asserts value when stringified matches the specified pattern.
+	 * Asserts value when stringified matches the specified glob-style pattern.
 	 */
-	public static void assertMatches(String pattern, Object value) {
-		Assertions2.assertMatches(pattern, value);
+	public static void assertMatchesGlob(String pattern, Object value) {
+		Assertions2.assertMatchesGlob(pattern, value);
 	}
 
 	/**

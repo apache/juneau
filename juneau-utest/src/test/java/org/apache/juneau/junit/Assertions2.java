@@ -870,13 +870,13 @@ public class Assertions2 {
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test string length</jc>
-	 * 	assertSize(5, <js>"hello"</js>);
+	 * 	<jsm>assertSize</jsm>(5, <js>"hello"</js>);
 	 *
 	 * 	<jc>// Test collection size</jc>
-	 * 	assertSize(3, List.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>));
+	 * 	<jsm>assertSize</jsm>(3, List.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>));
 	 *
 	 * 	<jc>// Test array size</jc>
-	 * 	assertSize(2, <jk>new</jk> String[]{<js>"x"</js>, <js>"y"</js>});
+	 * 	<jsm>assertSize</jsm>(2, <jk>new</jk> String[]{<js>"x"</js>, <js>"y"</js>});
 	 * </p>
 	 *
 	 * @param expected The expected size/length.
@@ -919,23 +919,23 @@ public class Assertions2 {
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test exact string conversion</jc>
-	 * 	<jsm>assertString</jsm>(<js>"John,30,true"</js>, user); <jc>// Assuming user converts to this format</jc>
+	 * 	<jsm>assertString</jsm>(<js>"John,30,true"</js>, <jv>user</jv>); <jc>// Assuming user converts to this format</jc>
 	 *
 	 * 	<jc>// Test formatted dates or numbers</jc>
-	 * 	<jsm>assertString</jsm>(<js>"2023-12-01"</js>, localDate);
+	 * 	<jsm>assertString</jsm>(<js>"2023-12-01"</js>, <jv>localDate</jv>);
 	 *
 	 * 	<jc>// Test complex object serialization</jc>
-	 * 	<jsm>assertString</jsm>(<js>"{name=John,age=30}"</js>, userMap);
+	 * 	<jsm>assertString</jsm>(<js>"{name=John,age=30}"</js>, <jv>userMap</jv>);
 	 *
 	 * 	<jc>// Test array/collection formatting</jc>
-	 * 	<jsm>assertString</jsm>(<js>"[red,green,blue]"</js>, colors);
+	 * 	<jsm>assertString</jsm>(<js>"[red,green,blue]"</js>, <jv>colors</jv>);
 	 * </p>
 	 *
 	 * @param expected The exact string that the actual object should convert to
 	 * @param actual The object to test. Must not be null.
 	 * @throws AssertionError if the actual object is null or its string representation doesn't exactly match expected
 	 * @see #assertContains(String, Object) for partial string matching
-	 * @see #assertMatches(String, Object) for pattern-based matching
+	 * @see #assertMatchesGlob(String, Object) for pattern-based matching
 	 */
 	public static void assertString(String expected, Object actual) {
 		assertString(args(), expected, actual);
@@ -958,62 +958,59 @@ public class Assertions2 {
 	}
 
 	/**
-	 * Asserts that an object's string representation matches the specified regular expression pattern.
+	 * Asserts that an object's string representation matches the specified glob-style pattern.
 	 *
 	 * <p>This method converts the actual object to its string representation using the current
-	 * {@link BeanConverter} and then tests it against the provided regular expression pattern.
-	 * This is useful for testing string formats, validating patterns, or checking flexible formats.</p>
+	 * {@link BeanConverter} and then tests it against the provided glob-style pattern.
+	 * This is useful for testing string formats with simple wildcard patterns.</p>
 	 *
 	 * <h5 class='section'>Pattern Syntax:</h5>
-	 * <p>The pattern parameter supports:</p>
+	 * <p>The pattern uses glob-style wildcards:</p>
 	 * <ul>
-	 * 	<li><b>Standard regex:</b> Full Java regular expression syntax</li>
-	 * 	<li><b>Case-insensitive:</b> Patterns ending with "/i" are automatically made case-insensitive</li>
-	 * 	<li><b>Dotall mode:</b> Patterns ending with "/s" enable dotall mode (. matches newlines)</li>
-	 * 	<li><b>Combined flags:</b> Use "/is" for both case-insensitive and dotall modes</li>
+	 * 	<li><b>{@code *}</b> matches any sequence of characters (including none)</li>
+	 * 	<li><b>{@code ?}</b> matches exactly one character</li>
+	 * 	<li><b>All other characters</b> are treated literally</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Test email format</jc>
-	 * 	<jsm>assertMatches</jsm>(<js>"\\w+@\\w+\\.\\w+"</js>, user.getEmail());
+	 * 	<jc>// Test filename patterns</jc>
+	 * 	<jsm>assertMatchesGlob</jsm>(<js>"user_*_temp"</js>, <jv>filename</jv>);
 	 *
-	 * 	<jc>// Test case-insensitive pattern</jc>
-	 * 	<jsm>assertMatches</jsm>(<js>"error.*timeout/i"</js>, logMessage);
+	 * 	<jc>// Test single character wildcards</jc>
+	 * 	<jsm>assertMatchesGlob</jsm>(<js>"file?.txt"</js>, <jv>fileName</jv>);
 	 *
-	 * 	<jc>// Test flexible number format</jc>
-	 * 	<jsm>assertMatches</jsm>(<js>"\\d{1,3}(,\\d{3})*(\\.\\d{2})?"</js>, formattedPrice);
-	 *
-	 * 	<jc>// Test multiline content with dotall mode</jc>
-	 * 	<jsm>assertMatches</jsm>(<js>".*error.*exception.*"</js>, <jv>multiLineLog</jv>);
+	 * 	<jc>// Test combined patterns</jc>
+	 * 	<jsm>assertMatchesGlob</jsm>(<js>"log_*_?.txt"</js>, <jv>logFile</jv>);
 	 * </p>
 	 *
-	 * @param pattern The regular expression pattern to match against. Supports "/i" and "/s" flags.
+	 * @param pattern The glob-style pattern to match against.
 	 * @param value The object to test. Must not be null.
 	 * @throws AssertionError if the value is null or its string representation doesn't match the pattern
 	 * @see #assertString(String, Object) for exact string matching
 	 * @see #assertContains(String, Object) for substring matching
+	 * @see Utils#getGlobMatchPattern(String) for pattern compilation details
 	 */
-	public static void assertMatches(String pattern, Object value) {
-		assertMatches(args(), pattern, value);
+	public static void assertMatchesGlob(String pattern, Object value) {
+		assertMatchesGlob(args(), pattern, value);
 	}
 
 	/**
-	 * Same as {@link #assertMatches(String, Object)} but with configurable assertion behavior.
+	 * Same as {@link #assertMatchesGlob(String, Object)} but with configurable assertion behavior.
 	 *
 	 * @param args Assertion configuration. See {@link #args()} for usage examples.
-	 * @param pattern The regular expression pattern to match against.
+	 * @param pattern The glob-style pattern to match against.
 	 * @param value The object to test. Must not be null.
-	 * @see #assertMatches(String, Object)
+	 * @see #assertMatchesGlob(String, Object)
 	 * @see #args()
 	 */
-	public static void assertMatches(AssertionArgs args, String pattern, Object value) {
+	public static void assertMatchesGlob(AssertionArgs args, String pattern, Object value) {
 		assertArgNotNull("args", args);
 		assertArgNotNull("pattern", pattern);
 		assertNotNull(value, "Value was null.");
 
 		var v = args.getBeanConverter().orElse(DEFAULT_CONVERTER).stringify(value);
-		var m = getMatchPattern(pattern).matcher(v);
-		assertTrue(m.matches(), args.getMessage("Pattern didn't match. ==> pattern: <{0}> but was: <{1}>", pattern, v));
+		var m = getGlobMatchPattern(pattern).matcher(v);
+		assertTrue(m.matches(), args.getMessage("Pattern didn''t match. ==> pattern: <{0}> but was: <{1}>", pattern, v));
 	}
 }

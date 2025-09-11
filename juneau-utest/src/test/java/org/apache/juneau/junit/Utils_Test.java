@@ -337,8 +337,24 @@ class Utils_Test extends TestBase {
 	}
 
 	@Test
+	@DisplayName("f() - Edge cases and special characters")
+	void f04_fEdgeCases() {
+		// Test with special characters (avoid braces in parameters for MessageFormat compatibility)
+		assertEquals("Pattern: .*items=\\[a,b\\].*", f("Pattern: {0}", ".*items=\\[a,b\\].*"));
+		assertEquals("Simple: no braces here", f("Simple: {0}", "no braces here"));
+		assertEquals("Mixed: string with data and 42", f("Mixed: {0} and {1}", "string with data", 42));
+
+		// Test with non-string arguments
+		assertEquals("Number: 42", f("Number: {0}", 42));
+		assertEquals("Boolean: true", f("Boolean: {0}", true));
+
+		// Test that single quotes in input are properly handled (need to be doubled in MessageFormat)
+		assertEquals("Text with 'single quotes'", f("Text with {0}", "'single quotes'"));
+	}
+
+	@Test
 	@DisplayName("fs() - Supplier creation")
-	void f04_fsSupplierCreation() {
+	void f05_fsSupplierCreation() {
 		var supplier = fs("User {0} has {1} items", "Bob", 3);
 		assertEquals("User Bob has 3 items", supplier.get());
 
@@ -348,7 +364,7 @@ class Utils_Test extends TestBase {
 
 	@Test
 	@DisplayName("fs() - No parameters supplier")
-	void f05_fsNoParameters() {
+	void f06_fsNoParameters() {
 		assertEquals("Static message", fs("Static message").get());
 	}
 
@@ -357,9 +373,9 @@ class Utils_Test extends TestBase {
 	// ====================================================================================================
 
 	@Test
-	@DisplayName("getMatchPattern() - Basic wildcard patterns")
-	void g01_getMatchPatternBasicWildcards() {
-		var pattern = getMatchPattern("user_*_temp");
+	@DisplayName("getGlobMatchPattern() - Basic wildcard patterns")
+	void g01_getGlobMatchPatternBasicWildcards() {
+		var pattern = getGlobMatchPattern("user_*_temp");
 		assertTrue(pattern.matcher("user_alice_temp").matches());
 		assertTrue(pattern.matcher("user_bob_temp").matches());
 		assertTrue(pattern.matcher("user__temp").matches());  // Empty match
@@ -368,9 +384,9 @@ class Utils_Test extends TestBase {
 	}
 
 	@Test
-	@DisplayName("getMatchPattern() - Question mark patterns")
-	void g02_getMatchPatternQuestionMark() {
-		var pattern = getMatchPattern("file?.txt");
+	@DisplayName("getGlobMatchPattern() - Question mark patterns")
+	void g02_getGlobMatchPatternQuestionMark() {
+		var pattern = getGlobMatchPattern("file?.txt");
 		assertTrue(pattern.matcher("file1.txt").matches());
 		assertTrue(pattern.matcher("fileA.txt").matches());
 		assertTrue(pattern.matcher("file_.txt").matches());
@@ -379,9 +395,9 @@ class Utils_Test extends TestBase {
 	}
 
 	@Test
-	@DisplayName("getMatchPattern() - Combined wildcards")
-	void g03_getMatchPatternCombined() {
-		var pattern = getMatchPattern("test_*.?");
+	@DisplayName("getGlobMatchPattern() - Combined wildcards")
+	void g03_getGlobMatchPatternCombined() {
+		var pattern = getGlobMatchPattern("test_*.?");
 		assertTrue(pattern.matcher("test_data.1").matches());
 		assertTrue(pattern.matcher("test_long_filename.x").matches());
 		assertTrue(pattern.matcher("test_.a").matches());
@@ -390,48 +406,48 @@ class Utils_Test extends TestBase {
 	}
 
 	@Test
-	@DisplayName("getMatchPattern() - Special regex characters")
-	void g04_getMatchPatternSpecialChars() {
+	@DisplayName("getGlobMatchPattern() - Special regex characters")
+	void g04_getGlobMatchPatternSpecialChars() {
 		// Test that regex special characters are properly escaped
-		var pattern = getMatchPattern("file[1].txt");
+		var pattern = getGlobMatchPattern("file[1].txt");
 		assertTrue(pattern.matcher("file[1].txt").matches());
 		assertFalse(pattern.matcher("file1.txt").matches());   // Should not match as character class
 
-		pattern = getMatchPattern("amount$100");
+		pattern = getGlobMatchPattern("amount$100");
 		assertTrue(pattern.matcher("amount$100").matches());
 		assertFalse(pattern.matcher("amount100").matches());   // Should require the $ character
 	}
 
 	@Test
-	@DisplayName("getMatchPattern() - With flags")
-	void g05_getMatchPatternWithFlags() {
-		var pattern = getMatchPattern("USER_*", Pattern.CASE_INSENSITIVE);
+	@DisplayName("getGlobMatchPattern() - With flags")
+	void g05_getGlobMatchPatternWithFlags() {
+		var pattern = getGlobMatchPattern("USER_*", Pattern.CASE_INSENSITIVE);
 		assertTrue(pattern.matcher("user_alice").matches());
 		assertTrue(pattern.matcher("USER_BOB").matches());
 		assertTrue(pattern.matcher("User_Charlie").matches());
 	}
 
 	@Test
-	@DisplayName("getMatchPattern() - Null input")
-	void g06_getMatchPatternNull() {
-		assertNull(getMatchPattern(null));
-		assertNull(getMatchPattern(null, Pattern.CASE_INSENSITIVE));
+	@DisplayName("getGlobMatchPattern() - Null input")
+	void g06_getGlobMatchPatternNull() {
+		assertNull(getGlobMatchPattern(null));
+		assertNull(getGlobMatchPattern(null, Pattern.CASE_INSENSITIVE));
 	}
 
 	@Test
-	@DisplayName("getMatchPattern() - Empty and edge cases")
-	void g07_getMatchPatternEdgeCases() {
+	@DisplayName("getGlobMatchPattern() - Empty and edge cases")
+	void g07_getGlobMatchPatternEdgeCases() {
 		// Empty string
-		var pattern = getMatchPattern("");
+		var pattern = getGlobMatchPattern("");
 		assertTrue(pattern.matcher("").matches());
 		assertFalse(pattern.matcher("a").matches());
 
 		// Only wildcards
-		pattern = getMatchPattern("*");
+		pattern = getGlobMatchPattern("*");
 		assertTrue(pattern.matcher("").matches());
 		assertTrue(pattern.matcher("anything").matches());
 
-		pattern = getMatchPattern("?");
+		pattern = getGlobMatchPattern("?");
 		assertTrue(pattern.matcher("a").matches());
 		assertFalse(pattern.matcher("").matches());
 		assertFalse(pattern.matcher("ab").matches());

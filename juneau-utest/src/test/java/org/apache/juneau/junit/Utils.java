@@ -48,7 +48,7 @@ import org.opentest4j.*;
  *   String <jv>validated</jv> = <jsm>assertArgNotNull</jsm>(<js>"username"</js>, <jv>username</jv>);
  *
  *   <jc>// Pattern matching</jc>
- *   Pattern <jv>pattern</jv> = <jsm>getMatchPattern</jsm>(<js>"user_*_temp"</js>);
+ *   Pattern <jv>pattern</jv> = <jsm>getGlobMatchPattern</jsm>(<js>"user_*_temp"</js>);
  * </p>
  *
  * <p><b>Thread Safety:</b> All methods in this class are thread-safe as they are stateless static methods.
@@ -303,7 +303,7 @@ class Utils {
 	}
 
 	/**
-	 * Converts a string containing wildcard characters to a regular expression {@link Pattern}.
+	 * Converts a string containing glob-style wildcard characters to a regular expression {@link Pattern}.
 	 *
 	 * <p>This method converts glob-style patterns to regular expressions with the following mappings:
 	 * <ul>
@@ -314,21 +314,21 @@ class Utils {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 *   <jk>var</jk> <jv>pattern</jv> = <jsm>getMatchPattern</jsm>(<js>"user_*_temp"</js>);
+	 *   <jk>var</jk> <jv>pattern</jv> = <jsm>getGlobMatchPattern</jsm>(<js>"user_*_temp"</js>);
 	 *   <jk>boolean</jk> <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"user_alice_temp"</js>).matches();  <jc>// true</jc>
 	 *   <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"user_bob_temp"</js>).matches();    <jc>// true</jc>
 	 *   <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"admin_alice_temp"</js>).matches(); <jc>// false</jc>
 	 * </p>
 	 *
-	 * @param s The wildcard pattern string.
+	 * @param s The glob-style wildcard pattern string.
 	 * @return A compiled {@link Pattern} object, or null if the input string is null.
 	 */
-	public static Pattern getMatchPattern(String s) {
-		return getMatchPattern(s, 0);
+	public static Pattern getGlobMatchPattern(String s) {
+		return getGlobMatchPattern(s, 0);
 	}
 
 	/**
-	 * Converts a string containing wildcard characters to a regular expression {@link Pattern} with flags.
+	 * Converts a string containing glob-style wildcard characters to a regular expression {@link Pattern} with flags.
 	 *
 	 * <p>This method converts glob-style patterns to regular expressions with the following mappings:
 	 * <ul>
@@ -340,15 +340,15 @@ class Utils {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 *   <jc>// Case-insensitive matching</jc>
-	 *   <jk>var</jk> <jv>pattern</jv> = <jsm>getMatchPattern</jsm>(<js>"USER_*"</js>, Pattern.<jsf>CASE_INSENSITIVE</jsf>);
+	 *   <jk>var</jk> <jv>pattern</jv> = <jsm>getGlobMatchPattern</jsm>(<js>"USER_*"</js>, Pattern.<jsf>CASE_INSENSITIVE</jsf>);
 	 *   <jk>boolean</jk> <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"user_alice"</js>).matches();  <jc>// true</jc>
 	 * </p>
 	 *
-	 * @param s The wildcard pattern string.
+	 * @param s The glob-style wildcard pattern string.
 	 * @param flags Regular expression flags (see {@link Pattern} constants).
 	 * @return A compiled {@link Pattern} object, or null if the input string is null.
 	 */
-	public static Pattern getMatchPattern(String s, int flags) {
+	public static Pattern getGlobMatchPattern(String s, int flags) {
 		if (s == null)
 			return null;
 		var sb = new StringBuilder();

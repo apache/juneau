@@ -39,7 +39,7 @@ class PropertyExtractors_Test extends TestBase {
 
 	@Nested
 	@DisplayName("ObjectPropertyExtractor")
-	class ObjectPropertyExtractorTest {
+	class a_ObjectPropertyExtractorTest {
 
 		private PropertyExtractors.ObjectPropertyExtractor extractor = new PropertyExtractors.ObjectPropertyExtractor();
 
@@ -129,7 +129,7 @@ class PropertyExtractors_Test extends TestBase {
 
 	@Nested
 	@DisplayName("ListPropertyExtractor")
-	class ListPropertyExtractorTest {
+	class b_ListPropertyExtractorTest {
 
 		private PropertyExtractors.ListPropertyExtractor extractor = new PropertyExtractors.ListPropertyExtractor();
 
@@ -208,7 +208,7 @@ class PropertyExtractors_Test extends TestBase {
 
 	@Nested
 	@DisplayName("MapPropertyExtractor")
-	class MapPropertyExtractorTest {
+	class c_MapPropertyExtractorTest {
 
 		private PropertyExtractors.MapPropertyExtractor extractor = new PropertyExtractors.MapPropertyExtractor();
 
@@ -316,9 +316,9 @@ class PropertyExtractors_Test extends TestBase {
 		public int getAge() { return age; }
 		public boolean isActive() { return active; }
 
-		public void setName(String name) { this.name = name; }
-		public void setAge(int age) { this.age = age; }
-		public void setActive(boolean active) { this.active = active; }
+		void setName(String name) { this.name = name; }
+		void setAge(int age) { this.age = age; }
+		void setActive(boolean active) { this.active = active; }
 	}
 
 	public static class TestBeanWithFields {
