@@ -475,12 +475,9 @@ public class Assertions2 {
 	/**
 	 * Asserts that mapped property access on an object returns expected values using a custom BiFunction.
 	 *
-	 * <p>This is the most powerful and flexible BCT method, designed for testing objects that don't follow
+	 * <p>This is designed for testing objects that don't follow
 	 * standard JavaBean patterns or require custom property access logic. The BiFunction allows complete
 	 * control over how properties are retrieved from the target object.</p>
-	 *
-	 * <p>When the BiFunction throws an exception, it's automatically caught and the exception's
-	 * simple class name becomes the property value for comparison (e.g., "NullPointerException").</p>
 	 *
 	 * <p>This method creates an intermediate LinkedHashMap to collect all property values before
 	 * using the same logic as assertBean for comparison. This ensures consistent ordering
@@ -697,16 +694,12 @@ public class Assertions2 {
 	}
 
 	/**
-	 * Asserts that a List contains the expected values using flexible comparison logic.
-	 *
-	 * <p>This is the primary method for testing all collection-like types. For non-List collections, use
-	 * {@link #l(Object)} to convert them to Lists first. This unified approach eliminates the need for
-	 * separate assertion methods for arrays, sets, and other collection types.</p>
+	 * Asserts that a List or List-like object contains the expected values using flexible comparison logic.
 	 *
 	 * <h5 class='section'>Testing Non-List Collections:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test a Set using l() conversion</jc>
-	 * 	Set&lt;String&gt; <jv>mySet</jv> = Set.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 * 	Set&lt;String&gt; <jv>mySet</jv> = <jk>new</jk> TreeSet&lt;&gt;(Arrays.<jsm>asList</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>));
 	 * 	<jsm>assertList</jsm>(<jsm>l</jsm>(<jv>mySet</jv>), <js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
 	 *
 	 * 	<jc>// Test an array using l() conversion</jc>
@@ -725,7 +718,7 @@ public class Assertions2 {
 	 * <p class='bjava'>
 	 * 	<jc>// Elements are converted to strings using the bean converter and compared as strings</jc>
 	 * 	<jsm>assertList</jsm>(List.<jsm>of</jsm>(1, 2, 3), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
-	 * 	<jsm>assertList</jsm>(List.<jsm>of</jsm>("a", "b"), <js>"a"</js>, <js>"b"</js>);
+	 * 	<jsm>assertList</jsm>(List.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>), <js>"a"</js>, <js>"b"</js>);
 	 * </p>
 	 *
 	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
