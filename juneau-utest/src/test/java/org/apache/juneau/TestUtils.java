@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.junit.*;
+import org.apache.juneau.junit.bct.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
