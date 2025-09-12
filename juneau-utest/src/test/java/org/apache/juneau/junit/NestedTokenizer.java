@@ -27,32 +27,32 @@ import java.util.*;
  *
  * <h5 class='section'>Supported Syntax:</h5>
  * <ul>
- * 	<li><js>"foo"</js> - Single value token</li>
- * 	<li><js>"foo,bar"</js> - Multiple value tokens</li>
- * 	<li><js>"foo{a,b},bar"</js> - Token with nested values</li>
- * 	<li><js>"foo{a{a1,a2}},bar"</js> - Recursively nested values</li>
- * 	<li><js>"foo\\,bar"</js> - Escaped comma in value</li>
- * 	<li><js>"foo\\{bar\\}"</js> - Escaped braces in value</li>
+ *    <li><js>"foo"</js> - Single value token</li>
+ *    <li><js>"foo,bar"</js> - Multiple value tokens</li>
+ *    <li><js>"foo{a,b},bar"</js> - Token with nested values</li>
+ *    <li><js>"foo{a{a1,a2}},bar"</js> - Recursively nested values</li>
+ *    <li><js>"foo\\,bar"</js> - Escaped comma in value</li>
+ *    <li><js>"foo\\{bar\\}"</js> - Escaped braces in value</li>
  * </ul>
  *
  * <h5 class='section'>State Machine:</h5>
  * <p>The parser operates in several states:</p>
  * <ul>
- * 	<li><b>PARSING_VALUE:</b> Reading a token value</li>
- * 	<li><b>PARSING_NESTED:</b> Reading nested content within braces</li>
- * 	<li><b>IN_ESCAPE:</b> Processing escaped character</li>
+ *    <li><b>PARSING_VALUE:</b> Reading a token value</li>
+ *    <li><b>PARSING_NESTED:</b> Reading nested content within braces</li>
+ *    <li><b>IN_ESCAPE:</b> Processing escaped character</li>
  * </ul>
  *
  * <h5 class='section'>Usage Examples:</h5>
  * <p class='bjava'>
- * 	<jc>// Simple tokens</jc>
- * 	<jk>var</jk> <jv>tokens</jv> = NestedTokenizer.<jsm>tokenize</jsm>(<js>"foo,bar,baz"</js>);
- * 	<jc>// tokens = [Token{value="foo"}, Token{value="bar"}, Token{value="baz"}]</jc>
+ *    <jc>// Simple tokens</jc>
+ *    <jk>var</jk> <jv>tokens</jv> = NestedTokenizer.<jsm>tokenize</jsm>(<js>"foo,bar,baz"</js>);
+ *    <jc>// tokens = [Token{value="foo"}, Token{value="bar"}, Token{value="baz"}]</jc>
  *
- * 	<jc>// Nested tokens</jc>
- * 	<jk>var</jk> <jv>nested</jv> = NestedTokenizer.<jsm>tokenize</jsm>(<js>"user{name,email},config{timeout,retries}"</js>);
- * 	<jc>// nested[0] = Token{value="user", nested=[Token{value="name"}, Token{value="email"}]}</jc>
- * 	<jc>// nested[1] = Token{value="config", nested=[Token{value="timeout"}, Token{value="retries"}]}</jc>
+ *    <jc>// Nested tokens</jc>
+ *    <jk>var</jk> <jv>nested</jv> = NestedTokenizer.<jsm>tokenize</jsm>(<js>"user{name,email},config{timeout,retries}"</js>);
+ *    <jc>// nested[0] = Token{value="user", nested=[Token{value="name"}, Token{value="email"}]}</jc>
+ *    <jc>// nested[1] = Token{value="config", nested=[Token{value="timeout"}, Token{value="retries"}]}</jc>
  * </p>
  */
 class NestedTokenizer {
@@ -132,7 +132,7 @@ class NestedTokenizer {
 						state = PARSING_VALUE;
 					}
 				}
-			} else if (state == IN_ESCAPE) {
+			} else /* (state == IN_ESCAPE) */ {
 				// Add the escaped character to current value only if we're parsing the main token value
 				if (nestedDepth == 0) {
 					currentValue.append(c);
@@ -168,14 +168,14 @@ class NestedTokenizer {
 	 *
 	 * <h5 class='section'>Structure:</h5>
 	 * <ul>
-	 * 	<li><b>value:</b> The main token value (part before any braces)</li>
-	 * 	<li><b>nested:</b> Optional list of nested tokens (content within braces)</li>
+	 *    <li><b>value:</b> The main token value (part before any braces)</li>
+	 *    <li><b>nested:</b> Optional list of nested tokens (content within braces)</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <ul>
-	 * 	<li><js>"foo"</js> → <js>Token{value="foo", nested=null}</js></li>
-	 * 	<li><js>"foo{a,b}"</js> → <js>Token{value="foo", nested=[Token{value="a"}, Token{value="b"}]}</js></li>
+	 *    <li><js>"foo"</js> → <js>Token{value="foo", nested=null}</js></li>
+	 *    <li><js>"foo{a,b}"</js> → <js>Token{value="foo", nested=[Token{value="a"}, Token{value="b"}]}</js></li>
 	 * </ul>
 	 */
 	public static class Token {

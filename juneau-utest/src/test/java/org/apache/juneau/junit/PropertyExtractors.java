@@ -28,18 +28,18 @@ import java.util.*;
  * <h5 class='section'>Extractor Hierarchy:</h5>
  * <p>The extractors form an inheritance hierarchy for code reuse:</p>
  * <ul>
- * 	<li><b>{@link ObjectPropertyExtractor}</b> - Base class with JavaBean property access</li>
- * 	<li><b>{@link ListPropertyExtractor}</b> - Extends ObjectPropertyExtractor with array/collection support</li>
- * 	<li><b>{@link MapPropertyExtractor}</b> - Extends ObjectPropertyExtractor with Map key access</li>
+ *    <li><b>{@link ObjectPropertyExtractor}</b> - Base class with JavaBean property access</li>
+ *    <li><b>{@link ListPropertyExtractor}</b> - Extends ObjectPropertyExtractor with array/collection support</li>
+ *    <li><b>{@link MapPropertyExtractor}</b> - Extends ObjectPropertyExtractor with Map key access</li>
  * </ul>
  *
  * <h5 class='section'>Execution Order:</h5>
  * <p>In {@link BasicBeanConverter}, the extractors are tried in this order:</p>
  * <ol>
- * 	<li><b>Custom extractors</b> - User-registered extractors via {@link BasicBeanConverter.Builder#addPropertyExtractor(PropertyExtractor)}</li>
- * 	<li><b>{@link ObjectPropertyExtractor}</b> - JavaBean properties, fields, and methods</li>
- * 	<li><b>{@link ListPropertyExtractor}</b> - Array/collection indices and size properties</li>
- * 	<li><b>{@link MapPropertyExtractor}</b> - Map key access and size property</li>
+ *    <li><b>Custom extractors</b> - User-registered extractors via {@link BasicBeanConverter.Builder#addPropertyExtractor(PropertyExtractor)}</li>
+ *    <li><b>{@link ObjectPropertyExtractor}</b> - JavaBean properties, fields, and methods</li>
+ *    <li><b>{@link ListPropertyExtractor}</b> - Array/collection indices and size properties</li>
+ *    <li><b>{@link MapPropertyExtractor}</b> - Map key access and size property</li>
  * </ol>
  *
  * <h5 class='section'>Property Access Strategy:</h5>
@@ -51,6 +51,8 @@ import java.util.*;
  */
 public class PropertyExtractors {
 
+	private PropertyExtractors() {}
+
 	/**
 	 * Standard JavaBean property extractor using reflection.
 	 *
@@ -60,25 +62,25 @@ public class PropertyExtractors {
 	 *
 	 * <h5 class='section'>Property Access Order:</h5>
 	 * <ol>
-	 * 	<li><b>{@code is{Property}()}</b> - Boolean property getters (e.g., {@code isActive()})</li>
-	 * 	<li><b>{@code get{Property}()}</b> - Standard getter methods (e.g., {@code getName()})</li>
-	 * 	<li><b>{@code get(String)}</b> - Map-style property access with property name as parameter</li>
-	 * 	<li><b>Fields</b> - Public fields with matching names (searches inheritance hierarchy)</li>
-	 * 	<li><b>{@code {property}()}</b> - No-argument methods with exact property name</li>
+	 *    <li><b>{@code is{Property}()}</b> - Boolean property getters (e.g., {@code isActive()})</li>
+	 *    <li><b>{@code get{Property}()}</b> - Standard getter methods (e.g., {@code getName()})</li>
+	 *    <li><b>{@code get(String)}</b> - Map-style property access with property name as parameter</li>
+	 *    <li><b>Fields</b> - Public fields with matching names (searches inheritance hierarchy)</li>
+	 *    <li><b>{@code {property}()}</b> - No-argument methods with exact property name</li>
 	 * </ol>
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Property "name" can be accessed via:</jc>
-	 * 	<jv>obj</jv>.getName()        <jc>// Standard getter</jc>
-	 * 	<jv>obj</jv>.name             <jc>// Public field</jc>
-	 * 	<jv>obj</jv>.name()           <jc>// Method with property name</jc>
-	 * 	<jv>obj</jv>.get(<js>"name"</js>)       <jc>// Map-style getter</jc>
+	 *    <jc>// Property "name" can be accessed via:</jc>
+	 *    <jv>obj</jv>.getName()        <jc>// Standard getter</jc>
+	 *    <jv>obj</jv>.name             <jc>// Public field</jc>
+	 *    <jv>obj</jv>.name()           <jc>// Method with property name</jc>
+	 *    <jv>obj</jv>.get(<js>"name"</js>)       <jc>// Map-style getter</jc>
 	 *
-	 * 	<jc>// Property "active" (boolean) can be accessed via:</jc>
-	 * 	<jv>obj</jv>.isActive()       <jc>// Boolean getter</jc>
-	 * 	<jv>obj</jv>.getActive()      <jc>// Standard getter alternative</jc>
-	 * 	<jv>obj</jv>.active           <jc>// Public field</jc>
+	 *    <jc>// Property "active" (boolean) can be accessed via:</jc>
+	 *    <jv>obj</jv>.isActive()       <jc>// Boolean getter</jc>
+	 *    <jv>obj</jv>.getActive()      <jc>// Standard getter alternative</jc>
+	 *    <jv>obj</jv>.active           <jc>// Public field</jc>
 	 * </p>
 	 *
 	 * <p><b>Compatibility:</b> This extractor can handle any object type, making it the
@@ -129,7 +131,7 @@ public class PropertyExtractors {
 						m.setAccessible(true);
 						return m.invoke(o);
 					}
-					throw new RuntimeException(f("Property {0} not found on object of type {1}", name, o.getClass().getSimpleName()));
+					throw new PropertyNotFoundException(name, o.getClass());
 				});
 		}
 	}
@@ -143,32 +145,32 @@ public class PropertyExtractors {
 	 *
 	 * <h5 class='section'>Additional Properties:</h5>
 	 * <ul>
-	 * 	<li><b>Numeric indices:</b> <js>"0"</js>, <js>"1"</js>, <js>"2"</js>, etc. for element access</li>
-	 * 	<li><b>Negative indices:</b> <js>"-1"</js>, <js>"-2"</js> for reverse indexing (from end)</li>
-	 * 	<li><b>Size properties:</b> <js>"length"</js> and <js>"size"</js> return collection size</li>
+	 *    <li><b>Numeric indices:</b> <js>"0"</js>, <js>"1"</js>, <js>"2"</js>, etc. for element access</li>
+	 *    <li><b>Negative indices:</b> <js>"-1"</js>, <js>"-2"</js> for reverse indexing (from end)</li>
+	 *    <li><b>Size properties:</b> <js>"length"</js> and <js>"size"</js> return collection size</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Supported Types:</h5>
 	 * <p>Works with any object that can be listified by the converter:</p>
 	 * <ul>
-	 * 	<li><b>Arrays:</b> All array types (primitive and object)</li>
-	 * 	<li><b>Collections:</b> List, Set, Queue, and all Collection subtypes</li>
-	 * 	<li><b>Iterables:</b> Any object implementing Iterable</li>
-	 * 	<li><b>Streams:</b> Stream objects and other lazy sequences</li>
-	 * 	<li><b>Maps:</b> Converted to list of entries for iteration</li>
+	 *    <li><b>Arrays:</b> All array types (primitive and object)</li>
+	 *    <li><b>Collections:</b> List, Set, Queue, and all Collection subtypes</li>
+	 *    <li><b>Iterables:</b> Any object implementing Iterable</li>
+	 *    <li><b>Streams:</b> Stream objects and other lazy sequences</li>
+	 *    <li><b>Maps:</b> Converted to list of entries for iteration</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Array/List access</jc>
-	 * 	<jv>list</jv>.get(0)          <jc>// "0" property</jc>
-	 * 	<jv>array</jv>[2]             <jc>// "2" property</jc>
-	 * 	<jv>list</jv>.get(-1)         <jc>// "-1" property (last element)</jc>
+	 *    <jc>// Array/List access</jc>
+	 *    <jv>list</jv>.get(0)          <jc>// "0" property</jc>
+	 *    <jv>array</jv>[2]             <jc>// "2" property</jc>
+	 *    <jv>list</jv>.get(-1)         <jc>// "-1" property (last element)</jc>
 	 *
-	 * 	<jc>// Size access</jc>
-	 * 	<jv>array</jv>.length         <jc>// "length" property</jc>
-	 * 	<jv>collection</jv>.size()    <jc>// "size" property</jc>
-	 * 	<jv>stream</jv>.count()       <jc>// "length" or "size" property</jc>
+	 *    <jc>// Size access</jc>
+	 *    <jv>array</jv>.length         <jc>// "length" property</jc>
+	 *    <jv>collection</jv>.size()    <jc>// "size" property</jc>
+	 *    <jv>stream</jv>.count()       <jc>// "length" or "size" property</jc>
 	 * </p>
 	 *
 	 * <p><b>Fallback:</b> If the property is not a numeric index or size property,
@@ -206,28 +208,28 @@ public class PropertyExtractors {
 	 *
 	 * <h5 class='section'>Map-Specific Properties:</h5>
 	 * <ul>
-	 * 	<li><b>Direct key access:</b> Any property name that exists as a Map key</li>
-	 * 	<li><b>Size property:</b> {@code "size"} returns {@code map.size()}</li>
+	 *    <li><b>Direct key access:</b> Any property name that exists as a Map key</li>
+	 *    <li><b>Size property:</b> {@code "size"} returns {@code map.size()}</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Supported Types:</h5>
 	 * <p>Works with any object implementing the {@code Map} interface:</p>
 	 * <ul>
-	 * 	<li><b>HashMap, LinkedHashMap:</b> Standard Map implementations</li>
-	 * 	<li><b>TreeMap, ConcurrentHashMap:</b> Specialized Map implementations</li>
-	 * 	<li><b>Properties:</b> Java Properties objects</li>
-	 * 	<li><b>Custom Maps:</b> Any Map implementation</li>
+	 *    <li><b>HashMap, LinkedHashMap:</b> Standard Map implementations</li>
+	 *    <li><b>TreeMap, ConcurrentHashMap:</b> Specialized Map implementations</li>
+	 *    <li><b>Properties:</b> Java Properties objects</li>
+	 *    <li><b>Custom Maps:</b> Any Map implementation</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Direct key access</jc>
-	 * 	<jv>map</jv>.get(<js>"name"</js>)       <jc>// "name" property</jc>
-	 * 	<jv>map</jv>.get(<js>"timeout"</js>)    <jc>// "timeout" property</jc>
-	 * 	<jv>props</jv>.getProperty(<js>"key"</js>) <jc>// "key" property</jc>
+	 *    <jc>// Direct key access</jc>
+	 *    <jv>map</jv>.get(<js>"name"</js>)       <jc>// "name" property</jc>
+	 *    <jv>map</jv>.get(<js>"timeout"</js>)    <jc>// "timeout" property</jc>
+	 *    <jv>props</jv>.getProperty(<js>"key"</js>) <jc>// "key" property</jc>
 	 *
-	 * 	<jc>// Size access</jc>
-	 * 	<jv>map</jv>.size()           <jc>// "size" property</jc>
+	 *    <jc>// Size access</jc>
+	 *    <jv>map</jv>.size()           <jc>// "size" property</jc>
 	 * </p>
 	 *
 	 * <h5 class='section'>Key Priority:</h5>

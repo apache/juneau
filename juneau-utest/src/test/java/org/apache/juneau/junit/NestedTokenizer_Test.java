@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit;
 
-import static org.apache.juneau.junit.Assertions2.*;
+import static org.apache.juneau.junit.BctAssertions.*;
 import static org.apache.juneau.junit.NestedTokenizer.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,12 +25,12 @@ import org.junit.jupiter.api.*;
  *
  * <p>Tests cover all aspects of the state machine parser including:</p>
  * <ul>
- * 	<li>Simple token parsing</li>
- * 	<li>Nested token structures</li>
- * 	<li>Escape sequence handling</li>
- * 	<li>Deep nesting scenarios</li>
- * 	<li>Edge cases and error conditions</li>
- * 	<li>Token object functionality</li>
+ *    <li>Simple token parsing</li>
+ *    <li>Nested token structures</li>
+ *    <li>Escape sequence handling</li>
+ *    <li>Deep nesting scenarios</li>
+ *    <li>Edge cases and error conditions</li>
+ *    <li>Token object functionality</li>
  * </ul>
  */
 class NestedTokenizer_Test extends TestBase {
@@ -40,6 +40,8 @@ class NestedTokenizer_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_simpleTokens() {
+		new NestedTokenizer();
+
 		// Single token
 		var tokens = tokenize("foo");
 		assertList(tokens, token("foo"));
@@ -241,6 +243,35 @@ class NestedTokenizer_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> tokenize("   "));
 	}
 
+	@Test void c04_finalTokenLogic() {
+		// Test line 136: final token addition logic
+
+		// Case 1: Empty final value with trailing comma (lastWasComma = true)
+		var tokens = tokenize("a,");
+		assertEquals(2, tokens.size());
+		assertEquals("a", tokens.get(0).getValue());
+		assertEquals("", tokens.get(1).getValue()); // Empty token added due to trailing comma
+
+		// Case 2: No tokens yet and empty input should create one empty token
+		// This is handled by error conditions, but let's test a whitespace-only case after comma
+		tokens = tokenize(",   ");
+		assertEquals(2, tokens.size());
+		assertEquals("", tokens.get(0).getValue());
+		assertEquals("", tokens.get(1).getValue()); // Empty final value but added because of lastWasComma
+
+		// Case 3: Non-empty final value should always be added
+		tokens = tokenize("a,b");
+		assertEquals(2, tokens.size());
+		assertEquals("a", tokens.get(0).getValue());
+		assertEquals("b", tokens.get(1).getValue());
+
+		// Case 4: Test with nested content and trailing comma
+		tokens = tokenize("root{a,},next");
+		assertEquals(2, tokens.size());
+		assertToken(tokens.get(0), "root", "a", ""); // Empty token in nested due to trailing comma
+		assertEquals("next", tokens.get(1).getValue());
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Token object tests
 	//------------------------------------------------------------------------------------------------------------------
@@ -285,6 +316,46 @@ class NestedTokenizer_Test extends TestBase {
 		assertNotEquals(nested1, nested3);
 	}
 
+	@Test void d06_tokenEqualsEdgeCases() {
+		// Test line 229: equals() method edge cases
+		var token = new Token("test");
+
+		// Case 1: Self equality
+		assertEquals(token, token);
+
+		// Case 2: Null comparison
+		assertNotEquals(token, null);
+
+		// Case 3: Different object type
+		assertNotEquals(token, "not a token");
+		assertNotEquals(token, Integer.valueOf(42));
+
+		// Case 4: Different value, same nested (null)
+		var other = new Token("different");
+		assertNotEquals(token, other);
+
+		// Case 5: Same value, different nested content
+		var token1 = new Token("same");
+		var token2 = new Token("same");
+		token1.setNested(Arrays.asList(new Token("child1")));
+		token2.setNested(Arrays.asList(new Token("child2")));
+		assertNotEquals(token1, token2);
+
+		// Case 6: Same value, one has nested, other doesn't
+		var token3 = new Token("same");
+		var token4 = new Token("same");
+		token3.setNested(Arrays.asList(new Token("child")));
+		// token4 has no nested content
+		assertNotEquals(token3, token4);
+
+		// Case 7: Both have null nested
+		var token5 = new Token("same");
+		var token6 = new Token("same");
+		token5.setNested(null);
+		token6.setNested(null);
+		assertEquals(token5, token6);
+	}
+
 	@Test void d03_tokenToString() {
 		// Simple token
 		var token = new Token("test");
@@ -318,6 +389,27 @@ class NestedTokenizer_Test extends TestBase {
 		// Verify unmodifiable
 		var nested = parent.getNested();
 		assertThrows(UnsupportedOperationException.class, () -> nested.add(new Token("child3")));
+	}
+
+	@Test void d05_hasNestedEdgeCases() {
+		// Test line 201: hasNested() method edge cases
+		var token = new Token("test");
+
+		// Case 1: null nested list
+		token.setNested(null);
+		assertFalse(token.hasNested()); // Should return false when nested is null
+
+		// Case 2: empty nested list
+		token.setNested(new ArrayList<>());
+		assertFalse(token.hasNested()); // Should return false when nested is empty
+
+		// Case 3: non-empty nested list
+		token.setNested(Arrays.asList(new Token("child")));
+		assertTrue(token.hasNested()); // Should return true when nested has content
+
+		// Case 4: nested list with multiple items
+		token.setNested(Arrays.asList(new Token("child1"), new Token("child2")));
+		assertTrue(token.hasNested()); // Should return true when nested has multiple items
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

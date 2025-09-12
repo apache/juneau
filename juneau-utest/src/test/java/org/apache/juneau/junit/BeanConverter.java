@@ -21,20 +21,20 @@ import java.util.*;
  * and for accessing object properties in a uniform way. It forms the foundation of the BCT
  * testing framework, enabling consistent object introspection and value extraction across
  * different object types and structures.</p>
- * 
+ *
  * <h5 class='section'>Core Conversion Operations:</h5>
  * <dl>
- * 	<dt><b>{@link #stringify(Object)}</b></dt>
- * 	<dd>Converts any object to its string representation, handling nested structures</dd>
+ *    <dt><b>{@link #stringify(Object)}</b></dt>
+ *    <dd>Converts any object to its string representation, handling nested structures</dd>
  *
- * 	<dt><b>{@link #listify(Object)}</b></dt>
- * 	<dd>Converts collection-like objects (arrays, Collections, Iterables, etc.) to List&lt;Object&gt;</dd>
+ *    <dt><b>{@link #listify(Object)}</b></dt>
+ *    <dd>Converts collection-like objects (arrays, Collections, Iterables, etc.) to List&lt;Object&gt;</dd>
  *
- * 	<dt><b>{@link #swap(Object)}</b></dt>
- * 	<dd>Pre-processes objects before conversion (e.g., unwrapping Optional, calling Supplier)</dd>
+ *    <dt><b>{@link #swap(Object)}</b></dt>
+ *    <dd>Pre-processes objects before conversion (e.g., unwrapping Optional, calling Supplier)</dd>
  *
- * 	<dt><b>{@link #getProperty(Object, String)}</b></dt>
- * 	<dd>Accesses object properties using multiple fallback mechanisms</dd>
+ *    <dt><b>{@link #getProperty(Object, String)}</b></dt>
+ *    <dd>Accesses object properties using multiple fallback mechanisms</dd>
  * </dl>
  *
  * <h5 class='section'>Property Access Strategy:</h5>
@@ -43,14 +43,14 @@ import java.util.*;
  * <h5 class='section'>Usage in BCT Framework:</h5>
  * <p>This interface is used internally by BCT assertion methods like:</p>
  * <ul>
- * 	<li>{@link Assertions2#assertBean(Object, String, String)}</li>
- * 	<li>{@link Assertions2#assertMapped(Object, java.util.function.BiFunction, String, String)}</li>
- * 	<li>{@link Assertions2#assertList(List, Object...)}</li>
- * 	<li>{@link Assertions2#assertBeans(Collection, String, String...)}</li>
+ *    <li>{@link BctAssertions#assertBean(Object, String, String)}</li>
+ *    <li>{@link BctAssertions#assertMapped(Object, java.util.function.BiFunction, String, String)}</li>
+ *    <li>{@link BctAssertions#assertList(List, Object...)}</li>
+ *    <li>{@link BctAssertions#assertBeans(Collection, String, String...)}</li>
  * </ul>
  *
  * @see BasicBeanConverter
- * @see Assertions2
+ * @see BctAssertions
  */
 public interface BeanConverter {
 
@@ -65,16 +65,17 @@ public interface BeanConverter {
 	/**
 	 * Converts a collection-like object to a standardized List&lt;Object&gt; format.
 	 *
-	 * @param o The object to convert to a list
-	 * @return A List containing the elements, or null if the object is null
+	 * @param o The object to convert to a list. Must not be null.
+	 * @return A List containing the elements
+	 * @throws IllegalArgumentException if the object is null or cannot be converted to a list
 	 */
 	List<Object> listify(Object o);
 
 	/**
 	 * Determines if an object can be converted to a list.
 	 *
-	 * @param o The object to test
-	 * @return True if the object can be listified, false otherwise
+	 * @param o The object to test. May be null.
+	 * @return True if the object can be listified, false if null or cannot be listified
 	 */
 	boolean canListify(Object o);
 
@@ -109,9 +110,10 @@ public interface BeanConverter {
 	/**
 	 * Extracts a nested property value using structured field access syntax.
 	 *
-	 * @param o The object to extract nested properties from
-	 * @param token The parsed token containing the property access structure
+	 * @param o The object to extract nested properties from. May be null.
+	 * @param token The parsed token containing the property access structure. Must not be null.
 	 * @return A formatted string representation of the extracted nested values
+	 * @throws IllegalArgumentException if the token is null
 	 */
 	String getNested(Object o, NestedTokenizer.Token token);
 }

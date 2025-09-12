@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit;
 
-import static org.apache.juneau.junit.Assertions2.*;
+import static org.apache.juneau.junit.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -456,7 +456,7 @@ class Stringifiers_Test extends TestBase {
 
 			// Order may vary, so check both possibilities
 			assertTrue(result.equals("{key1=value1,key2=value2}") ||
-					   result.equals("{key2=value2,key1=value1}"));
+				result.equals("{key2=value2,key1=value1}"));
 		}
 
 		@Test

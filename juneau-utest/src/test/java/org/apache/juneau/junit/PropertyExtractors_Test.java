@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit;
 
-import static org.apache.juneau.junit.Assertions2.*;
+import static org.apache.juneau.junit.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -118,8 +118,55 @@ class PropertyExtractors_Test extends TestBase {
 			var bean = new TestBean("John", 30, true);
 
 			var ex = assertThrows(RuntimeException.class, () ->
-				extractor.extract(converter, bean, "nonExistentProperty"));
-			assertContains(ex.getMessage(), "Property nonExistentProperty not found on object of type TestBean");
+			extractor.extract(converter, bean, "nonExistentProperty"));
+			assertContains("Property 'nonExistentProperty' not found on object of type TestBean", ex.getMessage());
+		}
+
+		@Test
+		@DisplayName("extract() - isX methods with parameters are ignored (line 91)")
+		void a10_extract_isMethodsWithParametersIgnored() {
+			var bean = new TestBeanWithParameterizedMethods();
+
+			// isActive() with no parameters should work
+			assertEquals(true, extractor.extract(converter, bean, "active"));
+
+			// isValid(String) with parameters should be ignored and fall back to property not found
+			var ex = assertThrows(RuntimeException.class, () ->
+				extractor.extract(converter, bean, "valid"));
+			assertContains("Property 'valid' not found", ex.getMessage());
+		}
+
+		@Test
+		@DisplayName("extract() - getX methods with parameters are ignored (line 96)")
+		void a11_extract_getMethodsWithParametersIgnored() {
+			var bean = new TestBeanWithParameterizedMethods();
+
+			// getName() with no parameters should work
+			assertEquals("test", extractor.extract(converter, bean, "name"));
+
+			// getDescription(String) with parameters should be ignored and fall back to property not found
+			var ex = assertThrows(RuntimeException.class, () ->
+				extractor.extract(converter, bean, "description"));
+			assertContains("Property 'description' not found", ex.getMessage());
+		}
+
+		@Test
+		@DisplayName("extract() - get() methods with wrong signature are ignored (line 101)")
+		void a12_extract_getMethodsWithWrongSignatureIgnored() {
+			var bean = new TestBeanWithInvalidGetMethods();
+
+			// get(String) with correct signature should work
+			assertEquals("mapped_value", extractor.extract(converter, bean, "key"));
+
+			// For a property that doesn't exist, the get(String) method will still be called
+			// but should return the result from get("nonExistent")
+			assertEquals("mapped_value", extractor.extract(converter, bean, "nonExistent"));
+
+			// Test with a bean that has ONLY invalid get methods (no valid get(String))
+			var beanWithoutValidGet = new TestBeanWithOnlyInvalidGetMethods();
+			var ex = assertThrows(RuntimeException.class, () ->
+				extractor.extract(converter, beanWithoutValidGet, "nonExistent"));
+			assertContains("Property 'nonExistent' not found", ex.getMessage());
 		}
 	}
 
@@ -248,8 +295,8 @@ class PropertyExtractors_Test extends TestBase {
 
 			// Non-existent key should fall back to ObjectPropertyExtractor and throw exception
 			var ex = assertThrows(RuntimeException.class, () ->
-				extractor.extract(converter, map, "nonExistentKey"));
-			assertContains(ex.getMessage(), "Property nonExistentKey not found on object of type HashMap");
+			extractor.extract(converter, map, "nonExistentKey"));
+			assertContains("Property 'nonExistentKey' not found on object of type HashMap", ex.getMessage());
 		}
 
 		@Test
@@ -286,8 +333,32 @@ class PropertyExtractors_Test extends TestBase {
 		}
 
 		@Test
+		@DisplayName("extract() - null value setting handling")
+		void c08_extract_nullValueSettingHandling() {
+			// Test the specific line 238 logic where property name matches nullValue setting
+			var map = new HashMap<String, Object>();
+			map.put(null, "null key value"); // Map with actual null key
+			map.put("other", "other value");
+
+			// When property name matches the nullValue setting ("<null>"), it should be converted to null
+			assertEquals("null key value", extractor.extract(converter, map, "<null>"));
+
+			// Test with custom nullValue setting
+			var customConverter = BasicBeanConverter.builder()
+				.defaultSettings()
+				.addSetting(BasicBeanConverter.SETTING_nullValue, "NULL_KEY")
+				.build();
+
+			var customExtractor = new PropertyExtractors.MapPropertyExtractor();
+			map.put("NULL_KEY", "literal null key string"); // Map with literal "NULL_KEY" string
+
+			// When property name matches custom nullValue setting, it should look for null key
+			assertEquals("null key value", customExtractor.extract(customConverter, map, "NULL_KEY"));
+		}
+
+		@Test
 		@DisplayName("extract() - falls back to ObjectPropertyExtractor")
-		void c08_extract_fallbackToObjectPropertyExtractor() {
+		void c09_extract_fallbackToObjectPropertyExtractor() {
 			var map = new TestMapWithMethods();
 
 			// Should fall back to HashMap.isEmpty() method since "empty" is not a key
@@ -354,6 +425,73 @@ class PropertyExtractors_Test extends TestBase {
 
 		public String getCustomProperty() {
 			return "method value";
+		}
+	}
+
+	public static class TestBeanWithParameterizedMethods {
+		// Valid methods that should work
+		public boolean isActive() {
+			return true;
+		}
+
+		public String getName() {
+			return "test";
+		}
+
+		// Invalid methods that should be ignored due to parameters (lines 91 & 96)
+		public boolean isValid(String criteria) {
+			return criteria != null;
+		}
+
+		public String getDescription(String language) {
+			return "Description in " + language;
+		}
+
+		public String getDescription(String language, String format) {
+			return "Description in " + language + " format " + format;
+		}
+	}
+
+	public static class TestBeanWithInvalidGetMethods {
+		// Valid get(String) method that should work (line 101)
+		public String get(String key) {
+			return "mapped_value";
+		}
+
+		// Invalid get() methods that should be ignored due to wrong signatures
+		public String get() {
+			return "no_parameters";
+		}
+
+		public String get(int index) {
+			return "wrong_parameter_type";
+		}
+
+		public String get(String key1, String key2) {
+			return "too_many_parameters";
+		}
+
+		public Integer get(String key, boolean flag) {
+			return 42; // Wrong return type and too many parameters
+		}
+	}
+
+	public static class TestBeanWithOnlyInvalidGetMethods {
+		// Only invalid get() methods that should be ignored due to wrong signatures
+		public String get() {
+			return "no_parameters";
+		}
+
+		public String get(int index) {
+			return "wrong_parameter_type";
+		}
+
+		public String get(String key1, String key2) {
+			return "too_many_parameters";
+		}
+
+		public Integer get(String key, boolean flag) {
+			return 42; // Wrong return type and too many parameters
 		}
 	}
 }

@@ -23,39 +23,39 @@ import java.util.function.*;
  *
  * <h5 class='section'>Usage Examples:</h5>
  * <p class='bjava'>
- * 	<jc>// Simple custom format</jc>
- * 	Stringifier&lt;LocalDate&gt; <jv>dateStringifier</jv> = (<jp>conv</jp>, <jp>date</jp>) -&gt;
- * 		<jp>date</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE</jsf>);
+ *    <jc>// Simple custom format</jc>
+ *    Stringifier&lt;LocalDate&gt; <jv>dateStringifier</jv> = (<jp>conv</jp>, <jp>date</jp>) -&gt;
+ *       <jp>date</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE</jsf>);
  *
- * 	<jc>// Complex nested object formatting</jc>
- * 	Stringifier&lt;Person&gt; <jv>personStringifier</jv> = (<jp>conv</jp>, <jp>person</jp>) -&gt;
- * 		<jp>person</jp>.getName() + <js>" ("</js> + <jp>conv</jp>.stringify(<jp>person</jp>.getAddress()) + <js>")"</js>;
+ *    <jc>// Complex nested object formatting</jc>
+ *    Stringifier&lt;Person&gt; <jv>personStringifier</jv> = (<jp>conv</jp>, <jp>person</jp>) -&gt;
+ *       <jp>person</jp>.getName() + <js>" ("</js> + <jp>conv</jp>.stringify(<jp>person</jp>.getAddress()) + <js>")"</js>;
  *
- * 	<jc>// Conditional formatting</jc>
- * 	Stringifier&lt;Order&gt; <jv>orderStringifier</jv> = (<jp>conv</jp>, <jp>order</jp>) -&gt; {
- * 		<jk>var</jk> <jv>status</jv> = <jp>order</jp>.getStatus();
- * 		<jk>return</jk> <jv>status</jv> == OrderStatus.<jsf>COMPLETED</jsf> ?
- * 			<js>"Order #"</js> + <jp>order</jp>.getId() + <js>" [DONE]"</js> :
- * 			<js>"Order #"</js> + <jp>order</jp>.getId() + <js>" ["</js> + <jv>status</jv> + <js>"]"</js>;
- * 	};
+ *    <jc>// Conditional formatting</jc>
+ *    Stringifier&lt;Order&gt; <jv>orderStringifier</jv> = (<jp>conv</jp>, <jp>order</jp>) -&gt; {
+ *       <jk>var</jk> <jv>status</jv> = <jp>order</jp>.getStatus();
+ *       <jk>return</jk> <jv>status</jv> == OrderStatus.<jsf>COMPLETED</jsf> ?
+ *          <js>"Order #"</js> + <jp>order</jp>.getId() + <js>" [DONE]"</js> :
+ *          <js>"Order #"</js> + <jp>order</jp>.getId() + <js>" ["</js> + <jv>status</jv> + <js>"]"</js>;
+ *    };
  * </p>
  *
  * <h5 class='section'>Registration:</h5>
  * <p class='bjava'>
- * 	<jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
- * 		.defaultSettings()
- * 		.addStringifier(LocalDate.<jk>class</jk>, <jv>dateStringifier</jv>)
- * 		.addStringifier(Person.<jk>class</jk>, <jv>personStringifier</jv>)
- * 		.addStringifier(Order.<jk>class</jk>, <jv>orderStringifier</jv>)
- * 		.build();
+ *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+ *       .defaultSettings()
+ *       .addStringifier(LocalDate.<jk>class</jk>, <jv>dateStringifier</jv>)
+ *       .addStringifier(Person.<jk>class</jk>, <jv>personStringifier</jv>)
+ *       .addStringifier(Order.<jk>class</jk>, <jv>orderStringifier</jv>)
+ *       .build();
  * </p>
  *
  * <h5 class='section'>Best Practices:</h5>
  * <ul>
- * 	<li><b>Use the converter parameter</b> for recursive conversion of nested objects</li>
- * 	<li><b>Keep output concise</b> but informative for test readability</li>
- * 	<li><b>Handle edge cases</b> gracefully (empty collections, special values)</li>
- * 	<li><b>Consider test context</b> - focus on properties relevant to testing</li>
+ *    <li><b>Use the converter parameter</b> for recursive conversion of nested objects</li>
+ *    <li><b>Keep output concise</b> but informative for test readability</li>
+ *    <li><b>Handle edge cases</b> gracefully (empty collections, special values)</li>
+ *    <li><b>Consider test context</b> - focus on properties relevant to testing</li>
  * </ul>
  *
  * @param <T> The type of object this stringifier handles

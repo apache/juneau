@@ -33,47 +33,46 @@ import java.util.stream.*;
  *
  * <h5 class='section'>Built-in Listifiers:</h5>
  * <ul>
- * 	<li><b>{@link #collectionListifier()}</b> - Converts {@link Collection} objects to {@link ArrayList}</li>
- * 	<li><b>{@link #iterableListifier()}</b> - Converts {@link Iterable} objects using streams</li>
- * 	<li><b>{@link #iteratorListifier()}</b> - Converts {@link Iterator} objects to lists (consumes iterator)</li>
- * 	<li><b>{@link #enumerationListifier()}</b> - Converts {@link Enumeration} objects to lists</li>
- * 	<li><b>{@link #streamListifier()}</b> - Converts {@link Stream} objects to lists (terminates stream)</li>
- * 	<li><b>{@link #optionalListifier()}</b> - Converts {@link Optional} to empty or single-element list</li>
- * 	<li><b>{@link #mapListifier()}</b> - Converts {@link Map} to list of {@link Map.Entry} objects</li>
+ *    <li><b>{@link #collectionListifier()}</b> - Converts {@link Collection} objects to {@link ArrayList}</li>
+ *    <li><b>{@link #iterableListifier()}</b> - Converts {@link Iterable} objects using streams</li>
+ *    <li><b>{@link #iteratorListifier()}</b> - Converts {@link Iterator} objects to lists (consumes iterator)</li>
+ *    <li><b>{@link #enumerationListifier()}</b> - Converts {@link Enumeration} objects to lists</li>
+ *    <li><b>{@link #streamListifier()}</b> - Converts {@link Stream} objects to lists (terminates stream)</li>
+ *    <li><b>{@link #mapListifier()}</b> - Converts {@link Map} to list of {@link Map.Entry} objects</li>
  * </ul>
  *
  * <h5 class='section'>Usage Example:</h5>
  * <p class='bjava'>
- * 	<jc>// Register listifiers using builder</jc>
- * 	<jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
- * 		.defaultSettings()
- * 		.addListifier(Collection.<jk>class</jk>, Listifiers.<jsm>collectionListifier</jsm>())
- * 		.addListifier(Stream.<jk>class</jk>, Listifiers.<jsm>streamListifier</jsm>())
- * 		.build();
+ *    <jc>// Register listifiers using builder</jc>
+ *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+ *       .defaultSettings()
+ *       .addListifier(Collection.<jk>class</jk>, Listifiers.<jsm>collectionListifier</jsm>())
+ *       .addListifier(Stream.<jk>class</jk>, Listifiers.<jsm>streamListifier</jsm>())
+ *       .build();
  * </p>
  *
  * <h5 class='section'>Iterator Consumption:</h5>
  * <p><b>Warning:</b> Some listifiers consume their input objects during conversion:</p>
  * <ul>
- * 	<li><b>{@link Iterator}:</b> Elements are consumed and iterator becomes exhausted</li>
- * 	<li><b>{@link Enumeration}:</b> Elements are consumed and enumeration becomes exhausted</li>
- * 	<li><b>{@link Stream}:</b> Stream is terminated and cannot be reused</li>
+ *    <li><b>{@link Iterator}:</b> Elements are consumed and iterator becomes exhausted</li>
+ *    <li><b>{@link Enumeration}:</b> Elements are consumed and enumeration becomes exhausted</li>
+ *    <li><b>{@link Stream}:</b> Stream is terminated and cannot be reused</li>
  * </ul>
  *
  * <h5 class='section'>Custom Listifier Development:</h5>
  * <p>When creating custom listifiers, follow these patterns:</p>
  * <ul>
- * 	<li><b>Null Safety:</b> Handle <jk>null</jk> inputs gracefully</li>
- * 	<li><b>Immutability:</b> Return new lists rather than modifying inputs</li>
- * 	<li><b>Type Safety:</b> Ensure proper generic type handling</li>
- * 	<li><b>Performance:</b> Consider memory usage for large collections</li>
+ *    <li><b>Null Safety:</b> Handle <jk>null</jk> inputs gracefully</li>
+ *    <li><b>Immutability:</b> Return new lists rather than modifying inputs</li>
+ *    <li><b>Type Safety:</b> Ensure proper generic type handling</li>
+ *    <li><b>Performance:</b> Consider memory usage for large collections</li>
  * </ul>
  *
  * @see Listifier
  * @see BasicBeanConverter.Builder#addListifier(Class, Listifier)
  * @see BasicBeanConverter.Builder#defaultSettings()
  */
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings("rawtypes")
 public class Listifiers {
 
 	/**
@@ -89,22 +88,22 @@ public class Listifiers {
 	 *
 	 * <h5 class='section'>Behavior:</h5>
 	 * <ul>
-	 * 	<li><b>Non-empty collections:</b> Returns new ArrayList with all elements in iteration order</li>
-	 * 	<li><b>Empty collections:</b> Returns new empty ArrayList</li>
-	 * 	<li><b>Preserves order:</b> Maintains the iteration order of the source collection</li>
+	 *    <li><b>Non-empty collections:</b> Returns new ArrayList with all elements in iteration order</li>
+	 *    <li><b>Empty collections:</b> Returns new empty ArrayList</li>
+	 *    <li><b>Preserves order:</b> Maintains the iteration order of the source collection</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Test with different collection types</jc>
-	 * 	<jk>var</jk> <jv>list</jv> = List.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
-	 * 	<jsm>assertList</jsm>(<jv>list</jv>, <js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 *    <jc>// Test with different collection types</jc>
+	 *    <jk>var</jk> <jv>list</jv> = List.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 *    <jsm>assertList</jsm>(<jv>list</jv>, <js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
 	 *
-	 * 	<jk>var</jk> <jv>set</jv> = Set.<jsm>of</jsm>(<js>"x"</js>, <js>"y"</js>);
-	 * 	<jsm>assertList</jsm>(<jv>set</jv>, <js>"x"</js>, <js>"y"</js>); <jc>// Order may vary</jc>
+	 *    <jk>var</jk> <jv>set</jv> = Set.<jsm>of</jsm>(<js>"x"</js>, <js>"y"</js>);
+	 *    <jsm>assertList</jsm>(<jv>set</jv>, <js>"x"</js>, <js>"y"</js>); <jc>// Order may vary</jc>
 	 *
-	 * 	<jk>var</jk> <jv>queue</jv> = <jk>new</jk> LinkedList&lt;&gt;(Arrays.<jsm>asList</jsm>(<js>"first"</js>, <js>"second"</js>));
-	 * 	<jsm>assertList</jsm>(<jv>queue</jv>, <js>"first"</js>, <js>"second"</js>);
+	 *    <jk>var</jk> <jv>queue</jv> = <jk>new</jk> LinkedList&lt;&gt;(Arrays.<jsm>asList</jsm>(<js>"first"</js>, <js>"second"</js>));
+	 *    <jsm>assertList</jsm>(<jv>queue</jv>, <js>"first"</js>, <js>"second"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Performance:</h5>
@@ -128,20 +127,20 @@ public class Listifiers {
 	 *
 	 * <h5 class='section'>Behavior:</h5>
 	 * <ul>
-	 * 	<li><b>Standard iterables:</b> Converts elements to list maintaining iteration order</li>
-	 * 	<li><b>Custom iterables:</b> Works with any object implementing Iterable interface</li>
-	 * 	<li><b>Large iterables:</b> Processes all elements regardless of size</li>
+	 *    <li><b>Standard iterables:</b> Converts elements to list maintaining iteration order</li>
+	 *    <li><b>Custom iterables:</b> Works with any object implementing Iterable interface</li>
+	 *    <li><b>Large iterables:</b> Processes all elements regardless of size</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Test with custom iterable</jc>
-	 * 	<jk>var</jk> <jv>range</jv> = IntStream.<jsm>range</jsm>(<jv>1</jv>, <jv>4</jv>).<jsm>boxed</jsm>().<jsm>collect</jsm>(toList());
-	 * 	<jsm>assertList</jsm>(<jv>range</jv>, <jv>1</jv>, <jv>2</jv>, <jv>3</jv>);
+	 *    <jc>// Test with custom iterable</jc>
+	 *    <jk>var</jk> <jv>range</jv> = IntStream.<jsm>range</jsm>(<jv>1</jv>, <jv>4</jv>).<jsm>boxed</jsm>().<jsm>collect</jsm>(toList());
+	 *    <jsm>assertList</jsm>(<jv>range</jv>, <jv>1</jv>, <jv>2</jv>, <jv>3</jv>);
 	 *
-	 * 	<jc>// Test with custom Iterable implementation</jc>
-	 * 	<jk>var</jk> <jv>fibonacci</jv> = <jk>new</jk> FibonacciIterable(<jv>5</jv>);
-	 * 	<jsm>assertList</jsm>(<jv>fibonacci</jv>, <jv>1</jv>, <jv>1</jv>, <jv>2</jv>, <jv>3</jv>, <jv>5</jv>);
+	 *    <jc>// Test with custom Iterable implementation</jc>
+	 *    <jk>var</jk> <jv>fibonacci</jv> = <jk>new</jk> FibonacciIterable(<jv>5</jv>);
+	 *    <jsm>assertList</jsm>(<jv>fibonacci</jv>, <jv>1</jv>, <jv>1</jv>, <jv>2</jv>, <jv>3</jv>, <jv>5</jv>);
 	 * </p>
 	 *
 	 * @return A {@link Listifier} for {@link Iterable} objects
@@ -159,29 +158,29 @@ public class Listifiers {
 	 *
 	 * <h5 class='section'>Behavior:</h5>
 	 * <ul>
-	 * 	<li><b>Element extraction:</b> Consumes all remaining elements from the iterator</li>
-	 * 	<li><b>Order preservation:</b> Maintains the iterator's order in the resulting list</li>
-	 * 	<li><b>Iterator exhaustion:</b> The iterator becomes unusable after conversion</li>
+	 *    <li><b>Element extraction:</b> Consumes all remaining elements from the iterator</li>
+	 *    <li><b>Order preservation:</b> Maintains the iterator's order in the resulting list</li>
+	 *    <li><b>Iterator exhaustion:</b> The iterator becomes unusable after conversion</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Test with list iterator</jc>
-	 * 	<jk>var</jk> <jv>list</jv> = List.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
-	 * 	<jk>var</jk> <jv>iterator</jv> = <jv>list</jv>.iterator();
-	 * 	<jsm>assertList</jsm>(<jv>iterator</jv>, <js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
-	 * 	<jc>// iterator is now exhausted</jc>
+	 *    <jc>// Test with list iterator</jc>
+	 *    <jk>var</jk> <jv>list</jv> = List.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 *    <jk>var</jk> <jv>iterator</jv> = <jv>list</jv>.iterator();
+	 *    <jsm>assertList</jsm>(<jv>iterator</jv>, <js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 *    <jc>// iterator is now exhausted</jc>
 	 *
-	 * 	<jc>// Test with custom iterator</jc>
-	 * 	<jk>var</jk> <jv>numbers</jv> = IntStream.<jsm>range</jsm>(<jv>1</jv>, <jv>4</jv>).iterator();
-	 * 	<jsm>assertList</jsm>(<jv>numbers</jv>, <jv>1</jv>, <jv>2</jv>, <jv>3</jv>);
+	 *    <jc>// Test with custom iterator</jc>
+	 *    <jk>var</jk> <jv>numbers</jv> = IntStream.<jsm>range</jsm>(<jv>1</jv>, <jv>4</jv>).iterator();
+	 *    <jsm>assertList</jsm>(<jv>numbers</jv>, <jv>1</jv>, <jv>2</jv>, <jv>3</jv>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Important Notes:</h5>
 	 * <ul>
-	 * 	<li><b>One-time use:</b> The iterator becomes exhausted and unusable after conversion</li>
-	 * 	<li><b>Side effects:</b> Any side effects in the iterator's next() method will occur</li>
-	 * 	<li><b>Exception handling:</b> Exceptions from the iterator are propagated</li>
+	 *    <li><b>One-time use:</b> The iterator becomes exhausted and unusable after conversion</li>
+	 *    <li><b>Side effects:</b> Any side effects in the iterator's next() method will occur</li>
+	 *    <li><b>Exception handling:</b> Exceptions from the iterator are propagated</li>
 	 * </ul>
 	 *
 	 * @return A {@link Listifier} for {@link Iterator} objects
@@ -199,22 +198,22 @@ public class Listifiers {
 	 *
 	 * <h5 class='section'>Behavior:</h5>
 	 * <ul>
-	 * 	<li><b>Element extraction:</b> Consumes all remaining elements from the enumeration</li>
-	 * 	<li><b>Order preservation:</b> Maintains the enumeration's order in the resulting list</li>
-	 * 	<li><b>Enumeration exhaustion:</b> The enumeration becomes unusable after conversion</li>
+	 *    <li><b>Element extraction:</b> Consumes all remaining elements from the enumeration</li>
+	 *    <li><b>Order preservation:</b> Maintains the enumeration's order in the resulting list</li>
+	 *    <li><b>Enumeration exhaustion:</b> The enumeration becomes unusable after conversion</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Test with Vector enumeration</jc>
-	 * 	<jk>var</jk> <jv>vector</jv> = <jk>new</jk> Vector&lt;&gt;(List.<jsm>of</jsm>(<js>"x"</js>, <js>"y"</js>, <js>"z"</js>));
-	 * 	<jk>var</jk> <jv>enumeration</jv> = <jv>vector</jv>.elements();
-	 * 	<jsm>assertList</jsm>(<jv>enumeration</jv>, <js>"x"</js>, <js>"y"</js>, <js>"z"</js>);
+	 *    <jc>// Test with Vector enumeration</jc>
+	 *    <jk>var</jk> <jv>vector</jv> = <jk>new</jk> Vector&lt;&gt;(List.<jsm>of</jsm>(<js>"x"</js>, <js>"y"</js>, <js>"z"</js>));
+	 *    <jk>var</jk> <jv>enumeration</jv> = <jv>vector</jv>.elements();
+	 *    <jsm>assertList</jsm>(<jv>enumeration</jv>, <js>"x"</js>, <js>"y"</js>, <js>"z"</js>);
 	 *
-	 * 	<jc>// Test with Hashtable enumeration</jc>
-	 * 	<jk>var</jk> <jv>table</jv> = <jk>new</jk> Hashtable&lt;&gt;(Map.<jsm>of</jsm>(<js>"key1"</js>, <js>"value1"</js>));
-	 * 	<jk>var</jk> <jv>keys</jv> = <jv>table</jv>.keys();
-	 * 	<jsm>assertList</jsm>(<jv>keys</jv>, <js>"key1"</js>);
+	 *    <jc>// Test with Hashtable enumeration</jc>
+	 *    <jk>var</jk> <jv>table</jv> = <jk>new</jk> Hashtable&lt;&gt;(Map.<jsm>of</jsm>(<js>"key1"</js>, <js>"value1"</js>));
+	 *    <jk>var</jk> <jv>keys</jv> = <jv>table</jv>.keys();
+	 *    <jsm>assertList</jsm>(<jv>keys</jv>, <js>"key1"</js>);
 	 * </p>
 	 *
 	 * @return A {@link Listifier} for {@link Enumeration} objects
@@ -232,30 +231,30 @@ public class Listifiers {
 	 *
 	 * <h5 class='section'>Behavior:</h5>
 	 * <ul>
-	 * 	<li><b>Stream termination:</b> Calls toList() to collect all stream elements</li>
-	 * 	<li><b>Order preservation:</b> Maintains stream order in the resulting list</li>
-	 * 	<li><b>Stream closure:</b> The stream becomes unusable after conversion</li>
+	 *    <li><b>Stream termination:</b> Calls toList() to collect all stream elements</li>
+	 *    <li><b>Order preservation:</b> Maintains stream order in the resulting list</li>
+	 *    <li><b>Stream closure:</b> The stream becomes unusable after conversion</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Test with filtered stream</jc>
-	 * 	<jk>var</jk> <jv>numbers</jv> = IntStream.<jsm>range</jsm>(<jv>1</jv>, <jv>10</jv>)
-	 * 		.filter(<jv>n</jv> -&gt; <jv>n</jv> % <jv>2</jv> == <jv>0</jv>)
-	 * 		.boxed();
-	 * 	<jsm>assertList</jsm>(<jv>numbers</jv>, <jv>2</jv>, <jv>4</jv>, <jv>6</jv>, <jv>8</jv>);
+	 *    <jc>// Test with filtered stream</jc>
+	 *    <jk>var</jk> <jv>numbers</jv> = IntStream.<jsm>range</jsm>(<jv>1</jv>, <jv>10</jv>)
+	 *       .filter(<jv>n</jv> -&gt; <jv>n</jv> % <jv>2</jv> == <jv>0</jv>)
+	 *       .boxed();
+	 *    <jsm>assertList</jsm>(<jv>numbers</jv>, <jv>2</jv>, <jv>4</jv>, <jv>6</jv>, <jv>8</jv>);
 	 *
-	 * 	<jc>// Test with mapped stream</jc>
-	 * 	<jk>var</jk> <jv>words</jv> = Stream.<jsm>of</jsm>(<js>"hello"</js>, <js>"world"</js>)
-	 * 		.map(String::toUpperCase);
-	 * 	<jsm>assertList</jsm>(<jv>words</jv>, <js>"HELLO"</js>, <js>"WORLD"</js>);
+	 *    <jc>// Test with mapped stream</jc>
+	 *    <jk>var</jk> <jv>words</jv> = Stream.<jsm>of</jsm>(<js>"hello"</js>, <js>"world"</js>)
+	 *       .map(String::toUpperCase);
+	 *    <jsm>assertList</jsm>(<jv>words</jv>, <js>"HELLO"</js>, <js>"WORLD"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Important Notes:</h5>
 	 * <ul>
-	 * 	<li><b>One-time use:</b> The stream is terminated and cannot be reused</li>
-	 * 	<li><b>Lazy evaluation:</b> Stream operations are executed during listification</li>
-	 * 	<li><b>Exception handling:</b> Stream operation exceptions are propagated</li>
+	 *    <li><b>One-time use:</b> The stream is terminated and cannot be reused</li>
+	 *    <li><b>Lazy evaluation:</b> Stream operations are executed during listification</li>
+	 *    <li><b>Exception handling:</b> Stream operation exceptions are propagated</li>
 	 * </ul>
 	 *
 	 * @return A {@link Listifier} for {@link Stream} objects
@@ -266,45 +265,6 @@ public class Listifiers {
 	}
 
 	/**
-	 * Returns a listifier for {@link Optional} objects that converts them to single-element or empty lists.
-	 *
-	 * <p>This listifier enables Optional values to be processed as lists in BCT assertions,
-	 * making it easy to test Optional-wrapped collections and values uniformly.</p>
-	 *
-	 * <h5 class='section'>Behavior:</h5>
-	 * <ul>
-	 * 	<li><b>Present value:</b> Returns single-element list containing the Optional's value</li>
-	 * 	<li><b>Empty Optional:</b> Returns empty list</li>
-	 * 	<li><b>Type preservation:</b> The list element type matches the Optional's type parameter</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Usage Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Test Optional with value</jc>
-	 * 	<jk>var</jk> <jv>optional</jv> = Optional.<jsm>of</jsm>(<js>"Hello"</js>);
-	 * 	<jsm>assertList</jsm>(<jv>optional</jv>, <js>"Hello"</js>);
-	 *
-	 * 	<jc>// Test empty Optional</jc>
-	 * 	<jk>var</jk> <jv>empty</jv> = Optional.<jsm>empty</jsm>();
-	 * 	<jsm>assertEmpty</jsm>(<jv>empty</jv>);
-	 *
-	 * 	<jc>// Test Optional in collection context</jc>
-	 * 	<jk>var</jk> <jv>user</jv> = <jk>new</jk> User().setNickname(Optional.<jsm>of</jsm>(<js>"Johnny"</js>));
-	 * 	<jsm>assertList</jsm>(<jv>user</jv>, <js>"nickname"</js>, <js>"Johnny"</js>);
-	 * </p>
-	 *
-	 * <h5 class='section'>Integration:</h5>
-	 * <p>This listifier is particularly useful when working with APIs that return Optional
-	 * collections or when testing Optional values in a list context.</p>
-	 *
-	 * @return A {@link Listifier} for {@link Optional} objects
-	 * @see Optional
-	 */
-	public static Listifier<Optional> optionalListifier() {
-		return (bc, optional) -> optional.isEmpty() ? emptyList() : singletonList(optional.get());
-	}
-
-	/**
 	 * Returns a listifier for {@link Map} objects that converts them to lists of {@link Map.Entry} objects.
 	 *
 	 * <p>This listifier enables maps to be processed as lists in BCT assertions, making it easy
@@ -312,24 +272,24 @@ public class Listifiers {
 	 *
 	 * <h5 class='section'>Behavior:</h5>
 	 * <ul>
-	 * 	<li><b>Entry conversion:</b> Each key-value pair becomes a Map.Entry in the list</li>
-	 * 	<li><b>Order preservation:</b> Maintains the map's iteration order</li>
-	 * 	<li><b>Empty maps:</b> Returns empty list for empty maps</li>
+	 *    <li><b>Entry conversion:</b> Each key-value pair becomes a Map.Entry in the list</li>
+	 *    <li><b>Order preservation:</b> Maintains the map's iteration order</li>
+	 *    <li><b>Empty maps:</b> Returns empty list for empty maps</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Test map contents</jc>
-	 * 	<jk>var</jk> <jv>map</jv> = Map.<jsm>of</jsm>(<js>"key1"</js>, <js>"value1"</js>, <js>"key2"</js>, <js>"value2"</js>);
-	 * 	<jsm>assertSize</jsm>(<jv>map</jv>, <jv>2</jv>);
+	 *    <jc>// Test map contents</jc>
+	 *    <jk>var</jk> <jv>map</jv> = Map.<jsm>of</jsm>(<js>"key1"</js>, <js>"value1"</js>, <js>"key2"</js>, <js>"value2"</js>);
+	 *    <jsm>assertSize</jsm>(<jv>map</jv>, <jv>2</jv>);
 	 *
-	 * 	<jc>// Test empty map</jc>
-	 * 	<jk>var</jk> <jv>emptyMap</jv> = Map.<jsm>of</jsm>();
-	 * 	<jsm>assertEmpty</jsm>(<jv>emptyMap</jv>);
+	 *    <jc>// Test empty map</jc>
+	 *    <jk>var</jk> <jv>emptyMap</jv> = Map.<jsm>of</jsm>();
+	 *    <jsm>assertEmpty</jsm>(<jv>emptyMap</jv>);
 	 *
-	 * 	<jc>// Test map in object property</jc>
-	 * 	<jk>var</jk> <jv>config</jv> = <jk>new</jk> Configuration().setProperties(<jv>map</jv>);
-	 * 	<jsm>assertSize</jsm>(<jv>config</jv>, <js>"properties"</js>, <jv>2</jv>);
+	 *    <jc>// Test map in object property</jc>
+	 *    <jk>var</jk> <jv>config</jv> = <jk>new</jk> Configuration().setProperties(<jv>map</jv>);
+	 *    <jsm>assertSize</jsm>(<jv>config</jv>, <js>"properties"</js>, <jv>2</jv>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Entry Processing:</h5>

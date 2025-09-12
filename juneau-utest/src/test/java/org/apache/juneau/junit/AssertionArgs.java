@@ -96,7 +96,7 @@ import java.util.function.*;
  *
  * <h5 class='section'>Thread Safety:</h5>
  * <p>This class is <b>not thread-safe</b> and is intended for single-threaded test execution.
- * Each test method should create its own instance using {@link Assertions2#args()} or create
+ * Each test method should create its own instance using {@link BctAssertions#args()} or create
  * a new instance directly with {@code new AssertionArgs()}.</p>
  *
  * <h5 class='section'>Immutability Considerations:</h5>
@@ -104,7 +104,7 @@ import java.util.function.*;
  * is mutable. For reusable configurations across multiple tests, consider creating a factory
  * method that returns pre-configured instances.</p>
  *
- * @see Assertions2#args()
+ * @see BctAssertions#args()
  * @see BeanConverter
  * @see BasicBeanConverter
  */

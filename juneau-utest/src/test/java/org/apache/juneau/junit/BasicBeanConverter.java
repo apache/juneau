@@ -33,183 +33,183 @@ import java.util.stream.*;
  *
  * <h5 class='section'>Key Features:</h5>
  * <ul>
- * 	<li><b>Extensible Type Handlers:</b> Pluggable stringifiers, listifiers, and swappers for custom types</li>
- * 	<li><b>Performance Optimization:</b> ConcurrentHashMap caching for type-to-handler mappings</li>
- * 	<li><b>Comprehensive Defaults:</b> Built-in support for all common Java types and structures</li>
- * 	<li><b>Configurable Settings:</b> Customizable formatting, delimiters, and display options</li>
- * 	<li><b>Thread Safety:</b> Fully thread-safe implementation suitable for concurrent testing</li>
+ *    <li><b>Extensible Type Handlers:</b> Pluggable stringifiers, listifiers, and swappers for custom types</li>
+ *    <li><b>Performance Optimization:</b> ConcurrentHashMap caching for type-to-handler mappings</li>
+ *    <li><b>Comprehensive Defaults:</b> Built-in support for all common Java types and structures</li>
+ *    <li><b>Configurable Settings:</b> Customizable formatting, delimiters, and display options</li>
+ *    <li><b>Thread Safety:</b> Fully thread-safe implementation suitable for concurrent testing</li>
  * </ul>
  *
  * <h5 class='section'>Architecture Overview:</h5>
  * <p>The converter uses four types of pluggable handlers:</p>
  * <dl>
- * 	<dt><b>Stringifiers:</b></dt>
- * 	<dd>Convert objects to string representations with custom formatting rules</dd>
+ *    <dt><b>Stringifiers:</b></dt>
+ *    <dd>Convert objects to string representations with custom formatting rules</dd>
  *
- * 	<dt><b>Listifiers:</b></dt>
- * 	<dd>Convert collection-like objects to List&lt;Object&gt; for uniform iteration</dd>
+ *    <dt><b>Listifiers:</b></dt>
+ *    <dd>Convert collection-like objects to List&lt;Object&gt; for uniform iteration</dd>
  *
- * 	<dt><b>Swappers:</b></dt>
- * 	<dd>Pre-process objects before conversion (unwrap Optional, call Supplier, etc.)</dd>
+ *    <dt><b>Swappers:</b></dt>
+ *    <dd>Pre-process objects before conversion (unwrap Optional, call Supplier, etc.)</dd>
  *
- * 	<dt><b>PropertyExtractors:</b></dt>
- * 	<dd>Define custom property access strategies for nested field navigation (e.g., <js>"user.address.city"</js>)</dd>
+ *    <dt><b>PropertyExtractors:</b></dt>
+ *    <dd>Define custom property access strategies for nested field navigation (e.g., <js>"user.address.city"</js>)</dd>
  * </dl>
  *
  * <p>PropertyExtractors use a chain-of-responsibility pattern, where each extractor in the chain
  * is tried until one can handle the property access. The framework includes built-in extractors for:</p>
  * <ul>
- * 	<li><b>JavaBean properties:</b> Standard getter methods and public fields</li>
- * 	<li><b>Collection/Array access:</b> Numeric indices and size/length properties</li>
- * 	<li><b>Map access:</b> Key-based property retrieval and size property</li>
+ *    <li><b>JavaBean properties:</b> Standard getter methods and public fields</li>
+ *    <li><b>Collection/Array access:</b> Numeric indices and size/length properties</li>
+ *    <li><b>Map access:</b> Key-based property retrieval and size property</li>
  * </ul>
  *
  * <h5 class='section'>Default Type Support:</h5>
  * <p>Out-of-the-box stringification support includes:</p>
  * <ul>
- * 	<li><b>Collections:</b> List, Set, Queue → <js>"[item1,item2,item3]"</js> format</li>
- * 	<li><b>Maps:</b> Map, Properties → <js>"{key1=value1,key2=value2}"</js> format</li>
- * 	<li><b>Map Entries:</b> Map.Entry → <js>"key=value"</js> format</li>
- * 	<li><b>Arrays:</b> All array types → <js>"[element1,element2]"</js> format</li>
- * 	<li><b>Dates:</b> Date, Calendar → ISO-8601 format</li>
- * 	<li><b>Files/Streams:</b> File, InputStream, Reader → content as hex or text</li>
- * 	<li><b>Reflection:</b> Class, Method, Constructor → human-readable signatures</li>
- * 	<li><b>Enums:</b> Enum values → name() format</li>
+ *    <li><b>Collections:</b> List, Set, Queue → <js>"[item1,item2,item3]"</js> format</li>
+ *    <li><b>Maps:</b> Map, Properties → <js>"{key1=value1,key2=value2}"</js> format</li>
+ *    <li><b>Map Entries:</b> Map.Entry → <js>"key=value"</js> format</li>
+ *    <li><b>Arrays:</b> All array types → <js>"[element1,element2]"</js> format</li>
+ *    <li><b>Dates:</b> Date, Calendar → ISO-8601 format</li>
+ *    <li><b>Files/Streams:</b> File, InputStream, Reader → content as hex or text</li>
+ *    <li><b>Reflection:</b> Class, Method, Constructor → human-readable signatures</li>
+ *    <li><b>Enums:</b> Enum values → name() format</li>
  * </ul>
  *
  * <p>Default listification support includes:</p>
  * <ul>
- * 	<li><b>Collection types:</b> List, Set, Queue, and all subtypes</li>
- * 	<li><b>Iterable objects:</b> Any Iterable implementation</li>
- * 	<li><b>Iterators:</b> Iterator and Enumeration (consumed to list)</li>
- * 	<li><b>Streams:</b> Stream objects (terminated to list)</li>
- * 	<li><b>Optional:</b> Empty list or single-element list</li>
- * 	<li><b>Maps:</b> Converted to list of Map.Entry objects</li>
+ *    <li><b>Collection types:</b> List, Set, Queue, and all subtypes</li>
+ *    <li><b>Iterable objects:</b> Any Iterable implementation</li>
+ *    <li><b>Iterators:</b> Iterator and Enumeration (consumed to list)</li>
+ *    <li><b>Streams:</b> Stream objects (terminated to list)</li>
+ *    <li><b>Optional:</b> Empty list or single-element list</li>
+ *    <li><b>Maps:</b> Converted to list of Map.Entry objects</li>
  * </ul>
  *
  * <p>Default swapping support includes:</p>
  * <ul>
- * 	<li><b>Optional:</b> Unwrapped to contained value or <jk>null</jk></li>
- * 	<li><b>Supplier:</b> Called to get supplied value</li>
- * 	<li><b>Future:</b> Extracts completed result or returns <js>"&lt;pending&gt;"</js> for incomplete futures (via {@link Swappers#futureSwapper()})</li>
+ *    <li><b>Optional:</b> Unwrapped to contained value or <jk>null</jk></li>
+ *    <li><b>Supplier:</b> Called to get supplied value</li>
+ *    <li><b>Future:</b> Extracts completed result or returns <js>"&lt;pending&gt;"</js> for incomplete futures (via {@link Swappers#futureSwapper()})</li>
  * </ul>
  *
  * <h5 class='section'>Configuration Settings:</h5>
  * <p>The converter supports extensive customization via settings:</p>
  * <dl>
- * 	<dt><code>nullValue</code></dt>
- * 	<dd>String representation for null values (default: <js>"&lt;null&gt;"</js>)</dd>
+ *    <dt><code>nullValue</code></dt>
+ *    <dd>String representation for null values (default: <js>"&lt;null&gt;"</js>)</dd>
  *
- * 	<dt><code>selfValue</code></dt>
- * 	<dd>Special property name that returns the object itself (default: <js>"&lt;self&gt;"</js>)</dd>
+ *    <dt><code>selfValue</code></dt>
+ *    <dd>Special property name that returns the object itself (default: <js>"&lt;self&gt;"</js>)</dd>
  *
- * 	<dt><code>emptyValue</code></dt>
- * 	<dd>String representation for empty collections (default: <js>"&lt;empty&gt;"</js>)</dd>
+ *    <dt><code>emptyValue</code></dt>
+ *    <dd>String representation for empty collections (default: <js>"&lt;empty&gt;"</js>)</dd>
  *
- * 	<dt><code>fieldSeparator</code></dt>
- * 	<dd>Delimiter between collection elements and map entries (default: <js>","</js>)</dd>
+ *    <dt><code>fieldSeparator</code></dt>
+ *    <dd>Delimiter between collection elements and map entries (default: <js>","</js>)</dd>
  *
- * 	<dt><code>collectionPrefix/Suffix</code></dt>
- * 	<dd>Brackets around collection content (default: <js>"["</js> and <js>"]"</js>)</dd>
+ *    <dt><code>collectionPrefix/Suffix</code></dt>
+ *    <dd>Brackets around collection content (default: <js>"["</js> and <js>"]"</js>)</dd>
  *
- * 	<dt><code>mapPrefix/Suffix</code></dt>
- * 	<dd>Brackets around map content (default: <js>"{"</js> and <js>"}"</js>)</dd>
+ *    <dt><code>mapPrefix/Suffix</code></dt>
+ *    <dd>Brackets around map content (default: <js>"{"</js> and <js>"}"</js>)</dd>
  *
- * 	<dt><code>mapEntrySeparator</code></dt>
- * 	<dd>Separator between map keys and values (default: <js>"="</js>)</dd>
+ *    <dt><code>mapEntrySeparator</code></dt>
+ *    <dd>Separator between map keys and values (default: <js>"="</js>)</dd>
  *
- * 	<dt><code>calendarFormat</code></dt>
- * 	<dd>DateTimeFormatter for calendar objects (default: <jsf>ISO_INSTANT</jsf>)</dd>
+ *    <dt><code>calendarFormat</code></dt>
+ *    <dd>DateTimeFormatter for calendar objects (default: <jsf>ISO_INSTANT</jsf>)</dd>
  *
- * 	<dt><code>classNameFormat</code></dt>
- * 	<dd>Format for class names: <js>"simple"</js>, <js>"canonical"</js>, or <js>"full"</js> (default: <js>"simple"</js>)</dd>
+ *    <dt><code>classNameFormat</code></dt>
+ *    <dd>Format for class names: <js>"simple"</js>, <js>"canonical"</js>, or <js>"full"</js> (default: <js>"simple"</js>)</dd>
  * </dl>
  *
  * <h5 class='section'>Usage Examples:</h5>
  *
  * <p><b>Basic Usage with Defaults:</b></p>
  * <p class='bjava'>
- * 	<jc>// Use default converter</jc>
- * 	<jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsf>DEFAULT</jsf>;
- * 	<jk>var</jk> <jv>result</jv> = <jv>converter</jv>.stringify(<jv>myObject</jv>);
+ *    <jc>// Use default converter</jc>
+ *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsf>DEFAULT</jsf>;
+ *    <jk>var</jk> <jv>result</jv> = <jv>converter</jv>.stringify(<jv>myObject</jv>);
  * </p>
  *
  * <p><b>Custom Configuration:</b></p>
  * <p class='bjava'>
- * 	<jc>// Build custom converter</jc>
- * 	<jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
- * 		.defaultSettings()
- * 		.addSetting(<jsf>SETTING_nullValue</jsf>, <js>"NULL"</js>)
- * 		.addSetting(<jsf>SETTING_fieldSeparator</jsf>, <js>" | "</js>)
- * 		.addStringifier(MyClass.<jk>class</jk>, (<jp>obj</jp>, <jp>conv</jp>) -> <js>"MyClass["</js> + <jp>obj</jp>.getName() + <js>"]"</js>)
- * 		.addListifier(MyIterable.<jk>class</jk>, (<jp>obj</jp>, <jp>conv</jp>) -> <jp>obj</jp>.toList())
- * 		.addSwapper(MyWrapper.<jk>class</jk>, (<jp>obj</jp>, <jp>conv</jp>) -> <jp>obj</jp>.getWrapped())
- * 		.build();
+ *    <jc>// Build custom converter</jc>
+ *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+ *       .defaultSettings()
+ *       .addSetting(<jsf>SETTING_nullValue</jsf>, <js>"&lt;null&gt;"</js>)
+ *       .addSetting(<jsf>SETTING_fieldSeparator</jsf>, <js>" | "</js>)
+ *       .addStringifier(MyClass.<jk>class</jk>, (<jp>obj</jp>, <jp>conv</jp>) -> <js>"MyClass["</js> + <jp>obj</jp>.getName() + <js>"]"</js>)
+ *       .addListifier(MyIterable.<jk>class</jk>, (<jp>obj</jp>, <jp>conv</jp>) -> <jp>obj</jp>.toList())
+ *       .addSwapper(MyWrapper.<jk>class</jk>, (<jp>obj</jp>, <jp>conv</jp>) -> <jp>obj</jp>.getWrapped())
+ *       .build();
  * </p>
  *
  * <p><b>Complex Property Access:</b></p>
  * <p class='bjava'>
- * 	<jc>// Extract nested properties</jc>
- * 	<jk>var</jk> <jv>name</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"name"</js>);
- * 	<jk>var</jk> <jv>city</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"address.city"</js>);
- * 	<jk>var</jk> <jv>firstOrder</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"orders.0.id"</js>);
- * 	<jk>var</jk> <jv>orderCount</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"orders.length"</js>);
+ *    <jc>// Extract nested properties</jc>
+ *    <jk>var</jk> <jv>name</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"name"</js>);
+ *    <jk>var</jk> <jv>city</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"address.city"</js>);
+ *    <jk>var</jk> <jv>firstOrder</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"orders.0.id"</js>);
+ *    <jk>var</jk> <jv>orderCount</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"orders.length"</js>);
  * </p>
  *
  * <p><b>Special Property Values:</b></p>
  * <p class='bjava'>
- * 	<jc>// Use special property names</jc>
- * 	<jk>var</jk> <jv>userObj</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"&lt;self&gt;"</js>); <jc>// Returns the user object itself</jc>
- * 	<jk>var</jk> <jv>nullValue</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"&lt;null&gt;"</js>); <jc>// Returns null</jc>
+ *    <jc>// Use special property names</jc>
+ *    <jk>var</jk> <jv>userObj</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"&lt;self&gt;"</js>); <jc>// Returns the user object itself</jc>
+ *    <jk>var</jk> <jv>nullValue</jv> = <jv>converter</jv>.getEntry(<jv>user</jv>, <js>"&lt;null&gt;"</js>); <jc>// Returns null</jc>
  *
- * 	<jc>// Custom self value</jc>
- * 	<jk>var</jk> <jv>customConverter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
- * 		.defaultSettings()
- * 		.addSetting(<jsf>SETTING_selfValue</jsf>, <js>"this"</js>)
- * 		.build();
- * 	<jk>var</jk> <jv>selfRef</jv> = <jv>customConverter</jv>.getEntry(<jv>user</jv>, <js>"this"</js>); <jc>// Returns user object</jc>
+ *    <jc>// Custom self value</jc>
+ *    <jk>var</jk> <jv>customConverter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+ *       .defaultSettings()
+ *       .addSetting(<jsf>SETTING_selfValue</jsf>, <js>"this"</js>)
+ *       .build();
+ *    <jk>var</jk> <jv>selfRef</jv> = <jv>customConverter</jv>.getEntry(<jv>user</jv>, <js>"this"</js>); <jc>// Returns user object</jc>
  * </p>
  *
  * <h5 class='section'>Performance Characteristics:</h5>
  * <ul>
- * 	<li><b>Handler Lookup:</b> O(1) average case via ConcurrentHashMap caching</li>
- * 	<li><b>Type Registration:</b> Handlers checked in reverse registration order (last wins)</li>
- * 	<li><b>Inheritance Support:</b> Handlers support class inheritance and interface implementation</li>
- * 	<li><b>Thread Safety:</b> Full concurrency support with no locking overhead after initialization</li>
- * 	<li><b>Memory Efficiency:</b> Minimal object allocation during normal operation</li>
+ *    <li><b>Handler Lookup:</b> O(1) average case via ConcurrentHashMap caching</li>
+ *    <li><b>Type Registration:</b> Handlers checked in reverse registration order (last wins)</li>
+ *    <li><b>Inheritance Support:</b> Handlers support class inheritance and interface implementation</li>
+ *    <li><b>Thread Safety:</b> Full concurrency support with no locking overhead after initialization</li>
+ *    <li><b>Memory Efficiency:</b> Minimal object allocation during normal operation</li>
  * </ul>
  *
  * <h5 class='section'>Extension Patterns:</h5>
  *
  * <p><b>Custom Type Stringification:</b></p>
  * <p class='bjava'>
- * 	<jv>builder</jv>.addStringifier(LocalDateTime.<jk>class</jk>, (<jp>dt</jp>, <jp>conv</jp>) ->
- * 		<jp>dt</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE_TIME</jsf>));
+ *    <jv>builder</jv>.addStringifier(LocalDateTime.<jk>class</jk>, (<jp>dt</jp>, <jp>conv</jp>) ->
+ *       <jp>dt</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE_TIME</jsf>));
  * </p>
  *
  * <p><b>Custom Collection Handling:</b></p>
  * <p class='bjava'>
- * 	<jv>builder</jv>.addListifier(MyCustomCollection.<jk>class</jk>, (<jp>coll</jp>, <jp>conv</jp>) ->
- * 		<jp>coll</jp>.stream().map(<jp>conv</jp>::swap).toList());
+ *    <jv>builder</jv>.addListifier(MyCustomCollection.<jk>class</jk>, (<jp>coll</jp>, <jp>conv</jp>) ->
+ *       <jp>coll</jp>.stream().map(<jp>conv</jp>::swap).toList());
  * </p>
  *
  * <p><b>Custom Object Transformation:</b></p>
  * <p class='bjava'>
- * 	<jv>builder</jv>.addSwapper(LazyValue.<jk>class</jk>, (<jp>lazy</jp>, <jp>conv</jp>) ->
- * 		<jp>lazy</jp>.isEvaluated() ? <jp>lazy</jp>.getValue() : "&lt;unevaluated&gt;");
+ *    <jv>builder</jv>.addSwapper(LazyValue.<jk>class</jk>, (<jp>lazy</jp>, <jp>conv</jp>) ->
+ *       <jp>lazy</jp>.isEvaluated() ? <jp>lazy</jp>.getValue() : "&lt;unevaluated&gt;");
  * </p>
  *
  * <h5 class='section'>Integration with BCT:</h5>
- * <p>This class is used internally by all BCT assertion methods in {@link Assertions2}:</p>
+ * <p>This class is used internally by all BCT assertion methods in {@link BctAssertions}:</p>
  * <ul>
- * 	<li>{@link Assertions2#assertBean(Object, String, String)} - Uses getEntry() for property access</li>
- * 	<li>{@link Assertions2#assertList(List, Object...)} - Uses stringify() for element comparison</li>
- * 	<li>{@link Assertions2#assertBeans(Collection, String, String...)} - Uses both getEntry() and stringify()</li>
+ *    <li>{@link BctAssertions#assertBean(Object, String, String)} - Uses getEntry() for property access</li>
+ *    <li>{@link BctAssertions#assertList(List, Object...)} - Uses stringify() for element comparison</li>
+ *    <li>{@link BctAssertions#assertBeans(Collection, String, String...)} - Uses both getEntry() and stringify()</li>
  * </ul>
  *
  * @see BeanConverter
  */
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings("rawtypes")
 public class BasicBeanConverter implements BeanConverter {
 
 	public static final BasicBeanConverter DEFAULT = builder().defaultSettings().build();
@@ -268,11 +268,11 @@ public class BasicBeanConverter implements BeanConverter {
 		var c = o.getClass();
 		var stringifier = stringifierMap.computeIfAbsent(c, this::findStringifier);
 		if (stringifier.isEmpty()) {
-			stringifier = of(canListify(o) ? (bc, o2) -> bc.stringify(bc.listify(o2)) : (bc, o2) -> o2.toString());
+			stringifier = of(canListify(o) ? (bc, o2) -> bc.stringify(bc.listify(o2)) : (bc, o2) -> safeToString(o2));
 			stringifierMap.putIfAbsent(c, stringifier);
 		}
 		var o2 = o;
-		return stringifier.map(x -> (Stringifier)x).map(x -> x.apply(this, o2)).map(Object::toString).orElse(null);
+		return stringifier.map(x -> (Stringifier)x).map(x -> x.apply(this, o2)).map(Utils::safeToString).orElse(null);
 	}
 
 	@Override
@@ -287,16 +287,15 @@ public class BasicBeanConverter implements BeanConverter {
 
 	@Override
 	public List<Object> listify(Object o) {
+		assertArgNotNull("o", o);
 		o = swap(o);
-		if (o == null)
-			return null;
 		if (o instanceof List)
 			return (List<Object>)o;
 		var c = o.getClass();
 		if (c.isArray())
 			return arrayToList(o);
 		var o2 = o;
-		return listifierMap.computeIfAbsent(c, this::findListifier).map(x -> (Listifier)x).map(x -> (List<Object>)x.apply(this, o2)).orElse(null);
+		return listifierMap.computeIfAbsent(c, this::findListifier).map(x -> (Listifier)x).map(x -> (List<Object>)x.apply(this, o2)).orElseThrow(()->new IllegalArgumentException(f("Object of type {0} could not be converted to a list.", t(o2))));
 	}
 
 	@Override
@@ -321,6 +320,7 @@ public class BasicBeanConverter implements BeanConverter {
 
 	@Override
 	public String getNested(Object o, NestedTokenizer.Token token) {
+		assertArgNotNull("token", token);
 
 		if (o == null) return getSetting(SETTING_nullValue, null);
 
@@ -350,11 +350,6 @@ public class BasicBeanConverter implements BeanConverter {
 		var s = stringifiers.stream().filter(x -> x.forClass.isAssignableFrom(c)).findFirst().orElse(null);
 		if (s != null)
 			return of(s.function);
-		for (var c2 : c.getInterfaces()) {
-			s = stringifiers.stream().filter(x -> x.forClass.isAssignableFrom(c2)).findFirst().orElse(null);
-			if (s != null)
-				return of(s.function);
-		}
 		return findStringifier(c.getSuperclass());
 	}
 
@@ -364,11 +359,6 @@ public class BasicBeanConverter implements BeanConverter {
 		var l = listifiers.stream().filter(x -> x.forClass.isAssignableFrom(c)).findFirst().orElse(null);
 		if (l != null)
 			return of(l.function);
-		for (var c2 : c.getInterfaces()) {
-			l = listifiers.stream().filter(x -> x.forClass.isAssignableFrom(c2)).findFirst().orElse(null);
-			if (l != null)
-				return of(l.function);
-		}
 		return findListifier(c.getSuperclass());
 	}
 
@@ -378,11 +368,6 @@ public class BasicBeanConverter implements BeanConverter {
 		var s = swappers.stream().filter(x -> x.forClass.isAssignableFrom(c)).findFirst().orElse(null);
 		if (s != null)
 			return of(s.function);
-		for (var c2 : c.getInterfaces()) {
-			s = swappers.stream().filter(x -> x.forClass.isAssignableFrom(c2)).findFirst().orElse(null);
-			if (s != null)
-				return of(s.function);
-		}
 		return findSwapper(c.getSuperclass());
 	}
 
@@ -400,9 +385,9 @@ public class BasicBeanConverter implements BeanConverter {
 	 *
 	 * <h5 class='section'>Handler Registration:</h5>
 	 * <ul>
-	 * 	<li><b>Stringifiers:</b> Custom string conversion logic for specific types</li>
-	 * 	<li><b>Listifiers:</b> Custom list conversion logic for collection-like types</li>
-	 * 	<li><b>Swappers:</b> Pre-processing transformation logic for wrapper types</li>
+	 *    <li><b>Stringifiers:</b> Custom string conversion logic for specific types</li>
+	 *    <li><b>Listifiers:</b> Custom list conversion logic for collection-like types</li>
+	 *    <li><b>Swappers:</b> Pre-processing transformation logic for wrapper types</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Registration Order:</h5>
@@ -413,34 +398,34 @@ public class BasicBeanConverter implements BeanConverter {
 	 * <p>All handlers support class inheritance and interface implementation.
 	 * When looking up a handler, the system checks:</p>
 	 * <ol>
-	 * 	<li>Exact class match</li>
-	 * 	<li>Interface matches (in order of interface declaration)</li>
-	 * 	<li>Superclass matches (walking up the inheritance hierarchy)</li>
+	 *    <li>Exact class match</li>
+	 *    <li>Interface matches (in order of interface declaration)</li>
+	 *    <li>Superclass matches (walking up the inheritance hierarchy)</li>
 	 * </ol>
 	 *
 	 * <h5 class='section'>Usage Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
-	 * 		.defaultSettings()
-	 * 		<jc>// Custom stringification for LocalDateTime</jc>
-	 * 		.addStringifier(LocalDateTime.<jk>class</jk>, (<jp>dt</jp>, <jp>conv</jp>) ->
-	 * 			<jp>dt</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE_TIME</jsf>))
+	 *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+	 *       .defaultSettings()
+	 *       <jc>// Custom stringification for LocalDateTime</jc>
+	 *       .addStringifier(LocalDateTime.<jk>class</jk>, (<jp>dt</jp>, <jp>conv</jp>) ->
+	 *          <jp>dt</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE_TIME</jsf>))
 	 *
-	 * 		<jc>// Custom collection handling for custom type</jc>
-	 * 		.addListifier(MyIterable.<jk>class</jk>, (<jp>iter</jp>, <jp>conv</jp>) ->
-	 * 			<jp>iter</jp>.stream().collect(toList()))
+	 *       <jc>// Custom collection handling for custom type</jc>
+	 *       .addListifier(MyIterable.<jk>class</jk>, (<jp>iter</jp>, <jp>conv</jp>) ->
+	 *          <jp>iter</jp>.stream().collect(toList()))
 	 *
-	 * 		<jc>// Custom transformation for wrapper type</jc>
-	 * 		.addSwapper(LazyValue.<jk>class</jk>, (<jp>lazy</jp>, <jp>conv</jp>) ->
-	 * 			<jp>lazy</jp>.isComputed() ? <jp>lazy</jp>.get() : <jk>null</jk>)
+	 *       <jc>// Custom transformation for wrapper type</jc>
+	 *       .addSwapper(LazyValue.<jk>class</jk>, (<jp>lazy</jp>, <jp>conv</jp>) ->
+	 *          <jp>lazy</jp>.isComputed() ? <jp>lazy</jp>.get() : <jk>null</jk>)
 	 *
-	 * 		<jc>// Configure settings</jc>
-	 * 		.addSetting(<jsf>SETTING_nullValue</jsf>, <js>"NULL"</js>)
-	 * 		.addSetting(<jsf>SETTING_fieldSeparator</jsf>, <js>" | "</js>)
+	 *       <jc>// Configure settings</jc>
+	 *       .addSetting(<jsf>SETTING_nullValue</jsf>, <js>"&lt;null&gt;"</js>)
+	 *       .addSetting(<jsf>SETTING_fieldSeparator</jsf>, <js>" | "</js>)
 	 *
-	 * 		<jc>// Add default handlers for common types</jc>
-	 * 		.defaultSettings()
-	 * 		.build();
+	 *       <jc>// Add default handlers for common types</jc>
+	 *       .defaultSettings()
+	 *       .build();
 	 * </p>
 	 */
 
@@ -453,10 +438,10 @@ public class BasicBeanConverter implements BeanConverter {
 	 *
 	 * <h5 class='section'>Type Handlers:</h5>
 	 * <ul>
-	 * 	<li><b>{@link #addStringifier(Class, Stringifier)}</b> - Custom string conversion logic</li>
-	 * 	<li><b>{@link #addListifier(Class, Listifier)}</b> - Custom list conversion for collection-like objects</li>
-	 * 	<li><b>{@link #addSwapper(Class, Swapper)}</b> - Pre-processing and object transformation</li>
-	 * 	<li><b>{@link #addPropertyExtractor(PropertyExtractor)}</b> - Custom property access strategies</li>
+	 *    <li><b>{@link #addStringifier(Class, Stringifier)}</b> - Custom string conversion logic</li>
+	 *    <li><b>{@link #addListifier(Class, Listifier)}</b> - Custom list conversion for collection-like objects</li>
+	 *    <li><b>{@link #addSwapper(Class, Swapper)}</b> - Pre-processing and object transformation</li>
+	 *    <li><b>{@link #addPropertyExtractor(PropertyExtractor)}</b> - Custom property access strategies</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>PropertyExtractors:</h5>
@@ -465,23 +450,23 @@ public class BasicBeanConverter implements BeanConverter {
 	 * pattern, trying each registered extractor until one succeeds:</p>
 	 *
 	 * <ul>
-	 * 	<li><b>{@link PropertyExtractors.ObjectPropertyExtractor}</b> - JavaBean-style properties via reflection</li>
-	 * 	<li><b>{@link PropertyExtractors.ListPropertyExtractor}</b> - Numeric indices and size/length for arrays/collections</li>
-	 * 	<li><b>{@link PropertyExtractors.MapPropertyExtractor}</b> - Key-based access for Map objects</li>
+	 *    <li><b>{@link PropertyExtractors.ObjectPropertyExtractor}</b> - JavaBean-style properties via reflection</li>
+	 *    <li><b>{@link PropertyExtractors.ListPropertyExtractor}</b> - Numeric indices and size/length for arrays/collections</li>
+	 *    <li><b>{@link PropertyExtractors.MapPropertyExtractor}</b> - Key-based access for Map objects</li>
 	 * </ul>
 	 *
 	 * <p>Custom extractors can be added to handle specialized property access patterns:</p>
 	 * <p class='bjava'>
- * 	<jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
- * 		.defaultSettings()
- * 		.addPropertyExtractor(<jk>new</jk> MyCustomExtractor())
-	 * 		.addPropertyExtractor((<jp>obj</jp>, <jp>prop</jp>) -&gt; {
-	 * 			<jk>if</jk> (<jp>obj</jp> <jk>instanceof</jk> MySpecialType <jv>special</jv>) {
-	 * 				<jk>return</jk> <jv>special</jv>.getCustomProperty(<jp>prop</jp>);
-	 * 			}
-	 * 			<jk>return</jk> <jk>null</jk>; <jc>// Try next extractor</jc>
-	 * 		})
-	 * 		.build();
+	 *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+	 *       .defaultSettings()
+	 *       .addPropertyExtractor(<jk>new</jk> MyCustomExtractor())
+	 *       .addPropertyExtractor((<jp>obj</jp>, <jp>prop</jp>) -&gt; {
+	 *          <jk>if</jk> (<jp>obj</jp> <jk>instanceof</jk> MySpecialType <jv>special</jv>) {
+	 *             <jk>return</jk> <jv>special</jv>.getCustomProperty(<jp>prop</jp>);
+	 *          }
+	 *          <jk>return</jk> <jk>null</jk>; <jc>// Try next extractor</jc>
+	 *       })
+	 *       .build();
 	 * </p>
 	 *
 	 * <h5 class='section'>Default Configuration:</h5>
@@ -529,7 +514,7 @@ public class BasicBeanConverter implements BeanConverter {
 		 *
 		 * @param <T> The type to handle
 		 * @param c The class to register the listifier for
-		 * @param s The listification function
+		 * @param l The listification function
 		 * @return This builder for method chaining
 		 */
 		public <T> Builder addListifier(Class<T> c, Listifier<T> l) { listifiers.add(new ListifierEntry<>(c, l)); return this; }
@@ -555,30 +540,30 @@ public class BasicBeanConverter implements BeanConverter {
 		 * conventions. The converter tries extractors in registration order until one returns
 		 * a non-<jk>null</jk> value. This allows for:</p>
 		 * <ul>
-		 * 	<li><b>Custom data structures:</b> Special property access for non-standard objects</li>
-		 * 	<li><b>Database entities:</b> Property access via entity-specific methods</li>
-		 * 	<li><b>Dynamic properties:</b> Computed or cached property values</li>
-		 * 	<li><b>Legacy objects:</b> Bridging older APIs with modern property access</li>
+		 *    <li><b>Custom data structures:</b> Special property access for non-standard objects</li>
+		 *    <li><b>Database entities:</b> Property access via entity-specific methods</li>
+		 *    <li><b>Dynamic properties:</b> Computed or cached property values</li>
+		 *    <li><b>Legacy objects:</b> Bridging older APIs with modern property access</li>
 		 * </ul>
 		 *
 		 * <h5 class='section'>Implementation Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Custom extractor for a specialized data class</jc>
-		 * 	PropertyExtractor <jv>customExtractor</jv> = (<jp>obj</jp>, <jp>property</jp>) -&gt; {
-		 * 		<jk>if</jk> (<jp>obj</jp> <jk>instanceof</jk> DatabaseEntity <jv>entity</jv>) {
-		 * 			<jk>switch</jk> (<jp>property</jp>) {
-		 * 				<jk>case</jk> <js>"id"</js>: <jk>return</jk> <jv>entity</jv>.getPrimaryKey();
-		 * 				<jk>case</jk> <js>"displayName"</js>: <jk>return</jk> <jv>entity</jv>.computeDisplayName();
-		 * 				<jk>case</jk> <js>"metadata"</js>: <jk>return</jk> <jv>entity</jv>.getMetadataAsMap();
-		 * 			}
-		 * 		}
-		 * 		<jk>return</jk> <jk>null</jk>; <jc>// Let next extractor try</jc>
-		 * 	};
+		 *    <jc>// Custom extractor for a specialized data class</jc>
+		 *    PropertyExtractor <jv>customExtractor</jv> = (<jp>obj</jp>, <jp>property</jp>) -&gt; {
+		 *       <jk>if</jk> (<jp>obj</jp> <jk>instanceof</jk> DatabaseEntity <jv>entity</jv>) {
+		 *          <jk>switch</jk> (<jp>property</jp>) {
+		 *             <jk>case</jk> <js>"id"</js>: <jk>return</jk> <jv>entity</jv>.getPrimaryKey();
+		 *             <jk>case</jk> <js>"displayName"</js>: <jk>return</jk> <jv>entity</jv>.computeDisplayName();
+		 *             <jk>case</jk> <js>"metadata"</js>: <jk>return</jk> <jv>entity</jv>.getMetadataAsMap();
+		 *          }
+		 *       }
+		 *       <jk>return</jk> <jk>null</jk>; <jc>// Let next extractor try</jc>
+		 *    };
 		 *
-		 * 	<jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
-		 * 		.addPropertyExtractor(<jv>customExtractor</jv>)
-		 * 		.defaultSettings() <jc>// Adds standard extractors</jc>
-		 * 		.build();
+		 *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+		 *       .addPropertyExtractor(<jv>customExtractor</jv>)
+		 *       .defaultSettings() <jc>// Adds standard extractors</jc>
+		 *       .build();
 		 * </p>
 		 *
 		 * <p><b>Execution Order:</b> Custom extractors are tried before the default extractors
@@ -589,29 +574,29 @@ public class BasicBeanConverter implements BeanConverter {
 		 * @see PropertyExtractor
 		 * @see PropertyExtractors
 		 */
-		public <T> Builder addPropertyExtractor(PropertyExtractor e) { propertyExtractors.add(e); return this; }
+		public Builder addPropertyExtractor(PropertyExtractor e) { propertyExtractors.add(e); return this; }
 
 		/**
 		 * Adds default handlers and settings for common Java types.
 		 *
 		 * <p>This method registers comprehensive support for:</p>
 		 * <ul>
-		 * 	<li><b>Collections:</b> List, Set, Collection → bracket format</li>
-		 * 	<li><b>Maps:</b> Map, Properties → brace format with key=value pairs</li>
-		 * 	<li><b>Map Entries:</b> Map.Entry → <js>"key=value"</js> format</li>
-		 * 	<li><b>Dates:</b> Date, Calendar → ISO-8601 format</li>
-		 * 	<li><b>Files/Streams:</b> File, InputStream, Reader → content extraction</li>
-		 * 	<li><b>Reflection:</b> Class, Method, Constructor → readable signatures</li>
-		 * 	<li><b>Enums:</b> All enum types → name() format</li>
-		 * 	<li><b>Iterables:</b> Iterable, Iterator, Enumeration, Stream → list conversion</li>
-		 * 	<li><b>Wrappers:</b> Optional, Supplier → unwrapping/evaluation</li>
+		 *    <li><b>Collections:</b> List, Set, Collection → bracket format</li>
+		 *    <li><b>Maps:</b> Map, Properties → brace format with key=value pairs</li>
+		 *    <li><b>Map Entries:</b> Map.Entry → <js>"key=value"</js> format</li>
+		 *    <li><b>Dates:</b> Date, Calendar → ISO-8601 format</li>
+		 *    <li><b>Files/Streams:</b> File, InputStream, Reader → content extraction</li>
+		 *    <li><b>Reflection:</b> Class, Method, Constructor → readable signatures</li>
+		 *    <li><b>Enums:</b> All enum types → name() format</li>
+		 *    <li><b>Iterables:</b> Iterable, Iterator, Enumeration, Stream → list conversion</li>
+		 *    <li><b>Wrappers:</b> Optional, Supplier → unwrapping/evaluation</li>
 		 * </ul>
 		 *
 		 * <p>Default settings include:</p>
 		 * <ul>
-		 * 	<li><code>nullValue</code> = <js>"&lt;null&gt;"</js></li>
-		 * 	<li><code>emptyValue</code> = <js>"&lt;empty&gt;"</js></li>
-		 * 	<li><code>classNameFormat</code> = <js>"simple"</js></li>
+		 *    <li><code>nullValue</code> = <js>"&lt;null&gt;"</js></li>
+		 *    <li><code>emptyValue</code> = <js>"&lt;empty&gt;"</js></li>
+		 *    <li><code>classNameFormat</code> = <js>"simple"</js></li>
 		 * </ul>
 		 *
 		 * <p><b>Note:</b> This should typically be called after custom handlers to avoid

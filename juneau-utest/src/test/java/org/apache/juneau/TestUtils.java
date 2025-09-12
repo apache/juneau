@@ -313,7 +313,7 @@ public class TestUtils extends Utils2 {
 	 * @see BasicBeanConverter
 	 */
 	public static void assertBean(Object actual, String fields, String expected) {
-		Assertions2.assertBean(actual, fields, expected);
+		BctAssertions.assertBean(actual, fields, expected);
 	}
 
 	/**
@@ -374,7 +374,7 @@ public class TestUtils extends Utils2 {
 	 * @see #assertBean(Object, String, String)
 	 */
 	public static void assertBeans(Object actual, String fields, String...expected) {
-		Assertions2.assertBeans(actual, fields, expected);
+		BctAssertions.assertBeans(actual, fields, expected);
 	}
 
 
@@ -435,14 +435,14 @@ public class TestUtils extends Utils2 {
 	 * @see #l(Object) for converting other collection types to Lists
 	 */
 	public static <T> void assertList(Object actual, Object...expected) {
-		Assertions2.assertList(actual, expected);
+		BctAssertions.assertList(actual, expected);
 	}
 
 	/**
 	 * Asserts an object matches the expected string after it's been made {@link Utils#r readable}.
 	 */
 	public static void assertContains(String expected, Object actual) {
-		Assertions2.assertContains(expected, actual);
+		BctAssertions.assertContains(expected, actual);
 	}
 
 	/**
@@ -452,14 +452,14 @@ public class TestUtils extends Utils2 {
 	 * @param actual
 	 */
 	public static void assertContainsAll(Object actual, String...expected) {
-		Assertions2.assertContainsAll(actual, expected);
+		BctAssertions.assertContainsAll(actual, expected);
 	}
 
 	/**
 	 * Asserts that a collection is not null and empty.
 	 */
 	public static void assertEmpty(Object value) {
-		Assertions2.assertEmpty(value);
+		BctAssertions.assertEmpty(value);
 	}
 
 	public static void assertEqualsAll(Object...values) {
@@ -538,7 +538,7 @@ public class TestUtils extends Utils2 {
 	 * @see BasicBeanConverter
 	 */
 	public static void assertMap(Map<?,?> actual, String fields, String expected) {
-		Assertions2.assertBean(actual, fields, expected);
+		BctAssertions.assertBean(actual, fields, expected);
 	}
 
 	/**
@@ -568,14 +568,14 @@ public class TestUtils extends Utils2 {
 	 * @see BasicBeanConverter
 	 */
 	public static <T> void assertMapped(T actual, BiFunction<T,String,Object> f, String properties, String expected) {
-		Assertions2.assertMapped(actual, f, properties, expected);
+		BctAssertions.assertMapped(actual, f, properties, expected);
 	}
 
 	/**
 	 * Asserts that a collection is not null and not empty.
 	 */
 	public static void assertNotEmpty(Object value) {
-		Assertions2.assertNotEmpty(value);
+		BctAssertions.assertNotEmpty(value);
 	}
 
 	public static void assertNotEqualsAny(Object actual, Object...values) {
@@ -618,28 +618,28 @@ public class TestUtils extends Utils2 {
 	 * @throws AssertionError if the object is null or not the expected size.
 	 */
 	public static void assertSize(int expected, Object actual) {
-		Assertions2.assertSize(expected, actual);
+		BctAssertions.assertSize(expected, actual);
 	}
 
 	/**
 	 * Asserts an object matches the expected string after it's been made {@link Utils#r readable}.
 	 */
 	public static void assertString(String expected, Object actual) {
-		Assertions2.assertString(expected, actual);
+		BctAssertions.assertString(expected, actual);
 	}
 
 	/**
 	 * Asserts value when stringified matches the specified glob-style pattern.
 	 */
 	public static void assertMatchesGlob(String pattern, Object value) {
-		Assertions2.assertMatchesGlob(pattern, value);
+		BctAssertions.assertMatchesGlob(pattern, value);
 	}
 
 	/**
 	 * Asserts an object matches the expected string after it's been made {@link Utils#r readable}.
 	 */
 	public static void assertString(String expected, Object actual, Supplier<String> messageSupplier) {
-		Assertions2.assertString(expected, actual);
+		BctAssertions.assertString(expected, actual);
 	}
 
 	public static <T extends Throwable> T assertThrowable(Class<? extends Throwable> expectedType, String expectedSubstring, T t) {

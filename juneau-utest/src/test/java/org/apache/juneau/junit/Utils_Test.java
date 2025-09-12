@@ -13,7 +13,7 @@
 package org.apache.juneau.junit;
 
 import static org.apache.juneau.junit.Utils.*;
-import static org.apache.juneau.junit.Assertions2.*;
+import static org.apache.juneau.junit.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -558,8 +558,7 @@ class Utils_Test extends TestBase {
 
 		@Override
 		public boolean equals(Object obj) {
-		return (obj instanceof TestBean other) && eq(this, other, (x,y) ->
-			x.age == y.age && x.active == y.active && eq(x.name, y.name));
+			return (obj instanceof TestBean other) && eq(this, other, (x,y) -> eq(x.age, y.age) && eq(x.active, y.active) && eq(x.name, y.name));
 		}
 
 		@Override

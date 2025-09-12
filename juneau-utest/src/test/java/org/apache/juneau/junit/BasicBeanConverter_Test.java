@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit;
 
-import static org.apache.juneau.junit.Assertions2.*;
+import static org.apache.juneau.junit.BctAssertions.*;
 import static org.apache.juneau.junit.BasicBeanConverter.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -133,10 +133,10 @@ class BasicBeanConverter_Test extends TestBase {
 		void a08_addSetting_addsCustomSetting() {
 			var converter = BasicBeanConverter.builder()
 				.defaultSettings()
-				.addSetting(SETTING_nullValue, "NULL")
+				.addSetting(SETTING_nullValue, "<null>")
 				.build();
 
-			assertEquals("NULL", converter.stringify(null));
+			assertEquals("<null>", converter.stringify(null));
 		}
 	}
 
@@ -234,9 +234,9 @@ class BasicBeanConverter_Test extends TestBase {
 		}
 
 		@Test
-		@DisplayName("b10_listify() handles null")
-		void b10_listify_handlesNull() {
-			assertNull(converter.listify(null));
+		@DisplayName("b10_listify() throws IllegalArgumentException for null")
+		void b10_listify_throwsForNull() {
+			assertThrows(IllegalArgumentException.class, () -> converter.listify(null));
 		}
 
 		@Test
@@ -296,7 +296,7 @@ class BasicBeanConverter_Test extends TestBase {
 			var bean = new TestBean("John", 30);
 
 			assertThrows(RuntimeException.class, () ->
-				converter.getProperty(bean, "unknown"));
+			converter.getProperty(bean, "unknown"));
 		}
 	}
 
@@ -313,10 +313,10 @@ class BasicBeanConverter_Test extends TestBase {
 		void d01_nullValue_changesNullRepresentation() {
 			var converter = BasicBeanConverter.builder()
 				.defaultSettings()
-				.addSetting(SETTING_nullValue, "NULL")
+				.addSetting(SETTING_nullValue, "<null>")
 				.build();
 
-			assertEquals("NULL", converter.stringify(null));
+			assertEquals("<null>", converter.stringify(null));
 		}
 
 		@Test
@@ -405,8 +405,8 @@ class BasicBeanConverter_Test extends TestBase {
 			var bean = new TestBean("John", 30);
 
 			var ex = assertThrows(RuntimeException.class, () ->
-				converter.getProperty(bean, "invalidProperty"));
-			assertContains("Property invalidProperty not found", ex.getMessage());
+			converter.getProperty(bean, "invalidProperty"));
+			assertContains("Property 'invalidProperty' not found", ex.getMessage());
 		}
 	}
 
@@ -427,5 +427,237 @@ class BasicBeanConverter_Test extends TestBase {
 		public int getAge() { return age; }
 		void setName(String name) { this.name = name; }
 		void setAge(int age) { this.age = age; }
+	}
+
+	public static class TestPerson {
+		private String name;
+		private int age;
+
+		public TestPerson(String name, int age) {
+			this.name = name;
+			this.age = age;
+		}
+
+		public String getName() { return name; }
+		public int getAge() { return age; }
+		void setName(String name) { this.name = name; }
+		void setAge(int age) { this.age = age; }
+	}
+
+	// ====================================================================================================
+	// Enhanced Edge Case Tests
+	// ====================================================================================================
+
+	@Nested
+	class h_EnhancedEdgeCases {
+
+		@Test
+		void h01_listifyWithMixedArrayTypes() {
+			var converter = builder().defaultSettings().build();
+
+			// Test different array types
+			var stringArray = new String[]{"a", "b", "c"};
+			var intArray = new int[]{1, 2, 3};
+			var booleanArray = new boolean[]{true, false, true};
+
+			var stringList = converter.listify(stringArray);
+			assertEquals(3, stringList.size());
+			assertEquals("a", stringList.get(0));
+
+			var intList = converter.listify(intArray);
+			assertEquals(3, intList.size());
+			assertEquals(1, intList.get(0));
+
+			var booleanList = converter.listify(booleanArray);
+			assertEquals(3, booleanList.size());
+			assertEquals(true, booleanList.get(0));
+		}
+
+		@Test
+		void h02_swapWithSingleRegistration() {
+			var converter = builder()
+				.defaultSettings()
+				.addSwapper(TestPerson.class, (conv, person) -> "Person:" + person.getName())
+				.build();
+
+			var person = new TestPerson("john", 30);
+
+			// Should apply swapper: Person -> String
+			assertEquals("Person:john", converter.stringify(person));
+		}
+
+		@Test
+		void h03_canListifyWithEdgeCases() {
+			var converter = builder().defaultSettings().build();
+
+			// Test various types that can/cannot be listified
+			assertTrue(converter.canListify(Arrays.asList("a", "b")));
+			assertTrue(converter.canListify(new String[]{"a", "b"}));
+			assertTrue(converter.canListify(Set.of("a", "b")));
+			assertFalse(converter.canListify(null));
+			assertFalse(converter.canListify("simple string"));
+			assertFalse(converter.canListify(42));
+			assertFalse(converter.canListify(new TestPerson("test", 25)));
+		}
+
+		@Test
+		void h04_performanceWithLargeObjects() {
+			var converter = builder().defaultSettings().build();
+
+			// Test performance with larger objects
+			var largeList = new ArrayList<>();
+			for (int i = 0; i < 1000; i++) {
+				largeList.add("item_" + i);
+			}
+
+			var start = System.nanoTime();
+			var result = converter.stringify(largeList);
+			var end = System.nanoTime();
+
+			assertNotNull(result);
+			assertTrue(result.length() > 1000, "Should generate substantial output");
+
+			var durationMs = (end - start) / 1_000_000;
+			assertTrue(durationMs < 100, "Should complete quickly for 1000 items, took: " + durationMs + "ms");
+		}
+
+		@Test
+		void h05_missingPropertyExtractorThrowsException() {
+			// Test line 305: orElseThrow when no property extractor is found
+			var converter = builder().build(); // No default extractors
+			var obj = new TestPerson("John", 30);
+
+			// Should throw RuntimeException when no extractor can handle the property
+			var ex = assertThrows(RuntimeException.class, () ->
+				converter.getProperty(obj, "name"));
+			assertContains("Could not find extractor for object of type", ex.getMessage());
+		}
+
+		@Test
+		void h06_iterationSyntaxWithCollections() {
+			// Test lines 316-317: #{...} syntax for iterating over collections/arrays
+			var converter = builder().defaultSettings().build();
+
+			// Test with list of objects
+			var people = Arrays.asList(
+				Map.of("name", "John", "age", 30),
+				Map.of("name", "Jane", "age", 25)
+			);
+
+			assertEquals("[{John},{Jane}]",
+				converter.getNested(people, Utils.tokenize("#{name}").get(0)));
+			assertEquals("[{30},{25}]",
+				converter.getNested(people, Utils.tokenize("#{age}").get(0)));
+			assertEquals("[{John,30},{Jane,25}]",
+				converter.getNested(people, Utils.tokenize("#{name,age}").get(0)));
+		}
+
+		@Test
+		void h07_getNested_earlyReturnConditions() {
+			// Test line 331: early return when e == null || !token.hasNested()
+			var converter = builder().defaultSettings().build();
+			var obj = new HashMap<String, Object>();
+			obj.put("key", "value");
+			obj.put("nullKey", null);
+
+			// Case 1: e == null (property value is null) and no nested tokens
+			assertEquals("<null>", converter.getNested(obj, Utils.tokenize("nullKey").get(0)));
+
+			// Case 2: e != null but token has no nested content
+			assertEquals("value", converter.getNested(obj, Utils.tokenize("key").get(0)));
+
+			// Case 3: e == null and token has nested content (should still return early)
+			assertEquals("<null>", converter.getNested(obj, Utils.tokenize("nullKey{nested}").get(0)));
+		}
+
+		@Test
+		void h08_interfaceBasedStringifierLookup() {
+			// Test lines 343-344: interface checking in findStringifier()
+
+			// Create a custom interface and class to test interface lookup
+			interface CustomStringifiable {
+				String getCustomString();
+			}
+
+			class CustomObject implements CustomStringifiable {
+				@Override
+				public String getCustomString() { return "custom"; }
+			}
+
+			var converter = builder()
+				.defaultSettings()
+				.addStringifier(CustomStringifiable.class, (conv, obj) -> "CUSTOM:" + obj.getCustomString())
+				.build();
+
+			// CustomObject implements CustomStringifiable, so should find the interface-based stringifier
+			assertEquals("CUSTOM:custom", converter.stringify(new CustomObject()));
+		}
+
+		@Test
+		void h09_interfaceBasedListifierLookup() {
+			// Test lines 357-358: interface checking in findListifier()
+
+			// Create an interface hierarchy where we register for a deeper interface
+			interface BaseInterface {
+				String getBase();
+			}
+
+			interface MiddleInterface {
+				String getMiddle();
+			}
+
+			// Class that implements multiple unrelated interfaces
+			class MultiInterfaceClass implements BaseInterface, MiddleInterface {
+				@Override
+				public String getBase() { return "base"; }
+				@Override
+				public String getMiddle() { return "middle"; }
+			}
+
+			var converter = builder()
+				.defaultSettings()
+				// Register listifier only for MiddleInterface, not BaseInterface or the class
+				.addListifier(MiddleInterface.class, (conv, obj) ->
+					Arrays.asList("FROM_MIDDLE_INTERFACE", obj.getMiddle()))
+				.build();
+
+			// MultiInterfaceClass won't directly match, BaseInterface won't match,
+			// but MiddleInterface will match during interface iteration
+			var result = converter.listify(new MultiInterfaceClass());
+			assertEquals("FROM_MIDDLE_INTERFACE", result.get(0));
+			assertEquals("middle", result.get(1));
+		}
+
+		@Test
+		void h10_interfaceBasedSwapperLookup() {
+			// Test lines 371-372: interface checking in findSwapper()
+
+			// Create multiple unrelated interfaces
+			interface FirstInterface {
+				String getFirst();
+			}
+
+			interface SecondInterface {
+				String getSecond();
+			}
+
+			// Class that implements multiple unrelated interfaces
+			class MultiInterfaceWrapper implements FirstInterface, SecondInterface {
+				@Override
+				public String getFirst() { return "first"; }
+				@Override
+				public String getSecond() { return "second"; }
+			}
+
+			var converter = builder()
+				.defaultSettings()
+				// Register swapper only for SecondInterface, not FirstInterface or the class
+				.addSwapper(SecondInterface.class, (conv, obj) -> "SWAPPED:" + obj.getSecond())
+				.build();
+
+			// MultiInterfaceWrapper won't directly match, FirstInterface won't match,
+			// but SecondInterface will match during interface iteration
+			assertEquals("SWAPPED:second", converter.stringify(new MultiInterfaceWrapper()));
+		}
 	}
 }

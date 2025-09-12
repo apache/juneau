@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit;
 
-import static org.apache.juneau.junit.Assertions2.*;
+import static org.apache.juneau.junit.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -273,62 +273,10 @@ class Listifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class f_OptionalListifier {
+	class f_MapListifier {
 
 		@Test
-		void f01_listifyPresentOptional() {
-			var listifier = Listifiers.optionalListifier();
-			var input = Optional.of("hello");
-			var result = listifier.apply(null, input);
-
-			assertList(result, "hello");
-		}
-
-		@Test
-		void f02_listifyEmptyOptional() {
-			var listifier = Listifiers.optionalListifier();
-			var input = Optional.empty();
-			var result = listifier.apply(null, input);
-
-			assertTrue(result.isEmpty());
-		}
-
-		@Test
-		void f03_listifyOptionalWithNull() {
-			var listifier = Listifiers.optionalListifier();
-			var input = Optional.ofNullable(null);
-			var result = listifier.apply(null, input);
-
-			assertTrue(result.isEmpty());
-		}
-
-		@Test
-		void f04_listifyOptionalWithComplexObject() {
-			var listifier = Listifiers.optionalListifier();
-			var complexObject = Map.of("key", "value");
-			var input = Optional.of(complexObject);
-			var result = listifier.apply(null, input);
-
-			assertEquals(1, result.size());
-			assertSame(complexObject, result.get(0));
-		}
-
-		@Test
-		void f05_listifyWithConverter() {
-			var converter = BasicBeanConverter.builder().defaultSettings().build();
-			var listifier = Listifiers.optionalListifier();
-			var input = Optional.of(42);
-			var result = listifier.apply(converter, input);
-
-			assertList(result, 42);
-		}
-	}
-
-	@Nested
-	class g_MapListifier {
-
-		@Test
-		void g01_listifyMap() {
+		void f01_listifyMap() {
 			var listifier = Listifiers.mapListifier();
 			var input = Map.of("key1", "value1", "key2", "value2");
 			var result = listifier.apply(null, input);
@@ -339,7 +287,7 @@ class Listifiers_Test extends TestBase {
 		}
 
 		@Test
-		void g02_listifyEmptyMap() {
+		void f02_listifyEmptyMap() {
 			var listifier = Listifiers.mapListifier();
 			var input = Map.of();
 			var result = listifier.apply(null, input);
@@ -348,7 +296,7 @@ class Listifiers_Test extends TestBase {
 		}
 
 		@Test
-		void g03_listifyMapWithNullValues() {
+		void f03_listifyMapWithNullValues() {
 			var listifier = Listifiers.mapListifier();
 			var input = new HashMap<String, String>();
 			input.put("key1", "value1");
@@ -371,7 +319,7 @@ class Listifiers_Test extends TestBase {
 		}
 
 		@Test
-		void g04_listifyWithConverter() {
+		void f04_listifyWithConverter() {
 			var converter = BasicBeanConverter.builder().defaultSettings().build();
 			var listifier = Listifiers.mapListifier();
 			var input = Map.of("a", 1, "b", 2);
@@ -383,10 +331,10 @@ class Listifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class h_Integration {
+	class g_Integration {
 
 		@Test
-		void h01_useInBasicBeanConverter() {
+		void g01_useInBasicBeanConverter() {
 			// Test various listifiable objects
 			assertList(List.of("a", "b"), "a", "b");
 			assertList(new LinkedHashSet<>(Arrays.asList("x", "y")), "x", "y");
@@ -395,13 +343,13 @@ class Listifiers_Test extends TestBase {
 		}
 
 		@Test
-		void h02_customListifierRegistration() {
+		void g02_customListifierRegistration() {
 			// Test that custom registration works
 			assertList(List.of("custom"), "custom");
 		}
 
 		@Test
-		void h03_listifierChaining() {
+		void g03_listifierChaining() {
 			// Test that listified objects can be processed by other listifiers
 			// Stream of optionals
 			var streamOfOptionals = Stream.of(Optional.of("a"), Optional.empty(), Optional.of("b"));

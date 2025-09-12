@@ -36,7 +36,7 @@ import org.opentest4j.*;
  *
  * <h5 class='section'>Usage Examples:</h5>
  * <p class='bjava'>
- *   <jk>import static</jk> org.apache.juneau.junit.Utils.*;
+ *   <jk>import static</jk> com.sfdc.junit.bct.Utils.*;
  *
  *   <jc>// String formatting</jc>
  *   String <jv>msg</jv> = <jsm>f</jsm>(<js>"User {0} has {1} items"</js>, <js>"Alice"</js>, 5);
@@ -54,6 +54,8 @@ import org.opentest4j.*;
  * <p><b>Thread Safety:</b> All methods in this class are thread-safe as they are stateless static methods.
  */
 class Utils {
+
+	private Utils() {}
 
 	/**
 	 * Converts an array to a {@link List} of objects.
@@ -464,5 +466,53 @@ class Utils {
 	 */
 	public static List<NestedTokenizer.Token> tokenize(String fields) {
 		return NestedTokenizer.tokenize(fields);
+	}
+
+	/**
+	 * Safely converts an object to its string representation, handling any exceptions that may occur.
+	 *
+	 * <p>This method provides a fail-safe way to call {@code toString()} on any object, ensuring that
+	 * exceptions thrown by problematic {@code toString()} implementations don't propagate up the call stack.
+	 * Instead, it returns a descriptive error message containing the exception type and message.</p>
+	 *
+	 * <h5 class='section'>Exception Handling:</h5>
+	 * <p>If the object's {@code toString()} method throws any {@code Throwable}, this method catches it
+	 * and returns a formatted string in the form: {@code "<ExceptionType>: <exception message>"}.</p>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Normal case - returns object's toString() result</jc>
+	 *    String result = <jsm>safeToString</jsm>(<js>"Hello"</js>);
+	 *    <jc>// result = "Hello"</jc>
+	 *
+	 *    <jc>// Exception case - returns formatted error message</jc>
+	 *    Object problematic = <jk>new</jk> Object() {
+	 *       <ja>@Override</ja>
+	 *       <jk>public</jk> String toString() {
+	 *          <jk>throw new</jk> RuntimeException(<js>"Cannot convert"</js>);
+	 *       }
+	 *    };
+	 *    String result = <jsm>safeToString</jsm>(<jv>problematic</jv>);
+	 *    <jc>// result = "RuntimeException: Cannot convert"</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Use Cases:</h5>
+	 * <ul>
+	 *    <li><b>Object stringification in converters:</b> Safe conversion of arbitrary objects to strings</li>
+	 *    <li><b>Debugging and logging:</b> Ensures log statements never fail due to toString() exceptions</li>
+	 *    <li><b>Error handling:</b> Graceful degradation when objects have problematic string representations</li>
+	 *    <li><b>Third-party object integration:</b> Safe handling of objects from external libraries</li>
+	 * </ul>
+	 *
+	 * @param o The object to convert to a string. May be any object including <jk>null</jk>.
+	 * @return The string representation of the object, or a formatted error message if toString() throws an exception.
+	 *    Returns <js>"null"</js> if the object is <jk>null</jk>.
+	 */
+	public static String safeToString(Object o) {
+		try {
+			return o.toString();
+		} catch (Throwable t) {  // NOSONAR
+			return t(t) + ": " + t.getMessage();
+		}
 	}
 }

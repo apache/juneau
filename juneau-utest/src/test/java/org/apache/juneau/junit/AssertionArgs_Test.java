@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit;
 
-import static org.apache.juneau.junit.Assertions2.*;
+import static org.apache.juneau.junit.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.*;
@@ -243,12 +243,10 @@ class AssertionArgs_Test extends TestBase {
 		var converter2 = createMockConverter();
 
 		// Set initial values
-		args.setBeanConverter(converter1)
-		    .setMessage("First message");
+		args.setBeanConverter(converter1).setMessage("First message");
 
 		// Overwrite with new values
-		args.setBeanConverter(converter2)
-		    .setMessage("Second message");
+		args.setBeanConverter(converter2).setMessage("Second message");
 
 		// Should have latest values
 		assertSame(converter2, args.getBeanConverter().get());

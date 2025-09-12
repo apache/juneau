@@ -12,23 +12,24 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit;
 
-import static org.apache.juneau.junit.Assertions2.*;
+import static org.apache.juneau.junit.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.junit.jupiter.api.*;
 import org.opentest4j.*;
 
 /**
- * Unit tests for the {@link Assertions2} class.
+ * Unit tests for the {@link BctAssertions} class.
  *
  * <p>This test class focuses on testing the assertion methods' behavior, error handling,
  * and argument passing. The underlying BeanConverter functionality is tested separately
  * in BasicBeanConverter_Test.</p>
  */
-class Assertions2_Test extends TestBase {
+class BctAssertions_Test extends TestBase {
 
 	// ====================================================================================================
 	// AssertionArgs Tests
@@ -139,7 +140,7 @@ class Assertions2_Test extends TestBase {
 
 		@Test
 		void c06_nullCollection() {
-			var e = assertThrows(AssertionFailedError.class, () -> Assertions2.assertBeans((Object)null, "name", "test"));
+			var e = assertThrows(AssertionFailedError.class, () -> assertBeans((Object)null, "name", "test"));
 			assertContains("Value was null", e.getMessage());
 		}
 	}
@@ -227,19 +228,19 @@ class Assertions2_Test extends TestBase {
 		void f02_withCustomArgs() {
 			var args = args().setMessage("Custom contains all message");
 
-			assertDoesNotThrow(() -> Assertions2.assertContainsAll(args, (Object)"Testing", "Test"));
+			assertDoesNotThrow(() -> assertContainsAll(args, (Object)"Testing", "Test"));
 		}
 
 		@Test
 		void f03_missingSubstring() {
-			var e = assertThrows(AssertionFailedError.class, () -> Assertions2.assertContainsAll("Hello World", "Hello", "Missing"));
+			var e = assertThrows(AssertionFailedError.class, () -> assertContainsAll("Hello World", "Hello", "Missing"));
 			assertContains("String did not contain expected substring", e.getMessage());
 			assertContains("Missing", e.getMessage());
 		}
 
 		@Test
 		void f04_nullValue() {
-			var e = assertThrows(AssertionFailedError.class, () -> Assertions2.assertContainsAll((Object)null, "test"));
+			var e = assertThrows(AssertionFailedError.class, () -> assertContainsAll((Object)null, "test"));
 			assertContains("Value was null", e.getMessage());
 		}
 	}
@@ -312,6 +313,29 @@ class Assertions2_Test extends TestBase {
 		void h05_nullValue() {
 			var e = assertThrows(IllegalArgumentException.class, () -> assertList(null, "test"));
 			assertContains("cannot be null", e.getMessage());
+		}
+
+		@Test
+		void h06_predicateValidation() {
+			// Test lines 765-766: Predicate-based element validation
+			var args = args().setMessage("Custom predicate message");
+			var numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+			// Test successful predicate validation
+			assertDoesNotThrow(() -> assertList(args, numbers, 
+				(Predicate<Integer>) x -> x == 1,   // First element should equal 1
+				(Predicate<Integer>) x -> x > 1,    // Second element should be > 1
+				"3",                                // Third element as string
+				(Predicate<Integer>) x -> x % 2 == 0, // Fourth element should be even
+				(Predicate<Integer>) x -> x == 5     // Fifth element should equal 5
+			));
+
+			// Test failed predicate validation - use single element list to avoid length mismatch
+			var singleNumber = Arrays.asList(1);
+			var e = assertThrows(AssertionFailedError.class, () -> 
+				assertList(args, singleNumber, (Predicate<Integer>) x -> x == 99)); // Should fail
+			assertContains("Element at index 0 did not pass predicate", e.getMessage());
+			assertContains("actual: <1>", e.getMessage());
 		}
 	}
 
@@ -462,7 +486,7 @@ class Assertions2_Test extends TestBase {
 	static class TestPerson {
 		private final String name;
 		private final int age;
-		private final TestAddress address;
+		private TestAddress address;
 
 		TestPerson(String name, int age) {
 			this(name, age, null);
@@ -477,6 +501,7 @@ class Assertions2_Test extends TestBase {
 		String getName() { return name; }
 		int getAge() { return age; }
 		TestAddress getAddress() { return address; }
+		void setAddress(TestAddress address) { this.address = address; }
 
 		@Override
 		public String toString() {
@@ -499,6 +524,87 @@ class Assertions2_Test extends TestBase {
 		@Override
 		public String toString() {
 			return "TestAddress{street='" + street + "', city='" + city + "'}";
+		}
+	}
+
+	// ====================================================================================================
+	// Enhanced Edge Case Tests
+	// ====================================================================================================
+
+	@Nested
+	class h_EnhancedEdgeCases {
+
+		@Test
+		void h01_assertListWithMixedTypes() {
+			// Test list with mixed data types
+			var mixedList = Arrays.asList("string", 42, true, 3.14, null);
+
+			assertList(mixedList, "string", 42, true, 3.14, null);
+			assertSize(5, mixedList);
+			assertContains("42", mixedList); // Number stringified
+			assertContains("true", mixedList); // Boolean stringified
+		}
+
+		@Test
+		void h02_assertMatchesGlobWithComplexPatterns() {
+			// Test glob matching with various patterns
+			var testStrings = Arrays.asList(
+				"hello.txt", "test_file.log", "document.pdf", 
+				"IMG_001.jpg", "data.xml", "script.js"
+			);
+
+			assertMatchesGlob("*.txt", testStrings.get(0));
+			assertMatchesGlob("test_*", testStrings.get(1));
+			assertMatchesGlob("*.pdf", testStrings.get(2));
+			assertMatchesGlob("IMG_???.jpg", testStrings.get(3));
+			assertMatchesGlob("*.xml", testStrings.get(4));
+			assertMatchesGlob("script.*", testStrings.get(5));
+		}
+
+		@Test
+		void h03_assertEmptyWithVariousEmptyTypes() {
+			// Test empty assertions with different empty types
+			assertEmpty(Arrays.asList());
+			assertEmpty(new HashMap<>());
+			assertEmpty(new HashSet<>());
+			assertEmpty(Optional.empty());
+		}
+
+		@Test
+		void h04_assertNotEmptyWithVariousNonEmptyTypes() {
+			// Test non-empty assertions
+			assertNotEmpty(Arrays.asList("item"));
+			assertNotEmpty(Map.of("key", "value"));
+			assertNotEmpty(Set.of("element"));
+			assertNotEmpty(Optional.of("value"));
+		}
+
+		@Test
+		void h05_assertContainsAllWithPartialMatches() {
+			// Test containsAll with partial string matches
+			var text = "The quick brown fox jumps over the lazy dog";
+
+			assertContainsAll(text, "quick", "fox", "lazy");
+			assertContainsAll(text, "The", "dog");
+
+			// Test with object that stringifies to contain multiple values
+			var complexObj = Map.of(
+				"description", "This is a test with multiple keywords: alpha, beta, gamma"
+			);
+			assertContainsAll(complexObj, "alpha", "beta", "gamma", "keywords");
+		}
+
+		@Test
+		void h06_assertSizeWithCustomListifiableObjects() {
+			// Test size assertions with objects that can be converted to lists
+			var stringArray = new String[]{"a", "b", "c"};
+			var intArray = new int[]{1, 2, 3, 4, 5};
+
+			assertSize(3, stringArray);
+			assertSize(5, intArray);
+
+			// Test with Stream (gets converted to list)
+			assertSize(4, Stream.of("w", "x", "y", "z"));
 		}
 	}
 }
