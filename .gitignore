@@ -5,3 +5,5 @@
 **/.settings/
 /bin/
 derby.log
+
+# Note: Maven site generation creates target/site/ (already ignored by **/target/ above)

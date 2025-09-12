@@ -199,6 +199,10 @@
 							<goals>
 								<goal>aggregate</goal>
 							</goals>
+							<configuration>
+								<!-- Override output directory for aggregate goal -->
+								<outputDirectory>${basedir}/docs/api</outputDirectory>
+							</configuration>
 						</execution>
 					</executions>
 				</plugin>
