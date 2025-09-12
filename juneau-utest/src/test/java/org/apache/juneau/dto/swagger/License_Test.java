@@ -126,6 +126,6 @@ class License_Test extends SimpleTestBase {
 			.set("url", URI.create("b"))
 			.set("$ref", "c");
 
-		assertList(t.keySet(), "name", "url", "$ref");
+		assertList(t.keySet(), "$ref", "name", "url");
 	}
 }

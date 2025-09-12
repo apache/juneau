@@ -115,6 +115,6 @@ class Contact_Test extends SimpleTestBase {
 			.set("email", "c")
 			.set("$ref", "d");
 
-		assertList(t.keySet(), "email", "name", "url", "$ref");
+		assertList(t.keySet(), "$ref", "email", "name", "url");
 	}
 }

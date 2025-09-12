@@ -258,6 +258,6 @@ class ParameterInfo_Test extends SimpleTestBase {
 			.set("uniqueItems", true)
 			.set("$ref", "l");
 
-		assertList(t.keySet(), "allowEmptyValue", "collectionFormat", "default", "description", "enum", "exclusiveMaximum", "exclusiveMinimum", "format", "in", "items", "maximum", "maxItems", "maxLength", "minimum", "minItems", "minLength", "multipleOf", "name", "pattern", "required", "schema", "type", "uniqueItems", "$ref");
+		assertList(t.keySet(), "$ref", "allowEmptyValue", "collectionFormat", "default", "description", "enum", "exclusiveMaximum", "exclusiveMinimum", "format", "in", "items", "maxItems", "maxLength", "maximum", "minItems", "minLength", "minimum", "multipleOf", "name", "pattern", "required", "schema", "type", "uniqueItems");
 	}
 }

@@ -411,7 +411,7 @@ public class Stringifiers {
 	 * @see Class
 	 */
 	public static Stringifier<Class> classStringifier() {
-		return (bc, clazz) -> stringifyClass(bc, clazz);
+		return Stringifiers::stringifyClass;
 	}
 
 	/**
@@ -442,8 +442,8 @@ public class Stringifiers {
 	 * @see Constructor
 	 */
 	public static Stringifier<Constructor> constructorStringifier() {
-		return (bc, constructor) -> {
-			return new StringBuilder()
+		return (bc, constructor) ->
+			new StringBuilder()
 				.append(stringifyClass(bc, ((Constructor<?>) constructor).getDeclaringClass()))
 				.append('(')
 				.append(
@@ -454,7 +454,6 @@ public class Stringifiers {
 				)
 				.append(')')
 				.toString();
-		};
 	}
 
 	/**
@@ -485,8 +484,8 @@ public class Stringifiers {
 	 * @see Method
 	 */
 	public static Stringifier<Method> methodStringifier() {
-		return (bc, method) -> {
-			return new StringBuilder()
+		return (bc, method) ->
+			new StringBuilder()
 				.append(method.getName())
 				.append('(')
 				.append(
@@ -496,7 +495,6 @@ public class Stringifiers {
 				)
 				.append(')')
 				.toString();
-		};
 	}
 
 	/**

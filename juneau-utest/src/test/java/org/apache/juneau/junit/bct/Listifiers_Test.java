@@ -41,13 +41,31 @@ class Listifiers_Test extends TestBase {
 		@Test
 		void a02_listifySet() {
 			var listifier = Listifiers.collectionListifier();
-			var input = Set.of("x", "y", "z");
+			var input = Set.of("z", "a", "m"); // Unordered input
 			var result = listifier.apply(null, input);
 
-			assertEquals(3, result.size());
-			assertTrue(result.contains("x"));
-			assertTrue(result.contains("y"));
-			assertTrue(result.contains("z"));
+			// TreeSet conversion ensures natural ordering
+			assertList(result, "a", "m", "z");
+		}
+
+		@Test
+		void a02a_listifySetTypes() {
+			var listifier = Listifiers.collectionListifier();
+
+			// HashSet (unordered) -> converted to TreeSet for natural ordering
+			var hashSet = new HashSet<>(Arrays.asList("z", "a", "m"));
+			var hashResult = listifier.apply(null, hashSet);
+			assertList(hashResult, "a", "m", "z");
+
+			// LinkedHashSet preserves insertion order
+			var linkedSet = new LinkedHashSet<>(Arrays.asList("z", "a", "m"));
+			var linkedResult = listifier.apply(null, linkedSet);
+			assertList(linkedResult, "z", "a", "m"); // Insertion order
+
+			// TreeSet already sorted, preserves its order
+			var treeSet = new TreeSet<>(Arrays.asList("z", "a", "m"));
+			var treeResult = listifier.apply(null, treeSet);
+			assertList(treeResult, "a", "m", "z"); // Natural order
 		}
 
 		@Test
@@ -278,12 +296,63 @@ class Listifiers_Test extends TestBase {
 		@Test
 		void f01_listifyMap() {
 			var listifier = Listifiers.mapListifier();
-			var input = Map.of("key1", "value1", "key2", "value2");
+			var input = Map.of("z", "value1", "a", "value2"); // Unordered input
 			var result = listifier.apply(null, input);
 
 			assertEquals(2, result.size());
 			// Result should contain Map.Entry objects
 			assertTrue(result.stream().allMatch(obj -> obj instanceof Map.Entry));
+
+			// TreeMap conversion ensures natural key ordering
+			var entries = result.stream()
+				.map(obj -> (Map.Entry<?, ?>) obj)
+				.toList();
+			assertEquals("a", entries.get(0).getKey());
+			assertEquals("z", entries.get(1).getKey());
+		}
+
+		@Test
+		void f01a_listifyMapTypes() {
+			var listifier = Listifiers.mapListifier();
+
+			// HashMap (unordered) -> converted to TreeMap for natural key ordering
+			var hashMap = new HashMap<String, String>();
+			hashMap.put("z", "value1");
+			hashMap.put("a", "value2");
+			hashMap.put("m", "value3");
+			var hashResult = listifier.apply(null, hashMap);
+			var hashEntries = hashResult.stream()
+				.map(obj -> (Map.Entry<?, ?>) obj)
+				.toList();
+			assertEquals("a", hashEntries.get(0).getKey());
+			assertEquals("m", hashEntries.get(1).getKey());
+			assertEquals("z", hashEntries.get(2).getKey());
+
+			// LinkedHashMap preserves insertion order
+			var linkedMap = new LinkedHashMap<String, String>();
+			linkedMap.put("z", "value1");
+			linkedMap.put("a", "value2");
+			linkedMap.put("m", "value3");
+			var linkedResult = listifier.apply(null, linkedMap);
+			var linkedEntries = linkedResult.stream()
+				.map(obj -> (Map.Entry<?, ?>) obj)
+				.toList();
+			assertEquals("z", linkedEntries.get(0).getKey()); // Insertion order
+			assertEquals("a", linkedEntries.get(1).getKey());
+			assertEquals("m", linkedEntries.get(2).getKey());
+
+			// TreeMap already sorted, preserves its order
+			var treeMap = new TreeMap<String, String>();
+			treeMap.put("z", "value1");
+			treeMap.put("a", "value2");
+			treeMap.put("m", "value3");
+			var treeResult = listifier.apply(null, treeMap);
+			var treeEntries = treeResult.stream()
+				.map(obj -> (Map.Entry<?, ?>) obj)
+				.toList();
+			assertEquals("a", treeEntries.get(0).getKey()); // Natural order
+			assertEquals("m", treeEntries.get(1).getKey());
+			assertEquals("z", treeEntries.get(2).getKey());
 		}
 
 		@Test

@@ -134,6 +134,6 @@ class Tag_Test extends SimpleTestBase {
 			.set("name", "c")
 			.set("$ref", "ref");
 
-		assertList(t.keySet(), "description", "externalDocs", "name", "$ref");
+		assertList(t.keySet(), "$ref", "description", "externalDocs", "name");
 	}
 }

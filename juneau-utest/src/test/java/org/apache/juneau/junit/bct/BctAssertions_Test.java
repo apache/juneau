@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 import org.opentest4j.*;
 
 /**
- * Unit tests for the {@link BctAssertions} class.
+ * Unit tests for the {@link Assertions2} class.
  *
  * <p>This test class focuses on testing the assertion methods' behavior, error handling,
  * and argument passing. The underlying BeanConverter functionality is tested separately
@@ -243,6 +243,42 @@ class BctAssertions_Test extends TestBase {
 			var e = assertThrows(AssertionFailedError.class, () -> assertContainsAll((Object)null, "test"));
 			assertContains("Value was null", e.getMessage());
 		}
+
+		@Test
+		void f05_multipleErrors() {
+			// Test that multiple missing substrings are collected and reported together
+			var text = "Hello World Testing";
+			var expected = new String[]{"Hello", "Missing1", "World", "Missing2", "Testing"};
+
+			var e = assertThrows(AssertionFailedError.class, () -> assertContainsAll(text, expected));
+
+			// Should report multiple errors in a single assertion failure
+			var message = e.getMessage();
+			assertContains("2 substring assertions failed", message);
+			assertContains("String did not contain expected substring", message);
+
+			// Should mention both missing substrings
+			assertContains("Missing1", message);
+			assertContains("Missing2", message);
+
+			// Should include the actual text
+			assertContains("Hello World Testing", message);
+		}
+
+		@Test
+		void f06_singleError() {
+			// Test that single errors are still reported as single assertion failures
+			var text = "Hello World";
+			var expected = new String[]{"Hello", "Missing", "World"};
+
+			var e = assertThrows(AssertionFailedError.class, () -> assertContainsAll(text, expected));
+
+			// Should report single error normally (not as "1 substring assertions failed")
+			var message = e.getMessage();
+			assertDoesNotThrow(() -> assertTrue(!message.contains("1 substring assertions failed")));
+			assertContains("String did not contain expected substring", message);
+			assertContains("Missing", message);
+		}
 	}
 
 	// ====================================================================================================
@@ -336,6 +372,41 @@ class BctAssertions_Test extends TestBase {
 				assertList(args, singleNumber, (Predicate<Integer>) x -> x == 99)); // Should fail
 			assertContains("Element at index 0 did not pass predicate", e.getMessage());
 			assertContains("actual: <1>", e.getMessage());
+		}
+
+		@Test
+		void h07_multipleErrors() {
+			// Test that multiple assertion errors are collected and reported together
+			var list = Arrays.asList("a", "wrong1", "c", "wrong2", "e");
+			var expected = new Object[]{"a", "b", "c", "d", "e"};
+
+			var e = assertThrows(AssertionFailedError.class, () -> assertList(list, expected));
+
+			// Should report multiple errors in a single assertion failure
+			var message = e.getMessage();
+			assertContains("2 list assertions failed", message);
+			assertContains("Element at index 1 did not match", message);
+			assertContains("Element at index 3 did not match", message);
+
+			// Should include both expected and actual values
+			assertContains("expected: <b>", message);
+			assertContains("but was: <wrong1>", message);
+			assertContains("expected: <d>", message);
+			assertContains("but was: <wrong2>", message);
+		}
+
+		@Test
+		void h08_singleError() {
+			// Test that single errors are still reported as single assertion failures
+			var list = Arrays.asList("a", "wrong", "c");
+			var expected = new Object[]{"a", "b", "c"};
+
+			var e = assertThrows(AssertionFailedError.class, () -> assertList(list, expected));
+
+			// Should report single error normally (not as "1 list assertions failed")
+			var message = e.getMessage();
+			assertDoesNotThrow(() -> assertTrue(!message.contains("1 list assertions failed")));
+			assertContains("Element at index 1 did not match", message);
 		}
 	}
 

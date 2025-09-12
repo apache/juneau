@@ -295,6 +295,6 @@ class SchemaInfo_Test extends SimpleTestBase {
 			.set("uniqueItems", true)
 			.set("xml", xml().setName("o"));
 
-		assertList(t.keySet(), "additionalProperties", "allOf", "default", "description", "discriminator", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "externalDocs", "format", "items", "maximum", "maxItems", "maxLength", "maxProperties", "minimum", "minItems", "minLength", "minProperties", "multipleOf", "pattern", "properties", "readOnly", "$ref", "requiredProperties", "title", "type", "uniqueItems", "xml");
+		assertList(t.keySet(), "$ref", "additionalProperties", "allOf", "default", "description", "discriminator", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "externalDocs", "format", "items", "maxItems", "maxLength", "maxProperties", "maximum", "minItems", "minLength", "minProperties", "minimum", "multipleOf", "pattern", "properties", "readOnly", "requiredProperties", "title", "type", "uniqueItems", "xml");
 	}
 }

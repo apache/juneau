@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit.bct;
 
-import static org.apache.juneau.junit.bct.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.junit.bct.Utils.*;
 
 import java.util.*;
 

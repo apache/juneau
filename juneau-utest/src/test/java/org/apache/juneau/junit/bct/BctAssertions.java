@@ -619,8 +619,30 @@ public class BctAssertions {
 		assertNotNull(actual, "Value was null.");
 
 		var a = args.getBeanConverter().orElse(DEFAULT_CONVERTER).stringify(actual);
-		for (var e : expected)
-			assertTrue(a.contains(e), args.getMessage("String did not contain expected substring.  ==> expected: <{0}> but was: <{1}>", e, a));
+		var errors = new ArrayList<AssertionFailedError>();
+
+		for (var e : expected) {
+			if (!a.contains(e)) {
+				errors.add(assertEqualsFailed(true, false, args.getMessage("String did not contain expected substring.  ==> expected: <{0}> but was: <{1}>", e, a)));
+			}
+		}
+
+		if (errors.isEmpty()) return;
+
+		if (errors.size() == 1) throw errors.get(0);
+
+		var missingSubstrings = new ArrayList<String>();
+		for (var e : expected) {
+			if (!a.contains(e)) {
+				missingSubstrings.add(e);
+			}
+		}
+
+		throw assertEqualsFailed(
+			missingSubstrings.stream().map(Utils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
+			Utils.escapeForJava(a),
+			args.getMessage("{0} substring assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n")))
+		);
 	}
 
 	/**
@@ -767,19 +789,44 @@ public class BctAssertions {
 
 		var converter = args.getBeanConverter().orElse(DEFAULT_CONVERTER);
 		var list = converter.listify(actual);
-		assertEquals(expected.length, list.size(), args.getMessage("Wrong list length."));
+		var errors = new ArrayList<AssertionFailedError>();
 
-		for (var i = 0; i < expected.length; i++) {
-			var x = list.get(i);
-			var e = expected[i];
-			if (e instanceof String e2) {
-				assertEquals(e2, converter.stringify(x), args.getMessage("Element at index {0} did not match.", i));
-			} else if (e instanceof Predicate e2) {  // NOSONAR
-				assertTrue(e2.test(x), args.getMessage("Element at index {0} did not pass predicate.  ==> actual: <{1}>", i, converter.stringify(x)));
-			} else {
-				assertEquals(e, x, args.getMessage("Element at index {0} did not match.  ==> expected: <{1}({2})> but was: <{3}(4)>", i, e, t(e), x, t(x)));
+		if (ne(expected.length, list.size())) {
+			errors.add(assertEqualsFailed(expected.length, list.size(), args.getMessage("Wrong list length.")));
+		} else {
+			for (var i = 0; i < expected.length; i++) {
+				var x = list.get(i);
+				var e = expected[i];
+				if (e instanceof String e2) {
+					if (ne(e2, converter.stringify(x))) {
+						errors.add(assertEqualsFailed(e2, converter.stringify(x), args.getMessage("Element at index {0} did not match.", i)));
+					}
+				} else if (e instanceof Predicate e2) {  // NOSONAR
+					if (!e2.test(x)) {
+						errors.add(new AssertionFailedError(args.getMessage("Element at index {0} did not pass predicate.  ==> actual: <{1}>", i, converter.stringify(x)).get()));
+					}
+				} else {
+					if (ne(e, x)) {
+						errors.add(assertEqualsFailed(e, x, args.getMessage("Element at index {0} did not match.  ==> expected: <{1}({2})> but was: <{3}({4})>", i, e, t(e), x, t(x))));
+					}
+				}
 			}
 		}
+
+		if (errors.isEmpty()) return;
+
+		var actualStrings = new ArrayList<String>();
+		for (var o : list) {
+			actualStrings.add(converter.stringify(o));
+		}
+
+		if (errors.size() == 1) throw errors.get(0);
+
+		throw assertEqualsFailed(
+			Stream.of(expected).map(converter::stringify).map(Utils::escapeForJava).collect(joining("\", \"", "[\"", "\"]")),
+			actualStrings.stream().map(Utils::escapeForJava).collect(joining("\", \"", "[\"", "\"]")),
+			args.getMessage("{0} list assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n")))
+		);
 	}
 
 	/**

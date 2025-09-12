@@ -13,8 +13,8 @@
 package org.apache.juneau.junit.bct;
 
 import static java.util.Optional.*;
-import static java.util.stream.Collectors.*;
 import static org.apache.juneau.junit.bct.Utils.*;
+import static java.util.stream.Collectors.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -623,8 +623,11 @@ public class BasicBeanConverter implements BeanConverter {
 			addStringifier(List.class, Stringifiers.listStringifier());
 			addStringifier(Map.class, Stringifiers.mapStringifier());
 
-			addListifier(Collection.class, Listifiers.collectionListifier());
+			// Note: Listifiers are processed in reverse registration order (last registered wins).
+			// Collection must be registered after Iterable so it takes precedence for Sets,
+			// ensuring TreeSet conversion for deterministic ordering.
 			addListifier(Iterable.class, Listifiers.iterableListifier());
+			addListifier(Collection.class, Listifiers.collectionListifier());
 			addListifier(Iterator.class, Listifiers.iteratorListifier());
 			addListifier(Enumeration.class, Listifiers.enumerationListifier());
 			addListifier(Stream.class, Listifiers.streamListifier());

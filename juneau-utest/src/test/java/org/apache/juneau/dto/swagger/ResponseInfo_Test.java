@@ -158,6 +158,6 @@ class ResponseInfo_Test extends SimpleTestBase {
 			.set("schema", schemaInfo().setType("d"))
 			.set("$ref", "e");
 
-		assertList(t.keySet(), "description", "examples", "headers", "schema", "$ref");
+		assertList(t.keySet(), "$ref", "description", "examples", "headers", "schema");
 	}
 }

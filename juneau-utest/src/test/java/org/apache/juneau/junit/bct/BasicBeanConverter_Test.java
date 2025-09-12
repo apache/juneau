@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit.bct;
 
-import static org.apache.juneau.junit.bct.BasicBeanConverter.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.junit.bct.BasicBeanConverter.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -182,12 +182,9 @@ class BasicBeanConverter_Test extends TestBase {
 		void b04_stringify_handlesCollections() {
 			assertEquals("[1,2,3]", converter.stringify(Arrays.asList(1, 2, 3)));
 			assertEquals("[]", converter.stringify(Collections.emptyList()));
-			// Set order is not guaranteed, so check length and content
-			var setResult = converter.stringify(Set.of("a", "b", "c"));
-			assertEquals(7, setResult.length()); // Should be "[x,y,z]" format
-			assertTrue(setResult.contains("a"));
-			assertTrue(setResult.contains("b"));
-			assertTrue(setResult.contains("c"));
+			// Set converted to TreeSet for deterministic ordering
+			var setResult = converter.stringify(Set.of("z", "a", "m"));
+			assertEquals("[a,m,z]", setResult); // TreeSet ensures natural order
 		}
 
 		@Test
@@ -226,11 +223,11 @@ class BasicBeanConverter_Test extends TestBase {
 
 		@Test
 		@DisplayName("b09_listify() handles collections")
-		void b09_listify_handlesCollections() {
-			var set = Set.of("a", "b", "c");
+			void b09_listify_handlesCollections() {
+			var set = Set.of("z", "a", "m");
 			var result = converter.listify(set);
-			assertEquals(3, result.size());
-			assertTrue(result.containsAll(Arrays.asList("a", "b", "c")));
+			// TreeSet conversion ensures natural ordering
+			assertList(result, "a", "m", "z");
 		}
 
 		@Test

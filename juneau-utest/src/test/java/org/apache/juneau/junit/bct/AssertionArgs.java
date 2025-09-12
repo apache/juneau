@@ -82,7 +82,7 @@ import java.util.function.*;
  * <h5 class='section'>Error Message Composition:</h5>
  * <p>When assertion failures occur, error messages are intelligently composed:</p>
  * <ul>
- *     <li><b>Base Message:</b> Custom message set via {@link #setMessage(String, Object)} or {@link #setMessage(Supplier)}</li>
+ *     <li><b>Base Message:</b> Custom message set via {@link #setMessage(String, Object...)} or {@link #setMessage(Supplier)}</li>
  *     <li><b>Assertion Context:</b> Specific context provided by individual assertion methods</li>
  *     <li><b>Composite Format:</b> <js>"{base message}, Caused by: {assertion context}"</js></li>
  * </ul>

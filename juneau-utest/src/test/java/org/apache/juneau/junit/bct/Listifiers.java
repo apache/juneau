@@ -91,6 +91,15 @@ public class Listifiers {
 	 *    <li><b>Non-empty collections:</b> Returns new ArrayList with all elements in iteration order</li>
 	 *    <li><b>Empty collections:</b> Returns new empty ArrayList</li>
 	 *    <li><b>Preserves order:</b> Maintains the iteration order of the source collection</li>
+	 *    <li><b>Set ordering:</b> Converts unordered Sets (HashSet, etc.) to TreeSet for deterministic ordering</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Set Ordering Behavior:</h5>
+	 * <p>To ensure predictable test results, this listifier handles Sets with unreliable ordering:</p>
+	 * <ul>
+	 *    <li><b>{@link SortedSet} (TreeSet, etc.):</b> Preserves existing sort order</li>
+	 *    <li><b>{@link LinkedHashSet}:</b> Preserves insertion order</li>
+	 *    <li><b>{@link HashSet} and other unordered Sets:</b> Converts to {@link TreeSet} for natural ordering</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Usage Examples:</h5>
@@ -99,8 +108,13 @@ public class Listifiers {
 	 *    <jk>var</jk> <jv>list</jv> = List.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
 	 *    <jsm>assertList</jsm>(<jv>list</jv>, <js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
 	 *
-	 *    <jk>var</jk> <jv>set</jv> = Set.<jsm>of</jsm>(<js>"x"</js>, <js>"y"</js>);
-	 *    <jsm>assertList</jsm>(<jv>set</jv>, <js>"x"</js>, <js>"y"</js>); <jc>// Order may vary</jc>
+	 *    <jc>// HashSet converted to TreeSet for predictable ordering</jc>
+	 *    <jk>var</jk> <jv>set</jv> = Set.<jsm>of</jsm>(<js>"z"</js>, <js>"a"</js>, <js>"m"</js>);
+	 *    <jsm>assertList</jsm>(<jv>set</jv>, <js>"a"</js>, <js>"m"</js>, <js>"z"</js>); <jc>// Natural ordering</jc>
+	 *
+	 *    <jc>// LinkedHashSet preserves insertion order</jc>
+	 *    <jk>var</jk> <jv>linkedSet</jv> = <jk>new</jk> LinkedHashSet&lt;&gt;(Arrays.<jsm>asList</jsm>(<js>"first"</js>, <js>"second"</js>));
+	 *    <jsm>assertList</jsm>(<jv>linkedSet</jv>, <js>"first"</js>, <js>"second"</js>);
 	 *
 	 *    <jk>var</jk> <jv>queue</jv> = <jk>new</jk> LinkedList&lt;&gt;(Arrays.<jsm>asList</jsm>(<js>"first"</js>, <js>"second"</js>));
 	 *    <jsm>assertList</jsm>(<jv>queue</jv>, <js>"first"</js>, <js>"second"</js>);
@@ -108,14 +122,22 @@ public class Listifiers {
 	 *
 	 * <h5 class='section'>Performance:</h5>
 	 * <p>This listifier creates a new ArrayList and copies all elements, so it has O(n) time
-	 * and space complexity. For large collections, consider the memory implications.</p>
+	 * and space complexity. For unordered Sets, an additional TreeSet conversion adds O(n log n)
+	 * sorting overhead. For large collections, consider the memory implications.</p>
 	 *
 	 * @return A {@link Listifier} for {@link Collection} objects
 	 * @see Collection
 	 * @see ArrayList
+	 * @see TreeSet
+	 * @see LinkedHashSet
 	 */
 	public static Listifier<Collection> collectionListifier() {
-		return (bc, collection) -> new ArrayList<>(collection);
+		return (bc, collection) -> {
+			if (collection instanceof Set && !(collection instanceof SortedSet) && !(collection instanceof LinkedHashSet)) {
+				collection = new TreeSet<>(collection);
+			}
+			return new ArrayList<>(collection);
+		};
 	}
 
 	/**
@@ -275,13 +297,29 @@ public class Listifiers {
 	 *    <li><b>Entry conversion:</b> Each key-value pair becomes a Map.Entry in the list</li>
 	 *    <li><b>Order preservation:</b> Maintains the map's iteration order</li>
 	 *    <li><b>Empty maps:</b> Returns empty list for empty maps</li>
+	 *    <li><b>Map ordering:</b> Converts unordered Maps (HashMap, etc.) to TreeMap for deterministic ordering</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Map Ordering Behavior:</h5>
+	 * <p>To ensure predictable test results, this listifier handles Maps with unreliable ordering:</p>
+	 * <ul>
+	 *    <li><b>{@link SortedMap} (TreeMap, etc.):</b> Preserves existing sort order</li>
+	 *    <li><b>{@link LinkedHashMap}:</b> Preserves insertion order</li>
+	 *    <li><b>{@link HashMap} and other unordered Maps:</b> Converts to {@link TreeMap} for natural key ordering</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
-	 *    <jc>// Test map contents</jc>
-	 *    <jk>var</jk> <jv>map</jv> = Map.<jsm>of</jsm>(<js>"key1"</js>, <js>"value1"</js>, <js>"key2"</js>, <js>"value2"</js>);
+	 *    <jc>// Test map contents with deterministic ordering</jc>
+	 *    <jk>var</jk> <jv>map</jv> = Map.<jsm>of</jsm>(<js>"z"</js>, <js>"value1"</js>, <js>"a"</js>, <js>"value2"</js>);
 	 *    <jsm>assertSize</jsm>(<jv>map</jv>, <jv>2</jv>);
+	 *    <jc>// Entries will be ordered by key: [a=value2, z=value1]</jc>
+	 *
+	 *    <jc>// LinkedHashMap preserves insertion order</jc>
+	 *    <jk>var</jk> <jv>linkedMap</jv> = <jk>new</jk> LinkedHashMap&lt;&gt;();
+	 *    <jv>linkedMap</jv>.put(<js>"first"</js>, <js>"1"</js>);
+	 *    <jv>linkedMap</jv>.put(<js>"second"</js>, <js>"2"</js>);
+	 *    <jc>// Entries will maintain insertion order: [first=1, second=2]</jc>
 	 *
 	 *    <jc>// Test empty map</jc>
 	 *    <jk>var</jk> <jv>emptyMap</jv> = Map.<jsm>of</jsm>();
@@ -296,11 +334,23 @@ public class Listifiers {
 	 * <p>The resulting Map.Entry objects can be further processed by other parts of the
 	 * conversion system, typically being stringified to <js>"key=value"</js> format.</p>
 	 *
+	 * <h5 class='section'>Performance:</h5>
+	 * <p>This listifier creates a new ArrayList from the map's entrySet. For unordered Maps,
+	 * an additional TreeMap conversion adds O(n log n) sorting overhead based on key ordering.
+	 * For large maps, consider the memory implications.</p>
+	 *
 	 * @return A {@link Listifier} for {@link Map} objects
 	 * @see Map
 	 * @see Map.Entry
+	 * @see TreeMap
+	 * @see LinkedHashMap
 	 */
 	public static Listifier<Map> mapListifier() {
-		return (bc, map) -> new ArrayList<>(map.entrySet());
+		return (bc, map) -> {
+			if (!(map instanceof SortedMap) && !(map instanceof LinkedHashMap)) {
+				map = new TreeMap<>(map);
+			}
+			return new ArrayList<>(map.entrySet());
+		};
 	}
 }

@@ -248,6 +248,6 @@ class Swagger_Test extends SimpleTestBase {
 			.set("tags", set(tag("o")))
 			.set("$ref", "p");
 
-		assertList(t.keySet(), "basePath", "consumes", "definitions", "externalDocs", "host", "info", "parameters", "paths", "produces", "responses", "schemes", "security", "securityDefinitions", "swagger", "tags", "$ref");
+		assertList(t.keySet(), "$ref", "basePath", "consumes", "definitions", "externalDocs", "host", "info", "parameters", "paths", "produces", "responses", "schemes", "security", "securityDefinitions", "swagger", "tags");
 	}
 }

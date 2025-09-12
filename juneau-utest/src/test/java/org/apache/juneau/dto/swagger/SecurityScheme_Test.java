@@ -165,6 +165,6 @@ class SecurityScheme_Test extends SimpleTestBase {
 			.set("type", "g")
 			.set("$ref", "ref");
 
-		assertList(t.keySet(), "authorizationUrl", "description", "flow", "in", "name", "scopes", "tokenUrl", "type", "$ref");
+		assertList(t.keySet(), "$ref", "authorizationUrl", "description", "flow", "in", "name", "scopes", "tokenUrl", "type");
 	}
 }

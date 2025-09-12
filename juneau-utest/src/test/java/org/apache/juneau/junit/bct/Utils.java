@@ -36,7 +36,7 @@ import org.opentest4j.*;
  *
  * <h5 class='section'>Usage Examples:</h5>
  * <p class='bjava'>
- *   <jk>import static</jk> com.sfdc.junit.bct.Utils.*;
+ *   <jk>import static</jk> org.apache.juneau.junit.bct.Utils.*;
  *
  *   <jc>// String formatting</jc>
  *   String <jv>msg</jv> = <jsm>f</jsm>(<js>"User {0} has {1} items"</js>, <js>"Alice"</js>, 5);

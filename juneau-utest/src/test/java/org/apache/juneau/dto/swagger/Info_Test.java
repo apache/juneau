@@ -149,6 +149,6 @@ class Info_Test extends SimpleTestBase {
 			.set("version", "f")
 			.set("$ref", "ref");
 
-		assertList(t.keySet(), "contact", "description", "license", "termsOfService", "title", "version", "$ref");
+		assertList(t.keySet(), "$ref", "contact", "description", "license", "termsOfService", "title", "version");
 	}
 }
