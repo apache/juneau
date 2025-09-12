@@ -33,5 +33,6 @@
 		<module>juneau-marshall</module>
 		<module>juneau-config</module>
 		<module>juneau-assertions</module>
+		<module>juneau-bct</module>
 	</modules>
 </project>

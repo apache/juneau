@@ -1690,6 +1690,12 @@ public final class StringUtils {
 		return sb.toString();
 	}
 
+	/**
+	 * Converts the contents of the specified input stream to a hex string.
+	 * 
+	 * @param is The input stream to convert.
+	 * @return The hex string representation of the input stream contents, or <jk>null</jk> if the stream is <jk>null</jk>.
+	 */
 	public static String toHex(InputStream is) {
 		return safe(()->is == null ? null : toHex(readBytes(is)));
 	}
@@ -1817,10 +1823,22 @@ public final class StringUtils {
 		}
 	}
 
+	/**
+	 * Converts the specified byte array to a UTF-8 string.
+	 * 
+	 * @param b The byte array to convert.
+	 * @return The UTF-8 string representation, or <jk>null</jk> if the array is <jk>null</jk>.
+	 */
 	public static String toUtf8(byte[] b) {
 		return b == null ? null : new String(b, IOUtils.UTF8);
 	}
 
+	/**
+	 * Converts the contents of the specified input stream to a UTF-8 string.
+	 * 
+	 * @param is The input stream to convert.
+	 * @return The UTF-8 string representation of the input stream contents, or <jk>null</jk> if the stream is <jk>null</jk>.
+	 */
 	public static String toUtf8(InputStream is) {
 		return safe(()->is == null ? null : new String(readBytes(is), IOUtils.UTF8));
 	}
@@ -2134,4 +2152,4 @@ public final class StringUtils {
 	 * Constructor.
 	 */
 	protected StringUtils() {}
-}
+}

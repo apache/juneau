@@ -28,7 +28,11 @@ import java.util.stream.*;
 
 import org.apache.juneau.common.utils.*;
 
-
+/**
+ * Common utility methods.
+ * 
+ * <p>This class contains various static utility methods for working with collections, strings, objects, and other common operations.
+ */
 public class Utils {
 
 	private static final Map<Class<?>,Function<String,?>> ENV_FUNCTIONS = new IdentityHashMap<>();
@@ -42,6 +46,10 @@ public class Utils {
 
 	/**
 	 * Creates an array of objects.
+	 * 
+	 * @param <T> The component type of the array.
+	 * @param x The objects to place in the array.
+	 * @return A new array containing the specified objects.
 	 */
 	@SafeVarargs
 	public static <T> T[] a(T...x) {
@@ -53,7 +61,7 @@ public class Utils {
 	 *
 	 * @param <T> The element type.
 	 * @param o The object to traverse.
-	 * @param c The consumer of the objects.
+	 * @return A list containing all accumulated elements.
 	 */
 	public static <T> List<T> accumulate(Object o) {
 		var l = list();
@@ -63,6 +71,10 @@ public class Utils {
 
 	/**
 	 * Shortcut for creating an unmodifiable list out of an array of values.
+	 * 
+	 * @param <T> The element type.
+	 * @param values The values to add to the list.
+	 * @return An unmodifiable list containing the specified values, or <jk>null</jk> if the input is <jk>null</jk>.
 	 */
 	@SafeVarargs
 	public static <T> List<T> alist(T...values) {  // NOSONAR
@@ -276,6 +288,10 @@ public class Utils {
 
 	/**
 	 * Null-safe {@link String#contains(CharSequence)} operation.
+	 * 
+	 * @param s The string to check.
+	 * @param values The characters to check for.
+	 * @return <jk>true</jk> if the string contains any of the specified characters.
 	 */
 	public static boolean contains(String s, char...values) {
 		if (s == null || values == null || values.length == 0)
@@ -289,6 +305,10 @@ public class Utils {
 
 	/**
 	 * Null-safe {@link String#contains(CharSequence)} operation.
+	 * 
+	 * @param s The string to check.
+	 * @param values The substrings to check for.
+	 * @return <jk>true</jk> if the string contains any of the specified substrings.
 	 */
 	public static boolean contains(String s, String...values) {
 		if (s == null || values == null || values.length == 0)
@@ -306,6 +326,10 @@ public class Utils {
 
 	/**
 	 * Shortcut for creating an empty list of the specified type.
+	 * 
+	 * @param <T> The element type.
+	 * @param type The element type class.
+	 * @return An empty list.
 	 */
 	public static <T> List<T> elist(Class<T> type) {
 		return Collections.emptyList();
@@ -327,6 +351,9 @@ public class Utils {
 
 	/**
 	 * Returns the specified string, or blank if that string is null.
+	 * 
+	 * @param value The value to convert to a string.
+	 * @return The string representation of the value, or an empty string if <jk>null</jk>.
 	 */
 	public static String emptyIfNull(Object value) {
 		return value == null ? "" : value.toString();
@@ -410,7 +437,7 @@ public class Utils {
 	 * Example:
 	 * <code>
 	 * 	public boolean equals(Object o)
-	 * 		return eq(this, (Role)o, (x,y)->eq(x.id,y.id) && eq(x.name,y.name) && eq(x.created,y.created) && eq(x.createdBy,y.createdBy));
+	 * 		return eq(this, (Role)o, (x,y)-&gt;eq(x.id,y.id) &amp;&amp; eq(x.name,y.name) &amp;&amp; eq(x.created,y.created) &amp;&amp; eq(x.createdBy,y.createdBy));
 	 * 	}
 	 * </code>
 	 *
@@ -445,6 +472,10 @@ public class Utils {
 
 	/**
 	 * Same as MessageFormat.format().
+	 * 
+	 * @param pattern The message pattern.
+	 * @param args The arguments to substitute into the pattern.
+	 * @return The formatted string.
 	 */
 	public static String f(String pattern, Object...args) {
 		if (args.length == 0)
@@ -530,6 +561,9 @@ public class Utils {
 
 	/**
 	 * Shortcut for calling {@link Objects#hash(Object...)}.
+	 * 
+	 * @param values The values to hash.
+	 * @return A hash code value for the given values.
 	 */
 	public static final int hash(Object...values) {
 		return Objects.hash(values);
@@ -537,6 +571,10 @@ public class Utils {
 
 	/**
 	 * Creates an {@link IllegalArgumentException}.
+	 * 
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new IllegalArgumentException with the formatted message.
 	 */
 	public static IllegalArgumentException illegalArg(String msg, Object...args) {
 		return new IllegalArgumentException(args.length == 0 ? msg : f(msg, args));
@@ -576,7 +614,10 @@ public class Utils {
 	}
 
 	/**
-	 * @return True if string is null or empty.
+	 * Returns <jk>true</jk> if string is <jk>null</jk> or empty.
+	 * 
+	 * @param o The string to check.
+	 * @return <jk>true</jk> if string is <jk>null</jk> or empty.
 	 */
 	public static boolean isEmpty(String o) {
 		return o == null || o.isEmpty();
@@ -611,7 +652,10 @@ public class Utils {
 	}
 
 	/**
-	 * @return True if string is not null or empty.
+	 * Returns <jk>true</jk> if string is not <jk>null</jk> and not empty.
+	 * 
+	 * @param o The string to check.
+	 * @return <jk>true</jk> if string is not <jk>null</jk> and not empty.
 	 */
 	public static boolean isNotEmpty(String o) {
 		return ! isEmpty(o);
@@ -835,6 +879,10 @@ public class Utils {
 
 	/**
 	 * Shortcut for creating a modifiable list out of an array of values.
+	 * 
+	 * @param <T> The element type.
+	 * @param values The values to add to the list.
+	 * @return A modifiable list containing the specified values.
 	 */
 	@SafeVarargs
 	public static <T> List<T> list(T...values) {  // NOSONAR
@@ -853,7 +901,12 @@ public class Utils {
 	}
 
 	/**
-	 * Shortcut for creating a modifiable set out of an array of values.
+	 * Shortcut for creating a modifiable map out of an array of key-value pairs.
+	 * 
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param values The key-value pairs (alternating keys and values).
+	 * @return A modifiable LinkedHashMap containing the specified key-value pairs.
 	 */
 	@SafeVarargs
 	public static <K,V> LinkedHashMap<K,V> map(Object...values) {  // NOSONAR
@@ -872,7 +925,14 @@ public class Utils {
 		return null;
 	}
 
-	/** Not equals */
+	/**
+	 * Null-safe not-equals check.
+	 * 
+	 * @param <T> The object type.
+	 * @param s1 Object 1.
+	 * @param s2 Object 2.
+	 * @return <jk>true</jk> if the objects are not equal.
+	 */
 	public static <T> boolean ne(T s1, T s2) {
 		return ! eq(s1, s2);
 	}
@@ -908,23 +968,46 @@ public class Utils {
 		return ! eqic(s1, s2);
 	}
 
+	/**
+	 * Returns a null list.
+	 * 
+	 * @param <T> The element type.
+	 * @param type The element type class.
+	 * @return <jk>null</jk>.
+	 */
 	public static <T> List<T> nlist(Class<T> type) {
 		return null;
 	}
 
+	/**
+	 * Returns a null map.
+	 * 
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param keyType The key type class.
+	 * @param valueType The value type class.
+	 * @return <jk>null</jk>.
+	 */
 	public static <K,V> Map<K,V> nmap(Class<K> keyType, Class<V> valueType) {
 		return null;
 	}
 
 	/**
-	 * Null-safe {@link String#contains(CharSequence)} operation.
+	 * Null-safe string not-contains operation.
+	 * 
+	 * @param s The string to check.
+	 * @param values The characters to check for.
+	 * @return <jk>true</jk> if the string does not contain any of the specified characters.
 	 */
 	public static boolean notContains(String s, char...values) {
 		return ! contains(s, values);
 	}
 
 	/**
-	 * Returns the specified string, or null if that string is null or empty.
+	 * Returns the specified string, or <jk>null</jk> if that string is <jk>null</jk> or empty.
+	 * 
+	 * @param value The string value to check.
+	 * @return The string value, or <jk>null</jk> if the string is <jk>null</jk> or empty.
 	 */
 	public static String nullIfEmpty(String value) {
 		return isEmpty(value) ? null : value;
@@ -944,6 +1027,9 @@ public class Utils {
 
 	/**
 	 * Returns an obfuscated version of the specified string.
+	 * 
+	 * @param s The string to obfuscate.
+	 * @return The obfuscated string with most characters replaced by asterisks.
 	 */
 	public static String obfuscate(String s) {
 		if (s == null || s.length() < 2)
@@ -953,17 +1039,29 @@ public class Utils {
 
 	/**
 	 * Shortcut for calling {@link Optional#ofNullable(Object)}.
+	 * 
+	 * @param <T> The object type.
+	 * @param t The object to wrap in an Optional.
+	 * @return An Optional containing the specified object, or empty if <jk>null</jk>.
 	 */
 	public static final <T> Optional<T> opt(T t) {
 		return Optional.ofNullable(t);
 	}
 
+	/**
+	 * Returns an empty Optional.
+	 * 
+	 * @param <T> The object type.
+	 * @return An empty Optional.
+	 */
 	public static final <T> Optional<T> opte() {
 		return Optional.empty();
 	}
 
 	/**
 	 * Prints all the specified lines to System.out.
+	 * 
+	 * @param lines The lines to print.
 	 */
 	public static final void printLines(String[] lines) {
 		for (var i = 0; i < lines.length; i++)
@@ -978,23 +1076,23 @@ public class Utils {
 	 * the Juneau framework for test assertions and debugging output.</p>
 	 *
 	  * <h5 class='section'>Type-Specific Formatting:</h5>
- * <ul>
- * 	<li><b>null:</b> Returns <js>null</js></li>
- * 	<li><b>Optional:</b> Recursively formats the contained value (or <js>null</js> if empty)</li>
- * 	<li><b>Collections:</b> Formats as <js>"[item1,item2,item3]"</js> with comma-separated elements</li>
- * 	<li><b>Maps:</b> Formats as <js>"{key1=value1,key2=value2}"</js> with comma-separated entries</li>
- * 	<li><b>Map.Entry:</b> Formats as <js>"key=value"</js></li>
- * 	<li><b>Arrays:</b> Converts to list format <js>"[item1,item2,item3]"</js></li>
- * 	<li><b>Iterables/Iterators/Enumerations:</b> Converts to list and formats recursively</li>
- * 	<li><b>GregorianCalendar:</b> Formats as ISO instant timestamp</li>
- * 	<li><b>Date:</b> Formats as ISO instant string (e.g., <js>"2023-12-25T10:30:00Z"</js>)</li>
- * 	<li><b>InputStream:</b> Converts to hexadecimal representation</li>
- * 	<li><b>Reader:</b> Reads content and returns as string</li>
- * 	<li><b>File:</b> Reads file content and returns as string</li>
- * 	<li><b>byte[]:</b> Converts to hexadecimal representation</li>
- * 	<li><b>Enum:</b> Returns the enum name via {@link Enum#name()}</li>
- * 	<li><b>All other types:</b> Uses {@link Object#toString()}</li>
- * </ul>
+	 * <ul>
+	 * 	<li><b>null:</b> Returns <js>null</js></li>
+	 * 	<li><b>Optional:</b> Recursively formats the contained value (or <js>null</js> if empty)</li>
+	 * 	<li><b>Collections:</b> Formats as <js>"[item1,item2,item3]"</js> with comma-separated elements</li>
+	 * 	<li><b>Maps:</b> Formats as <js>"{key1=value1,key2=value2}"</js> with comma-separated entries</li>
+	 * 	<li><b>Map.Entry:</b> Formats as <js>"key=value"</js></li>
+	 * 	<li><b>Arrays:</b> Converts to list format <js>"[item1,item2,item3]"</js></li>
+	 * 	<li><b>Iterables/Iterators/Enumerations:</b> Converts to list and formats recursively</li>
+	 * 	<li><b>GregorianCalendar:</b> Formats as ISO instant timestamp</li>
+	 * 	<li><b>Date:</b> Formats as ISO instant string (e.g., <js>"2023-12-25T10:30:00Z"</js>)</li>
+	 * 	<li><b>InputStream:</b> Converts to hexadecimal representation</li>
+	 * 	<li><b>Reader:</b> Reads content and returns as string</li>
+	 * 	<li><b>File:</b> Reads file content and returns as string</li>
+	 * 	<li><b>byte[]:</b> Converts to hexadecimal representation</li>
+	 * 	<li><b>Enum:</b> Returns the enum name via {@link Enum#name()}</li>
+	 * 	<li><b>All other types:</b> Uses {@link Object#toString()}</li>
+	 * </ul>
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
@@ -1013,10 +1111,10 @@ public class Utils {
 	 * 	r(List.of(Map.of("x", 1), Set.of("a", "b"))) <jc>// Returns: "[{x=1},[a,b]]"</jc>
 	 *
 	  * 	<jc>// Special types</jc>
- * 	r(Optional.of("test")) <jc>// Returns: "test"</jc>
- * 	r(Optional.empty()) <jc>// Returns: null</jc>
- * 	r(new Date(1640995200000L)) <jc>// Returns: "2022-01-01T00:00:00Z"</jc>
- * 	r(MyEnum.FOO) <jc>// Returns: "FOO"</jc>
+	 * 	r(Optional.of("test")) <jc>// Returns: "test"</jc>
+	 * 	r(Optional.empty()) <jc>// Returns: null</jc>
+	 * 	r(new Date(1640995200000L)) <jc>// Returns: "2022-01-01T00:00:00Z"</jc>
+	 * 	r(MyEnum.FOO) <jc>// Returns: "FOO"</jc>
 	 * </p>
 	 *
 	 * <h5 class='section'>Recursive Processing:</h5>
@@ -1090,6 +1188,10 @@ public class Utils {
 
 	/**
 	 * Creates a {@link RuntimeException}.
+	 * 
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new RuntimeException with the formatted message.
 	 */
 	public static RuntimeException runtimeException(String msg, Object...args) {
 		return new RuntimeException(args.length == 0 ? msg : f(msg, args));
@@ -1097,6 +1199,9 @@ public class Utils {
 
 	/**
 	 * Shortcut for converting an object to a string.
+	 * 
+	 * @param val The object to convert.
+	 * @return The string representation of the object, or <jk>null</jk> if the object is <jk>null</jk>.
 	 */
 	public static String s(Object val) {
 		return val == null ? null : val.toString();
@@ -1121,6 +1226,10 @@ public class Utils {
 	 * Used to wrap code that returns a value but throws an exception.
 	 * Useful in cases where you're trying to execute code in a fluent method call
 	 * or are trying to eliminate untestable catch blocks in code.
+	 * 
+	 * @param <T> The return type.
+	 * @param s The supplier that may throw an exception.
+	 * @return The result of the supplier execution.
 	 */
 	public static <T> T safe(ThrowingSupplier<T> s) {
 		try {
@@ -1152,6 +1261,10 @@ public class Utils {
 
 	/**
 	 * Shortcut for creating a modifiable set out of an array of values.
+	 * 
+	 * @param <T> The element type.
+	 * @param values The values to add to the set.
+	 * @return A modifiable LinkedHashSet containing the specified values.
 	 */
 	@SafeVarargs
 	public static <T> LinkedHashSet<T> set(T...values) {  // NOSONAR
@@ -1160,6 +1273,9 @@ public class Utils {
 
 	/**
 	 * Splits a comma-delimited list into a list of strings.
+	 * 
+	 * @param s The string to split.
+	 * @return A list of split strings, or an empty list if the input is <jk>null</jk>.
 	 */
 	public static List<String> split(String s) {
 		return s == null ? Collections.emptyList() : split(s, ',');
@@ -1274,7 +1390,7 @@ public class Utils {
 	}
 
 	/**
-	 * Same as {@link #split3(String)} but consumes the tokens instead of creating an array.
+	 * Same as {@link #splita(String)} but consumes the tokens instead of creating an array.
 	 *
 	 * @param s The string to split.
 	 * @param consumer The consumer of the tokens.
@@ -1285,6 +1401,9 @@ public class Utils {
 
 	/**
 	 * Splits a comma-delimited list into an array of strings.
+	 * 
+	 * @param s The string to split.
+	 * @return An array of split strings.
 	 */
 	public static String[] splita(String s) {
 		return splita(s, ',');
@@ -1721,16 +1840,15 @@ public class Utils {
 	 * 	assertList(toList(<jv>myQueue</jv>), <js>"first"</js>, <js>"second"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Integration with assertList:</h5>
-	 * <p>This method is specifically designed to work with {@link #assertList(List, Object...)} to provide
+	 * <h5 class='section'>Integration with Testing:</h5>
+	 * <p>This method is specifically designed to work with testing frameworks to provide
 	 * a unified testing approach for all collection-like types. Instead of having separate assertion methods
-	 * for arrays, sets, and other collections, you can convert them all to Lists and use the single
-	 * {@code assertList} method.</p>
+	 * for arrays, sets, and other collections, you can convert them all to Lists and use standard
+	 * list assertion methods.</p>
 	 *
 	 * @param o The object to convert to a List. Must not be null and must be a supported collection-like type.
 	 * @return A {@link List} containing the elements from the input object.
 	 * @throws IllegalArgumentException if the input object cannot be converted to a List.
-	 * @see #assertList(List, Object...)
 	 * @see #arrayToList(Object)
 	 */
 	public static final List<?> toList(Object o) {  // NOSONAR

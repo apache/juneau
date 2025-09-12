@@ -17,5 +17,12 @@ package org.apache.juneau.common.internal;
  */
 @FunctionalInterface
 public interface ThrowingSupplier<T> {
+
+	/**
+	 * Gets a result.
+	 * 
+	 * @return A result.
+	 * @throws Exception If an error occurs.
+	 */
 	T get() throws Exception;
 }
