@@ -47,11 +47,40 @@ Once deployed, the comprehensive site will be available at:
 
 ## Manual Setup Required
 
+### GitHub Pages Setup
 After pushing this workflow, enable GitHub Pages in your repository:
 
 1. Go to **Settings** → **Pages**
 2. Under **Source**, select **GitHub Actions**
 3. The site will be available at: `https://<username>.github.io/juneau/`
+
+### Email Notifications Setup
+To receive email notifications when deployments complete or fail, configure these GitHub repository secrets:
+
+1. Go to **Settings** → **Secrets and variables** → **Actions**
+2. Add the following **Repository secrets**:
+
+| Secret Name | Value | Description |
+|-------------|-------|-------------|
+| `MAIL_USERNAME` | `your-email@gmail.com` | Gmail address to send from |
+| `MAIL_PASSWORD` | `your-app-password` | Gmail App Password (not regular password) |
+| `NOTIFICATION_EMAIL` | `james.bognar@salesforce.com` | Email address to receive notifications |
+
+### Gmail App Password Setup
+For security, use Gmail App Passwords instead of your regular password:
+
+1. Go to [Google Account settings](https://myaccount.google.com/)
+2. Navigate to **Security** → **2-Step Verification** (enable if not already)
+3. Go to **Security** → **App passwords**
+4. Generate a new app password for "GitHub Actions"
+5. Use this 16-character password as `MAIL_PASSWORD`
+
+### Alternative Email Providers
+To use other email providers, update the workflow SMTP settings:
+
+- **Outlook/Hotmail**: `smtp.live.com:587`
+- **Yahoo**: `smtp.mail.yahoo.com:587`
+- **Custom SMTP**: Update `server_address` and `server_port` in the workflow
 
 ## Local Development
 
