@@ -68,15 +68,15 @@ jobs:
           echo "Building site for Juneau version: $JUNEAU_VERSION"
           
           # Build and install core modules first (needed for dependencies)
-          mvn clean install -DskipTests -pl '!juneau-examples-rest-jetty-ftest,!juneau-utest,!juneau-all,!juneau-distrib'
+          mvn clean install -DskipTests
           
           # Build juneau-doc module (needed for custom docs)
           cd juneau-doc
           mvn install -DskipTests
           cd ..
           
-          # Generate complete project site (skip problematic modules)
-          mvn site -DskipTests -pl '!juneau-examples-rest-jetty-ftest,!juneau-utest,!juneau-all,!juneau-distrib'
+          # Generate complete project site
+          mvn site -DskipTests
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

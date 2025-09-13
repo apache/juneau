@@ -182,7 +182,7 @@
 						<docfilessubdirs>true</docfilessubdirs>
 						<javadocDirectory>${basedir}/juneau-doc/src/main/javadoc</javadocDirectory>
 						<javadocExecutable>${javadoc.executable}</javadocExecutable>
-						<source>${maven.compiler.source}</source>
+						<release>${maven.compiler.target}</release>
 						<detectJavaApiLink>false</detectJavaApiLink>
 						<sourcepath>src/main/java</sourcepath>
 					</configuration>
