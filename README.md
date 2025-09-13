@@ -19,19 +19,23 @@
 [![CodeQL](https://github.com/apache/juneau/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/apache/juneau/actions/workflows/codeql-analysis.yml)
 [![GitHub Pages](https://github.com/apache/juneau/actions/workflows/pages.yml/badge.svg)](https://github.com/apache/juneau/actions/workflows/pages.yml)
 
-* [Homepage](https://juneau.apache.org/)
-* [Wiki](https://github.com/apache/juneau/wiki)
-* [Javadocs](https://juneau.apache.org/site/apidocs-9.0.0/index.html)
-* [Documentation](https://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#overview.description)
-* [Pet Store App](https://github.com/apache/juneau-petstore)
+## 📚 Documentation & Resources
 
-## 📚 Development Documentation
+### 🌐 Official Resources
+* **[🏠 Homepage](https://juneau.apache.org/)** - Official Apache Juneau website
+* **[📖 Wiki](https://github.com/apache/juneau/wiki)** - Community documentation and guides
+* **[🎯 Pet Store App](https://github.com/apache/juneau-petstore)** - Complete example application
 
-* **[📖 Project Site](https://apache.github.io/juneau/)** - Complete project documentation with API docs, test reports, and project information
-* **[🔧 API Documentation](https://apache.github.io/juneau/apidocs/)** - Latest Javadoc API documentation  
-* **[📊 Test Reports](https://apache.github.io/juneau/surefire.html)** - JUnit test execution results
-* **[📦 Dependencies](https://apache.github.io/juneau/dependencies.html)** - Project dependency analysis
-* **[📋 Project Reports](https://apache.github.io/juneau/project-reports.html)** - Complete Maven site reports
+### 📋 Stable Documentation
+* **[📚 Official Javadocs](https://juneau.apache.org/site/apidocs-9.0.0/index.html)** - Released API documentation (v9.0.0)
+* **[📖 Official Documentation](https://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#overview.description)** - Complete framework documentation
+
+### 🚀 Development Documentation
+* **[📖 Project Site](https://github.com/pages/apache/juneau/)** - Latest project documentation with API docs, test reports, and project information
+* **[🔧 API Documentation](https://github.com/pages/apache/juneau/apidocs/)** - Current development Javadoc API documentation  
+* **[📊 Test Reports](https://github.com/pages/apache/juneau/surefire.html)** - JUnit test execution results
+* **[📦 Dependencies](https://github.com/pages/apache/juneau/dependencies.html)** - Project dependency analysis
+* **[📋 Project Reports](https://github.com/pages/apache/juneau/project-reports.html)** - Complete Maven site reports
 
 > **Note:** The development documentation is automatically updated with each commit and provides the most current project information.
 
