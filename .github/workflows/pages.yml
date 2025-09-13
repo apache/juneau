@@ -61,23 +61,22 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build Juneau
-        run: |
-          mvn clean compile -DskipTests
-
       - name: Build Documentation Site
         run: |
           # Set up environment
           export JUNEAU_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | grep -v "WARNING")
           echo "Building site for Juneau version: $JUNEAU_VERSION"
           
+          # Build and install core modules first (needed for dependencies)
+          mvn clean install -DskipTests -pl '!juneau-examples-rest-jetty-ftest,!juneau-utest,!juneau-all,!juneau-distrib'
+          
           # Build juneau-doc module (needed for custom docs)
           cd juneau-doc
           mvn install -DskipTests
           cd ..
           
-          # Generate complete project site (includes Javadocs, test reports, etc.)
-          mvn site -DskipTests
+          # Generate complete project site (skip problematic modules)
+          mvn site -DskipTests -pl '!juneau-examples-rest-jetty-ftest,!juneau-utest,!juneau-all,!juneau-distrib'
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
