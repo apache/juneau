@@ -19,3 +19,5 @@ github:
     wiki: true
     issues: true
     projects: true
+  ghpages:
+    whoami: asf-site

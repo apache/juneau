@@ -50,7 +50,6 @@ import org.apache.juneau.rest.widget.*;
 	},
 	asideFloat="RIGHT"
 )
-@SuppressWarnings("javadoc")
 public class UtilityBeansResource extends BasicRestObject {
 
 	@SuppressWarnings("unused")
@@ -85,14 +84,28 @@ public class UtilityBeansResource extends BasicRestObject {
 		return BeanDescription.of(Address.class);
 	}
 
+	/**
+	 * Sample address bean used for demonstrating utility bean functionality.
+	 */
 	@Bean(p="street,city,state,zip,isCurrent")
 	public static class Address {
+
+		/** Street address. */
 		public String street;
+
+		/** City name. */
 		public String city;
+
+		/** State abbreviation. */
 		public String state;
+
+		/** ZIP code. */
 		public int zip;
+
+		/** Whether this is the current address. */
 		public boolean isCurrent;
 
+		/** Default constructor. */
 		public Address() {}
 	}
 

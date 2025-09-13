@@ -78,26 +78,56 @@ public class SqlStore extends ConfigStore {
 			this.pollInterval = env(SQLSTORE_pollInterval, 600);  // Time in seconds.
 		}
 
+		/**
+		 * Sets the JDBC URL for the database connection.
+		 *
+		 * @param value The JDBC URL.
+		 * @return This object.
+		 */
 		public Builder jdbcUrl(String value) {
 			this.jdbcUrl = value;
 			return this;
 		}
 
+		/**
+		 * Sets the name of the database table containing configuration entries.
+		 *
+		 * @param value The table name.
+		 * @return This object.
+		 */
 		public Builder tableName(String value) {
 			this.tableName = value;
 			return this;
 		}
 
+		/**
+		 * Sets the name of the column containing configuration entry names.
+		 *
+		 * @param value The column name.
+		 * @return This object.
+		 */
 		public Builder nameColumn(String value) {
 			this.nameColumn = value;
 			return this;
 		}
 
+		/**
+		 * Sets the name of the column containing configuration entry values.
+		 *
+		 * @param value The column name.
+		 * @return This object.
+		 */
 		public Builder valueColumn(String value) {
 			this.valueColumn = value;
 			return this;
 		}
 
+		/**
+		 * Sets the polling interval in seconds for checking database changes.
+		 *
+		 * @param value The polling interval in seconds.
+		 * @return This object.
+		 */
 		public Builder pollInterval(int value) {
 			this.pollInterval = value;
 			return this;
