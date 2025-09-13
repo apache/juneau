@@ -54,33 +54,20 @@ After pushing this workflow, enable GitHub Pages in your repository:
 2. Under **Source**, select **GitHub Actions**
 3. The site will be available at: `https://<username>.github.io/juneau/`
 
-### Email Notifications Setup
-To receive email notifications when deployments complete or fail, configure these GitHub repository secrets:
+### Monitoring Deployments
+To monitor deployment status and receive notifications:
 
-1. Go to **Settings** → **Secrets and variables** → **Actions**
-2. Add the following **Repository secrets**:
+1. **GitHub Pages Badge** - The README includes a status badge showing deployment status
+2. **GitHub Notifications** - Enable repository notifications:
+   - Go to the repository → **Watch** → **Custom** → **Actions**
+   - Enable notifications for workflow runs in your GitHub profile settings
+3. **Actions Tab** - Monitor deployments directly in the repository's Actions tab
+4. **Commit Status** - Deployment status appears on commits and pull requests
 
-| Secret Name | Value | Description |
-|-------------|-------|-------------|
-| `MAIL_USERNAME` | `your-email@gmail.com` | Gmail address to send from |
-| `MAIL_PASSWORD` | `your-app-password` | Gmail App Password (not regular password) |
-| `NOTIFICATION_EMAIL` | `james.bognar@salesforce.com` | Email address to receive notifications |
-
-### Gmail App Password Setup
-For security, use Gmail App Passwords instead of your regular password:
-
-1. Go to [Google Account settings](https://myaccount.google.com/)
-2. Navigate to **Security** → **2-Step Verification** (enable if not already)
-3. Go to **Security** → **App passwords**
-4. Generate a new app password for "GitHub Actions"
-5. Use this 16-character password as `MAIL_PASSWORD`
-
-### Alternative Email Providers
-To use other email providers, update the workflow SMTP settings:
-
-- **Outlook/Hotmail**: `smtp.live.com:587`
-- **Yahoo**: `smtp.mail.yahoo.com:587`
-- **Custom SMTP**: Update `server_address` and `server_port` in the workflow
+### Deployment Status
+- ✅ **Success**: Site is deployed and accessible at the GitHub Pages URL
+- ❌ **Failure**: Check the Actions tab for detailed error logs
+- 🟡 **In Progress**: Deployment is currently running
 
 ## Local Development
 
