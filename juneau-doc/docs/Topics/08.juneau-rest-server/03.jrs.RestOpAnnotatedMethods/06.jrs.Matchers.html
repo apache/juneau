@@ -53,7 +53,7 @@
 			If no methods are found with a matching matcher, a <l>412 Precondition Failed</l> status is returned.
 		<li class='note'>
 			If multiple matchers are specified on the same method, ONLY ONE matcher needs to match for the 
-			method to be invoked.
+			method to be invoked.</li>
 		<li class='note'>
 			Note that you CANNOT define identical paths on different methods UNLESS you use matchers.
 			<br>That includes paths that are only different in variable names (e.g. <l>"/foo/{bar}"</l> and 
@@ -65,8 +65,8 @@
 	</ul>
 	
 	<ul class='seealso'>
-		<li class='ja'>{@link oajr.annotation.RestOp#matchers RestOp(matchers)}
-		<li class='jc'>{@link oajr.matcher.MultipartFormDataMatcher}
-		<li class='jc'>{@link oajr.matcher.UrlEncodedFormMatcher}
+		<li class='ja'>{@link oajr.annotation.RestOp#matchers RestOp(matchers)}</li>
+		<li class='jc'>{@link oajr.matcher.MultipartFormDataMatcher}</li>
+		<li class='jc'>{@link oajr.matcher.UrlEncodedFormMatcher}</li>
 	</ul>
 </div>

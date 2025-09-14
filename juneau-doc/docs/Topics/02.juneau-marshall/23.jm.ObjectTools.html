@@ -21,13 +21,13 @@
 		and manipulating POJOs.  It consists of the following classes:
 	</p>
 	<ul class='javatree'>
-		<li class='jc'>{@link oaj.objecttools.ObjectRest}
-		<li class='jc'>{@link oaj.objecttools.ObjectSearcher}
-		<li class='jc'>{@link oaj.objecttools.ObjectSorter}
-		<li class='jc'>{@link oaj.objecttools.ObjectViewer}
-		<li class='jc'>{@link oaj.objecttools.ObjectPaginator}
-		<li class='jc'>{@link oaj.objecttools.ObjectIntrospector}
-		<li class='jc'>{@link oaj.objecttools.ObjectMerger}
+		<li class='jc'>{@link oaj.objecttools.ObjectRest}</li>
+		<li class='jc'>{@link oaj.objecttools.ObjectSearcher}</li>
+		<li class='jc'>{@link oaj.objecttools.ObjectSorter}</li>
+		<li class='jc'>{@link oaj.objecttools.ObjectViewer}</li>
+		<li class='jc'>{@link oaj.objecttools.ObjectPaginator}</li>
+		<li class='jc'>{@link oaj.objecttools.ObjectIntrospector}</li>
+		<li class='jc'>{@link oaj.objecttools.ObjectMerger}</li>
 	</ul>
 	
 	<h5 class='topic'>ObjectRest</h5>
@@ -40,11 +40,11 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>
-			{@link java.util.Map Maps} and Java beans representing JSON objects.
+			{@link java.util.Map Maps} and Java beans representing JSON objects.</li>
 		<li>
-			{@link java.util.Collection Collections} and arrays representing JSON arrays.
+			{@link java.util.Collection Collections} and arrays representing JSON arrays.</li>
 		<li>
-			Java beans.
+			Java beans.</li>
 	</ul>
 	<p>
 		Leaves of the tree can be any type of object.
@@ -128,7 +128,7 @@
 	|	Map <jv>map</jv> = <jv>objectRest</jv>.getMap(<js>"/items/@name=foo"</js>);
 	</p>
 	<ul class='notes'>
-		<li class='note'>This class is used in the {@link oajr.converter.Traversable} REST response converter.
+		<li class='note'>This class is used in the {@link oajr.converter.Traversable} REST response converter.</li>
 	</ul>
 	
 	<h5 class='topic'>ObjectSearcher</h5>
@@ -149,16 +149,16 @@
 		The tool can be used against the following data types:
 	</p>
 	<ul>
-		<li>Arrays/collections of maps or beans.
+		<li>Arrays/collections of maps or beans.</li>
 	</ul>
 	<p>
 		The default searcher is configured with the following matcher factories that provides the capabilities of matching
 		against various data types.  This list is extensible:
 	</p>
 	<ul class='javatreec'>
-		<li class='jc'>{@link oaj.objecttools.StringMatcherFactory}
-		<li class='jc'>{@link oaj.objecttools.NumberMatcherFactory}
-		<li class='jc'>{@link oaj.objecttools.TimeMatcherFactory}
+		<li class='jc'>{@link oaj.objecttools.StringMatcherFactory}</li>
+		<li class='jc'>{@link oaj.objecttools.NumberMatcherFactory}</li>
+		<li class='jc'>{@link oaj.objecttools.TimeMatcherFactory}</li>
 	</ul>
 	<p>
 		The {@link oaj.objecttools.StringMatcherFactory} class provides searching based on the following patterns:
@@ -201,7 +201,7 @@
 		<li><js>"property=2011 - 2013-06-30"</js> - Closed ranges
 	</ul>
 	<ul class='notes'>
-		<li class='note'>This class is used in the {@link oajr.converter.Queryable} REST response converter.
+		<li class='note'>This class is used in the {@link oajr.converter.Queryable} REST response converter.</li>
 	</ul>
 
 	<h5 class='topic'>ObjectSorter</h5>
@@ -220,14 +220,14 @@
 		The tool can be used against the following data types:
 	</p>
 	<ul>
-		<li>Arrays/collections of maps or beans.
+		<li>Arrays/collections of maps or beans.</li>
 	</ul>
 	<p>
 		The arguments are a simple comma-delimited list of property names optionally suffixed with <js>'+'</js> and <js>'-'</js> to 
 		denote ascending/descending order.
 	</p>
 	<ul class='notes'>
-		<li class='note'>This class is used in the {@link oajr.converter.Queryable} REST response converter.
+		<li class='note'>This class is used in the {@link oajr.converter.Queryable} REST response converter.</li>
 	</ul>
 	
 	<h5 class='topic'>ObjectViewer</h5>
@@ -246,11 +246,11 @@
 		The tool can be used against the following data types:
 	</p>
 	<ul>
-		<li>Arrays/collections of maps or beans.
-		<li>Singular maps or beans.
+		<li>Arrays/collections of maps or beans.</li>
+		<li>Singular maps or beans.</li>
 	</ul>
 	<ul class='notes'>
-		<li class='note'>This class is used in the {@link oajr.converter.Queryable} REST response converter.
+		<li class='note'>This class is used in the {@link oajr.converter.Queryable} REST response converter.</li>
 	</ul>
 	
 	<h5 class='topic'>ObjectPaginator</h5>
@@ -269,10 +269,10 @@
 		The tool can be used against the following data types:
 	</p>
 	<ul>
-		<li>Arrays/collections of maps or beans.
+		<li>Arrays/collections of maps or beans.</li>
 	</ul>
 	<ul class='notes'>
-		<li class='note'>This class is used in the {@link oajr.converter.Queryable} REST response converter.
+		<li class='note'>This class is used in the {@link oajr.converter.Queryable} REST response converter.</li>
 	</ul>
 
 	<h5 class='topic'>ObjectIntrospector</h5>
@@ -291,8 +291,8 @@
 		in as arguments.
 	</p>
 	<ul class='notes'>
-		<li class='note'>This class is used in the {@link oajr.converter.Introspectable} REST response converter.
-		<li class='warn'>This is an extremely powerful but potentially dangerous tool.  Use wisely.
+		<li class='note'>This class is used in the {@link oajr.converter.Introspectable} REST response converter.</li>
+		<li class='warn'>This is an extremely powerful but potentially dangerous tool.  Use wisely.</li>
 	</ul>
 	
 	<h5 class='topic'>ObjectMerger</h5>

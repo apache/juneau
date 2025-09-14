@@ -18,7 +18,7 @@
 <div class='topic'>
 	<ul class='spaced-list'>
 		<li>
-			Each config file contains zero or more sections containing zero or more entries:
+			Each config file contains zero or more sections containing zero or more entries:</li>
 			<p class='bini'>
 				|	<cs>[Section1]</cs>
 				|	<ck>key1</ck> = <cv>1</cv>
@@ -27,7 +27,7 @@
 				|	<ck>key1</ck> = <cv>2</cv>
 			</p>
 		<li>
-			Unicode escapes can be used in values.
+			Unicode escapes can be used in values.</li>
 			<p class='bini'>
 				|	<ck>key1</ck> = <cv>\u0070\u0075\u0062\u006c\u0069\u0063</cv>
 			</p>
@@ -41,7 +41,7 @@
 				|	<ck>key1</ck> = <cv>1</cv>
 			</p>
 		<li>
-			Comments can also be placed on the same line as entries:
+			Comments can also be placed on the same line as entries:</li>
 			<p class='bini'>
 				|	<ck>key1</ck> = <cv>1</cv>  <cc># A comment about this entry</cc>
 			</p>
@@ -62,11 +62,11 @@
 			</p>
 			<br>When retrieved, the above translates to <js>"line1,\nline2,\nline3"</js>.
 		<li>
-			Leading and trailing whitespace on values are ignored.
+			Leading and trailing whitespace on values are ignored.</li>
 		<li>
-			Whitespace is not ignored within multi-line values (except for the leading tab character on each line).
+			Whitespace is not ignored within multi-line values (except for the leading tab character on each line).</li>
 		<li>
-			Blank lines can be used anywhere in the file.
+			Blank lines can be used anywhere in the file.</li>
 			<p class='bini'>
 				|	<cc># A comment line</cc>
 				|	
@@ -76,7 +76,7 @@
 			</p>
 		<li>
 			Values located before any sections are considered part of the no-name section, meaning
-			they are accessed simply by key and not section/key.
+			they are accessed simply by key and not section/key.</li>
 			<p class='bini'>
 				|	<cc># Top of file</cc>
 				|	
@@ -91,11 +91,11 @@
 			</p>
 		<li>
 			Section and key names must be at least one character long and not consist of any of the following
-			characters:
+			characters:</li>
 			<p class='bini'>
 				|	/ \ [ ] = #
 			</p>
 		<li>
-			Whitespace in section and key names is technically allowed but discouraged.
+			Whitespace in section and key names is technically allowed but discouraged.</li>
 	</ul>
 </div>

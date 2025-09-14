@@ -35,7 +35,7 @@
 											<ul>
 												<li class='jc'>{@link oaj.uon.UonSerializer.Builder}
 													<ul>
-														<li class='jc'>{@link oaj.oapi.OpenApiSerializer.Builder}
+														<li class='jc'>{@link oaj.oapi.OpenApiSerializer.Builder}</li>
 													</ul>
 												</li>
 											</ul>
@@ -174,9 +174,9 @@
 			<td>
 				<ul>
 					<li><c><jk>byte</jk>[]</c> (default)
-					<li>{@link java.io.InputStream}
-					<li>{@link java.io.Reader} - Read into String and then converted using {@link java.lang.String#getBytes()}.
-					<li>{@link java.lang.Object} - Converted to String and then converted using {@link java.lang.String#getBytes()}.
+					<li>{@link java.io.InputStream}</li>
+					<li>{@link java.io.Reader} - Read into String and then converted using {@link java.lang.String#getBytes()}.</li>
+					<li>{@link java.lang.Object} - Converted to String and then converted using {@link java.lang.String#getBytes()}.</li>
 					<li>Any POJO transformable to a <c><jk>byte</jk>[]</c> via the following methods:
 						<ul>
 							<li><c><jk>public byte</jk>[] toBytes() {...}</c>
@@ -190,14 +190,14 @@
 			<td><c>date<br>date-time</c></td>
 			<td>
 				<ul>
-					<li>{@link java.util.Calendar} (default)
-					<li>{@link java.util.Date}
+					<li>{@link java.util.Calendar} (default)</li>
+					<li>{@link java.util.Date}</li>
 					<li>Any POJO transformable to a {@link java.util.Calendar} via the following methods:
 						<ul>
 							<li><c><jk>public</jk> Calendar toCalendar() {...}</c>
 							<li><c><jk>public</jk> Calendar toFoo() {...}</c> (any method name starting with "to")
 						</ul>
-					<li>Any POJO transformable to a {@link java.util.Calendar} via an {@link oaj.swap.ObjectSwap}.
+					<li>Any POJO transformable to a {@link java.util.Calendar} via an {@link oaj.swap.ObjectSwap}.</li>
 				</ul>
 			</td>
 		</tr>
@@ -213,12 +213,12 @@
 			<td>empty</td>
 			<td>
 				<ul>
-					<li>{@link java.lang.String} (default)
+					<li>{@link java.lang.String} (default)</li>
 					<li>Any POJO transformable to a {@link java.lang.String} via the following methods:
 						<ul>
 							<li><c><jk>public</jk> String toString() {...}</c>
 						</ul>
-					<li>Any POJO transformable to a {@link java.lang.String} via an {@link oaj.swap.ObjectSwap}.
+					<li>Any POJO transformable to a {@link java.lang.String} via an {@link oaj.swap.ObjectSwap}.</li>
 				</ul>
 			</td>
 		</tr>
@@ -227,15 +227,15 @@
 			<td>empty</td>
 			<td>
 				<ul>
-					<li>{@link java.lang.Boolean} (default)
+					<li>{@link java.lang.Boolean} (default)</li>
 					<li><jk>boolean</jk>
-					<li>{@link java.lang.String} - Converted to a {@link java.lang.Boolean}.
+					<li>{@link java.lang.String} - Converted to a {@link java.lang.Boolean}.</li>
 					<li>Any POJO transformable to a {@link java.lang.Boolean} via the following methods:
 						<ul>
 							<li><c><jk>public</jk> Boolean toBoolean() {...}</c>
 							<li><c><jk>public</jk> Boolean toFoo() {...}</c> (any method name starting with "to")
 						</ul>
-					<li>Any POJO transformable to a {@link java.lang.Boolean} via an {@link oaj.swap.ObjectSwap}.
+					<li>Any POJO transformable to a {@link java.lang.Boolean} via an {@link oaj.swap.ObjectSwap}.</li>
 				</ul>
 			</td>
 		</tr>
@@ -244,15 +244,15 @@
 			<td><c>int32</c></td>
 			<td>
 				<ul>
-					<li>{@link java.lang.Integer} (default)
+					<li>{@link java.lang.Integer} (default)</li>
 					<li><jk>int</jk>
-					<li>{@link java.lang.String} - Converted to an {@link java.lang.String}.
+					<li>{@link java.lang.String} - Converted to an {@link java.lang.String}.</li>
 					<li>Any POJO transformable to an {@link java.lang.Integer} via the following methods:
 						<ul>
 							<li><c><jk>public</jk> Integer toInteger() {...}</c>
 							<li><c><jk>public</jk> Integer toFoo() {...}</c> (any method name starting with "to")
 						</ul>
-					<li>Any POJO transformable to an {@link java.lang.Integer} via an {@link oaj.swap.ObjectSwap}.
+					<li>Any POJO transformable to an {@link java.lang.Integer} via an {@link oaj.swap.ObjectSwap}.</li>
 				</ul>
 			</td>
 		</tr>
@@ -260,15 +260,15 @@
 			<td><c>int64</c></td>
 			<td>
 				<ul>
-					<li>{@link java.lang.Long} (default)
+					<li>{@link java.lang.Long} (default)</li>
 					<li><jk>long</jk>
-					<li>{@link java.lang.String} - Converted to a {@link java.lang.Long}.
+					<li>{@link java.lang.String} - Converted to a {@link java.lang.Long}.</li>
 					<li>Any POJO transformable to a {@link java.lang.Long} via the following methods:
 						<ul>
 							<li><c><jk>public</jk> Long toLong() {...}</c>
 							<li><c><jk>public</jk> Long toFoo() {...}</c> (any method name starting with "to")
 						</ul>
-					<li>Any POJO transformable to a {@link java.lang.Long} via an {@link oaj.swap.ObjectSwap}.
+					<li>Any POJO transformable to a {@link java.lang.Long} via an {@link oaj.swap.ObjectSwap}.</li>
 				</ul>
 			</td>
 		</tr>
@@ -277,15 +277,15 @@
 			<td><c>float</c></td>
 			<td>
 				<ul>
-					<li>{@link java.lang.Float} (default)
+					<li>{@link java.lang.Float} (default)</li>
 					<li><jk>float</jk>
-					<li>{@link java.lang.String} - Converted to a {@link java.lang.Float}.
+					<li>{@link java.lang.String} - Converted to a {@link java.lang.Float}.</li>
 					<li>Any POJO transformable to a {@link java.lang.Float} via the following methods:
 						<ul>
 							<li><c><jk>public</jk> Float toFloat() {...}</c>
 							<li><c><jk>public</jk> Float toFoo() {...}</c> (any method name starting with "to")
 						</ul>
-					<li>Any POJO transformable to a {@link java.lang.Float} via an {@link oaj.swap.ObjectSwap}.
+					<li>Any POJO transformable to a {@link java.lang.Float} via an {@link oaj.swap.ObjectSwap}.</li>
 				</ul>
 			</td>
 		</tr>
@@ -293,15 +293,15 @@
 			<td><c>double</c></td>
 			<td>
 				<ul>
-					<li>{@link java.lang.Double} (default)
+					<li>{@link java.lang.Double} (default)</li>
 					<li><jk>double</jk>
-					<li>{@link java.lang.String} - Converted to a {@link java.lang.Double}.
+					<li>{@link java.lang.String} - Converted to a {@link java.lang.Double}.</li>
 					<li>Any POJO transformable to a {@link java.lang.Double} via the following methods:
 						<ul>
 							<li><c><jk>public</jk> Double toDouble() {...}</c>
 							<li><c><jk>public</jk> Double toFoo() {...}</c> (any method name starting with "to")
 						</ul>
-					<li>Any POJO transformable to a {@link java.lang.Double} via an {@link oaj.swap.ObjectSwap}.
+					<li>Any POJO transformable to a {@link java.lang.Double} via an {@link oaj.swap.ObjectSwap}.</li>
 				</ul>
 			</td>
 		</tr>
@@ -310,13 +310,13 @@
 			<td>empty</td>
 			<td>
 				<ul>
-					<li>Arrays or Collections of any defaults on this list.
+					<li>Arrays or Collections of any defaults on this list.</li>
 					<li>Any POJO transformable to arrays of the default types (e.g. <c>Integer[]</c>, <c>Boolean[][]</c>, etc...).
 						<br>For example:
 						<ul>
 							<li><c><jk>public</jk> Boolean[][] toFoo() {...}</c> (any method name starting with "to")
 						</ul>
-					<li>Any POJO transformable to arrays of the default types via an {@link oaj.swap.ObjectSwap}
+					<li>Any POJO transformable to arrays of the default types via an {@link oaj.swap.ObjectSwap}</li>
 				</ul>
 			</td>
 		</tr>
@@ -334,8 +334,8 @@
 			<td>
 				<ul>
 					<li><c>Map&lt;String,Object&gt;</c> (default)
-					<li>Beans with properties of anything on this list.
-					<li>Any POJO transformable to a map via an {@link oaj.swap.ObjectSwap}
+					<li>Beans with properties of anything on this list.</li>
+					<li>Any POJO transformable to a map via an {@link oaj.swap.ObjectSwap}</li>
 				</ul>
 			</td>
 		</tr>
@@ -510,10 +510,10 @@
 			Array properties can also use CSV/SSV/PIPES for array notation.
 			<br>Various notations can be mixed throughout.
 		<li class='note'>
-			Schemas and POJOs can be defined arbitrarily deep.
+			Schemas and POJOs can be defined arbitrarily deep.</li>
 		<li class='note'>
 			Schemas are optional.
-			They can be skipped or partially defined.
+			They can be skipped or partially defined.</li>
 		<li class='note'>
 			We make our best attempt to convert the input to the matching type.  
 			However, you will get <c>SerializeExceptions</c> if you attempt an impossible conversion.

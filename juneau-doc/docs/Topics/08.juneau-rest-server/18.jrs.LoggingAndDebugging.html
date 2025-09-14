@@ -23,13 +23,13 @@
 	<ul class='javatree'>
 		<li class='ja'>{@link oajr.annotation.Rest}
 			<ul class='javatreec'>
-				<li class='jma'>{@link oajr.annotation.Rest#debug() debug}
-				<li class='jma'>{@link oajr.annotation.Rest#debugOn() debugOn}
+				<li class='jma'>{@link oajr.annotation.Rest#debug() debug}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#debugOn() debugOn}</li>
 			</ul>
 		</li>
 		<li class='ja'>{@link oajr.annotation.RestOp}
 			<ul class='javatreec'>
-				<li class='jma'>{@link oajr.annotation.RestOp#debug() debug}
+				<li class='jma'>{@link oajr.annotation.RestOp#debug() debug}</li>
 			</ul>
 		</li>
 	</ul>
@@ -38,9 +38,9 @@
 	</p>	
 	<ul class='spaced-list'>
 		<li>
-			HTTP request/response bodies are cached in memory for logging purposes.
+			HTTP request/response bodies are cached in memory for logging purposes.</li>
 		<li>
-			HTTP requests/responses are logged to the registered {@link oajr.logger.CallLogger}.
+			HTTP requests/responses are logged to the registered {@link oajr.logger.CallLogger}.</li>
 	</ul>
 	<p>
 		The possible annotation values are:
@@ -87,13 +87,13 @@
 		Debugging can also be enabled programmatically with the use of the following APIs:
 	</p>	
 	<ul class='javatree'>
-		<li class='jic'>{@link oajr.debug.DebugEnablement}
-		<li class='jc'>{@link oajr.debug.BasicDebugEnablement}
+		<li class='jic'>{@link oajr.debug.DebugEnablement}</li>
+		<li class='jc'>{@link oajr.debug.BasicDebugEnablement}</li>
 		<li class='jc'>{@link oajr.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jm'>{@link oajr.RestContext.Builder#debugEnablement() debugEnablement()}
-				<li class='jm'>{@link oajr.RestContext.Builder#debugEnablement(Class) debugEnablement(Class)}
-				<li class='jm'>{@link oajr.RestContext.Builder#debugEnablement(DebugEnablement) debugEnablement(DebugEnablement)}
+				<li class='jm'>{@link oajr.RestContext.Builder#debugEnablement() debugEnablement()}</li>
+				<li class='jm'>{@link oajr.RestContext.Builder#debugEnablement(Class) debugEnablement(Class)}</li>
+				<li class='jm'>{@link oajr.RestContext.Builder#debugEnablement(DebugEnablement) debugEnablement(DebugEnablement)}</li>
 			</ul>
 		</li>
 	</ul>
@@ -103,9 +103,9 @@
 	<ul class='javatree'>
 		<li class='je'>{@link oajr.logger.CallLoggingDetail}
 			<ul class='javatreec'>
-				<li class='jf'>{@link oajr.logger.CallLoggingDetail#STATUS_LINE STATUS_LINE}
-				<li class='jf'>{@link oajr.logger.CallLoggingDetail#HEADER HEADER}
-				<li class='jf'>{@link oajr.logger.CallLoggingDetail#ENTITY ENTITY}
+				<li class='jf'>{@link oajr.logger.CallLoggingDetail#STATUS_LINE STATUS_LINE}</li>
+				<li class='jf'>{@link oajr.logger.CallLoggingDetail#HEADER HEADER}</li>
+				<li class='jf'>{@link oajr.logger.CallLoggingDetail#ENTITY ENTITY}</li>
 			</ul>
 		</li>
 	</ul>
@@ -164,14 +164,14 @@
 	<ul class='javatree'>
 		<li class='ja'>{@link oajr.annotation.Rest}
 			<ul class='javatreec'>
-				<li class='jma'>{@link oajr.annotation.Rest#callLogger() callLogger()}
+				<li class='jma'>{@link oajr.annotation.Rest#callLogger() callLogger()}</li>
 			</ul>
 		</li>
 		<li class='jc'>{@link oajr.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jm'>{@link oajr.RestContext.Builder#callLogger() callLogger()}
-				<li class='jm'>{@link oajr.RestContext.Builder#callLogger(Class) callLogger(Class)}
-				<li class='jm'>{@link oajr.RestContext.Builder#callLogger(CallLogger) callLogger(CallLogger)}
+				<li class='jm'>{@link oajr.RestContext.Builder#callLogger() callLogger()}</li>
+				<li class='jm'>{@link oajr.RestContext.Builder#callLogger(Class) callLogger(Class)}</li>
+				<li class='jm'>{@link oajr.RestContext.Builder#callLogger(CallLogger) callLogger(CallLogger)}</li>
 			</ul>
 		</li>
 	</ul>
@@ -218,9 +218,9 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link oajr.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jm'>{@link oajr.RestContext.Builder#thrownStore() thrownStore()}
-				<li class='jm'>{@link oajr.RestContext.Builder#thrownStore(Class) thrownStore(Class)}
-				<li class='jm'>{@link oajr.RestContext.Builder#thrownStore(ThrownStore) thrownStore(ThrownStore)}
+				<li class='jm'>{@link oajr.RestContext.Builder#thrownStore() thrownStore()}</li>
+				<li class='jm'>{@link oajr.RestContext.Builder#thrownStore(Class) thrownStore(Class)}</li>
+				<li class='jm'>{@link oajr.RestContext.Builder#thrownStore(ThrownStore) thrownStore(ThrownStore)}</li>
 			</ul>
 		</li>
 	</ul>
@@ -229,6 +229,6 @@
 			allows you to suppress logging when testing error conditions by passing in a <c>noTrace=true</c> query parameter
 			or <c>No-Trace: true</c> header on requests.  
 		<li class='note'>{@link oajr.debug.DebugEnablement}, {@link oajr.logger.CallLogger}, and 
-			{@link oajr.stats.ThrownStore} can all be defined globally as Spring beans in a Spring Boot environment.
+			{@link oajr.stats.ThrownStore} can all be defined globally as Spring beans in a Spring Boot environment.</li>
 	</ul>
 </div>

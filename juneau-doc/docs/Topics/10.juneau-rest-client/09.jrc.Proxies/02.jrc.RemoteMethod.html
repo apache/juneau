@@ -23,9 +23,9 @@
 	<ul class='javatree'>
 		<li class='ja'>{@link oaj.http.remote.RemoteOp}
 			<ul class='javatreec'>
-				<li class='jma'>{@link oaj.http.remote.RemoteOp#method method}
-				<li class='jma'>{@link oaj.http.remote.RemoteOp#path path}
-				<li class='jma'>{@link oaj.http.remote.RemoteOp#returns returns}
+				<li class='jma'>{@link oaj.http.remote.RemoteOp#method method}</li>
+				<li class='jma'>{@link oaj.http.remote.RemoteOp#path path}</li>
+				<li class='jma'>{@link oaj.http.remote.RemoteOp#returns returns}</li>
 			</ul>
 		</li>
 	</ul>
@@ -34,11 +34,11 @@
 		Specialized sub-annotations are provided for common HTTP methods:
 	</p>
 	<ul class='javatreec'>
-		<li class='ja'>{@link oaj.http.remote.RemoteGet}
-		<li class='ja'>{@link oaj.http.remote.RemotePost}
-		<li class='ja'>{@link oaj.http.remote.RemotePut}
-		<li class='ja'>{@link oaj.http.remote.RemotePatch}
-		<li class='ja'>{@link oaj.http.remote.RemoteDelete}
+		<li class='ja'>{@link oaj.http.remote.RemoteGet}</li>
+		<li class='ja'>{@link oaj.http.remote.RemotePost}</li>
+		<li class='ja'>{@link oaj.http.remote.RemotePut}</li>
+		<li class='ja'>{@link oaj.http.remote.RemotePatch}</li>
+		<li class='ja'>{@link oaj.http.remote.RemoteDelete}</li>
 	</ul>
 
 	<h5 class='topic'>@RemoteOp(method/path)</h5>
@@ -147,18 +147,18 @@
 			- The body of the response will be converted to the POJO using the parser defined on the 
 			<c>RestClient</c> based on the <c>Content-Type</c> of the response.
 		<li>
-			Any {@link oaj.http.annotation.Response @Response}-annotated type. (described later)
+			Any {@link oaj.http.annotation.Response @Response}-annotated type. (described later)</li>
 		<li>
 			<c>HttpResponse</c> 
 			- Returns the raw <c>HttpResponse</c> returned by the inner <c>HttpClient</c>.
 		<li>
 			{@link java.io.Reader} 
-			- Returns access to the raw reader of the response.
+			- Returns access to the raw reader of the response.</li>
 		<li>
 			{@link java.io.InputStream} 
-			- Returns access to the raw input stream of the response.
+			- Returns access to the raw input stream of the response.</li>
 		<li>
-			A {@link java.util.concurrent.Future} or {@link java.util.concurrent.CompletableFuture} of anything on this list. 
+			A {@link java.util.concurrent.Future} or {@link java.util.concurrent.CompletableFuture} of anything on this list. </li>
 	</ul>
 	
 	<p>

@@ -63,19 +63,19 @@
 	<h5 class='topic'>Features</h5>
 	<ul class='spaced-list'>
 		<li>
-			Deployable in standard Servlet containers.
+			Deployable in standard Servlet containers.</li>
 		<li>
-			Deployable in Spring Boot environments with full support for injected beans.
+			Deployable in Spring Boot environments with full support for injected beans.</li>
 		<li>
 			Serializes POJOs to JSON, XML, HTML, URL-Encoding, UON, RDF/XML, N-Triple, Turtle, N3, SOAP, or 
 			Java-serialized-object based on value of <l>Accept</l> header.  
 			<br>No user code is required to handle these types.
 			<ul>
 				<li>Extensible design that provides ability to override existing content type handlers, or add the 
-					ability to handle other kinds of content types.
+					ability to handle other kinds of content types.</li>
 			</ul>
 		<li>
-			Parses content of POST/PUT request bodies to POJOs.
+			Parses content of POST/PUT request bodies to POJOs.</li>
 		<li>
 			Automatic built-in ability to serialize POJO metadata to JSON+SCHEMA, XML+SCHEMA, or HTML+SCHEMA based on 
 			<l>Accept</l> header.
@@ -88,21 +88,21 @@
 		<li>
 			Automatic error handling.
 			<ul>
-				<li>Automatic 401 errors (Unauthorized) on failed guards.
-				<li>Automatic 404 errors (Not Found) on unmatched path patterns.
-				<li>Automatic 405 errors (Method Not Implemented) on unimplemented methods.
+				<li>Automatic 401 errors (Unauthorized) on failed guards.</li>
+				<li>Automatic 404 errors (Not Found) on unmatched path patterns.</li>
+				<li>Automatic 405 errors (Method Not Implemented) on unimplemented methods.</li>
 				<li>Automatic 406 errors (Not Acceptable) when no matching serializer was found to handle the 
 					<l>Accept</l> header.
-				<li>Automatic 412 errors (Precondition Failed) when all matchers failed to match.
+				<li>Automatic 412 errors (Precondition Failed) when all matchers failed to match.</li>
 				<li>Automatic 415 errors (Unsupported Media Type) when no matching parser was found was found to handle 
 					the <l>Content-Type</l> header.
-				<li>Automatic 500 errors on uncaught exceptions.
+				<li>Automatic 500 errors on uncaught exceptions.</li>
 			</ul>
 		<li>
 			Support for parsing all HTTP parts (headers, query, formData, path variables) using Swagger formatting rules and validations.
 			<br>Not limited to simple POJOs but rather you can represent arbitrarily-complex POJOs in any HTTP part using UON notation.
 		<li>
-			Auto-created Swagger JSON and Swagger UI available through OPTIONS requests of resources.
+			Auto-created Swagger JSON and Swagger UI available through OPTIONS requests of resources.</li>
 		<li>
 			Various useful debugging features that make debugging using a browser extremely simple...
 			<ul>

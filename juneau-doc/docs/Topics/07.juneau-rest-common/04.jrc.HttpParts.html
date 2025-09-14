@@ -25,14 +25,14 @@
 		<ul>
 			<li class='jc'>{@link oaj.http.part.BasicPart}
 			<ul class='javatreec'>
-				<li class='jc'>{@link oaj.http.part.BasicBooleanPart}
-				<li class='jc'>{@link oaj.http.part.BasicCsvArrayPart}
-				<li class='jc'>{@link oaj.http.part.BasicDatePart}
-				<li class='jc'>{@link oaj.http.part.BasicIntegerPart}
-				<li class='jc'>{@link oaj.http.part.BasicLongPart}
-				<li class='jc'>{@link oaj.http.part.BasicPartIterator}
-				<li class='jc'>{@link oaj.http.part.BasicStringPart}
-				<li class='jc'>{@link oaj.http.part.BasicUriPart}
+				<li class='jc'>{@link oaj.http.part.BasicBooleanPart}</li>
+				<li class='jc'>{@link oaj.http.part.BasicCsvArrayPart}</li>
+				<li class='jc'>{@link oaj.http.part.BasicDatePart}</li>
+				<li class='jc'>{@link oaj.http.part.BasicIntegerPart}</li>
+				<li class='jc'>{@link oaj.http.part.BasicLongPart}</li>
+				<li class='jc'>{@link oaj.http.part.BasicPartIterator}</li>
+				<li class='jc'>{@link oaj.http.part.BasicStringPart}</li>
+				<li class='jc'>{@link oaj.http.part.BasicUriPart}</li>
 			</ul>
 		</ul>
 	</ul>
@@ -90,9 +90,9 @@
 		Various methods are provided for iterating over the parts in this list to avoid array copies.
 	</p>
 	<ul class='javatree'>
-		<li class='jm'>{@link oaj.http.part.PartList#forEach(Consumer) forEach(Consumer)} / {@link oaj.http.part.PartList#forEach(String,Consumer) forEach(String,Consumer)} / {@link oaj.http.part.PartList#forEach(Predicate,Consumer) forEach(Predicate,Consumer)} - Use consumers to process parts.
-		<li class='jm'>{@link oaj.http.part.PartList#partIterator() partIterator()} / {@link oaj.http.part.PartList#partIterator(String) partIterator(String)} - Use an {@link oaj.http.part.PartIterator} to process parts.
-		<li class='jm'>{@link oaj.http.part.PartList#stream() stream()} / {@link oaj.http.part.PartList#stream(String) stream(String)} - Use a stream.
+		<li class='jm'>{@link oaj.http.part.PartList#forEach(Consumer) forEach(Consumer)} / {@link oaj.http.part.PartList#forEach(String,Consumer) forEach(String,Consumer)} / {@link oaj.http.part.PartList#forEach(Predicate,Consumer) forEach(Predicate,Consumer)} - Use consumers to process parts.</li>
+		<li class='jm'>{@link oaj.http.part.PartList#partIterator() partIterator()} / {@link oaj.http.part.PartList#partIterator(String) partIterator(String)} - Use an {@link oaj.http.part.PartIterator} to process parts.</li>
+		<li class='jm'>{@link oaj.http.part.PartList#stream() stream()} / {@link oaj.http.part.PartList#stream(String) stream(String)} - Use a stream.</li>
 	</ul>
 	<p>
 		In general, try to use these over the {@link oaj.http.part.PartList#getAll() getAll()} / {@link oaj.http.part.PartList#getAll(String) getAll(String)} methods that require array copies.

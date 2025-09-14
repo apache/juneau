@@ -30,10 +30,10 @@
 			<td><b>Java primitives and primitive objects</b></td>
 			<td>
 				<ul class='normal'>
-					<li>{@code String}
-					<li>{@code Integer}
-					<li>{@code Float}
-					<li>{@code Boolean}
+					<li>{@code String}</li>
+					<li>{@code Integer}</li>
+					<li>{@code Float}</li>
+					<li>{@code Boolean}</li>
 				</ul>
 			</td>
 			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -192,8 +192,8 @@
 			</td>
 			<td>					
 				<ul class='normal'>
-					<li>{@code FileInputStream}
-					<li>{@code StringReader}
+					<li>{@code FileInputStream}</li>
+					<li>{@code StringReader}</li>
 				</ul>
 			</td>
 			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -288,7 +288,7 @@
 		These are used in places such as: 
 	</p>
 	<ul class='spaced-list'>
-		<li>Serializing of POJOs to Strings in the REST client API when no serializers are registered.
+		<li>Serializing of POJOs to Strings in the REST client API when no serializers are registered.</li>
 		<li>Parsing of POJOs from Strings in the REST server API for <js>"text/plain"</js> requests where
 		<js>"text/plain"</js> is not already mapped to an existing serializer.
 	</ul>
@@ -298,7 +298,7 @@
 		However, there is one exception:
 	</p>
 	<ul class='spaced-list'>
-		<li>{@link java.util.TimeZone} - Uses {@link java.util.TimeZone#getID()}
+		<li>{@link java.util.TimeZone} - Uses {@link java.util.TimeZone#getID()}</li>
 	</ul>
 	
 	<p>
@@ -322,7 +322,7 @@
 		Exceptions exist for the following classes:
 	</p>
 	<ul class='spaced-list'>
-		<li>{@link java.util.TimeZone} - Uses {@link java.util.TimeZone#getTimeZone(String)}
+		<li>{@link java.util.TimeZone} - Uses {@link java.util.TimeZone#getTimeZone(String)}</li>
 		<li>{@link java.util.Locale} - Uses {@link java.util.Locale#forLanguageTag(String)} after replacing <js>'_'</js> with <js>'-'</js>.
 		<li>{@link java.lang.Boolean} - Blank and <js>"null"</js> are interpreted as null values.
 		<li>Primitives (except for <c><jk>void</jk>.<jk>class</jk></c>) - Uses the primitive wrapper classes for instantiating from Strings.

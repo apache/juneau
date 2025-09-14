@@ -84,8 +84,8 @@
 		Builders require two parts:
 	</p>
 	<ol>
-		<li>A way to detect and instantiate a builder using reflection.
-		<li>A way to instantiate a POJO from a builder.
+		<li>A way to detect and instantiate a builder using reflection.</li>
+		<li>A way to instantiate a POJO from a builder.</li>
 	</ol>
 	<p>
 		The first can be accomplished through <b>any</b> of the following:
@@ -115,13 +115,13 @@
 			<p class='bjava nomargin'>
 				|	<jk>public</jk> MyBean build() {...}
 			</p>
-		<li>The existence of a public constructor on the POJO class that takes in the builder instance.
+		<li>The existence of a public constructor on the POJO class that takes in the builder instance.</li>
 			<p class='bjava nomargin'>
 				|	<jk>public</jk> MyBean(Builder <jv>builder</jv>) {...}
 			</p>
 	</ul>
 	<ul class='seealso'>
-		<li class='ja'>{@link oaj.annotation.Builder}
-		<li class='jic'>{@link oaj.swap.Builder}
+		<li class='ja'>{@link oaj.annotation.Builder}</li>
+		<li class='jic'>{@link oaj.swap.Builder}</li>
 	</ul>
 </div>
