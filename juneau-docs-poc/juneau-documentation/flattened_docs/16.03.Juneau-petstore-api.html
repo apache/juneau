@@ -1,0 +1,219 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'juneau-petstore-api', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The <c>juneau-petstore-api</c> module contains the Java interface of our application and the DTOs that go along
+		with it.  These classes are meant to be shared between the server and client side code.
+	</p>
+	
+	<p>
+		The <c>PetStore</c> class is our primary class for defining our application.  It's a standard Java interface with 
+		annotations used to describe how the methods map to REST calls.
+	</p>
+	<h5 class='figure'>PetStore.java</h5>
+	<p class='bcode w800'>
+		|	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
+		|	<jk>public interface</jk> PetStore {
+		|	
+		|		<jc>//------------------------------------------------------------------------------------------------------------------
+		|		// Pets
+		|		//------------------------------------------------------------------------------------------------------------------</jc>
+		|	
+		|		<jd>/**
+		|		 * Returns all pets in the database.
+		|		 *
+		|		 * @return All pets in the database.
+		|		 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+		|		 */</jd>
+		|		<ja>@RemoteGet</ja>(<js>"/pet"</js>)
+		|		<jk>public</jk> Collection<Pet> getPets() <jk>throws</jk> NotAcceptable;
+		|	
+		|		<jd>/**
+		|		 * Returns a pet from the database.
+		|		 *
+		|		 * @param petId The ID of the pet to retrieve.
+		|		 * @return The pet.
+		|		 * @throws IdNotFound Pet was not found.
+		|		 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+		|		 */</jd>
+		|		<ja>@RemoteGet</ja>(<js>"/pet/{petId}"</js>)
+		|		<jk>public</jk> Pet getPet(
+		|			<ja>@Path</ja>(
+		|				name=<js>"petId"</js>,
+		|				schema=<ja>@Schema</ja>(description=<js>"ID of pet to return"</js>)
+		|			)
+		|			<jk>long</jk> <jv>petId</jv>
+		|		) <jk>throws</jk> IdNotFound, NotAcceptable;
+		|	
+		|		<jd>/**
+		|		 * Adds a pet to the database.
+		|		 *
+		|		 * @param pet The pet data to add to the database.
+		|		 * @return Ok if successful.
+		|		 * @throws IdConflict ID already in use.
+		|		 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+		|		 * @throws UnsupportedMediaType Unsupported <c>Content-Type</c> header specified.
+		|		 */</jd>
+		|		<ja>@RemotePost</ja>(<js>"/pet"</js>)
+		|		<jk>public long</jk> createPet(
+		|			<ja>@Content</ja>(
+		|				schema=<ja>@Schema</ja>(description=<js>"Pet object to add to the store"</js>)
+		|			)
+		|			CreatePet <jv>pet</jv>
+		|		) <jk>throws</jk> IdConflict, NotAcceptable, UnsupportedMediaType;
+		|	
+		|		<jd>/**
+		|		 * Updates a pet in the database.
+		|		 *
+		|		 * @param pet The pet data to add to the database.
+		|		 * @return Ok if successful.
+		|		 * @throws IdNotFound ID not found.
+		|		 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+		|		 * @throws UnsupportedMediaType Unsupported <c>Content-Type</c> header specified.
+		|		 */</jd>
+		|		<ja>@RemotePut</ja>(<js>"/pet/{petId}"</js>)
+		|		<jk>public</jk> Ok updatePet(
+		|			<ja>@Content</ja>(
+		|				schema=<ja>@Schema</ja>(description=<js>"Pet object that needs to be added to the store"</js>)
+		|			)
+		|			UpdatePet <jv>pet</jv>
+		|		) <jk>throws</jk> IdNotFound, NotAcceptable, UnsupportedMediaType;
+		|	
+		|		<jd>/**
+		|		 * Find all pets with the matching statuses.
+		|		 *
+		|		 * @param status The statuses to match against.
+		|		 * @return The pets that match the specified statuses.
+		|		 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+		|		 */</jd>
+		|		<ja>@RemoteGet</ja>(<js>"/pet/findByStatus"</js>)
+		|		<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
+		|			<ja>@Query</ja>(
+		|				name=<js>"status"</js>,
+		|				schema=<ja>@Schema</ja>(
+		|					description=<js>"Status values that need to be considered for filter."</js>,
+		|					required=<jk>true</jk>,
+		|					type=<js>"array"</js>,
+		|					collectionFormat=<js>"csv"</js>,
+		|					items=<ja>@Items</ja>(
+		|						type=<js>"string"</js>,
+		|						_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
+		|						_default=<js>"AVAILABLE"</js>
+		|					)
+		|				)
+		|			)
+		|			PetStatus[] <jv>status</jv>
+		|		) <jk>throws</jk> NotAcceptable;
+		|	
+		|		<jd>/**
+		|		 * Deletes the specified pet.
+		|		 *
+		|		 * @param apiKey Security key.
+		|		 * @param petId ID of pet to delete.
+		|		 * @return Ok if successful.
+		|		 * @throws IdNotFound Pet not found.
+		|		 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
+		|		 */</jd>
+		|		<ja>@RemoteDelete</ja>(<js>"/pet/{petId}"</js>)
+		|		<jk>public</jk> Ok deletePet(
+		|			<ja>@Header</ja>(
+		|				name=<js>"api_key"</js>,
+		|				schema=<ja>@Schema</ja>(
+		|					description=<js>"Security API key"</js>,
+		|					required=<jk>true</jk>
+		|				)
+		|			)
+		|			String <jv>apiKey</jv>,
+		|			<ja>@Path</ja>(
+		|				name=<js>"petId"</js>,
+		|				schema=<ja>@Schema(description=<js>"Pet id to delete"</js>)
+		|			)
+		|			<jk>long</jk> <jv>petId</jv>
+		|		) <jk>throws</jk> IdNotFound, NotAcceptable;
+		|	
+		|		<jd>/**
+		|		 * Deletes all pets in the database.
+		|		 *
+		|		 * @return Ok if successful.
+		|		 */</jd>
+		|		<ja>@RemoteDelete</ja>(<js>"/pet"</js>)
+		|		<jk>public</jk> Ok deleteAllPets();
+		|	
+		|		<jc>//------------------------------------------------------------------------------------------------------------------
+		|		// Orders
+		|		//------------------------------------------------------------------------------------------------------------------</jc>
+		|	
+		|		...
+		|	}
+	</p>
+
+	<p>
+		<ja>@Remote</ja> and <ja>@RemoteX</ja> are client-side annotations used to map the method calls to REST
+		and will be describe in the client code section.
+	</p>
+	<p>
+		<ja>@Path</ja> and <ja>@Body</ja> are used by both the client and server side code to map to REST artifacts on both
+		sides.
+	</p>
+	<p>
+		Both sets of annotations are provided by pulling in the Juneau dependency below:
+	
+	<h5 class='figure'>Maven Dependency</h5>
+	<p class='bcode w500'>
+		|	<xt>&lt;dependency&gt;</xt>
+		|		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
+		|		<xt>&lt;artifactId&gt;</xt>juneau-marshall<xt>&lt;/artifactId&gt;</xt>
+		|		<xt>&lt;version&gt;</xt>9.x.x<xt>&lt;/version&gt;</xt>
+		|	<xt>&lt;/dependency&gt;</xt>
+	</p>	
+	<p>
+		The <c>Pet</c> class is a DTO that gets serialized over the REST connection.  It is also annotated with JPA annotations
+		so that they can easily be stored in a JPA datastore on the server side.
+	</p>
+	<h5 class='figure'>Pet.java</h5>
+	<p class='bcode w800'>
+		|	<ja>@Bean</ja>(typeName=<js>"Pet"</js>, properties=<js>"id,species,name,tags,price,status"</js>)
+		|	<ja>@Entity</ja>(name=<js>"PetstorePet"</js>)
+		|	<jk>public class</jk> Pet {
+		|	
+		|		<ja>@Column @Id @GeneratedValue</ja>
+		|		<ja>@Schema</ja>(description=<js>"Unique identifier for this pet."</js>)
+		|		<ja>@Html</ja>(link=<js>"servlet:/pet/{id}"</js>)
+		|		<jk>private long</jk> <jf>id</jf>;
+		|	
+		|		<ja>@Column</ja>(length=50)
+		|		<ja>@Schema</ja>(description=<js>"Pet name."</js>, minLength=3, maxLength=50)
+		|		<jk>private</jk> String <jf>name</jf>;
+		|	
+		|		<ja>@Column</ja>
+		|		<ja>@Schema</ja>(description=<js>"Price of pet."</js>, maximum=<js>"999.99"</js>)
+		|		<ja>@Html</ja>(render=PriceRender.<jk>class</jk>)
+		|		<jk>private float</jk> <jf>price</jf>;
+		|	
+		|		...
+		|	}
+	</p>
+	<p>
+		The annotations here are a combination of Juneau annotations for controlling marshalling (<ja>@Bean</ja>, <ja>@Html</ja>) 
+		and documentation/validation (<ja>@Schema</ja>), and JPA annoations for database persistence (<ja>@Entity</ja>, <ja>@Column</ja>).
+	</p>
+	<div class='info'>
+		Most applications may choose to have separate classes for DTOs and JPA beans since you typically are not going to want
+		to expose server-side details to client-side code.  In these examples however they were combined into the same classes for brevity.
+	</div>
+</div>

@@ -1,0 +1,122 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Swaps', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		{@link oaj.swap.ObjectSwap Swaps} are a critical component of Juneau.
+		They allow the serializers and parsers to handle Java objects that wouldn't normally be serializable.
+	</p>
+	<p>
+		Swaps are, simply put, 'object swappers' that swap in serializable objects for 
+		non-serializable ones during serialization, and vis-versa during parsing.
+		Some examples of non-serializable objects are <c>File</c>, <c>Reader</c>, 
+		<c>Iterable</c>, etc...
+		These are classes that aren't beans and cannot be represented as simple maps, collections, or primitives.
+	</p>
+	<p>
+		In the following example, we introduce a <c>ObjectSwap</c> that will swap in a bean of a particular type
+		with a map containing customized key-value pairs:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Sample swap for converting a bean to a specialized map of key-value pairs.</jc>
+		|	<jk>public class</jk> MyBeanSwap <jk>extends</jk> ObjectSwap&lt;MyBean,JsonMap&gt; {
+		|		
+		|		<jc>// Converts a bean to a generic map.</jc>
+		|		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
+		|		<jk>public</jk> JsonMap swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) {
+		|			<jk>return</jk> JsonMap.<jsm>of</jsm>(<js>"foo"</js>, <jv>bean</jv>.getBar());
+		|		}
+		|		
+		|		<jc>// Converts the generic map back into a bean.</jc>
+		|		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
+		|		<jk>public</jk> MyBean unswap(BeanSession <jv>session</jv>, JsonMap <jv>map</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
+		|			MyBean <jv>bean</jv> = <jk>new</jk> MyBean();
+		|			<jv>bean</jv>.setBar(<jv>map</jv>.getString(<js>"foo"</js>));
+		|			<jk>return</jk> <jv>bean</jv>;
+		|		}
+		|	}
+	</p>
+	<p>
+		The swap can then be associated with serializers and parsers like so:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Create a new JSON serializer with our swap.</jc>
+		|	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().swaps(MyBeanSwap.<jk>class</jk>).build();
+		|	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		|	
+		|	<jc>// Create a JSON parser with our swap.</jc>
+		|	ReaderParser <jv>parser</jv> = JsonParser.<jsm>create</jsm>().swaps(MyBeanSwap.<jk>class</jk>).build();
+		|	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+	</p>
+	<p>
+		Another example of a <c>ObjectSwap</c> is one that converts <c><jk>byte</jk>[]</c> arrays to
+		BASE64-encoded strings:
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> StringSwap&lt;<jk>byte</jk>[]&gt; {
+		|	
+		|		<ja>@Override</ja> <jc>/* StringSwap */</jc>
+		|		<jk>public</jk> String swap(<jk>byte</jk>[] <jv>bytes</jv>) <jk>throws</jk> Exception {
+		|			ByteArrayOutputStream <jv>baos</jv> = <jk>new</jk> ByteArrayOutputStream();
+		|			OutputStream <jv>b64os</jv> = MimeUtility.encode(<jv>baos</jv>, <js>"base64"</js>);
+		|			<jv>b64os</jv>.write(<jv>bytes</jv>);
+		|			<jv>b64os</jv>.close();
+		|			<jk>return new</jk> String(<jv>baos</jv>.toByteArray());
+		|		}
+		|		
+		|		<ja>@Override</ja> <jc>/* StringSwap */</jc>
+		|		<jk>public byte</jk>[] unswap(String <jv>string</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
+		|			<jk>byte</jk>[] <jv>bytes</jv> = <jv>string</jv>.getBytes();
+		|			ByteArrayInputStream <jv>bais</jv> = <jk>new</jk> ByteArrayInputStream(<jv>bytes</jv>);
+		|			InputStream <jv>b64is</jv> = MimeUtility.<jsm>decode</jsm>(<jv>bais</jv>, <js>"base64"</js>);
+		|			<jk>byte</jk>[] <jv>tmp</jv> = <jk>new byte</jk>[<jv>bytes</jv>.<jf>length</jf>];
+		|			<jk>int</jk> <jv>n</jv> = <jv>b64is</jv>.read(<jv>tmp</jv>);
+		|			<jk>byte</jk>[] <jv>res</jv> = <jk>new byte</jk>[<jv>n</jv>];
+		|			System.<jsm>arraycopy</jsm>(<jv>tmp</jv>, 0, <jv>res</jv>, 0, <jv>n</jv>);
+		|			<jk>return</jk> <jv>res</jv>;
+		|		}
+		|	}
+	</p>
+	<p>
+		The following example shows the BASE64 swap in use:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Create a JSON serializer and register the BASE64 encoding swap with it.</jc>
+		|	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().swaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+		|	ReaderParser <jv>parser</jv> = JsonParser.<jsm>create</jsm>().swaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+		|	
+		|	<jk>byte</jk>[] <jv>bytes</jv> = {1,2,3};
+		|	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bytes</jv>);      <jc>// Produces "'AQID'"</jc>
+		|	<jv>bytes</jv> = <jv>parser</jv>.parse(<jv>json</jv>, <jk>byte</jk>[].<jk>class</jk>);       <jc>// Reproduces {1,2,3}</jc>
+		|	
+		|	<jk>byte</jk>[][] <jv>bytes2d</jv> = {{1,2,3},{4,5,6},<jk>null</jk>};
+		|	<jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bytes2d</jv>);           <jc>// Produces "['AQID','BAUG',null]"</jc>
+		|	<jv>bytes2d</jv> = <jv>parser</jv>.parse(<jv>json</jv>, <jk>byte</jk>[][].<jk>class</jk>);   <jc>// Reproduces {{1,2,3},{4,5,6},null}</jc>
+	</p>
+	<p>
+		The {@link oaj.BeanContextable.Builder#swap(Class,Class,ThrowingFunction)} and {@link oaj.BeanContextable.Builder#swap(Class,Class,ThrowingFunction,ThrowingFunction)}
+		methods are another way to define swaps by using functions.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Use a function to convert beans to strings.</jc>
+		|	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		|		.<jsm>create</jsm>()
+		|		.simple()
+		|		.swap(MyBean.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>myBeanStringifier</jsm>(<jv>x</jv>))
+		|		.build();
+	</p>
+</div>

@@ -1,0 +1,88 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Fluent Assertions', created:'9.0.0'} 
+
+<div class='topic'>
+	<p>
+		The <a class="doclink" href="#juneau-assertions">juneau-assertions</a> module in Juneau is a powerful API for performing fluent style assertions.
+	</p>
+	<p>
+		Fluent assertions have two types of methods:
+	</p>
+	<ul>
+		<li><c>"asX"</c> methods which perform transformations.
+		<li><c>"isX"</c> methods which perform assertions.
+	</ul>
+	<p>
+		Multiple transformations and assertions can be performed per statement.
+	</p>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+		|	<jk>import static</jk> org.apache.juneau.assertions.AssertionPredicates.*;
+		|	
+		|	<jc>// Check the contents of a string.</jc>
+		|	<jsm>assertString</jsm>(<js>"foo, bar"</js>)
+		|		.asSplit(<js>","</js>)
+		|		.asTrimmed()
+		|		.is(<js>"foo"</js>, <js>"bar"</js>);
+		|
+		|	<jc>// Extract a subset of properties from a list of beans and compare using Simplified JSON.</jc>
+		|	List&lt;MyBean&gt; <jv>myListOfBeans</jv> = ...;
+		|	<jsm>assertBeanList</jsm>(<jv>myListOfBeans</jv>)
+		|		.asPropertyMaps(<js>"a,b"</js>)
+		|		.asJson().is(<js>"[{a:1,b:'foo'}]"</js>);
+		|	
+		|	<jc>// Perform an arbitrary Predicate check against a bean.</jc>
+		|	MyBean <jv>myBean</jv> = ...;
+		|	<jsm>assertBean</jsm>(<jv>myBean</jv>)
+		|		.is(<jv>x</jv> -&gt; <jsm>isValidCheck</jsm>(<jv>x</jv>))
+		|	
+		|	<jc>// Check that a list of strings has less than 10 entries and the first</jc>
+		|	<jc>// 3 entries are [foo, bar*, null] using assertion predicates.</jc>
+		|	List&lt;String&gt; <jv>myListOfStrings</jv> = ...;
+		|	<jsm>assertStringList</jsm>(<jv>myListOfStrings</jv>)
+		|		.asSize().isLt(10)
+		|		.asFirst(3)
+		|			.is(<jsm>eq</jsm>(<js>"foo"</js>),<jsm>match</jsm>(<js>"bar*"</js>),<jsm>isNull</jsm>())
+		|	
+		|	<jc>// Check that an exception is thrown and is the specified type and has the specified message.</jc>
+		|	<jsm>assertThrown</jsm>(()-&gt;<jv>myBean</jv>.runBadMethod())
+		|		.isExists()
+		|		.isExactType(RuntimeException.<jk>class</jk>)
+		|		.asMessage().is(<js>"foo"</js>);
+	</p>
+	<p>
+		The Assertions APIs are used throughout the REST client and server APIs for performing inline assertions on REST requests and responses.
+	</p>
+
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
+		|	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
+		|		.json5()
+		|		.build()
+		|		.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.assertStatus().asCode().is(200)
+		|		.assertHeader(<js>"Content-Type"</js>).isMatches(<js>"application/json*"</js>)
+		|		.getContent().assertValue().asString().isContains(<js>"OK"</js>)
+		|		.getContent().as(MyBean.<jk>class</jk>);
+	</p>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#ja.Overview">Fluent Assertions</a> for more information.
+	</ul>
+</div>

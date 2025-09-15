@@ -1,0 +1,128 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Parsing into Generic Models', updated:'8.2.0'}
+
+<div class='topic'>
+	<p>
+		The Juneau parsers are not limited to parsing back into the original bean classes.
+		If the bean classes are not available on the parsing side, the parser can also be used to 
+		parse into a generic model consisting of <c>Maps</c>, <c>Collections</c>, and primitive
+		objects.
+	</p>
+	<p>
+		You can parse into any <c>Map</c> type (e.g. <c>HashMap</c>, <c>TreeMap</c>) but
+		using {@link oaj.collections.JsonMap} is recommended since it has many convenience methods
+		for converting values to various types.
+		The same is true when parsing collections.  You can use any Collection (e.g. <c>HashSet</c>, 
+		<c>LinkedList</c>) or array (e.g. <c>Object[]</c>, <c>String[]</c>, 
+		<c>String[][]</c>) but using {@link oaj.collections.JsonList} is recommended.
+	</p>
+	<p>
+		When the map or list type is not specified, or is the abstract <c>Map</c>, <c>Collection</c>, 
+		or <c>List</c> types, the parser will use <c>JsonMap</c> and <c>JsonList</c> by 
+		default.
+	</p>
+	<p>
+		For example, given the following JSON:
+	</p>
+	<p class='bjson'>
+		|	{
+		|		id: <jk>1</jk>, 
+		|		name: <js>'John Smith'</js>, 
+		|		uri: <js>'http://sample/addressBook/person/1'</js>, 
+		|		addressBookUri: <js>'http://sample/addressBook'</js>, 
+		|		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
+		|		addresses: [
+		|			{
+		|				uri: <js>'http://sample/addressBook/address/1'</js>, 
+		|				personUri: <js>'http://sample/addressBook/person/1'</js>, 
+		|				id: <jk>1</jk>, 
+		|				street: <js>'100 Main Street'</js>, 
+		|				city: <js>'Anywhereville'</js>, 
+		|				state: <js>'NY'</js>, 
+		|				zip: <jk>12345</jk>, 
+		|				isCurrent: <jk>true</jk>
+		|			}
+		|		]
+		|	}
+	</p>
+	<p>
+		We can parse this into a generic <c>JsonMap</c>:
+	</p>
+	<p class='bjava'>	
+		|	<jc>// Parse JSON into a generic POJO model.</jc>
+		|	JsonMap <jv>map</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, JsonMap.<jk>class</jk>);
+		|
+		|	<jc>// Convert it back to JSON.</jc>
+		|	String <jv>json</jv> = Json5.<jsm>of</jsm>(<jv>map</jv>);
+	</p>
+	<p>
+		What we end up with is the exact same output.
+		Even the numbers and booleans are preserved because they are parsed into <c>Number</c> and 
+		<c>Boolean</c> objects when parsing into generic models.
+	</p>
+	<p class='bjson'>
+		|	{
+		|		id: <jk>1</jk>, 
+		|		name: <js>'John Smith'</js>, 
+		|		uri: <js>'http://sample/addressBook/person/1'</js>, 
+		|		addressBookUri: <js>'http://sample/addressBook'</js>, 
+		|		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
+		|		addresses: [
+		|			{
+		|				uri: <js>'http://sample/addressBook/address/1'</js>, 
+		|				personUri: <js>'http://sample/addressBook/person/1'</js>, 
+		|				id: <jk>1</jk>, 
+		|				street: <js>'100 Main Street'</js>, 
+		|				city: <js>'Anywhereville'</js>, 
+		|				state: <js>'NY'</js>, 
+		|				zip: <jk>12345</jk>, 
+		|				isCurrent: <jk>true</jk>
+		|			}
+		|		]
+		|	}
+	</p>
+	<p>
+		Once parsed into a generic model, various convenience methods are provided on the <c>JsonMap</c>
+			and <c>JsonList</c> classes to retrieve values:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Parse JSON into a generic POJO model.</jc>
+		|	JsonMap <jv>map</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, JsonMap.<jk>class</jk>);
+		|
+		|	<jc>// Get some simple values.</jc>
+		|	String <jv>name</jv> = <jv>map</jv>.getString(<js>"name"</js>);
+		|	<jk>int</jk> <jv>id</jv> = <jv>map</jv>.getInt(<js>"id"</js>);
+		|
+		|	<jc>// Get a value convertable from a String.</jc>
+		|	URI <jv>uri</jv> = <jv>map</jv>.get(URI.<jk>class</jk>, <js>"uri"</js>);
+		|
+		|	<jc>// Get a value using a swap.</jc>
+		|	TemporalCalendarSwap <jv>swap</jv> = <jk>new</jk> TemporalCalendarSwap.IsoInstant();
+		|	Calendar <jv>birthDate</jv> = <jv>map</jv>.get(<jv>swap</jv>, <js>"birthDate"</js>);
+		|
+		|	<jc>// Get the addresses.</jc>
+		|	JsonList <jv>addresses</jv> = <jv>map</jv>.getList(<js>"addresses"</js>);
+		|
+		|	<jc>// Get the first address and convert it to a bean.</jc>
+		|	Address <jv>address</jv> = <jv>addresses</jv>.get(Address.<jk>class</jk>, 0);
+	</p>
+	
+	<p>
+		As a general rule, parsing into beans is often more efficient than parsing into generic models.
+		And working with beans is often less error prone than working with generic models.
+	</p>		
+</div>

@@ -1,0 +1,131 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Atom'}
+
+<div class='topic'>
+	<p>
+		The Juneau ATOM feed DTOs are simply beans with fluent-style setters.
+		The following code shows a feed being created programmatically using the 
+		{@link oaj.dto.atom.AtomBuilder} class.
+	</p>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
+		|	
+		|	Feed <jv>feed</jv> = 
+		|		<jsm>feed</jsm>(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+		|		.setSubtitle(<jsm>text</jsm>(<js>"html"</js>).setText(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
+		|		.setLinks(
+		|			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org"</js>).setHreflang(<js>"en"</js>),
+		|			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://juneau.apache.org/feed.atom"</js>)
+		|		)
+		|		.setRights(<js>"Copyright (c) ..."</js>)
+		|		.setGenerator(
+		|			<jsm>generator</jsm>(<js>"Juneau"</js>).setUri(<js>"http://juneau.apache.org/"</js>).setVersion(<js>"1.0"</js>)
+		|		)
+		|		.setEntries(
+		|			<jsm>entry</jsm>(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+		|			.setLinks(
+		|				<jsm>link</jsm><js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/juneau.atom"</js>),
+		|				<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://juneau.apache.org/audio/juneau_podcast.mp3"</js>).setLength(1337)
+		|			)
+		|			.setPublished(<js>"2016-01-02T03:04:05Z"</js>)
+		|			.setAuthors(
+		|				<jsm>person</jsm>(<js>"Jane Smith"</js>).setUri(<js>"http://juneau.apache.org/"</js>).setEmail(<js>"janesmith@apache.org"</js>)
+		|			)
+		|			.setContributors(
+		|				<jsm>person</jsm>(<js>"John Smith"</js>)
+		|			)
+		|			.setContent(
+		|				<jsm>content</jsm>(<js>"xhtml"</js>)
+		|				.setLang(<js>"en"</js>)
+		|				.setBase(<js>"http://www.apache.org/"</js>)
+		|				.setText(<js>"&lt;div&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>)
+		|			)
+		|		);
+	</p>
+	<p>
+		To serialize this to ATOM, use the {@link oaj.xml.XmlSerializer} class:
+	</p>
+	
+	<h5 class='figure'>Example with no namespaces</h5>
+	<p class='bjava'>
+		|	<jc>// Create a serializer with readable output, no namespaces yet.</jc>
+		|	XmlSerializer <jv>serializer</jv> = XmlSerializer.<jsm>create</jsm>().sq().ws().build();
+		|
+		|	<jc>// Serialize to ATOM/XML</jc>
+		|	String <jv>atomXml</jv> = <jv>serializer</jv>.serialize(<jv>feed</jv>);
+	</p>
+	
+	<h5 class='figure'>Results</h5>
+	<p class='bxml'>
+		|	<xt>&lt;feed&gt;</xt>
+		|		<xt>&lt;id&gt;</xt>
+		|			tag:juneau.apache.org
+		|		<xt>&lt;/id&gt;</xt>
+		|		<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/'</xs> <xa>rel</xa>=<xs>'alternate'</xs> 
+		|			<xa>type</xa>=<xs>'text/html'</xs> <xa>hreflang</xa>=<xs>'en'</xs>/<xt>&gt;</xt>
+		|		<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/feed.atom'</xs> <xa>rel</xa>=<xs>'self'</xs> 
+		|			<xa>type</xa>=<xs>'application/atom+xml'</xs>/<xt>&gt;</xt>
+		|		<xt>&lt;rights&gt;</xt>
+		|			Copyright (c) ...
+		|		<xt>&lt;/rights&gt;</xt>
+		|		<xt>&lt;title</xt> <xa>type</xa>=<xs>'text'</xs>&gt;</xt>
+		|			Juneau ATOM specification
+		|		<xt>&lt;/title&gt;</xt>
+		|		<xt>&lt;updated&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/updated&gt;</xt>
+		|		<xt>&lt;generator</xt> <xa>uri</xa>=<xs>'http://juneau.apache.org/'</xs> <xa>version</xa>=<xs>'1.0'</xs><xt>&gt;</xt>
+		|			Juneau
+		|		<xt>&lt;/generator&gt;</xt>
+		|		<xt>&lt;subtitle</xt> <xa>type</xa>=<xs>'html'</xs><xt>&gt;</xt>
+		|			Describes <xt>&lt;em&gt;</xt>stuff<xt>&lt;/em&gt;</xt> about Juneau
+		|		<xt>&lt;/subtitle&gt;</xt>
+		|		<xt>&lt;entry&gt;</xt>
+		|			<xt>&lt;author&gt;</xt>
+		|				<xt>&lt;name&gt;</xt>Jane Smith<xt>&lt;/name&gt;</xt>
+		|				<xt>&lt;uri&gt;</xt>http://juneau.apache.org/<xt>&lt;/uri&gt;</xt>
+		|				<xt>&lt;email&gt;</xt>janesmith@apache.org<xt>&lt;/email&gt;</xt>
+		|			<xt>&lt;/author&gt;</xt>
+		|			<xt>&lt;contributor&gt;</xt>
+		|				<xt>&lt;name&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
+		|			<xt>&lt;/contributor&gt;</xt>
+		|			<xt>&lt;id&gt;</xt>
+		|				tag:juneau.apache.org
+		|			<xt>&lt;/id&gt;</xt>
+		|			<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/juneau.atom'</xs> 
+		|				<xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs>/<xt>&gt;</xt>
+		|			<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/audio/juneau_podcast.mp3'</xs> 
+		|				<xa>rel</xa>=<xs>'enclosure'</xs> <xa>type</xa>=<xs>'audio/mpeg'</xs> <xa>length</xa>=<xs>'12345'</xs>/<xt>&gt;</xt>
+		|			<xt>&lt;title&gt;</xt>
+		|				Juneau ATOM specification snapshot
+		|			<xt>&lt;/title&gt;</xt>
+		|			<xt>&lt;updated&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/updated&gt;</xt>
+		|			<xt>&lt;content</xt> <xa>base</xa>=<xs>'http://www.apache.org/'</xs> <xa>lang</xa>=<xs>'en'</xs> 
+		|				<xa>type</xa>=<xs>'xhtml'</xs><xt>&gt;</xt>
+		|				<xt>&lt;div</xt> <xa>xmlns</xa>=<xs>"http://www.w3.org/1999/xhtml"</xs>
+		|					<xt>&gt;&lt;p&gt;&lt;i&gt;</xt>[Update: Juneau supports ATOM.]<xt>&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;</xt>
+		|			<xt>&lt;/content&gt;</xt>
+		|			<xt>&lt;published&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/published&gt;</xt>
+		|		<xt>&lt;/entry&gt;</xt>
+		|	<xt>&lt;/feed&gt;</xt>		
+	</p>
+	<p>
+		The {@link oaj.xml.XmlParser} class can be used convert these Atom documents back into POJOs.
+	</p>
+	<p>
+		Other serializers and parsers (e.g. {@link oaj.json.JsonSerializer}) can be used to 
+		represent these POJOs in languages other than XML.
+	</p>
+</div>

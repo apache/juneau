@@ -1,0 +1,92 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Extending JettyMicroservice', created:'8.0.0'}
+
+<div class='topic'>
+	<p>
+		This example shows how the {@link oaj.microservice.jetty.JettyMicroservice} class
+		can be extended to implement lifecycle listener methods or override existing methods.
+		We'll create a new class <l>com.foo.MyJettyMicroservice</l>.
+	</p>
+	<p class='bjava'>
+		|	<jd>/**
+		|	 * Sample subclass of a JettyMicroservice that provides customized behavior.
+		|	 */</jd>
+		|	<jk>public class</jk> MyJettyMicroservice <jk>extends</jk> JettyMicroservice {
+		|	
+		|		<jk>public static void</jk> main(String[] <jv>args</jv>) <jk>throws</jk> Exception {
+		|			JettyMicroservice.Builder builder = JettyMicroservice.<jsm>create</jsm>();
+		|			<jk>new</jk> MyJettyMicroservice(builder).start().join();
+		|		}
+		|	
+		|		<jk>public</jk> MyJettyMicroservice(JettyMicroservice.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		|			<jk>super</jk>(<jv>builder</jv>);
+		|		}
+		|		
+		|		<jc>// Customized code here.</jc>
+	</p>
+	<p>
+		Optionally, you can extend the {@link oaj.microservice.jetty.JettyMicroservice.Builder} class as well:
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> MyJettyMicroservice.Builder <jk>extends</jk> JettyMicroservice.Builder {
+		|	
+		|		<jk>int</jk> <jf>extraField</jf>;
+		|
+		|		<jd>/**
+		|		 * Constructor (required).
+		|		 */</jd>
+		|		<jk>protected</jk> MyJettyMicroservice.Builder() {}
+		|	
+		|		<jd>/**
+		|		 * Copy constructor (required).
+		|		 *
+		|		 * <ja>@param</ja> copyFrom The builder to copy settings from.
+		|		 */</jd>
+		|		<jk>protected</jk> MyJettyMicroservice.Builder(MyJettyMicroservice.Builder <jv>copyFrom</jv>) {
+		|			<jk>super</jk>(<jv>copyFrom</jv>);
+		|		}
+		|	
+		|		<jc>// Additional setters</jc>
+		|	
+		|		<jk>public</jk> MyJettyMicroservice.Builder extraField(<jk>int</jk> <jv>extraField</jv>) {
+		|			<jk>this</jk>.<jf>extraField</jf> = <jv>extraField</jv>;
+		|			<jk>return this</jk>;
+		|		}
+		|	
+		|		<jc>// Overridden methods</jc>
+		|	
+		|		<ja>@Override</ja> <jc>/* JettyMicroservice.Builder */</jc>
+		|		<jk>public</jk> MyJettyMicroservice.Builder copy() {
+		|			<jk>return new</jk> MyJettyMicroservice.Builder(<jk>this</jk>);
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* JettyMicroservice.Builder */</jc>
+		|		<jk>public</jk> MyJettyMicroservice.Builder ports(<jk>int</jk>...<jv>ports</jv>) {
+		|			<jk>super</jk>.ports(<jv>ports</jv>);
+		|			<jk>return this</jk>;
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* JettyMicroservice.Builder */</jc>
+		|		<jk>public</jk> MyJettyMicroservice.Builder servlet(Class&lt;? <jk>extends</jk> RestServlet&gt; <jv>cls</jv>) <jk>throws</jk> InstantiationException, IllegalAccessException {
+		|			<jk>super</jk>.servlet(<jv>cls</jv>);
+		|			<jk>return this</jk>;
+		|		}
+		|	
+		|		...
+		|	}
+	</p>
+</div>

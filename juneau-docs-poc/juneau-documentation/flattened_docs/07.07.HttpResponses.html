@@ -1,0 +1,114 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'HTTP Responses', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.http.response} package contains predefined <c>org.apache.http.HttpResponse</c> implementations for most standard HTTP
+		responses. 
+	</p>
+	<ul class='javatreec'>
+		<li class='jc'>{@link oaj.http.response.Accepted}</li>
+		<li class='jc'>{@link oaj.http.response.AlreadyReported}</li>
+		<li class='jc'>{@link oaj.http.response.BadRequest}</li>
+		<li class='jc'>{@link oaj.http.response.Conflict}</li>
+		<li class='jc'>{@link oaj.http.response.Continue}</li>
+		<li class='jc'>{@link oaj.http.response.Created}</li>
+		<li class='jc'>{@link oaj.http.response.EarlyHints}</li>
+		<li class='jc'>{@link oaj.http.response.ExpectationFailed}</li>
+		<li class='jc'>{@link oaj.http.response.FailedDependency}</li>
+		<li class='jc'>{@link oaj.http.response.Forbidden}</li>
+		<li class='jc'>{@link oaj.http.response.Found}</li>
+		<li class='jc'>{@link oaj.http.response.Gone}</li>
+		<li class='jc'>{@link oaj.http.response.HttpVersionNotSupported}</li>
+		<li class='jc'>{@link oaj.http.response.IMUsed}</li>
+		<li class='jc'>{@link oaj.http.response.InsufficientStorage}</li>
+		<li class='jc'>{@link oaj.http.response.InternalServerError}</li>
+		<li class='jc'>{@link oaj.http.response.LengthRequired}</li>
+		<li class='jc'>{@link oaj.http.response.Locked}</li>
+		<li class='jc'>{@link oaj.http.response.LoopDetected}</li>
+		<li class='jc'>{@link oaj.http.response.MethodNotAllowed}</li>
+		<li class='jc'>{@link oaj.http.response.MisdirectedRequest}</li>
+		<li class='jc'>{@link oaj.http.response.MovedPermanently}</li>
+		<li class='jc'>{@link oaj.http.response.MultipleChoices}</li>
+		<li class='jc'>{@link oaj.http.response.MultiStatus}</li>
+		<li class='jc'>{@link oaj.http.response.NetworkAuthenticationRequired}</li>
+		<li class='jc'>{@link oaj.http.response.NoContent}</li>
+		<li class='jc'>{@link oaj.http.response.NonAuthoritiveInformation}</li>
+		<li class='jc'>{@link oaj.http.response.NotAcceptable}</li>
+		<li class='jc'>{@link oaj.http.response.NotExtended}</li>
+		<li class='jc'>{@link oaj.http.response.NotFound}</li>
+		<li class='jc'>{@link oaj.http.response.NotImplemented}</li>
+		<li class='jc'>{@link oaj.http.response.NotModified}</li>
+		<li class='jc'>{@link oaj.http.response.Ok}</li>
+		<li class='jc'>{@link oaj.http.response.PartialContent}</li>
+		<li class='jc'>{@link oaj.http.response.PayloadTooLarge}</li>
+		<li class='jc'>{@link oaj.http.response.PermanentRedirect}</li>
+		<li class='jc'>{@link oaj.http.response.PreconditionFailed}</li>
+		<li class='jc'>{@link oaj.http.response.PreconditionRequired}</li>
+		<li class='jc'>{@link oaj.http.response.Processing}</li>
+		<li class='jc'>{@link oaj.http.response.RangeNotSatisfiable}</li>
+		<li class='jc'>{@link oaj.http.response.RequestHeaderFieldsTooLarge}</li>
+		<li class='jc'>{@link oaj.http.response.ResetContent}</li>
+		<li class='jc'>{@link oaj.http.response.SeeOther}</li>
+		<li class='jc'>{@link oaj.http.response.ServiceUnavailable}</li>
+		<li class='jc'>{@link oaj.http.response.SwitchingProtocols}</li>
+		<li class='jc'>{@link oaj.http.response.TemporaryRedirect}</li>
+		<li class='jc'>{@link oaj.http.response.TooManyRequests}</li>
+		<li class='jc'>{@link oaj.http.response.Unauthorized}</li>
+		<li class='jc'>{@link oaj.http.response.UnavailableForLegalReasons}</li>
+		<li class='jc'>{@link oaj.http.response.UnprocessableEntity}</li>
+		<li class='jc'>{@link oaj.http.response.UnsupportedMediaType}</li>
+		<li class='jc'>{@link oaj.http.response.UpgradeRequired}</li>
+		<li class='jc'>{@link oaj.http.response.UriTooLong}</li>
+		<li class='jc'>{@link oaj.http.response.UseProxy}</li>
+		<li class='jc'>{@link oaj.http.response.VariantAlsoNegotiates}</li>
+	</ul>	
+	
+	<p>
+		These are built upon existing HttpComponents APIs:
+	</p>
+	<ul class='javatree'>
+		<li class='jic'>{@code org.apache.http.HttpMessage}
+		<ul>
+			<li class='jic'>{@code org.apache.http.HttpResponse}
+			<ul>
+				<li class='jc'>{@link oaj.http.response.BasicHttpResponse} - 100-399 response codes</li>
+				<li class='jc'>{@link oaj.http.response.BasicHttpException} - 400+ response codes</li>
+			</ul>
+		</ul>
+	</ul>
+	
+	<p>
+		The most common location where these responses are used are in REST operation methods described later.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@RestDelete</ja>(path=<js>"/{id}"</js>)
+		|	<jk>public</jk> Ok doDelete(<ja>@Path</ja> <jk>int</jk> <jv>id</jv>) <jk>throws</jk> NotFound, Unauthorized {
+		|		<jf>pojoService</jf>.delete(<jf>pojoService</jf>.find(<jv>id</jv>).orElseThrow(NotFound::<jk>new</jk>));
+		|		<jk>return</jk> Ok.OK;
+		|	}
+	</p>
+	
+	<p>
+		The following classes are also provided for constructing your own custom responses:
+	</p>
+	<ul class='javatreec'>
+		<li class='jc'>{@link oaj.http.response.BasicHttpException}</li>
+		<li class='jc'>{@link oaj.http.response.BasicHttpResponse}</li>
+	</ul>	
+</div>

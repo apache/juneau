@@ -1,0 +1,176 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Auto-detected swaps', created:'8.1.0'} 
+
+<div class='topic'>
+	<p>
+		Various methods can be defined on a class directly to affect how it gets serialized.
+		This can often be simpler than using <c>ObjectSwaps</c>.
+	</p>
+	<p>
+		Objects serialized as <c>Strings</c> can be parsed back into their original objects by 
+		implementing one of the following methods on the class:
+	</p>		
+	<ul class='spaced-list'>
+		<li>
+			<c><jk>public static</jk> T fromString(String)</c> method.
+			<br>Any of the following method names also work: 
+			<ul>
+				<li><c>valueOf(String)</c>
+				<li><c>parse(String)</c>
+				<li><c>parseString(String)</c>
+				<li><c>forName(String)</c>
+				<li><c>forString(String)</c>
+			</ul>
+		<li>
+			<c><jk>public</jk> T(String)</c> constructor.
+	</ul>
+	<p>
+		Note that these methods cover conversion from several built-in Java types, meaning the parsers can 
+		automatically construct these objects from strings:
+	</p>
+	<ul>
+		<li><c>fromString(String)</c> - {@link java.util.UUID}
+		<li><c>valueOf(String)</c> - {@link java.lang.Boolean}, {@link java.lang.Byte}, 
+			{@link java.lang.Double}, {@link java.lang.Float}, 
+			{@link java.lang.Integer}, {@link java.lang.Long}, {@link java.lang.Short}, {@link java.sql.Date}, 
+			{@link java.sql.Time}, {@link java.sql.Timestamp}
+		<li><c>parse(String)</c> - {@link java.text.DateFormat}, {@link java.text.MessageFormat}, 
+			{@link java.text.NumberFormat}, {@link java.util.Date}, {@link java.util.logging.Level}
+		<li><c>parseString(String)</c> - {@link javax.xml.bind.DatatypeConverter}
+		<li><c>forName(String)</c> - {@link java.lang.Class}
+	</ul>
+	<p>
+		If you want to force a bean-like class to be serialized as a string, you can use the 
+		{@link oaj.annotation.BeanIgnore @BeanIgnore} annotation on the class to force it to be 
+		serialized to a string using the <c>toString()</c> method.
+	</p>
+	<p>
+		Serializing to other intermediate objects can be accomplished by defining a swap method directly on the 
+		class:
+	</p>			
+	<ul>
+		<li><c><jk>public</jk> X swap()</c> method, where <c>X</c> is any serializable object.
+		<li><c><jk>public</jk> X swap(BeanSession)</c> method, where <c>X</c> is any serializable object.
+		<li><c><jk>public static</jk> MyPojo unswap(X)</c> method, where <c>X</c> is any serializable object.
+		<li><c><jk>public static</jk> MyPojo swap(X,BeanSession)</c> method, where <c>X</c> is any serializable object.
+	</ul>
+	<p>
+		Serializing to and from Maps can be accomplished by defining any of the following methods:
+	</p>			
+	<ul>
+		<li><c><jk>public</jk> Map toMap()</c> method.
+			<br>Can be any type of map with string keys and object vals. 
+		<li><c><jk>public</jk> JsonMap toMap()</c> method. 
+		<li><c><jk>public</jk> Map toMap(BeanSession)</c> method.
+			<br>Can be any type of map with string keys and object vals. 
+		<li><c><jk>public</jk> JsonMap toMap(BeanSession)</c> method.
+		<li><c><jk>public static</jk> MyPojo fromMap(Map)</c> method.
+			<br>Can be any type of map with string keys and object vals. 
+		<li><c><jk>public static</jk> MyPojo fromMap(JsonMap)</c> method.
+		<li><c><jk>public static</jk> MyPojo fromMap(Map,BeanSession)</c> method.
+			<br>Can be any type of map with string keys and object vals. 
+		<li><c><jk>public static</jk> MyPojo fromMap(JsonMap,BeanSession)</c> method.
+	</ul>
+	<p>
+		The <c>BeanSession</c> parameter allows you access to various information about the current 
+		serialization session.
+		For example, you could provide customized results based on the media type being produced 
+		({@link oaj.BeanSession#getMediaType()}).
+	</p>
+	<p>
+		The following example shows how an HTML5 form template object can be created that gets serialized as a 
+		populated HTML5 {@link oaj.dto.html5.Form} bean.
+	</p>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+		|	
+		|	<jd>/**
+		|	 * A simple HTML form template whose serialized form is an HTML5 Form object.
+		|	 */</jd>
+		|	<jk>public class</jk> FormTemplate {
+		|		
+		|		<jk>private</jk> String <jf>action</jf>;
+		|		<jk>private int</jk> <jf>value1</jf>;
+		|		<jk>private boolean</jk> <jf>value2</jf>;
+		|		
+		|		<jc>// Some constructor that initializes our fields. </jc>
+		|		<jk>public</jk> FormTemplate(String <jv>action</jv>, <jk>int</jk> <jv>value1</jv>, <jk>boolean</jk> <jv>value2</jv>) {
+		|			<jk>this</jk>.<jf>action</jf> = <jv>action</jv>;
+		|			<jk>this</jk>.<jf>value1</jf> = <jv>value1</jv>;
+		|			<jk>this</jk>.<jf>value2</jf> = <jv>value2</jv>;
+		|		}
+		|		
+		|		<jc>// Special swap method that converts this template to a serializable bean</jc>
+		|		<jk>public</jk> Form swap(BeanSession <jv>session</jv>) {
+		|			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
+		|				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
+		|				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v2"</js>).value(<jf>value2</jf>)
+		|			);
+		|		}
+		|	}
+	</p>
+	<p>
+		Swapped objects can be converted back into their original form by the parsers by specifying one of the 
+		following methods:
+	</p>
+	<ul>
+		<li><c><jk>public static</jk> T unswap(BeanSession, X)</c> method where <c>X</c> is the 
+			swap class type.
+		<li><c><jk>public</jk> T(X)</c> constructor where <c>X</c> is the swap class type.
+	</ul>
+	<p>
+		The following shows how our form template class can be modified to allow the parsers to reconstruct our 
+		original object:
+	</p>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+		|	
+		|	<jd>/**
+		|	 * A simple HTML form template whose serialized form is an HTML5 Form object.
+		|	 * This time with parsing support.
+		|	 */</jd>
+		|	<ja>@Bean</ja>(dictionary=HtmlBeanDictionary.<jk>class</jk>)
+		|	<jk>public class</jk> FormTemplate {
+		|		
+		|		<jk>private</jk> String <jf>action</jf>;
+		|		<jk>private int</jk> <jf>value1</jf>;
+		|		<jk>private boolean</jk> <jf>value2</jf>;
+		|		
+		|		<jc>// Our 'unswap' constructor</jc>
+		|		<jk>public</jk> FormTemplate(Form <jv>form</jv>) {
+		|			<jk>this</jk>.<jf>action</jf> = <jv>form</jv>.getAttr(<js>"action"</js>);
+		|			<jk>this</jk>.<jf>value1</jf> = <jv>form</jv>.getChild(Input.<jk>class</jk>, 0)
+		|				.getAttr(<jk>int</jk>.<jk>class</jk>, <js>"value"</js>);
+		|			<jk>this</jk>.<jf>value2</jf> = <jv>form</jv>.getChild(Input.<jk>class</jk>, 1)
+		|				.getAttr(<jk>boolean</jk>.<jk>class</jk>, <js>"value"</js>);
+		|		}
+		|		
+		|		<jk>public</jk> FormTemplate(String <jv>action</jv>, <jk>int</jk> <jv>value1</jv>, <jk>boolean</jk> <jv>value2</jv>) {
+		|			<jk>this</jk>.<jf>action</jf> = <jv>action</jv>;
+		|			<jk>this</jk>.<jf>value1</jf> = <jv>value1</jv>;
+		|			<jk>this</jk>.<jf>value2</jf> = <jv>value2</jv>;
+		|		}
+		|		
+		|		<jk>public</jk> Form swap(BeanSession <jv>session</jv>) {
+		|			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
+		|				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
+		|				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v2"</js>).value(<jf>value2</jf>)
+		|			);
+		|		}
+		|	}
+	</p>
+</div>

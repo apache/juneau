@@ -1,0 +1,49 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Running in Eclipse', created:'8.0.0'}
+
+<div class='topic'>
+	<p>
+		The <l>mjm.launch</l> file is already provided to allow you to quickly start
+		your new microservice.
+	</p>
+	<p>
+		Go to <b>Run -&gt; Run Configurations -&gt; Java Application -&gt; my-jetty-microservice</b> and click <b>Run</b>.
+		In your console view, you should see the following output:
+	</p>
+	<p class='bconsole'>
+		|	Running class 'JettyMicroservice' using config file 'mjm.cfg'.
+		|	Server started on port 10000
+		|	
+		|	List of available commands:
+		|		exit -- Shut down service
+		|		restart -- Restarts service
+		|		help -- Commands help
+		|	
+		|	&gt; 			
+	</p>
+	<p>
+		Now open your browser and point to <l>http://localhost:10000</l>.  
+		You should see the following:
+	</p>
+	<p class='bcode w400'>
+		|	http://localhost:10000
+	</p>			
+	<img class='bordered w400' src='doc-files/mjm.Running.1.png'>
+	<p>
+		You can enter the command <c>exit</c> to shut it down.
+	</p>
+</div>

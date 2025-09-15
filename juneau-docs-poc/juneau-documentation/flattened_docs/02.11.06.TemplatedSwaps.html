@@ -1,0 +1,52 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Templated Swaps'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.annotation.Swap#template() @Swap(template)} annotation allows you to associate
+		arbitrary contextual strings with swaps.
+		The primary purpose is for providing template names, such as for Apache FreeMarker, therefore
+		the name 'template'.
+		However, the usage of the string is open-ended.
+	</p>
+	<p>
+		For example, you could pair a template string like so:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
+		|	<jk>public class</jk> MyPojo {}
+	</p>
+	<p>
+		The implementation of the FreeMarker swap would look something like this:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Our templated swap class.</jc>
+		|	<jk>public class</jk> FreeMarkerSwap <jk>extends</jk> ObjectSwap&lt;Object,Reader&gt; {
+		|
+		|		<jk>public</jk> MediaType[] forMediaTypes() {
+		|			<jc>// Make sure this only applies to the HTML serializer.</jc>
+		|			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/html"</js>);
+		|		}
+		|
+		|		<jk>public</jk> Reader swap(BeanSession <jv>session</jv>, Object <jv>object</jv>, String <jv>template</jv>) <jk>throws</jk> Exception {
+		|			<jc>// Call some method that uses FreeMarker to convert 'o' to raw HTML using </jc>
+		|			<jc>// the 'MyPojo.div.ftl' template.</jc>
+		|			<jk>return</jk> getFreeMarkerReader(<jv>template</jv>, <jv>object</jv>);  
+		|		}
+		|	}
+	</p>
+</div>

@@ -1,0 +1,45 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@NameProperty Annotation'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.annotation.NameProperty @NameProperty} annotation is used to
+		identify a setter as a method for setting the name of a POJO as it's known by its parent object.
+	</p>
+	<p>
+		A commonly-used case is when you're parsing a JSON map containing beans where one of the bean 
+		properties is the key used in the map.
+	</p>
+	<p class='bjson'>
+		|	<jc>// JSON</jc> 
+		|	{
+		|		<jok>id1</jok>: {<jok>name</jok>: <jov>'John Smith'</jov>, <jok>sex</jok>: <jov>'M'</jov>},
+		|		<jok>id2</jok>: {<jok>name</jok>: <jov>'Jane Doe'</jov>, <jok>sex</jok>: <jov>'F'</jov>}
+		|	}
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> Person {
+		|		
+		|		<ja>@NameProperty</ja> 
+		|		<jk>public</jk> String <jf>id</jf>;  <jc>// Value gets assigned from object key</jc>
+		|		
+		|		<jk>public</jk> String <jf>name</jf>;
+		|		
+		|		<jk>public char</jk> <jf>sex</jf>;
+		|	}
+	</p>
+</div>

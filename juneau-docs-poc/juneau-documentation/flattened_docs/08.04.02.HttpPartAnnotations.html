@@ -1,0 +1,465 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'HTTP Part Annotations', updated:'8.1.0,9.0.0'} 
+
+<div class='topic'>
+	<p>
+		The following annotations allow for defining part schemas based on the OpenAPI standard.
+	</p>
+	<ul class='spaced-list'>
+		<li><b>Request annotations:</b>
+			<ul class='javatree'>
+				<li class='ja'>{@link oaj.http.annotation.Request}
+					<ul class='javatreec'>
+						<li class='jma'>{@link oaj.http.annotation.Request#on() on}</li>
+						<li class='jma'>{@link oaj.http.annotation.Request#onClass() onClass}</li>
+						<li class='jma'>{@link oaj.http.annotation.Request#parser() parser}</li>
+					</ul>
+				</li>
+				<li class='ja'>{@link oaj.http.annotation.Header}
+					<ul class='javatreec'>
+						<li class='jma'>{@link oaj.http.annotation.Header#name() name}</li>
+						<li class='jma'>{@link oaj.http.annotation.Header#parser() parser}</li>
+						<li class='jma'>{@link oaj.http.annotation.Header#schema() schema}</li>
+						<li class='jma'>{@link oaj.http.annotation.Header#value() value}</li>
+					</ul>
+				</li>
+				<li class='ja'>{@link oaj.http.annotation.Query}
+					<ul class='javatreec'>
+						<li class='jma'>{@link oaj.http.annotation.Query#name() name}</li>
+						<li class='jma'>{@link oaj.http.annotation.Query#parser() parser}</li>
+						<li class='jma'>{@link oaj.http.annotation.Query#schema() schema}</li>
+						<li class='jma'>{@link oaj.http.annotation.Query#value() value}</li>
+					</ul>
+				</li>
+				<li class='ja'>{@link oaj.http.annotation.FormData}
+					<ul class='javatreec'>
+						<li class='jma'>{@link oaj.http.annotation.FormData#name() name}</li>
+						<li class='jma'>{@link oaj.http.annotation.FormData#parser() parser}</li>
+						<li class='jma'>{@link oaj.http.annotation.FormData#schema() schema}</li>
+						<li class='jma'>{@link oaj.http.annotation.FormData#value() value}</li>
+					</ul>
+				</li>
+				<li class='ja'>{@link oaj.http.annotation.Path}
+					<ul class='javatreec'>
+						<li class='jma'>{@link oaj.http.annotation.Path#name() name}</li>
+						<li class='jma'>{@link oaj.http.annotation.Path#parser() parser}</li>
+						<li class='jma'>{@link oaj.http.annotation.Path#schema() schema}</li>
+						<li class='jma'>{@link oaj.http.annotation.Path#value() value}</li>
+					</ul>
+				</li>
+				<li class='ja'>{@link oaj.http.annotation.Content}
+					<ul class='javatreec'>
+						<li class='jma'>{@link oaj.http.annotation.Content#schema() schema}</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li><b>Response annotations:</b>
+			<ul class='javatree'>
+				<li class='ja'>{@link oaj.http.annotation.Response}
+					<ul class='javatreec'>
+						<li class='jma'>{@link oaj.http.annotation.Response#examples() examples}</li>
+						<li class='jma'>{@link oaj.http.annotation.Response#headers() headers}</li>
+						<li class='jma'>{@link oaj.http.annotation.Response#on() on}</li>
+						<li class='jma'>{@link oaj.http.annotation.Response#onClass() onClass}</li>
+						<li class='jma'>{@link oaj.http.annotation.Response#schema() schema}</li>
+						<li class='jma'>{@link oaj.http.annotation.Response#serializer() serializer}</li>
+					</ul>
+				</li>
+				<li class='ja'>{@link oaj.http.annotation.Header}
+					<ul class='javatreec'>
+						<li class='jma'>{@link oaj.http.annotation.Header#name() name}</li>
+						<li class='jma'>{@link oaj.http.annotation.Header#schema() schema}</li>
+						<li class='jma'>{@link oaj.http.annotation.Header#serializer() serializer}</li>
+						<li class='jma'>{@link oaj.http.annotation.Header#value() value}</li>
+					</ul>
+				</li>
+				<li class='ja'>{@link oaj.http.annotation.Content}
+					<ul class='javatreec'>
+						<li class='jma'>{@link oaj.http.annotation.Content#schema() schema}</li>
+					</ul>
+				</li>
+				<li class='ja'>{@link oaj.http.annotation.StatusCode}
+					<ul class='javatreec'>
+						<li class='jma'>{@link oaj.http.annotation.StatusCode#value() value}</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li><b>Common schema annotation:</b>
+			<ul class='javatree'>
+				<li class='ja'>{@link oaj.annotation.Schema}
+					<ul class='javatreec'>
+						<li class='jma'>{@link oaj.annotation.Schema#_default() _default}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#_enum() _enum}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#$ref() $ref}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#additionalProperties() additionalProperties}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#aev() aev}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#allOf() allOf}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#allowEmptyValue() allowEmptyValue}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#cf() cf}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#collectionFormat() collectionFormat}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#d() d}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#description() description}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#df() df}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#discriminator() discriminator}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#e() e}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#emax() emax}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#emin() emin}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#exclusiveMaximum() exclusiveMaximum}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#exclusiveMinimum() exclusiveMinimum}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#externalDocs() externalDocs}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#f() f}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#format() format}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#ignore() ignore}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#items() items}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#max() max}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#maxi() maxi}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#maximum() maximum}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#maxItems() maxItems}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#maxl() maxl}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#maxLength() maxLength}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#maxp() maxp}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#maxProperties() maxProperties}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#min() min}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#mini() mini}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#minimum() minimum}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#minItems() minItems}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#minl() minl}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#minLength() minLength}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#minp() minp}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#minProperties() minProperties}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#mo() mo}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#multipleOf() multipleOf}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#on() on}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#onClass() onClass}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#p() p}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#pattern() pattern}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#properties() properties}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#r() r}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#readOnly() readOnly}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#required() required}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#ro() ro}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#sie() sie}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#skipIfEmpty() v}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#t() t}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#title() title}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#type() type}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#ui() ui}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#uniqueItems() uniqueItems}</li>
+						<li class='jma'>{@link oaj.annotation.Schema#xml() xml}</li>
+					</ul>
+				</li>
+			</ul>
+		</li>	
+	</ul>
+	<p>
+		The {@link oaj.http.annotation.Header @Header}/{@link oaj.http.annotation.Query @Query}/
+		{@link oaj.http.annotation.FormData @FormData}/{@link oaj.http.annotation.Path @Path} annotations 
+		can be used on parameters of {@link oajr.annotation.RestOp @RestOp}-annotated methods to 
+		get access to request headers, query parameters, form-data parameters, and path parts.
+	</p>
+	<p>
+		The most typical scenario is to simply use the <c>value</c> field to define parameter names:
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>
+		|	<jk>public void</jk> doGet(
+		|		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> <jv>p1</jv>, 
+		|		<ja>@Query</ja>(<js>"p2"</js>) String <jv>p2</jv>, 
+		|		<ja>@Query</ja>(<js>"p3"</js>) UUID <jv>p3</jv>) {...}
+	</p>
+	<p>
+		This is functionally equivalent to the following code:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>
+		|	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
+		|		RequestQueryParams <jv>query</jv> = <jv>req</jv>.getQueryParams();
+		|		<jk>int</jk> <jv>p1</jv> = <jv>query</jv>.get(<js>"p1"</js>).asInteger().orElse(0);
+		|		String <jv>p2</jv> = <jv>query</jv>.get(<js>"p2"</js>).orElse(<jk>null</jk>);
+		|		UUID <jv>p3</jv> = <jv>query</jv>.get(<js>"p3"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
+		|	}
+	</p>
+	<p>
+		The special name <js>"*"</js> (or blank) can be used to represent all values.
+		When used, the data type must be a <c>Map</c> or bean.
+	</p>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+		|	<jc>// Multiple values passed as a map.</jc>
+		|	<ja>@RestGet</ja>
+		|	<jk>public void</jk> doGet(<ja>@Query</ja>(<js>"*"</js>) Map&lt;String,Object&gt; <jv>map</jv>) {...}
+	</p>
+	<p class='bjava'>
+		|	<jc>// Same but name "*" is inferred.</jc>
+		|	<ja>@RestGet</ja>
+		|	<jk>public void</jk> doGet(<ja>@Query</ja> Map&lt;String,Object&gt; <jv>map</jv>) {...}
+	</p>
+	<p class='bjava'>
+		|	<jc>// Multiple values passed as a bean.</jc>
+		|	<ja>@RestGet</ja>
+		|	<jk>public void</jk> doGet(<ja>@Query</ja> MyQueryBean <jv>bean</jv>) {...}
+	</p>
+	<p>
+		The {@link oaj.http.annotation.Content @Content} annotation is used to identify POJOs to be used as the body of an HTTP request.
+	</p>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+		|	<jc>// Defined on parameter</jc>
+		|	<ja>@RestPost</ja>
+		|	<jk>public void</jk> addPet(<ja>@Content</ja> Pet <jv>pet</jv>) {...}
+	</p>
+	<p class='bjava'>
+		|	<jc>// Defined on POJO class</jc>
+		|	<ja>@RestPost</ja>
+		|	<jk>public void</jk> addPet(Pet <jv>pet</jv>) {...}
+		|	
+		|	<ja>@Content</ja>
+		|	<jk>public class</jk> Pet {...}
+	</p>
+	<p>
+		This is functionally equivalent to the following code:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestPost</ja>
+		|	<jk>public void</jk> addPet(RestRequest <jv>req</jv>) {
+		|		Pet <jv>pet</jv> = <jv>req</jv>.getContent().as(Pet.<jk>class</jk>);
+		|		...
+		|	}
+	</p>
+	<p>
+		In addition to {@link oaj.http.annotation.Content @Content}-annotated parameters/types, the body of an HTTP request
+		can be retrieved by passing in parameters of the following types (matched in the specified order):
+	</p>
+	<ol class='spaced-list'>
+		<li>
+			{@link java.io.Reader}
+			<br><ja>@Content</ja> annotation is optional.
+			<br><c>Content-Type</c> is ignored.
+		<li>
+			{@link java.io.InputStream}
+			<br><ja>@Content</ja> annotation is optional.
+			<br><c>Content-Type</c> is ignored.
+		<li>
+			Any <a class="doclink" href="#jm.PojoCategories">Parseable POJO</a> type.
+			<br><c>Content-Type</c> is required to identify correct parser.
+		<li>
+			Objects convertible from {@link java.io.Reader} by having one of the following non-deprecated methods:
+			<ul>
+				<li><c><jk>public</jk> T(Reader in) {...}</c>
+				<li><c><jk>public static</jk> T <jsm>create</jsm>(Reader in) {...}</c>
+				<li><c><jk>public static</jk> T <jsm>fromReader</jsm>(Reader in) {...}</c>
+			</ul>
+			<c>Content-Type</c> must not be present or match an existing parser so that it's not parsed as a POJO.
+		<li>
+			Objects convertible from {@link java.io.InputStream} by having one of the following non-deprecated methods:
+			<ul>
+				<li><c><jk>public</jk> T(InputStream in) {...}</c>
+				<li><c><jk>public static</jk> T <jsm>create</jsm>(InputStream in) {...}</c>
+				<li><c><jk>public static</jk> T <jsm>fromInputStream</jsm>(InputStream in) {...}</c>
+			</ul>
+			<c>Content-Type</c> must not be present or match an existing parser so that it's not parsed as a POJO.
+		<li>
+			Objects convertible from {@link java.lang.String} by having one of the following non-deprecated methods:
+			<ul>
+				<li><c><jk>public</jk> T(String in) {...}</c>
+				<li><c><jk>public static</jk> T <jsm>create</jsm>(String in) {...}</c>
+				<li><c><jk>public static</jk> T <jsm>fromString</jsm>(String in) {...}</c>
+				<li><c><jk>public static</jk> T <jsm>parse</jsm>(String in) {...}</c>
+				<li><c><jk>public static</jk> T <jsm>parseString</jsm>(String in) {...}</c>
+				<li><c><jk>public static</jk> T <jsm>forName</jsm>(String in) {...}</c>
+				<li><c><jk>public static</jk> T <jsm>forString</jsm>(String in) {...}</c>
+			</ul>
+			Note that this also includes all enums.
+		<li>
+			Any {@link java.util.Optional} of anything on this list.</li>
+	</ol>
+	<p>
+		When used in combination with the mutable {@link oaj.Value} object, the {@link oaj.http.annotation.StatusCode @StatusCode} and {@link oaj.http.annotation.Header @Header} annotations 
+		can be used on parameters {@link oajr.annotation.RestOp @RestOp}-annotated methods to 
+		to define to response codes and headers.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(<js>"/user/login"</js>)
+		|	<jk>public void</jk> login(
+		|		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
+		|		<ja>@FormData</ja>(<js>"password"</js>) String <jv>password</jv>,
+		|		<ja>@StatusCode</ja> Value&lt;Integer&gt; <jv>status</jv>,
+		|		<ja>@Header</ja>(<js>"My-Response-Header"</js>) Value&lt;String&gt; <jv>myResponseHeader</jv>
+		|	) {
+		|		<jk>if</jk> (<jsm>isValid</jsm>(<jv>username</jv>, <jv>password</jv>)) {
+		|			<jv>status</jv>.set(200);
+		|			<jv>myResponseHeader</jv>.set(<js>"Welcome "</js> + <jv>username</jv> + <js>"!"</js>);
+		|		} <jk>else</jk> {
+		|			<jv>status</jv>.set(401);
+		|		}
+		|	}
+	</p>
+	<p>
+		This is functionally equivalent to the following code:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(<js>"/user/login"</js>)
+		|	<jk>public void</jk> doGet(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
+		|		RequestFormParams <jv>form</jv> = <jv>req</jv>.getFormParams();
+		|		String <jv>username</jv> = <jv>form</jv>.get(<js>"username"</js>).orElse(<jk>null</jk>);
+		|		String <jv>password</jv> = <jv>form</jv>.get(<js>"password"</js>).orElse(<jk>null</jk>);
+		|		<jk>if</jk> (<jsm>isValid</jsm>(<jv>username</jv>, <jv>password</jv>) {
+		|			<jv>res</jv>.setStatus(200);
+		|			<jv>res</jv>.setHeader(<js>"My-Response-Header"</js>, <js>"Welcome "</js> + <jv>username</jv> + <js>"!"</js>);
+		|		} else {
+		|			<jv>res</jv>.setStatus(401);
+		|		}
+		|	}
+	</p>
+	<p>
+		The default registered part marshallers, {@link oaj.oapi.OpenApiSerializer} and {@link oaj.oapi.OpenApiParser}, are used to 
+		marshall POJOs using schemas defined via the {@link oaj.annotation.Schema @Schema} annotation.
+	</p>
+	<p>
+		For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <c>Longs</c>:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(<js>"/testQuery1"</js>)	
+		|	<jk>public void</jk> testQuery1(
+		|		<ja>@Query</ja>(<js>"queryParamName"</js>)
+		|		<ja>@Schema</ja>(
+		|			collectionFormat=<js>"pipes"</js>,
+		|			items=<ja>@Items</ja>(
+		|				collectionFormat=<js>"csv"</js>,
+		|				type=<js>"integer"</js>, 
+		|				format=<js>"int64"</js>,
+		|				minimum=<js>"0"</js>,
+		|				maximum=<js>"100"</js>
+		|				minLength=1,
+		|				maxLength=10
+		|			),
+		|			minLength=1,
+		|			maxLength=10
+		|		)
+		|		Long[][] <jv>queryParameter</jv>
+		|	) {...}
+		|
+		|	<jc>// Same but using condensed notation.</jc>
+		|	<ja>@RestGet</ja>(<js>"/testQuery2"</js>)	
+		|	<jk>public void</jk> testQuery2(
+		|		<ja>@Query</ja>(<js>"queryParamName"</js>)
+		|		<ja>@Schema</ja>(
+		|			cf=<js>"pipes"</js>, minl=1, maxl=10,
+		|			i=<ja>@Items</ja>(cf=<js>"csv"</js>, t=<js>"integer"</js>, f=<js>"int64"</js>, min=<js>"0"</js>, max=<js>"100"</js>, minl=1, maxl=10)
+		|		)
+		|		Long[][] <jv>queryParameter</jv>
+		|	) {...}
+	</p>
+	<p>
+		Schema-based marshalling works for both request and response parts.
+		Input will be converted based on the types and formats defined in the schema definition.
+		Input validations such as <c>minLength/maxLength</c> that don't match the input will result in automatic <c>400 Bad Request</c> responses.
+	</p>
+	
+	<p>
+		The part and schema annotations are also used for supplying swagger information about the HTTP part.
+		This information is used to populate the auto-generated Swagger documentation and UI.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@Query</ja>(<js>"name"</js>)
+		|	<ja>@Schema</ja>(
+		|		description=<js>"Pet name"</js>,
+		|		required=<jk>true</jk>
+		|	)
+	</p>
+	<p>
+		<a class="doclink" href="#jrs.SvlVariables">SVL Variables</a> (e.g. "$L{my.localized.variable}") are supported on annotation fields as well.
+		Among other things, this allow for annotation values to be defined externally and the ability to produce localized swagger documents
+		based on the <c>Accept-Language</c> on a request.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@Schema</ja>(
+		|		description=<js>"$L{PetNameDescription}"</js>
+		|	)
+	</p>
+	<p>
+		The {@link oaj.http.annotation.Content @Content} annotation can also be used to parse HTTP request bodies using OpenAPI schemas 
+		when the body content type matches the {@link oaj.oapi.OpenApiParser} parser via the header <c>Content-Type: text/openapi</c>.
+	</p>
+	<p>
+		The following shows the same for a request body:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestPost</ja>(<js>"/testContent"</js>)	
+		|	<jk>public void</jk> testContent(
+		|		<ja>@Content</ja>
+		|		<ja>@Schema</ja>(
+		|			items=<ja>@Items</ja>(
+		|				collectionFormat=<js>"pipes"</js>,
+		|				items=<ja>@SubItems</ja>(
+		|					collectionFormat=<js>"csv"</js>,
+		|					type=<js>"integer"</js>, 
+		|					format=<js>"int64"</js>,
+		|					minimum=<js>"0"</js>,
+		|					maximum=<js>"100"</js>
+		|					minLength=1,
+		|					maxLength=10
+		|				)
+		|			),
+		|			minLength=1,
+		|			maxLength=10
+		|		)
+		|		Long[][] <jv>content</jv>
+		|	) {...}
+	</p>
+	<p>
+		The list of valid POJO types for parameters depends on type and format of the value or items/entries of the value.
+		For example, instead of <c>Longs</c> in the example above, we could also define a 2-dimensional array of POJOs convertible from <c>Longs</c>:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Content is a 2-dimensional array of POJOs convertible from Longs:</jc>
+		|	<ja>@RestPost</ja>(<js>"/example1"</js>)	
+		|	<jk>public void</jk> testContent(<ja>@Content</ja>(...) MyPojo1[][] <jv>content</jv>) {...}
+		|	
+		|	<jk>public class</jk> MyPojo1 {
+		|		<jk>public</jk> MyPojo1(Long <jv>input</jv>) {...}
+		|	}
+	</p>
+	<p class='bjava'>
+		|	<jc>// Content is a POJO that takes in a Long array:</jc>
+		|	<ja>@RestPost</ja>(<js>"/example2"</js>)	
+		|	<jk>public void</jk> testContent(<ja>@Content</ja>(...) MyPojo2[] <jv>content</jv>) {...}
+		|	
+		|	<jk>public class</jk> MyPojo2 {
+		|		<jk>public</jk> MyPojo2(Long[] <jv>input</jv>) {...}
+		|	}
+	</p>
+	<p class='bjava'>
+		|	<jc>// Content is a POJO that takes in the whole 2-dimensional array:</jc>
+		|	<ja>@RestPost</ja>(<js>"/example3"</js>)	
+		|	<jk>public void</jk>testContent<ja>@Content</ja>(...) MyPojo3 <jv>content</jv>) {...}
+		|	
+		|	<jk>public class</jk> MyPojo3 {
+		|		<jk>public</jk> MyPojo3(Long[][] <jv>input</jv>) {...}
+		|	}
+	</p>
+	<p>
+		As you can see, the complexity of possible input types expands significantly.
+		For more information about valid parameter types, see <a class="doclink" href="#jm.OpenApiParsers">OpenAPI Parsers</a>.
+	</p>
+</div>

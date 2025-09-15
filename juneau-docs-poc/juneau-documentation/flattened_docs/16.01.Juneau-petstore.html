@@ -1,0 +1,39 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'juneau-petstore', created:'8.2.0', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The <c>PetStore</c> application is an functional application meant to demonstrate using Juneau with Spring Boot
+		to create an end-to-end client/server REST API. 
+	</p>
+	<p>
+		What makes Juneau unique is the ability to create Java interfaces that behave just like RPC but using REST
+		as the underlying protocol.  And the technology it not tied to any platform so it can be used in any environment
+		by simply pulling in Maven dependencies.  The server-side need only provide the ability to host a servlet.
+	</p>
+	<p>
+		Visit the <a class='doclink' href='https://github.com/apache/juneau-petstore'>GitHub project</a> hosting the application.
+	</p>
+	<p>
+		The project is broken down into the following subprojects:
+	</p>
+	<ul class='spaced-list'>
+		<li><c>juneau-petstore-api</c> - Contains the Java interface and DTOs for the petstore application.
+		<li><c>juneau-petstore-server</c> - Contains the server-side Java implementation of the petstore Java interface as a REST resource.
+		<li><c>juneau-petstore-client</c> - Contains the client-side Java proxy of the petstore Java interface.
+	</ul>
+</div>

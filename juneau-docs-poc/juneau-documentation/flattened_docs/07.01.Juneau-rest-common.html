@@ -1,0 +1,59 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'juneau-rest-common', created:'9.0.0'}
+
+<div class='topic'>
+	<h5 class='figure'>Maven Dependency</h5>
+	<p class='bxml w500'>
+		|	<xt>&lt;dependency&gt;</xt>
+		|		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
+		|		<xt>&lt;artifactId&gt;</xt>juneau-rest-common<xt>&lt;/artifactId&gt;</xt>
+		|		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
+		|	<xt>&lt;/dependency&gt;</xt>
+	</p>	
+	
+	<h5 class='figure'>Java Library</h5>
+	<p class='bcode w500'>
+		|	juneau-rest-common-<juneauVersion>9.0.1</juneauVersion>.jar 
+	</p>	
+	
+	<h5 class='figure'>OSGi Module</h5>
+	<p class='bcode w500'>
+		|	org.apache.juneau.rest.common_<juneauVersion>9.0.1</juneauVersion>.jar 
+	</p>	
+	
+	<p>
+		The {@link oaj.http} package contains a slew of useful extensions to the Apache HttpComponents libraries
+		and define APIs used extensively in the REST server and client APIs.
+	</p>
+	<ul class='javatree'>
+		<li class='jp'>{@link oaj.http} - Utility classes used for HTTP parts/headers/entities.</li>
+		<li class='jp'>{@link oaj.http.annotation} - Swagger-based annotations used on both server-side APIs and client-side proxy interfaces.</li>
+		<li class='jp'>{@link oaj.http.entity} - HTTP entity classes.</li>
+		<li class='jp'>{@link oaj.http.header} - HTTP header classes.</li>
+		<li class='jp'>{@link oaj.http.part} - HTTP query/form-data/path classes.</li>
+		<li class='jp'>{@link oaj.http.remote} - Remote proxy interface API</li>
+		<li class='jp'>{@link oaj.http.resource} - HTTP resource classes.</li>
+		<li class='jp'>{@link oaj.http.response} - HTTP response classes.</li>
+	</ul>
+	
+	<p>
+		These APIs extend from the Apache HttpComponents libraries and can be used with libraries based on it such
+		as Apache HttpClient.  The REST Client API described later is built on top of Apache HttpClient and many
+		of the classes defined in this package make up integral components of that API.  Likewise, the APIs
+		defined here are also used in the REST Server APIs also described later.
+	</p>
+</div>

@@ -1,0 +1,102 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@Xml(childName) Annotation'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.xml.annotation.Xml#childName() @Xml(childName)} annotation can be used to 
+		specify the name of XML child elements for bean properties of type collection or array.
+	</p>
+	
+	<h5 class='figure'>Example</h5>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>Without annotation</th>
+			<th>With annotation</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(childName=<js>"X"</js>)
+				|		<jk>public</jk> String[] <jf>a</jf>;
+				|		<ja>@Xml</ja>(childName=<js>"Y"</js>)
+				|		<jk>public int</jk>[] <jf>b</jf>;
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		a: [<js>'foo'</js>,<js>'bar'</js>],
+				|		b: [123,456]
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;object&gt;
+				|		&lt;a&gt;
+				|			&lt;string&gt;<xv>foo</xv>&lt;/string&gt;
+				|			&lt;string&gt;<xv>bar</xv>&lt;/string&gt;
+				|		&lt;/a&gt;
+				|		&lt;b&gt;
+				|			&lt;number&gt;<xv>123</xv>&lt;/number&gt;
+				|			&lt;number&gt;<xv>456</xv>&lt;/number&gt;
+				|		&lt;/b&gt;
+				|	&lt;/object&gt;
+		</xt></td>
+		<td class='code'><xt>
+				|	&lt;object&gt;
+				|		&lt;a&gt;
+				|			&lt;X&gt;<xv>foo</xv>&lt;/X&gt;
+				|			&lt;X&gt;<xv>bar</xv>&lt;/X&gt;
+				|		&lt;/a&gt;
+				|		&lt;b&gt;
+				|			&lt;Y&gt;<xv>123</xv>&lt;/Y&gt;
+				|			&lt;Y&gt;<xv>456</xv>&lt;/Y&gt;
+				|		&lt;/b&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(childName=<js>"child"</js>)
+				|		<jk>public int</jk>[] <jf>a</jf>;
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		a: [123,456]
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;object&gt;
+				|		&lt;a&gt;
+				|			&lt;string&gt;<xv>foo</xv>&lt;/string&gt;
+				|			&lt;string&gt;<xv>bar</xv>&lt;/string&gt;
+				|		&lt;/a&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+			<td class='code'><xt>
+				|	&lt;object&gt;
+				|		&lt;a&gt;
+				|			&lt;child&gt;<xv>foo</xv>&lt;/child&gt;
+				|			&lt;child&gt;<xv>bar</xv>&lt;/child&gt;
+				|		&lt;/a&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+		</tr>
+	</table>
+</div>

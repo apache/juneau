@@ -1,0 +1,722 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@Xml(format) Annotation'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.xml.annotation.Xml#format() @Xml(format)} annotation can be used to tweak 
+		the XML format of a POJO.
+		The value is set to an enum value of type {@link oaj.xml.annotation.XmlFormat}.
+		This annotation can be applied to both classes and bean properties.
+	</p>
+	<p>
+		The {@link oaj.xml.annotation.XmlFormat#ATTR} format can be applied to bean properties to 
+		serialize them as XML attributes instead of elements.
+		Note that this only supports properties of simple types (e.g. strings, numbers, booleans).
+	</p>
+	
+	<h5 class='figure'>Example</h5>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>Without annotation</th>
+			<th>With annotation</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>)
+				|		<jk>public</jk> String <jf>a</jf>;
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		a: <js>'foo'</js>
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;object&gt;
+				|		&lt;a&gt;<xv>foo</xv>&lt;/a&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+			<td class='code'><xt>
+				|	&lt;object <xa>a</xa>=<xs>'foo'</xs>/&gt;
+			</xt></td>
+		</tr>
+	</table>
+	<p>
+		The {@link oaj.xml.annotation.XmlFormat#ATTRS} format can be applied to bean classes to 
+		force all bean properties to be serialized as XML attributes instead of child elements.
+	</p>
+	
+	<h5 class='figure'>Example</h5>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>Without annotation</th>
+			<th>With annotation</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTRS</jsf>)
+				|	<jk>class</jk> MyBean {
+				|		<jk>public</jk> String <jf>a</jf>;
+				|		<jk>public int</jk> <jf>b</jf>;
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		a: <js>'foo'</js>,
+				|		b: 123
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;object&gt;
+				|		&lt;a&gt;<xv>foo</xv>&lt;/a&gt;
+				|		&lt;b&gt;<xv>123</xv>&lt;/b&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+			<td class='code'><xt>
+				|	&lt;object <xa>a</xa>=<xs>'foo'</xs> <xa>b</xa>=<xs>'123'</xs>/&gt;
+			</xt></td>
+		</tr>
+	</table>
+	<p>
+		The {@link oaj.xml.annotation.XmlFormat#ELEMENT} format can be applied to bean properties 
+		to override the {@link oaj.xml.annotation.XmlFormat#ATTRS} format applied on the bean 
+		class.
+	</p>
+	
+	<h5 class='figure'>Example</h5>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>Without annotation</th>
+			<th>With annotation</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTRS</jsf>)
+				|	<jk>class</jk> MyBean {
+				|		<jk>public</jk> String <jf>a</jf>;
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>ELEMENT</jsf>)
+				|		<jk>public int</jk> <jf>b</jf>;
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		a: <js>'foo'</js>,
+				|		b: 123
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;object&gt;
+				|		&lt;a&gt;<xv>foo</xv>&lt;/a&gt;
+				|		&lt;b&gt;<xv>123</xv>&lt;/b&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+			<td class='code'><xt>
+				|	&lt;object <xa>a</xa>=<xs>'foo'</xs></xs>&gt;
+				|		&lt;b&gt;<xv>123</xv>&lt;/b&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+		</tr>
+	</table>
+	<p>
+		The {@link oaj.xml.annotation.XmlFormat#ATTRS} format can be applied to a single bean 
+		property of type <c>Map&lt;String,Object&gt;</c> to denote arbitrary XML attribute values on the 
+		element.
+		These can be mixed with other {@link oaj.xml.annotation.XmlFormat#ATTR} annotated 
+		properties but there must not be an overlap in bean property names and map keys. 
+	</p>
+	
+	<h5 class='figure'>Example</h5>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>Without annotation</th>
+			<th>With annotation</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTRS</jsf>)
+				|		<jk>public</jk> Map&lt;String,Object&gt; <jf>a</jf>;
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>)
+				|		<jk>public int</jk> <jf>b</jf>;
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		<jok>a</jok>: {
+				|			<jok>k1</jok>: <jov>'foo'</jov>, 
+				|			<jok>k2</jok>: <jov>123</jov>, 
+				|		},
+				|		<jok>b</jok>: <jov>456</jov>
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;object&gt;
+				|		&lt;a&gt;
+				|			&lt;k1&gt;<xv>foo</xv>&lt;/k1&gt;
+				|			&lt;k2 <xa>_type</xa>=<xs>'number'</xs>&gt;<xv>123</xv>&lt;/k2&gt;
+				|		&lt;/a&gt;
+				|		&lt;b&gt;<xv>456</xv>&lt;/b&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+			<td class='code'><xt>
+				|	&lt;object <xa>k1</xa>=<xs>'foo'</xs> <xa>k2</xa>=<xs>'123'</xs> <xa>b</xa>=<xs>'456'</xs>/&gt;
+			</xt></td>
+		</tr>
+	</table>
+	<p>
+		The {@link oaj.xml.annotation.XmlFormat#COLLAPSED} format can be applied to bean properties
+		of type array/Collection.
+		This causes the child objects to be serialized directly inside the bean element.
+		This format must be used in conjunction with {@link oaj.xml.annotation.Xml#childName() @Xml(childName)}
+		to differentiate which collection the values came from if you plan on parsing the output back into beans.
+		Note that child names must not conflict with other property names.
+	</p>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>Without annotation</th>
+			<th>With annotation</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(childName=<js>"A"</js>,format=XmlFormat.<jsf>COLLAPSED</jsf>)
+				|		<jk>public</jk> String[] <jf>a</jf>;
+				|		<ja>@Xml</ja>(childName=<js>"B"</js>,format=XmlFormat.<jsf>COLLAPSED</jsf>)
+				|		<jk>public int</jk>[] <jf>b</jf>;
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		a: [<js>'foo'</js>,<js>'bar'</js>],
+				|		b: [123,456]
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;object&gt;
+				|		&lt;a&gt;
+				|			&lt;string&gt;<xv>foo</xv>&lt;/string&gt;
+				|			&lt;string&gt;<xv>bar</xv>&lt;/string&gt;
+				|		&lt;/a&gt;
+				|		&lt;b&gt;
+				|			&lt;number&gt;<xv>123</xv>&lt;/number&gt;
+				|			&lt;number&gt;<xv>456</xv>&lt;/number&gt;
+				|		&lt;/b&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+			<td class='code'><xt>
+				|	&lt;object&gt;
+				|		&lt;A&gt;<xv>foo</xv>&lt;/A&gt;
+				|		&lt;A&gt;<xv>bar</xv>&lt;/A&gt;
+				|		&lt;B&gt;<xv>123</xv>&lt;/B&gt;
+				|		&lt;B&gt;<xv>456</xv>&lt;/B&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+		</tr>
+	</table>
+	<p>
+		The {@link oaj.xml.annotation.XmlFormat#ELEMENTS} format can be applied to a single bean 
+		property of either a simple type or array/Collection.
+		It allows free-form child elements to be formed.
+		All other properties on the bean MUST be serialized as attributes.
+	</p>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>With annotation</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>)
+				|		<jk>public</jk> String <jf>a</jf>;
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>ELEMENTS</jsf>)
+				|		<jk>public</jk> String <jf>b</jf>;
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		a: <js>'foo'</js>,
+				|		b: <js>'bar'</js>
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;object <xa>a</xa>=<xs>'foo'</xs>&gt;
+				|		&lt;string&gt;<xv>bar</xv>&lt;/string&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>)
+				|		<jk>public</jk> String <jf>a</jf>;
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>ELEMENTS</jsf>)
+				|		<jk>public</jk> Object[] <jf>b</jf>;
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		a: <js>'foo'</js>,
+				|		b: [
+				|			<js>'bar'</js>, 
+				|			<js>'baz'</js>, 
+				|			123, 
+				|			<jk>true</jk>,
+				|			<jk>null</jk>
+				|		]
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;object <xa>a</xa>=<xs>'foo'</xs>&gt;
+				|		&lt;string&gt;<xv>bar</xv>&lt;/string&gt;
+				|		&lt;string&gt;<xv>baz</xv>&lt;/string&gt;
+				|		&lt;number&gt;<xv>123</xv>&lt;/number&gt;
+				|		&lt;boolean&gt;<xv>true</xv>&lt;/boolean&gt;
+				|		&lt;null/&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+		</tr>
+	</table>
+	<p>
+		The {@link oaj.xml.annotation.XmlFormat#MIXED} format is similar to 
+		{@link oaj.xml.annotation.XmlFormat#ELEMENTS} except elements names on primitive types 
+		(string/number/boolean/null) are stripped from the output.
+		This format particularly useful when combined with bean dictionaries to produce mixed content.  
+		The bean dictionary isn't used during serializationbut it is needed during parsing to resolve bean 
+		types.
+	</p>
+	<p>
+		The {@link oaj.xml.annotation.XmlFormat#MIXED_PWS} format identical to 
+		{@link oaj.xml.annotation.XmlFormat#MIXED} except whitespace characters are preserved in 
+		the output.  
+	</p>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>Without annotations</th>
+			<th>With annotations</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED</jsf>)
+				|		<ja>@Beanp</ja>(dictionary={MyBeanX.<jk>class</jk>, MyBeanY.<jk>class</jk>})	
+				|		<jk>public</jk> Object[] <jf>a</jf>;
+				|	}
+				|	
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBeanX {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>)
+				|		<jk>public</jk> String <jf>b</jf>;
+				|	}
+				|	
+				|	<ja>@Bean</ja>(typeName=<js>"Y"</js>)	
+				|	<jk>class</jk> MyBeanY {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>)
+				|		<jk>public</jk> String <jf>c</jf>;
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		a: [
+				|			<js>'foo'</js>,
+				|			{ _type:<js>'X'</js>, b:<js>'bar'</js> }
+				|			<js>'baz'</js>,
+				|			{ _type:<js>'Y'</js>, b:<js>'qux'</js> },
+				|			<js>'quux'</js>
+				|		]
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;object&gt;
+				|		&lt;a&gt;
+				|			&lt;string&gt;<xv>foo</xv>&lt;/string&gt;
+				|			&lt;object&gt;
+				|				&lt;b&gt;<xv>bar</xv>&lt;/b&gt;
+				|			&lt;/object&gt;
+				|			&lt;string&gt;<xv>baz</xv>&lt;/string&gt;
+				|			&lt;object&gt;
+				|				&lt;b&gt;<xv>qux</xv>&lt;/b&gt;
+				|			&lt;/object&gt;
+				|			&lt;string&gt;<xv>quux</xv>&lt;/string&gt;
+				|		&lt;/a&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+			<td class='code'><xt>
+				|	&lt;object&gt;<xv>foo</xv>&lt;X <xa>b</xa>=<xs>'bar'</xs>/&gt;<xv>baz</xv>&lt;Y <xa>c</xa>=<xs>'qux'</xs>/&gt;<xv>quux</xv>&lt;/object&gt;
+			</xt></td>
+		</tr>
+	</table>
+	<p>
+		Whitespace (tabs and newlines) are not added to MIXED child nodes in readable-output mode. 
+		This helps ensures strings in the serialized output can be losslessly parsed back into their original 
+		forms when they contain whitespace characters.
+		If the {@link javax.xml.stream.XMLInputFactory#IS_REPLACING_ENTITY_REFERENCES} setting was not useless 
+		in Java, we could support lossless readable XML for MIXED content.  
+		But as of Java 8, it still does not work. 
+	</p>
+	<p>
+		XML suffers from other deficiencies as well that affect MIXED content.  
+		For example, <xt>&lt;X&gt;&lt;/X&gt;</xt> and <xt>&lt;X/&gt;</xt> are equivalent in XML and 
+		indistinguishable by the Java XML parsers.  
+		This makes it impossible to differentiate between an empty element and an element containing an empty 
+		string.  
+		This causes empty strings to get lost in translation. 
+		To alleviate this, we use the constructs <js>"_xE000_"</js> to represent an empty string, and 
+		<js>"_x0020_"</js> to represent leading and trailing spaces.
+	</p>
+	<p>
+		The examples below show how whitespace is handled under various circumstances:
+	</p>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>XML</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT</jsf>)
+				|		<jk>public</jk> String <jf>a</jf> = <jk>null</jk>;
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X/&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT</jsf>)
+				|		<jk>public</jk> String <jf>a</jf> = <js>""</js>;
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>_xE000_</xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT</jsf>)
+				|		<jk>public</jk> String <jf>a</jf> = <js>" "</js>;
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>_x0020_</xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT</jsf>)
+				|		<jk>public</jk> String <jf>a</jf> = <js>"  "</js>;
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>_x0020__x0020_</xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT</jsf>)
+				|		<jk>public</jk> String <jf>a</jf> = <js>"  foobar  "</js>;
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>_x0020_ foobar _x0020_</xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT_PWS</jsf>)
+				|		<jk>public</jk> String <jf>a</jf> = <jk>null</jk>;
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X/&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT_PWS</jsf>)
+				|		<jk>public</jk> String <jf>a</jf> = <js>""</js>;
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>_xE000_</xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT_PWS</jsf>)
+				|		<jk>public</jk> String <jf>a</jf> = <js>" "</js>;
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv> </xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT_PWS</jsf>)
+				|		<jk>public</jk> String <jf>a</jf> = <js>"  "</js>;
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>  </xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT_PWS</jsf>)
+				|		<jk>public</jk> String <jf>a</jf> = <js>"  foobar  "</js>;
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>  foobar  </xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED</jsf>)
+				|		<jk>public</jk> String[] <jf>a</jf> = <jk>null</jk>;
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X/&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED</jsf>)
+				|		<jk>public</jk> String[] <jf>a</jf> = {<js>""</js>};
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>_xE000_</xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED</jsf>)
+				|		<jk>public</jk> String[] <jf>a</jf> = {<js>" "</js>};
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>_x0020_</xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED</jsf>)
+				|		<jk>public</jk> String[] <jf>a</jf> = {<js>"  "</js>};
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>_x0020__x0020_</xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED</jsf>)
+				|		<jk>public</jk> String[] <jf>a</jf> = {<js>"  foobar  "</js>};
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>_x0020_ foobar _x0020_</xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED_PWS</jsf>)
+				|		<jk>public</jk> String[] <jf>a</jf> = <jk>null</jk>;
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X/&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED_PWS</jsf>)
+				|		<jk>public</jk> String[] <jf>a</jf> = {<js>""</js>};
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>_xE000_</xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED_PWS</jsf>)
+				|		<jk>public</jk> String[] <jf>a</jf> = {<js>" "</js>};
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv> </xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED_PWS</jsf>)
+				|		<jk>public</jk> String[] <jf>a</jf> = {<js>"  "</js>};
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>  </xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<ja>@Bean</ja>(typeName=<js>"X"</js>)	
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>MIXED_PWS</jsf>)
+				|		<jk>public</jk> String[] <jf>a</jf> = {<js>"  foobar  "</js>};
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;X&gt;<xv>  foobar  </xv>&lt;/X&gt;
+			</xt></td>
+		</tr>
+	</table>
+	
+	<p>
+		It should be noted that when using <jsf>MIXED</jsf>, you are not guaranteed to parse back the exact 
+		same content since side-by-side strings in the content will end up concatenated when parsed.
+	</p>
+	<p>
+		The {@link oaj.xml.annotation.XmlFormat#TEXT} format is similar to 
+		{@link oaj.xml.annotation.XmlFormat#MIXED} except it's meant for solitary objects that 
+		get serialized as simple child text nodes.
+		Any object that can be serialize to a <c>String</c> can be used.
+		The {@link oaj.xml.annotation.XmlFormat#TEXT_PWS} is the same except whitespace is 
+		preserved in the output.
+	</p>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>Without annotations</th>
+			<th>With annotations</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>TEXT</jsf>)
+				|		<jk>public</jk> String <jf>a</jf>;
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		a: <js>'foo'</js>
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;object&gt;
+				|		&lt;a&gt;<xv>foo</xv>&lt;/a&gt;
+				|	&lt;/object&gt;
+			</xt></td>
+			<td class='code'><xt>
+				|	&lt;object&gt;<xv>foo</xv>&lt;/object&gt;
+			</xt></td>
+		</tr>
+	</table>
+	<p>
+		The {@link oaj.xml.annotation.XmlFormat#XMLTEXT} format is similar to 
+		{@link oaj.xml.annotation.XmlFormat#TEXT} except it's meant for strings containing XML 
+		that should be serialized as-is to the document.
+		Any object that can be serialize to a <c>String</c> can be used.
+		During parsing, the element content gets parsed with the rest of the document and then re-serialized to 
+		XML before being set as the property value.  
+		This process may not be perfect (e.g. double quotes may be replaced by single quotes, etc...).
+	</p>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>With TEXT annotation</th>
+			<th>With XMLTEXT annotation</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>class</jk> MyBean {
+				|		<ja>@Xml</ja>(format=XmlFormat.<jsf>XMLTEXT</jsf>)
+				|		<jk>public</jk> String <jf>a</jf>;
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		a: <js>'Some &lt;b&gt;XML&lt;/b&gt; text'</js>
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;object&gt;<xv>Some &amp;lt;b&amp;gt;XML&amp;lt;/b&amp;gt; text</xv>&lt;/object&gt;
+			</xt></td>
+			<td class='code'><xt>
+				|	&lt;object&gt;<xv>Some <xt>&lt;b&gt;</xt>XML<xt>&lt;/b&gt;</xt> text</xv>&lt;/object&gt;
+			</xt></td>
+		</tr>
+	</table>
+</div>

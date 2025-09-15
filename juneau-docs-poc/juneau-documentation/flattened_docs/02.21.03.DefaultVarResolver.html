@@ -1,0 +1,39 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'VarResolver.DEFAULT', created:'8.1.0'}
+
+<div class='topic'>
+	<p>
+		{@link oaj.svl.VarResolver#DEFAULT} is a reusable variable resolver with default support for the following variables:
+	</p>
+	<ul>
+		<li><c>$S{key[,default]}</c> - {@link oaj.svl.vars.SystemPropertiesVar}
+		<li><c>$E{key[,default]}</c> - {@link oaj.svl.vars.EnvVariablesVar}
+		<li><c>$A{key[,default]}</c> - {@link oaj.svl.vars.ArgsVar}
+		<li><c>$MF{key[,default]}</c> - {@link oaj.svl.vars.ManifestFileVar}
+		<li><c>$SW{stringArg,pattern:thenValue[,pattern:thenValue...]}</c> - {@link oaj.svl.vars.SwitchVar}
+		<li><c>$IF{arg,then[,else]}</c> - {@link oaj.svl.vars.IfVar}
+		<li><c>$CO{arg[,arg2...]}</c> - {@link oaj.svl.vars.CoalesceVar}
+		<li><c>$PM{arg,pattern}</c> - {@link oaj.svl.vars.PatternMatchVar}
+		<li><c>$PR{stringArg,pattern,replace}</c>- {@link oaj.svl.vars.PatternReplaceVar}
+		<li><c>$PE{arg,pattern,groupIndex}</c> - {@link oaj.svl.vars.PatternExtractVar}
+		<li><c>$UC{arg}</c> - {@link oaj.svl.vars.UpperCaseVar}
+		<li><c>$LC{arg}</c> - {@link oaj.svl.vars.LowerCaseVar}
+		<li><c>$NE{arg}</c> - {@link oaj.svl.vars.NotEmptyVar}
+		<li><c>$LN{arg[,delimiter]}</c> - {@link oaj.svl.vars.LenVar}
+		<li><c>$ST{arg,start[,end]}</c> - {@link oaj.svl.vars.SubstringVar}
+	</ul>
+</div>

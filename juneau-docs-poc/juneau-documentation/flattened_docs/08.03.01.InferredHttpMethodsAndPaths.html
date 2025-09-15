@@ -1,0 +1,76 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Inferred HTTP Methods and Paths', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		When the <c>name</c> and/or <c>path</c> values are not specified, their values are inferred
+		from the Java method name. 
+	</p>
+	<p>
+		The HTTP method can be inferred from the Java method by starting the method name with any of the following:
+	</p>
+	<ul>
+		<li><c>get</c>
+		<li><c>put</c>
+		<li><c>post</c>
+		<li><c>delete</c>
+		<li><c>options</c>
+		<li><c>head</c>
+		<li><c>trace</c>
+		<li><c>patch</c>
+	</ul>
+	<p>
+		If <c>path</c> is not defined, it's inferred from the Java method name (minus the prefix above).
+	</p>
+	
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+		|	<jc>// Method="GET", path="/foo"</jc>
+		|	<ja>@RestOp</ja>
+		|	<jk>public</jk> String getFoo() {...}
+	</p>
+	<p class='bjava'>
+		|	<jc>// Method="DELETE", path="/foo"</jc>
+		|	<ja>@RestOp</ja>
+		|	<jk>public</jk> String deleteFoo() {...}
+	</p>
+	<p class='bjava'>
+		|	<jc>// Method="GET", path="/foo"</jc>
+		|	<jc>// "GET" is default</jc>
+		|	<ja>@RestOp</ja>
+		|	<jk>public</jk> String foo() {...}
+	</p>
+	<p class='bjava'>
+		|	<jc>// Method="GET", path="/"</jc>
+		|	<ja>@RestOp</ja>(path=<js>"/"</js>)
+		|	<jk>public</jk> String foo() {...}
+	</p>
+	<p class='bjava'>
+		|	<jc>// Method="GET", path="/"</jc>
+		|	<ja>@RestOp</ja>
+		|	<jk>public</jk> String get() {...}
+	</p>
+	<p class='bjava'>
+		|	<jc>// Method="POST", path="/"</jc>
+		|	<ja>@RestOp</ja>
+		|	<jk>public</jk> String post() {...}
+	</p>
+	
+	<p>
+		If <c>name</c> and <c>path</c> are both specified, the Java method name can be anything.
+	</p>
+</div>

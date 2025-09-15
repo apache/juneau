@@ -1,0 +1,86 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Non-Tree Models and Recursion Detection', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The Juneau Serializer API is designed to be used against POJO tree structures. 
+		It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
+		If you try to serialize models with loops, you will usually cause a <c>StackOverflowError</c> to 
+		be thrown (if {@link oaj.BeanTraverseContext.Builder#maxDepth(int)} is not reached 
+		first).
+	</p>
+	<p>
+		If you still want to use the Juneau serializers on such models, Juneau provides the 
+		{@link oaj.BeanTraverseContext.Builder#detectRecursions()} setting.
+		It tells the serializer to look for instances of an object in the current branch of the tree and skip 
+		serialization when a duplicate is encountered.
+	</p>
+	<p>
+		For example, let's make a POJO model out of the following classes:
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> A {
+		|		<jk>public</jk> B <jf>b</jf>;
+		|	}
+		|	
+		|	<jk>public class</jk> B {
+		|		<jk>public</jk> C <jf>c</jf>;
+		|	}
+		|	
+		|	<jk>public class</jk> C {
+		|		<jk>public</jk> A <jf>a</jf>;
+		|	}
+	</p>
+	<p>
+		Now we create a model with a loop and serialize the results.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
+		|	WriterSerializer <jv>serializer</jv> = Json5Serializer
+		|		.<jsf>DEFAULT_READABLE</jsf>
+		|		.copy()
+		|		.detectRecursions()
+		|		.build();
+		|
+		|	<jc>// Create a recursive loop.</jc>
+		|	A <jv>a</jv> = <jk>new</jk> A();
+		|	<jv>a</jv>.<jf>b</jf> = <jk>new</jk> B();
+		|	<jv>a</jv>.<jf>b</jf>.<jf>c</jf> = <jk>new</jk> C();
+		|	<jv>a</jv>.<jf>b</jf>.<jf>c</jf>.<jf>a</jf> = <jv>a</jv>;
+		|	
+		|	<jc>// Serialize to JSON.</jc>
+		|	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>a</jv>);
+	</p>
+	<p>
+		What we end up with is the following, which does not serialize the contents of the <c>c</c> field:
+	</p>
+	<p class='bjson'>
+		|	{
+		|		<jok>b</jok>: {
+		|			<jok>c</jok>: {
+		|			}
+		|		}
+		|	}
+	</p>
+	<p>
+		Without recursion detection enabled, this would cause a stack-overflow error.
+	</p>
+	<p>
+		Recursion detection introduces a performance penalty of around 20%.
+		For this reason the setting is disabled by default.
+	</p>
+</div>

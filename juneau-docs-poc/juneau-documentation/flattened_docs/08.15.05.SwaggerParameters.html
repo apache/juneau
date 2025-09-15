@@ -1,0 +1,156 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Parameters', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		Expanding operations shows you a list of parameters:
+	</p>
+	<img class='bordered w900' src='doc-files/jrs.Swagger.Operations.2.png'> 
+	<p>
+		Parameter information can be defined in a couple of ways.  The typical way is through annotations on parameters
+		being passed to your <ja>@RestOp</ja>-annotated method, like so:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>
+		|	<jk>public</jk> Collection&lt;Pet&gt; getPets(
+		|			<ja>@Query</ja>(
+		|				name=<js>"s"</js>,
+		|				schema=<ja>@Schema</ja>(	
+		|					description={
+		|						<js>"Search."</js>,
+		|						<js>"Key/value pairs representing column names and search tokens."</js>,
+		|						<js>"'*' and '?' can be used as meta-characters in string fields."</js>,
+		|						<js>"'&gt;', '&gt;=', '&lt;', and '&lt;=' can be used as limits on numeric and date fields."</js>,
+		|						<js>"Date fields can be matched with partial dates (e.g. '2018' to match any date in the year 2018)."</js>
+		|					},
+		|					type=<js>"array"</js>,
+		|					collectionFormat=<js>"csv"</js>
+		|				)	
+		|			) 
+		|			String[] <jv>s</jv>,
+		|			<ja>@Query</ja>(
+		|				name=<js>"v"</js>,
+		|				schema=<ja>@Schema</ja>(
+		|					description={
+		|						<js>"View."</js>,
+		|						<js>"Column names to display."</js>
+		|					},
+		|					type=<js>"array"</js>,
+		|					collectionFormat=<js>"csv"</js>
+		|				)
+		|			) 
+		|			String[] <jv>v</jv>,
+		|			...
+		|		) <jk>throws</jk> NotAcceptable {
+		|		...
+		|	}
+	</p>
+	<ul class='notes'>
+		<li class='note'>The {@link oaj.annotation.Schema @Schema} annotation can also be attached
+			directly to the parameter or parameter type as well.</li>
+		<li class='note'>The {@link oaj.annotation.Schema#type() type} and {@link oaj.annotation.Schema#collectionFormat() collectionFormat} values above are optional and auto-detected based on the
+			parameter class type if omitted.  They're included here for clarity.
+			The examples will be explained in the next section.</li>
+	</ul>
+	<p>
+		Another option is to specify your parameter information in the <c>parameters</c> annotation as free-form JSON 5.
+		In the case of the <c>PetStoreResource.getPets()</c> method, we pull this information from a static field
+		defined in the {@link oajr.converter.Queryable} class:
+	</p>
+	<h5 class='figure'>PetStoreResource.getPets()</h5>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(
+		|		path=<js>"/pet"</js>,
+		|		summary=<js>"All pets in the store"</js>,
+		|		swagger=<ja>@OpSwagger</ja>(
+		|			tags=<js>"pet"</js>,
+		|			parameters={
+		|				Queryable.<jsf>SWAGGER_PARAMS</jsf>
+		|			}
+		|		),
+		|		...
+		|		converters={Queryable.<jk>class</jk>}
+		|	)
+		|	<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable {
+		|		<jk>return</jk> <jf>store</jf>.getPets();
+		|	}
+	</p>
+	<h5 class='figure'>Queryable</h5>
+	<p class='bjava'>
+		|	<jk>public class</jk> Queryable <jk>implements</jk> RestConverter {
+		|	
+		|		<jk>public static final</jk> String <jsf>SWAGGER_PARAMS</jsf>=<js>""</js>
+		|			+ <js>"{"</js>
+		|				+ <js>"in:'query',"</js>
+		|				+ <js>"name:'s',"</js>
+		|				+ <js>"description:'"</js>
+		|					+ <js>"Search.\n"</js>
+		|					+ <js>"Key/value pairs representing column names and search tokens.\n"</js>
+		|					+ <js>"\\'*\\' and \\'?\\' can be used as meta-characters in string fields.\n"</js>
+		|					+ <js>"\\'&gt;\\', \\'&gt;=\\', \\'&lt;\\', and \\'&lt;=\\' can be used as limits on numeric and date fields.\n"</js>
+		|					+ <js>"Date fields can be matched with partial dates (e.g. \\'2018\\' to match any date in the year 2018)."</js>
+		|				+ <js>"',"</js>
+		|				+ <js>"type:'array',"</js>
+		|				+ <js>"collectionFormat:'csv',"</js>
+		|				+ <js>"x-examples:{example:'?s=Bill*,birthDate&gt;2000'}"</js>
+		|			+ <js>"},"</js>
+		|			+ <js>"{"</js>
+		|				+ <js>"in:'query',"</js>
+		|				+ <js>"name:'v',"</js>
+		|				+ <js>"description:'"</js>
+		|					+ <js>"View.\n"</js>
+		|					+ <js>"Column names to display."</js>
+		|				+ <js>"',"</js>
+		|				+ <js>"type:'array',"</js>
+		|				+ <js>"collectionFormat:'csv',"</js>
+		|				+ <js>"x-examples:{example:'?v=name,birthDate'}"</js>
+		|			+ <js>"},"</js>
+		|			...
+		|		;
+		|	}
+	</p>
+	<p>
+		This information could have also been defined in the Swagger JSON for the resource as well.
+	</p>
+	<p>
+		The parameter section contains information about the request body as well for PUT and POST methods, as shown here:
+	</p>
+	<img class='bordered w900' src='doc-files/jrs.Swagger.Parameters.2.png'> 
+	<p>
+		The definition of this method is shown here:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestPost</ja>(
+		|		summary=<js>"Add a new pet to the store"</js>,
+		|		swagger=<ja>@OpSwagger</ja>(
+		|			tags=<js>"pet"</js>
+		|		)
+		|	)
+		|	<jk>public</jk> Ok postPet(
+		|			<ja>@Content</ja> 
+		|			<ja>@Schema</ja>(description=<js>"Pet object to add to the store"</js>) 
+		|			PetCreate <jv>pet</jv>
+		|		) <jk>throws</jk> IdConflict, NotAcceptable, UnsupportedMediaType {
+		|
+		|		<jf>store</jf>.create(<jv>pet</jv>);
+		|		<jk>return</jk> <jsf>OK</jsf>;
+		|	}
+	</p>
+	<p>
+		Note that the schema information on the body parameter is automatically detected if not provided.
+	</p>
+</div>

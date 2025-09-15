@@ -1,0 +1,124 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'HTML5'}
+
+<div class='topic'>
+	<p>
+		The Juneau HTML5 DTOs are simply beans with fluent-style setters that allow you to quickly construct HTML
+		fragments as Java objects.  These object can then be serialized to HTML using one of the existing HTML 
+		serializers, or to other languages such as JSON using the JSON serializers.
+	</p>
+	<p>
+		The {@link oaj.dto.html5.HtmlBuilder} class is a utility class with predefined static methods
+		that allow you to easily construct DTO instances in a minimal amount of code. 
+	</p>
+	<p>
+		The following examples show how to create common HTML DOM objects.
+	</p>
+	<table class='styled w800'>
+		<tr>
+			<th>Java code</th>
+			<th>HTML</th>
+		</tr>
+		<tr>
+			<td class='code'>
+		<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+		
+		Object <jv>mytable</jv> = 	
+			<jsm>table</jsm>(
+				<jsm>tr</jsm>(
+					<jsm>th</jsm>(<js>"c1"</js>),
+					<jsm>th</jsm>(<js>"c2"</js>)
+				),
+				<jsm>tr</jsm>(
+					<jsm>td</jsm>(<js>"v1"</js>),
+					<jsm>td</jsm>(<js>"v2"</js>)
+				)
+			);
+	
+		String <jv>html</jv> = Html.<jsm>of</jsm>(<jv>mytablE</jv>);
+			</td>
+			<td class='code'><xt>
+		&lt;table&gt;
+			&lt;tr&gt;
+				&lt;th&gt;<xv>c1</xv>&lt;/th&gt;
+				&lt;th&gt;<xv>c2</xv>&lt;/th&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+				&lt;td&gt;<xv>v1</xv>&lt;/td&gt;
+				&lt;td&gt;<xv>v2</xv>&lt;/td&gt;
+			&lt;/tr&gt;
+		&lt;/table&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+		<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+			
+		Object <jv>mydiv</jv> = 	
+			<jsm>div</jsm>().align(<js>"center"</js>).onmouseover(<js>"alert(\"boo!\");"</js>)
+			.children(
+				<jsm>p</jsm>(<js>"Juneau supports "</js>, <jsm>b</jsm>(<jsm>i</jsm>(<js>"mixed"</js>)), <js>" content!"</js>)
+			);
+	
+		String <jv>html</jv> = Html.<jsm>of</jsm>(<jv>mydiv</jv>);
+			</td>
+			<td class='code'><xt>
+		&lt;div <xa>align</xa>=<xs>'center'</xs> <xa>onmouseover</xa>=<xs>'alert("boo!");'</xs>&gt;
+			&lt;p&gt;<xv>Juneau supports </xv>&lt;b&gt;&lt;i&gt;<xv>mixed</xv>&lt;/i&gt;&lt;/b&gt; <xv>content!</xv>&lt;/p&gt;
+		&lt;/table&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+		<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+			
+		Object <jv>myform</jv> =
+			<jsm>form</jsm>().action(<js>"/submit"</js>).method(<js>"POST"</js>)
+			.children(
+				<js>"Position (1-10000): "</js>, <jsm>input</jsm>(<js>"number"</js>).name(<js>"pos"</js>).value(1), <jsm>br</jsm>(),
+				<js>"Limit (1-10000): "</js>, <jsm>input</jsm>(<js>"number"</js>).name(<js>"limit"</js>).value(100), <jsm>br</jsm>(),
+				<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>),
+				<jsm>button</jsm>(<js>"reset"</js>, <js>"Reset"</js>)
+			); 	
+	
+		String <jv>html</jv> = Html.<jsm>of</jsm>(<jv>myform</jv>);
+			</td>
+			<td class='code'><xt>
+			&lt;form <xa>action</xa>=<xs>'/submit'</xs> <xa>method</xa>=<xs>'POST'</xs>&gt;
+				<xv>Position (1-10000):</xv> &lt;input <xa>name</xa>=<xs>'pos'</xs> <xa>type</xa>=<xs>'number'</xs> 
+					<xa>value</xa>=<xs>'1'</xs>/&gt;&lt;br/&gt;
+				<xv>Limit (1-10000):</xv> &lt;input <xa>name</xa>=<xs>'pos'</xs> <xa>type</xa>=<xs>'number'</xs> 
+					<xa>value</xa>=<xs>'100'</xs>/&gt;&lt;br/&gt;
+				&lt;button <xa>type</xa>=<xs>'submit'</xs>&gt;<xv>Submit</xv>&lt;/button&gt;
+				&lt;button <xa>type</xa>=<xs>'reset'</xs>&gt;<xv>Reset</xv>&lt;/button&gt;			 
+			&lt;/form&gt;
+			</xt></td>
+		</tr>
+	</table>
+	<p>
+		Using the HTML5 DTOs, you should be able to construct any valid HTML5 from full document bodies
+		to any possible fragments.
+	</p>
+	<p>
+		The {@link oaj.html.HtmlParser} class can be used convert these HTML documents back
+		into POJOs.
+	</p>
+	<p>
+		Other serializers and parsers (e.g. {@link oaj.json.JsonSerializer}) can be used to 
+		represent these POJOs in languages other than HTML.
+	</p>
+</div>

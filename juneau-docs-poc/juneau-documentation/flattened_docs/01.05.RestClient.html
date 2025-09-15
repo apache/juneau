@@ -1,0 +1,94 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'REST Client', created:'9.0.0'} 
+
+<div class='topic'>
+	<p>
+		Built upon the feature-rich Apache HttpClient library, the Juneau RestClient API adds support for fluent-style
+		REST calls and the ability to perform marshalling of POJOs to and from HTTP parts.
+	</p>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
+		|	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
+		|		.json5()
+		|		.build()
+		|		.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.assertStatus().asCode().is(200)
+		|		.assertHeader(<js>"Content-Type"</js>).matchesSimple(<js>"application/json*"</js>)
+		|		.getContent().as(MyBean.<jk>class</jk>);
+	</p>
+</div>
+
+<h5 class='topic'>REST Testing Framework</h5>
+<div class='topic'>
+	<p>
+		The {@link oajr.mock.MockRestClient} class is used for performing serverless unit testing of {@link oajr.annotation.Rest @Rest}-annotated
+		and {@link oaj.http.remote.Remote @Remote}-annotated classes.  It perform full serialization and parsing of the HTTP request and responses, 
+		but bypasses the network layer to significantly improve speed while still performing real testing.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jk>public class</jk> MockTest {
+		|
+		|		<jc>// A simple bean with one field.</jc>
+		|		<jk>public static class</jk> MyBean {
+		|			<jk>public int</jk> <jf>foo</jf> = 1;
+		|		}
+		|
+		|		<jc>// Our REST resource to test.</jc>
+		|		<jc>// Simply echos the response.</jc>
+		|		<ja>@Rest</ja>
+		|		<jk>public static class</jk> EchoRest <jk>extends</jk> BasicRestServlet {
+		|
+		|			<ja>@RestPut</ja>
+		|			<jk>public</jk> MyBean echo(<ja>@Content</ja> MyBean <jv>bean</jv>) {
+		|				<jk>return</jk> <jv>bean</jv>;
+		|			}
+		|		}
+		|
+		|		<jc>// Our JUnit test.</jc>
+		|		<ja>@Test</ja>
+		|		<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
+		|
+		|			MyBean <jv>myBean</jv> = <jk>new</jk> MyBean();
+		|
+		|			<jc>// Do a round-trip on the bean through the REST interface</jc>
+		|			<jv>myBean</jv> = MockRestClient
+		|				.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
+		|				.json5()
+		|				.build()
+		|				.put(<js>"/echo"</js>, <jv>myBean</jv>)
+		|				.run()
+		|				.assertStatus().is(200)
+		|				.assertContent().is(<js>"{foo:1}"</js>)
+		|				.getContent().as(MyBean.<jk>class</jk>);
+		|
+		|			<jsm>assertEquals</jsm>(1, <jv>myBean</jv>.<jf>foo</jf>);
+		|		}
+		|	}
+	</p>
+</div>
+
+
+<h5 class='topic'>Additional Information</h5>
+<div class='topic'>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#juneau-rest-client">juneau-rest-client</a> for more information.
+	</ul>
+</div>

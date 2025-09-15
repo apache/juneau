@@ -1,0 +1,43 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'System properties', created:'8.0.0'}
+
+<div class='topic'>
+	<p>
+		As a convenience, the <c>SystemProperties</c> section of your configuration file can be used to define system
+		properties to set during initialization of your microservice:
+	</p>
+	<p class='bini'>
+		|	<cc>#=======================================================================================================================
+		|	# System properties
+		|	#-----------------------------------------------------------------------------------------------------------------------
+		|	# These are arbitrary system properties that are set during startup.
+		|	#=======================================================================================================================</cc>
+		|	<cs>[SystemProperties]</cs>
+		|	
+		|	<cc># Configure Jetty for StdErrLog Logging
+		|	# org.eclipse.jetty.util.log.class = org.eclipse.jetty.util.log.StrErrLog</cc>
+		|	
+		|	<cc># Configure Jetty to log using java-util logging</cc>
+		|	<ck>org.eclipse.jetty.util.log.class</ck> = <cv>org.apache.juneau.microservice.jetty.JettyLogger</cv>
+		|	
+		|	<cc># Jetty logging level
+		|	# Possible values:  ALL, DEBUG, INFO, WARN, OFF</cc>
+		|	<ck>org.eclipse.jetty.LEVEL</ck> = <cv>WARN</cv>
+		|	
+		|	<ck>derby.stream.error.file</ck> = <cv>$C{Logging/logDir}/derby-errors.log</cv>
+	</p>
+</div>

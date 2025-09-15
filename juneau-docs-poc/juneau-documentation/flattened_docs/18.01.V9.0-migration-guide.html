@@ -1,0 +1,96 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'v9.0 Migration Guide'}
+
+<div class='topic'>
+	<p>
+		The following guide can be used to help migrate your code to v9.0.  Note that you can also refer to the <a href='#9.0.0'>Release Notes</a> for
+		changes as well.
+	</p>
+	<table class='styled w900'>
+		<tr>
+			<th>
+				Old
+			</th>
+			<th>
+				New
+			</th>
+		</tr>
+		<tr>
+			<td>
+				<ja>@RestMethod</ja> annotation.
+			</td>
+			<td>
+				Has been replaced with {@link oajr.annotation.RestOp}, {@link oajr.annotation.RestGet}, {@link oajr.annotation.RestPut}, {@link oajr.annotation.RestPost}, {@link oajr.annotation.RestDelete}, {@link oajr.annotation.RestOptions}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<ja>@RemoteMethod</ja> annotation.
+			</td>
+			<td>
+				Has been replaced with {@link oaj.http.remote.RemoteOp}, {@link oaj.http.remote.RemoteGet}, {@link oaj.http.remote.RemotePut}, {@link oaj.http.remote.RemotePost}, {@link oaj.http.remote.RemoteDelete}.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<c>BasicRestServletJena</c>, <c>BasicRestServletJenaGroup</c> classes.
+			</td>
+			<td>
+				These have been removed in 9.0 due to the removal of the Jena packages (due to security issues).  Replace
+				with {@link oajr.servlet.BasicRestServlet} and {@link oajr.servlet.BasicRestServletGroup}.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<ja>@Body</ja> annotation.
+			</td>
+			<td>
+				Has been renamed to <ja>@Content</ja> (to better match HTTP naming conventions such as Content-Type/Content-Encoding headers).
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<c><ja>@Query</ja>(_default)</c>, <c><ja>@FormData</ja>(_default)</c>.
+			</td>
+			<td>
+				Has been renamed to {@link oaj.http.annotation.Query#def} / {@link oaj.http.annotation.FormData#def}.  Note however that <ja>@RestOp</ja>-annotated parameters
+				now also support use of Optional parameters which simplifies the coding of default values.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<c><ja>@Rest</ja>(reqHeaders)</c>.
+			</td>
+			<td>
+				Has been renamed to {@link oajr.annotation.Rest#defaultRequestHeaders} and added {@link oajr.annotation.Rest#defaultResponseHeaders}.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<ja>@Rest(staticFiles)</ja>.
+			</td>
+			<td>
+				Changed from a string array to a <c>Class&lt;? <jk>extends</jk> StaticFiles&gt;</c>.  If you're extending from 
+				{@link oajr.servlet.BasicRestServlet}/{@link oajr.servlet.BasicRestObject}, the {@link oajr.servlet.BasicRestOperations#getHtdoc(String,Locale)}
+				is already implemented for you to provide static files under the sub-URI <js>/htdocs/*</js>.  The default implementation for finding
+				static files is {@link oajr.staticfile.BasicStaticFiles} which provides basic out-of-the-box functionality, so you can usually
+				just remove the previous <c><ja>@Rest</ja>(staticFiles)</c> value.
+			</td>
+		</tr>
+	</table>
+	
+</div>

@@ -1,0 +1,42 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Overloading HTTP Methods'}
+
+<div class='topic'>
+	<p>
+		Through the use of the built-in <l>"method"</l> GET parameter, you can implement requests beyond the basic 
+		REST http method types.
+	</p>
+	<p>
+		For example, the URL <l>"/sample/foo?method=BAR"</l> will cause the following method to be invoked...
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestOp</ja>(method=<js>"BAR"</js>)
+		|	<jk>public void</jk> doBar(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
+		|		<jc>// Handle BAR requests</jc>
+		|	}
+	</p>
+	<p>
+		To support overloaded methods, the {@link oajr.annotation.Rest#allowedMethodParams() @Rest(allowedMethodParams)} 
+		setting must be enabled on your servlet.
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		<jc>// Allow &amp;method parameter on BAR requests</jc>
+		|		allowedMethodParams=<js>"BAR"</js>
+		|	)
+	</p>
+</div>

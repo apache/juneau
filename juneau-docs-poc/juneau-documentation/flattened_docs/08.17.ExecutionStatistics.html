@@ -1,0 +1,60 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'REST method execution statistics', created:'8.1.3', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		{@link oajr.annotation.Rest}-annotated classes get automated timing and error statistic information for all <ja>@RestOp</ja>
+		and lifecycle-event annotated methods on the class.
+	</p>
+	<p>
+		If you extend from {@link oajr.servlet.BasicRestServlet} or {@link oajr.servlet.BasicRestObject}, then
+		the statics are made available through the REST interface via the following method:
+	</p>
+	<p class='bjava'>
+	<ja>@RestGet</ja>(
+		path=<js>"/stats"</js>,
+		summary=<js>"Timing statistics"</js>,
+		description=<js>"Timing statistics for method invocations on this resource."</js>
+	)
+	<ja>@Override</ja> <jc>/* BasicRestOperations */</jc>
+	<jk>public</jk> RestContextStats getStats(RestRequest <jv>req</jv>) {
+		<jk>return</jk> <jv>req</jv>.getContext().getStats();
+	}
+	</p>
+	<p>
+		Rendered in a browser, it looks like this:
+	</p>
+	<img class='bordered w900' src='doc-files/jrs.ExecutionStatistics.1.png'>
+	<p>
+		The default REST configuration provides a link to the stats in the navlinks section of the page:
+	</p>
+	<img class='bordered w900' src='doc-files/jrs.ExecutionStatistics.2.png'>
+	<p>
+		The exception hash shown is the same hash that is shown in the log file and provides a quick way of locating
+		the exception in the logs.
+	</p>
+	<p>
+		Programmatic access to the statistics are provided via the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oajr.RestContext}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oajr.RestContext#getStats() getStats()}</li>
+			</ul>
+		</li>
+	</ul>
+</div>

@@ -1,0 +1,105 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Models', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()} setting can be used to reduce the size of your
+		generated Swagger JSON files by creating model definitions for beans and referencing those definitions through <c>$ref</c> attributes.
+	</p>
+	<p>
+		This setting is disabled by default but can be set on the {@link oajr.RestContext.Builder} object:
+	</p>
+	<p class='bjava'>
+		|	<ja>@HookEvent</ja>(<jsf>INIT</jsf>)
+		|	<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) {
+		|		<jv>builder</jv>.jsonSchemaGenerator().useBeanDefs();
+		|	}
+	</p>
+	<p>
+		In the Swagger UI, this causes bean definitions to show up in the Models section at the bottom of the page:
+	</p>
+	<h5 class='figure'>Models section</h5>
+	<img class='bordered w900' src='doc-files/jrs.Swagger.Models.1.png'> 
+	<h5 class='figure'>Models section with Order bean expanded</h5>
+	<img class='bordered w900' src='doc-files/jrs.Swagger.Models.2.png'> 
+	<p>
+		In the generated Swagger JSON, embedded schema information for beans will be replaced with references such as the one shown below for the <c>Order</c> bean:
+	</p>
+	<p class='bjson'>
+		|	{
+		|		<jok>"swagger"</jok>: <jov>"2.0"</jov>,
+		|		<jok>"paths"</jok>: {
+		|			<jok>"/store/order"</jok>: {
+		|				<jok>"get"</jok>: {
+		|					<jok>"operationId"</jok>: <jov>"getOrders"</jov>,
+		|					<jok>"summary"</jok>: <jov>"Petstore orders"</jov>,
+		|					<jok>"responses"</jok>: {
+		|						<jok>"200"</jok>: {
+		|							<jok>"description"</jok>: <jov>"OK"</jov>,
+		|							<jok>"schema"</jok>: {
+		|								<jok>"description"</jok>: <jov>"java.util.Collection&lt;org.apache.juneau.examples.rest.petstore.Order&gt;"</jov>,
+		|								<jok>"type"</jok>: <jov>"array"</jov>,
+		|								<jok>"items"</jok>: {
+		|									<jok>"$ref"</jok>: <jov>"#/definitions/Order"</jov>
+		|								}
+		|							},
+		|							...
+		|						...
+		|					...
+		|				...
+		|			...
+		|		},
+		|		<jok>"definitions"</jok>: {
+		|			<jok>"Order"</jok>: {
+		|				<jok>"type"</jok>: <jov>"object"</jov>,
+		|				<jok>"properties"</jok>: {
+		|					<jok>"id"</jok>: {
+		|						<jok>"type"</jok>: <jov>"integer"</jov>,
+		|						<jok>"format"</jok>: <jov>"int64"</jov>
+		|					},
+		|					<jok>"petId": {
+		|						<jok>"type"</jok>: <jov>"integer"</jov>,
+		|						<jok>"format"</jok>: <jov>"int64"</jov>
+		|					},
+		|					<jok>"shipDate"</jok>: {
+		|						<jok>"type"</jok>: <jov>"string"</jov>
+		|					},
+		|					<jok>"status"</jok>: {
+		|						<jok>"type"</jok>: <jov>"string"</jov>,
+		|						<jok>"enum"</jok>: [
+		|							<jov>"PLACED"</jov>,
+		|							<jov>"APPROVED"</jov>,
+		|							<jov>"DELIVERED"</jov>
+		|						]
+		|					}
+		|				},
+		|				<jok>"description"</jok>: <jov>"org.apache.juneau.examples.rest.petstore.Order"</jov>,
+		|				<jok>"example"</jok>: {
+		|					<jok>"id"</jok>: <jov>123</jov>,
+		|					<jok>"petId"</jok>: <jov>456</jov>,
+		|					<jok>"shipDate"</jok>: <jov>"2012-12-21"</jov>,
+		|					<jok>"status"</jok>: <jov>"APPROVED"</jov>
+		|				}
+		|			},
+		|		...
+		|	}
+	</p>
+	<p>
+		Note that this does not affect how the information is rendered for that bean in the Swagger UI:
+	</p>
+	<img class='bordered w900' src='doc-files/jrs.Swagger.Models.3.png'> 
+</div>

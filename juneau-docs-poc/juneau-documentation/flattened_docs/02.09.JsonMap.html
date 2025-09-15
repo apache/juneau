@@ -1,0 +1,124 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'JsonMap and JsonList', updated:'8.2.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.collections.JsonMap} and {@link oaj.collections.JsonList} classes are generic Java 
+		representations of JSON objects and arrays.  
+		These classes can be used to create "unstructured" models for serialization (as opposed to "structured" 
+		models consisting of beans).  
+		If you want to quickly generate JSON/XML/HTML from generic maps/collections, or parse JSON/XML/HTML into 
+		generic maps/collections, these classes work well.  
+	</p>
+	<p>
+		These classes extend directly from the following JCF classes:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'> 
+			{@link java.util.LinkedHashMap java.util.LinkedHashMap}
+			<ul>
+				<li class='jc'> 
+				{@link oaj.collections.JsonMap org.apache.juneau.collections.JsonMap}</li>
+			</ul>
+		</li>
+		<li class='jc'> 
+			{@link java.util.LinkedList java.util.LinkedList}
+			<ul>
+				<li class='jc'> 
+					{@link oaj.collections.JsonList org.apache.juneau.collections.JsonList}</li>
+			</ul>
+		</li>
+	</ul>
+	<p>
+		The <l>JsonMap</l> and <l>JsonList</l> classes are very similar to the <l>JSONObject</l> and 
+		<l>JSONArray</l> classes found in other libraries.  
+		However, the names were chosen because the concepts of <l>Maps</l> and <l>Lists</l> are already familiar to 
+		Java programmers, and these classes can be used with any of the serializers or parsers.
+	</p>
+	<p>
+		These object can be serialized in one of two ways:
+	</p>
+	<ol class='spaced-list'>
+		<li>
+			Using the provided {@link oaj.collections.JsonMap#writeTo(java.io.Writer)} or 
+			{@link oaj.collections.JsonList#writeTo(java.io.Writer)} methods.</li>
+		<li>
+			Passing them to one of the {@link oaj.serializer.Serializer} serialize methods.</li>
+		<li>
+			Simply calling the {@link oaj.collections.JsonMap#asJson()}/{@link oaj.collections.JsonMap#toString()} or {@link oaj.collections.JsonList#asString()}/{@link oaj.collections.JsonList#toString()}
+			methods which will serialize it as Simplified JSON.</li>
+	</ol>
+	<p>
+		Any valid JSON can be parsed into an unstructured model consisting of generic 
+		{@link oaj.collections.JsonMap} and {@link oaj.collections.JsonList} objects. 
+		
+		(Any valid XML can also be parsed into an unstructured model)
+	</p>
+	<p class='bjava'>
+		|	<jc>// Parse an arbitrary JSON document into an unstructered data model
+		|	// consisting of JsonMaps, JsonLists, and java primitive objects.</jc>
+		|	String <jv>json</jv> = <js>"{a:{name:'John Smith',age:21},b:{name:'Joe Smith',age:42}}"</js>;
+		|	JsonMap <jv>map</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, JsonMap.<jk>class</jk>);
+		|
+		|	<jc>// Use JsonMap API to extract data from the unstructured model.</jc>
+		|	<jk>int</jk> <jv>johnSmithAge</jv> = <jv>map</jv>.getMap(<js>"a"</js>).getInt(<js>"age"</js>);
+		|	
+		|	<jc>// Convert it back into JSON.</jc>
+		|	<jv>json</jv> = Json.<jsm>of</jsm>(<jv>map</jv>);
+		|	
+		|	<jc>// Or convert it to XML.</jc>
+		|	String <jv>xml</jv> = Xml.<jsm>of</jsm>(<jv>map</jv>);
+		|
+		|	<jc>// Or just use toString() or asJson().</jc>
+		|	<jv>json</jv> = <jv>map</jv>.toString();
+		|	<jv>json</jv> = <jv>map</jv>.asJson();
+	</p>
+	<p>
+		The <c>JsonMap</c> and <c>JsonList</c> classes have many convenience features:
+	</p>
+	<p class='bjava'>	
+		|	<jc>// Convert the map to a bean.</jc>		
+		|	MyBean <jv>myBean</jv> = <jv>map</jv>.cast(MyBean.<jk>class</jk>);
+		|			
+		|	<jc>// Find entries by multiple keys.</jc>
+		|	MyBean <jv>myBean</jv> = <jv>map</jv>.find(MyBean.<jk>class</jk>, <js>"key1"</js>, <js>"key2"</js>);
+		|	
+		|	<jc>// Fluent-style appenders.</jc>
+		|	<jv>map</jv>.append(<js>"key1"</js>, <js>"val1"</js>).append(<js>"key2"</js>, <js>"val2"</js>);
+		|			
+		|	<jc>// REST-like functions for manipulating nodes in the data structure using URL-like notation.</jc>
+		|	<jv>map</jv>.getAt(<js>"foo/bar/myBean"</js>, MyBean.<jk>class</jk>);		
+		|	<jv>map</jv>.putAt(<js>"foo/bar/myBean"</js>, MyBean.<jk>class</jk>);		
+		|	<jv>map</jv>.postAt(<js>"foo/bar/myListOfBeans"</js>, MyBean.<jk>class</jk>);		
+		|	<jv>map</jv>.deleteAt(<js>"foo/bar/myBean"</js>);		
+		|	
+		|	<jc>// Copy with inclusion or exclusion.</jc>
+		|	JsonMap <jv>map2</jv> = <jv>map</jv>.include(<js>"key1"</js>, <js>"key2"</js>, <js>"key3"</js>);
+		|	JsonMap <jv>map3</jv> = <jv>map</jv>.exclude(<js>"key1"</js>, <js>"key2"</js>, <js>"key3"</js>);
+		|	
+		|	<jc>// Serialize using another serializer.</jc>
+		|	String <jv>xml</jv> = <jv>map</jv>.serializeTo(XmlSerializer.<jsf>DEFAULT</jsf>);
+		|	
+		|	<jc>// Nested maps.</jc>
+		|	<jv>map</jv>.inner(<jv>anotherMap</jv>);
+	</p>
+	
+	<div class='info'>
+		As a general rule, if you do not specify a target type during parsing, or if the target type cannot be 
+		determined through reflection, the parsers automatically generate <l>JsonMaps</l> and <l>JsonLists</l>.
+	</div>
+</div>

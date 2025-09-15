@@ -1,0 +1,161 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@Bean Annotation', updated:'8.2.0,9.0.0'} 
+
+<div class='topic'>
+	<p>
+		The {@link oaj.annotation.Bean @Bean} annotation is used to tailor how beans are 
+		interpreted by the framework.
+	</p>
+	<p> 
+		Bean property inclusion and ordering on a bean class can be done using the 
+		{@link oaj.annotation.Bean#properties() @Bean(properties|p)} annotation.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Address class with only street/city/state properties (in that order).</jc>
+		|	<jc>// All other properties are ignored.</jc>
+		|	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
+		|	<jk>public class</jk> Address { ... }
+	</p>
+	<p> 
+		Bean properties can be excluded using the {@link oaj.annotation.Bean#excludeProperties() @Bean(excludeProperties|xp)}
+		annotation.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Address class with only street/city/state properties (in that order).</jc>
+		|	<jc>// All other properties are ignored.</jc>
+		|	<ja>@Bean</ja>(excludeProperties=<js>"city,state"</js>})
+		|	<jk>public class</jk> Address { ... }
+	</p>
+	<p>
+		Bean properties can be sorted alphabetically using {@link oaj.annotation.Bean#sort() @Bean(sort)}
+	</p>
+	<p class='bjava'>
+		|	<jc>// Address class with only street/city/state properties (in that order).</jc>
+		|	<jc>// All other properties are ignored.</jc>
+		|	<ja>@Bean</ja>(sort=<jk>true</jk>)
+		|	<jk>public class</jk> MyBean { ... }
+	</p>
+	<p>
+		The {@link oaj.annotation.Bean#propertyNamer() @Bean(propertyNamer)} annotation
+		is used to provide customized naming of properties.
+	</p>
+	<p>
+		Property namers are used to transform bean property names from standard form to some other form.
+		For example, the {@link oaj.PropertyNamerDLC} will convert property names to 
+		dashed-lowercase, and these will be used as attribute names in JSON and element names in XML.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Define a class with dashed-lowercase property names.</jc>
+		|	<ja>@Bean</ja>(propertyNamer=PropertyNamerDashedLC.<jk>class</jk>)
+		|	<jk>public class</jk> MyBean { ... }
+	</p>
+	<p>
+		The {@link oaj.annotation.Bean#interfaceClass @Bean(interfaceClass)} annotation is used
+		to limit properties on beans to specific interface classes.
+		When specified, only the list of properties defined on the interface class will be used during 
+		serialization.
+		Additional properties on subclasses will be ignored.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Parent class</jc>
+		|	<ja>@Bean</ja>(interfaceClass=A.<jk>class</jk>)
+		|	<jk>public abstract class</jk> A {
+		|		<jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
+		|	}
+		|	
+		|	<jc>// Child class</jc>
+		|	<jk>public class</jk> A1 <jk>extends</jk> A {
+		|		<jk>public</jk> String <jf>f1</jf> = <js>"f1"</js>;
+		|	}
+		|
+		|	A1 <jv>a1</jv> = <jk>new</jk> A1();
+		|	String <jv>result</jv> = Json5.<jsm>of</jsm>(<jv>a1</jv>);
+		|	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, <jv>result</jv>);  <jc>// Note f1 is not serialized.</jc> 
+	</p>
+	<p>
+		Note that this annotation can be used on the parent class so that it filters to all child classes.
+		Or can be set individually on the child classes.
+	</p>
+	<p>
+		The {@link oaj.annotation.Bean#stopClass @Bean(stopClass)} annotation is another
+		way to limit which properties are serialized (except from the opposite direction).
+		It's identical in purpose to the stop class specified by {@link java.beans.Introspector#getBeanInfo(Class, Class)}.
+		Any properties in the stop class or in its base classes will be ignored during analysis.
+	</p>
+	<p>
+		For example, in the following class hierarchy, instances of <c>C3</c> will include property 
+		<c>p3</c> but not <c>p1</c> or <c>p2</c>.
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> C1 {
+		|		<jk>public int</jk> getP1();
+		|	}
+		|
+		|	<jk>public class</jk> C2 <jk>extends</jk> C1 {
+		|		<jk>public int</jk> getP2();
+		|	}
+		|
+		|	<ja>@Bean</ja>(stopClass=C2.<jk>class</jk>)
+		|	<jk>public class</jk> C3 <jk>extends</jk> C2 {
+		|		<jk>public int</jk> getP3();
+		|	}
+	</p>
+	<p>
+		The {@link oaj.annotation.Bean#interceptor() @Bean(interceptor)} annotation
+		and {@link oaj.swap.BeanInterceptor} class can be used to perform interception
+		and inline handling of bean getter and setter calls.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Interceptor that strips out sensitive information on Address beans.</jc>
+		|	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
+		|	
+		|		<ja>@Override</ja>
+		|		<jk>public</jk> Object readProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
+		|			<jk>if</jk> (<js>"taxInfo"</js>.equals(<jv>name</jv>))
+		|				<jk>return</jk> <js>"redacted"</js>;
+		|			<jk>return</jk> <jv>value</jv>;
+		|		}
+		|
+		|		<ja>@Override</ja>
+		|		<jk>public</jk> Object writeProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
+		|			<jk>if</jk> (<js>"taxInfo"</js>.equals(<jv>name</jv>) &amp;&amp; <js>"redacted"</js>.equals(<jv>value</jv>))
+		|				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(<jv>bean</jv>.getStreet(), <jv>bean</jv>.getCity(), <jv>bean</jv>.getState());
+		|			<jk>return</jk> <jv>value</jv>;
+		|		}
+		|	}
+		| 
+		|	<jc>// Register interceptor on bean class.</jc>
+		|	<ja>@Bean</ja>(interceptor=AddressInterceptor.<jk>class</jk>)
+		|	<jk>public class</jk> Address {
+		|		<jk>public</jk> String getTaxInfo() {...}
+		|		<jk>public void</jk> setTaxInfo(String <jv>value</jv>) {...}
+		|	}
+	</p>
+	<p>
+		The {@link oaj.annotation.Bean#on() @Bean(on)} and {@link oaj.annotation.Bean#onClass() @Bean(onClass)}
+		annotations can be used to programmatically attach <ja>@Bean</ja> annotations to classes. 
+	</p>
+	<p class='bjava'>
+		|	<ja>@Bean</ja>(onClass=Address.<jk>class</jk>, sort=<jk>true</jk>, excludeProperties=<js>"city,state"</js>)
+		|	<jk>public class</jk> MyAnnotatedClass {...}
+		|
+		|	<jc>// Create a serializer configured using annotations.</jc>
+		|	JsonSerializer <jv>serializer</jv> = JsonSerializer
+		|		.<jsm>create</jsm>()
+		|		.applyAnnotations(MyAnnotatedClass.<jk>class</jk>)
+		|		.build();
+	</p>

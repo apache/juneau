@@ -1,0 +1,139 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'UI Customization', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The HTML views of POJOs can somewhat be considered a rudimentary User Interface.
+		In reality, a better term for them would be a Developer Interface as they're meant to be used 
+		primarily by developers and not end users.
+		Despite that distinction, it is possible to 'brand' the HTML page to whatever you desire.
+	</p>
+	<p>
+		The sample root page below includes some default branding for Juneau and Apache:
+	</p>
+	<p class='bcode'>
+		|	http://localhost:10000/helloWorld
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.UiCustomization.1.png'>
+	<p>
+		The Juneau REST framework does not provide specific branding support (i.e. there is no concept of a brand icon).
+		Instead, it just uses the existing open-ended API for defining branding via annotations on your REST classes.
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		<jc>// Optional external configuration file.</jc>
+		|		config=<js>"$S{juneau.configFile}"</js>,
+		|	)
+		|	<ja>@HtmlDocConfig</ja>(
+		|	
+		|		<jc>// Default stylesheet to use for the page.
+		|		// Can be overridden from external config file.
+		|		// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+		|		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+		|	
+		|		<jc>// Default page header contents.</jc>
+		|		header={
+		|			<js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;"</js>,  <jc>// Use @Rest(title)</jc>
+		|			<js>"&lt;h2&gt;$RS{operationSummary,description}&lt;/h2&gt;"</js>, <jc>// Use either @RestOp(summary) or @Rest(description)</jc>
+		|			<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
+		|		},
+		|	
+		|		<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
+		|		// Use it to add a favicon link to the page.</jc>
+		|		head={
+		|			<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
+		|		},
+		|	
+		|		<jc>// Basic page navigation links.</jc>
+		|		navlinks={
+		|			<js>"up: request:/.."</js>
+		|		},
+		|		
+		|		<jc>// No default page footer contents.
+		|		// Can be overridden from external config file.</jc>
+		|		footer=<js>"$C{REST/footer}"</js>
+		|	)
+		|	
+		|	<jk>public interface</jk> BasicUniversalConfig {}
+	</p>
+	<p class='bjava'>			
+		|	<ja>@Rest</ja>(...)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		widgets={
+		|			ContentTypeMenuItem.<jk>class</jk>,
+		|			ThemeMenuItem.<jk>class</jk>
+		|		},
+		|		navlinks={
+		|			<js>"options: ?method=OPTIONS"</js>,
+		|			<js>"$W{ContentTypeMenuItem}"</js>,
+		|			<js>"$W{ThemeMenuItem}"</js>,
+		|			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+		|		},
+		|		aside={
+		|			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+		|			<js>"	&lt;p&gt;This is an example of a 'router' page that serves as a jumping-off point to child resources.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Resources can be nested arbitrarily deep through router pages.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Note the &lt;span class='link'&gt;options&lt;/span&gt; link provided that lets you see the generated swagger doc for this page.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Also note the &lt;span class='link'&gt;sources&lt;/span&gt; link on these pages to view the source code for the page.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Other features (such as this aside) are added through annotations.&lt;/p&gt;"</js>,
+		|			<js>"&lt;/div&gt;"</js>
+		|		},
+		|		asideFloat=<js>"RIGHT"</js>
+		|	)
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {...}
+	</p>
+	
+	<p>
+		The default annotation values use {@link oaj.config.vars.ConfigVar $C} variables to pull in values from an optional
+		external configuration file such as the one shown below:
+	</p>
+	<p class='bini'>
+		|	<cc>#=======================================================================================================================
+		|	# REST settings
+		|	#=======================================================================================================================</cc>
+		|	<cs>[REST]</cs>
+		|	
+		|	<ck>staticFiles</ck> = <cv>htdocs:files/htdocs</cv>
+		|	
+		|	<cc># Stylesheet to use for HTML views.</cc>
+		|	<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
+		|	
+		|	<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
+		|	<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
+		|	<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
+		|	<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
+		|	
+		|	<ck>favicon</ck> = <cv>$C{REST/headerIcon}</cv>
+		|	<ck>header</ck> = 
+		|		<cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;</cv>
+		|			<cv>&lt;img src='$U{$C{REST/headerIcon}}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;</cv>
+		|		<cv>&lt;/a&gt;</cv>
+		|	<ck>footer</ck> = 
+		|		<cv>&lt;a href='$U{$C{REST/footerLink}}'&gt;</cv>
+		|			<cv>&lt;img src='$U{$C{REST/footerIcon}}' style='float:right;padding-right:20px;height:32px'/&gt;</cv>
+		|		<cv>&lt;/a&gt;</cv>
+	</p>
+	<p>
+		The take-away here is that the "User Interface" is open-ended, lets you define pretty much anything you want through arbitrary HTML, 
+		and allows you either hardcode your interface inside annotations or pull them in via string variables from other places such as
+		external config files.
+	</p>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jmj.UiCustomization">UI Customization</a>
+	</ul>
+</div>

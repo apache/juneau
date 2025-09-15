@@ -1,0 +1,130 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Utility Beans', created:'9.0.0'} 
+
+<div class='topic'>
+	<p>
+		The {@link oajr.beans} package contains a set of reusable utility beans meant to help with putting together
+		explorable REST interfaces.
+	</p>
+	<p>
+		The {@link oaj.examples.rest.UtilityBeansResource} class shows how these beans are used.
+		The resource class is hosted in the example REST applications rendered below:
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.UtilityBeans.png'>
+	
+	<h5 class='topic'>ResourceDescriptions</h5>
+	<p>
+		The {@link oaj.examples.rest.UtilityBeansResource#getChildDescriptions() getChildDescriptions()} method shows an example
+		of rendering a list of descriptive links for child endpoints.
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(<js>"/"</js>)
+		|	<jk>public</jk> ResourceDescriptions getChildDescriptions() {
+		|		<jk>return</jk> ResourceDescriptions
+		|			.<jsm>create</jsm>()
+		|			.append(<js>"BeanDescription"</js>, <js>"Example of BeanDescription bean"</js>)
+		|			.append(<js>"Hyperlink"</js>, <js>"Example of Hyperlink bean"</js>)
+		|			.append(<js>"SeeOtherRoot"</js>, <js>"Example of SeeOtherRoot bean"</js>);
+		|	}
+	</p>
+	
+	<h5 class='figure'>HTML representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.UtilityBeans.png'>
+	
+	<h5 class='figure'>JSON representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.UtilityBeans.json.png'>
+	
+	<h5 class='topic'>BeanDescription</h5>
+	<p>
+		The {@link oaj.examples.rest.UtilityBeansResource#aBeanDescription() aBeanDescription()} method shows an example
+		of rendering simple schema information about an arbitrary bean class.
+	</p>
+		
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(<js>"/BeanDescription"</js>)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		aside={
+		|			<js>"&lt;div class='text'&gt;"</js>,
+		|			<js>"	&lt;p&gt;Example of serialized org.apache.juneau.rest.utilitybeans.ResourceDescriptions bean.&lt;/p&gt;"</js>,
+		|			<js>"&lt;/div&gt;"</js>
+		|		}
+		|	)
+		|	<jk>public</jk> BeanDescription aBeanDescription() {
+		|		<jk>return</jk> BeanDescription.<jsm>of</jsm>(Address.<jk>class</jk>);
+		|	}
+	</p>
+	
+	<h5 class='figure'>HTML representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.UtilityBeans.BeanDescription.png'>
+	
+	<h5 class='figure'>JSON representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.UtilityBeans.BeanDescription.json.png'>
+	
+	<h5 class='topic'>Hyperlink</h5>
+	<p>
+		The {@link oaj.examples.rest.UtilityBeansResource#aHyperlink() aHyperlink()} method shows an example
+		of rendering a simple hyperlink.
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(<js>"/Hyperlink"</js>)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		aside={
+		|			<js>"&lt;div class='text'&gt;"</js>,
+		|			<js>"	&lt;p&gt;Example of serialized org.apache.juneau.rest.utilitybeans.Hyperlink bean.&lt;/p&gt;"</js>,
+		|			<js>"&lt;/div&gt;"</js>
+		|		}
+		|	)
+		|	<jk>public</jk> Hyperlink aHyperlink() {
+		|		<jk>return</jk> Hyperlink.<jsm>create</jsm>(<js>"/utilitybeans"</js>, <js>"Back to /utilitybeans"</js>);
+		|	}
+	</p>
+	
+	<h5 class='figure'>HTML representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.UtilityBeans.Hyperlink.png'>
+	
+	<h5 class='figure'>JSON representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.UtilityBeans.Hyperlink.json.png'>
+	
+	<h5 class='topic'>SeeOtherRoot</h5>
+	<p>
+		The {@link oaj.examples.rest.UtilityBeansResource#aSeeOtherRoot() aSeeOtherRoot()} method shows an example
+		of sending a <c>303 See Other</c> with a <c>Location</c> header pointing to the servlet root.
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(<js>"/SeeOtherRoot"</js>)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		aside={
+		|			<js>"&lt;div class='text'&gt;"</js>,
+		|			<js>"	&lt;p&gt;Example of serialized org.apache.juneau.rest.utilitybeans.SeeOtherRoot bean.&lt;/p&gt;"</js>,
+		|			<js>"&lt;/div&gt;"</js>
+		|		}
+		|	)
+		|	<jk>public</jk> SeeOtherRoot aSeeOtherRoot() {
+		|		<jk>return</jk> SeeOtherRoot.<jsf>INSTANCE</jsf>;
+		|	}
+	</p>
+	
+	<p>
+		Clicking on the link will just redirect to this same page. 
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.UtilityBeans.png'>
+	
+	<p>
+		Typically this is useful for endpoints where you want to redirect back to the servlet root, such as a DELETE.
+	</p>
+	
+</div>

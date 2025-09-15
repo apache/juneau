@@ -1,0 +1,47 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'juneau-petstore-client', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The <c>juneau-petstore-client</c> module contains a single <c>Main</c> class used to instantiate the proxy against
+		our remote REST interface using the Java interface described above.
+	</p>
+	
+	<h5 class='figure'>Main.java</h5>
+	<p class='bcode w800'>
+		|	<jk>public class</jk> Main {
+		|	
+		|		<jk>public static void</jk> main(String[] <jv>args</jv>) {
+		|	
+		|			<jc>// Create a RestClient with JSON serialization support.</jc>
+		|			RestClient <jv>restClient</jv> = RestClient.<jsm>create</jsm>().json5().build();
+		|	
+		|			<jc>// Instantiate our proxy.</jc>
+		|			PetStore <jv>petStore</jv> = <jv>restClient</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:5000"</js>);
+		|	
+		|			<jc>// Print out the pets in the store.</jc>
+		|			Collection&lt;Pet&gt; <jv>pets</jv> = <jv>petStore</jv>.getPets();
+		|	
+		|			<jc>// Pretty-print them to STDOUT.</jc>
+		|			Json5.<jsf>DEFAULT_READABLE</jsf>.println(<jv>pets</jv>);
+		|		}
+		|	}
+	</p>
+	<p>
+		Notice how little code is necessary to construct a remote proxy.
+	</p>
+</div>

@@ -1,0 +1,34 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Other Notes'}
+
+<div class='topic'>
+	<ul class='spaced-list'>
+		<li>
+			The escape character <js>'\'</js> can be used when necessary to escape the following characters: 
+			<c>$ , { }</c>
+		<li>
+			<b>WARNING:</b>  It is possible to cause {@link java.lang.StackOverflowError StackOverflowErrors} if 
+			your nested variables result in a recursive loop (e.g. the environment variable 
+			<c>'MYPROPERTY'</c> has the value <c>'$E{MYPROPERTY}'</c>).
+			So don't do that!
+		<li>
+			As a general rule, this class tries to be as efficient as possible by not creating new strings when not 
+			needed.
+			<br>For example, calling the resolve method on a string that doesn't contain variables (e.g. 
+			<c>resolver.resolve(<js>"foobar"</js>)</c>) will simply be a no-op and return the same string.
+	</ul>
+</div>

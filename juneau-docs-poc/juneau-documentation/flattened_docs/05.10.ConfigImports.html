@@ -1,0 +1,137 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Imports', updated:'8.1.0'} 
+
+<div class='topic'>
+	<p>
+		Configurations can import values from other configurations using the following syntax: 
+	</p>
+	<p class='bini'>
+		|	<cc># Import values from configuration 'ParentConfig'</cc>
+		|	<ci>&lt;ParentConfig&gt;</ci>
+		|
+		|	<cc># Our normal section</cc>
+		|	<cs>[Section1]</cs>
+		|	...
+	</p>
+	<p>
+		A configuration can contain zero or more imports anywhere in the file.
+		However, for clarity, imports should normally be placed in the default section of the configuration file.
+		The resolved configuration is retrieved from the configuration store used for the child configuration.
+	</p>
+	<p>
+		Configuration imports can be nested arbitrarily deep.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bini'>
+		|	<cc># MyConfig contents</cc>
+		|	<ci>&lt;ParentConfig1&gt;</ci>
+	</p>
+	<p class='bini'>
+		|	<cc># ParentConfig1 contents</cc>
+		|	<ci>&lt;ParentConfig2&gt;</ci>
+	</p>
+	<p class='bini'>
+		|	<cc># ParentConfig2 contents</cc>
+		|	<cs>[Foo]</cs>
+		|	<ck>bar</ck> = <cv>baz</cv>
+	</p>
+	<p class='bjava'>
+		|	<jc>// Java code</jc>
+		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
+		|	String <jv>foo</jv> = <jv>config</jv>.get(<js>"Foo/bar"</js>).get();  <jc>// == "baz"</jc>
+	</p>
+	<p>
+		Values can be overridden by child configurations.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bini'>
+		|	<cc># MyConfig contents</cc>
+		|	<ci>&lt;ParentConfig1&gt;</ci>
+		|	
+		|	<cs>[Foo]</cs>
+		|	<ck>bar</ck> = <cv>baz</cv>
+	</p>
+	<p class='bini'>
+		|	<cc># ParentConfig1 contents</cc>
+		|	<ci>&lt;ParentConfig2&gt;</ci>
+		|	
+		|	<cs>[Foo]</cs>
+		|	<ck>bar</ck> = <cv>qux</cv>
+	</p>
+	<p class='bini'>
+		|	<cc># ParentConfig2 contents</cc>
+		|	<cs>[Foo]</cs>
+		|	<ck>bar</ck> = <cv>quux</cv>
+	</p>
+	<p class='bjava'>
+		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
+		|	String <jv>foo</jv> = <jv>config</jv>.get(<js>"Foo/bar"</js>).get();  <jc>// == "baz"</jc>
+	</p>
+	
+	<p>
+		Changes made to imported configurations are automatically reflected in the child configuration and
+		partake in the listener API as if the entries were part of the child configuration.
+		Only non-overridden values trigger listener events.  For example, if an imported configuration
+		defines a value for <js>"Foo/bar"</js> and the child configuration does not, modifications to 
+		<js>"Foo/bar"</js> value in the parent configuration will trigger a listener event in the child config.
+		However, if the child configuration does also specify a value for <js>"Foo/bar"</js>, a change to the parent
+		<js>"Foo/bar"</js> will NOT trigger a listener event because the value ends up not being changed from
+		the perspective of the child configuration.
+	</p>
+	<p>
+		Values can be overwritten in child configurations but the values will only be set in that configuration
+		and not the imported configuration.  
+	</p>
+	<p>
+		Dynamically adding an import will cause change events to be generated for imported values.
+	</p>
+	<p class='bini'>
+		|	<cc># MyConfig contents starting empty</cc>
+	</p>
+	<p class='bini'>
+		|	<cc># ParentConfig contents</cc>
+		|	<cs>[Foo]</cs>
+		|	<ck>bar</ck> = <cv>baz</cv>
+	</p>
+	<p class='bjava'>
+		|	<jc>// Create our configuration.</jc>
+		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
+		|	
+		|	<jc>// Create a listener that sets a flag if "Foo/bar" is set.</jc>	
+		|	<jk>final boolean</jk>[] <jv>triggered</jv> = <jk>new boolean</jk>[1];
+		|	ConfigEventListener <jv>listener</jv> = <jk>new</jk> ConfigEventListener() {
+		|		<jk>public void</jk> onConfigChange(ConfigEvents <jv>events</jv>) {
+		|			<jv>triggered</jv>[0] = <jv>events</jv>.isKeyModified(<js>"Foo"</js>, <js>"bar"</js>));
+		|		}
+		|	};
+		|	<jv>config</jv>.addListener(<jv>listener</jv>);
+		|	
+		|	<jc>// Dynamically add an import to ParentConfig in the default section.</jc>
+		|	<jv>config</jv>.setImport(<js>""</js>, <js>"ParentConfig"</js>);
+		|	<jv>config</jv>.commit();
+		|	
+		|	<jc>// The new import statement should have triggered a config changes for imported values.</jc>
+		|	<jsm>assertTrue</jsm>(<jv>triggered</jv>[0]);	
+	</p>
+	<p>
+		Dynamically removing an import has the same effect as removing keys and generates <jsf>REMOVE_ENTRY</jsf> events.
+	</p>
+	<p>
+		Note that when dynamically adding or removing imports, overridden keys in the child config will be filtered
+		from the change events.
+	</p>
+</div>

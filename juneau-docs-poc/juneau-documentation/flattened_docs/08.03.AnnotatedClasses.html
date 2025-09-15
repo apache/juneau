@@ -1,0 +1,86 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@Rest-Annotated Classes', updated:'8.1.2,9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oajr.annotation.Rest @Rest} annotation is the primary way of defining
+		and configuring REST resource classes.
+		The functionality of the class itself is covered in detail in the topics below.
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oajr.annotation.Rest}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.Rest#allowedHeaderParams() allowedHeaderParams}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#allowedMethodHeaders() allowedMethodHeaders}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#allowedMethodParams() allowedMethodParams}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#beanStore() beanStore}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#callLogger() callLogger}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#children() children}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#clientVersionHeader() clientVersionHeader}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#config() config}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#consumes() consumes}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#converters() converters}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#debug() debug}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#debugEnablement() debugEnablement}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#debugOn() debugOn}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#defaultAccept() defaultAccept}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#defaultCharset() defaultCharset}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#defaultContentType() defaultContentType}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#defaultRequestAttributes() defaultRequestAttributes}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#defaultRequestHeaders() defaultRequestHeaders}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#defaultResponseHeaders() defaultResponseHeaders}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#description() description}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#disableContentParam() disableContentParam}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#encoders() encoders}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#guards() guards}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#maxInput() maxInput}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#messages() messages}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#on() on}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#onClass() onClass}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#parsers() parsers}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#partParser() partParser}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#partSerializer() partSerializer}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#path() path}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#produces() produces}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#renderResponseStackTraces() renderResponseStackTraces}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#responseProcessors() responseProcessors}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#restChildrenClass() restChildrenClass}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#restOpArgs() restOpArgs}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#restOperationsClass() restOperationsClass}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#roleGuard() roleGuard}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#rolesDeclared() rolesDeclared}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#serializers() serializers}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#siteName() siteName}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#staticFiles() staticFiles}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#swagger() swagger}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#swaggerProvider() swaggerProvider}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#title() title}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#uriAuthority() uriAuthority}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#uriContext() uriContext}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#uriRelativity() uriRelativity}</li>
+				<li class='jma'>{@link oajr.annotation.Rest#uriResolution() uriResolution}</li>
+			</ul>
+		</li>
+	</ul>
+	<p>
+		The {@link oajr.annotation.Rest @Rest} annotation in inheritable from parents and interfaces of resource classes.
+		When multiple annotations are defined at different levels, the annotation values are combined.
+		This is a particularly useful feature because it allows you to define your own configured parent
+		resource classes that can be extended by all your child resources so that they all share common
+		settings.
+	</p>
+</div>

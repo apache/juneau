@@ -1,0 +1,184 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Namespaces'}
+
+<div class='topic'>
+	<p>
+		Let's go back to the example of our original <c>Person</c> bean class but add some namespace annotations:
+	</p>
+	<h5 class='figure'>Sample Beans</h5>
+	<p class='bjava'>
+		|	<ja>@Xml</ja>(prefix=<js>"per"</js>)
+		|	<ja>@Bean</ja>(typeName=<js>"person"</js>)
+		|	<jk>public class</jk> Person {
+		|		
+		|		<jc>// Bean properties</jc>
+		|		<jk>public</jk> String <jf>name</jf>;
+		|		<ja>@Swap</ja>(TemporalCalendarSwap.IsoInstant.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		|		<jk>public</jk> List&lt;Address&gt; <jf>addresses</jf>; 
+		|	
+		|		<jc>// Getters/setters omitted</jc>
+		|	}
+		|	
+		|	<ja>@Xml</ja>(prefix=<js>"addr"</js>)
+		|	<ja>@Bean</ja>(typeName=<js>"address"</js>)
+		|	<jk>public class</jk> Address {
+		|
+		|		<jc>// Bean properties</jc>
+		|		<ja>@Xml</ja>(prefix=<js>"mail"</js>) <jk>public</jk> String <jf>street</jf>, <jf>city</jf>;
+		|		<ja>@Xml</ja>(prefix=<js>"mail"</js>) <jk>public</jk> StateEnum <jf>state</jf>;
+		|		<ja>@Xml</ja>(prefix=<js>"mail"</js>) <jk>public int</jk> <jf>zip</jf>;
+		|		<jk>public boolean</jk> <jf>isCurrent</jf>;
+		|
+		|		<jc>// Getters/setters omitted</jc>
+		|	}	
+	</p>
+	<p>
+		The namespace URLs can either be defined as part of the {@link oaj.xml.annotation.Xml @Xml}
+		annotation, or can be defined at the package level with the {@link oaj.xml.annotation.XmlSchema @XmlSchema}
+		annotation.
+		Below shows it defined at the package level:
+	</p>
+	<h5 class='figure'>package-info.java</h5>
+	<p class='bjava'>
+		|	<ja>@XmlSchema</ja>(
+		|		prefix=<js>"ab"</js>,  <jc>// Default namespace</jc>
+		|		xmlNs={
+		|			<ja>@XmlNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.apache.org/addressBook/"</js>),
+		|			<ja>@XmlNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.apache.org/person/"</js>),
+		|			<ja>@XmlNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.apache.org/address/"</js>),
+		|			<ja>@XmlNs</ja>(prefix=<js>"mail"</js>, namespaceURI=<js>"http://www.apache.org/mail/"</js>)
+		|		}
+		|	)
+		|	<jk>package</jk> org.apache.juneau.examples.addressbook;
+	</p>		
+	<h5 class='figure'>Sample Code</h5>
+	<p class='bjava'>
+		|	Person <jv>person</jv> = <jk>new</jk> Person()
+		|		.name(<js>"John Smith"</js>)
+		|		.birthDate(<js>"1946-08-12T00:00:00Z"</js>)
+		|		.addresses(
+		|			<jk>new</jk> Address() 
+		|				.street(<js>"100 Main Street"</js>)
+		|				.city(<js>"Anywhereville"</js>)
+		|				.state(<jsf>NY</jsf>)
+		|				.zip(12345)
+		|				.isCurrent(<jk>true</jk>);
+		|		);
+		|
+		|	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
+		|	<jc>// Note that this is identical to XmlSerializer.DEFAULT_NS_SQ_READABLE.</jc>
+		|	XmlSerializer <jv>serializer</jv> = XmlSerializer.<jsm>create</jsm>().ns().ws().sq().build();
+		|	
+		|	String <jv>xml</jv> = <jv>serializer</jv>.serialize(p);
+	</p>
+	<p>
+		Now when we run this code, we'll see namespaces added to our output:
+	</p>
+	<p class='bxml'>
+		|	<xt>&lt;per:person&gt;</xt>
+		|		<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+		|		<xt>&lt;per:birthDate&gt;</xt>1946-08-12T04:00:00Z<xt>&lt;/per:birthDate&gt;</xt>
+		|		<xt>&lt;per:addresses&gt;</xt>
+		|			<xt>&lt;addr:address&gt;</xt>
+		|				<xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
+		|				<xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
+		|				<xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
+		|				<xt>&lt;mail:zip&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
+		|				<xt>&lt;addr:isCurrent&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
+		|			<xt>&lt;/addr:address&gt;</xt>
+		|		<xt>&lt;/per:addresses&gt;</xt>
+		|	<xt>&lt;/per:person&gt;</xt>
+	</p>
+	<p>
+		Enabling the <del>XmlSerializer.XML_addNamespaceUrisToRoot</del>setting results
+		in the namespace URLs being added to the root node:
+	</p>
+	<p class='bxml'>
+		|	<xt>&lt;per:person</xt>
+		|			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+		|			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs>
+		|			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs>
+		|			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs>
+		|		<xt>&gt;</xt>
+		|		<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+		|		<xt>&lt;per:birthDate&gt;</xt>1946-08-12T04:00:00Z<xt>&lt;/per:birthDate&gt;</xt>
+		|		<xt>&lt;per:addresses&gt;</xt>
+		|			<xt>&lt;addr:address&gt;</xt>
+		|				<xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
+		|				<xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
+		|				<xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
+		|				<xt>&lt;mail:zip&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
+		|				<xt>&lt;addr:isCurrent&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
+		|			<xt>&lt;/addr:address&gt;</xt>
+		|		<xt>&lt;/per:addresses&gt;</xt>
+		|	<xt>&lt;/per:person&gt;</xt>
+	</p>
+	<p>
+		We can simplify the output by setting the default namespace on the serializer so that all the elements do 
+		not need to be prefixed:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
+		|	XmlSerializer <jv>serializer</jv> = XmlSerializer.<jsm>create</jsm>().ws().sq().ns()
+		|		.defaultNamespaceUri(<js>"http://www.apache.org/person/"</js>)
+			.build();
+		|</p>
+	<p>
+		This produces the following equivalent where the elements don't need prefixes since they're already in the 
+		default document namespace:
+	</p>
+	<p class='bxml'>
+		|	<xt>&lt;person</xt>
+		|			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+		|			<xa>xmlns</xa>=<xs>'http://www.apache.org/person/'</xs>
+		|			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs>
+		|			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs>
+		|		<xt>&gt;</xt>
+		|		<xt>&lt;name&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
+		|		<xt>&lt;birthDate&gt;</xt>1946-08-12T04:00:00Z<xt>&lt;/birthDate&gt;</xt>
+		|		<xt>&lt;addresses&gt;</xt>
+		|			<xt>&lt;addr:address&gt;</xt>
+		|				<xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
+		|				<xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
+		|				<xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
+		|				<xt>&lt;mail:zip&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
+		|				<xt>&lt;addr:isCurrent&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
+		|			<xt>&lt;/addr:address&gt;</xt>
+		|		<xt>&lt;/addresses&gt;</xt>
+		|	<xt>&lt;/person&gt;</xt>
+	</p>
+	<p>
+		By default, the XML serializer class will make a first-pass over the data structure to look for namespaces 
+		defined on classes and bean properties.
+		In high-performance environments, you may want to consider disabling auto-detection and providing your 
+		own explicit list of namespaces to the serializer to avoid this scanning step using 
+		{@link oaj.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}.
+	</p>
+	<p>
+		The following code will produce the same output as before but will perform slightly better since it 
+		avoids this pre-scan step.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
+		|	XmlSerializer <jv>serializer</jv> = XmlSerializer.<jsm>create</jsm>()
+		|		.ws()
+		|		.sq()
+		|		.autoDetectNamespaces(<jk>false</jk>)
+		|		.namespaces(<js>"{per:'http://www.apache.org/person/'}"</js>)
+		|		.build();
+	</p>
+</div>

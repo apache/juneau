@@ -1,0 +1,95 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'End-to-End REST', created:'9.0.0'} 
+
+<div class='topic'>
+	<p>
+		The <a class="doclink" href="#juneau-rest-server">juneau-rest-server</a> and <a class="doclink" href="#juneau-rest-client">juneau-rest-client</a> libraries
+		provide server and client side REST capabilities that can be used by themselves, or together to create
+		simplified yet sophisticated Java-based REST communications layers that completely hide away the complexities
+		of the REST protocol.
+	</p>
+	<p>
+		A typical pattern is to define a REST API on the server side:
+	</p>
+	<p class='bjava'>	
+		|	<ja>@Rest</ja>(path=<js>"/petstore"</js>)
+		|	<jk>public class</jk> PetStoreRest {
+		|		
+		|		<ja>@RestPost</ja>(path=<js>"/pets"</js>, guards=AdminGuard.<jk>class</jk>)
+		|		<jk>public</jk> Ok addPet(
+		|			<ja>@Content</ja> CreatePet <jv>createPetBean</jv>, 
+		|			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
+		|			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
+		|		) <jk>throws</jk> BadRequest, Unauthorized, InternalServerError {
+		|			<jc>// Process request here.</jc>
+		|			<jk>return</jk> Ok.<jsf>OK</jsf>;  <jc>// Standard 400-OK response.</jc>
+		|		}
+		|	}
+	</p>	
+	<p>
+		Then define a Java interface that can be provided to consumers of your API to access your REST API:
+	</p>
+	<p class='bjava'>	
+		|	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
+		|	<jk>public interface</jk> PetStoreClient {
+		|		
+		|		<ja>@RemotePost</ja>(<js>"/pets"</js>)
+		|		Ok addPet(
+		|			<ja>@Content</ja> CreatePet <jv>createPet</jv>, 
+		|			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
+		|			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
+		|		) <jk>throws</jk> BadRequest, Unauthorized, InternalServerError;
+		|	}
+	</p>
+	<p>
+		Note that you may choose to have your service class implement your interface.  The REST libraries will
+		happily look for annotations defined on methods of parent classes and interfaces.  It's up to you how
+		you want to design it.
+	</p>
+	<p>
+		Finally, the {@link oajrc.RestClient} class is used to construct a remote proxy to our REST service:
+	<p class='bjava'>	
+		|	<jc>// Use a RestClient with default JSON 5 support and BASIC auth.</jc>
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().basicAuth(...).build();
+		|	
+		|	<jc>// Instantiate our proxy interface.</jc>
+		|	PetStoreClient <jv>store</jv> = <jv>client</jv>.getRemote(PetStoreClient.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+		|	
+		|	<jc>// Use it to create a pet.</jc>
+		|	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+		|	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
+	</p>
+	<p>
+		The call above translates to the following REST call:
+	</p>
+	<p class='bcode'>
+		|	POST http://localhost:10000/petstore/pets?debug=true HTTP/1.1
+		|	Accept: application/json
+		|	Content-Type: application/json
+		|	Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+		|	E-Tag: 475588d4-0b27-4f56-9296-cc683251d314
+		|	
+		|	{
+		|		name: 'Fluffy',
+		|		price: 9.99 
+		|	}
+	</p>
+	<p>
+		It looks simplistic but the server and client APIs are highly sophisticated libraries that allow you
+		to perform complex tasks using very little code.
+	</p>
+</div>

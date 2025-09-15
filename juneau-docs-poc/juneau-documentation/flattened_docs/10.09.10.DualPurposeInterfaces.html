@@ -1,0 +1,117 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Dual-purpose (end-to-end) interfaces', created:'8.0.0'}
+
+<div class='topic'>
+	<p>
+		A common coding practice is to use the same Java interface to define both your server and client side REST interfaces.
+		The advantage to this approach is that changes that you make to your REST interface can be reflected in both places
+		at the same time, reducing the chances for compatibility mistakes.
+	</p>
+	<p>
+		What makes this possible is that method-level annotations such as <ja>@RestOp</ja> and parameter-level annotations
+		such as <ja>@Query</ja> are inherited from parent classes.  
+		This normally isn't possible but the framework will spider up the parent hierarchy of classes to find method and parameter level
+		annotations defined on overridden methods.
+	</p>
+	<p>
+		The general approach is to define your {@link oaj.http.remote.Remote @Remote}-annotated interface first.
+		The following example is pulled from the PetStore app:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
+		|	<jk>public interface</jk> PetStore {
+		|	
+		|		<ja>@RemoteGet</ja>(<js>"/pet"</js>)
+		|		<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable;
+		|	
+		|		<ja>@RemotDelete</ja>(<js>"/pet/{petId}"</js>)
+		|		<jk>public</jk> Ok deletePet(
+		|			<ja>@Header</ja>(
+		|				name=<js>"api_key"</js>,
+		|				description=<js>"Security API key"</js>,
+		|				required=<jk>true</jk>,
+		|				example=<js>"foobar"</js>
+		|			)
+		|			String <jv>apiKey</jv>,
+		|			<ja>@Path</ja>(
+		|				name=<js>"petId"</js>,
+		|				description=<js>"Pet id to delete"</js>,
+		|				example=<js>"123"</js>
+		|			)
+		|			<jk>long</jk> <jv>petId</jv>
+		|		) <jk>throws</jk> IdNotFound, NotAcceptable;
+		|		
+		|		...
+	</p>
+	<p>
+		Next you define the implementation of your interface as a normal Juneau REST resource:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/petstore"</js>,
+		|		title=<js>"Petstore application"</js>,
+		|		...
+		|	)
+		|	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> PetStore {
+		|	
+		|		...
+		|	
+		|		<ja>@Override</ja> <jc>/* PetStore */</jc>
+		|		<ja>@RestOp</ja>(
+		|			method=<jsm>GET</jsm>,
+		|			path=<js>"/pet"</js>,
+		|			summary=<js>"All pets in the store"</js>,
+		|			...
+		|		)
+		|		<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable {
+		|			<jk>return</jk> <jsf>store</jsf>.getPets();
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* PetStore */</jc>
+		|		<ja>@RestOp</ja>(
+		|			method=<jsf>DELETE</jsf>,
+		|			path=<js>"/pet/{petId}"</js>,
+		|			summary=<js>"Deletes a pet"</js>,
+		|			...
+		|		)
+		|		<jk>public</jk> Ok deletePet(String <jv>apiKey</jv>, <jk>long</jk> <jv>petId</jv>) <jk>throws</jk> IdNotFound, NotAcceptable {
+		|			<jsf>store</jsf>.removePet(<jv>petId</jv>);
+		|			<jk>return</jk> <jsf>OK</jsf>;
+		|		}
+	</p>
+	<p>
+		Then use the interface as a remote resource like so:
+	</p>
+	<p class='bjava'>
+		|	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build();
+		|	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>);
+		|
+		|	<jk>for</jk> (Pet <jv>pet</jv> : <jv>store</jv>.getPets()) {
+		|		<jv>store</jv>.deletePet(<js>"my-special-key"</js>, <jv>pet</jv>.getId());
+		|		System.<jsf>err</jsf>.println(<js>"Deleted pet:  id="</js> + <jv>pet</jv>.getId());
+		|	}
+	</p>	
+	<p>
+		In the example above, we chose to add the <ja>@RestOp</ja> annotation to the implementation class.  
+		However, they could have been added to the interface instead.  It's personal preference where you want to place
+		the annotations.
+	</p>
+	<p>
+		Note how we didn't need to use the <ja>@Header</ja> and <ja>@Path</ja> annotations in our implementation since
+		the annotations were inherited from the interface.
+	</p>
+</div>

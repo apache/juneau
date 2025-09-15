@@ -1,0 +1,123 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Comparison with Jackson', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		Juneau was developed independently from Jackson but shares many of the same features and capabilities.
+		Whereas Jackson was created to work primarily with JSON, Juneau was created to work for multiple languages.
+		Therefore, the terminology and annotations in Juneau are similar but language-agnostic.   
+	</p>
+	<p>
+		The following charts describe equivalent features between the two libraries:
+	</p>
+	
+	<h5 class='topic'>Annotations</h5>
+	<table class='styled w800'>
+		<tr><th>Jackson</th><th>Juneau</th></tr>
+		<tr>
+			<td>
+				<ja>@JsonGetter</ja>
+				<br><ja>@JsonSetter</ja>
+			</td>
+			<td>
+				{@link oaj.annotation.Beanp @Beanp}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<ja>@JsonAnyGetter</ja>
+				<br><ja>@JsonAnySetter</ja>
+			</td>
+			<td>
+				{@link oaj.annotation.Beanp#name() @Beanp(name="*")}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<ja>@JsonIgnore</ja>
+				<br><ja>@JsonIgnoreType</ja>
+			</td>
+			<td>
+				{@link oaj.annotation.BeanIgnore @BeanIgnore}
+			</td>
+		</tr>
+		<tr>
+			<td><c><ja>@JsonIgnoreProperties</ja>({...})</c></td>
+			<td>
+				{@link oaj.annotation.Bean#excludeProperties @Bean(excludeProperties|xp)}
+			</td>
+		</tr>
+		<tr>
+			<td><c><ja>@JsonAutoDetect</ja>(fieldVisibility=...)</c></td>
+			<td>
+				No equivalent annotation but can be controlled via: 
+				<br>{@link oaj.BeanContext.Builder#beanFieldVisibility(Visibility)}
+				<br>{@link oaj.BeanContext.Builder#beanMethodVisibility(Visibility)}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<ja>@JsonCreator</ja>
+				<br><ja>@JsonProperty</ja>
+			</td>
+			<td>
+				{@link oaj.annotation.Beanc @Beanc}
+			</td>
+		</tr>
+		<tr>
+			<td><ja>@JacksonInject</ja></td>
+			<td>
+				No equivalent.
+			</td>
+				
+		</tr>
+		<tr>
+			<td>
+				<ja>@JsonSerialize</ja>
+				<br><ja>@JsonDeserialize</ja>
+			</td>
+			<td>
+				Juneau uses swaps to convert non-serializable object to serializable forms:
+				<br>{@link oaj.annotation.Swap @Swap}
+			</td>
+		</tr>
+		<tr>
+			<td><ja>@JsonInclude</ja></td>
+			<td>
+				No equivalent annotation but can be controlled via various settings:
+				<br>{@link oaj.BeanContext}
+				<br>{@link oaj.serializer.Serializer}
+			</td>
+		</tr>
+		<tr>
+			<td><ja>@JsonPropertyOrder</ja></td>
+			<td>
+				{@link oaj.annotation.Bean#properties @Bean(properties="...")}
+				<br>{@link oaj.annotation.Bean#sort @Bean(sort=x)}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<ja>@JsonValue</ja>
+				<br><ja>@JsonRawValue</ja>
+			</td>
+			<td>
+				Can be replicated using swaps with <c>Reader</c> swapped values.
+			</td>
+		</tr>
+	</table>
+</div>

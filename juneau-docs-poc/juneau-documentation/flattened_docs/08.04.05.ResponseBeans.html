@@ -1,0 +1,115 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@Response Beans', updated:'8.1.0,9.0.0'} 
+
+<div class='topic'>
+	<p>
+		The {@link oaj.http.annotation.Response} annotation can be used to define beans that return HTTP response
+		parts via annotations and methods.  They are used in combination with the following annotations:
+	</p>
+	<ul class='javatreec'>
+		<li class='ja'>{@link oaj.http.annotation.StatusCode} </li>
+		<li class='ja'>{@link oaj.http.annotation.Header} </li>
+		<li class='ja'>{@link oaj.http.annotation.Content} </li>
+		<li class='ja'>{@link oaj.annotation.Schema} </li>
+	</ul>
+	
+	<p>
+		Response beans can either be returned or thrown from {@link oajr.annotation.RestOp @RestOp}-annotated methods.
+	</p>
+	<ul class='notes'>
+		<li class='note'>
+		As a general convention, response beans with return codes <c>&lt;400</c> should be defined as regular classes and
+		 <c>&gt;=400</c> should be defined as exceptions.
+	</ul>
+	<p>
+		The following example shows the <ja>@Response</ja> annotation used to define an exception for an invalid login attempt:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Our annotated normal response.</jc>
+		|	<ja>@Response</ja>
+		|	<ja>@StatusCode</ja>(200)
+		|	<ja>@Schema</ja>(
+		|		description=<js>"User was good."</js> <jc>// Description show in Swagger</jc>
+		|	)
+		|	<jk>public class</jk> ValidLogin {
+		|		<jk>public</jk> ValidLogin() {
+		|			...
+		|		}
+		|		
+		|		<jc>// Response bean converted to output based on Accept header.</jc>
+		|		<ja>@Content</ja>
+		|		<jk>public</jk> WelcomeMessageBean getContent() {
+		|			<jk>return new</jk> WelcomeMessageBean();
+		|		}
+		|	}
+	</p>
+	<p class='bjava'>
+		|	<jc>// Our annotated exception.</jc>
+		|	<ja>@Response</ja>
+		|	<ja>@StatusCode</ja>(401)
+		|	<ja>@Schema</ja>(
+		|		description=<js>"Invalid username or password provided"</js> <jc>// Description show in Swagger</jc>
+		|	)
+		|	<jk>public class</jk> InvalidLogin <jk>extends</jk> Exception {
+		|		<jk>public</jk> InvalidLogin() {
+		|			<jk>super</jk>(<js>"Invalid username or password."</js>);  <jc>// Message sent in response</jc>
+		|		}
+		|		
+		|		<ja>@Header</ja>(<js>"My-Message"</js>)
+		|		<jk>public</jk> String getMyMessage() {
+		|			<jk>return</jk> <js>"Nope!"</js>;
+		|		}
+		|	}
+	</p>
+	<p class='bjava'>
+		|	<jc>// Our REST method that throws an annotated exception.</jc>
+		|	<ja>@RestGet</ja>(<js>"/user/login"</js>)
+		|	<jk>public</jk> ValidLogin login(
+		|		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
+		|		<ja>@FormData</ja>(<js>"password"</js>) String <jv>password</jv>
+		|	) <jk>throws</jk> InvalidLogin 
+		|	{
+		|		<jk>if</jk> (<jsm>isValid</jsm>(<jv>username</jv>, <jv>password</jv>)) {
+		|			<jk>return new</jk> ValidLogin();
+		|		} 
+		|		<jk>throw new</jk> InvalidLogin();
+		|	}
+	</p>
+	<p>
+		Custom exceptions can also extend from one of the predefined HTTP exceptions such as the {@link oaj.http.response.Unauthorized} exception:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Our annotated exception.</jc>
+		|	<ja>@Response</ja>
+		|	<ja>@Schema</ja>(
+		|		description=<js>"Invalid username or password provided"</js> <jc>// Overridden from parent class</jc>
+		|	) 
+		|	<jk>public class</jk> InvalidLogin <jk>extends</jk> Unauthorized {
+		|		<jk>public</jk> InvalidLogin() {
+		|			<jk>super</jk>(<js>"Invalid username or password."</js>); 
+		|		}
+		|	}
+		|
+		|	<jc>// Parent predefined exception class.</jc>
+		|	<ja>@Response</ja>
+		|	<ja>@StatusCode</ja>(401)
+		|	<ja>@Schema</ja>(
+		|		description=<js>"Unauthorized"</js>
+		|	)
+		|	<jk>public class</jk> Unauthorized <jk>extends</jk> RestException {...}
+	</p>
+</div>

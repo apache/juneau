@@ -1,0 +1,103 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'HTTP Entities and Resources', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.http.entity} package contains implementations of <c>org.apache.http.HttpEntity</c>.  These are
+		entities that can be sent or received with an HTTP message.  They consist of a message body and the headers
+		<c>Content-Type</c>, <c>Content-Length</c>, and <c>Content-Encoding</c>.  
+	</p>
+	<p>
+		The {@link oaj.http.resource} package contains implementations of {@link oaj.http.resource.HttpResource} which are extensions of <c>org.apache.http.HttpEntity</c> with 
+		arbitrary headers added beyond the standard content headers.
+	</p>
+	<ul class='javatree'>
+		<li class='jic'>{@code org.apache.http.HttpEntity}
+		<ul>
+			<li class='jc'>{@link oaj.http.entity.BasicHttpEntity}
+			<ul class='javatreec'>
+				<li class='jc'>{@link oaj.http.entity.ByteArrayEntity}</li>
+				<li class='jc'>{@link oaj.http.entity.FileEntity}</li>
+				<li class='jc'>{@link oaj.http.entity.StreamEntity}</li>
+				<li class='jc'>{@link oaj.http.entity.ReaderEntity}</li>
+				<li class='jc'>{@link oaj.http.entity.SerializedEntity}</li>
+				<li class='jc'>{@link oaj.http.entity.StringEntity}</li>
+			</ul>
+			<li class='jic'>{@link oaj.http.resource.HttpResource}
+			<ul>
+				<li class='jc'>{@link oaj.http.resource.BasicResource}
+				<ul class='javatreec'>
+					<li class='jc'>{@link oaj.http.resource.ByteArrayResource}</li>
+					<li class='jc'>{@link oaj.http.resource.FileResource}</li>
+					<li class='jc'>{@link oaj.http.resource.StreamResource}</li>
+					<li class='jc'>{@link oaj.http.resource.ReaderResource}</li>
+					<li class='jc'>{@link oaj.http.resource.StringResource}</li>
+				</ul>
+			</ul>
+		</ul>
+	</ul>
+	
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.http.HttpEntities.*;
+		|
+		|	<jk>byte</jk>[] <jv>payload</jv> = {...};
+		|
+		|	<jc>// Create via type builder.</jc>
+		|	HttpEntity <jv>entity</jv> = ByteArrayEntity
+		|		.<jsm>create</jsm>()
+		|		.content(<jv>payload</jv>)
+		|		.contentType(ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>);
+		|
+		|	<jc>// Create via HttpEntities.</jc>
+		|	HttpEntity <jv>entity</jv> = <jsm>byteArrayEntity</jsm>(<jv>payload</jv>, ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>);
+	</p>
+	
+	<p>
+		HTTP entities and resources can be used by both the server and client side APIs described in later sections.
+	</p>
+	<h5 class='figure'>Server-side example:</h5>
+	<p class='bjava'>
+		|	<jc>// REST endpoint that simply echos an HTTP entity.</jc>
+		|	<ja>@RestPost</ja>(path=<js>"/entity"</js>)
+		|	<jk>public</jk> HttpEntity echoMyEntity(HttpEntity <jv>entity</jv>) {
+		|		<jk>return</jk> <jv>entity</jv>;
+		|	}
+		| 
+		|	<jc>// REST endpoint that serves up a static file.</jc>
+		|	<ja>@RestGet</ja>(path=<js>"/resource/{fileName}"</js>)
+		|	<jk>public</jk> HttpResource getStaticFile(<ja>@Path</ja> String <jv>fileName</jv>, Locale <jv>locale</jv>) {
+		|		getContext().getStaticFiles().resolve(<jv>fileName</jv>, <jv>locale</jv>).orElseThrow(NotFound::<jk>new</jk>);
+		|	}
+	</p>
+	
+	
+	<h5 class='figure'>Client-side example:</h5>
+	<p class='bjava'>
+		|	<jc>// REST client that uses the echo REST endpoint above.</jc> 
+		|	
+		|	HttpEntity <jv>entity</jv> = <jsm>byteArrayEntity</jsm>(...);
+		|	
+		|	<jv>entity</jv> = RestClient.<jsm>create</jsm>()
+		|		.build()
+		|		.rootUrl(<jsf>URI</jsf>)
+		|		.post(<js>"/entity"</js>, <jv>entity</jv>)
+		|		.run()
+		|		.assertStatus().asCode().is(200)
+		|		.getContent().as(ByteArrayEntity.<jk>class</jk>);
+	</p>
+</div>

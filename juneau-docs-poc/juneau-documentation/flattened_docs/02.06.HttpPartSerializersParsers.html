@@ -1,0 +1,81 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'HTTP Part Serializers and Parsers', updated:'8.2.0,9.0.0'} 
+
+<div class='topic'>
+	<p>
+		There is a separate set of serializers and parsers for marshalling HTTP parts (query, form-data, headers, path variables, and plain-text request bodies).
+		The distinction is that these are designed to marshall directly to-and-from strings based on Open-API schema information.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Schema information about our part.</jc>
+		|	HttpPartSchema <jv>schema</jv> = HttpPartSchema
+		|		.<jsm>tArrayPipes</jsm>()
+		|		.items(
+		|			HttpPartSchema
+		|				.<jsm>tArrayCsv</jsm>()
+		|				.items(
+		|					HttpPartSchema.<jsm>tInt64</jsm>(<js>"integer"</js>,<js>"int64"</js>)
+		|				)
+		|		)
+		|		.build();
+		|
+		|	<jc>// Our value to serialize</jc>
+		|	Object <jv>value</jv> = <jk>new long</jk>[][]{{1,2,3},{4,5,6},{7,8,9}};
+		|
+		|	<jc>// Produces "1,2,3|4,5,6|7,8,9"</jc>
+		|	String <jv>output</jv> = OpenApi.<jsm>of</jsm>(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>value</jv>);
+		|	
+		|	<jc>// Produces "[[1,2,3],[4,5,6],[7,8,9]]</jc>
+		|	<jk>long</jk>[][] <jv>value</jv> = OpenApi.<jsm>to</jsm>(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>output</jv>, <jk>long</jk>[][].<jk>class</jk>);
+	</p>
+	<p>
+		The {@link oaj.httppart.HttpPartSchema} class also provides convenience static methods for creation of custom schemas.
+		The equivalent to the schema above can be structured like so:
+	</p>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
+		|	
+		|	<jc>// Schema information about our part.</jc>
+		|	HttpPartSchema <jv>schema</jv> = <jsm>tArrayPipes</jsm>(<jsm>tArrayCsv</jsm>(<jsm>tInt64</jsm>())).build();
+	</p>
+	<p>
+		The class hierarchy for the part marshallers are:
+	</p>
+	
+	<ul class='javatree'>
+		<li class='jic'>{@link oaj.httppart.HttpPartSerializer}
+			<ul>
+				<li class='jc'>{@link oaj.httppart.SimplePartSerializer} - Serializes directly to strings.</li>
+				<li class='jc'>{@link oaj.uon.UonSerializer} - Serializes to UON notation.
+					<ul>
+						<li class='jc'>{@link oaj.oapi.OpenApiSerializer} - Serializes using Open-API schema rules.</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li class='jic'>{@link oaj.httppart.HttpPartParser}
+			<ul>
+				<li class='jc'>{@link oaj.httppart.SimplePartParser} - Parses directly from strings.</li>
+				<li class='jc'>{@link oaj.uon.UonParser} - Parses from UON notation.
+					<ul>
+						<li class='jc'>{@link oaj.oapi.OpenApiParser} - Parses using Open-API schema rules.</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div>

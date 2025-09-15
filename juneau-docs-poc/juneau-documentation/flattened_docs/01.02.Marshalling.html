@@ -1,0 +1,435 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Marshalling', created:'9.0.0'} 
+
+<div class='topic'>
+	<p>
+		The <a class="doclink" href="#juneau-marshall">juneau-marshall</a> library includes easy-to-use and highly customizable serializers and parsers based around
+		a common API.  It allows you to marshall Java POJOs directly to and from a wide variety of language types
+		without the need for intermediate Document Object Models making them extremely efficient.
+	</p>
+	<p>
+		Supported languages include:
+		<ul>
+			<li>JSON</li>
+			<li>XML</li>
+			<li>HTML</li>
+			<li>UON</li>
+			<li>URL-Encoding</li>
+			<li>MessagePack</li>
+			<li>OpenAPI</li>
+			<li>SOAP/XML</li>
+			<li>CSV</li>
+			<li>YAML (coming soon)</li>
+			<li>RDF/XML</li>
+			<li>RDF/XML-Abbrev </li>
+			<li>N-Triple</li>
+			<li>Turtle</li>
+			<li>N3</li>
+		</ul>
+	</p>
+	<ul>
+		<li class='note'>
+			The marshalling support can be thought of as similar to Jackson except for support of a wide variety of languages.
+			Additionally, JSON marshalling is about 20% faster than Jackson yet supports the same usecases.</li>
+	</ul>
+	<p>
+		The default serializers can often be used to serialize POJOs in a single line of code:
+	</p>
+	<p class='bjava'>
+		|	<jc>// A simple bean</jc>
+		|	<jk>public class</jk> Person {
+		|		<jk>public</jk> String <jf>name</jf> = <js>"John Smith"</js>;
+		|		<jk>public int</jk> <jf>age</jf> = 21;
+		|	}
+		|	
+		|	<jc>// Produces:
+		|	// "{"name":"John Smith","age":21}"</jc>
+		|	String <jv>json</jv> = Json.<jsm>of</jsm>(<jk>new</jk> Person());
+	</p>
+	<p>
+		Parsing back into POJOs is equally simple for any of the supported languages.
+		Language fragments are also supported.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Parse a JSON object as a bean.</jc>
+		|	String <jv>json</jv> = <js>"{\"name\":\"John Smith\","\age\":21}"</js>;
+		|	Person <jv>person</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, Person.<jk>class</jk>);
+	</p>
+	<p>
+		Marshalling support is provided for a wide variety of POJO types including:
+	</p>
+	<ul>
+		<li>Primitives and primitive objects</li>
+		<li>Beans</li>
+		<li>Java Collections Framework objects (e.g. Collections, Maps)</li>
+		<li>Arrays</li>
+		<li>POJOs</li>
+	</ul>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jm.PojoCategories">Pojo Categories</a> for an exhaustive list of categories supported out-of-the-box.
+	</ul>
+</div>
+
+<h5 class='topic'>Serializer/Parser Builders</h5>
+<div class='topic'>
+	<p>
+		Marshallers like the one shown above are pairings of serializers and parsers.  
+		Serializers and parsers are builder-based using fluent methods allowing you to quickly create, clone, and modify them
+		in single lines of code.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Create a serializer from scratch programmatically using a builder.</jc>
+		|	JsonSerializer <jv>serializer</jv> = JsonSerializer
+		|		.<jsm>create</jsm>()
+		|		.simple()                           <jc>// Simple mode</jc>
+		|		.sq()                               <jc>// Use single quotes</jc>
+		|		.timeZone(TimeZone.<jsf>GMT</jsf>)             <jc>// For timezone-specific serialization</jc>
+		|		.locale(Locale.<jsf>JAPAN</jsf>)               <jc>// For locale-specific serialization</jc>
+		|		.sortCollections()
+		|		.sortProperties()
+		|		.keepNullProperties()
+		|		.trimStrings()
+		|		.beanMethodVisibility(<jsf>PROTECTED</jsf>)    <jc>// Control which fields/methods are serialized</jc>
+		|		.beanDictionary(                    <jc>// Adds type variables for resolution during parsing</jc>
+		|			MyBeanA.<jk>class</jk>, 
+		|			MyBeanB.<jk>class</jk>
+		|		)
+		|		.debug()                            <jc>// Debug mode</jc>
+		|		.build();
+	</p>
+	<p>
+		Many POJOs such as primitives, beans, collections, arrays, and classes with various known constructors and methods are serializable out-of-the-box.
+	</p>
+	<p> 
+		<a class="doclink" href="#jm.Swaps">Swaps</a> allow you to replace non-serializable objects with serializable equivalents.
+		The {@link oaj.swaps} package contains a variety of predefined swaps.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Create a serializer from scratch programmatically using a builder.</jc>
+		|	JsonSerializer <jv>serializer</jv> = JsonSerializer
+		|		.<jsm>create</jsm>()
+		|		.swaps(                             <jc>// Swap unserializable classes with surrogate POJOs</jc>
+		|			IteratorSwap.<jk>class</jk>,              <jc>// Iterators swapped with lists</jc>
+		|			ByteArrayBase64Swap.<jk>class</jk>,       <jc>// byte[] swapped with base-64 encoded strings</jc>
+		|			CalendarSwap.ISO8601DT.<jk>class</jk>     <jc>// Calendars swapped with ISO8601-compliant strings</jc>
+		|		)
+		|		.build();
+	</p>
+	<p>
+		Any POJO that doesn't fit into the category of a bean/collection/array/primitive and doesn't have a swap
+		associated with it is converted to simple strings.
+		By default, various instance and static methods and constructors on POJO classes are automatically detected and supported
+		for marshalling a POJO to and from a string.
+	</p>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jm.SerializersAndParsers"></a> for more information.
+	</ul>
+</div>
+
+<h5 class='topic'>Bean Annotations</h5>
+<div class='topic'>
+	<p>
+		Beans and POJO classes, methods, fields, and constructors can also be annotated with a variety of annotations to customize how they are marshalled:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Sort bean properties by name.</jc>
+		|	<jc>// Exclude city/state from marshalling.</jc>
+		|	<ja>@Bean</ja>(sort=<jk>true</jk>, excludeProperties=<js>"city,state"</js>)
+		|	<jk>public class</jk> Address { ... }
+		|
+		|	<jc>// Specify an implementation class for an interface.</jc>
+		|	<ja>@Marshalled</ja>(implClass=AutomobileImpl.<jk>class</jk>)
+		|	<jk>public interface</jk> Automobile { ... }
+	</p>
+	<p>
+		As a general rule, any capabilities provided by bean annotations can be programmatically specified
+		via the builder APIs.  This allows the marshallers to be used equivalently on either your own code
+		that you have access to, or external code where you only have access to binaries.
+	</p>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jm.JavaBeansSupport">Java Beans Support</a> for more information.
+	</ul>
+</div>
+
+<h5 class='topic'>Configuration Annotations</h5>
+<div class='topic'>
+	<p>
+		Serializers and parsers can also be configured using annotations.
+	</p>
+	<p class='bjava'>
+		|	<ja>@BeanConfig</ja>(sortProperties=<js>"true"</js>)
+		|	<ja>@SerializerConfig</ja>(quoteChar=<js>"'"</js>)
+		|	<ja>@RdfConfig</ja>(rdfxml_tab=<js>"5"</js>, addRootProperty=<js>"true"</js>)
+		|	<jk>public class</jk> MyAnnotatedClass {...}
+		|	
+		|	<jc>// Create a serializer configured using annotations.</jc>
+		|	JsonSerializer <jv>serializer</jv> = JsonSerializer
+		|		.<jsm>create</jsm>()
+		|		.applyAnnotations(MyAnnotatedClass.<jk>class</jk>)
+		|		.build();
+	</p>
+	<p>
+		Config annotations are extensively used in the REST Servlet APIs to configure how POJOs are marshalled through REST interfaces.
+	</p>
+	<p>
+		Config variables also support embedded variables for resolving settings at runtime.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Sort properties depending on value of system property "sortProperties".</jc>
+		|	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
+	</p>
+	<p>
+		Default values for config settings can be overridden via system properties or environment variables.
+		For example, the system property "BeanContext.sortProperties" or environment variable "BEANCONTEXT_SORTPROPERTIES" can be
+		used to set the default value for the sort properties setting.
+	</p>
+	<p>
+		Bean annotations can also be programmatically attached to POJOs using config annototations like so:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Bean</ja>(onClass=Address.<jk>class</jk>, sort=<jk>true</jk>, excludeProperties=<js>"city,state"</js>)
+		|	<jk>public class</jk> MyAnnotatedClass {...}
+	</p>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jm.ContextAnnotations">Context Annotations</a> for more information.
+	</ul>
+</div>
+
+<h5 class='topic'>JSON 5 Marshalling</h5>
+<div class='topic'>
+	<p>
+		The {@link oaj.json.Json5Serializer} class can be used to serialized POJOs into JSON 5 notation.
+	</p>
+	<p>
+		JSON 5 is similar to JSON except for the following:
+	</p>
+	<ul class='spaced-list'>
+		<li>JSON attributes are only quoted when necessary.</li>
+		<li>Uses single-quotes for quoting.</li>
+	</ul>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+		|	<jc>// Some free-form JSON.</jc>
+		|	Map <jv>map</jv> = JsonMap.<jsm>of</jsm>(
+		|		<js>"foo"</js>, <js>"x1"</js>,
+		|		<js>"_bar"</js>, <js>"x2"</js>,
+		|		<js>" baz "</js>, <js>"x3"</js>,
+		|		<js>"123"</js>, <js>"x4"</js>,
+		|		<js>"return"</js>, <js>"x5"</js>,
+		|		<js>""</js>, <js>"x6"</js>
+		|	);
+	</p>
+	<p class='bjson'>
+		|	<joc>// Serialized to standard JSON</joc>
+		|	{
+		|		<jok>"foo"</jok>: <jov>"x1"</jov>,
+		|		<jok>"_bar"</jok>: <jov>"x2"</jov>,
+		|		<jok>" baz "</jok>: <jov>"x3"</jov>,
+		|		<jok>"123"</jok>: <jov>"x4"</jov>,
+		|		<jok>"return"</jok>: <jov>"x5"</jov>,
+		|		<jok>""</jok>: <jov>"x6"</jov>
+		|	}
+	</p>	 		
+	<p class='bjson'>
+	<joc>// Serialized to JSON 5</joc>
+		|	{
+		|		<jok>foo</jok>: <jov>'x1'</jov>,
+		|		<jok>_bar</jok>: <jov>'x2'</jov>,
+		|		<jok>' baz '</jok>: <jov>'x3'</jov>,  <joc>// Quoted due to embedded spaces.</joc>
+		|		<jok>'123'</jok>: <jov>'x4'</jov>,    <joc>// Quoted to prevent confusion with number.</joc>
+		|		<jok>'return'</jok>: <jov>'x5'</jov>, <joc>// Quoted because it's a keyword.</joc>
+		|		<jok>''</jok>: <jov>'x6'</jov>        <joc>// Quoted because it's an empty string.</joc>
+		|	}
+	</p>
+	<p>
+		JSON 5 is still valid Javascript.
+		The advantage to simplified JSON is you can represent it in a Java String in minimal form with minimal escaping.
+		This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to JSON 5 and do a simple string comparison.
+	</p>
+	<p class='bjava'>
+		|	WriterSerializer <jv>serializer</jv> = Json5Serializer.<jsf>DEFAULT</jsf>;
+		|	<jsm>assertString</jsm>(<jv>serializer</jv>.toString(<jv>myPojo</jv>)).is(<js>"{foo:'bar',baz:123}"</js>);
+	</p>			
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jm.Json5">JSON 5</a> for more information.
+	</ul>
+</div>
+
+<h5 class='topic'>UON Marshalling</h5>
+<div class='topic'>
+	<p>
+		The Marshalling API also supports UON (URL-Encoded Object Notation).
+		It allows JSON-like data structures (OBJECT, ARRAY, NUMBER, BOOLEAN, STRING, NULL) in HTTP constructs (query parameters, form parameters,
+		headers, URL parts) without violating RFC2396.
+		This allows POJOs to be converted directly into these HTTP constructs which is not possible in other languages such as JSON.
+	</p>
+	<p class='buon'>
+		|	(
+		|		id=1, 
+		|		name=<js>'John+Smith'</js>, 
+		|		uri=<js>http://sample/addressBook/person/1</js>, 
+		|		addressBookUri=<js>http://sample/addressBook</js>,
+		|		birthDate=<js>1946-08-12T00:00:00Z</js>,
+		|		addresses=@(
+		|			(
+		|				uri=<js>http://sample/addressBook/address/1</js>, 
+		|				personUri=<js>http://sample/addressBook/person/1</js>, 
+		|				id=<js>1</js>, 
+		|				street=<js>'100+Main+Street'</js>, 
+		|				city=<js>Anywhereville</js>, 
+		|				state=<js>NY</js>, 
+		|				zip=<js>12345</js>, 
+		|				isCurrent=<jk>true</jk>
+		|			)
+		|		)
+		|	)
+	</p>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jm.UonDetails">UON Details</a> for more information.
+	</ul>
+</div>
+<h5 class='topic'>OpenAPI Marshalling</h5>
+<div class='topic'>
+	<p>
+		The Marshalling API also supports schema-based OpenAPI serialization.
+		It allows HTTP parts to be marshalled to-and-from POJOs based on OpenAPI schema definitions.
+	</p>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.httpart.HttpPartSchema.*;
+		|	
+		|	<jc>// Schema - Pipe-delimited list of comma-delimited longs.</jc>
+		|	HttpPartSchema <jv>schema</jv> = <jsm>tArrayPipes</jsm>().items(
+		|		<jsm>tArrayCsv</jsm>().items(
+		|			<jsm>tInt64</jsm>()
+		|		)
+		|	).build();
+		|
+		|	<jc>// Our value to serialize</jc>
+		|	Object <jv>value</jv> = <jk>new long</jk>[][]{{1,2,3},{4,5,6},{7,8,9}};
+		|
+		|	<jc>// Produces "1,2,3|4,5,6|7,8,9"</jc>
+		|	String <jv>output</jv> = OpenApi.<jsm>of</jsm>(<jv>schema</jv>, <jv>value</jv>);
+	</p>
+	<p>
+		Schema-based serialization and parsing is used heavily in both the server and client REST APIs with built-in schema
+		validations support in various HTTP part annotations.
+	</p>
+	<p class='bjava'>
+		|	<jc>// REST server method with HTTP parts using schema validation.</jc>
+		|	<ja>@RestGet</ja>
+		|	<jk>public void</jk> doGet(
+		|		<ja>@Query</ja>(name=<js>"myParam"</js>, schema=<ja>@Schema</ja>(min=1, max=32)) <jk>int</jk> <jv>myParam</jv>,
+		|		<ja>@Header</ja>(<js>"MyHeader"</js>, schema=<ja>@Schema</ja>(pattern=<js>"foo.*"</js>)) String <jv>p2</jv>
+		|	) {...}
+	</p>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jm.OpenApiDetails">OpenAPI Details</a> for more information.
+	</ul>
+</div>
+
+<h5 class='topic'>JsonMap/JsonList</h5>
+<div class='topic'>
+	<p>
+		The {@link oaj.collections.JsonMap} and {@link oaj.collections.JsonList} collections classes allow you
+		to programmatically build generic JSON data structures.  They are similar in concept to 
+		<c>JSONObject</c> and <c>JSONArray</c> that you find in other JSON marshalling APIs but
+		can be used to generate DOMs in any of the supported languages.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Create JSON strings from scratch using fluent-style code.</jc>
+		|	String <jv>myMap</jv> = JsonMap.<jsm>create</jsm>().append(<js>"foo"</js>,<js>"bar"</js>).asJson(); 
+		|	String <jv>myList</jv> = JsonList.<jsm>of</jsm>(<js>"foo"</js>, 123, <jk>null</jk>, <jv>jsonObject</jv>).asJson(); 
+		|	
+		|	<jc>// Parse directly from JSON into generic DOMs.</jc>
+		|	Map&lt;String,Object&gt; <jv>myMap</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{foo:'bar'}"</js>); 
+		|	List&lt;Object&gt; <jv>myList</jv> = JsonList.<jsm>ofJson</jsm>(<js>"['foo',123,null]"</js>); 
+	</p>
+	<p>
+		These classes provide lots of convenience methods including:
+	</p>
+	<ul>
+		<li>Methods for direct marshalling to/from any of the other supported languages.</li>
+		<li>Methods for quick conversions to other data types including collections, beans, arrays, etc...</li>
+	</ul>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jm.JsonMap">JsonMap and JsonList</a> for more information.
+	</ul>
+</div>
+
+<h5 class='topic'>Serializer and Parser Sets</h5>
+<div class='topic'>
+	<p>
+		{@link oaj.serializer.SerializerSet} and {@link oaj.parser.ParserSet} classes allow serializers and parsers 
+		to be retrieved by W3C-compliant HTTP <code>Accept</code> and <code>Content-Type</code> values:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Construct a new serializer group with configuration parameters that get applied 
+		|	// to all serializers.</jc>
+		|	SerializerSet <jv>serializerSet</jv> = SerializerSet
+		|		.<jsm>create</jsm>()
+		|		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
+		|		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(CalendarSwap.ISO8601DT.<jk>class</jk>))
+		|		.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.useWhitespace())
+		|		.build();
+		|
+		|	<jc>// Find the appropriate serializer by Accept type and serialize our POJO to the specified writer.</jc>
+		|	<jc>// Fully RFC2616 compliant.</jc>
+		|	<jv>serializerSet</jv>
+		|		.getSerializer(<js>"text/invalid, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>)
+		|		.serialize(<jv>person</jv>, <jv>myWriter</jv>);
+		|		
+		|	<jc>// Construct a new parser group with configuration parameters that get applied to all parsers.</jc>
+		|	ParserSet <jv>parserSet</jv> = ParserSet
+		|		.<jsm>create</jsm>()
+		|		.add(JsonParser.<jk>class</jk>, UrlEncodingParser.<jk>class</jk>);
+		|		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(CalendarSwap.ISO8601DT.<jk>class</jk>))
+		|		.build();
+		|
+		|	Person <jv>person</jv> = <jv>parserSet</jv>
+		|		.getParser(<js>"text/json"</js>)
+		|		.parse(<jv>myReader</jv>, Person.<jk>class</jk>);
+	</p>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jm.SerializerSetsParserSets">SerializerSets and ParserSets</a> for more information.
+	</ul>
+</div>
+
+<h5 class='topic'>SVL Variables</h5>
+<div class='topic'>
+	<p>
+		The {@link oaj.svl} package defines an API for a language called "Simple Variable Language".
+		In a nutshell, Simple Variable Language (or SVL) is text that contains variables of the form
+		<js>"$varName{varKey}"</js>.
+	</p>
+	<p>
+		Variables can be recursively nested within the varKey (e.g. <js>"$FOO{$BAR{xxx},$BAZ{xxx}}"</js>).
+		Variables can also return values that themselves contain more variables.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Use the default variable resolver to resolve a string that 
+		|	// contains $S (system property) variables</jc>
+		|	String <jv>myProperty</jv> = VarResolver.<jsf>DEFAULT</jsf>.resolve(<js>"The Java home directory is $S{java.home}"</js>);
+	</p>
+	<p>
+		The SVL variables are used widely throughout various annotations defined in Juneau allowing many features to be configured
+		via external sources such as configuration files or environment variables/system properties.  The SVL APIs are 
+		extensible allowing for the addition of new types of variables.
+	</p>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jm.SimpleVariableLanguage">Simple Variable Language</a> for more information.
+	</ul>
+</div>

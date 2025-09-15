@@ -1,0 +1,92 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'XML Details'}
+
+<div class='topic'>
+	<p>
+		Juneau supports converting arbitrary POJOs to and from XML using ultra-efficient serializers and parsers.
+		The XML serializer converts POJOs directly to XML without the need for intermediate DOM objects.
+		Likewise, the XML parser uses a STaX parser and creates POJOs directly without intermediate DOM objects. 
+	</p>
+	<p>
+		Unlike frameworks such as JAXB, Juneau does not require POJO classes to be annotated to produce and consume 
+		XML.
+		However, several XML annotations are provided for handling namespaces and fine-tuning the format of the XML produced.
+	</p>
+	<p>
+		The following example shows XML for a typical bean:
+	</p>
+	<h5 class='figure'>Sample Beans</h5>
+	<p class='bjava'>
+		|	<ja>@Bean</ja>(typeName=<js>"person"</js>)
+		|	<jk>public class</jk> Person {
+		|		
+		|		<jc>// Bean properties</jc>
+		|		<jk>public</jk> String <jf>name</jf>;
+		|		<ja>@Swap</ja>(TemporalCalendarSwap.IsoInstant.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		|		<jk>public</jk> List&lt;Address&gt; <jf>addresses</jf>; 
+		|	
+		|		<jc>// Getters/setters omitted</jc>
+		|	}
+		|	
+		|	<ja>@Bean</ja>(typeName=<js>"address"</js>)
+		|	<jk>public class</jk> Address {
+		|
+		|		<jc>// Bean properties</jc>
+		|		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>;
+		|		<jk>public</jk> StateEnum <jf>state</jf>;
+		|		<jk>public int</jk> <jf>zip</jf>;
+		|		<jk>public boolean</jk> <jf>isCurrent</jf>;
+		|
+		|		<jc>// Getters/setters omitted</jc>
+		|	}	
+	</p>
+	<h5 class='figure'>Sample Code</h5>
+	<p class='bjava'>
+		|	Person <jv>person</jv> = <jk>new</jk> Person()
+		|		.name(<js>"John Smith"</js>)
+		|		.birthDate(<js>"1946-08-12T00:00:00Z"</js>)
+		|		.addresses(
+		|			<jk>new</jk> Address() 
+		|				.street(<js>"100 Main Street"</js>)
+		|				.city(<js>"Anywhereville"</js>)
+		|				.state(<jsf>NY</jsf>)
+		|				.zip(12345)
+		|				.isCurrent(<jk>true</jk>);
+		|		);
+	</p>
+	<h5 class='figure'>Normal XML:</h5>
+	<p class='bxml'>
+		|	<xt>&lt;person&gt;</xt>
+		|		<xt>&lt;name&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
+		|		<xt>&lt;birthDate&gt;</xt>1946-08-12T04:00:00Z<xt>&lt;/birthDate&gt;</xt>
+		|		<xt>&lt;addresses&gt;</xt>
+		|			<xt>&lt;address&gt;</xt>
+		|				<xt>&lt;street&gt;</xt>100 Main Street<xt>&lt;/street&gt;</xt>
+		|				<xt>&lt;city&gt;</xt>Anywhereville<xt>&lt;/city&gt;</xt>
+		|				<xt>&lt;state&gt;</xt>NY<xt>&lt;/state&gt;</xt>
+		|				<xt>&lt;zip&gt;</xt>12345<xt>&lt;/zip&gt;</xt>
+		|				<xt>&lt;isCurrent&gt;</xt>true<xt>&lt;/isCurrent&gt;</xt>
+		|			<xt>&lt;/address&gt;</xt>
+		|		<xt>&lt;/addresses&gt;</xt>
+		|	<xt>&lt;/person&gt;</xt>
+	</p>
+	<p>
+		Juneau produces JSON-equivalent XML, meaning any valid JSON document can be losslessly converted into an XML 
+		equivalent.
+		In fact, all of the Juneau serializers and parsers are built upon this JSON-equivalence.
+	</p>
+</div>

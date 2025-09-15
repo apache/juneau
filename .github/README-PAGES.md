@@ -51,8 +51,40 @@ Once deployed, the comprehensive site will be available at:
 After pushing this workflow, enable GitHub Pages in your repository:
 
 1. Go to **Settings** → **Pages**
-2. Under **Source**, select **GitHub Actions**
-3. The site will be available at: `https://<username>.github.io/juneau/`
+2. Under **Source**, select **GitHub Actions** (not "Deploy from a branch")
+3. **Important**: Make sure the repository has Pages enabled in the repository settings
+4. If you see "Get Pages site failed" error, verify:
+   - Repository is public OR you have GitHub Pro/Enterprise for private repo Pages
+   - Pages feature is enabled for the repository
+   - GitHub Actions has permission to deploy Pages
+5. The site will be available at: `https://<username>.github.io/juneau/`
+
+### Troubleshooting GitHub Pages Deployment
+
+If you encounter "Get Pages site failed" error:
+
+1. **Check Repository Settings**:
+   - Go to **Settings** → **Pages**
+   - Ensure **Source** is set to "GitHub Actions"
+   - Verify the repository has Pages enabled
+
+2. **Check Permissions**:
+   - Go to **Settings** → **Actions** → **General**
+   - Under "Workflow permissions", ensure "Read and write permissions" is selected
+   - Check that "Allow GitHub Actions to create and approve pull requests" is enabled
+
+3. **Repository Visibility**:
+   - Public repositories: Pages is free
+   - Private repositories: Requires GitHub Pro, Team, or Enterprise
+
+4. **Manual Enablement**:
+   - If the workflow fails, you may need to manually enable Pages first
+   - Create a simple `index.html` in a `gh-pages` branch, then switch back to Actions
+
+5. **Apache-Specific Requirements**:
+   - Apache projects require `.asf.yaml` configuration for GitHub Pages
+   - The `ghpages: whoami: asf-site` configuration has been added to enable Pages
+   - See: https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=127405038
 
 ### Monitoring Deployments
 To monitor deployment status and receive notifications:

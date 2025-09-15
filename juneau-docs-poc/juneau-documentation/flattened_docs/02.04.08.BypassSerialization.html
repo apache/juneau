@@ -1,0 +1,64 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Bypass Serialization using Readers and InputStreams'}
+
+<div class='topic'>
+	<p>
+		Juneau serializers treat instances of <c>Readers</c> and <c>InputStreams</c> special by 
+		simply serializing their contents directly to the output stream or writer.
+		This allows you to embed fully customized serializer output.
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> MyBean {
+		|		<jc>// A bean property that produces raw JSON.</jc>
+		|		<jk>public</jk> Reader <jf>f1</jf> = <jk>new</jk> StringReader(<js>"{'foo':'bar'}"</js>);	
+		|	}	
+		|	
+		|	<jc>// Produces "{f1:{'foo':'bar'}}"</jc>
+		|	String <jv>json</jv> = Json5.<jsm>of</jsm>(<jk>new</jk> MyBean());
+	</p>			
+	<p>
+		Note that if you're serializing Readers and InputStreams, it's up to you to make sure you're producing
+		valid output (in this case JSON).
+	</p>
+	<p>
+		A more typical scenario where this is useful is by using swaps to convert POJOs to Readers whose 
+		contents are determined via the {@link oaj.BeanSession#getMediaType()} method.
+		In the following example, we're customizing the JSON output for a particular bean type but leaving
+		all other renditions as-is:
+	</p>			
+	<p class='bjava'>
+		|	<ja>@Swap</ja>(MyBeanSwapSometimes.<jk>class</jk>)
+		|	<jk>public class</jk> MyBean {...}
+		|	
+		|	<jc>// A swap that produces specialized output for JSON but default serialization for</jc>
+		|	<jc>// all other media types.</jc>
+		|	<jk>public class</jk> MyBeanSwapSometimes <jk>extends</jk> ObjectSwap&lt;MyBean,Object&gt; {
+		|		<jk>public</jk> Object swap(BeanSession <jv>session</jv>, MyPojo <jv>object</jv>) <jk>throws</jk> Exception {
+		|			MediaType <jv>mediaType</jv> = <jv>session</jv>.getMediaType();
+		|			<jk>if</jk> (<jv>mediaType</jv>.hasSubType(<js>"json"</js>))
+		|				<jk>return new</jk> StringReader(<js>"{myPojo:'foobar'}"</js>);  <jc>// Custom JSON output</jc>
+		|			<jk>return</jk> <jv>object</jv>;  <jc>// Otherwise serialize it as a normal bean</jc>
+		|		}
+		|	}
+	</p>	
+	<div class='info'>
+		Due to the nature of the RDF serializers, Readers and InputStreams are serialized as literals,
+		not as RDF text.
+		This is due to the fact that the RDF serializers use a DOM for serialization so we don't have
+		access to the underlying stream.
+	</div>
+</div>

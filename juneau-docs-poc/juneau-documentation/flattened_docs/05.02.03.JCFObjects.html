@@ -1,0 +1,74 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Java Collection Framework Objects', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		Entries can also be read as Java Collection Framework objects.
+		The <c>Type,Type...</c> arguments allow you to specify the component types for maps and collections.
+		<c>List</c> class arguments can be followed by zero or one arguments representing the entry types.
+		<c>Map</c> class arguments can be followed by zero or two arguments representing the key and value types.
+		The arguments can be chained to produce any data structure consisting of maps, collections, or POJOs.
+	</p>
+	<p>
+		Examples are shown below:
+	</p>
+	<ul class='spaced-list'>
+		<li><c>to(List.<jk>class</jk>)</c>
+			<br>Produces: <c>List&lt;?&gt;</c>
+		<li><c>to(LinkedList.<jk>class</jk>)</c>
+			<br>Produces: <c>LinkedList&lt;?&gt;</c>
+		<li><c>to(HashSet.<jk>class</jk>, Integer.<jk>class</jk>)</c>
+			<br>Produces: <c>HashSet&lt;Integer&gt;</c>
+		<li><c>to(Map.<jk>class</jk>)</c>
+			<br>Produces: <c>Map&lt;?,?&gt;</c>
+		<li><c>to(HashMap.<jk>class</jk>)</c>
+			<br>Produces: <c>HashMap&lt;?,?&gt;</c>
+		<li><c>to(LinkedHashMap.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>)</c>
+			<br>Produces: <c>LinkedHashMap&lt;String,MyBean&gt;</c> 
+		<li><c>to(HashMap.<jk>class</jk>, Integer.<jk>class</jk>, ArrayList.<jk>class</jk>, MyBean[].<jk>class</jk>)</c>
+			<br>Produces: <c>LinkedHashMap&lt;Integer,ArrayList&lt;MyBean[]&gt;&gt;</c> 
+	</ul>
+	<h5 class='figure'>Example:</h5>
+	<p class='bini'>
+		|	<ck>addresses</ck> = 
+		|		<cv>[
+		|			{
+		|				street: '123 Main Street',
+		|				city: 'Anywhere',
+		|				state: 'NY',
+		|				zip: 12345
+		|			}</cv>,
+		|			<cv>{
+		|				street: '456 Main Street',
+		|				city: 'Anywhere',
+		|				state: 'NY',
+		|				zip: 12345
+		|			}
+		|		]</cv>
+	</p>
+	<p class='bjava'>
+		|	List&lt;Address&gt; <jv>addresses</jv> = <jv>config</jv>.get(<js>"addresses"</js>).as(ArrayList.<jk>class</jk>, Address.<jk>class</jk>).orElse(<jk>null</jk>);
+	</p>
+	<p>
+		Oftentimes, it might be useful to parse into the {@link oaj.collections.JsonList} and {@link oaj.collections.JsonMap}
+		classes that provide the various convenience methods for working with JSON-like data structures:
+	</p>
+	<p class='bjava'>
+		|	JsonMap <jv>map</jv> = <jv>config</jv>.get(<js>"key1"</js>).asMap().orElse(<jk>null</jk>);
+		|	JsonList <jv>list</jv> = <jv>config</jv>.get(<js>"key2"</js>).asList().orElse(<jk>null</jk>);
+	</p>
+</div>

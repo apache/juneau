@@ -1,0 +1,125 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'UI Customization', created:'8.0.0'}
+
+<div class='topic'>
+	<p>
+		The Microservice project contains a <c>files/htdocs</c> folder with predefined stylesheets and
+		images.
+	</p>
+	<img style='width:200px' src='doc-files/jmj.UiCustomization.1.png'>
+	<p>
+		These files can be used to tailor the look-and-feel of your microservice.
+	</p>
+	<p class='bcode'>
+		|	http://localhost:10000/helloWorld
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.UiCustomization.1.png'>
+	<p>
+		The REST configuration section of your microservice configuration file can be used to tailor the header and footer on the pages:
+	</p>
+	<p class='bini'>
+		|	<cc>#=======================================================================================================================
+		|	# REST settings
+		|	#=======================================================================================================================</cc>
+		|	<cs>[REST]</cs>
+		|	
+		|	<ck>staticFiles</ck> = <cv>htdocs:files/htdocs</cv>
+		|	
+		|	<cc># Stylesheet to use for HTML views.</cc>
+		|	<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
+		|	
+		|	<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
+		|	<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
+		|	<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
+		|	<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
+		|	
+		|	<ck>favicon</ck> = <cv>$C{REST/headerIcon}</cv>
+		|	<ck>header</ck> = 
+		|		<cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;</cv>
+		|			<cv>&lt;img src='$U{$C{REST/headerIcon}}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;</cv>
+		|		<cv>&lt;/a&gt;</cv>
+		|	<ck>footer</ck> = 
+		|		<cv>&lt;a href='$U{$C{REST/footerLink}}'&gt;</cv>
+		|			<cv>&lt;img src='$U{$C{REST/footerIcon}}' style='float:right;padding-right:20px;height:32px'/&gt;</cv>
+		|		<cv>&lt;/a&gt;</cv>
+	</p>
+	<p>
+		The {@link oajr.config.DefaultConfig} interface (which defines the default settings for {@link oajr.servlet.BasicRestServlet} 
+		pulls in this information using {@link oaj.config.vars.ConfigVar $C} and {@link oajr.vars.UrlVar $U} variables:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		...
+		|		<jc>// Optional external configuration file.</jc>
+		|		config=<js>"$S{juneau.configFile}"</js>,
+		|	
+		|		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
+		|		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
+		|		// By default, we define static files through the external configuration file.</jc>
+		|		staticFiles=<js>"$C{REST/staticFiles}"</js>
+		|	)
+		|	<jc>// HTML-page specific settings</jc>
+		|	<ja>@HtmlDocConfig</ja>(
+		|		<jc>// Default page header contents.</jc>
+		|		header={
+		|			<js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;"</js>,  <jc>// Use @Rest(title)</jc>
+		|			<js>"&lt;h2&gt;$RS{operationSummary,description}&lt;/h2&gt;"</js>, <jc>// Use either @RestOp(summary) or @Rest(description)</jc>
+		|			<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
+		|		},
+		|	
+		|		<jc>// Default stylesheet to use for the page.
+		|		// Can be overridden from external config file.
+		|		// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+		|		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+		|	
+		|		<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
+		|		// Use it to add a favicon link to the page.</jc>
+		|		head={
+		|			<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
+		|		},
+		|	
+		|		<jc>// No default page footer contents.
+		|		// Can be overridden from external config file.</jc>
+		|		footer=<js>"$C{REST/footer}"</js>
+		|	)
+		|	<jk>public interface</jk> BasicRestConfig {}
+	</p>
+	<p>
+		Note that the <c>files/htdocs</c> directory is mapped to <js>"servlet:/htdocs"</js> using the <c>staticFiles</c>
+		setting.  This allows those files to be served up through the servlet through the URL <js>"/[servlet-path]/htdocs"</js>
+	</p>
+	<p>
+		The theme files are externally accessible and can be modified to produce any look-and-feel you desire.
+		The microservice still works without the files directory.  An embedded <c>devops.css</c> is included in the jar as a default spreadsheet.
+	</p>
+	<p>
+		If you're testing out changes in the theme stylesheets, you may want to set the following system property that prevents caching of those files so 
+		that you don't need to restart the microservice each time a change is made:
+	</p>
+	<p class='bini'>
+		|	<cc>#=======================================================================================================================
+		|	# System properties
+		|	#-----------------------------------------------------------------------------------------------------------------------
+		|	# These are arbitrary system properties that are set during startup.
+		|	#=======================================================================================================================</cc>
+		|	<cs>[SystemProperties]</cs>
+		|	
+		|	<cc># Disable classpath resource caching.
+		|	# Useful if you're attached using a debugger and you're modifying classpath resources while running.</cc>
+		|	<ck>RestContext.disableClasspathResourceCaching.b</ck> = <cv>true</cv>
+	</p>
+</div>

@@ -1,0 +1,87 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'General Design', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The Juneau framework uses the design pattern of builders, context, and session objects:
+	</p>
+	<ul>
+		<li>Context Builders - Modifiable objects that allow you to define configuration settings for contexts.</li>
+		<li>Contexts - Unmodifiable thread-safe objects meant to be cacheable and reusable.</li>
+		<li>Sessions - Modifiable objects usually meant for one-time use.</li>
+	</ul>
+	<p>
+		This is a general design pattern used throughout the framework including the REST client and server APIs.
+	</p>
+	<p>
+		The following shows the general pattern for creating sessions:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Create a reusable context object (in this case a serializer).</jc>
+		|	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		|		.<jsm>create</jsm>()                 <jc>// Instantiates a context builder.</jc>
+		|		.findFluentSetters()      <jc>// Sets a configuration value.</jc>
+		|		.build();                 <jc>// Creates a context.</jc>
+		|	
+		|	<jc>// Create a one-time session object.</jc>
+		|	WriterSerializerSession <jv>session</jv> = <jv>serializer</jv>
+		|		.createSession()           <jc>// Instantiates a session builder.</jc>
+		|		.useWhitespace()           <jc>// Sets a session value.</jc>
+		|		.build();                  <jc>// Creates a session.</jc>
+		|		
+		|	<jc>// Use it.</jc>
+		|	String <jv>json</jv> = <jv>session</jv>.serialize(<jv>myBean</jv>);
+	</p>
+	<p>
+		Typically developers will not deal with session objects and will just use convenience
+		methods on the context classes themselves that handle creation of sessions:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Just use serialize method on WriterSerializer class.</jc>
+		|	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myBean</jv>);
+	</p>
+	<p>
+		Most context objects also have static default instances that can be used in leu of
+		creating new contexts as well:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Just use one of the static context instances.</jc>
+		|	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myBean</jv>);
+	</p>
+	<p>
+		Most context classes also have the ability to clone and modify existing context objects:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Clone and modify an existing context object.</jc>
+		|	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		|		.<jsf>DEFAULT</jsf>
+		|		.copy()                   <jc>// Instantiates a context builder.</jc>
+		|		.findFluentSetters()      <jc>// Sets a configuration value.</jc>
+		|		.build();                 <jc>// Creates a context.</jc>
+	</p>	
+	<p>
+		The default values of many context settings can also be set via system properties and environment variables.
+		The javadocs on these settings will identify when this is possible.
+	</p>
+	<p>
+		The framework makes heavy use of caching of existing context objects with the same builder settings.  
+		This is a critical reason why Juneau achieve impressive performance.  
+		Using Java reflection to find out all information about a bean type is expensive.
+		By caching context objects, we only need to reflect that bean type once and store that information in the context
+		for reuse by all serializers and parsers that share the same bean context configuration settings.
+	</p>
+</div>

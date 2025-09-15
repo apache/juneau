@@ -1,0 +1,105 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Path Patterns', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oajr.annotation.RestOp#path() @RestOp(path)} annotation allows 
+		you to define URL path patterns to match against.
+		These patterns can contain variables of the form <l>"{xxx}"</l> that can be passed in directly to the
+		Java methods as extra parameters.
+	</p>
+	<p>
+		In the following example, 3 separate GET request handlers are defined with different path patterns.
+		Note how the variables are passed in as additional arguments on the method, and how those arguments are 
+		automatically converted to the specified class type...
+	</p>
+	<p class='bjava'>
+		|	<jc>// Default method</jc>
+		|	<ja>@RestGet</ja>(path=<js>"/*"</js>)
+		|	<jk>public void</jk> doGetDefault() {
+		|		...
+		|	}
+		|
+		|	<jc>// Method with path pattern</jc>
+		|	<ja>@RestGet</ja>(path=<js>"/xxx"</js>)
+		|	<jk>public void</jk> doGetNoArgs(...) {
+		|		...
+		|	}
+		|
+		|	<jc>// Method with path pattern with arguments</jc>
+		|	<ja>@RestGet</ja>(path=<js>"/xxx/{foo}/{bar}/{baz}/{bing}"</js>)
+		|	<jk>public void</jk> doGetWithArgs(
+		|			<ja>@Path</ja>(<js>"foo"</js>) String <jv>foo</jv>, 
+		|			<ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> <jv>bar</jv>, 
+		|			<ja>@Path</ja>(<js>"baz"</js>) MyEnum <jv>baz</jv>, 
+		|			<ja>@Path</ja>(<js>"bing"</js>) UUID <jv>qux</jv>
+		|	) {
+		|		...
+		|	}
+	</p>
+	<p>
+		By default, path patterns are matched using a best-match heuristic. 
+		When overlaps occur, URLs are matched from most-specific to most-general order:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Try first </jc>
+		|	<ja>@RestGet</ja>(<js>"/foo/bar"</js>)
+		|	<jk>public void</jk> method1() {
+		|		...
+		|	}
+		|
+		|	<jc>// Try second</jc>
+		|	<ja>@RestGet</ja>(<js>"/foo/{bar}"</js>)
+		|	<jk>public void</jk> method2(...) {
+		|		...
+		|	}
+		|
+		|	<jc>// Try third</jc>
+		|	<ja>@RestGet</ja>(<js>"/foo/*"</js>)
+		|	<jk>public void</jk> method3(...) {
+		|		...
+		|	}
+		|
+		|	<jc>// Try last</jc>
+		|	<ja>@RestGet</ja>(<js>"/*"</js>)
+		|	<jk>public void</jk> method4(...) {
+		|		...
+		|	}
+	</p>
+	<p>
+		Paths that end with <js>"/*"</js> will do a prefix match on the incoming URL.  
+		Any remainder after the match can be accessed through 
+		{@link oajr.httppart.RequestPathParams#getRemainder()} or parameters with the 
+		<c><ja>@Path</ja>(<js>"/*"</js>)</c> annotation.
+		On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will 
+		require an exact URL match, and if any remainder exists, a 404 (not found) error will be thrown.
+	</p>
+	<p>
+		The following example shows the distinction.
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(<js>"/*"</js>)
+		|	<jk>public void</jk> doGet(<ja>@Path</ja>(<js>"/*"</js>) String <jv>remainder</jv>) {
+		|		<jc>// URL path pattern can have remainder accessible through req.getRemainder().</jc>
+		|	}
+		|
+		|	<ja>@RestPut</ja>(<js>"/"</js>)
+		|	<jk>public void</jk> doPut() {
+		|		<jc>// URL path pattern must match exactly and will cause a 404 error if a remainder exists.</jc>
+		|	}
+	</p>
+</div>

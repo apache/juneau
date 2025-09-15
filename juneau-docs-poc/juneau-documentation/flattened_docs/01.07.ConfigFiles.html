@@ -1,0 +1,60 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Config Files', created:'9.0.0'} 
+
+<div class='topic'>
+	<p>
+		The <a class="doclink" href="#juneau-config">juneau-config</a> library contains a powerful API for creating and using INI-style config files.
+	</p>
+	<h5 class='figure'>Example configuration file:</h5>
+	<p class='bini'>
+		|	<cc># A set of entries</cc>
+		|	<cs>[Section1]</cs>
+		|
+		|	<cc># An integer</cc>
+		|	<ck>key1</ck> = <cv>1</cv>
+		|
+		|	<cc># A boolean</cc>
+		|	<ck>key2</ck> = <cv>true</cv>
+		|	
+		|	<cc># An array</cc>
+		|	<ck>key3</ck> = <cv>1,2,3</cv>
+		|
+		|	<cc># A POJO</cc>
+		|	<ck>key4</ck> = <cv>http://bar</cv>
+	</p>
+	<p>
+		Config files are accessed through the {@link oaj.config.Config} class which
+		are created through the {@link oaj.config.Config.Builder} class.
+		Builder creator methods are provided on the <c>Config</c> class:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Create a Config object</jc>
+		|	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+		|	
+		|	<jc>// Read values from section #1</jc>
+		|	<jk>int</jk> <jv>key1</jv> = <jv>config</jv>.getInt(<js>"Section1/key1"</js>);
+		|	<jk>boolean</jk> <jv>key2</jv> = <jv>config</jv>.getBoolean(<js>"Section1/key2"</js>);
+		|	<jk>int</jk>[] <jv>key3</jv> = <jv>config</jv>.getObject(<js>"Section1/key3"</js>, <jk>int</jk>[].<jk>class</jk>);
+		|	URL <jv>key4</jv> = <jv>config</jv>.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
+	</p>
+	<p>
+		The config language may look simple but it is a very powerful feature with many capabilities.
+	</p>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#juneau-config">juneau-config</a> for more information.
+	</ul>
+</div>

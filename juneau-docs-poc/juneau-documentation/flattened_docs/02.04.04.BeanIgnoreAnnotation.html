@@ -1,0 +1,46 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@BeanIgnore Annotation'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.annotation.BeanIgnore @BeanIgnore} annotation is used to
+		ignore classes, fields, and methods from being interpreted as beans or bean components.
+	</p> 
+	<p>
+		When applied to classes, objects will be converted to strings even though they look like beans.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Not really a bean!  Use toString() instead!</jc>
+		|	<ja>@BeanIgnore</ja>
+		|	<jk>public class</jk> MyBean {...}
+	</p>
+	<p>
+		When applied to fields and getters/setters, they will be ignored as bean properties.
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> MyBean {
+		|		
+		|		<jc>// Not a bean property!</jc>
+		|		<ja>@BeanIgnore</ja>
+		|		<jk>public</jk> String <jf>foo</jf>;
+		|		
+		|		<jc>// Not a bean property!</jc>
+		|		<ja>@BeanIgnore</ja>
+		|		<jk>public</jk> String getBar() {...}
+		|	}
+	</p>
+</div>

@@ -1,0 +1,102 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@Swap Annotation', updated:'8.0.0,9.0.0'} 
+
+<div class='topic'>
+	<p>
+		{@link oaj.annotation.Swap @Swap} can be used to associate a swap class using an 
+		annotation.
+		This is often cleaner than using the builder <c>swaps()</c> method since you can keep
+		your swap class near your POJO class. 
+	</p>
+	<p class='bjava'>
+		|	<ja>@Swap</ja>(MyObjectSwap.<jk>class</jk>)
+		|	<jk>public class</jk> MyPojo {
+		|		...
+		|	}
+		|	
+		|	<jc>// Sample swap for converting MyPojo classes to a simple string.</jc>
+		|	<jk>public class</jk> MyObjectSwap <jk>extends</jk> ObjectSwap&lt;MyPojo,String&gt; {
+		|		
+		|		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
+		|		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyPojo <jv>pojo</jv>) {
+		|			<jk>return</jk> <jv>pojo</jv>.toSomeSerializableForm();
+		|		}
+		|	}
+	</p>
+	<p>
+		Multiple swaps can be associated with a class using multiple {@link oaj.annotation.Swap @Swap} annotations:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>)
+		|	<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>)
+		|	<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
+		|	<jk>public class</jk> MyPojo {}
+	</p>
+	<p>
+		<c>Readers</c> get serialized directly to the output of a serializer.
+		Therefore it's possible to implement a swap that provides fully-customized output.
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> MyJsonSwap <jk>extends</jk> ObjectSwap&lt;MyPojo,Reader&gt; {
+		|
+		|		<jk>public</jk> MediaType[] forMediaTypes() {
+		|			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
+		|		}
+		|
+		|		<jk>public</jk> Reader swap(BeanSession <jv>session</jv>, MyPojo <jv>pojo</jv>) <jk>throws</jk> Exception {
+		|			<jk>return new</jk> StringReader(<js>"{message:'Custom JSON!'}"</js>);
+		|		}
+		|	}
+	</p>
+	<p>
+		The <ja>@Swap</ja> annotation can also be used on getters and setters as well to apply a swap
+		to individual property values:
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> MyBean {
+		|		<jk>private</jk> MyPojo <jf>myPojo</jf>;
+		|	
+		|		<jc>// Swap applied to bean property.</jc>	
+		|		<ja>@Beanp</ja>(swap=MyPojoSwap.<jk>class</jk>)
+		|		<jk>public</jk> MyPojo getMyPojo() {
+		|			<jk>return</jk> <jf>myPojo</jf>;
+		|		}
+		|	}
+	</p>
+	<p>
+		When applied to bean properties, the swap annotation need only be applied to either the getter, setter, or field.
+	</p>
+	<p>
+		The swap annotation can also be applied to the private field of a bean property, like so:
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> MyBean {
+		|
+		|		<ja>@Beanp</ja>(swap=MyPojoSwap.<jk>class</jk>)
+		|		<jk>private</jk> MyPojo <jf>myPojo</jf>;
+		|	
+		|		<jk>public</jk> MyPojo getMyPojo() {
+		|			<jk>return</jk> <jf>myPojo</jf>;
+		|		}
+		|		
+		|		<jk>public</jk> MyBean setMyPojo(MyPojo <jv>myPojo</jv>) {
+		|			<jk>this</jk>.<jf>myPojo</jf> = <jv>myPojo</jv>;
+		|			<jk>return this</jk>;
+		|		}
+		|	}
+	</p>
+</div>

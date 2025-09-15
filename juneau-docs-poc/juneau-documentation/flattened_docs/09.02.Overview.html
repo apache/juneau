@@ -1,0 +1,165 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Overview', created:'8.0.0', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The Juneau REST servlet APIs are designed to work seemlessly with the Spring Boot framework.
+		The only restriction is that your top-level REST resource must extend from one of the following classes:
+	</p>
+	<ul class='javatree'>
+		<li class='jp'>{@link oajr.springboot}
+		<ul class='javatree'>
+			<li class='jc'>{@link oajr.springboot.BasicSpringRestServlet} - Basic servlet</li>
+			<li class='jc'>{@link oajr.springboot.BasicSpringRestServletGroup} - Basic servlet group</li>
+		</ul>
+	</ul>
+	<p>
+		These classes are the equivalent to the {@link oajr.servlet.BasicRestServlet} and {@link oajr.servlet.BasicRestServletGroup}
+		except they hook into the injection framework of Spring Boot to provide resolution of beans (e.g. child resources, various
+		configuration classes).
+	</p>
+	<p>
+		The <c>org.apache.juneau.examples.rest.springboot</c> package and <c>org.apache.juneau.examples.rest.springboot.App</c> 
+		application are a basic Spring Boot application that shows off simple Juneau examples including injection beans.
+	</p>	
+	<p class='bjava'>
+		|	<ja>@SpringBootApplication</ja>
+		|	<ja>@Controller</ja>
+		|	<jk>public class</jk> App {
+		|	
+		|		<jc>//Entry point method.</jc>
+		|		<jk>public static void</jk> main(String[] <jv>args</jv>) {
+		|			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>).run(<jv>args</jv>);
+		|		}
+		|	
+		|		<jc>// Our root REST bean.
+		|		// Note that this must extend from {@link oajr.springboot.SpringRestServlet} to allow use of injection.
+		|		// All REST objects are attached to this bean using the {@link oajr.annotation.Rest#children()} annotation.</jc>
+		|		<ja>@Bean</ja>
+		|		<jk>public</jk> RootResources getRootResources() {
+		|			<jk>return new</jk> RootResources();
+		|		}
+		|	
+		|		<jc>// Registers our REST bean at the URI root.</jc>
+		|		<ja>@Bean</ja>
+		|		<jk>public</jk> ServletRegistrationBean&lt;Servlet&gt; getRootServlet(RootResources <jv>rootResources</jv>) {
+		|			<jk>return new</jk> ServletRegistrationBean&lt;&gt;(<jv>rootResources</jv>, <js>"/*"</js>);
+		|		}
+		|	
+		|		<jc>// Injected child resource.</jc>
+		|		<ja>@Bean</ja>
+		|		<jk>public</jk> HelloWorldResource getHelloWorldResource() {
+		|			<jk>return new</jk> HelloWorldResource();
+		|		}
+		|	
+		|		<jc>// Injected child bean used in injected child resource.</jc>
+		|		<ja>@Bean</ja>
+		|		<jk>public</jk> HelloWorldMessageProvider getHelloWorldMessageProvider() {
+		|			<jk>return new</jk> HelloWorldMessageProvider(<js>"Hello Spring injection user!"</js>);
+		|		}
+		|	}
+	</p>	
+	<p>
+		Our root resource servlet serves as a router page.  It is defined as follows:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		title=<js>"Root resources"</js>,
+		|		description=<js>"Example of a router resource page."</js>,
+		|		children={
+		|			HelloWorldResource.<jk>class</jk>,
+		|			DtoExamples.<jk>class</jk>,
+		|			UtilityBeansResource.<jk>class</jk>,
+		|			HtmlBeansResource.<jk>class</jk>,
+		|			ConfigResource.<jk>class</jk>,
+		|			ShutdownResource.<jk>class</jk>
+		|		}
+		|	)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		widgets={
+		|			ContentTypeMenuItem.<jk>class</jk>
+		|		},
+		|		navlinks={
+		|			<js>"api: servlet:/api"</js>,
+		|			<js>"stats: servlet:/stats"</js>,
+		|			<js>"$W{ContentTypeMenuItem}"</js>,
+		|			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+		|		},
+		|		aside={
+		|			<js>"&lt;div class='text'&gt;"</js>,
+		|			<js>"	&lt;p&gt;This is an example of a 'router' page that serves as a jumping-off point to child resources.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Resources can be nested arbitrarily deep through router pages.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Note the &lt;span class='link'&gt;API&lt;/span&gt; link provided that lets you see the generated swagger doc for this page.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Also note the &lt;span class='link'&gt;STATS&lt;/span&gt; link that provides basic usage statistics.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Also note the &lt;span class='link'&gt;SOURCE&lt;/span&gt; link on these pages to view the source code for the page.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Other features (such as this aside) are added through annotations.&lt;/p&gt;"</js>,
+		|			<js>"&lt;/div&gt;"</js>
+		|		},
+		|		asideFloat=<js>"RIGHT"</js>
+		|	)
+		|	<ja>@SerializerConfig</ja>(
+		|		quoteChar=<js>"'"</js>
+		|	)
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup {
+		|		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L;
+		|	}
+	</p>	
+	
+	<h5 class='figure'>HTML representation</h5>
+	<img class='bordered w800' src='doc-files/jrss.Overview.RootResources.png'>
+	
+	<h5 class='figure'>JSON representation</h5>
+	<img class='bordered w800' src='doc-files/jrss.Overview.RootResources.json.png'>
+	
+	<p>
+		The <c>org.apache.juneau.examples.rest.springboot.HelloWorldResource</c> class shows an example of a child resource
+		defined as an injected bean.
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		title=<js>"Hello World"</js>,
+		|		description=<js>"An example of the simplest-possible resource"</js>,
+		|		path=<js>"/helloWorld"</js>
+		|	)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		aside={
+		|			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+		|			<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
+		|			<js>"&lt;/div&gt;"</js>
+		|		}
+		|	)
+		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestObject {
+		|	
+		|		<ja>@Autowired</ja>
+		|		<jk>private</jk> HelloWorldMessageProvider <jf>messageProvider</jf>;
+		|	
+		|		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with injected message"</js>)
+		|		<jk>public</jk> String sayHello() {
+		|			<jk>return</jk> <jf>messageProvider</jf>.get();
+		|		}
+		|	}
+	</p>
+	
+	<p>
+		Note that the message rendered is coming from our injected message provider:
+	</p>
+	<h5 class='figure'>HTML representation</h5>
+	<img class='bordered w800' src='doc-files/jrss.Overview.HelloWorldResource.png'>
+	
+</div>

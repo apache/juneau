@@ -1,0 +1,101 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Syntax Rules'}
+
+<div class='topic'>
+	<ul class='spaced-list'>
+		<li>
+			Each config file contains zero or more sections containing zero or more entries:</li>
+			<p class='bini'>
+				|	<cs>[Section1]</cs>
+				|	<ck>key1</ck> = <cv>1</cv>
+				|
+				|	<cs>[Section2]</cs>
+				|	<ck>key1</ck> = <cv>2</cv>
+			</p>
+		<li>
+			Unicode escapes can be used in values.</li>
+			<p class='bini'>
+				|	<ck>key1</ck> = <cv>\u0070\u0075\u0062\u006c\u0069\u0063</cv>
+			</p>
+		<li>
+			Comment lines start with the <js>'#'</js> character and can be placed on lines before sections and entries:
+			<p class='bini'>
+				|	<cc># A comment about this section</cc>
+				|	<cs>[Section1]</cs>
+				|	
+				|	<cc># A comment about this entry</cc>
+				|	<ck>key1</ck> = <cv>1</cv>
+			</p>
+		<li>
+			Comments can also be placed on the same line as entries:</li>
+			<p class='bini'>
+				|	<ck>key1</ck> = <cv>1</cv>  <cc># A comment about this entry</cc>
+			</p>
+		<li>
+			Values containing <js>'#'</js> must be escaped to prevent identification as a comment character:
+			<p class='bini'>
+				|	<ck>valueContainingPound</ck> = <cv>Value containing \u0023 character</cv>
+			</p>
+			<br>Likewise, <js>'\'</js> should be escaped to prevent confusion with unicode escapes.
+		<li>
+			Values containing newlines can span multiple lines.
+			<br>Subsequent lines start with a tab character.
+			<p class='bini'>
+				|	<ck>multiLineValue</ck> = 
+				|		<cv>line 1,</cv>
+				|		<cv>line 2,</cv>
+				|		<cv>line 3</cv>
+			</p>
+			<br>When retrieved, the above translates to <js>"line1,\nline2,\nline3"</js>.
+		<li>
+			Leading and trailing whitespace on values are ignored.</li>
+		<li>
+			Whitespace is not ignored within multi-line values (except for the leading tab character on each line).</li>
+		<li>
+			Blank lines can be used anywhere in the file.</li>
+			<p class='bini'>
+				|	<cc># A comment line</cc>
+				|	
+				|	<cc># Another comment line</cc>
+				|	<cs>[Section1]</cs>
+				|	...
+			</p>
+		<li>
+			Values located before any sections are considered part of the no-name section, meaning
+			they are accessed simply by key and not section/key.</li>
+			<p class='bini'>
+				|	<cc># Top of file</cc>
+				|	
+				|	<cc># Use config.getString("key1") to retrieve.</cc>
+				|	<ck>key1</ck> = <cv>val1</cv>
+				|	
+				|	<cc># The first section</cc>
+				|	<cs>[Section1]</cs>
+				|
+				|	<cc># Use config.getString("Section1/key2") to retrieve.</cc>
+				|	<ck>key2</ck> = <cv>val2</cv>
+			</p>
+		<li>
+			Section and key names must be at least one character long and not consist of any of the following
+			characters:</li>
+			<p class='bini'>
+				|	/ \ [ ] = #
+			</p>
+		<li>
+			Whitespace in section and key names is technically allowed but discouraged.</li>
+	</ul>
+</div>

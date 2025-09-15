@@ -1,0 +1,91 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Args', created:'8.0.0'}
+
+<div class='topic'>
+	<p>
+		Command-line arguments can be associated with a microservice using the {@link oaj.microservice.Microservice.Builder#args(String...)} method.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jk>public static void</jk> main(String[] <jv>args</jv>) {
+		|		Microservice
+		|			.<jsm>create</jsm>()          <jc>// Create builder.</jc>
+		|			.args(<jv>args</jv>)        <jc>// Pass in args.</jc>
+		|			.build()           <jc>// Create microservice.</jc>
+		|			.start()           <jc>// Start microservice.</jc>
+		|			.join()            <jc>// Join thread.</jc>
+		|		;
+		|	}
+	</p>
+	<p>
+		When specified, the arguments can be retrieved using the {@link oaj.microservice.Microservice#getArgs()} method which provides
+		an API for easily accessing command-line arguments using common notation:
+	</p>
+	<p class='bjava'>
+		|	Args <jv>args</jv> = Microservice.<jsm>getInstance</jsm>().getArgs();
+		|	
+		|	<jc>// One main argument</jc>
+		|	<jc>// a1</jc>
+		|	String <jv>a1</jv> = <jv>args</jv>.getArg(0); <jc>// "a1"</jc>
+		|	String <jv>a2</jv> = <jv>args</jv>.getArg(1); <jc>// null</jc>
+		|
+		|	<jc>// Two main arguments</jc>
+		|	<jc>// a1 a2</jc>
+		|	String <jv>a1</jv> = <jv>args</jv>.getArg(0); <jc>// "a1"</jc>
+		|	String <jv>a2</jv> = <jv>args</jv>.getArg(1); <jc>// "a2"</jc>
+		|
+		|	<jc>// One main argument and one optional argument with no value</jc>
+		|	<jc>// a1 -a2</jc>
+		|	String <jv>args</jv>a1 = <jv>args</jv>.getArg(0);
+		|	<jk>boolean</jk> <jv>hasA2</jv> = <jv>args</jv>.hasArg(<js>"a2"</js>); <jc>// true</jc>
+		|	<jk>boolean</jk> <jv>hasA3</jv> = <jv>args</jv>.hasArg(<js>"a3"</js>); <jc>// false</jc>
+		|
+		|	<jc>// One main argument and one optional argument with one value</jc>
+		|	<jc>// a1 -a2 v2</jc>
+		|	String <jv>a1</jv> = <jv>args</jv>.getArg(0);
+		|	String <jv>a2</jv> = <jv>args</jv>.getArg(<js>"a2"</js>); <jc>// "v2"</jc>
+		|	String <jv>a3</jv> = <jv>args</jv>.getArg(<js>"a3"</js>); <jc>// null</jc>
+		|
+		|	<jc>// One main argument and one optional argument with two values</jc>
+		|	<jc>// a1 -a2 v2a v2b</jc>
+		|	String <jv>a1</jv> = <jv>args</jv>.getArg(0);
+		|	List&lt;String&gt; <jv>a2</jv> = <jv>args</jv>.getArgs(<js>"a2"</js>); <jc>// Contains ["v2a","v2b"]</jc>
+		|	List&lt;String&gt; <jv>a3</jv> = <jv>args</jv>.getArgs(<js>"a3"</js>); <jc>// Empty list</jc>
+		|
+		|	<jc>// Same as previous, except specify optional argument name multiple times</jc>
+		|	<jc>// a1 -a2 v2a -a2 v2b</jc>
+		|	String <jv>a1</jv> = <jv>args</jv>.getArg(0);
+		|	List&lt;String&gt; <jv>a2</jv> = <jv>args</jv>.getArgs(<js>"a2"</js>); <jc>// Contains ["v2a","v2b"]</jc>
+	</p>
+	<p>
+		Specifying the command-line arguments also makes them available through {@link oaj.svl.vars.ArgsVar $A} SVL variables.
+		These can be used in the configuration file and throughout various Juneau annotations.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// $A used in variable resolver.</jc>
+		|	VarResolver <jv>varResolver</jv> = Microservice.<jsm>getInstance</jsm>().getVarResolver();
+		|	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"Arg #1 is set to $A{1}"</js>));
+	</p>
+	<p class='bjava'>
+		|	<jc>// $A used in annotation.</jc>
+		|	<ja>@Rest</ja>(
+		|		title=<js>"$A{title}"</js>,
+		|		...
+		|	)
+	</p>
+</div>

@@ -1,0 +1,123 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Custom ConfigStores', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The <c>ConfigStore</c> API has been written to allow easy development of custom configuration storage classes.
+	</p>
+	<p>
+		The example below shows a starting point for an implementation based on polling a relational database.
+		The source can be found here: {@link oaj.examples.core.config.store.SqlStore}.
+		Completing it is left as an exercise:
+	</p>
+	<h5 class='figure'>Example Store Class:</h5>
+	<p class='bjava'>
+		|	<jk>public class</jk> SqlStore <jk>extends</jk> ConfigStore {
+		|	
+		|		<jk>private final</jk> String <jf>jdbcUrl</jf>;
+		|		<jk>private final</jk> String <jf>tableName</jf>, <jf>nameColumn</jf>, <jf>valueColumn</jf>;
+		|		<jk>private final</jk> Timer <jf>watcher</jf>;
+		|		<jk>private final</jk> ConcurrentHashMap&lt;String,String&gt; <jf>cache</jf> = <jk>new</jk> ConcurrentHashMap&lt;&gt;();
+		|	
+		|		<jk>protected</jk> SqlStore(ConfigStore.Builder <jv>builder</jv>) {
+		|			<jk>super</jk>(<jv>builder</jv>);
+		|			<jk>this</jk>.<jf>jdbcUrl</jf> = <jv>builder</jv>.<jf>jdbcUrl</jf>;
+		|			<jk>this</jk>.<jf>tableName</jf> = <jv>builder</jv>.<jf>tableName</jf>;
+		|			<jk>this</jk>.<jf>nameColumn</jf> = <jv>builder</jv>.<jf>nameColumn</jf>;
+		|			<jk>this</jk>.<jf>valueColumn</jf> = <jv>builder</jv>.<jf>valueColumn</jf>;
+		|	
+		|			<jk>int</jk> <jv>pollInterval</jv> = <jv>builder</jv>.<jf>pollInterval</jf>;
+		|	
+		|			TimerTask <jv>timerTask</jv> = <jk>new</jk> TimerTask() {
+		|				<ja>@Override</ja>
+		|				<jk>public void</jk> run() {
+		|					SqlStore.<jk>this</jk>.poll();
+		|				}
+		|			};
+		|	
+		|			<jk>this</jk>.<jf>watcher</jf> = <jk>new</jk> Timer(<js>"MyTimer"</js>);
+		|			<jf>watcher</jf>.scheduleAtFixedRate(<jv>timerTask</jv>, 0, <jv>pollInterval</jv> * 1000);
+		|		}
+		|	
+		|		<jk>synchronized void</jk> poll() {
+		|			<jc>// Loop through all our entries and find the latest values.</jc>
+		|			<jk>for</jk> (Map.Entry&lt;String,String&gt; <jv>e</jv> : <jf>cache</jf>.entrySet()) {
+		|				String <jv>name</jv> = <jv>e</jv>.getKey();
+		|				String <jv>cacheContents</jv> = <jv>e</jv>.getValue();
+		|				String <jv>newContents</jv> = getDatabaseValue(<jv>name</jv>);
+		|	
+		|				<jc>// Change detected!</jc>
+		|				<jk>if</jk> (! <jv>cacheContents</jv>.equals(<jv>newContents</jv>))
+		|					update(<jv>name</jv>, <jv>newContents</jv>);
+		|			}
+		|		}
+		|	
+		|		<jc>// Reads the value from the database.</jc>
+		|		<jk>protected</jk> String getDatabaseValue(String <jv>name</jv>) {
+		|			<jc>// Implement me!</jc>
+		|			<jk>return null</jk>;
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		|		<jk>public boolean</jk> exists(String <jv>name</jv>) {
+		|			<jc>// Implement me!</jc>
+		|			<jk>return false</jk>;
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		|		<jk>public synchronized</jk> String read(String <jv>name</jv>) {
+		|			String <jv>contents</jv> = <jf>cache</jf>.get(<jv>name</jv>);
+		|			<jk>if</jk> (<jv>contents</jv> == <jk>null</jk>) {
+		|				<jv>contents</jv> = getDatabaseValue(<jv>name</jv>);
+		|				update(<jv>name</jv>, <jv>contents</jv>);
+		|			}
+		|			<jk>return</jk> <jv>contents</jv>;
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		|		<jk>public synchronized</jk> String write(String <jv>name</jv>, String <jv>expectedContents</jv>, String <jv>newContents</jv>) {
+		|	
+		|			<jc>// This is a no-op.</jc>
+		|			<jk>if</jk> (StringUtils.<jsm>eq</jsm>(<jv>expectedContents</jv>, <jv>newContents</jv>))
+		|				<jk>return null</jk>;
+		|	
+		|			String <jv>currentContents</jv> = read(<jv>name</jv>);
+		|	
+		|			<jk>if</jk> (<jv>expectedContents</jv> != <jk>null</jk> &amp;&amp; StringUtils.<jsm>ne</jsm>(<jv>currentContents</jv>, <jv>expectedContents</jv>))
+		|				<jk>return</jk> <jv>currentContents</jv>;
+		|	
+		|			update(<jv>name</jv>, <jv>newContents</jv>);
+		|	
+		|			<jc>// Success!</jc>
+		|			<jk>return null</jk>;
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		|		<jk>public synchronized</jk> SqlStore update(String <jv>name</jv>, String <jv>newContents</jv>) {
+		|			<jf>cache</jf>.put(<jv>name</jv>, <jv>newContents</jv>);
+		|			<jk>super</jk>.update(<jv>name</jv>, <jv>newContents</jv>);  <jc>// Trigger any listeners.</jc>
+		|			<jk>return this</jk>;
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* Closeable */</jc>
+		|		<jk>public synchronized void</jk> close() {
+		|			<jk>if</jk> (<jf>watcher</jf> != <jk>null</jk>)
+		|				<jf>watcher</jf>.cancel();
+		|		}
+		|	}
+	</p>
+</div>

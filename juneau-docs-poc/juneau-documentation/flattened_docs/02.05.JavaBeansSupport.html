@@ -1,0 +1,116 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Java Beans Support', created:'8.2.0', updated:'9.0.0'} 
+
+<div class='topic'>
+	<p>
+		Out-of-the-box, Juneau supports marshalling of Java beans with standard public getters and setters, public
+		fields, and fluent setters (e.g. <c>withX</c> naming convention).  There are also many settings and
+		annotations that can be used to customize how bean properties are detected.  The following is an example of
+		some of the ways to define bean properties:
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> MyBean {
+		|	
+		|		<jc>// Public field property.</jc>
+		|		<jk>public</jk> String <jf>property1</jf>;
+		|		
+		|		<jc>// Standard public getters/setters.</jc>
+		|		<jk>public</jk> String getProperty2() {...}
+		|		<jk>public void</jk> setProperty2(String <jv>value</jv>) {...}
+		|		
+		|		<jc>// With fluent-style setter.</jc>
+		|		<jk>public</jk> String getProperty3() {...}
+		|		<jk>public</jk> MyBean withProperty3(String <jv>value</jv>) {...}
+		|		
+		|		<jc>// Read-only property (ignored by parsers).</jc>
+		|		<jk>public</jk> String getProperty4() {...}
+		|		
+		|		<jc>// Write-only property (ignored by serializers).</jc>
+		|		<jk>public void</jk> setProperty5(String <jv>value</jv>) {...}
+		|		
+		|		<jc>// Non-standard getters/setters identified by annotation.</jc>
+		|		<ja>@Beanp</ja>
+		|		<jk>public</jk> String property6() {...}
+		|		<ja>@Beanp</ja>
+		|		<jk>public void</jk> property6(String value) {...}
+		|		
+		|		<jc>// Non-standard getters/setters identified by annotation with overridden names.</jc>
+		|		<ja>@Beanp</ja>(<js>"property7"</js>)
+		|		<jk>public</jk> String property7X() {...}
+		|		<ja>@Beanp</ja>(<js>"property7"</js>)
+		|		<jk>public void</jk> property7X(String <jv>value</jv>) {...}
+		|
+		|		<jc>// Non-public getters/setters identified by annotation.</jc>
+		|		<ja>@Beanp</ja>
+		|		<jk>private</jk> String getProperty8() {...}
+		|		<ja>@Beanp</ja>
+		|		<jk>private void</jk> setProperty8(String <jv>value</jv>) {...}
+		|		
+		|		<jc>// Ignore a method that looks like a getter.</jc>
+		|		<ja>@BeanIgnore</ja>
+		|		<jk>public</jk> String getNotAProperty() {...}
+		|	}
+	</p>
+	<p>
+		Several settings exist to allow you to customize how bean properties are handled by serializers and parsers:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.BeanContext.Builder}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanClassVisibility(Visibility) beanClassVisibility(Visibility)}</li>
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanConstructorVisibility(Visibility) beanConstructorVisibility(Visibility)}</li>
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility(Visibility)}</li>
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanMethodVisibility(Visibility) beanMethodVisibility(Visibility)}</li>
+				<li class='jm'>{@link oaj.BeanContext.Builder#beansRequireDefaultConstructor() beansRequireDefaultConstructor()}</li>
+				<li class='jm'>{@link oaj.BeanContext.Builder#beansRequireSerializable() beansRequireSerializable()}</li>
+				<li class='jm'>{@link oaj.BeanContext.Builder#beansRequireSettersForGetters() beansRequireSettersForGetters()}</li>
+				<li class='jm'>{@link oaj.BeanContext.Builder#disableBeansRequireSomeProperties() disableBeansRequireSomeProperties()}</li>
+			</ul>
+		</li>
+	</ul>
+	<p>
+		Settings and equivalent annotations are also available to control which properties are marshalled and how they are ordered.
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.BeanContext.Builder}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanProperties(Class,String) beanProperties(Class,String)}</li>
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanPropertiesExcludes(Class,String) beanPropertiesExcludes(Class,String)}</li>
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanPropertiesReadOnly(Class,String) beanPropertiesReadOnly(Class,String) }</li>
+				<li class='jm'>{@link oaj.BeanContext.Builder#beanPropertiesWriteOnly(Class,String) beanPropertiesWriteOnly(Class,String)}</li>
+			</ul>
+		</li>
+	</ul>
+	<p>
+		It's common to use the {@link oaj.annotation.Bean#properties @Bean(properties|p)} annotation to force the ordering
+		of properties during marshalling.  IBM JVMs keep the ordering of fields and methods in the compiled bytecodebut
+		Oracle JVMs do not and return fields/methods in random order.  The {@link oaj.annotation.Bean#properties @Bean(properties|p)} annotation was added to 
+		help with this limitation.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Bean should be marshalled with properties in the specified order.</jc>
+		|	<ja>@Bean</ja>(properties=<js>"foo,bar,baz"</js>)
+		|	<jk>public class</jk> MyBean {
+		|		...
+		|	}
+	</p>
+	
+	<ul class='seealso'>
+		<li class='doclink'><a class="doclink" href="#jm.PojoCategories">POJO Categories</a> - Marshalling rules for POJOs.
+		<li class='doclink'><a class="doclink" href="#jm.BeanDictionaries">Bean Dictionaries</a> - Handling properties with subclassable types.
+	</ul>
+</div>

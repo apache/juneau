@@ -1,0 +1,60 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Building and Running from Command-Line', created:'8.0.0'}
+
+<div class='topic'>
+	<p>
+		The <l>pom.xml</l> file is a basic Maven build script for creating your microservice
+		as an executable uber-jar.
+	</p>
+	<p>
+		The easiest way to build your microservice is to run the following from the project root.
+	</p>
+	<p class='bconsole'>
+		|	mvn clean install
+	</p>
+	<p>
+		Your <c>target</c> directory should now contain the following files:
+	</p>
+	<ul>
+		<li><c>my-jetty-microservice-1.0.jar</c>
+		<li><c>mjm.cfg</c>
+	</ul>
+	<p>
+		To start from a command line, run the following command from inside your <c>target</c> directory:
+	</p>
+	<p class='bconsole'>
+		|	java -jar my-jetty-microservice-1.0.jar
+	</p>
+	<p>
+		You should see the following console output:
+	</p>
+	<p class='bconsole'>
+		|	Running class 'JettyMicroservice' using config file 'mjm.cfg'.
+		|	Server started on port 10000
+		|	
+		|	List of available commands:
+		|		exit -- Shut down service
+		|		restart -- Restarts service
+		|		help -- Commands help
+		|	
+		|	&gt; 			
+	</p>
+	<p>
+		If you get this error message: <code class='snippet'>java.net.BindException: Address already in use</code>, 
+		then this microservice is already running elsewhere and so it cannot bind to port 10000.
+	</p>
+</div>

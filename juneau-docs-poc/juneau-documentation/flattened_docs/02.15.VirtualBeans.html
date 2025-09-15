@@ -1,0 +1,66 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Virtual Beans', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.BeanContext.Builder#disableInterfaceProxies()} setting (enabled by default) allows
+		the Juneau parsers to parse content into virtual beans (bean interfaces without implementation classes).
+	</p>
+	<p>
+		For example, the following code creates an instance of the specified unimplemented interface:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Our unimplemented interface</jc> 
+		|	<jk>public interface</jk> Address {
+		|		
+		|		String getStreet();
+		|		<jk>void</jk> setStreet(String <jv>value</jv>); 
+		|		
+		|		String getCity();
+		|		<jk>void</jk> setCity(String <jv>value</jv>); 
+		|
+		|		StateEnum getState();
+		|		<jk>void</jk> setState(StateEnum <jv>value</jv>); 
+		|		
+		|		<jk>int</jk> getZip();
+		|		<jk>void</jk> setZip(<jk>int</jk> <jv>value</jv>);
+		|	}
+		|	
+		|	<jc>// Our code</jc>
+		|	Address <jv>address</jv> = Json.<jsm>to</jsm>(
+		|		<js>"{street:'123 Main St', city:'Anywhere', state:'PR', zip:12345}"</js>, 
+		|		Address.<jk>class</jk>
+		|	); 
+		|	
+		|	<jk>int</jk> <jv>zip</jv> = <jv>address</jv>.getZip();
+		|	<jv>address</jv>.setState(StateEnum.<jsf>NY</jsf>);
+	</p>
+	<p>
+		Getter and setter values can be any <a class="doclink" href="#jm.PojoCategories">parsable</a> values, even other virtual beans.
+	</p>
+	<p>
+		Under-the-covers, a virtual bean is simply a proxy interface on top of an existing {@link oaj.BeanMap}
+		instance.  From a programmatic point-of-view, they're indistinguishable from real beans, and can be 
+		manipulated and serialized like any other bean.
+	</p>	
+	<p>
+		Virtual beans can also be created programmatically using the {@link oaj.BeanContext} class:
+	</p>
+	<p class='bjava'>
+		|	Address <jv>address</jv> = BeanContext.<jsf>DEFAULT</jsf>.createSession().newBean(Address.<jk>class</jk>);
+	</p>
+</div>

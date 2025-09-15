@@ -1,0 +1,65 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'One-way Swaps'}
+
+<div class='topic'>
+	<p>
+		In the previous sections, we defined two-way swaps, meaning swaps where the original objects could be 
+		reconstructing during parsing. 
+		However, there are certain kinds of objects that we may want to support for serializing but that are not 
+		possible to reconstruct during parsing.  
+		For these, we can use one-way object swaps.
+	</p>
+	<p>
+		A one-way swap is simply an object transform that only implements the {@code swap()} method.  
+		The {@code unswap()} method is simply left unimplemented.
+	</p>
+	<p>
+		An example of a one-way swaps would be one that allows {@code Iterators} to be serialized as JSON arrays.  
+		It can make sense to be able to render {@code Iterators} as arrays but in general it's not possible to 
+		reconstruct an {@code Iterator} during parsing. 
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> IteratorSwap <jk>extends</jk> ObjectSwap&lt;Iterator,List&gt; {
+		|		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
+		|		<jk>public</jk> List swap(Iterator <jv>iterator</jv>) {
+		|			List <jv>list</jv> = <jk>new</jk> LinkedList();
+		|			<jk>while</jk> (<jv>iterator</jv>.hasNext())
+		|				<jv>list</jv>.add(<jv>iterator</jv>.next());
+		|			<jk>return</jk> <jv>list</jv>;
+		|		}
+		|	}
+	</p>
+	<p>
+		Here is an example of our one-way swap being used.  
+		Note that trying to parse the original object will cause a {@link oaj.parser.ParseException} 
+		to be thrown.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
+		|	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().swaps(IteratorSwap.<jk>class</jk>).build();
+		|	
+		|	<jc>// Construct an iterator we want to serialize.</jc>
+		|	Iterator <jv>iterator</jv> = JsonList.<jsm>of</jsm>(1,2,3).iterator();
+		|	
+		|	<jc>// Serialize our Iterator</jc>
+		|	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>iterator</jv>);		<jc>// Produces "[1,2,3]"</jc>
+		|	
+		|	<jc>// Try to parse it.</jc>
+		|	ReaderParser <jv>parser</jv> = JsonParser.<jsm>create</jsm>().swaps(IteratorSwap.<jk>class</jk>).build();
+		|	<jv>iterator</jv> = <jv>parser</jv>.parse(<jv>json</jv>, Iterator.<jk>class</jk>);		<jc>// Throws ParseException!!!</jc>
+	</p>
+</div>

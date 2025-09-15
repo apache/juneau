@@ -1,0 +1,146 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
+/* Class Hierarchy Tree Styling */
+
+.hierarchyContainer {
+  margin: 1.5rem 0;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  background: var(--ifm-color-emphasis-100);
+  padding: 1rem;
+}
+
+.treeList {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.treeList .treeList {
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+  border-left: 2px solid var(--ifm-color-emphasis-300);
+  margin-left: 1rem;
+}
+
+.treeNode {
+  margin: 0.25rem 0;
+  padding: 0.25rem 0;
+  display: flex;
+  align-items: flex-start;
+  line-height: 1.4;
+}
+
+.icon {
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.nodeLink {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--ifm-color-primary);
+  transition: all 0.2s ease;
+}
+
+.nodeLink:hover {
+  color: var(--ifm-color-primary-dark);
+  border-bottom: 1px solid var(--ifm-color-primary-dark);
+  background: rgba(46, 125, 50, 0.05);
+  border-radius: 3px;
+  padding: 1px 3px;
+}
+
+.nodeLink code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+
+.description {
+  color: var(--ifm-color-emphasis-700);
+  margin-left: 0.5rem;
+  font-style: italic;
+}
+
+/* Type-specific styling */
+.interface {
+  background: rgba(33, 150, 243, 0.05);
+  border-left: 3px solid #2196f3;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+}
+
+.class {
+  background: rgba(76, 175, 80, 0.05);
+  border-left: 3px solid #4caf50;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+}
+
+.abstract {
+  background: rgba(255, 152, 0, 0.05);
+  border-left: 3px solid #ff9800;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+}
+
+.method {
+  background: rgba(156, 39, 176, 0.05);
+  border-left: 3px solid #9c27b0;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+}
+
+.field {
+  background: rgba(63, 81, 181, 0.05);
+  border-left: 3px solid #3f51b5;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+}
+
+/* Dark theme adjustments */
+[data-theme='dark'] .hierarchyContainer {
+  background: var(--ifm-color-emphasis-200);
+  border-color: var(--ifm-color-emphasis-400);
+}
+
+[data-theme='dark'] .treeList .treeList {
+  border-left-color: var(--ifm-color-emphasis-400);
+}
+
+[data-theme='dark'] .description {
+  color: var(--ifm-color-emphasis-600);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .treeList .treeList {
+    padding-left: 1rem;
+    margin-left: 0.5rem;
+  }
+  
+  .icon {
+    font-size: 0.9rem;
+  }
+  
+  .description {
+    display: block;
+    margin-left: 1.5rem;
+    margin-top: 0.25rem;
+  }
+}

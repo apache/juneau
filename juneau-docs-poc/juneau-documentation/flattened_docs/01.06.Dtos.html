@@ -1,0 +1,205 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'DTOs', created:'9.0.0'} 
+
+<div class='topic'>
+	<p>
+		The <a class="doclink" href="#juneau-dto">juneau-dto</a> library contains several predefined POJOs for generating commonly-used document types that
+		are designed to be used with the Juneau Marshaller APIs for both serializing and parsing.
+	</p>
+</div>
+
+<h5 class='topic'>HTML5</h5>
+<div class='topic'>
+	<p>
+		The Juneau HTML5 DTOs are simply beans with fluent-style setters that allow you to quickly construct HTML
+		fragments as Java objects.  These object can then be serialized to HTML using one of the existing HTML 
+		serializers, or to other languages such as JSON using the JSON serializers.
+	</p>
+	<p>
+		The {@link oaj.dto.html5.HtmlBuilder} class is a utility class with predefined static methods
+		that allow you to easily construct DTO instances in a minimal amount of code. 
+	</p>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+		|
+		|	<jc>// An HTML table</jc>	
+		|	Object <jv>mytable</jv> = 	
+		|		<jsm>table</jsm>(
+		|			<jsm>tr</jsm>(
+		|				<jsm>th</jsm>(<js>"c1"</js>),
+		|				<jsm>th</jsm>(<js>"c2"</js>)
+		|			),
+		|			<jsm>tr</jsm>(
+		|				<jsm>td</jsm>(<js>"v1"</js>),
+		|				<jsm>td</jsm>(<js>"v2"</js>)
+		|			)
+		|		);
+		|		
+		|	String <jv>html</jv> = Html.<jsm>of</jsm>(<jv>mytable</jv>);
+	</p>
+	<p class='bxml'><xt>
+		|	&lt;table&gt;
+		|		&lt;tr&gt;
+		|			&lt;th&gt;<xv>c1</xv>&lt;/th&gt;
+		|			&lt;th&gt;<xv>c2</xv>&lt;/th&gt;
+		|		&lt;/tr&gt;
+		|		&lt;tr&gt;
+		|			&lt;td&gt;<xv>v1</xv>&lt;/td&gt;
+		|			&lt;td&gt;<xv>v2</xv>&lt;/td&gt;
+		|		&lt;/tr&gt;
+		|	&lt;/table&gt;
+	</xt></p>	
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jd.Html5">HTML5</a> for more information.
+	</ul>
+</div>
+
+<h5 class='topic'>ATOM</h5>
+<div class='topic'>
+	<p>
+		The Juneau ATOM feed DTOs are simply beans with fluent-style setters.
+		The following code shows a feed being created programmatically using the 
+		{@link oaj.dto.atom.AtomBuilder} class.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
+		|	
+		|	Feed <jv>feed</jv> = 
+		|		<jsm>feed</jsm>(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+		|		.subtitle(<jsm>text</jsm>(<js>"html"</js>).text(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
+		|		.links(
+		|			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org"</js>).hreflang(<js>"en"</js>),
+		|			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://juneau.apache.org/feed.atom"</js>)
+		|		)
+		|		.rights(<js>"Copyright (c) ..."</js>)
+		|		.generator(
+		|			<jsm>generator</jsm>(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
+		|		)
+		|		.entries(
+		|			<jsm>entry</jsm>(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+		|			.links(
+		|				<jsm>link</jsm><js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/juneau.atom"</js>),
+		|				<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://juneau.apache.org/audio/juneau_podcast.mp3"</js>).length(1337)
+		|			)
+		|			.published(<js>"2016-01-02T03:04:05Z"</js>)
+		|			.authors(
+		|				<jsm>person</jsm>(<js>"Jane Smith"</js>).uri(<js>"http://juneau.apache.org/"</js>).email(<js>"janesmith@apache.org"</js>)
+		|			)
+		|			.contributors(
+		|				<jsm>person</jsm>(<js>"John Smith"</js>)
+		|			)
+		|			.content(
+		|				<jsm>content</jsm>(<js>"xhtml"</js>)
+		|				.lang(<js>"en"</js>)
+		|				.base(<js>"http://www.apache.org/"</js>)
+		|				.text(<js>"&lt;div&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>)
+		|			)
+		|		);
+		|
+		|	<jc>// Create a serializer with readable output, no namespaces yet.</jc>
+		|	XmlSerializer <jv>serializer</jv> = XmlSerializer.<jsm>create</jsm>().sq().ws().build();
+		|
+		|	<jc>// Serialize to ATOM/XML</jc>
+		|	String <jv>atomXml</jv> = <jv>serializer</jv>.serialize(<jv>feed</jv>);
+	</p>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jd.Atom">Atom</a> for more information.
+	</ul>
+</div>
+
+<h5 class='topic'>Swagger</h5>
+<div class='topic'>
+	<p>
+		The Juneau Swagger DTOs are simply beans with fluent-style setters that allow you to quickly construct 
+		Swagger documents as Java objects.  
+		These object can then be serialized to JSON using one of the existing JSON serializers, or to other 
+		languages such as XML or HTML using the other serializers.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jk>static import</jk> org.apache.juneau.dto.swagger.SwaggerBuilder.*;
+		|
+		|	Swagger <jv>swagger</jv> = <jsm>swagger</jsm>()
+		|		.swagger(<js>"2.0"</js>)
+		|		.info(
+		|			<jsm>info</jsm>(<js>"Swagger Petstore"</js>, <js>"1.0.0"</js>)
+		|				.description(<js>"This is a sample server Petstore server."</js>)
+		|				.termsOfService(<js>"http://swagger.io/terms/"</js>)
+		|				.contact(
+		|					<jsm>contact</jsm>().email(<js>"apiteam@swagger.io"</js>)
+		|				)
+		|				.license(
+		|					<jsm>license</jsm>(<js>"Apache 2.0"</js>).url(<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>)
+		|				)
+		|		)
+		|		.host(<js>"petstore.swagger.io"</js>)
+		|		.basePath(<js>"/v2"</js>)
+		|		.tags(
+		|			<jsm>tag</jsm>(<js>"pet"</js>).description(<js>"Everything about your Pets"</js>)
+		|				.externalDocs(
+		|					<jsm>externalDocumentation</jsm>(<js>"http://swagger.io"</js>, <js>"http://swagger.io"</js>)
+		|				)
+		|		)
+		|		.schemes(<js>"http"</js>)
+		|		.path(<js>"/pet"</js>, <js>"post"</js>,
+		|			<jsm>operation</jsm>()
+		|				.tags(<js>"pet"</js>)
+		|				.summary(<js>"Add a new pet to the store"</js>)
+		|				.description(<js>""</js>)
+		|				.operationId(<js>"addPet"</js>)
+		|				.consumes(MediaType.<jsf>JSON</jsf>, MediaType.<jsf>XML</jsf>)
+		|				.produces(MediaType.<jsf>JSON</jsf>, MediaType.<jsf>XML</jsf>)
+		|				.parameters(
+		|					<jsm>parameterInfo</jsm>(<js>"body"</js>, <js>"body"</js>)
+		|						.description(<js>"Pet object that needs to be added to the store"</js>)
+		|						.required(<jk>true</jk>)
+		|				)
+		|				.response(405, <jsm>responseInfo</jsm>(<js>"Invalid input"</js>))
+		|		);
+		|
+		|	<jc>// Serialize using JSON serializer.</jc>
+		|	String <jv>swaggerJson</jv> = Json.<jsm>of</jsm>(<jv>swagger</jv>);
+		|	
+		|	<jc>// Or just use toString() or asJson().</jc>
+		|	String <jv>swaggerJson</jv> = <jv>swagger</jv>.asJson();
+	</p>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jd.Swagger">Swagger</a> for more information.
+	</ul>
+</div>
+
+<h5 class='topic'>SwaggerUI</h5>
+<div class='topic'>
+	<p>
+		The {@link oaj.dto.swagger.ui.SwaggerUI} class is a DTO class for generating Swagger user interfaces
+		from {@link oaj.dto.swagger.Swagger} beans.
+	</p>
+	<p>
+		The <c>PetStore</c> example described later provides an example of auto-generated Swagger JSON:
+	</p>
+	<img class='bordered w900' src='doc-files/jd.SwaggerUI.json.png'>
+	<p>
+		Using {@link oaj.dto.swagger.ui.SwaggerUI}, we're able to render that JSON as a Swagger user interface
+		when the request is asking for HTML:
+	</p>
+	<img class='bordered w900' src='doc-files/jd.SwaggerUI.html.png'>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#jd.SwaggerUi">Swagger UI</a> for more information.
+	</ul>
+</div>

@@ -1,0 +1,121 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Stylesheets', updated:'8.1.0,9.0.0'}
+
+<div class='topic'>
+	<p>
+		The sample root page renders in the default "devops" look-and-feel:
+	</p>
+	<p class='bcode'>
+		|	http://localhost:10000
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.Stylesheets.0.png'>
+	<p>
+		The sample root page provides a dropdown widget to try out the other default look-and-feels:
+	</p>
+	<img class='bordered' src='doc-files/jrs.Stylesheets.1.png'/>
+	<p>
+		For example, the "light" look-and-feel:
+	</p>
+	<p class='bcode'>
+		|	http://localhost:10000/?stylesheet=styles%2Flight.css
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.Stylesheets.2.png'>
+	<p>
+		And the "dark" look-and-feel:
+	</p>
+	<p class='bcode'>
+		|	http://localhost:10000/?stylesheet=styles%2Fdark.css
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.Stylesheets.3.png'>
+	<p>
+		The stylesheet URL is controlled by the {@link oaj.html.annotation.HtmlDocConfig#stylesheet() @HtmlDocConfig(stylesheet)} annotation.
+		The {@link oajr.config.BasicUniversalConfig} interface defines the stylesheet served up as a static file:
+	<p class='bjava'>
+		|	<ja>@HtmlDocConfig</ja>(
+		|		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>
+		|	)
+		|	<jk>public interface</jk> BasicUniversalConfig {...}
+	</p>		
+	<p>
+		The <js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js> variable says to use the URI defined
+		in your servlet's config file, if there is one, and to default to serving up the file
+		<c>htdocs/themes/devops.css</c> which is in the resource folder of the <c>juneau-rest-server</c> module.
+	</p>
+	<p>
+		To provide your own stylesheet, simply override the stylesheet attribute and point to a different
+		file:	
+	</p>
+	<p class='bjava'>
+		|	<ja>@HtmlDocConfig</ja>(
+		|		stylesheet=<js>"servlet:/htdocs/themes/my-style.css"</js>
+		|	)
+		|	<jk>public class</jk> MyResourceBaseClass <jk>extends</jk> BasicRestServlet {...}
+	</p>
+	<p>
+		You can try out different stylesheets by passing in a <c>stylesheet</c> attribute in the request
+		URL.
+		The example above show this in use.
+	</p>
+	<p>
+		In case you're curious about how the menu item works, it's defined via a widget:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(...)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		widgets={
+		|			PoweredByApache.<jk>class</jk>,
+		|			ContentTypeMenuItem.<jk>class</jk>,
+		|			StyleMenuItem.<jk>class</jk>
+		|		},
+		|		navlinks={
+		|			<js>"options: ?method=OPTIONS"</js>,
+		|			<js>"$W{ContentTypeMenuItem}"</js>,
+		|			<js>"$W{StyleMenuItem}"</js>,
+		|			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+		|		}
+		|	)
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {...}
+	</p>
+	<p>
+		The <c>StyleMenuItem</c> is a widget that extends from {@link oajr.widget.MenuItemWidget}, a
+		specialized widget for creating pop-up menus.
+		In the case of <l>StyleMenuItem</l>, it's simply returning a list of links wrapped in a div tag:
+	</p>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+		|
+		|	<jk>public class</jk> StyleMenuItem <jk>extends</jk> MenuItemWidget {
+		|	
+		|		<jk>private static final</jk> String[] <jsf>BUILT_IN_STYLES</jsf> = {<js>"devops"</js>, <js>"light"</js>, <js>"original"</js>, <js>"dark"</js>};
+		|	
+		|		<ja>@Override</ja> <jc>/* Widget */</jc>
+		|		<jk>public</jk> String getLabel(RestRequest <jv>req</jv>) {
+		|			<jk>return</jk> <js>"styles"</js>;
+		|		}
+		|
+		|		<ja>@Override</ja> <jc>/* MenuItemWidget */</jc>
+		|		<jk>public</jk> Div getContent(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
+		|			Div <jv>div</jv> = <jsm>div</jsm>();
+		|			<jk>for</jk> (String <jv>style</jv> : <jsf>BUILT_IN_STYLES</jsf>) {
+		|				java.net.URI <jk>uri</jk> = <jv>req</jv>.getUri(<jk>true</jk>, <jk>new</jk> AMap&lt;String,String&gt;().append(<js>"stylesheet"</js>, <js>"styles/"</js>+s+<js>".css"</js>));
+		|				<jv>div</jv>.children(<jsm>a</jsm>(<jv>uri</jv>, <jv>style</jv>), <jsm>br</jsm>());
+		|			}
+		|			<jk>return</jk> <jv>div</jv>;
+		|		}
+		|	}
+	</p>
+</div>

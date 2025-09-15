@@ -1,0 +1,159 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'OpenAPI Methodology', updated:'8.2.0'} 
+
+<div class='topic'>
+	<p>
+		Unlike the other Juneau serializers and parsers that convert input and output directly to-and-from POJOs,
+		the OpenAPI serializers and parsers use intermediate objects based on the <c>type</c> and <c>format</c>
+		of the schema.
+	</p>
+	<p>
+		The following table shows the "natural" intermediate type of the object based on the <c>type/format</c>:
+	</p>
+	<table class='styled w800'>
+		<tr><th>Type</th><th>Format</th><th>Intermediate Java Type</th></tr>
+		<tr class='dark bb'>
+			<td rowspan='4'><c>string</c> or empty</td>
+			<td><c>byte<br>binary<br>binary-spaced</c></td>
+			<td><c><jk>byte</jk>[]</c></td>
+		</tr>
+		<tr class='dark bb'>
+			<td><c>date<br>date-time</c></td>
+			<td>{@link java.util.Calendar}</td>
+		</tr>
+		<tr class='dark bb'>
+			<td><c>uon</c></td>
+			<td>No intermediate type.<br>(serialized directly to/from POJO)</td>
+		</tr>
+		<tr class='dark bb'>
+			<td>empty</td>
+			<td>{@link java.lang.String}</td>
+		</tr>
+		<tr class='light bb'>
+			<td rowspan='1'><c>boolean</c></td>
+			<td>empty</td>
+			<td>{@link java.lang.Boolean}</td>
+		</tr>
+		<tr class='dark bb'>
+			<td rowspan='2'><c>integer</c></td>
+			<td><c>int32</c></td>
+			<td>{@link java.lang.Integer}</td>
+		</tr>
+		<tr class='dark bb'>
+			<td><c>int64</c></td>
+			<td>{@link java.lang.Long}</td>
+		</tr>
+		<tr class='light bb'>
+			<td rowspan='2'><c>number</c></td>
+			<td><c>float</c></td>
+			<td>{@link java.lang.Float}</td>
+		</tr>
+		<tr class='light bb'>
+			<td><c>double</c></td>
+			<td>{@link java.lang.Double}</td>
+		</tr>
+		<tr class='dark bb'>
+			<td rowspan='2'><c>array</c></td>
+			<td>empty</td>
+			<td>Arrays of intermediate types on this list.</td>
+		</tr>
+		<tr class='dark bb'>
+			<td><c>uon</c></td>
+			<td>No intermediate type.<br>(serialized directly to/from POJO)</td>
+		</tr>
+		<tr class='light bb'>
+			<td rowspan='2'><c>object</c></td>
+			<td>empty</td>
+			<td><c>Map&lt;String,Object&gt;</c></td>
+		</tr>
+		<tr class='light bb'>
+			<td><c>uon</c></td>
+			<td>No intermediate type.<br>(serialized directly to/from POJO)</td>
+		</tr>
+	</table>
+	<p>
+		The valid POJO types for serializing/parsing are based on the intermediate types above.
+		As a general rule, any POJOs that are the intermediate type or transformable to or from
+		the intermediate type are valid POJO types.
+	</p>
+	<p>
+		For example, the following POJO type can be transformed to and from a byte array.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Sample POJO class convertable to and from a byte[].</jc>
+		|	<jk>public class</jk> MyPojo {
+		|		
+		|		<jc>// Constructor used by parser.</jc>
+		|		<jk>public</jk> MyPojo(<jk>byte</jk>[] <jv>value</jv>) {...}
+		|	
+		|		<jc>// toX method used by serializer.</jc>
+		|		<jk>public byte</jk>[] toBytes() {...}
+		|	}
+	</p>
+	<p>
+		This example shows how that POJO can be converted to a BASE64-encoded string.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Construct a POJO.</jc>
+		|	MyPojo <jv>myPojo</jv> = ...;
+		|	
+		|	<jc>// Define a schema.</jc>
+		|	HttpPartSchema <jv>schema</jv> = HttpPartSchema.<jsm>tByte</jsm>().build();
+		|
+		|	<jc>// Convert POJO to BASE64-encoded string.</jc>
+		|	HttpPartSerializer <jv>serializer</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>;
+		|	String <jv>httpPart</jv> = <jv>serializer</jv>.serialize(<jv>schema</jv>, <jv>myPojo</jv>);
+		|	
+		|	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
+		|	HttpPartParser <jv>parser</jv> = OpenApiParser.<jsf>DEFAULT</jsf>;
+		|	<jv>myPojo</jv> = <jv>parser</jv>.parse(<jv>schema</jv>, <jv>httpPart</jv>, MyPojo.<jk>class</jk>);
+	</p>
+	<p>
+		In addition to defining format, the schema also allows for validations of the serialized form.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Construct a POJO.</jc>
+		|	MyPojo <jv>myPojo</jv> = ...;
+		|	
+		|	<jc>// Define a schema.</jc>
+		|	<jc>// Serialized string must be no smaller than 100 characters.</jc>
+		|	HttpPartSchema <jv>schema</jv> = HttpPartSchema.<jsm>tByte</jsm>().minLength(100).build();
+		|
+		|	<jc>// Convert POJO to BASE64-encoded string.</jc>
+		|	HttpPartSerializer <jv>serializer</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>;
+		|	String <jv>httpPart</jv>;
+		|	<jk>try</jk> {
+		|		<jv>httpPart</jv> = <jv>serializer</jv>.serialize(<jv>schema</jv>, <jv>myPojo</jv>);
+		|	} <jk>catch</jk> (SchemaValidationException <jv>e</jv>) {
+		|		<jc>// Oops, output too small.</jc>
+		|	}
+		|	
+		|	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
+		|	HttpPartParser <jv>parser</jv> = OpenApiParser.<jsf>DEFAULT</jsf>;
+		|	<jk>try</jk> {
+		|		<jv>myPojo</jv> = <jv>parser</jv>.parse(<jv>schema</jv>, <jv>httpPart</jv>, MyPojo.<jk>class</jk>);
+		|	} <jk>catch</jk> (SchemaValidationException <jv>e</jv>) {
+		|		<jc>// Oops, input too small.</jc>
+		|	}
+	</p>
+	<p>
+		It looks simple but the implementation is highly sophisticated being able to serialize and parse and validate using complex schemas.
+	</p>
+	<p>
+		The next sections go more into depth on serializing and parsing various POJO types.
+	</p>
+</div>

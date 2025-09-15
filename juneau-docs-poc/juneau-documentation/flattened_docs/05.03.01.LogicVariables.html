@@ -1,0 +1,94 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Logic Variables'}
+
+<div class='topic'>
+	<p>
+		The default variable resolver also provides the following logic variables for performing simple logical operations:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.svl.vars.IfVar} - <c>$IF{arg,then[,else]}</c>
+		<li class='jc'>{@link oaj.svl.vars.SwitchVar} - <c>$SW{arg,pattern1:then1[,pattern2:then2...]}</c>
+		<li class='jc'>{@link oaj.svl.vars.CoalesceVar} - <c>$CO{arg1[,arg2...]}</c>
+		<li class='jc'>{@link oaj.svl.vars.PatternMatchVar} - <c>$PM{arg,pattern}</c> 
+		<li class='jc'>{@link oaj.svl.vars.NotEmptyVar} - <c>$NE{arg}</c>
+		<li class='jc'>{@link oaj.svl.vars.UpperCaseVar} - <c>$UC{arg}</c>
+		<li class='jc'>{@link oaj.svl.vars.LowerCaseVar} - <c>$LC{arg}</c>
+	</ul>
+	<p>
+		The <c>$IF</c> variable can be used for simple if/else logic:
+	</p>
+	<p class='bini'>
+		|	<cc># Value set to 'foo' if myBooleanProperty is true</cc>
+		|	<ck>key1</ck> = 
+		|		<cv>$IF{		
+		|			$S{myBooleanProperty},
+		|			foo
+		|		}</cv>		
+		|			
+		|	<cc># Value set to 'foo' if myBooleanProperty is true, 'bar' if false.</cc>
+		|	<ck>key2</ck> = 
+		|		<cv>$IF{		
+		|			$S{myBooleanProperty},
+		|			foo,
+		|			bar
+		|		}</cv>		
+		|
+		|	<cc># Value set to key1 value if myBooleanProperty is true, key2 value if false.</cc>
+		|	<ck>key3</ck> = 
+		|		<cv>$IF{		
+		|			$S{myBooleanProperty},
+		|			$C{key1},
+		|			$C{key2}
+		|		}</cv>		
+	</p>
+	<p>
+		The <c>$SW</c> variable can be used for switch blocks based on pattern matching:
+	</p>
+	<p class='bini'>
+		|	<cc># Shell command depends on the OS</cc>
+		|	<ck>shellCommand</ck> = 
+		|		<cv>$SW{		
+		|			$LC{$S{os.name}},
+		|			*win*: bat,
+		|			linux: bash,
+		|			*: sh
+		|		}</cv>		
+	</p>
+	<p>
+		The <c>$CO</c> variable can be used for coalescing of values (finding the first non-null/empty match):
+	</p>
+	<p class='bini'>
+		|	<cc># Debug flag can be enabled by system property or environment variable.</cc>
+		|	<ck>debug</ck> = 
+		|		<cv>$CO{		
+		|			$S{debug},
+		|			$E{DEBUG},
+		|			false
+		|		}</cv>		
+	</p>
+	<p>
+		The <c>$PM</c> variable can be used for calculating boolean values:
+	</p>
+	<p class='bini'>
+		|	<cc># Debug flag can be enabled by system property or environment variable.</cc>
+		|	<ck>isWindows</ck> = 
+		|		<cv>$PM{		
+		|			$LC{$S{os.name}},
+		|			*win*
+		|		}</cv>		
+	</p>
+</div>

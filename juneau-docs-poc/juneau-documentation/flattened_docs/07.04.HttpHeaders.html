@@ -1,0 +1,237 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'HTTP Headers', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.http.header} package contains implementations of <c>org.apache.http.Header</c> for all common HTTP
+		headers.
+	</p>
+	<ul class='javatreec'>
+		<li class='jc'>{@link oaj.http.header.Accept}</li>
+		<li class='jc'>{@link oaj.http.header.AcceptCharset}</li>
+		<li class='jc'>{@link oaj.http.header.AcceptEncoding}</li>
+		<li class='jc'>{@link oaj.http.header.AcceptLanguage}</li>
+		<li class='jc'>{@link oaj.http.header.AcceptRanges}</li>
+		<li class='jc'>{@link oaj.http.header.Age}</li>
+		<li class='jc'>{@link oaj.http.header.Allow}</li>
+		<li class='jc'>{@link oaj.http.header.Authorization}</li>
+		<li class='jc'>{@link oaj.http.header.CacheControl}</li>
+		<li class='jc'>{@link oaj.http.header.ClientVersion}</li>
+		<li class='jc'>{@link oaj.http.header.Connection}</li>
+		<li class='jc'>{@link oaj.http.header.ContentDisposition}</li>
+		<li class='jc'>{@link oaj.http.header.ContentEncoding}</li>
+		<li class='jc'>{@link oaj.http.header.ContentLanguage}</li>
+		<li class='jc'>{@link oaj.http.header.ContentLength}</li>
+		<li class='jc'>{@link oaj.http.header.ContentLocation}</li>
+		<li class='jc'>{@link oaj.http.header.ContentRange}</li>
+		<li class='jc'>{@link oaj.http.header.ContentType}</li>
+		<li class='jc'>{@link oaj.http.header.Date}</li>
+		<li class='jc'>{@link oaj.http.header.Debug}</li>
+		<li class='jc'>{@link oaj.http.header.ETag}</li>
+		<li class='jc'>{@link oaj.http.header.Expect}</li>
+		<li class='jc'>{@link oaj.http.header.Expires}</li>
+		<li class='jc'>{@link oaj.http.header.Forwarded}</li>
+		<li class='jc'>{@link oaj.http.header.From}</li>
+		<li class='jc'>{@link oaj.http.header.Host}</li>
+		<li class='jc'>{@link oaj.http.header.IfMatch}</li>
+		<li class='jc'>{@link oaj.http.header.IfModifiedSince}</li>
+		<li class='jc'>{@link oaj.http.header.IfNoneMatch}</li>
+		<li class='jc'>{@link oaj.http.header.IfRange}</li>
+		<li class='jc'>{@link oaj.http.header.IfUnmodifiedSince}</li>
+		<li class='jc'>{@link oaj.http.header.LastModified}</li>
+		<li class='jc'>{@link oaj.http.header.Location}</li>
+		<li class='jc'>{@link oaj.http.header.MaxForwards}</li>
+		<li class='jc'>{@link oaj.http.header.NoTrace}</li>
+		<li class='jc'>{@link oaj.http.header.Origin}</li>
+		<li class='jc'>{@link oaj.http.header.Pragma}</li>
+		<li class='jc'>{@link oaj.http.header.ProxyAuthenticate}</li>
+		<li class='jc'>{@link oaj.http.header.ProxyAuthorization}</li>
+		<li class='jc'>{@link oaj.http.header.Range}</li>
+		<li class='jc'>{@link oaj.http.header.Referer}</li>
+		<li class='jc'>{@link oaj.http.header.RetryAfter}</li>
+		<li class='jc'>{@link oaj.http.header.Server}</li>
+		<li class='jc'>{@link oaj.http.header.TE}</li>
+		<li class='jc'>{@link oaj.http.header.Thrown}</li>
+		<li class='jc'>{@link oaj.http.header.Trailer}</li>
+		<li class='jc'>{@link oaj.http.header.TransferEncoding}</li>
+		<li class='jc'>{@link oaj.http.header.Upgrade}</li>
+		<li class='jc'>{@link oaj.http.header.UserAgent}</li>
+		<li class='jc'>{@link oaj.http.header.Vary}</li>
+		<li class='jc'>{@link oaj.http.header.Via}</li>
+		<li class='jc'>{@link oaj.http.header.Warning}</li>
+		<li class='jc'>{@link oaj.http.header.WwwAuthenticate}</li>
+	</ul>
+	<p>
+		These headers extend from the following classes that provide data-type specific functionality:
+	</p>
+	<ul class='javatree'>
+		<li class='jic'>{@code org.apache.http.NameValuePair}
+		<ul>
+			<li class='jic'>{@code org.apache.http.Header}
+			<ul>
+				<li class='jc'>{@link oaj.http.header.BasicHeader}
+				<ul class='javatreec'>
+					<li class='jc'>{@link oaj.http.header.BasicBooleanHeader}	</li>
+					<li class='jc'>{@link oaj.http.header.BasicCsvHeader}</li>
+					<li class='jc'>{@link oaj.http.header.BasicDateHeader}</li>
+					<li class='jc'>{@link oaj.http.header.BasicEntityTagHeader}</li>
+					<li class='jc'>{@link oaj.http.header.BasicEntityTagsHeader}</li>
+					<li class='jc'>{@link oaj.http.header.BasicIntegerHeader}</li>
+					<li class='jc'>{@link oaj.http.header.BasicLongHeader}</li>
+					<li class='jc'>{@link oaj.http.header.BasicMediaRangesHeader}</li>
+					<li class='jc'>{@link oaj.http.header.BasicMediaTypeHeader}</li>
+					<li class='jc'>{@link oaj.http.header.BasicStringHeader}</li>
+					<li class='jc'>{@link oaj.http.header.BasicStringRangesHeader}</li>
+					<li class='jc'>{@link oaj.http.header.BasicUriHeader}</li>
+				</ul>
+			</ul>
+		</ul>
+	</ul>
+	<p>
+		These subclasses provide various convenience methods to allow for easy fluent-style coding.
+	</p>
+	<h5 class='figure'>Examples</h5>
+	<p class='bjava'>
+		|	<jc>// Validates the response body content is not expired.</jc>
+		|	<jv>restClient</jv>
+		|		.get(<jsf>URL</jsf>)
+		|		.run()
+		|		.getHeader(<js>"Expires"</js>).asDateHeader().assertZonedDateTime().isLessThan(<jk>new</jk> Date());
+	</p>
+	
+	<h5 class='topic'>HeaderList</h5>
+	<p>
+		The {@link oaj.http.header.HeaderList} class is a list of HTTP headers.
+	</p>
+
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+		|	<jc>// Construct using builder.</jc>
+		|	HeaderList <jv>headers</jv> = HeaderList
+		|		.<jsm>create</jsm>()
+		|		.append(Accept.<jsm>of</jsm>(<js>"text/xml"</js>))
+		|		.append(<js>"Content-Type"</js>, ()-&gt;<jsm>getDynamicContentTypeFromSomewhere</jsm>());
+		|	
+		|	<jc>// Construct using convenience creator.</jc>
+		|	HeaderList <jv>headers</jv> = HeaderList.<jsm>of</jsm>(Accept.<jsf>TEXT_XML</jsf>, ContentType.<jsf>TEXT_XML</jsf>);
+	</p>
+	<p>
+		Static methods are provided on {@link oaj.http.HttpHeaders} to further simplify creation of header lists.
+	</p>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
+		|
+		|	HeaderList <jv>headers</jv> = <jsm>headerList</jsm>(<jsm>accept</jsm>(<js>"text/xml"</js>), <jsm>contentType</jsm>(<js>"text/xml"</js>));
+	</p>
+	<p>
+		The builder class supports setting default header values (i.e. add a header to the list if it isn't otherwise in the list).
+		Note that this is different from simply setting a value twice as using default values will not overwrite existing
+		headers.
+		<br>The following example notes the distinction:
+	</p>
+	<p class='bjava'>
+		|	<jv>headers</jv> = HeaderList
+		|		.<jsm>create</jsm>()
+		|		.set(Accept.<jsf>TEXT_PLAIN</jsf>)
+		|		.set(Accept.<jsf>TEXT_XML</jsf>);
+		|	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[Accept: text/xml]"</js>);
+		|
+		|	<jv>headers</jv> = HeaderList
+		|		.create()
+		|		.set(Accept.<jsf>TEXT_PLAIN</jsf>)
+		|		.setDefault(Accept.<jsf>TEXT_XML</jsf>);
+		|	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[Accept: text/plain]"</js>);
+	</p>
+
+	<p>
+		Various methods are provided for iterating over the headers in this list to avoid array copies.
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link oaj.http.header.HeaderList#forEach(Consumer) forEach(Consumer)} / {@link oaj.http.header.HeaderList#forEach(String,Consumer) forEach(String,Consumer)} / {@link oaj.http.header.HeaderList#forEach(Predicate,Consumer) forEach(Predicate,Consumer)} - Use consumers to process headers.</li>
+		<li class='jm'>{@link oaj.http.header.HeaderList#headerIterator() headerIterator()} / {@link oaj.http.header.HeaderList#headerIterator(String) headerIterator(String)} - Use an {@link org.apache.http.HeaderIterator} to process headers.</li>
+		<li class='jm'>{@link oaj.http.header.HeaderList#stream() stream()} / {@link oaj.http.header.HeaderList#stream(String) stream(String)} - Use a stream.</li>
+	</ul>
+	<p>
+		In general, try to use these over the {@link oaj.http.header.HeaderList#getAll() getAll()} / {@link oaj.http.header.HeaderList#getAll(String) getAll(String)} methods that require array copies.
+	</p>
+	<p>
+		The {@link oaj.http.header.HeaderList#get(String) get(String)} method is special in that it will collapse multiple headers with the same name into
+		a single comma-delimited list (see <a href='https://tools.ietf.org/html/rfc2616#section-4.2'>RFC 2616 Section 4.2</a> for rules).
+	</p>
+	<p>
+		The {@link oaj.http.header.HeaderList#get(Class) get(Class)} and {@link oaj.http.header.HeaderList#get(String,Class) get(String,Class)} methods are provided for working with {@link oaj.http.annotation.Header}-annotated
+		beans.
+	</p>
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+		|	HeaderList headers = HeaderList.of(Accept.TEXT_JSON, Accept.TEXT_XML);
+		|
+		|	<jc>// Returns "text/json, text/xml"</jc>
+		|	Accept <jv>accept</jv> = <jv>headers</jv>.get(Accept.<jk>class</jk>);
+	</p>
+
+	<p>
+		By default, header names are treated as case-insensitive.  This can be changed using the {@link oaj.http.header.HeaderList#caseSensitive(boolean) caseSensitive(boolean)}
+		method.
+	</p>
+
+	<p>
+		A {@link oaj.svl.VarResolver} can be associated with this builder to create header values with embedded variables that
+		are resolved at runtime.
+	</p>
+
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+		|	<jc>// Create a header list with dynamically-resolving values pulled from a system property.</jc>
+		|
+		|	System.<jsm>setProperty</jsm>(<js>"foo"</js>, <js>"bar"</js>);
+		|
+		|	HeaderList <jv>headers</jv> = HeaderList
+		|		.<jsm>create</jsm>()
+		|		.resolving()
+		|		.append(<js>"X1"</js>, <js>"$S{foo}"</js>)
+		|		.append(<js>"X2"</js>, ()-&gt;<js>"$S{foo}"</js>);
+		|
+		|	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[X1: bar, X2: bar]"</js>);
+	</p>
+
+	<p>
+		The {@link oaj.http.header.HeaderList} object can be extended to defined pre-packaged lists of headers which can be used in various
+		annotations throughout the framework.
+	</p>
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+		|	<jc>// A predefined list of headers.</jc>
+		|	<jk>public class</jk> MyHeaderList <jk>extends</jk> HeaderList {
+		|		<jk>public</jk> MyHeaderList() {
+		|			<jk>super</jk>(Accept.<jsf>TEXT_XML</jsf>, ContentType.<jsf>TEXT_XML</jsf>);
+		|		}
+		|	}
+		|
+		|	<jc>// Use it on a remote proxy to add headers on all requests.</jc>
+		|	<ja>@Remote</ja>(path=<js>"/petstore"</js>, headerList=MyHeaderList.<jk>class</jk>)
+		|	<jk>public interface</jk> PetStore {
+		|
+		|		<ja>@RemotePost</ja>(<js>"/pets"</js>)
+		|		Pet addPet(
+		|			<ja>@Content</ja> CreatePet <jv>createPet</jv>,
+		|			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,
+		|			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
+		|		);
+		|	}
+	</p>
+</div>

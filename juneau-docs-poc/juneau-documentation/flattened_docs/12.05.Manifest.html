@@ -1,0 +1,76 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Manifest', created:'8.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.microservice.Microservice.Builder#manifest(Object)} method can be used to specify the contents or location of of the main 
+		manifest file of the executable jar.
+	</p>
+	<p>
+		If you do not specify the location/contents of the manifest file, the microservice will attempt to resolve it through the following methods:
+	</p>
+	<ol class='spaced-list'>
+		<li>
+			Looking on the file system for a file at <js>"META-INF/MANIFEST.MF"</js>.
+			This is primarily to allow for running microservices from within eclipse workspaces where the manifest file
+			is located in the project root.
+		<li>
+			Using the class loader for this class to find the file at the URL <js>"META-INF/MANIFEST.MF"</js>.
+	</ol>
+	<p>
+		If you do manually specify the manifest file, you can pass in any of the following types:
+	</p>		
+	<ul>
+		<li>{@link oaj.utils.ManifestFile} - A pre-parsed manifest file.</li>
+		<li>{@link java.util.jar.Manifest} - A pre-parsed manifest file.</li>
+		<li>{@link java.io.Reader} - Containing the raw contents of the manifest. </li>
+		<li>{@link java.io.InputStream} - Containing the raw contents of the manifest.</li>
+		<li>{@link java.io.File} - File containing the raw contents of the manifest.</li>
+		<li>{@link java.lang.String} - Path to file containing the raw contents of the manifest.</li>
+		<li>{@link java.lang.Class} - Finds and loads the manifest file of the jar file that the specified class is contained within.</li>
+	</ul>
+	<p>
+		The manifest file can be retrieved using the the {@link oaj.microservice.Microservice#getManifest()} method which 
+		provides an API for accessing manifest file entries.
+		This method returns an instance of {@link oaj.utils.ManifestFile} which extends from {@link oaj.collections.JsonMap} allowing
+		you to retrieve entries as any data types supported by that class.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	ManifestFile <jv>manifestFile</jv> = Microservice.<jsm>getInstance</jsm>().getManifest();
+		|	
+		|	String <jv>mainClass</jv> = <jv>manifestFile</jv>.getString(<js>"Main-Class"</js>);
+		|	<jk>int</jk> <jv>myInt</jv> = <jv>manifestFile</jv>.getInt(<js>"My-Int"</js>, 123);
+		|	<jk>boolean</jk> <jv>myBoolean</jv> = <jv>manifestFile</jv>.getBoolean(<js>"My-Boolean"</js>);
+	</p>
+	<p>
+		The manifest is also used for the {@link oaj.svl.vars.ManifestFileVar $MF} SVL variable.
+	</p>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+		|	<jc>// $MF used in variable resolver.</jc>
+		|	VarResolver <jv>var</jv> = Microservice.<jsm>getInstance</jsm>().getVarResolver();
+		|	System.<jsf>out</jsf>.println(<jv>vr</jv>.resolve(<js>"The main class is $MF{Main-Class}"</js>));
+	</p>
+	<p class='bjava'>
+		|	<jc>// $MF used in annotation.</jc>
+		|	<ja>@Rest</ja>(
+		|		title=<js>"$MF{Application-Title}"</js>,
+		|		...
+		|	)
+	</p>
+</div>

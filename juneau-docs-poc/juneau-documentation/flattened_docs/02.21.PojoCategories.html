@@ -1,0 +1,351 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'POJO Categories'}
+
+<div class='topic'>
+	<p>
+		In general, Juneau allows for marshalling for a wide variety of POJO types including:
+	</p>
+	<p>
+		The following chart shows POJOs categorized into groups and whether they can be serialized or parsed:
+	</p>
+	<h5 class='figure'>General POJO serialization/parsing support</h5>
+	<table class='styled w800' style='border-collapse:collapse'>
+		<tr><th>Group</th><th>Description</th><th>Examples</th><th>Can<br>serialize?</th><th>Can<br>parse?</th></tr>
+		<tr class='dark bb' style='background-color:lightyellow;'>
+			<td style='text-align:center'>1</td>
+			<td><b>Java primitives and primitive objects</b></td>
+			<td>
+				<ul class='normal'>
+					<li>{@code String}</li>
+					<li>{@code Integer}</li>
+					<li>{@code Float}</li>
+					<li>{@code Boolean}</li>
+				</ul>
+			</td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+		</tr>			
+		<tr class='dark bb' style='background-color:lightyellow'>
+			<td style='text-align:center'>2</td>
+			<td><b>Java Collections Framework objects, Java arrays, Java Optionals</b></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>			
+		<tr class='light bb'>
+			<td style='text-align:center'>2a</td>
+			<td>
+				<b>With standard keys/values</b>
+				<br>Map keys are group [1, 4a, 6a] objects.
+				<br>Map, Collection, Optional, and array values are group [1, 2, 3ac, 4a, 6a] objects.	
+			</td>
+			<td>
+				<ul class='normal'>
+					<li><c>HashSet&lt;String,Integer&gt;</c>
+					<li><c>TreeMap&lt;Integer,Bean&gt;</c>
+					<li><c>List&lt;<jk>int</jk>[][]&gt;</c>
+					<li><c>Bean[]</c>
+					<li><c>Optional&lt;Bean&gt;</c>
+				</ul>
+			</td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+		</tr>			
+		<tr class='light bb'>
+			<td style='text-align:center'>2b</td>
+			<td>
+				<b>With non-standard keys/values</b>
+				<br>Map keys are group [2, 3, 4b, 5, 6b, 7] objects.
+				<br>Map, Collection, and array values are group [3b, 4b, 5, 6b, 7] objects.	
+			</td>
+			<td>
+				<ul class='normal'>
+					<li><c>HashSet&lt;Bean,Integer&gt;</c>
+					<li><c>TreeMap&lt;Integer,Reader&gt;</c>
+					<li><c>Optional&lt;Reader&gt;</c>
+				</ul>
+			</td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			<td style='background-color:salmon;text-align:center'><b>no</b></td>
+		</tr>			
+		<tr class='dark bb' style='background-color:lightyellow'>
+			<td style='text-align:center'>3</td>
+			<td><b>Java Beans</b></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>			
+		<tr class='light bb'>
+			<td style='text-align:center'>3a</td>
+			<td>
+				<b>With standard properties</b>
+				<br>These are beans that have one or more properties defined by public getter 
+				or public fields.
+				<br>Properties can also be defined as final read-only fields and passed in as constructor args.
+				<br>Property values are group [1, 2, 3ac, 4a, 6a] objects.
+			</td>
+			<td>&nbsp;</td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+		</tr>			
+		<tr class='light bb'>
+			<td style='text-align:center'>3b</td>
+			<td>
+				<b>With non-standard properties or not true beans</b>
+				<br>These include true beans that have one or more properties defined by getter 
+				and setter methods or properties but property types include group [3b, 4b, 5, 6b, 7] objects.
+				<br>This also includes classes that look like beans but aren't true beans.  
+				For example, classes that have getters but not setters, or classes without no-arg constructors.	
+			</td>
+			<td>&nbsp;</td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			<td style='background-color:salmon;text-align:center'><b>no</b></td>
+		</tr>		
+		<tr class='light bb'>
+			<td style='text-align:center'>3c</td>
+			<td>
+				<b>Virtual beans</b>
+				<br>These are unimplemented bean interfaces with properties of type [1, 2, 3ac, 4a, 6a] objects.
+				<br>Parsers will automatically  create interface proxies on top of BeanMap instances.	
+			</td>
+			<td>&nbsp;</td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+		</tr>		
+		<tr class='light bb'>
+			<td style='text-align:center'>3d</td>
+			<td>
+				<b>Read-only beans without setters</b>
+				<br>The same as 3a but without property setters or constructor args.
+			</td>
+			<td>&nbsp;</td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			<td style='background-color:salmon;text-align:center'><b>no</b></td>
+		</tr>		
+		<tr class='dark bb' style='background-color:lightyellow'>
+			<td style='text-align:center'>4</td>
+			<td>
+				<b>Swapped objects</b>
+				<br>These are objects that are not directly serializable but have 
+				{@link oaj.swap.ObjectSwap ObjectSwaps} associated with them.  
+				The purpose of a POJO swap is to convert an object to another object that is easier to serialize 
+				and parse.  
+				For example, the {@link oaj.swaps.TemporalDateSwap.IsoLocalDateTime} class can be used to 
+				serialize {@link java.util.Date} objects to ISO8601 strings, and parse them back into 
+				{@link java.util.Date} objects.
+			</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>			
+		<tr class='light bb'>
+			<td style='text-align:center'>4a</td>
+			<td>
+				<b>2-way swapped to group [1, 2a, 3ac] objects</b>
+				<br>For example, a swap that converts a {@code Date} to a {@code String}.
+			</td>
+			<td>
+				<ul class='normal'>
+					<li><c>java.util.Date</c>
+					<li><c>java.util.GregorianCalendar</c>
+				</ul>
+			</td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+		</tr>			
+		<tr class='light bb'>
+			<td style='text-align:center'>4b</td>
+			<td>
+				<b>1-way swapped to group [1, 2, 3] objects</b>
+				<br>For example, a swap that converts an {@code Iterator} to a {@code List}.  
+				This would be one way, since you cannot reconstruct an {@code Iterator}.
+			</td>
+			<td>
+				<ul class='normal'>
+					<li><c>java.util.Iterator</c>
+				</ul>
+			</td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			<td style='background-color:salmon;text-align:center'><b>no</b></td>
+		</tr>		
+		<tr class='dark bb' style='background-color:lightyellow'>
+			<td style='text-align:center'>5</td>
+			<td>
+				<b>Readers and InputStreams</b>
+				<br>Contents are serialized directly to the output stream or writer.
+				<br>Typically used for low-level language-specific replacement of POJOs using per-Media-Type 
+				POJO swaps.
+			</td>
+			<td>					
+				<ul class='normal'>
+					<li>{@code FileInputStream}</li>
+					<li>{@code StringReader}</li>
+				</ul>
+			</td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			<td style='background-color:salmon;text-align:center'><b>no</b></td>
+		</tr>		
+	
+		<tr class='dark bb' style='background-color:lightyellow'>
+			<td style='text-align:center'>6</td>
+			<td>
+				<b>Non-serializable objects with standard methods for converting to a serializable form</b><br>
+			</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>		
+		<tr class='light bb' style='background-color:lightyellow'>
+			<td style='text-align:center'>6a</td>
+			<td>
+				Classes with a method that converts it to a serializable form:
+				<ul>
+					<li><c><jk>public</jk> X swap(BeanSession);</c> where <c>X</c> is in groups 
+						[1, 2a, 3ac].
+					<li><c><jk>public</jk> String toString();</c> where the string is any meaningful data.
+				</ul>
+				And a method that converts it back into the original object:
+				<ul>
+					<li><c><jk>public static</jk> T fromString(String);</c>		
+					<li><c><jk>public static</jk> T valueOf(String);</c>		
+					<li><c><jk>public static</jk> T parse(String);</c>		
+					<li><c><jk>public static</jk> T parseString(String);</c>		
+					<li><c><jk>public static</jk> T forName(String);</c>		
+					<li><c><jk>public static</jk> T forString(String);</c>		
+					<li><c><jk>public</jk> T(X);</c> where <c>X</c> is in groups [1, 2a, 3ac].
+					<li><c><jk>public static</jk> T unswap(BeanSession,X);</c> where <c>X</c> is in 
+						groups [1, 2a, 3ac].		
+				</ul>
+			</td>
+			<td>
+				<ul class='normal'>
+					<li><c>java.lang.Class</c>
+					<li><c>java.sql.Time</c>
+					<li><c>java.sql.Timestamp</c>
+					<li><c>java.text.MessageFormat</c>
+					<li><c>java.text.NumberFormat</c>
+					<li><c>java.util.Date</c>
+					<li><c>java.util.UUID</c>
+					<li><c>java.util.logging.Level</c>
+					<li><c>javax.xml.bind.DatatypeConverter</c>
+				</ul>
+			</td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+		</tr>		
+		<tr class='light bb' style='background-color:lightyellow'>
+			<td style='text-align:center'>6b</td>
+			<td>
+				Classes that only have a method to convert to a serializable form:
+				<ul>
+					<li><c><jk>public</jk> X swap(BeanSession);</c> where <c>X</c> is in groups 
+						[1, 2, 3].
+					<li><c><jk>public</jk> String toString();</c> where the string is any meaningful data.
+				</ul>
+			</td>
+			<td>&nbsp;</td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			<td style='background-color:salmon;text-align:center'><b>no</b></td>
+		</tr>			
+		<tr class='dark' style='background-color:lightyellow'>
+			<td style='text-align:center'>7</td>
+			<td>
+				<b>All other objects</b>
+				<br>Anything that doesn't fall into one of the groups above are simply converted to {@code Strings} 
+				using the {@code toString()} method.
+			</td>
+			<td>&nbsp;</td>
+			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			<td style='background-color:salmon;text-align:center'><b>no</b></td>
+		</tr>			
+	</table>
+	<div class='info'>
+		Serializers are designed to work on tree-shaped POJO models.  
+		These are models where there are no referential loops (e.g. leaves with references to nodes, or nodes 
+		in one branch referencing nodes in another branch).  
+		There is a serializer setting {@code detectRecursions} to look for and handle these kinds of loops 
+		(by setting these references to <jk>null</jk>) but it is not enabled by default since it introduces 
+		a moderate performance penalty. 
+	</div>
+	
+	<h5 class='topic' id='PojosConveribleToStrings'>POJOs convertible to/from Strings</h5>
+	<p>
+		A separate category exists for POJOs that can be converted to and from Strings.
+		These are used in places such as: 
+	</p>
+	<ul class='spaced-list'>
+		<li>Serializing of POJOs to Strings in the REST client API when no serializers are registered.</li>
+		<li>Parsing of POJOs from Strings in the REST server API for <js>"text/plain"</js> requests where
+		<js>"text/plain"</js> is not already mapped to an existing serializer.
+	</ul>
+	
+	<p>
+		As a general rule, all POJOs are converted to Strings using the <c>toString()</c> method.
+		However, there is one exception:
+	</p>
+	<ul class='spaced-list'>
+		<li>{@link java.util.TimeZone} - Uses {@link java.util.TimeZone#getID()}</li>
+	</ul>
+	
+	<p>
+		POJOs are convertible from Strings using any of the following (matched in the specified order):
+	</p>
+	<ul class='spaced-list'>
+		<li>Any of the following public static non-deprecated methods:
+		<ul>
+			<li><c>create(String)</c>
+			<li><c>fromString(String)</c>
+			<li><c>fromValue(String)</c>
+			<li><c>valueOf(String)</c>
+			<li><c>parse(String)</c>
+			<li><c>parseString(String)</c>
+			<li><c>forName(String)</c>
+			<li><c>forString(String)</c>
+		</ul>
+		<li>Has a public constructor that takes in a <c>String</c>.
+	</ul>
+	<p>
+		Exceptions exist for the following classes:
+	</p>
+	<ul class='spaced-list'>
+		<li>{@link java.util.TimeZone} - Uses {@link java.util.TimeZone#getTimeZone(String)}</li>
+		<li>{@link java.util.Locale} - Uses {@link java.util.Locale#forLanguageTag(String)} after replacing <js>'_'</js> with <js>'-'</js>.
+		<li>{@link java.lang.Boolean} - Blank and <js>"null"</js> are interpreted as null values.
+		<li>Primitives (except for <c><jk>void</jk>.<jk>class</jk></c>) - Uses the primitive wrapper classes for instantiating from Strings.
+	</ul>
+	
+	<h5 class='topic' id='PojosConveribleToOtherTypes'>POJOs convertible to/from other types</h5>
+	<p>
+		POJOs are also converted to various other types in places such as the Open-API serializers and parsers. 
+		In this section, the type being converted to will be referred to as <c>X</c>.
+	</p>
+	<p>
+		POJOs are considered convertible from X if it has any of the following (matched in the specified order):
+	</p>
+	<ul class='spaced-list'>
+		<li>Any any of the following public static non-deprecated methods:
+		<ul>
+			<li><c>create(X)</c>
+			<li><c>from*(X)</c>
+		</ul>
+		<li>Has a public constructor that takes in an <c>X</c>.
+		<li>The X class has a public non-static no-arg non-deprecated method called <c>to*()</c>.
+	</ul>
+	<p>
+		POJOs are considered convertible from X if any of the reverse of above are true.
+	</p>
+</div>

@@ -1,0 +1,454 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #2e7d32;
+  --ifm-color-primary-dark: #1b5e20;
+  --ifm-color-primary-darker: #1b5e20;
+  --ifm-color-primary-darkest: #0d4f14;
+  --ifm-color-primary-light: #4caf50;
+  --ifm-color-primary-lighter: #66bb6a;
+  --ifm-color-primary-lightest: #81c784;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #4caf50;
+  --ifm-color-primary-dark: #388e3c;
+  --ifm-color-primary-darker: #2e7d32;
+  --ifm-color-primary-darkest: #1b5e20;
+  --ifm-color-primary-light: #66bb6a;
+  --ifm-color-primary-lighter: #81c784;
+  --ifm-color-primary-lightest: #a5d6a7;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced code block styling */
+.prism-code {
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Eclipse IDE Java syntax highlighting colors */
+
+/* Keywords (public, private, class, extends, etc.) */
+.token.keyword {
+  color: #7f0055 !important;
+  font-weight: bold !important;
+}
+
+/* String literals */
+.token.string {
+  color: #2a00ff !important;
+}
+
+/* Comments */
+.token.comment {
+  color: #3f7f5f !important;
+  font-style: italic !important;
+}
+
+/* Class names and types */
+.token.class-name {
+  color: #000000 !important;
+  font-weight: normal !important;
+}
+
+/* Method names */
+.token.function,
+.token.method {
+  color: #000000 !important;
+  font-weight: normal !important;
+}
+
+/* Numbers */
+.token.number {
+  color: #000000 !important;
+}
+
+/* Annotations (@Rest, @RestGet, etc.) */
+.token.annotation {
+  color: #646464;
+  font-weight: normal;
+}
+
+/* Operators (=, +, -, etc.) */
+.token.operator {
+  color: #000000;
+}
+
+/* Punctuation ({}, (), [], etc.) */
+.token.punctuation {
+  color: #000000;
+}
+
+/* Variables and identifiers */
+.token.variable {
+  color: #000000;
+}
+
+/* Field names */
+.token.property {
+  color: #0000c0;
+}
+
+/* Static fields and constants */
+.token.constant {
+  color: #0000c0;
+  font-style: italic;
+}
+
+/* Generics (<T>, <String>, etc.) */
+.token.generic {
+  color: #000000;
+}
+
+/* Dark theme Eclipse colors (for dark mode users) */
+[data-theme='dark'] .token.keyword {
+  color: #cc7832;
+  font-weight: bold;
+}
+
+[data-theme='dark'] .token.string {
+  color: #6a8759;
+}
+
+[data-theme='dark'] .token.comment {
+  color: #808080;
+  font-style: italic;
+}
+
+[data-theme='dark'] .token.class-name {
+  color: #ffc66d;
+}
+
+[data-theme='dark'] .token.function,
+[data-theme='dark'] .token.method {
+  color: #ffc66d;
+}
+
+[data-theme='dark'] .token.number {
+  color: #6897bb;
+}
+
+[data-theme='dark'] .token.annotation {
+  color: #bbb529;
+}
+
+[data-theme='dark'] .token.operator,
+[data-theme='dark'] .token.punctuation,
+[data-theme='dark'] .token.variable {
+  color: #a9b7c6;
+}
+
+[data-theme='dark'] .token.property,
+[data-theme='dark'] .token.constant {
+  color: #9876aa;
+}
+
+/* Eclipse-style code block background */
+.prism-code {
+  background-color: #ffffff !important;
+  border: 1px solid #c0c0c0;
+}
+
+[data-theme='dark'] .prism-code {
+  background-color: #2b2b2b !important;
+  border: 1px solid #555555;
+}
+
+/* Juneau-specific annotation highlighting (Eclipse style) */
+.token.annotation.juneau {
+  color: #646464;
+  background: rgba(100, 100, 100, 0.1);
+  padding: 1px 3px;
+  border-radius: 3px;
+}
+
+[data-theme='dark'] .token.annotation.juneau {
+  color: #bbb529;
+  background: rgba(187, 181, 41, 0.1);
+}
+
+/* Code block title styling */
+.prism-code[title] {
+  position: relative;
+}
+
+.prism-code[title]::before {
+  content: attr(title);
+  position: absolute;
+  top: -2em;
+  left: 0;
+  right: 0;
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-content);
+  padding: 0.5em 1em;
+  font-size: 0.8em;
+  font-weight: 600;
+  border-radius: 8px 8px 0 0;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+}
+
+/* Copy button enhancements */
+.clean-btn {
+  transition: all 0.2s ease;
+}
+
+.clean-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Line highlighting */
+.docusaurus-highlight-code-line {
+  background-color: rgba(46, 125, 50, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+  border-left: 3px solid var(--ifm-color-primary);
+}
+
+/* Code block with line numbers */
+.prism-code .token-line::before {
+  content: attr(data-line);
+  position: absolute;
+  left: -3em;
+  width: 2em;
+  text-align: right;
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.8em;
+}
+
+/* Inline code enhancements */
+code {
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 4px;
+  padding: 0.1em 0.3em;
+  font-size: 0.9em;
+  color: var(--ifm-color-primary-dark);
+}
+
+[data-theme='dark'] code {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-primary-light);
+}
+
+/* Link styling for Javadoc links */
+a[href*="apidocs"] {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--ifm-color-primary);
+  transition: all 0.2s ease;
+}
+
+a[href*="apidocs"]:hover {
+  color: var(--ifm-color-primary-dark);
+  border-bottom: 1px solid var(--ifm-color-primary-dark);
+  background: rgba(46, 125, 50, 0.05);
+}
+
+/* Table enhancements for comparison tables */
+.comparison-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  padding: 0.75em;
+  text-align: left;
+}
+
+.comparison-table th {
+  background: var(--ifm-color-emphasis-100);
+  font-weight: 600;
+}
+
+.comparison-table .old-system {
+  background: rgba(244, 67, 54, 0.05);
+}
+
+.comparison-table .new-system {
+  background: rgba(76, 175, 80, 0.05);
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.2em 0.6em;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-badge.success {
+  background: #4caf50;
+  color: white;
+}
+
+.status-badge.warning {
+  background: #ff9800;
+  color: white;
+}
+
+.status-badge.error {
+  background: #f44336;
+  color: white;
+}
+
+/* Feature cards */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5em;
+  margin: 2em 0;
+}
+
+.feature-card {
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  padding: 1.5em;
+  transition: all 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card h3 {
+  color: var(--ifm-color-primary);
+  margin-top: 0;
+}
+
+/* Java Tree styling - using original Juneau icons */
+.java-tree, .javatreec {
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  max-width: 900px;
+}
+
+.java-tree ul, .javatreec ul {
+  padding-left: 0px;
+  margin: 0px;
+  max-width: 900px;
+  margin-left: 1.5rem;
+  border-left: 2px solid var(--ifm-color-emphasis-300);
+  padding-left: 1rem;
+}
+
+.java-tree li, .javatreec li {
+  display: inline-block;
+  padding-left: 5px;
+  margin: 0.5rem 0;
+  line-height: 1.4;
+  width: 100%;
+}
+
+.java-tree li::before, .javatreec li::before {
+  font-weight: bolder;
+  font-size: x-small;
+}
+
+/* Java element type icons */
+/* Larger icons for class/interface/annotation/enum */
+.java-tree li.ja::before, .javatreec li.ja::before { color: #00ced1; content: '\00a0\00a0\24d0\00a0'; font-size: medium; font-weight: bold; } /* Java annotation */
+.java-tree li.jc::before, .javatreec li.jc::before { color: rgb(76, 107, 135); content: '\00a0\00a0\24d2\00a0'; font-size: medium; font-weight: bold; } /* Java class */
+.java-tree li.jac::before, .javatreec li.jac::before { color: #eed304; content: '\00a0\00a0\24d2\00a0'; font-size: medium; font-weight: bold; } /* Java abstract class */
+.java-tree li.jic::before, .javatreec li.jic::before { color: #5f4ba2; content: '\00a0\00a0\24d8\00a0'; font-size: medium; font-weight: bold; } /* Java interface */
+.java-tree li.je::before, .javatreec li.je::before { color: #906029; content: '\00a0\00a0\24d4\00a0'; font-size: medium; font-weight: bold; } /* Java enum */
+
+/* Smaller icons for methods/fields */
+.java-tree li.jf::before, .javatreec li.jf::before { color: rgb(76, 107, 135); content: '\00a0\00a0\25cf\00a0'; } /* Java field */
+.java-tree li.jfp::before, .javatreec li.jfp::before { color: #eed304; content: '\00a0\00a0\25cf\00a0'; } /* Java private field */
+.java-tree li.jm::before, .javatreec li.jm::before { color: rgb(76, 107, 135); content: '\00a0\00a0\25cf\00a0'; } /* Java method */
+.java-tree li.jmp::before, .javatreec li.jmp::before { color: #eed304; content: '\00a0\00a0\25c6\00a0'; } /* Java private method */
+.java-tree li.jma::before, .javatreec li.jma::before { color: #00ced1; content: '\00a0\00a0\25cf\00a0'; } /* Java annotation method */
+
+/* List markers for better compatibility */
+.java-tree li.jc::marker, .javatreec li.jc::marker { font-weight: bolder; font-size: small; color: #008000; content: '\00a0\00a0\24d2\00a0\00a0'; }
+.java-tree li.jac::marker, .javatreec li.jac::marker { font-weight: bolder; font-size: small; color: #eed304; content: '\00a0\00a0\24d2\00a0\00a0'; }
+.java-tree li.jic::marker, .javatreec li.jic::marker { font-weight: bolder; font-size: small; color: #5f4ba2; content: '\00a0\00a0\24d8\00a0\00a0'; }
+.java-tree li.ja::marker, .javatreec li.ja::marker { font-weight: bolder; font-size: small; color: #00ced1; content: '\00a0\00a0\24d0\00a0\00a0'; }
+.java-tree li.je::marker, .javatreec li.je::marker { font-weight: bolder; font-size: small; color: #906029; content: '\00a0\00a0\24d4\00a0\00a0'; }
+.java-tree li.jm::marker, .javatreec li.jm::marker { font-weight: bolder; font-size: small; color: #008000; content: '\00a0\00a0\25cf\00a0\00a0'; }
+.java-tree li.jf::marker, .javatreec li.jf::marker { font-weight: bolder; font-size: small; color: #008000; content: '\00a0\00a0\25cf\00a0\00a0'; }
+.java-tree li.jp::marker, .javatreec li.jp::marker { font-weight: bolder; font-size: small; color: #e09c01; content: '\00a0\00a0\229e\00a0\00a0'; }
+.java-tree li.jmp::marker, .javatreec li.jmp::marker { font-weight: bolder; font-size: small; color: #eed304; content: '\00a0\00a0\25c6\00a0\00a0'; }
+.java-tree li.jma::marker, .javatreec li.jma::marker { font-weight: bolder; font-size: small; color: #00ced1; content: '\00a0\00a0\25cf\00a0\00a0'; }
+
+.java-tree code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ifm-color-primary);
+}
+
+.java-tree a {
+  color: rgb(76, 107, 135);
+  text-decoration: none;
+  border-bottom: 1px dotted rgb(76, 107, 135);
+}
+
+.java-tree a:hover {
+  color: rgb(60, 85, 108);
+  border-bottom: 1px solid rgb(60, 85, 108);
+  background: rgba(76, 107, 135, 0.05);
+  border-radius: 3px;
+  padding: 1px 3px;
+}
+
+/* Dark theme for java-tree */
+[data-theme='dark'] .java-tree, [data-theme='dark'] .javatreec {
+  background: var(--ifm-color-emphasis-200);
+  border-color: var(--ifm-color-emphasis-400);
+}
+
+[data-theme='dark'] .java-tree ul, [data-theme='dark'] .javatreec ul {
+  border-left-color: var(--ifm-color-emphasis-400);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .prism-code {
+    font-size: 12px;
+  }
+  
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .java-tree ul {
+    margin-left: 1rem;
+    padding-left: 0.75rem;
+  }
+}

@@ -1,0 +1,76 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@Beanc Annotation', updated:'8.1.0,8.1.2'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.annotation.Beanc @Beanc} annotation is used to 
+		map constructor arguments to property names on bean with read-only properties.
+		Since method parameter names are lost during compilation, this annotation essentially redefines 
+		them so that they are available at runtime.
+	</p>
+	<p>
+		The definition of a read-only bean is a bean with properties with only getters, like shown below:
+	</p>	
+	<p class='bjava'>
+		|	<jc>// Our read-only bean.</jc>
+		|	<jk>public class</jk> Person {
+		|		<jk>private final</jk> String <jf>name</jf>;
+		|		<jk>private final int</jk> <jf>age</jf>;
+		|
+		|		<ja>@Beanc</ja>(properties=<js>"name,age"</js>})
+		|		<jk>public</jk> Person(String <jv>name</jv>, <jk>int</jk> <jv>age</jv>) {
+		|			<jk>this</jk>.<jf>name</jf> = <jv>name</jv>;
+		|			<jk>this</jk>.<jf>age</jf> = <jv>age</jv>;
+		|		}
+		|
+		|		<jc>// Read only properties.</jc>
+		|		<jc>// Getters but no setters.</jc>
+		|
+		|		<jk>public</jk> String getName() {
+		|			<jk>return</jk> <jf>name</jf>;
+		|		}
+		|
+		|		<jk>public int</jk> getAge() {
+		|			<jk>return</jk> <jf>age</jf>;
+		|		}
+		|	}			
+	</p>
+	<p class='bjava'>
+		|	<jc>// Parsing into a read-only bean.</jc>
+		|	String <jv>json</jv> = <js>"{name:'John Smith',age:45}"</js>;
+		|	Person <jv>person</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, Person.<jk>class</jk>);
+		|	String <jv>name</jv> = <jv>person</jv>.getName();  <jc>// "John Smith"</jc>
+		|	<jk>int</jk> <jv>age</jv> = <jv>person</jv>.getAge();   <jc>// 45</jc>
+	</p>
+	<p>
+		Beans can also be defined with a combination of read-only and read-write properties.
+	</p>
+	<p>
+		The {@link oaj.annotation.Name @Name} annotation can also be used instead of <c><ja>@Beanc</ja>(properties)</c>:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Beanc</ja>
+		|	<jk>public</jk> Person(<ja>@Name</ja>(<js>"name"</js>) String <jv>name</jv>, <ja>@Name</ja>(<js>"age"</js>) <jk>int</jk> <jv>age</jv>) {
+		|		<jk>this</jk>.<jf>name</jf> = <jv>name</jv>;
+		|		<jk>this</jk>.<jf>age</jf> = <jv>age</jv>;
+		|	}
+	</p>
+	<p>
+		If neither <c><ja>@Beanc</ja>(properties)</c> or <ja>@Name</ja> is used to identify the bean property names, 
+		we will try to use the parameter names if they are available in the bytecode.
+	</p>
+</div>

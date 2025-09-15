@@ -1,0 +1,103 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Java Method Throwable Types', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		Annotated Java methods can throw any of the following:
+	</p>
+	<ul class='spaced-list'>
+		<li>Standard HTTP response beans:
+			<ul class='javatreec'>
+				<li class='jc'>{@link oaj.http.response.BadRequest}</li>
+				<li class='jc'>{@link oaj.http.response.Conflict}</li>
+				<li class='jc'>{@link oaj.http.response.ExpectationFailed}</li>
+				<li class='jc'>{@link oaj.http.response.FailedDependency}</li>
+				<li class='jc'>{@link oaj.http.response.Forbidden}</li>
+				<li class='jc'>{@link oaj.http.response.Gone}</li>
+				<li class='jc'>{@link oaj.http.response.HttpVersionNotSupported}</li>
+				<li class='jc'>{@link oaj.http.response.InsufficientStorage}</li>
+				<li class='jc'>{@link oaj.http.response.InternalServerError}</li>
+				<li class='jc'>{@link oaj.http.response.LengthRequired}</li>
+				<li class='jc'>{@link oaj.http.response.Locked}</li>
+				<li class='jc'>{@link oaj.http.response.LoopDetected}</li>
+				<li class='jc'>{@link oaj.http.response.MethodNotAllowed}</li>
+				<li class='jc'>{@link oaj.http.response.MisdirectedRequest}</li>
+				<li class='jc'>{@link oaj.http.response.NetworkAuthenticationRequired}</li>
+				<li class='jc'>{@link oaj.http.response.NotAcceptable}</li>
+				<li class='jc'>{@link oaj.http.response.NotExtended}</li>
+				<li class='jc'>{@link oaj.http.response.NotFound}</li>
+				<li class='jc'>{@link oaj.http.response.NotImplemented}</li>
+				<li class='jc'>{@link oaj.http.response.PayloadTooLarge}</li>
+				<li class='jc'>{@link oaj.http.response.PreconditionFailed}</li>
+				<li class='jc'>{@link oaj.http.response.PreconditionRequired}</li>
+				<li class='jc'>{@link oaj.http.response.RangeNotSatisfiable}</li>
+				<li class='jc'>{@link oaj.http.response.RequestHeaderFieldsTooLarge}</li>
+				<li class='jc'>{@link oaj.http.response.ServiceUnavailable}</li>
+				<li class='jc'>{@link oaj.http.response.TooManyRequests}</li>
+				<li class='jc'>{@link oaj.http.response.Unauthorized}</li>
+				<li class='jc'>{@link oaj.http.response.UnavailableForLegalReasons}</li>
+				<li class='jc'>{@link oaj.http.response.UnprocessableEntity}</li>
+				<li class='jc'>{@link oaj.http.response.UnsupportedMediaType}</li>
+				<li class='jc'>{@link oaj.http.response.UpgradeRequired}</li>
+				<li class='jc'>{@link oaj.http.response.UriTooLong}</li>
+				<li class='jc'>{@link oaj.http.response.VariantAlsoNegotiates}</li>
+			</ul>
+		</li>
+		<li>Annotated throwables:
+			<ul class='javatreec'>
+				<li class='ja'>{@link oaj.http.annotation.Response}</li>
+			</ul>
+		</li>
+	</ul>
+	<p>
+		All other throwables get processed as follows:
+	</p>
+	<ul class='spaced-list'>
+		<li>Processed as 400/Bad Request:
+			<ul class='javatreec'>
+				<li class='jc'>{@link oaj.parser.ParseException}</li>
+				<li class='jc'>{@link oaj.InvalidDataConversionException}</li>
+			</ul>
+		</li>
+		<li>Processed as 401/Unauthorized:
+			<ul>
+				<li>Any class named <js>"*AccessDenied*"</js> or  <js>"*Unauthorized*"</js>
+			</ul>
+		</li>
+		<li>Processed as 404/Not Found:
+			<ul>
+				<li>Any class named <js>"*Empty*"</js> or  <js>"*NotFound*"</js>
+			</ul>
+		</li>
+		<li>Anything else processed as 500/Internal Server Error.</li>
+	</ul>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(<js>"/user/login"</js>)
+		|	<jk>public</jk> Ok login(
+		|		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
+		|		<ja>@FormData</ja>(<js>"password"</js>) String <jv>password</jv>
+		|	) <jk>throws</jk> Unauthorized 
+		|	{
+		|		<jk>if</jk> (! <jsm>isOK</jsm>(<jv>username</jv>, <jv>password</jv>))
+		|			<jk>throw new</jk> Unauthorized(<js>"You're not welcome!"</js>);
+		|			
+		|		<jk>return</jk> Ok.<jsf>OK</jsf>;
+		|	}
+	</p>
+</div>

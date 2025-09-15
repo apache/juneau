@@ -1,0 +1,204 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Overview', created:'9.0.0'} 
+
+<div class='topic'>
+	<p>
+		The {@link oaj.assertions} package in Juneau is a powerful API for performing fluent style assertions.
+		It is used throughout the REST client and server APIs for performing inline assertions on REST requests and responses.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
+		|	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
+		|		.json5()
+		|		.build()
+		|		.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.assertStatus().asCode().is(200)
+		|		.assertHeader(<js>"Content-Type"</js>).isMatches(<js>"application/json*"</js>)
+		|		.getContent().assertValue().asString().isContains(<js>"OK"</js>)
+		|		.getContent().as(MyBean.<jk>class</jk>);
+	</p>
+	<ul class='notes'>
+		<li class='note'>The REST API is described later in the documentation.</i>
+	</ul>
+	<p>
+		The assertions API is designed to be used in both code (as it's done in the REST APIs) or for standalone
+		use in unit tests.
+	</p>
+	<p>
+		The {@link oaj.assertions.Assertions} class provides various static methods for invoking assertions on a variety
+		of object types for simplified unit testing.
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.assertions.Assertions}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertAny(Object) assertAny(T)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertArray(Object[]) assertArray(E[])}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertBean(Object) assertBean(V)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertBeanList(List) assertBeanList(List)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertBoolean(Boolean) assertBoolean(Boolean)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertBooleanArray(boolean[]) assertBooleanArray(boolean[])}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertByteArray(byte[]) assertByteArray(byte[])}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertBytes(byte[]) assertBytes(byte[])}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertBytes(InputStream) assertBytes(InputStream)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertCharArray(char[]) assertCharArray(char[])}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertCollection(Collection) assertCollection(Collection)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertComparable(Comparable) assertComparable(T)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertDate(Date) assertDate(Date)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertDoubleArray(double[]) assertDoubleArray(double[])}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertFloatArray(float[]) assertFloatArray(float[])}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertIntArray(int[]) assertIntArray(int[])}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertInteger(Integer) assertInteger(Integer)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertList(List) assertList(List)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertLong(Long) assertLong(Long)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertLongArray(long[]) assertLongArray(long[])}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertMap(Map) assertMap(Map)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertObject(Object) assertObject(T)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertOptional(Optional) assertOptional(Optional)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertReader(Reader) assertReader(Reader)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertShortArray(short[]) assertShortArray(short[])}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertString(Object) assertString(Object)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertStringList(List) assertStringList(List)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertThrowable(Throwable) assertThrowable(V)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertThrown(Snippet) assertThrown(Snippet)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertVersion(Version) assertVersion(Version)}</li>
+				<li class='jm'>{@link oaj.assertions.Assertions#assertZonedDateTime(ZonedDateTime) assertZonedDateTime(ZonedDateTime)}</li>
+			</ul>
+		</li>
+	</ul>
+	<p>
+		Assertions have 3 categories of methods:
+	</p>
+	<ul>
+		<li>Testing methods (<c>isX</c> methods)
+		<li>Transform methods (<c>asX</c> methods)
+		<li>Configuration methods (<c>setX</c> methods)
+	</ul>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+		|	<jk>import static</jk> org.apache.juneau.assertions.AssertionPredicates.*;
+		|	
+		|	<jc>// Check the contents of a string.</jc>
+		|	<jsm>assertString</jsm>(<js>"foo, bar"</js>)
+		|		.asSplit(<js>","</js>)
+		|		.asTrimmed()
+		|		.isHas(<js>"foo"</js>, <js>"bar"</js>);
+		|
+		|	<jc>// Extract a subset of properties from a list of beans and compare using Simplified JSON.</jc>
+		|	List&lt;MyBean&gt; <jv>myListOfBeans</jv> = ...;
+		|	<jsm>assertBeanList</jsm>(<jv>myListOfBeans</jv>)
+		|		.asPropertyMap(<js>"a,b"</js>)
+		|		.asJson().is(<js>"[{a:1,b:'foo'}]"</js>);
+		|	
+		|	<jc>// Perform an arbitrary Predicate check against a bean.</jc>
+		|	MyBean <jv>myBeans</jv> = ...;
+		|	<jsm>assertBean</jsm>(<jv>myBeans</jv>)
+		|		.is(<jv>x</jv> -&gt; <jsm>isValidCheck</jsm>(<jv>x</jv>))
+		|	
+		|	<jc>// Check that a list of strings has less than 10 entries and the first</jc>
+		|	<jc>// 3 entries are [foo, bar*, null] using assertion predicates.</jc>
+		|	List&lt;String&gt; <jv>myListOfStrings</jv> = ...;
+		|	<jsm>assertStringList</jsm>(<jv>myListOfStrings</jv>)
+		|		.asSize().isLt(10)
+		|		.asFirst(3)
+		|			.isEach(<jsm>eq</jsm>(<js>"foo"</js>),<jsm>match</jsm>(<js>"bar*"</js>),<jsm>isNull</jsm>())
+		|	
+		|	<jc>// Check that an exception is thrown and is the specified type and has the specified message.</jc>
+		|	<jsm>assertThrown</jsm>(()-&gt;<jv>myBean</jv>.runBadMethod())
+		|		.exists()
+		|		.isExactType(RuntimeException.<jk>class</jk>)
+		|		.asMessage().is(<js>"foo"</js>);
+	</p>
+	<p>
+		Testing methods (<c>isX</c> methods) perform an assertion on the specified value and throws a {@link java.lang.AssertionError} if
+		the test fails.  Otherwise, the method returns the original assertion object to allow you to chain the command.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Test a string.</jc>
+		|	<jsm>assertString</jsm>(<jv>myString</jv>)
+		|		.isNotNull()  <jc>// Perform test and returns original FluentStringAssertion.</jc>
+		|		.isNotEmpty();  <jc>// Perform test and returns original FluentStringAssertion.</jc>
+	</p>	
+	<p>
+		Transform methods (<c>asX</c> methods) allow you to convert assertions of one type to another type or to convert the tested value to
+		some other form wrapped in another assertion.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Customize the behavior of an assertion.</jc>
+		|	<jsm>assertString</jsm>(<jv>myString</jv>)
+		|		.asString()  <jc>// Converts to a FluentIntegerAssertion.</jc>
+		|			.isLt(100)  <jc>// Runs test and returns original FluentStringAssertion.</jc>
+		|		.asUc()  <jc>// Converts string to uppercase and returns a new FluentStringAssertion.</jc>
+		|			.isContains(<js>"FOO"</js>);  <jc>// Runs test and returns original FluentStringAssertion.</jc>
+	</p>	
+	<p>
+		Configuration methods (<c>setX</c> methods) allow you to tailor the behavior of assertions when they fail.  They always return the same assertion object.
+		Transformed assertions inherit the configurations of the created-by assertions.  Configuration methods start with <c>set</c>.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Customize the behavior of an assertion.</jc>
+		|	<jsm>assertString</jsm>(<jv>myString</jv>)
+		|		.setMsg(<js>"My string was null.  Value was {VALUE}."</js>)  <jc>// Custom error message when error occurs.</jc>
+		|		.setOut(<jv>myPrintWriter</jv>)  <jc>// Print error message to a separate writer.</jc>
+		|		.setThrowable(MyAssertionThrowable.<jk>class</jk>)  <jc>// Throw a customized assertion exception.</jc>
+		|		.isNotNull();
+	</p>	
+	<p>
+		The following shows the class hierarchy for the {@link oaj.assertions.IntegerAssertion IntegerAssertion} class showing the general
+		design pattern for assertion classes:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oaj.assertions.Assertion Assertion} - Base class for all assertion objects containing common configuration methods.
+			<ul>
+				<li class='jac'>{@link oaj.assertions.FluentAssertion FluentAssertion&lt;R&gt;} - Parent class for all fluent assertions.
+					<ul>
+						<li class='jac'>{@link oaj.assertions.FluentObjectAssertion FluentObjectAssertion&lt;T,R&gt;} - Tests and transforms for general POJOs.
+							<ul>
+								<li class='jac'>{@link oaj.assertions.FluentComparableAssertion FluentComparableAssertion&lt;T <jk>extends</jk> Comparable,R&gt;} - Tests and transforms for Comparables.
+									<ul>
+										<li class='jac'>{@link oaj.assertions.FluentIntegerAssertion FluentIntegerAssertion&lt;R&gt;} - Tests and transforms for Integers.
+											<ul>
+												<li class='jac'>{@link oaj.assertions.IntegerAssertion IntegerAssertion} - Assertion that returns itself.</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+	</ul>
+	<p>
+		In the design, the "Fluent" classes (e.g. {@link oaj.assertions.FluentIntegerAssertion}) allow you to specify the object
+		that gets returned when the test method is executed.  When used in the <c>RestClient</c> class for example, the return
+		object is the {@link oajrc.RestResponse} object so that you can perform multiple fluent operations against that object.
+		The "Normal" classes (e.g. {@link oaj.assertions.IntegerAssertion}) are simply subclasses of the fluent equivalent
+		which return the assertion itself, meaning the test method returns the original {@link oaj.assertions.IntegerAssertion}
+		so that multiple tests can be performed per assertion.
+	</p>
+	<p>
+		For more information about the capabilities of the Assertions API, refer to the methods on the {@link oaj.assertions.Assertions} methods
+		above.
+	</p>
+</div>

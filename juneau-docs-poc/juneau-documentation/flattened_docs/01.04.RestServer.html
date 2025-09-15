@@ -1,0 +1,516 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'REST Server'} 
+
+<h5 class='topic'>@Rest-Annotated Resources</h5>
+<div class='topic'>
+	<p>
+		A REST resource is simply a Java class annotated with {@link oajr.annotation.Rest}.
+		The most common case is a class that extends {@link oajr.servlet.BasicRestServlet}, which itself is simply an 
+		extension of {@link jakarta.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
+	</p>
+	<p class='bjava'>
+		|	<jc>// Sample REST resource that prints out a simple "Hello world!" message.</jc>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/helloWorld"</js>,
+		|		title=<js>"Hello World"</js>,
+		|		description=<js>"An example of the simplest-possible resource"</js>
+		|	)
+		|	<ja>@HtmlDoc</ja>(
+		|		navlinks={
+		|			<js>"up: request:/.."</js>,
+		|			<js>"options: servlet:/?method=OPTIONS"</js>
+		|		},
+		|		aside={
+		|			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+		|			<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
+		|			<js>"&lt;/div&gt;"</js>
+		|		}
+		|	)
+		|	<ja>@BeanConfig</ja>(sortProperties=<js>"true"</js>)
+		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
+		|	
+		|		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
+		|		<jk>public</jk> String sayHello() {
+		|			<jk>return</jk> <js>"Hello world!"</js>;
+		|		}
+		|	}
+	</p>
+	<p>
+		This is what it looks like in a browser.
+	</p>
+	<p class='bcode'>
+		|	http://localhost:10000/helloWorld
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.HelloWorldExample.1.png'>
+	<ul class='spaced-list'>
+		<li>Parsers for request bodies are selected based on the request <c>Content-Type</c> header.
+		<li>Serializers for response bodies are selected based on the request <c>Accept</c> header.
+		<ul>
+			<li>In this case, it's the {@link oaj.html.HtmlDocSerializer} serializer based on the
+				browser's default <c>Accept</c> header that's asking for HTML.
+		</ul>
+		<li>REST resource classes and methods can be annotated with configuration annotations for the serializers and parsers (such as <ja>@HtmlConfig</ja> and <ja>@BeanConfig</ja> shown above).
+		<li>Annotations such as the title, summary, and descriptions shown above are used for auto-generated Swagger UI pages (described later).</li>
+	</ul>
+</div>
+
+<h5 class='topic'>REST Children</h5>
+<div class='topic'>
+	<p>
+		Child Resources are REST servlets or objects that are linked to parent resources through the 
+		{@link oajr.annotation.Rest#children() @Rest(children)} annotation.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jd>/** Parent Resource */</jd>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/parent"</js>,
+		|		children={
+		|			MyChildResource.<jk>class</jk>
+		|		}
+		|	)
+		|	<jk>public</jk> MyParentResource <jk>extends</jk> BasicRestServlet {...}
+	</p>
+	<p class='bjava'>
+		|	<jd>/** Child Resource */</jd>
+		| 	<ja>@Rest</ja>(
+		|		path=<js>"/child"</js>  <jc>// Path relative to parent resource.</jc>
+		|	)
+		|	<jc>// Note that we don't need to extend from RestServlet.</jc>
+		|	<jk>public</jk> MyChildResource <jk>implements</jk> BasicRestObject {
+		|		...
+		|	} 
+	</p>
+	<p>
+		The path of the child resource gets appended to the path of the parent resource. 
+		So in the example above, the child resource is accessed through the URL <l>/parent/child</l>.
+	</p>
+	<p>
+		The advantage of using child resources is that they do not need to be declared in the JEE <l>web.xml</l> 
+		file.
+		Initialization of and access to the child resources occurs through the parent resource.
+		Children can be nested arbitrary deep to create complex REST interfaces with a single top-level REST servlet.
+	</p>
+</div>
+
+<h5 class='topic'>Predefined Configuration Interfaces</h5>
+<div class='topic'>
+	<p>
+		The servlets in the previous section implemented the {@link oajr.config.BasicUniversalConfig} which simply defines
+		a preconfigured set of annotations that get inherited by the child classes:
+	</p>
+	<p class='bjava'>
+		|	<jd>/**
+		|	 * Predefined configuration for a REST resource that supports all languages 
+		|	 * and provides common default configuration values.</jd>
+		|	 */</jd>
+		|	<ja>@Rest</ja>(
+		|	
+		|		<jc>// Default serializers for all Java methods in the class.</jc>
+		|		serializers={
+		|			HtmlDocSerializer.<jk>class</jk>,
+		|			HtmlStrippedDocSerializer.<jk>class</jk>,
+		|			HtmlSchemaDocSerializer.<jk>class</jk>,
+		|			JsonSerializer.<jk>class</jk>,
+		|			Json5Serializer.<jk>class</jk>,
+		|			JsonSchemaSerializer.<jk>class</jk>,
+		|			XmlDocSerializer.<jk>class</jk>,
+		|			UonSerializer.<jk>class</jk>,
+		|			UrlEncodingSerializer.<jk>class</jk>,
+		|			OpenApiSerializer.<jk>class</jk>,
+		|			MsgPackSerializer.<jk>class</jk>,
+		|			SoapXmlSerializer.<jk>class</jk>,
+		|			PlainTextSerializer.<jk>class</jk>,
+		|			CsvSerializer.<jk>class</jk>
+		|		},
+		|	
+		|		<jc>// Default parsers for all Java methods in the class.</jc>
+		|		parsers={
+		|			JsonParser.<jk>class</jk>,
+		|			Json5Parser.<jk>class</jk>,
+		|			XmlParser.<jk>class</jk>,
+		|			HtmlParser.<jk>class</jk>,
+		|			UonParser.<jk>class</jk>,
+		|			UrlEncodingParser.<jk>class</jk>,
+		|			OpenApiParser.<jk>class</jk>,
+		|			MsgPackParser.<jk>class</jk>,
+		|			PlainTextParser.<jk>class</jk>,
+		|			CsvParser.<jk>class</jk>
+		|		}
+		|	)
+		|	<jk>public interface</jk> BasicUniversalConfig <jk>extends</jk> DefaultConfig, DefaultHtmlConfig {}
+	</p>
+	<p class='bjava'>
+		|	<jd>/**
+		|	 * Predefined REST configuration that defines common default values for all configurations.
+		|	 */</jd>
+		|	<ja>@Rest</ja>(
+		|		<jc>// Configuration file.</jc>
+		|		config=<js>"$S{j.configFile,$E{J_CONFIG_FILE,SYSTEM_DEFAULT}}"</js>,
+		|	
+		|		<jc>// Standard fields.</jc>
+		|		path=<js>""</js>,
+		|		roleGuard=<js>""</js>,
+		|		rolesDeclared=<js>""</js>,
+		|	
+		|		<jc>// Configuration beans.</jc>
+		|		converters={},
+		|		encoders={IdentityEncoder.<jk>class</jk>},
+		|		guards={},
+		|		parsers={},
+		|		partParser=OpenApiParser.<jk>class</jk>,
+		|		partSerializer=OpenApiSerializer.<jk>class</jk>,
+		|		responseProcessors={
+		|			ReaderProcessor.<jk>class</jk>,
+		|			InputStreamProcessor.<jk>class</jk>,
+		|			ThrowableProcessor.<jk>class</jk>,
+		|			HttpResponseProcessor.<jk>class</jk>,
+		|			HttpResourceProcessor.<jk>class</jk>,
+		|			HttpEntityProcessor.<jk>class</jk>,
+		|			ResponseBeanProcessor.<jk>class</jk>,
+		|			PlainTextPojoProcessor.<jk>class</jk>,
+		|			SerializedPojoProcessor.<jk>class</jk>
+		|		},
+		|		restOpArgs={
+		|			AttributeArg.<jk>class</jk>,
+		|			ContentArg.<jk>class</jk>,
+		|			FormDataArg.<jk>class</jk>,
+		|			HasFormDataArg.<jk>class</jk>,
+		|			HasQueryArg.<jk>class</jk>,
+		|			HeaderArg.<jk>class</jk>,
+		|			HttpServletRequestArgs.<jk>class</jk>,
+		|			HttpServletResponseArgs.<jk>class</jk>,
+		|			HttpSessionArgs.<jk>class</jk>,
+		|			InputStreamParserArg.<jk>class</jk>,
+		|			MethodArg.<jk>class</jk>,
+		|			ParserArg.<jk>class</jk>,
+		|			PathArg.<jk>class</jk>,
+		|			QueryArg.<jk>class</jk>,
+		|			ReaderParserArg.<jk>class</jk>,
+		|			RequestBeanArg.<jk>class</jk>,
+		|			ResponseBeanArg.<jk>class</jk>,
+		|			ResponseHeaderArg.<jk>class</jk>,
+		|			ResponseCodeArg.<jk>class</jk>,
+		|			RestContextArgs.<jk>class</jk>,
+		|			RestSessionArgs.<jk>class</jk>,
+		|			RestOpContextArgs.<jk>class</jk>,
+		|			RestOpSessionArgs.<jk>class</jk>,
+		|			RestRequestArgs.<jk>class</jk>,
+		|			RestResponseArgs.<jk>class</jk>,
+		|			DefaultArg.<jk>class</jk>
+		|		},
+		|		serializers={},
+		|	
+		|		<jc>// Configurable settings.</jc>
+		|		allowedHeaderParams=<js>"$S{j.allowedHeaderParams,$E{J_ALLOWED_HEADER_PARAMS,Accept,Content-Type}}"</js>,
+		|		allowedMethodHeaders=<js>"$S{j.allowedMethodHeaders,$E{J_ALLOWED_METHOD_HEADERS,}}"</js>,
+		|		allowedMethodParams=<js>"$S{j.allowedMethodParams,$E{J_ALLOWED_METHOD_PARAMS,HEAD,OPTIONS}}"</js>,
+		|		clientVersionHeader=<js>"$S{j.clientVersionHeader,$E{J_CLIENT_VERSION_HEADER,Client-Version}}"</js>,
+		|		debug=<js>"$S{j.debug,$E{J_DEBUG,}}"</js>,
+		|		debugOn=<js>"$S{j.debugOn,$E{J_DEBUG_ON,}}"</js>,
+		|		defaultAccept=<js>"$S{j.defaultAccept,$E{J_DEFAULT_ACCEPT,}}"</js>,
+		|		defaultCharset=<js>"$S{j.defaultCharset,$E{J_DEFAULT_CHARSET,UTF-8}}"</js>,
+		|		defaultContentType=<js>"$S{j.defaultContentType,$E{J_DEFAULT_CONTENT_TYPE,}}"</js>,
+		|		defaultRequestAttributes=<js>"$S{j.defaultRequestAttributes,$E{J_DEFAULT_REQUEST_ATTRIBUTES,}}"</js>,
+		|		defaultRequestHeaders=<js>"$S{j.defaultRequestHeaders,$E{J_DEFAULT_REQUEST_HEADERS,}}"</js>,
+		|		defaultResponseHeaders=<js>"$S{j.defaultResponseHeaders,$E{J_DEFAULT_RESPONSE_HEADERS,}}"</js>,
+		|		disableContentParam=<js>"$S{j.disableContentParam,$E{J_DISABLE_CONTENT_PARAM,false}}"</js>,
+		|		maxInput=<js>"$S{j.maxInput,$E{J_MAX_INPUT,1000000}}"</js>,
+		|		messages=<js>"$S{j.messages,$E{J_MESSAGES,}}"</js>,
+		|		renderResponseStackTraces=<js>"$S{j.renderResponseStackTraces,$E{J_RENDER_RESPONSE_STACK_TRACES,false}}"</js>,
+		|		uriAuthority=<js>"$S{j.uriAuthority,$E{J_URI_AUTHORITY,}}"</js>,
+		|		uriContext=<js>"$S{j.uriContext,$E{J_URI_CONTEXT,}}"</js>,
+		|		uriRelativity=<js>"$S{j.uriRelativity,$E{J_URI_RELATIVITY,}}"</js>,
+		|		uriResolution=<js>"$S{j.uriResolution,$E{J_URI_RESOLUTION,}}"</js>,
+		|	
+		|		<jc>// Metadata settings.</jc>
+		|		consumes={},
+		|		description=<js>""</js>,
+		|		produces={},
+		|		siteName=<js>"$S{j.siteName,$E{J_SITE_NAME,}}"</js>,
+		|		swagger=@Swagger,
+		|		title=<js>"$S{j.title,$E{J_TITLE,}}"</js>,
+		|	
+		|		<jc>// Injectable/overridable beans.</jc>
+		|		beanStore=BeanStore.Void.<jk>class</jk>,  <jc>// Defaults to BeanStore.</jc>
+		|		callLogger=CallLogger.Void.<jk>class</jk>,  <jc>// Defaults to BasicCallLogger.</jc>
+		|		debugEnablement=DebugEnablement.Void.<jk>class</jk>,  <jc>// Defaults to BasicDefaultEnablement.</jc>
+		|		fileFinder=FileFinder.Void.<jk>class</jk>,  <jc>// Defaults to BasicFileFinder.</jc>
+		|		staticFiles=StaticFiles.Void.<jk>class</jk>,  <jc>// Defaults to BasicStaticFiles.</jc>
+		|		swaggerProvider=SwaggerProvider.Void.<jk>class</jk>,  <jc>// Defaults to BasicSwaggerProvider.</jc>
+		|	
+		|		<jc>// Overridable context classes.</jc>
+		|		contextClass=RestContext.<jk>class</jk>,
+		|		restChildrenClass=RestChildren.<jk>class</jk>,
+		|		restOpContextClass=RestOpContext.<jk>class</jk>,
+		|		restOperationsClass=RestOperations.<jk>class</jk>
+		|	)
+		|	<ja>@BeanConfig</ja>(
+		|		<jc>// When parsing generated beans, ignore unknown properties 
+		|		// that may only exist as getters and not setters.</jc>
+		|		ignoreUnknownBeanProperties=<js>"true"</js>,
+		|		ignoreUnknownEnumValues=<js>"true"</js>
+		|	)
+		|	<ja>@SerializerConfig</ja>(
+		|		<jc>// Enable automatic resolution of URI objects to root-relative values.</jc>
+		|		uriResolution=<js>"ROOT_RELATIVE"</js>
+		|	)
+		|	<jk>public interface</jk> DefaultConfig {}
+	</p>
+	<p class='bjava'>
+		|	<jd>/**
+		|	 * Predefined REST configuration that defines common default values the HTML Doc serializer.
+		|	 */</jd>
+		|	<ja>@HtmlDocConfig</ja>(
+		|	
+		|		<jc>// Default page header contents.</jc>
+		|		header={
+		|			<js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;"</js>,  <jc>// Use @Rest(title)</jc>
+		|			<js>"&lt;h2&gt;$RS{operationSummary,description}&lt;/h2&gt;"</js>, <jc>// Use either @RestOp(summary) or @Rest(description)</jc>
+		|			<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
+		|		},
+		|	
+		|		<jc>// Basic page navigation links.</jc>
+		|		navlinks={
+		|			<js>"up: request:/.."</js>
+		|		},
+		|	
+		|		<jc>// Default stylesheet to use for the page.
+		|		// Can be overridden from external config file.
+		|		// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+		|		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+		|	
+		|		<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
+		|		// Use it to add a favicon link to the page.</jc>
+		|		head=<js>"$C{REST/head}"</js>,
+		|	
+		|		<jc>// No default page footer contents.
+		|		// Can be overridden from external config file.</jc>
+		|		footer=<js>"$C{REST/footer}"</js>,
+		|	
+		|		<jc>// By default, table cell contents should not wrap.</jc>
+		|		nowrap=<js>"true"</js>
+		|	)
+		|	<jk>public interface</jk> DefaultHtmlConfig {}
+	</p>
+	<p>
+		The {@link oajr.config} package contains other basic configurations for use.
+		Annotations are aggregated from child-to-parent order allowing for these basic configurations
+		to be extended and modified, or you can create your own annotations from scratch.
+	</p>
+</div>	
+	
+<h5 class='topic'>REST Group Pages</h5>
+<div class='topic'>
+	<p>
+		The {@link oajr.servlet.BasicRestServletGroup} class provides a default "router" page for 
+		child resources when a parent resource is nothing more than a grouping of child resources.
+	</p>		
+	<p>
+		The <l>RootResources</l> class in the Samples project is an example of a router page:
+	</p>
+	<p class='bjava'>		
+		|	<jd>/**
+		|	 * Sample REST resource showing how to implement a "router" resource page.
+		|	 */</jd>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/"</js>,
+		|		title=<js>"Root resources"</js>,
+		|		description=<js>"Example of a router resource page."</js>,
+		|		children={
+		|			HelloWorldResource.<jk>class</jk>,
+		|			PetStoreResource.<jk>class</jk>,
+		|			DtoExamples.<jk>class</jk>,
+		|			ConfigResource.<jk>class</jk>,
+		|			LogsResource.<jk>class</jk>,
+		|			ShutdownResource.<jk>class</jk>
+		|		}
+		|	)
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {
+		|		<jc>// NO CODE!!!</jc>
+		|	}
+	</p>
+	<p>
+		When you bring up this resource in a browser, you see the following that provides a list
+		of navigable links to your child resources:
+	</p>
+	<p class='bcode'>
+		|	http://localhost:10000
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.RouterPages.1.png'/>
+</div>
+
+<h5 class='topic'>REST Resource Methods</h5>
+<div class='topic'>
+	<p>
+		The real power behind the REST server API is the ability to define Java methods as REST endpoints.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@RestPost</ja>(path=<js>"/pets"</js>, guards=AdminGuard.<jk>class</jk>)
+		|	<jk>public</jk> Ok addPet(
+		|		<ja>@Content</ja> CreatePet <jv>createPetBean</jv>, 
+		|		<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
+		|		<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
+		|	) <jk>throws</jk> BadRequest, Unauthorized, InternalServerError {
+		|		<jc>// Process request.</jc>
+		|		<jk>return</jk> Ok.<jsf>OK</jsf>;
+		|	}
+	</p>
+	<p>
+		Java methods on {@link oajr.annotation.Rest @Rest}-annotated classes have the following format:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestOp</ja>(method=<js>"..."</js>, path=<js>"..."</js>)
+		|	<ja><i>&lt;config-annotations&gt;</i></ja>
+		|	<jk>public</jk> <i>&lt;return-type&gt;</i> method(<i>&lt;args&gt;</i>) <jk>throws</jk> <i>&lt;throwables&gt;</i> {
+		|		...
+		|	}
+	</p>
+	<p>
+		The various parts require their own topics to fully appreciate the scope of abilities but the following is a summary:
+	</p>
+	<ul class='spaced-list'>
+		<li>Annotated with {@link oajr.annotation.RestOp @RestOp}.
+		<ul>
+			<li>Also available: {@link oajr.annotation.RestGet @RestGet} / {@link oajr.annotation.RestPut @RestPut} / {@link oajr.annotation.RestPost @RestPost} / {@link oajr.annotation.RestDelete @RestDelete}.</li>
+			<li>Annotation optional if using standard naming conventions (e.g. <c>getFoo()</c> equivalent to <c><ja>@RestGet</ja>(path=<js>"/foo"</js>)</c>).
+		</ul>
+		<li>Optionally annotated with config annotations such as {@link oaj.annotation.BeanConfig @BeanConfig} and {@link oaj.html.annotation.HtmlDocConfig @HtmlDocConfig} that 
+			customize the behavior of serializers and parsers at the method level.</li>
+		<li>Returned object gets serialized as the HTTP response body.
+		<ul>
+			<li>Typically a POJO serialized based on {@link oaj.http.header.Accept} request header.</li>
+			<li>Support for raw values such as <c>Readers</c> and <c>InputStreams</c> (among others).
+			<li>Support for response beans annotated with {@link oaj.http.annotation.Response @Response}.</li>
+			<li>Support for Apache Http Core interfaces: {@link org.apache.http.HttpEntity} / {@link org.apache.http.HttpResponse} / {@link oaj.http.resource.HttpResource}.</li>
+			<li>Standard HTTP responses such as {@link oaj.http.response.Ok} and {@link oaj.http.response.TemporaryRedirect} provided in {@link oaj.http.response} package.</li>
+			<li>Extensible API for defining custom return types.</li>
+		</ul>
+		<li>A wide range of possible argument types including:
+		<ul>
+			<li>Standard {@link jakarta.servlet.http.HttpServletRequest} / {@link jakarta.servlet.http.HttpServletResponse} objects.</li>
+			<li>Extended {@link oajr.RestRequest} / {@link oajr.RestResponse} objects.</li>
+			<li>Parsed HTTP parts with either the arguments or beans annotated with {@link oaj.http.annotation.Path @Path} / {@link oaj.http.annotation.Header @Header} / {@link oaj.http.annotation.Query @Query} / {@link oaj.http.annotation.FormData @FormData}.</li>
+			<li>Parsed HTTP body with either the argument or bean annotated with {@link oaj.http.annotation.Content @Content}.</li>
+			<li>Raw HTTP request body with <c>InputStream</c> or <c>Reader</c>.
+			<li>Raw HTTP response body with <c>OutputStream</c> or <c>Writer</c>.
+			<li>Request beans annotated with {@link oaj.http.annotation.Request @Request}.</li>
+			<li>Response beans annotated with {@link oaj.http.annotation.Response @Response}.</li>
+			<li>Standard HTTP headers such as {@link oaj.http.header.Accept} and {@link oaj.http.header.ContentType}  provided in {@link oaj.http.header} package.</li>
+			<li>Auto-generated {@link oaj.dto.swagger.Swagger}.</li>
+			<li>Various other standard objects such as {@link java.security.Principal}, {@link jakarta.servlet.http.Cookie}, {@link jakarta.servlet.http.HttpSession}, and {@link java.util.ResourceBundle}.</li>
+			<li>Spring beans or other injectable beans.</li>
+			<li>Extensible API for defining custom argument types.</li>
+		</ul>
+		<li>Throwables can be anything.
+		<ul>
+			<li>Typically one of the standard HTTP responses such as {@link oaj.http.response.BadRequest} or {@link oaj.http.response.NotFound} provided in {@link oaj.http.response} package.</li>
+			<li>Can define your own {@link oaj.http.annotation.Response @Response}-annotated throwables.</li>
+			<li>Anything else gets converted to an {@link oaj.http.response.InternalServerError}. </li>
+		</ul>
+	</ul>
+</div>
+	
+<h5 class='topic'>Deploying as a Servlet</h5>
+<div class='topic'>
+	<p>
+		The {@link oajr.servlet.BasicRestServlet} class is the entry point for your REST resources.
+		It extends directly from <l>HttpServlet</l> and is deployed like any other servlet (such as a standard <c>web.xml</c> file).
+	</p>
+	<p>
+		When the servlet <l>init()</l> method is called, it triggers the code to find and process the <l>@Rest</l>
+		annotations on that class and all child classes.
+		These get constructed into a {@link oajr.RestContext} object that holds all the configuration
+		information about your resource in a read-only object.
+	</p>
+	<p>
+		Most developers are not going to be using the <l>RestServlet</l> class itself, and instead will
+		extend from one of the preconfigured default servlets such as {@link oajr.servlet.BasicRestServlet} and {@link oajr.servlet.BasicRestServletGroup} 
+		which provides universal language support, basic instrumentation, and auto-generated Swagger UI.
+	</p>
+</div>
+
+<h5 class='topic'>Deploying in Spring Boot</h5>
+<div class='topic'>
+	<p>
+		The {@link oajr.springboot.BasicSpringRestServlet} class is typically entry point for your REST resources
+		when working within a Spring Boot environment.  It extends from 
+		{@link oajr.springboot.SpringRestServlet} which provides additional capabilities including:
+	</p>
+	<ul>
+		<li>Your REST resources can be defined as injectable Spring beans.</li>
+		<li>Various capabilities within the REST Server library (e.g. logging, instrumentation, call handling, API extensions) can be defined via
+			Spring beans and automatically pulled into the framework.</li>
+	</ul>
+	<p>
+		Most developers are not going to be using the <l>RestServlet</l> class itself, and instead will
+		extend from one of the preconfigured default servlets such as {@link oajr.springboot.BasicSpringRestServlet} and {@link oajr.springboot.BasicSpringRestServletGroup}
+		that have the same capabilites as the {@link oajr.servlet.BasicRestServlet} and {@link oajr.servlet.BasicRestServletGroup} counterparts.
+	</p>
+	<h5 class='figure'>Example configuration file:</h5>
+	<p class='bjava'>
+		|	<ja>@Configuration</ja>
+		|	<jk>public class</jk> MySpringConfiguration {
+		|		
+		|		<jd>/**
+		|		 * Our root REST bean.
+		|		 * Note that this must extend from SpringRestServlet so that child resources can be 
+		|		 * resolved as Spring beans.
+		|		 * All REST objects are attached to this bean using the {@link oajr.annotation.Rest#children()} annotation.
+		|		 */</jd>
+		|		<ja>@Bean</ja>
+		|		<jk>public</jk> RootResources getRootResources() {
+		|			<jk>return new</jk> RootResources();
+		|		}
+		|	
+		|		<jd>/**
+		|		 * Optionally return the HelloWorldResource object as an injectable bean.
+		|		 */</jd>
+		|		<ja>@Bean</ja>
+		|		<jk>public</jk> HelloWorldResource getHelloWorldResource() {
+		|			<jk>return new</jk> HelloWorldResource();
+		|		}
+		|	
+		|		<jd>/**
+		|		 * Map our servlet to a path.
+		|		 */</jd>
+		|		<ja>@Bean</ja>
+		|		<jk>public</jk> ServletRegistrationBean&lt;Servlet&gt; getRootServlet(RootResources <jv>rootResources</jv>) {
+		|			<jk>return new</jk> ServletRegistrationBean&lt;&gt;(<jv>rootResources</jv>, <js>"/*"</js>);
+		|		}
+		|	}
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		children={
+		|			HelloWorldResource.<jk>class</jk>
+		|		}
+		|	)
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup {
+		|		<jc>// No code!</jc>
+		|	}
+	</p>
+</div>
+
+<h5 class='topic'>Additional Information</h5>
+<div class='topic'>
+	<ul class='seealso'>
+		<li class='link'><a class="doclink" href="#juneau-rest-server">juneau-rest-server</a> for more information.
+	</ul>
+</div>

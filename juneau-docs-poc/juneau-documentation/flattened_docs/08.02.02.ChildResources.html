@@ -1,0 +1,56 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Child Resources', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		Child Resources are REST servlets or objects that are linked to parent resources through the 
+		{@link oajr.annotation.Rest#children() @Rest(children)} annotation.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jd>/** Parent Resource */</jd>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/parent"</js>,
+		|		children={MyChildResource.<jk>class</jk>}
+		|	)
+		|	<jk>public</jk> MyRootResources <jk>extends</jk> BasicRestServletGroup {...}
+	</p>
+	<p class='bjava'>
+		|	<jd>/** Child Resource */</jd>
+ 		|	<ja>@Rest</ja>(
+		|		path=<js>"/child"</js>  <jc>// Path relative to parent resource.</jc>
+		|	)
+		|	<jc>// Note that we don't need to extend from RestServlet.</jc>
+		|	<jk>public</jk> MyChildResource <jk>extends</jk> BasicRestObject {...} 
+	</p>
+	<p>
+		The path of the child resource gets appended to the path of the parent resource. 
+		So in the example above, the child resource is accessed through the URL <l>/parent/child</l>.
+	</p>
+	<p>
+		One advantage of using child resources is that they do not need to be declared in the JEE <l>web.xml</l> 
+		file.
+		Initialization of and access to the child resources occurs through the parent resource.
+		Children can be nested arbitrary deep to create complex REST interfaces with a single top-level REST servlet.
+	</p>
+	<p>
+		As explained earlier, child REST objects typically extend from {@link oajr.servlet.BasicRestObject} or {@link oajr.servlet.BasicRestObjectGroup}
+		and not from one of the servlet classes.  They also technically don't even need to extend from those classes
+		and can instead just be a normal class annotated with the bare-minimum {@link oajr.annotation.Rest @Rest} and {@link oajr.annotation.RestOp @RestOp}
+		annotations.
+	</p>
+</div>	

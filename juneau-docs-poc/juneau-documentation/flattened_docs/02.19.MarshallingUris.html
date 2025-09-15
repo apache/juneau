@@ -1,0 +1,151 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'URIs', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		Juneau serializers have sophisticated support for transforming relative URIs to absolute form.
+	</p>
+	<p>
+		The following example shows a bean containing URIs of various forms and how they end up serialized. 
+	</p>
+	<p class='bjava'>
+		|	<jc>// Our bean with properties containing various kinds of URIs.</jc>
+		|	<jk>public class</jk> TestURIs {
+		|		<jk>public</jk> URI
+		|			<jf>a</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org/a"</js>),
+		|			<jf>b</jf> = URI.<jsm>create</jsm>(<js>"/b"</js>),
+		|			<jf>c</jf> = URI.<jsm>create</jsm>(<js>"/c/x/y"</js>),
+		|			<jf>d</jf> = URI.<jsm>create</jsm>(<js>"d"</js>),
+		|			<jf>e</jf> = URI.<jsm>create</jsm>(<js>"e/x/y"</js>),
+		|			<jf>f</jf> = URI.<jsm>create</jsm>(<js>""</js>),
+		|			<jf>g</jf> = URI.<jsm>create</jsm>(<js>"context:/g/x"</js>),
+		|			<jf>h</jf> = URI.<jsm>create</jsm>(<js>"context:/h"</js>),
+		|			<jf>i</jf> = URI.<jsm>create</jsm>(<js>"context:/"</js>),
+		|			<jf>j</jf> = URI.<jsm>create</jsm>(<js>"context:/.."</js>),
+		|			<jf>k</jf> = URI.<jsm>create</jsm>(<js>"servlet:/k/x"</js>),
+		|			<jf>l</jf> = URI.<jsm>create</jsm>(<js>"servlet:/l"</js>),
+		|			<jf>m</jf> = URI.<jsm>create</jsm>(<js>"servlet:/"</js>),
+		|			<jf>n</jf> = URI.<jsm>create</jsm>(<js>"servlet:/.."</js>),
+		|			<jf>o</jf> = URI.<jsm>create</jsm>(<js>"request:/o/x"</js>),
+		|			<jf>p</jf> = URI.<jsm>create</jsm>(<js>"request:/p"</js>),
+		|			<jf>q</jf> = URI.<jsm>create</jsm>(<js>"request:/"</js>),
+		|			<jf>r</jf> = URI.<jsm>create</jsm>(<js>"request:/.."</js>);
+		|	}	
+		|	
+		|	<jc>// Create a serializer.</jc>
+		|	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		|		<jsm>create</jsm>()
+		|		.simple()
+		|		.uriContext(
+		|			UriContext.of(
+		|				<js>"http://foo.com:123"</js>,  <jc>// Authority</jc>
+		|				<js>"/myContext"</js>,  <jc>// Context root</jc>
+		|				<js>"/myServlet"</js>,  <jc>// Servlet path</jc>
+		|				<js>"/myPath"</js>  <jc>// Path info</jc>
+		|			)
+		|		)
+		|		.uriResolution(<jsf>ABSOLUTE</jsf>)
+		|		.uriRelativity(<jsf>RESOURCE</jsf>)
+		|		.build();
+		|		
+		|	<jc>// Produces:</jc>
+		|	<jc>// {</jc>
+		|	<jc>//	a:'http://www.apache.org/a',</jc>
+		|	<jc>//	b:'http://foo.com:123/b',</jc>
+		|	<jc>//	c:'http://foo.com:123/c/x/y',</jc>
+		|	<jc>//	d:'http://foo.com:123/myContext/myServlet/d',</jc>
+		|	<jc>//	e:'http://foo.com:123/myContext/myServlet/e/x/y',</jc>
+		|	<jc>//	f:'http://foo.com:123/myContext/myServlet',</jc>
+		|	<jc>//	g:'http://foo.com:123/myContext/g/x',</jc>
+		|	<jc>//	h:'http://foo.com:123/myContext/h',</jc>
+		|	<jc>//	i:'http://foo.com:123/myContext',</jc>
+		|	<jc>//	j:'http://foo.com:123'</jc>
+		|	<jc>//	k:'http://foo.com:123/myContext/myServlet/k/x',</jc>
+		|	<jc>//	l:'http://foo.com:123/myContext/myServlet/l',</jc>
+		|	<jc>//	m:'http://foo.com:123/myContext/myServlet',</jc>
+		|	<jc>//	n:'http://foo.com:123/myContext',</jc>
+		|	<jc>//	o:'http://foo.com:123/myContext/myServlet/myPath/o/x',</jc>
+		|	<jc>//	p:'http://foo.com:123/myContext/myServlet/myPath/p',</jc>
+		|	<jc>//	q:'http://foo.com:123/myContext/myServlet/myPath',</jc>
+		|	<jc>//	r:'http://foo.com:123/myContext/myServlet'</jc>
+		|	<jc>// }</jc>
+		|	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> TestURIs());
+	</p>
+	<p>
+		URI resolution is controlled by the following settings:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link oaj.serializer.Serializer.Builder#uriContext(UriContext)}
+			<br>Setting that defines the URI contextual information used to resolve relative URIs.
+		</li>
+		<li class='jm'>{@link oaj.serializer.Serializer.Builder#uriRelativity(UriRelativity)}
+			<br>Setting that defines how relative URIs should be interpreted.
+			<br>Possible values:
+			<ul>
+				<li class='jf'>{@link oaj.UriRelativity#RESOURCE}
+					<br>Relative URIs should be considered relative to the servlet URI.
+					<br>(e.g. <js>"http://host:port/context-root/servlet-path"</js>).
+				<li class='jf'>{@link oaj.UriRelativity#PATH_INFO}
+					<br>Relative URIs should be considered relative to the request URI.
+					<br>(e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
+			</ul>
+		</li>
+		<li class='jm'>{@link oaj.serializer.Serializer.Builder#uriResolution(UriResolution)}
+			<br>Setting that defines the final format of serialized URIs.
+			<br>Possible values:
+			<ul>
+				<li class='jf'>{@link oaj.UriResolution#ABSOLUTE}
+					<br>Resolve to an absolute URL.
+					<br>(e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
+				<li class='jf'>{@link oaj.UriResolution#ROOT_RELATIVE}
+					<br>Resolve to a root-relative URL.
+					<br>(e.g. <js>"/context-root/servlet-path/path-info"</js>).
+				<li class='jf'>{@link oaj.UriResolution#NONE}
+					<br>Don't do any URL resolution.
+			</ul>
+		</li>
+	</ul>
+	<p>
+		Juneau automatically interprets any {@link java.net.URL} and {@link java.net.URI} objects as URIs and will
+		resolve them accordingly.
+		The {@link oaj.annotation.Uri @Uri} annotation can be used to extend that to other bean 
+		properties and class types so that they also get interpreted as URIs.
+		For example:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Applied to a class whose toString() method returns a URI.</jc>
+		|	<ja>@URI</ja>
+		|	<jk>public class</jk> MyURI {
+		|		<ja>@Override</ja> <jc>/* Object */</jc>
+		|		<jk>public</jk> String toString() {
+		|			<jk>return</jk> <js>"http://localhost:9080/foo/bar"</js>;
+		|		}
+		|	}
+		|
+		|	<jc>// Applied to bean properties</jc>
+		|	<jk>public class</jk> MyBean {
+		|
+		|		<ja>@URI</ja>
+		|		<jk>public</jk> String <jf>beanUri</jf>;
+		|
+		|		<ja>@URI</ja>
+		|		<jk>public</jk> String getParentUri() {
+		|			...
+		|		}
+		|	}
+	</p>
+</div>

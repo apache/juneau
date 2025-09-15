@@ -1,0 +1,45 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'ConfigStore Listeners'}
+
+<div class='topic'>
+	<p>
+		The <c>ConfigStore</c> class has the following listener methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oaj.config.store.ConfigStore}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.config.store.ConfigStore#register(String,ConfigStoreListener) register(String,ConfigStoreListener)}</li>
+				<li class='jm'>{@link oaj.config.store.ConfigStore#unregister(String,ConfigStoreListener) unregister(String,ConfigStoreListener)}</li>
+			</ul>
+		</li>
+	</ul>
+	<p>
+		Note that this is a different listener than {@link oaj.config.event.ConfigEventListener}.
+		In this case, we're just listening for changed files:
+	</p>		
+	<ul class='javatree'>
+		<li class='jic'>{@link oaj.config.store.ConfigStoreListener}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oaj.config.store.ConfigStoreListener#onChange(String) onChange(String)}</li>
+			</ul>
+		</li>
+	</ul>
+	<p>
+		This listener is used by the <c>Config</c> class to listen for changes on the file system so that it can be
+		updated in real-time.
+	</p>
+</div>

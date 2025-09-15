@@ -1,0 +1,115 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Per-media-type Swaps', updated:'8.1.0,8.2.0'} 
+
+<div class='topic'>
+	<p>
+		Swaps can also be defined per-media-type.		
+	</p>
+	<p>	
+		The {@link oaj.swap.ObjectSwap#forMediaTypes()} method can be overridden to 
+		provide a set of media types that the swap is invoked on.
+		It's also possible to define multiple swaps against the same object as long as they're differentiated 
+		by media type.
+		When multiple swaps are defined, the best-match media type is used.
+	</p>
+	<p>
+		In the following example, we define 3 swaps against the same object.  
+		One for JSON, one for XML, and one for all other types.
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> ObjectSwapTest {
+		|
+		|		<jk>public static class</jk> MyPojo {}
+		|
+		|		<jk>public static class</jk> MyJsonSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
+		|			<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
+		|			<jk>public</jk> MediaType[] forMediaTypes() {
+		|				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/json"</js>);
+		|			}
+		|			<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
+		|			<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyPojo <jv>pojo</jv>) <jk>throws</jk> Exception {
+		|				<jk>return</jk> <js>"It's JSON!"</js>;
+		|			}
+		|		}
+		|
+		|		<jk>public static class</jk> MyXmlSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
+		|			<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
+		|			<jk>public</jk> MediaType[] forMediaTypes() {
+		|				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/xml"</js>);
+		|			}
+		|			<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
+		|			<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyPojo <jv>pojo</jv>) <jk>throws</jk> Exception {
+		|				<jk>return</jk> <js>"It's XML!"</js>;
+		|			}
+		|		}
+		|
+		|		<jk>public static class</jk> MyOtherSwap <jk>extends</jk> StringSwap&lt;MyPojo&gt; {
+		|			<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
+		|			<jk>public</jk> MediaType[] forMediaTypes() {
+		|				<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/*"</js>);
+		|			}
+		|			<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
+		|			<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyPojo <jv>pojo</jv>) <jk>throws</jk> Exception {
+		|				<jk>return</jk> <js>"It's something else!"</js>;
+		|			}
+		|		}
+		|
+		|		<ja>@Test</ja>
+		|		<jk>public void</jk> doTest() <jk>throws</jk> Exception {
+		|
+		|			SerializerSet <jv>serializers</jv> = SerializersSet.<jsm>create</jsm>()
+		|				.add(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>)
+		|				.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>))
+		|				.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.ws())
+		|				.build();
+		|
+		|			MyPojo <jv>myPojo</jv> = <jk>new</jk> MyPojo();
+		|
+		|			String <jv>json</jv> = <jv>seralizers</jv>.getWriterSerializer(<js>"text/json"</js>).serialize(<jv>myPojo</jv>);
+		|			<jsm>assertEquals</jsm>(<js>"'It\\'s JSON!'"</js>, <jv>json</jv>);
+		|
+		|			String <jv>xml</jv> = <jv>seralizers</jv>.getWriterSerializer(<js>"text/xml"</js>).serialize(<jv>myPojo</jv>);
+		|			<jsm>assertEquals</jsm>(<js>"&lt;string&gt;It's XML!&lt;/string&gt;"</js>, <jv>xml</jv>);
+		|
+		|			String <jv>html</jv> = <jv>seralizers</jv>.getWriterSerializer(<js>"text/html"</js>).serialize(<jv>myPojo</jv>);
+		|			<jsm>assertEquals</jsm>(<js>"&lt;string&gt;It's something else!&lt;/string&gt;"</js>, <jv>html</jv>);
+		|		}
+		|	}
+	</p>
+	<p>
+		When multiple swaps match the same media type, a best-match algorithm is applied to find the correct
+		swap to use.
+	</p>
+	<p>
+		In later sections we describe how annotations can be used to shorten this syntax:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>)
+		|	<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>)
+		|	<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
+		|	<jk>public static class</jk> MyPojo {}
+		|
+		|	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/json"</js>)
+		|	<jk>public static class</jk> MyJsonSwap <jk>extends</jk> ObjectSwap&lt;MyPojo,String&gt; {...}
+		|
+		|	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/xml"</js>)
+		|	<jk>public static class</jk> MyXmlSwap <jk>extends</jk> ObjectSwap&lt;MyPojo,String&gt; {...}
+		|
+		|	<ja>@Swap</ja>(mediaTypes=<js>"&#42;/*"</js>)
+		|	<jk>public static class</jk> MyOtherSwap <jk>extends</jk> ObjectSwap&lt;MyPojo,String&gt; {...}
+	</p>
+</div>

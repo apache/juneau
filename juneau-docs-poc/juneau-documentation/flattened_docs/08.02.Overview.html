@@ -1,0 +1,152 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Overview', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		A REST resource is simply a Java class annotated with {@link oajr.annotation.Rest @Rest}.
+		The most common case is a class that extends {@link oajr.servlet.BasicRestServlet}, which itself is simply an 
+		extension of {@link jakarta.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
+	</p>
+	<p>
+		Juneau has two sample applications for demonstrating how to use the REST API, one using Jetty and one using
+		Spring Boot:
+	</p>
+	<ul class='javatree'>
+		<li class='jp'><c>org.apache.juneau.examples.rest.jetty</c>
+		<li class='jp'><c>org.apache.juneau.examples.rest.springboot</c>
+	</ul>
+	<p>
+		The <c>org.apache.juneau.examples.rest.springboot</c> application is described in the section <a class="doclink" href="#jrss.Overview">SpringBoot Overview</a>.
+	</p>
+	<p>
+		The Jetty application consists of the following application class that registers our top-level servlet:
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> App {
+		|	
+		|		<jk>public static void</jk> main(String[] <jv>args</jv>) <jk>throws</jk> Exception {
+		|			JettyMicroservice
+		|				.<jsm>create</jsm>()
+		|				.args(<jv>args</jv>)
+		|				.servlet(RootResources.<jk>class</jk>)
+		|				.build()
+		|				.start()
+		|				.startConsole()
+		|				.join();
+		|		}
+		|	}
+	</p>
+	<p>
+		The root resources class is an example of a router page that is used to attach children to:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		title=<js>"Root resources"</js>,
+		|		description=<js>"Example of a router resource page."</js>,
+		|		children={
+		|			HelloWorldResource.<jk>class</jk>,
+		|			DtoExamples.<jk>class</jk>,
+		|			UtilityBeansResource.<jk>class</jk>,
+		|			HtmlBeansResource.<jk>class</jk>,
+		|			ConfigResource.<jk>class</jk>,
+		|			ShutdownResource.<jk>class</jk>
+		|		}
+		|	)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		widgets={
+		|			ContentTypeMenuItem.<jk>class</jk>
+		|		},
+		|		navlinks={
+		|			<js>"api: servlet:/api"</js>,
+		|			<js>"stats: servlet:/stats"</js>,
+		|			<js>"$W{ContentTypeMenuItem}"</js>,
+		|			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java"</js>
+		|		},
+		|		aside={
+		|			<js>"&lt;div class='text'&gt;"</js>,
+		|			<js>"	&lt;p&gt;This is an example of a 'router' page that serves as a jumping-off point to child resources.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Resources can be nested arbitrarily deep through router pages.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Note the &lt;span class='link'&gt;API&lt;/span&gt; link provided that lets you see the generated swagger doc for this page.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Also note the &lt;span class='link'&gt;STATS&lt;/span&gt; link to view runtime statistics on this page.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Also note the &lt;span class='link'&gt;SOURCE&lt;/span&gt; link to view the source code for the page.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;Other features (such as this aside) are added through annotations.&lt;/p&gt;"</js>,
+		|			<js>"&lt;/div&gt;"</js>
+		|		},
+		|		asideFloat=<js>"RIGHT"</js>
+		|	)
+		|	<ja>@SerializerConfig</ja>(
+		|		<jc>// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple
+		|		// String comparisons.
+		|		// You can apply any of the Serializer/Parser/BeanContext settings this way.</jc>
+		|		quoteChar=<js>"'"</js>
+		|	)
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {
+		|		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L;
+		|	}	
+	</p>
+	<p>
+		This is what it looks like in a browser:
+	</p>
+	
+	<h5 class='figure'>HTML representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.Overview.RootResources.png'>
+	
+	<h5 class='figure'>JSON representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.Overview.RootResources.json.png'>
+	
+	<p>
+		The {@link oaj.examples.rest.HelloWorldResource} class is our basic example of a child REST resource:
+	</p>
+	
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		title=<js>"Hello World"</js>,
+		|		description=<js>"An example of the simplest-possible resource"</js>,
+		|		path=<js>"/helloWorld"</js>
+		|	)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		aside={
+		|			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+		|			<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
+		|			<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
+		|			<js>"&lt;/div&gt;"</js>
+		|		}
+		|	)
+		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestObject {
+		|	
+		|		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
+		|		<jk>public</jk> String sayHello() {
+		|			<jk>return</jk> <js>"Hello world!"</js>;
+		|		}
+		|	}
+	</p>
+
+	<p>
+		This is what it looks like in a browser:
+	</p>
+
+	<h5 class='figure'>HTML representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.Overview.HelloWorldResource.png'>
+	
+	<p>
+		It doesn't much simpler than that.  
+		In this case, we're simply returning a string that will be converted to any of the supported languages (e.g. 
+		JSON, XML, HTML, ...).
+		However, we could have returned any POJO consisting of beans, maps, collections, etc...
+	</p>
+</div>

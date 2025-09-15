@@ -1,0 +1,69 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Simple Variable Language'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.svl} packages defines an API for a language called "Simple Variable Language".
+		In a nutshell, Simple Variable Language (or SVL) is text that contains variables of the form <js>"$varName{varKey}"</js>.
+		It is used extensively in the Config, REST and Microservice APIs.
+	</p>
+	<p>
+		Most variables can be recursively nested within the varKey (e.g. <js>"$FOO{$BAR{xxx},$BAZ{xxx}}"</js>)
+		and can return values that themselves contain more variables.
+	</p>
+	<p>
+		The {@link oaj.svl.VarResolver} class is used to resolve variables.
+		The {@link oaj.svl.VarResolver#DEFAULT} resolver is a reusable instance of this class 
+		configured with the following basic variables:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.svl.vars.SystemPropertiesVar} - <c>$S{key[,default]}</c>
+		<li class='jc'>{@link oaj.svl.vars.EnvVariablesVar} - <c>$E{key[,default]}</c>
+	</ul>
+	<p>
+		The following logic variables are also provided:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.svl.vars.IfVar} - <c>$IF{arg,then[,else]}</c>
+		<li class='jc'>{@link oaj.svl.vars.SwitchVar} - <c>$SW{arg,pattern1:then1[,pattern2:then2...]}</c>
+		<li class='jc'>{@link oaj.svl.vars.CoalesceVar} - <c>$CO{arg1[,arg2...]}</c>
+		<li class='jc'>{@link oaj.svl.vars.PatternMatchVar} - <c>$PM{arg,pattern}</c> 
+		<li class='jc'>{@link oaj.svl.vars.PatternReplaceVar} - <c>$PR{arg,pattern,replace}</c> 
+		<li class='jc'>{@link oaj.svl.vars.PatternExtractVar} - <c>$PE{arg,pattern,groupIndex}</c> 
+		<li class='jc'>{@link oaj.svl.vars.NotEmptyVar} - <c>$NE{arg}</c>
+		<li class='jc'>{@link oaj.svl.vars.UpperCaseVar} - <c>$UC{arg}</c>
+		<li class='jc'>{@link oaj.svl.vars.LowerCaseVar} - <c>$LC{arg}</c>
+		<li class='jc'>{@link oaj.svl.vars.LenVar} - <c>$LN{arg[,delimiter]}</c>
+		<li class='jc'>{@link oaj.svl.vars.SubstringVar} - <c>$ST{arg,start[,end]}</c>
+	</ul>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Use the default variable resolver to resolve a string that contains 
+		|	// $S (system property) variables.</jc>
+		|	String <jv>property</jv> = VarResolver.<jsf>DEFAULT</jsf>.resolve(<js>"The Java home directory is $S{java.home}"</js>);
+	</p>
+	<p>
+		The following shows how variables can be arbitrarily nested...
+	</p>
+	<p class='bjava'>
+		|	<jc>// Look up a property in the following order:
+		|	// 1) MYPROPERTY environment variable.
+		|	// 2) 'my.property' system property if environment variable not found.
+		|	// 3) 'not found' string if system property not found.</jc>
+		|	String <jv>property</jv> = VarResolver.<jsf>DEFAULT</jsf>.resolve(<js>"$E{MYPROPERTY,$S{my.property,not found}}"</js>);
+	</p>
+</div>
