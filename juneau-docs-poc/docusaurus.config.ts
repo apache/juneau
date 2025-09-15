@@ -15,6 +15,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import remarkJuneauLinks from './src/plugins/remark-juneau-links';
+import remarkVersionReplacer from './src/plugins/remark-version-replacer';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -22,6 +23,11 @@ const config: Config = {
   title: 'Apache Juneau',
   tagline: 'Universal toolkit for marshalling POJOs to a wide variety of content types using a common framework',
   favicon: 'img/favicon.ico',
+
+  // Custom configuration variables
+  customFields: {
+    juneauVersion: '9.0.1',
+  },
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -73,6 +79,9 @@ const config: Config = {
                 'oajmj': 'org.apache.juneau.microservice.jetty',
               },
               javadocBaseUrl: '../apidocs'
+            }],
+            [remarkVersionReplacer, {
+              version: '9.0.1'
             }]
           ]
         },

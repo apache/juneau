@@ -91,8 +91,8 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/02.01.Juneau-marshall',
-          label: '2.1. Juneau Marshall',
+          id: 'topics/02.01.Module-juneau-marshall',
+          label: '2.1. Module: juneau-marshall',
         },
         {
           type: 'doc',
@@ -600,8 +600,8 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'doc',
-      id: 'topics/03.01.Juneau-marshall-rdf',
-      label: '3. Marshall RDF',
+      id: 'topics/03.01.Module-juneau-marshall-rdf',
+      label: '3. Module: juneau-marshall-rdf',
     },
     {
       type: 'category',
@@ -610,8 +610,8 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/04.01.Juneau-dto',
-          label: '4.1. Juneau DTO',
+          id: 'topics/04.01.Module-juneau-dto',
+          label: '4.1. Module: juneau-dto',
         },
         {
           type: 'doc',
@@ -647,8 +647,8 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/05.01.Juneau-config',
-              label: '5.1. Juneau Config',
+              id: 'topics/05.01.Module-juneau-config',
+              label: '5.1. Module: juneau-config',
             },
             {
               type: 'doc',
@@ -819,8 +819,8 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/06.01.Juneau-assertions',
-          label: '6.1. Juneau Assertions',
+          id: 'topics/06.01.Module-juneau-assertions',
+          label: '6.1. Module: juneau-assertions',
         },
         {
           type: 'doc',
@@ -836,8 +836,8 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/07.01.Juneau-rest-common',
-          label: '7.1. Juneau REST Common',
+          id: 'topics/07.01.Module-juneau-rest-common',
+          label: '7.1. Module: juneau-rest-common',
         },
         {
           type: 'doc',
@@ -883,8 +883,8 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/08.01.Juneau-rest-server',
-          label: '8.1. Juneau REST Server',
+          id: 'topics/08.01.Module-juneau-rest-server',
+          label: '8.1. Module: juneau-rest-server',
         },
         {
           type: 'category',
@@ -1240,8 +1240,8 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/09.01.Juneau-rest-server-springboot',
-          label: '9.1. Juneau REST Server SpringBoot',
+          id: 'topics/09.01.Module-juneau-rest-server-springboot',
+          label: '9.1. Module: juneau-rest-server-springboot',
         },
         {
           type: 'doc',
@@ -1257,8 +1257,8 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/10.01.Juneau-rest-client',
-          label: '10.1. Juneau REST Client',
+          id: 'topics/10.01.Module-juneau-rest-client',
+          label: '10.1. Module: juneau-rest-client',
         },
         {
           type: 'doc',
@@ -1413,8 +1413,8 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/11.01.Juneau-rest-mock',
-          label: '11.1. Juneau REST Mock',
+          id: 'topics/11.01.Module-juneau-rest-mock',
+          label: '11.1. Module: juneau-rest-mock',
         },
         {
           type: 'doc',
@@ -1430,8 +1430,8 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/12.01.Juneau-microservice-core',
-          label: '12.1. Juneau Microservice Core',
+          id: 'topics/12.01.Module-juneau-microservice-core',
+          label: '12.1. Module: juneau-microservice-core',
         },
         {
           type: 'doc',
@@ -1487,8 +1487,8 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/13.01.Juneau-microservice-jetty',
-          label: '13.1. Juneau Microservice Jetty',
+          id: 'topics/13.01.Module-juneau-microservice-jetty',
+          label: '13.1. Module: juneau-microservice-jetty',
         },
         {
           type: 'doc',
@@ -1593,8 +1593,8 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/16.01.Juneau-petstore',
-          label: '16.1. Juneau PetStore',
+          id: 'topics/16.01.App-juneau-petstore',
+          label: '16.1. App: juneau-petstore',
         },
         {
           type: 'doc',
@@ -1603,18 +1603,18 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'topics/16.03.Juneau-petstore-api',
-          label: '16.3. Juneau PetStore API',
+          id: 'topics/16.03.App-juneau-petstore-api',
+          label: '16.3. App: juneau-petstore-api',
         },
         {
           type: 'doc',
-          id: 'topics/16.04.Juneau-petstore-client',
-          label: '16.4. Juneau PetStore Client',
+          id: 'topics/16.04.App-juneau-petstore-client',
+          label: '16.4. App: juneau-petstore-client',
         },
         {
           type: 'doc',
-          id: 'topics/16.05.Juneau-petstore-server',
-          label: '16.5. Juneau PetStore Server',
+          id: 'topics/16.05.App-juneau-petstore-server',
+          label: '16.5. App: juneau-petstore-server',
         },
       ],
     },

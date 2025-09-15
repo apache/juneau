@@ -71,10 +71,10 @@ function convertHtmlToMarkdown(htmlContent, sourceFile) {
     
     // Convert HTML entities FIRST, before other processing (except in BXML blocks)
     // BXML blocks need special handling to preserve XML structure
-    markdown = markdown.replace(/(<p\s+class=['"]bxml['"][^>]*>[\s\S]*?<\/p>)|&lt;/gi, (match, bxmlBlock) => {
+    markdown = markdown.replace(/(<p\s+class=['"][^'"]*\bbxml(?:\s+[^'"]*)['"][^>]*>[\s\S]*?<\/p>)|&lt;/gi, (match, bxmlBlock) => {
         return bxmlBlock || '<';
     });
-    markdown = markdown.replace(/(<p\s+class=['"]bxml['"][^>]*>[\s\S]*?<\/p>)|&gt;/gi, (match, bxmlBlock) => {
+    markdown = markdown.replace(/(<p\s+class=['"][^'"]*\bbxml(?:\s+[^'"]*)['"][^>]*>[\s\S]*?<\/p>)|&gt;/gi, (match, bxmlBlock) => {
         return bxmlBlock || '>';
     });
     markdown = markdown.replace(/&amp;/g, '&');
@@ -83,7 +83,8 @@ function convertHtmlToMarkdown(htmlContent, sourceFile) {
     markdown = markdown.replace(/&nbsp;/g, ' ');
     
     // Convert all code block types to proper Markdown with language hints
-    markdown = markdown.replace(/<p\s+class=['"]b(java|json|xml|bxml|ini|console|uon|urlenc|code)['"][^>]*>((?:(?!<\/p>)[\s\S])*?)<\/p>/gi, (match, type, codeContent) => {
+    // Updated regex to handle width classes like 'bxml w500', 'bcode w800', etc.
+    markdown = markdown.replace(/<p\s+class=['"][^'"]*\bb(java|json|xml|bxml|ini|console|uon|urlenc|code)(?:\s+[^'"]*)['"][^>]*>((?:(?!<\/p>)[\s\S])*?)<\/p>/gi, (match, type, codeContent) => {
         
         // SIMPLE & RELIABLE DOCGENERATOR CONVERTER
         // Focus on getting indentation and empty lines right
@@ -201,6 +202,15 @@ function convertHtmlToMarkdown(htmlContent, sourceFile) {
             code = code.replace(/&#39;/g, "'");
             // Remove any remaining HTML tags (but not the XML tags we just created)
             code = code.replace(/<(?!\/?[a-zA-Z][a-zA-Z0-9]*\b[^>]*>)[^>]*>/g, '');
+        }
+        
+        // For regular XML blocks (not bxml), also decode HTML entities
+        if (type === 'xml') {
+            code = code.replace(/&lt;/g, '<');
+            code = code.replace(/&gt;/g, '>');
+            code = code.replace(/&amp;/g, '&');
+            code = code.replace(/&quot;/g, '"');
+            code = code.replace(/&#39;/g, "'");
         }
         
         // Map code types to appropriate language hints for syntax highlighting
