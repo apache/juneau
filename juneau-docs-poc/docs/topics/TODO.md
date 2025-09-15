@@ -26,11 +26,13 @@ The following sections are planned but not yet linked:
 - juneau-rest-client
 - juneau-rest-mock
 
-### Examples
+:::tip Examples
 
 - juneau-examples-core
 - juneau-examples-rest
 - my-springboot-microservice
+
+:::
 
 ### Detailed Topics
 
