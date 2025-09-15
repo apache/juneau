@@ -323,6 +323,9 @@ function convertHtmlToMarkdown(htmlContent, sourceFile) {
     // Process {@link} tags for Javadoc-style links
     markdown = processJuneauLinks(markdown);
     
+    // Convert Java trees to custom elements (must come before convertClassHierarchies)
+    markdown = convertJavaTreeToCustomElements(markdown);
+    
     // Convert class hierarchy trees 
     markdown = convertClassHierarchies(markdown);
     
@@ -460,6 +463,413 @@ function convertClassHierarchies(content) {
     });
     
     return content;
+}
+
+function convertJavaTreeToCustomElements(content) {
+    // Convert Java tree HTML structures to custom element format
+    console.log('🔍 convertJavaTreeToCustomElements called, content length:', content.length);
+    
+    const result = content.replace(/<ul\s+class=['"](?:.*\s)?javatree(?:\s.*)?['"][^>]*>([\s\S]*?)<\/ul>/gi, (match, listContent) => {
+        try {
+            console.log('Converting Java tree:', match.substring(0, 100) + '...');
+            const lines = parseJavaTreeToLines(listContent, 0);
+            return '\n' + lines.join('\n') + '\n';
+        } catch (error) {
+            console.error('Error converting Java tree:', error);
+            return match;
+        }
+    });
+    
+    console.log('🔍 convertJavaTreeToCustomElements finished');
+    return result;
+}
+
+function parseJavaTreeToLines(html, depth) {
+    const lines = [];
+    const depthPrefix = '>'.repeat(depth);
+    
+    // Parse properly nested <li> elements 
+    let pos = 0;
+    while (pos < html.length) {
+        const liMatch = html.substring(pos).match(/<li\s+class=['"]([^'"]*?)['"][^>]*>/);
+        if (!liMatch) break;
+        
+        const fullLiStart = pos + liMatch.index;
+        const className = liMatch[1];
+        const liOpenEnd = fullLiStart + liMatch[0].length;
+        
+        // Find the matching </li> tag, accounting for nested <li> elements
+        let liEnd = findMatchingLiClose(html, liOpenEnd);
+        if (liEnd === -1) {
+            // If no closing </li> found, take until next <li> or end
+            const nextLi = html.substring(liOpenEnd).search(/<li\s+class=['"][^'"]*['"][^>]*>/);
+            liEnd = nextLi !== -1 ? liOpenEnd + nextLi : html.length;
+        }
+        
+        const content = html.substring(liOpenEnd, liEnd).trim();
+        
+        // Extract the main content before any nested <ul>
+        const ulIndex = content.indexOf('<ul');
+        const mainContent = ulIndex !== -1 ? content.substring(0, ulIndex).trim() : content.trim();
+        
+        // Process {@link} tags and convert to markdown links
+        const processedContent = processJavaTreeContent(mainContent);
+        
+        // Map class names to custom elements
+        const elementType = mapClassToElement(className);
+        
+        // Handle javatreec (condensed) lists
+        if (content.includes("class='javatreec'") || content.includes('class="javatreec"')) {
+            const condensedItems = extractCondensedItems(content);
+            if (condensedItems.length > 0) {
+                const condensedLine = depthPrefix + '>' + condensedItems.join('&nbsp;&nbsp;');
+                lines.push(condensedLine);
+                pos = liEnd + 5; // Skip past </li>
+                continue;
+            }
+        }
+        
+        // Add the main element
+        lines.push(`${depthPrefix}<${elementType}>${processedContent}</${elementType}>`);
+        
+        // Process nested <ul> elements
+        const nestedUls = content.match(/<ul[^>]*>([\s\S]*?)<\/ul>/gi);
+        if (nestedUls) {
+            nestedUls.forEach(nestedUl => {
+                const nestedContent = nestedUl.replace(/^<ul[^>]*>/, '').replace(/<\/ul>$/, '');
+                const nestedLines = parseJavaTreeToLines(nestedContent, depth + 1);
+                lines.push(...nestedLines);
+            });
+        }
+        
+        pos = liEnd + 5; // Skip past </li>
+    }
+    
+    return lines;
+}
+
+function findMatchingLiClose(html, startPos) {
+    let depth = 1;
+    let pos = startPos;
+    
+    while (pos < html.length && depth > 0) {
+        const nextLiOpen = html.substring(pos).search(/<li[^>]*>/);
+        const nextLiClose = html.substring(pos).search(/<\/li>/);
+        
+        if (nextLiClose === -1) return -1;
+        
+        if (nextLiOpen !== -1 && nextLiOpen < nextLiClose) {
+            depth++;
+            pos += nextLiOpen + 4;
+        } else {
+            depth--;
+            if (depth === 0) {
+                return pos + nextLiClose;
+            }
+            pos += nextLiClose + 5;
+        }
+    }
+    
+    return -1;
+}
+
+function mapClassToElement(className) {
+    const mapping = {
+        'jac': 'java-abstract-class',
+        'jc': 'javac-class', 
+        'jic': 'java-interface',
+        'ja': 'java-annotation',
+        'je': 'java-enum',
+        'jm': 'java-method',
+        'jmp': 'java-method-private',
+        'jma': 'java-method-annotation',
+        'jf': 'java-field',
+        'jfp': 'java-field-private'
+    };
+    
+    return mapping[className] || 'java-class';
+}
+
+function processJavaTreeContent(content) {
+    // Process {@link} tags
+    content = content.replace(/\{@link\s+([^}]+)\}/gi, (match, linkContent) => {
+        const parts = linkContent.split(/\s+/);
+        const target = parts[0];
+        const text = parts.slice(1).join(' ') || target.split('.').pop();
+        
+        // Expand oaj abbreviation
+        const expandedTarget = target.replace(/^oaj\./, 'org.apache.juneau.');
+        const linkPath = expandedTarget.replace(/\./g, '/');
+        
+        return `[${text}](../apidocs/${linkPath}.html)`;
+    });
+    
+    // Process <c> tags (convert to backticks)
+    content = content.replace(/<c>(.*?)<\/c>/gi, '`$1`');
+    
+    // Process <jk> tags (Java keywords)
+    content = content.replace(/<jk>(.*?)<\/jk>/gi, '$1');
+    
+    // Clean up HTML entities
+    content = content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ');
+    
+    // Remove extra whitespace
+    content = content.replace(/\s+/g, ' ').trim();
+    
+    return content;
+}
+
+function extractCondensedItems(content) {
+    const items = [];
+    const javatreecMatch = content.match(/<ul\s+class=['"]javatreec['"][^>]*>([\s\S]*?)<\/ul>/i);
+    
+    if (javatreecMatch) {
+        const innerContent = javatreecMatch[1];
+        const liMatches = innerContent.match(/<li\s+class=['"]([^'"]*?)['"][^>]*>([\s\S]*?)<\/li>/gi);
+        
+        if (liMatches) {
+            liMatches.forEach(liMatch => {
+                const classMatch = liMatch.match(/class=['"]([^'"]*?)['"][^>]*>/);
+                const contentMatch = liMatch.replace(/^<li[^>]*>/, '').replace(/<\/li>$/, '');
+                
+                if (classMatch) {
+                    const className = classMatch[1];
+                    const elementType = mapClassToElement(className);
+                    const processedContent = processJavaTreeContent(contentMatch);
+                    items.push(`<${elementType}>${processedContent}</${elementType}>`);
+                }
+            });
+        }
+    }
+    
+    return items;
+}
+
+function parseJavaTreeNode(html) {
+    const nodes = [];
+    
+    // Clean up the HTML and normalize it
+    let normalizedHtml = html.trim();
+    
+    // Split by <li> tags and process each
+    const liParts = normalizedHtml.split(/<li\s+class=['"]([^'"]*?)['"][^>]*>/i);
+    
+    // Skip the first empty part
+    for (let i = 1; i < liParts.length; i += 2) {
+        const className = liParts[i];
+        let content = liParts[i + 1] || '';
+        
+        // Find the end of this li content (next <li> or end of string)
+        const nextLiIndex = content.search(/<li\s+class=['"][^'"]*['"][^>]*>/i);
+        if (nextLiIndex !== -1) {
+            content = content.substring(0, nextLiIndex);
+        }
+        
+        const node = parseJavaTreeItem(className, content);
+        if (node) {
+            nodes.push(node);
+        }
+    }
+    
+    return nodes;
+}
+
+function parseJavaTreeItem(className, content) {
+    try {
+        // Extract the main text/link for this item
+        const { name, link, type } = extractNodeInfo(className, content);
+        
+        const node = {
+            name: name,
+            type: type,
+            link: link
+        };
+        
+        // Look for nested <ul> elements for children
+        const children = [];
+        const nestedUlPattern = /<ul(?:\s+class=['"]([^'"]*?)['"])?[^>]*>([\s\S]*?)<\/ul>/gi;
+        let ulMatch;
+        
+        while ((ulMatch = nestedUlPattern.exec(content)) !== null) {
+            const ulClass = ulMatch[1] || '';
+            const ulContent = ulMatch[2];
+            
+            if (ulClass.includes('javatreec')) {
+                // This is a condensed children list
+                const condensedChildren = parseCondensedChildren(ulContent);
+                if (condensedChildren.length > 0) {
+                    // Find the last child that can have condensed children
+                    if (children.length > 0) {
+                        const lastChild = children[children.length - 1];
+                        lastChild.childrenCondensed = true;
+                        lastChild.children = (lastChild.children || []).concat(condensedChildren);
+                    } else {
+                        // Apply to current node
+                        node.childrenCondensed = true;
+                        node.children = (node.children || []).concat(condensedChildren);
+                    }
+                }
+            } else {
+                // Regular nested children
+                const nestedChildren = parseJavaTreeNode(ulContent);
+                children.push(...nestedChildren);
+            }
+        }
+        
+        if (children.length > 0) {
+            node.children = children;
+        }
+        
+        return node;
+        
+    } catch (error) {
+        console.error('Error parsing Java tree item:', error);
+        return null;
+    }
+}
+
+function parseCondensedChildren(html) {
+    const children = [];
+    const liPattern = /<li\s+class=['"]([^'"]*?)['"][^>]*>([\s\S]*?)<\/li>/gi;
+    let match;
+    
+    while ((match = liPattern.exec(html)) !== null) {
+        const className = match[1];
+        const content = match[2];
+        
+        const { name, link, type } = extractNodeInfo(className, content);
+        children.push({
+            name: name,
+            type: type,
+            link: link
+        });
+    }
+    
+    return children;
+}
+
+function extractNodeInfo(className, content) {
+    // Map CSS class to our type system
+    const typeMap = {
+        'jac': 'java-abstract-class',
+        'jc': 'java-class', 
+        'jic': 'java-interface',
+        'ja': 'java-annotation',
+        'je': 'java-enum',
+        'jm': 'java-method',
+        'jf': 'java-field',
+        'jmp': 'java-private-method',
+        'jfp': 'java-private-field',
+        'jma': 'java-annotation-method'
+    };
+    
+    const type = typeMap[className] || 'java-class';
+    
+    // Extract the main content before any nested <ul> tags
+    const mainContent = content.split('<ul')[0].trim();
+    
+    // Extract link and name from {@link} patterns
+    const linkPattern = /\{@link\s+([^}]+)\}/gi;
+    const linkMatch = linkPattern.exec(mainContent);
+    
+    let name = '';
+    let link = '';
+    
+    if (linkMatch) {
+        const linkTarget = linkMatch[1];
+        
+        // Handle package abbreviations
+        let expandedTarget = linkTarget;
+        for (const [abbrev, fullPackage] of Object.entries(packageAbbreviations)) {
+            expandedTarget = expandedTarget.replace(new RegExp(`^${abbrev}\\.`, 'g'), `${fullPackage}.`);
+        }
+        
+        // Extract class name and method
+        const parts = expandedTarget.split('#');
+        const classPath = parts[0];
+        const methodName = parts[1];
+        
+        // Get the simple class name
+        const classSegments = classPath.split('.');
+        name = classSegments[classSegments.length - 1];
+        
+        // If there's a method, format it properly
+        if (methodName) {
+            // Clean up method signature from content after the {@link}
+            const afterLink = mainContent.replace(/\{@link[^}]+\}/, '').trim();
+            const codeMatch = afterLink.match(/<c>(.*?)<\/c>/);
+            let returnType = codeMatch ? codeMatch[1] : '';
+            
+            // Decode HTML entities in return type
+            returnType = returnType.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+            
+            // Extract the method signature (everything after the return type)
+            const methodText = afterLink.replace(/<c>.*?<\/c>/, '').replace(/&nbsp;/g, ' ').trim();
+            let methodSig = methodText || methodName;
+            
+            // Decode HTML entities in method signature
+            methodSig = methodSig.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+            
+            if (returnType) {
+                name = `${returnType} ${methodSig}`;
+            } else {
+                name = methodSig;
+            }
+        }
+        
+        // Convert to documentation link
+        const classPathWithSlashes = classPath.replace(/\./g, '/');
+        link = `../apidocs/${classPathWithSlashes}.html`;
+        if (methodName) {
+            // Clean up method name for anchor - just the method name without params
+            const cleanMethodName = methodName.split('(')[0];
+            link += `#${cleanMethodName}`;
+        }
+    } else {
+        // Fallback: extract text content
+        name = mainContent.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+        // Decode HTML entities
+        name = name.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+    }
+    
+    return { name, link, type };
+}
+
+function generateClassHierarchyComponent(nodes) {
+    const indent = '  ';
+    
+    function nodeToString(node, depth = 1) {
+        const baseIndent = indent.repeat(depth);
+        let result = `${baseIndent}{ name: "${escapeQuotes(node.name)}", type: "${node.type}"`;
+        
+        if (node.link) {
+            result += `, link: "${node.link}"`;
+        }
+        
+        if (node.childrenCondensed) {
+            result += `, childrenCondensed: true`;
+        }
+        
+        if (node.children && node.children.length > 0) {
+            result += `,\n${baseIndent}  children: [\n`;
+            
+            const childStrings = node.children.map(child => nodeToString(child, depth + 2));
+            result += childStrings.join(',\n');
+            
+            result += `\n${baseIndent}  ]`;
+        }
+        
+        result += ' }';
+        return result;
+    }
+    
+    const nodeStrings = nodes.map(node => nodeToString(node));
+    
+    return `<ClassHierarchy nodes={[\n${nodeStrings.join(',\n')}\n]} />`;
+}
+
+function escapeQuotes(text) {
+    return text.replace(/"/g, '\\"').replace(/'/g, "\\'");
 }
 
 function convertTables(content) {

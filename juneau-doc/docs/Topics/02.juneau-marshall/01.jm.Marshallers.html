@@ -21,34 +21,44 @@
 		and {@link oaj.parser.Parser} with convenience methods for serializing and parsing POJOs.
 	</p>
 	<ul class='javatree'>
-		<li class='jac'>{@link oaj.marshaller.Marshaller}
+		<li class='jac'>
+			{@link oaj.marshaller.Marshaller}
 			<ul>
-				<li class='jm'><c>T</c>&nbsp;&nbsp;{@link oaj.marshaller.Marshaller#read(Object,Class) read(Object,Class&lt;T&gt;)}
+				<li class='jm'>
+					<c>T</c>&nbsp;&nbsp;{@link oaj.marshaller.Marshaller#read(Object,Class) read(Object,Class&lt;T&gt;)}
+				</li>
 			</ul>
 			<ul>
-				<li class='jac'>{@link oaj.marshaller.CharMarshaller}
+				<li class='jac'>
+					{@link oaj.marshaller.CharMarshaller}
 					<ul>
-						<li class='jm'><c>String</c>&nbsp;&nbsp;{@link oaj.marshaller.CharMarshaller#write(Object) write(Object)}
-						<ul class='javatreec'>
-							<li class='jc'>{@link oaj.marshaller.Csv}</li>
-							<li class='jc'>{@link oaj.marshaller.Html}</li>
-							<li class='jc'>{@link oaj.marshaller.Json}</li>
-							<li class='jc'>{@link oaj.marshaller.OpenApi}</li>
-							<li class='jc'>{@link oaj.marshaller.PlainText}</li>
-							<li class='jc'>{@link oaj.marshaller.Json5}</li>
-							<li class='jc'>{@link oaj.marshaller.Uon}</li>
-							<li class='jc'>{@link oaj.marshaller.UrlEncoding}</li>
-							<li class='jc'>{@link oaj.marshaller.Xml}</li>
-						</ul>
+						<li class='jm'>
+							<c>String</c>&nbsp;&nbsp;{@link oaj.marshaller.CharMarshaller#write(Object) write(Object)}
+							<ul class='javatreec'>
+								<li class='jc'>{@link oaj.marshaller.Csv}</li>
+								<li class='jc'>{@link oaj.marshaller.Html}</li>
+								<li class='jc'>{@link oaj.marshaller.Json}</li>
+								<li class='jc'>{@link oaj.marshaller.OpenApi}</li>
+								<li class='jc'>{@link oaj.marshaller.PlainText}</li>
+								<li class='jc'>{@link oaj.marshaller.Json5}</li>
+								<li class='jc'>{@link oaj.marshaller.Uon}</li>
+								<li class='jc'>{@link oaj.marshaller.UrlEncoding}</li>
+								<li class='jc'>{@link oaj.marshaller.Xml}</li>
+							</ul>
+						</li>
 					</ul>
-				<li class='jac'>{@link oaj.marshaller.StreamMarshaller}
+				</li>
+				<li class='jac'>
+					{@link oaj.marshaller.StreamMarshaller}
 					<ul>
-						<li class='jm'><c><jk>byte</jk>[]</c>&nbsp;&nbsp;{@link oaj.marshaller.StreamMarshaller#write(Object) write(Object)}
-						<ul class='javatreec'>
-							<li class='jc'>{@link oaj.marshaller.MsgPack}</li>
-						</ul>
+						<li class='jm'>
+							<c><jk>byte</jk>[]</c>&nbsp;&nbsp;{@link oaj.marshaller.StreamMarshaller#write(Object) write(Object)}
+							<ul class='javatreec'>
+								<li class='jc'>{@link oaj.marshaller.MsgPack}</li>
+							</ul>
+						</li>
 					</ul>
-				</ul>
+				</li>
 			</ul>
 		</li>
 	</ul>

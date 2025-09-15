@@ -347,94 +347,50 @@ a[href*="apidocs"]:hover {
   margin-top: 0;
 }
 
-/* Java Tree styling - using original Juneau icons */
-.java-tree, .javatreec {
-  background: var(--ifm-color-emphasis-100);
-  border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: 8px;
-  padding: 1rem 1.5rem;
-  margin: 1.5rem 0;
-  max-width: 900px;
+/* Java Tree CSS - Original Juneau styling */
+
+/* Documentation Tree - from original juneau-doc.css */
+.doctree li, .javatree li, .seealso>li, .notes>li, .values>li, .format>li { 
+  max-width: 800px; 
+  margin-top: 0px; 
+  list-style: none;
+}
+.doctree>li, .seealso>li { 
+  margin-bottom: 10px; 
+}
+.doctree li, .seealso li {  
+  margin-top: 5px; 
+}
+.doctree ul, .seealso ul {  
+  padding: 0px 0px 0px 15px; 
+  margin-top: -2px; 
+  margin-bottom: -2px; 
+}
+.javatree>li {  
+  margin-bottom: 1px; 
+}
+.javatree li { 
+  margin-top: 1px; 
+}
+.javatree ul { 
+  padding: 0px 0px 0px 20px; 
+  margin-top: 0px; 
+  margin-bottom: 0px; 
 }
 
-.java-tree ul, .javatreec ul {
-  padding-left: 0px;
+/* Compressed/condensed Java tree - from original juneau-doc.css */
+ul.javatreec, .javatreec ul {  
+  padding-left: 0px; 
   margin: 0px;
-  max-width: 900px;
-  margin-left: 1.5rem;
-  border-left: 2px solid var(--ifm-color-emphasis-300);
-  padding-left: 1rem;
+  max-width: 900px; 
 }
-
-.java-tree li, .javatreec li {
-  display: inline-block;
-  padding-left: 5px;
-  margin: 0.5rem 0;
-  line-height: 1.4;
-  width: 100%;
+.javatreec li { 
+  display: inline-block; 
+  padding-left: 5px; 
 }
-
-.java-tree li::before, .javatreec li::before {
-  font-weight: bolder;
-  font-size: x-small;
-}
-
-/* Java element type icons */
-/* Larger icons for class/interface/annotation/enum */
-.java-tree li.ja::before, .javatreec li.ja::before { color: #00ced1; content: '\00a0\00a0\24d0\00a0'; font-size: medium; font-weight: bold; } /* Java annotation */
-.java-tree li.jc::before, .javatreec li.jc::before { color: rgb(76, 107, 135); content: '\00a0\00a0\24d2\00a0'; font-size: medium; font-weight: bold; } /* Java class */
-.java-tree li.jac::before, .javatreec li.jac::before { color: #eed304; content: '\00a0\00a0\24d2\00a0'; font-size: medium; font-weight: bold; } /* Java abstract class */
-.java-tree li.jic::before, .javatreec li.jic::before { color: #5f4ba2; content: '\00a0\00a0\24d8\00a0'; font-size: medium; font-weight: bold; } /* Java interface */
-.java-tree li.je::before, .javatreec li.je::before { color: #906029; content: '\00a0\00a0\24d4\00a0'; font-size: medium; font-weight: bold; } /* Java enum */
-
-/* Smaller icons for methods/fields */
-.java-tree li.jf::before, .javatreec li.jf::before { color: rgb(76, 107, 135); content: '\00a0\00a0\25cf\00a0'; } /* Java field */
-.java-tree li.jfp::before, .javatreec li.jfp::before { color: #eed304; content: '\00a0\00a0\25cf\00a0'; } /* Java private field */
-.java-tree li.jm::before, .javatreec li.jm::before { color: rgb(76, 107, 135); content: '\00a0\00a0\25cf\00a0'; } /* Java method */
-.java-tree li.jmp::before, .javatreec li.jmp::before { color: #eed304; content: '\00a0\00a0\25c6\00a0'; } /* Java private method */
-.java-tree li.jma::before, .javatreec li.jma::before { color: #00ced1; content: '\00a0\00a0\25cf\00a0'; } /* Java annotation method */
-
-/* List markers for better compatibility */
-.java-tree li.jc::marker, .javatreec li.jc::marker { font-weight: bolder; font-size: small; color: #008000; content: '\00a0\00a0\24d2\00a0\00a0'; }
-.java-tree li.jac::marker, .javatreec li.jac::marker { font-weight: bolder; font-size: small; color: #eed304; content: '\00a0\00a0\24d2\00a0\00a0'; }
-.java-tree li.jic::marker, .javatreec li.jic::marker { font-weight: bolder; font-size: small; color: #5f4ba2; content: '\00a0\00a0\24d8\00a0\00a0'; }
-.java-tree li.ja::marker, .javatreec li.ja::marker { font-weight: bolder; font-size: small; color: #00ced1; content: '\00a0\00a0\24d0\00a0\00a0'; }
-.java-tree li.je::marker, .javatreec li.je::marker { font-weight: bolder; font-size: small; color: #906029; content: '\00a0\00a0\24d4\00a0\00a0'; }
-.java-tree li.jm::marker, .javatreec li.jm::marker { font-weight: bolder; font-size: small; color: #008000; content: '\00a0\00a0\25cf\00a0\00a0'; }
-.java-tree li.jf::marker, .javatreec li.jf::marker { font-weight: bolder; font-size: small; color: #008000; content: '\00a0\00a0\25cf\00a0\00a0'; }
-.java-tree li.jp::marker, .javatreec li.jp::marker { font-weight: bolder; font-size: small; color: #e09c01; content: '\00a0\00a0\229e\00a0\00a0'; }
-.java-tree li.jmp::marker, .javatreec li.jmp::marker { font-weight: bolder; font-size: small; color: #eed304; content: '\00a0\00a0\25c6\00a0\00a0'; }
-.java-tree li.jma::marker, .javatreec li.jma::marker { font-weight: bolder; font-size: small; color: #00ced1; content: '\00a0\00a0\25cf\00a0\00a0'; }
-
-.java-tree code {
-  background: none;
-  border: none;
-  padding: 0;
-  color: var(--ifm-color-primary);
-}
-
-.java-tree a {
-  color: rgb(76, 107, 135);
-  text-decoration: none;
-  border-bottom: 1px dotted rgb(76, 107, 135);
-}
-
-.java-tree a:hover {
-  color: rgb(60, 85, 108);
-  border-bottom: 1px solid rgb(60, 85, 108);
-  background: rgba(76, 107, 135, 0.05);
-  border-radius: 3px;
-  padding: 1px 3px;
-}
-
-/* Dark theme for java-tree */
-[data-theme='dark'] .java-tree, [data-theme='dark'] .javatreec {
-  background: var(--ifm-color-emphasis-200);
-  border-color: var(--ifm-color-emphasis-400);
-}
-
-[data-theme='dark'] .java-tree ul, [data-theme='dark'] .javatreec ul {
-  border-left-color: var(--ifm-color-emphasis-400);
+.javatreec li::before { 
+  font-weight: bolder; 
+  font-size: x-small; 
 }
 
 /* Responsive adjustments */
@@ -446,9 +402,48 @@ a[href*="apidocs"]:hover {
   .feature-grid {
     grid-template-columns: 1fr;
   }
-  
-  .java-tree ul {
-    margin-left: 1rem;
-    padding-left: 0.75rem;
-  }
 }
+
+javac-annotation, 
+javac-class, 
+javac-abstract-class, 
+javac-interface, 
+javac-enum, 
+javac-field, 
+javac-field-private, 
+javac-method, 
+javac-method-private, 
+javac-method-annotation { font: 'Lucida Console'; font-size: small; }
+
+java-annotation, 
+java-class, 
+java-abstract-class, 
+java-interface, 
+java-enum, 
+java-field, 
+java-field-private, 
+java-method, 
+java-method-private, 
+java-method-annotation { font: 'Lucida Console';}
+
+javac-annotation::before  { color: #00ced1; content: '\24d0\00a0'; font-weight: bolder; font-size: x-small; }
+javac-class::before  { color: #008000; content: '\24d2\00a0'; font-weight: bolder; font-size: x-small; }
+javac-abstract-class::before { color: #CCB404; content: '\24d2\00a0'; font-weight: bolder; font-size: x-small; }
+javac-interface::before { color: #5f4ba2; content: '\24d8\00a0'; font-weight: bolder; font-size: x-small; }
+javac-enum::before  { color: #906029; content: '\24d4\00a0'; font-weight: bolder; font-size: x-small; }
+javac-field::before  { color: #008000; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
+javac-field-private::before { color: #CCB404; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
+javac-method::before  { color: #008000; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
+javac-method-private::before { color: #CCB404; content: '\25c6\00a0'; font-weight: bolder; font-size: x-small; }
+javac-method-annotation::before { color: #00ced1; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
+
+java-annotation::before  { color: #00ced1; content: '\24d0\00a0\00a0'; font-weight: bolder; font-size: large; }
+java-class::before  { color: #008000; content: '\24d2\00a0\00a0'; font-weight: bolder; font-size: large; }
+java-abstract-class::before { color: #CCB404; content: '\24d2\00a0\00a0'; font-weight: bolder; font-size: large; }
+java-interface::before { color: #5f4ba2; content: '\24d8\00a0\00a0'; font-weight: bolder; font-size: large; }
+java-enum::before  { color: #906029; content: '\24d4\00a0\00a0'; font-weight: bolder; font-size: large; }
+java-field::before  { color: #008000; content: '\25cf\00a0\00a0'; font-weight: bolder; font-size: x-small; }
+java-field-private::before { color: #CCB404; content: '\25cf\00a0\00a0'; font-weight: bolder; font-size: x-small; }
+java-method::before  { color: #008000; content: '\25cf\00a0\00a0'; font-weight: bolder; font-size: x-small; }
+java-method-private::before { color: #CCB404; content: '\25c6\00a0\00a0'; font-weight: bolder; font-size: x-small; }
+java-method-annotation::before { color: #00ced1; content: '\25cf\00a0\00a0'; font-weight: bolder; font-size: x-small; }

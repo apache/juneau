@@ -19,6 +19,8 @@
   border-radius: 8px;
   background: var(--ifm-color-emphasis-100);
   padding: 1rem;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 14px;
 }
 
 .treeList {
@@ -29,9 +31,48 @@
 
 .treeList .treeList {
   padding-left: 1.5rem;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   border-left: 2px solid var(--ifm-color-emphasis-300);
   margin-left: 1rem;
+  position: relative;
+}
+
+/* Tree connection lines */
+.treeList .treeList::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10px;
+  border-left: 1px solid var(--ifm-color-emphasis-400);
+  height: 100%;
+}
+
+.treeNode::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: -15px;
+  border-top: 1px solid var(--ifm-color-emphasis-400);
+  width: 15px;
+}
+
+.treeNode::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -15px;
+  border-left: 1px solid var(--ifm-color-emphasis-400);
+  height: 18px;
+}
+
+.treeNode:last-child::after {
+  height: 18px;
+}
+
+/* Remove lines for root level */
+.hierarchyContainer > .treeList > .treeNode::before,
+.hierarchyContainer > .treeList > .treeNode::after {
+  display: none;
 }
 
 .treeNode {
@@ -39,14 +80,24 @@
   padding: 0.25rem 0;
   display: flex;
   align-items: flex-start;
-  line-height: 1.4;
+  line-height: 1.0;
+  position: relative;
 }
 
 .icon {
   margin-right: 0.5rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
   flex-shrink: 0;
   margin-top: 0.1rem;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  background: var(--ifm-color-emphasis-300);
+  color: var(--ifm-color-emphasis-900);
 }
 
 .nodeLink {
@@ -85,11 +136,21 @@
   margin-left: -0.5rem;
 }
 
+.interface .icon {
+  background: #2196f3;
+  color: white;
+}
+
 .class {
   background: rgba(76, 175, 80, 0.05);
   border-left: 3px solid #4caf50;
   padding-left: 0.5rem;
   margin-left: -0.5rem;
+}
+
+.class .icon {
+  background: #4caf50;
+  color: white;
 }
 
 .abstract {
@@ -99,6 +160,11 @@
   margin-left: -0.5rem;
 }
 
+.abstract .icon {
+  background: #ff9800;
+  color: white;
+}
+
 .method {
   background: rgba(156, 39, 176, 0.05);
   border-left: 3px solid #9c27b0;
@@ -106,11 +172,86 @@
   margin-left: -0.5rem;
 }
 
+.method .icon {
+  background: #9c27b0;
+  color: white;
+}
+
 .field {
   background: rgba(63, 81, 181, 0.05);
   border-left: 3px solid #3f51b5;
   padding-left: 0.5rem;
   margin-left: -0.5rem;
+}
+
+.field .icon {
+  background: #3f51b5;
+  color: white;
+}
+
+.annotation {
+  background: rgba(255, 193, 7, 0.05);
+  border-left: 3px solid #ffc107;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+}
+
+.annotation .icon {
+  background: #ffc107;
+  color: #333;
+}
+
+.enum {
+  background: rgba(121, 85, 72, 0.05);
+  border-left: 3px solid #795548;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+}
+
+.enum .icon {
+  background: #795548;
+  color: white;
+}
+
+.privateMethod {
+  background: rgba(156, 39, 176, 0.03);
+  border-left: 3px solid #9c27b0;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+  opacity: 0.7;
+}
+
+.privateMethod .icon {
+  background: #9c27b0;
+  color: white;
+  opacity: 0.8;
+}
+
+.privateField {
+  background: rgba(63, 81, 181, 0.03);
+  border-left: 3px solid #3f51b5;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+  opacity: 0.7;
+}
+
+.privateField .icon {
+  background: #3f51b5;
+  color: white;
+  opacity: 0.8;
+}
+
+.annotationMethod {
+  background: rgba(255, 193, 7, 0.03);
+  border-left: 3px solid #ffc107;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+}
+
+.annotationMethod .icon {
+  background: #ffc107;
+  color: #333;
+  opacity: 0.8;
 }
 
 /* Dark theme adjustments */
@@ -123,8 +264,19 @@
   border-left-color: var(--ifm-color-emphasis-400);
 }
 
+[data-theme='dark'] .treeList .treeList::before,
+[data-theme='dark'] .treeNode::before,
+[data-theme='dark'] .treeNode::after {
+  border-color: var(--ifm-color-emphasis-500);
+}
+
 [data-theme='dark'] .description {
   color: var(--ifm-color-emphasis-600);
+}
+
+[data-theme='dark'] .icon {
+  background: var(--ifm-color-emphasis-400);
+  color: var(--ifm-color-emphasis-100);
 }
 
 /* Responsive adjustments */
@@ -141,6 +293,6 @@
   .description {
     display: block;
     margin-left: 1.5rem;
-    margin-top: 0.25rem;
+    margin-top: 0.125rem;
   }
 }
