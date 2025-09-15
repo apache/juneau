@@ -104,8 +104,8 @@
 						<exclude>**/*.md</exclude>
 						<exclude>**/*.svg</exclude>
 						<exclude>**/*.nojekyll</exclude>
-						<exclude>/juneau-docs-poc/juneau-documentation/blog/**</exclude>
-						<exclude>/juneau-docs-poc/juneau-documentation/docs/**</exclude>
+						<exclude>/juneau-docs-poc/blog/**</exclude>
+						<exclude>/juneau-docs-poc/docs/**</exclude>
 
 						<!-- Eclipse metadata files -->
 						<exclude>**/.settings/**</exclude>
