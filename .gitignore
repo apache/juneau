@@ -6,4 +6,7 @@
 /bin/
 derby.log
 
+# Temporary cursor assistant scripts
+cursor-*
+
 # Note: Maven site generation creates target/site/ (already ignored by **/target/ above)
