@@ -347,52 +347,6 @@ a[href*="apidocs"]:hover {
   margin-top: 0;
 }
 
-/* Java Tree CSS - Original Juneau styling */
-
-/* Documentation Tree - from original juneau-doc.css */
-.doctree li, .javatree li, .seealso>li, .notes>li, .values>li, .format>li { 
-  max-width: 800px; 
-  margin-top: 0px; 
-  list-style: none;
-}
-.doctree>li, .seealso>li { 
-  margin-bottom: 10px; 
-}
-.doctree li, .seealso li {  
-  margin-top: 5px; 
-}
-.doctree ul, .seealso ul {  
-  padding: 0px 0px 0px 15px; 
-  margin-top: -2px; 
-  margin-bottom: -2px; 
-}
-.javatree>li {  
-  margin-bottom: 1px; 
-}
-.javatree li { 
-  margin-top: 1px; 
-}
-.javatree ul { 
-  padding: 0px 0px 0px 20px; 
-  margin-top: 0px; 
-  margin-bottom: 0px; 
-}
-
-/* Compressed/condensed Java tree - from original juneau-doc.css */
-ul.javatreec, .javatreec ul {  
-  padding-left: 0px; 
-  margin: 0px;
-  max-width: 900px; 
-}
-.javatreec li { 
-  display: inline-block; 
-  padding-left: 5px; 
-}
-.javatreec li::before { 
-  font-weight: bolder; 
-  font-size: x-small; 
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .prism-code {
@@ -424,8 +378,19 @@ java-field,
 java-field-private, 
 java-method, 
 java-method-private, 
-java-method-annotation { font: 'Lucida Console';}
+java-method-annotation { font-family: 'Lucida Console', monospace; }
 
+/* Custom node elements for hierarchy levels */
+node-1 { display: block; margin-left: 2em; }
+node-2 { display: block; margin-left: 4em; }
+node-3 { display: block; margin-left: 6em; }
+node-4 { display: block; margin-left: 8em; }
+node-5 { display: block; margin-left: 10em; }
+
+/* Tree wrapper for proper spacing */
+tree { display: block; margin: 1em 0; }
+
+/* Make java elements inline after indent */
 javac-annotation::before  { color: #00ced1; content: '\24d0\00a0'; font-weight: bolder; font-size: x-small; }
 javac-class::before  { color: #008000; content: '\24d2\00a0'; font-weight: bolder; font-size: x-small; }
 javac-abstract-class::before { color: #CCB404; content: '\24d2\00a0'; font-weight: bolder; font-size: x-small; }
@@ -437,13 +402,13 @@ javac-method::before  { color: #008000; content: '\25cf\00a0'; font-weight: bold
 javac-method-private::before { color: #CCB404; content: '\25c6\00a0'; font-weight: bolder; font-size: x-small; }
 javac-method-annotation::before { color: #00ced1; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
 
-java-annotation::before  { color: #00ced1; content: '\24d0\00a0\00a0'; font-weight: bolder; font-size: large; }
-java-class::before  { color: #008000; content: '\24d2\00a0\00a0'; font-weight: bolder; font-size: large; }
-java-abstract-class::before { color: #CCB404; content: '\24d2\00a0\00a0'; font-weight: bolder; font-size: large; }
-java-interface::before { color: #5f4ba2; content: '\24d8\00a0\00a0'; font-weight: bolder; font-size: large; }
-java-enum::before  { color: #906029; content: '\24d4\00a0\00a0'; font-weight: bolder; font-size: large; }
-java-field::before  { color: #008000; content: '\25cf\00a0\00a0'; font-weight: bolder; font-size: x-small; }
-java-field-private::before { color: #CCB404; content: '\25cf\00a0\00a0'; font-weight: bolder; font-size: x-small; }
-java-method::before  { color: #008000; content: '\25cf\00a0\00a0'; font-weight: bolder; font-size: x-small; }
-java-method-private::before { color: #CCB404; content: '\25c6\00a0\00a0'; font-weight: bolder; font-size: x-small; }
-java-method-annotation::before { color: #00ced1; content: '\25cf\00a0\00a0'; font-weight: bolder; font-size: x-small; }
+java-annotation::before  { color: #00ced1; content: '\24d0\00a0'; font-weight: bolder; font-size: large; }
+java-class::before  { color: #008000; content: '\24d2\00a0'; font-weight: bolder; font-size: large; }
+java-abstract-class::before { color: #CCB404; content: '\24d2\00a0'; font-weight: bolder; font-size: large; }
+java-interface::before { color: #5f4ba2; content: '\24d8\00a0'; font-weight: bolder; font-size: large; }
+java-enum::before  { color: #906029; content: '\24d4\00a0'; font-weight: bolder; font-size: large; }
+java-field::before  { color: #008000; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
+java-field-private::before { color: #CCB404; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
+java-method::before  { color: #008000; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
+java-method-private::before { color: #CCB404; content: '\25c6\00a0'; font-weight: bolder; font-size: x-small; }
+java-method-annotation::before { color: #00ced1; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
