@@ -367,8 +367,9 @@ javac-field,
 javac-field-private, 
 javac-method, 
 javac-method-private, 
-javac-method-annotation { font: 'Lucida Console'; font-size: small; }
+javac-method-annotation { font: monospace; font-size: small; }
 
+java-package, 
 java-annotation, 
 java-class, 
 java-abstract-class, 
@@ -378,9 +379,10 @@ java-field,
 java-field-private, 
 java-method, 
 java-method-private, 
-java-method-annotation { font-family: 'Lucida Console', monospace; }
+java-method-annotation { font-family: monospace; font-size: medium; }
 
 /* Custom node elements for hierarchy levels */
+node-0 { display: block; margin-left: 0em; }
 node-1 { display: block; margin-left: 2em; }
 node-2 { display: block; margin-left: 4em; }
 node-3 { display: block; margin-left: 6em; }
