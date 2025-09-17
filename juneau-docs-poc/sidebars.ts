@@ -116,75 +116,112 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'doc',
-              id: 'topics/02.04.01.BeanAnnotation',
-              label: '2.4.1. @Bean Annotation',
+              id: 'topics/02.04.01.JavaBeansSupport',
+              label: '2.4.1. Java Beans Support',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.02.BeanpAnnotation',
-              label: '2.4.2. @Beanp Annotation',
+              id: 'topics/02.04.02.BeanAnnotation',
+              label: '2.4.2. @Bean Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.03.BeancAnnotation',
-              label: '2.4.3. @Beanc Annotation',
+              id: 'topics/02.04.03.BeanpAnnotation',
+              label: '2.4.3. @Beanp Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.04.BeanIgnoreAnnotation',
-              label: '2.4.4. @BeanIgnore Annotation',
+              id: 'topics/02.04.04.BeancAnnotation',
+              label: '2.4.4. @Beanc Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.05.NamePropertyAnnotation',
-              label: '2.4.5. @NameProperty Annotation',
+              id: 'topics/02.04.05.BeanIgnoreAnnotation',
+              label: '2.4.5. @BeanIgnore Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.06.ParentPropertyAnnotation',
-              label: '2.4.6. @ParentProperty Annotation',
+              id: 'topics/02.04.06.NamePropertyAnnotation',
+              label: '2.4.6. @NameProperty Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.07.PojoBuilders',
-              label: '2.4.7. POJO Builders',
+              id: 'topics/02.04.07.ParentPropertyAnnotation',
+              label: '2.4.7. @ParentProperty Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.08.BypassSerialization',
-              label: '2.4.8. Bypass Serialization',
+              id: 'topics/02.04.08.PojoBuilders',
+              label: '2.4.8. POJO Builders',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.04.09.BypassSerialization',
+              label: '2.4.9. Bypass Serialization',
             },
           ],
         },
         {
           type: 'doc',
-          id: 'topics/02.05.00.JavaBeansSupport',
-          label: '2.5. Java Beans Support',
+          id: 'topics/02.05.00.HttpPartSerializersParsers',
+          label: '2.5. HTTP Part Serializers/Parsers',
         },
         {
           type: 'doc',
-          id: 'topics/02.06.00.HttpPartSerializersParsers',
-          label: '2.6. HTTP Part Serializers/Parsers',
+          id: 'topics/02.06.00.ContextSettings',
+          label: '2.6. Context Settings',
         },
         {
           type: 'doc',
-          id: 'topics/02.07.00.ContextSettings',
-          label: '2.7. Context Settings',
+          id: 'topics/02.07.00.ContextAnnotations',
+          label: '2.7. Context Annotations',
         },
         {
           type: 'doc',
-          id: 'topics/02.08.00.ContextAnnotations',
-          label: '2.8. Context Annotations',
+          id: 'topics/02.08.00.JsonMap',
+          label: '2.8. JsonMap',
         },
         {
           type: 'doc',
-          id: 'topics/02.09.00.JsonMap',
-          label: '2.9. JsonMap',
+          id: 'topics/02.09.00.ComplexDataTypes',
+          label: '2.9. Complex Data Types',
         },
         {
-          type: 'doc',
-          id: 'topics/02.10.00.ComplexDataTypes',
-          label: '2.10. Complex Data Types',
+          type: 'category',
+          label: '2.10. Swaps',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'topics/02.10.00.SerializerSetsParserSets',
+              label: '2.10. Serializer/Parser Sets',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.10.01.PerMediaTypeSwaps',
+              label: '2.10.1. Per-Media-Type Swaps',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.10.02.OneWaySwaps',
+              label: '2.10.2. One-Way Swaps',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.10.03.SwapAnnotation',
+              label: '2.10.3. @Swap Annotation',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.10.04.TemplatedSwaps',
+              label: '2.10.4. Templated Swaps',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.10.05.SurrogateClasses',
+              label: '2.10.5. Surrogate Classes',
+            },
+          ],
         },
         {
           type: 'category',
@@ -193,8 +230,8 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/02.11.00.SerializerSetsParserSets',
-              label: '2.11. Serializer/Parser Sets',
+              id: 'topics/02.11.00.Swaps',
+              label: '2.11. Swaps',
             },
             {
               type: 'doc',
@@ -206,47 +243,29 @@ const sidebars: SidebarsConfig = {
               id: 'topics/02.11.02.AutoSwaps',
               label: '2.11.2. Auto Swaps',
             },
-            {
-              type: 'doc',
-              id: 'topics/02.11.03.PerMediaTypeSwaps',
-              label: '2.11.3. Per-Media-Type Swaps',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.11.04.OneWaySwaps',
-              label: '2.11.4. One-Way Swaps',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.11.05.SwapAnnotation',
-              label: '2.11.5. @Swap Annotation',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.11.06.TemplatedSwaps',
-              label: '2.11.6. Templated Swaps',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.11.07.SurrogateClasses',
-              label: '2.11.7. Surrogate Classes',
-            },
           ],
         },
         {
-          type: 'doc',
-          id: 'topics/02.12.00.Swaps',
-          label: '2.12. Swaps',
-        },
-        {
           type: 'category',
-          label: '2.13. Dynamic Annotations',
+          label: '2.12. Dynamic Annotations',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/02.13.00.DynamicallyAppliedAnnotations',
-              label: '2.13. Dynamically Applied Annotations',
+              id: 'topics/02.12.00.DynamicallyAppliedAnnotations',
+              label: '2.12. Dynamically Applied Annotations',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: '2.13. Bean Dictionaries',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'topics/02.13.00.BeanDictionaries',
+              label: '2.13. Bean Dictionaries',
             },
             {
               type: 'doc',
@@ -257,38 +276,45 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'topics/02.14.00.BeanDictionaries',
-          label: '2.14. Bean Dictionaries',
+          id: 'topics/02.14.00.VirtualBeans',
+          label: '2.14. Virtual Beans',
         },
         {
           type: 'doc',
-          id: 'topics/02.15.00.VirtualBeans',
-          label: '2.15. Virtual Beans',
+          id: 'topics/02.15.00.Recursion',
+          label: '2.15. Recursion',
         },
         {
           type: 'doc',
-          id: 'topics/02.16.00.Recursion',
-          label: '2.16. Recursion',
+          id: 'topics/02.16.00.ParsingIntoGenericModels',
+          label: '2.16. Parsing into Generic Models',
         },
         {
           type: 'doc',
-          id: 'topics/02.17.00.ParsingIntoGenericModels',
-          label: '2.17. Parsing into Generic Models',
+          id: 'topics/02.17.00.ReadingContinuousStreams',
+          label: '2.17. Reading Continuous Streams',
         },
         {
           type: 'doc',
-          id: 'topics/02.18.00.ReadingContinuousStreams',
-          label: '2.18. Reading Continuous Streams',
+          id: 'topics/02.18.00.MarshallingUris',
+          label: '2.18. Marshalling URIs',
         },
         {
           type: 'doc',
-          id: 'topics/02.19.00.MarshallingUris',
-          label: '2.19. Marshalling URIs',
+          id: 'topics/02.19.00.JacksonComparison',
+          label: '2.19. Jackson Comparison',
         },
         {
-          type: 'doc',
-          id: 'topics/02.20.00.JacksonComparison',
-          label: '2.20. Jackson Comparison',
+          type: 'category',
+          label: '2.20. Simple Variable Language',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'topics/02.20.00.PojoCategories',
+              label: '2.20. POJO Categories',
+            },
+          ],
         },
         {
           type: 'category',
@@ -297,8 +323,8 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/02.21.00.PojoCategories',
-              label: '2.21. POJO Categories',
+              id: 'topics/02.21.00.SimpleVariableLanguage',
+              label: '2.21. Simple Variable Language',
             },
             {
               type: 'doc',
@@ -324,13 +350,20 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'topics/02.22.00.SimpleVariableLanguage',
-          label: '2.22. Simple Variable Language',
+          id: 'topics/02.22.00.Encoders',
+          label: '2.22. Encoders',
         },
         {
-          type: 'doc',
-          id: 'topics/02.23.00.Encoders',
-          label: '2.23. Encoders',
+          type: 'category',
+          label: '2.23. JSON Details',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'topics/02.23.00.ObjectTools',
+              label: '2.23. Object Tools',
+            },
+          ],
         },
         {
           type: 'category',
@@ -339,8 +372,8 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/02.24.00.ObjectTools',
-              label: '2.24. Object Tools',
+              id: 'topics/02.24.00.JsonDetails',
+              label: '2.24. JSON Details',
             },
             {
               type: 'doc',
@@ -370,231 +403,469 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: 'doc',
-          id: 'topics/02.25.00.JsonDetails',
-          label: '2.25. JSON Details',
-        },
-        {
           type: 'category',
-          label: '2.26. XML Details',
+          label: '2.25. XML Details',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/02.26.00.JsonSchemaDetails',
-              label: '2.26. JSON Schema Details',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.26.01.XmlMethodology',
-              label: '2.26.1. XML Methodology',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.26.02.XmlSerializers',
-              label: '2.26.2. XML Serializers',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.26.03.XmlParsers',
-              label: '2.26.3. XML Parsers',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.26.04.XmlBeanTypeNameAnnotation',
-              label: '2.26.4. @XmlBeanTypeName Annotation',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.26.05.XmlChildNameAnnotation',
-              label: '2.26.5. @XmlChildName Annotation',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.26.06.XmlFormatAnnotation',
-              label: '2.26.6. @XmlFormat Annotation',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.26.07.XmlNamespaces',
-              label: '2.26.7. XML Namespaces',
+              id: 'topics/02.25.00.JsonSchemaDetails',
+              label: '2.25. JSON Schema Details',
             },
           ],
         },
         {
           type: 'category',
+          label: '2.26. HTML Details',
+          collapsed: true,
+          items: [
+            {
+
+              type: 'category',
+
+              label: '2.26. XML Details',
+
+              collapsed: true,
+
+              items: [
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.26.00.XmlDetails',
+
+                  label: '2.26. XML Details',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.26.01.XmlMethodology',
+
+                  label: '2.26.1. XML Methodology',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.26.02.XmlSerializers',
+
+                  label: '2.26.2. XML Serializers',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.26.03.XmlParsers',
+
+                  label: '2.26.3. XML Parsers',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.26.04.XmlBeanTypeNameAnnotation',
+
+                  label: '2.26.4. @XmlBeanTypeName Annotation',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.26.05.XmlChildNameAnnotation',
+
+                  label: '2.26.5. @XmlChildName Annotation',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.26.06.XmlFormatAnnotation',
+
+                  label: '2.26.6. @XmlFormat Annotation',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.26.07.XmlNamespaces',
+
+                  label: '2.26.7. XML Namespaces',
+
+                },
+
+              ],
+
+            },
+          ],
+        },
+        {
+
+          type: 'category',
+
           label: '2.27. HTML Details',
+
           collapsed: true,
+
           items: [
+
             {
+
               type: 'doc',
-              id: 'topics/02.27.00.XmlDetails',
-              label: '2.27. XML Details',
+
+              id: 'topics/02.27.00.HtmlDetails',
+
+              label: '2.27. HTML Details',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/02.27.01.HtmlMethodology',
+
               label: '2.27.1. HTML Methodology',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/02.27.02.HtmlSerializers',
+
               label: '2.27.2. HTML Serializers',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/02.27.03.HtmlParsers',
+
               label: '2.27.3. HTML Parsers',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/02.27.04.HtmlAnnotation',
+
               label: '2.27.4. @Html Annotation',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/02.27.05.HtmlRenderAnnotation',
+
               label: '2.27.5. @HtmlRender Annotation',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/02.27.06.HtmlDocSerializer',
-              label: '2.27.6. HTML Doc Serializer',
+
+              label: '2.27.6. HtmlDocSerializer',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/02.27.07.BasicHtmlDocTemplate',
-              label: '2.27.7. Basic HTML Doc Template',
+
+              label: '2.27.7. BasicHtmlDocTemplate',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/02.27.08.HtmlCustomTemplates',
+
               label: '2.27.8. HTML Custom Templates',
+
             },
+
           ],
-        },
-        {
-          type: 'doc',
-          id: 'topics/02.28.00.HtmlDetails',
-          label: '2.28. HTML Details',
+
         },
         {
           type: 'category',
-          label: '2.29. UON Details',
+          label: '2.28. UON Details',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/02.29.00.HtmlSchema',
-              label: '2.29. HTML Schema',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.29.01.UonMethodology',
-              label: '2.29.1. UON Methodology',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.29.02.UonSerializers',
-              label: '2.29.2. UON Serializers',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.29.03.UonParsers',
-              label: '2.29.3. UON Parsers',
+              id: 'topics/02.28.00.HtmlSchema',
+              label: '2.28. HTML Schema',
             },
           ],
         },
         {
           type: 'category',
-          label: '2.30. URL-Encoding Details',
+          label: '2.29. URL-Encoding Details',
           collapsed: true,
           items: [
             {
-              type: 'doc',
-              id: 'topics/02.30.00.UonDetails',
-              label: '2.30. UON Details',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.30.01.UrlEncMethodology',
-              label: '2.30.1. URL-Encoding Methodology',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.30.02.UrlEncSerializers',
-              label: '2.30.2. URL-Encoding Serializers',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.30.03.UrlEncParsers',
-              label: '2.30.3. URL-Encoding Parsers',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.30.04.UrlEncodingAnnotation',
-              label: '2.30.4. @UrlEncoding Annotation',
+
+              type: 'category',
+
+              label: '2.29. UON Details',
+
+              collapsed: true,
+
+              items: [
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.29.00.UonDetails',
+
+                  label: '2.29. UON Details',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.29.01.UonMethodology',
+
+                  label: '2.29.1. UON Methodology',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.29.02.UonSerializers',
+
+                  label: '2.29.2. UON Serializers',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.29.03.UonParsers',
+
+                  label: '2.29.3. UON Parsers',
+
+                },
+
+              ],
+
             },
           ],
         },
         {
           type: 'category',
-          label: '2.31. MessagePack Details',
+          label: '2.30. MessagePack Details',
           collapsed: true,
           items: [
             {
-              type: 'doc',
-              id: 'topics/02.31.00.UrlEncodingDetails',
-              label: '2.31. URL-Encoding Details',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.31.01.MsgPackSerializers',
-              label: '2.31.1. MessagePack Serializers',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.31.02.MsgPackParsers',
-              label: '2.31.2. MessagePack Parsers',
+
+              type: 'category',
+
+              label: '2.30. URL-Encoding Details',
+
+              collapsed: true,
+
+              items: [
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.30.00.UrlEncodingDetails',
+
+                  label: '2.30. URL-Encoding Details',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.30.01.UrlEncMethodology',
+
+                  label: '2.30.1. URL-Encoding Methodology',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.30.02.UrlEncSerializers',
+
+                  label: '2.30.2. URL-Encoding Serializers',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.30.03.UrlEncParsers',
+
+                  label: '2.30.3. URL-Encoding Parsers',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.30.04.UrlEncodingAnnotation',
+
+                  label: '2.30.4. @UrlEncoding Annotation',
+
+                },
+
+              ],
+
             },
           ],
         },
         {
           type: 'category',
+          label: '2.31. OpenAPI Details',
+          collapsed: true,
+          items: [
+            {
+
+              type: 'category',
+
+              label: '2.31. MessagePack Details',
+
+              collapsed: true,
+
+              items: [
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.31.00.MsgPackDetails',
+
+                  label: '2.31. MessagePack Details',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.31.01.MsgPackSerializers',
+
+                  label: '2.31.1. MessagePack Serializers',
+
+                },
+
+                {
+
+                  type: 'doc',
+
+                  id: 'topics/02.31.02.MsgPackParsers',
+
+                  label: '2.31.2. MessagePack Parsers',
+
+                },
+
+              ],
+
+            },
+          ],
+        },
+        {
+
+          type: 'category',
+
           label: '2.32. OpenAPI Details',
+
           collapsed: true,
+
           items: [
+
             {
+
               type: 'doc',
-              id: 'topics/02.32.00.MsgPackDetails',
-              label: '2.32. MessagePack Details',
+
+              id: 'topics/02.32.00.OpenApiDetails',
+
+              label: '2.32. OpenAPI Details',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/02.32.01.OpenApiMethodology',
+
               label: '2.32.1. OpenAPI Methodology',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/02.32.02.OpenApiSerializers',
+
               label: '2.32.2. OpenAPI Serializers',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/02.32.03.OpenApiParsers',
+
               label: '2.32.3. OpenAPI Parsers',
+
             },
+
           ],
+
         },
         {
           type: 'doc',
-          id: 'topics/02.33.00.OpenApiDetails',
-          label: '2.33. OpenAPI Details',
-        },
-        {
-          type: 'doc',
-          id: 'topics/02.34.00.BestPractices',
-          label: '2.34. Best Practices',
+          id: 'topics/02.33.00.BestPractices',
+          label: '2.33. Best Practices',
         },
       ],
     },
@@ -641,79 +912,96 @@ const sidebars: SidebarsConfig = {
       collapsed: true,
       items: [
         {
+
           type: 'category',
-          label: '5.1. Juneau Config',
+
+          label: '5.1. Module - juneau-config',
+
           collapsed: true,
+
           items: [
+
             {
+
               type: 'doc',
+
               id: 'topics/05.01.00.Module-juneau-config',
-              label: '5.1. Module: juneau-config',
+
+              label: '5.1. Module - juneau-config',
+
             },
+
             {
+
               type: 'doc',
-              id: 'topics/05.01.01.SyntaxRules',
-              label: '5.1.1. Syntax Rules',
+
+              id: 'topics/05.01.01.Overview',
+
+              label: '5.1.1. Overview',
+
             },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/05.01.02.SyntaxRules',
+
+              label: '5.1.2. Syntax Rules',
+
+            },
+
           ],
+
         },
         {
           type: 'category',
-          label: '5.2. Overview',
+          label: '5.2. Reading Entries',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/05.02.00.Overview',
-              label: '5.2. Overview',
-            },
-            {
-              type: 'doc',
-              id: 'topics/05.02.01.Pojos',
-              label: '5.2.1. POJOs',
-            },
-            {
-              type: 'doc',
-              id: 'topics/05.02.02.Arrays',
-              label: '5.2.2. Arrays',
-            },
-            {
-              type: 'doc',
-              id: 'topics/05.02.03.JCFObjects',
-              label: '5.2.3. JCF Objects',
-            },
-            {
-              type: 'doc',
-              id: 'topics/05.02.04.BinaryData',
-              label: '5.2.4. Binary Data',
+              id: 'topics/05.02.00.ReadingEntries',
+              label: '5.2. Reading Entries',
             },
           ],
         },
         {
+
           type: 'category',
-          label: '5.3. Reading Entries',
+
+          label: '5.3. Variables',
+
           collapsed: true,
+
           items: [
+
             {
+
               type: 'doc',
-              id: 'topics/05.03.00.ReadingEntries',
-              label: '5.3. Reading Entries',
+
+              id: 'topics/05.03.00.Variables',
+
+              label: '5.3. Variables',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/05.03.01.LogicVariables',
+
               label: '5.3.1. Logic Variables',
+
             },
+
           ],
+
         },
         {
           type: 'doc',
-          id: 'topics/05.04.00.Variables',
-          label: '5.4. Variables',
-        },
-        {
-          type: 'doc',
-          id: 'topics/05.05.00.ModdedEntries',
+          id: 'topics/05.04.00.ModdedEntries',
           label: '5.5. Modified Entries',
         },
         {
@@ -723,7 +1011,7 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/05.06.00.Sections',
+              id: 'topics/05.05.00.Sections',
               label: '5.6. Sections',
             },
             {
@@ -745,17 +1033,17 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'topics/05.07.00.SettingValues',
+          id: 'topics/05.06.00.SettingValues',
           label: '5.7. Setting Values',
         },
         {
           type: 'doc',
-          id: 'topics/05.08.00.Listeners',
+          id: 'topics/05.07.00.Listeners',
           label: '5.8. Listeners',
         },
         {
           type: 'doc',
-          id: 'topics/05.09.00.SerializingConfigs',
+          id: 'topics/05.08.00.SerializingConfigs',
           label: '5.9. Serializing Configs',
         },
         {
@@ -765,7 +1053,7 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/05.10.00.ConfigImports',
+              id: 'topics/05.09.00.ConfigImports',
               label: '5.10. Config Imports',
             },
             {
@@ -792,22 +1080,22 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'topics/05.11.00.ConfigStores',
+          id: 'topics/05.10.00.ConfigStores',
           label: '5.11. Config Stores',
         },
         {
           type: 'doc',
-          id: 'topics/05.12.00.ReadOnlyConfigs',
+          id: 'topics/05.11.00.ReadOnlyConfigs',
           label: '5.12. Read-Only Configs',
         },
         {
           type: 'doc',
-          id: 'topics/05.13.00.ClosingConfigs',
+          id: 'topics/05.12.00.ClosingConfigs',
           label: '5.13. Closing Configs',
         },
         {
           type: 'doc',
-          id: 'topics/05.14.00.SystemDefaultConfig',
+          id: 'topics/05.13.00.SystemDefaultConfig',
           label: '5.14. System Default Config',
         },
       ],
@@ -882,9 +1170,27 @@ const sidebars: SidebarsConfig = {
       collapsed: true,
       items: [
         {
-          type: 'doc',
-          id: 'topics/08.01.00.Module-juneau-rest-server',
+
+          type: 'category',
+
           label: '8.1. Module: juneau-rest-server',
+
+          collapsed: true,
+
+          items: [
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/08.01.00.Module-juneau-rest-server',
+
+              label: '8.1. Module: juneau-rest-server',
+
+            },
+
+          ],
+
         },
         {
           type: 'category',
@@ -893,7 +1199,7 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/08.02.00.Overview',
+              id: 'topics/08.01.01.Overview',
               label: '8.2. Overview',
             },
             {
@@ -930,7 +1236,7 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/08.03.00.AnnotatedClasses',
+              id: 'topics/08.02.00.AnnotatedClasses',
               label: '8.3. Annotated Classes',
             },
             {
@@ -982,7 +1288,7 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/08.04.00.RestOpAnnotatedMethods',
+              id: 'topics/08.03.00.RestOpAnnotatedMethods',
               label: '8.4. RestOp Annotated Methods',
             },
             {
@@ -1019,52 +1325,52 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'topics/08.05.00.HttpParts',
+          id: 'topics/08.04.00.HttpParts',
           label: '8.5. HTTP Parts',
         },
         {
           type: 'doc',
-          id: 'topics/08.06.00.Marshalling',
+          id: 'topics/08.05.00.Marshalling',
           label: '8.6. Marshalling',
         },
         {
           type: 'doc',
-          id: 'topics/08.07.00.HandlingFormPosts',
+          id: 'topics/08.06.00.HandlingFormPosts',
           label: '8.7. Handling Form Posts',
         },
         {
           type: 'doc',
-          id: 'topics/08.08.00.Guards',
+          id: 'topics/08.07.00.Guards',
           label: '8.8. Guards',
         },
         {
           type: 'doc',
-          id: 'topics/08.09.00.Converters',
+          id: 'topics/08.08.00.Converters',
           label: '8.9. Converters',
         },
         {
           type: 'doc',
-          id: 'topics/08.10.00.LocalizedMessages',
+          id: 'topics/08.09.00.LocalizedMessages',
           label: '8.10. Localized Messages',
         },
         {
           type: 'doc',
-          id: 'topics/08.11.00.Encoders',
+          id: 'topics/08.10.00.Encoders',
           label: '8.11. Encoders',
         },
         {
           type: 'doc',
-          id: 'topics/08.12.00.ConfigurationFiles',
+          id: 'topics/08.11.00.ConfigurationFiles',
           label: '8.12. Configuration Files',
         },
         {
           type: 'doc',
-          id: 'topics/08.13.00.SvlVariables',
+          id: 'topics/08.12.00.SvlVariables',
           label: '8.13. SVL Variables',
         },
         {
           type: 'doc',
-          id: 'topics/08.14.00.StaticFiles',
+          id: 'topics/08.13.00.StaticFiles',
           label: '8.14. Static Files',
         },
         {
@@ -1074,7 +1380,7 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/08.15.00.ClientVersioning',
+              id: 'topics/08.14.00.ClientVersioning',
               label: '8.15. Client Versioning',
             },
             {
@@ -1121,7 +1427,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'topics/08.16.00.Swagger',
+          id: 'topics/08.15.00.Swagger',
           label: '8.16. Swagger',
         },
         {
@@ -1131,7 +1437,7 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/08.17.00.ExecutionStatistics',
+              id: 'topics/08.16.00.ExecutionStatistics',
               label: '8.17. Execution Statistics',
             },
             {
@@ -1163,72 +1469,72 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'topics/08.18.00.HtmlDocAnnotation',
+          id: 'topics/08.17.00.HtmlDocAnnotation',
           label: '8.18. HtmlDoc Annotation',
         },
         {
           type: 'doc',
-          id: 'topics/08.19.00.LoggingAndDebugging',
+          id: 'topics/08.18.00.LoggingAndDebugging',
           label: '8.19. Logging and Debugging',
         },
         {
           type: 'doc',
-          id: 'topics/08.20.00.HttpStatusCodes',
+          id: 'topics/08.19.00.HttpStatusCodes',
           label: '8.20. HTTP Status Codes',
         },
         {
           type: 'doc',
-          id: 'topics/08.21.00.BuiltInParameters',
+          id: 'topics/08.20.00.BuiltInParameters',
           label: '8.21. Built-In Parameters',
         },
         {
           type: 'doc',
-          id: 'topics/08.22.00.UsingWithOsgi',
+          id: 'topics/08.21.00.UsingWithOsgi',
           label: '8.22. Using with OSGi',
         },
         {
           type: 'doc',
-          id: 'topics/08.23.00.RestContext',
+          id: 'topics/08.22.00.RestContext',
           label: '8.23. REST Context',
         },
         {
           type: 'doc',
-          id: 'topics/08.24.00.RestOpContext',
+          id: 'topics/08.23.00.RestOpContext',
           label: '8.24. RestOp Context',
         },
         {
           type: 'doc',
-          id: 'topics/08.25.00.ResponseProcessors',
+          id: 'topics/08.24.00.ResponseProcessors',
           label: '8.25. Response Processors',
         },
         {
           type: 'doc',
-          id: 'topics/08.26.00.RestRpc',
+          id: 'topics/08.25.00.RestRpc',
           label: '8.26. REST RPC',
         },
         {
           type: 'doc',
-          id: 'topics/08.27.00.SerializingUris',
+          id: 'topics/08.26.00.SerializingUris',
           label: '8.27. Serializing URIs',
         },
         {
           type: 'doc',
-          id: 'topics/08.28.00.UtilityBeans',
+          id: 'topics/08.27.00.UtilityBeans',
           label: '8.28. Utility Beans',
         },
         {
           type: 'doc',
-          id: 'topics/08.29.00.HtmlBeans',
+          id: 'topics/08.28.00.HtmlBeans',
           label: '8.29. HTML Beans',
         },
         {
           type: 'doc',
-          id: 'topics/08.30.00.OtherNotes',
+          id: 'topics/08.29.00.OtherNotes',
           label: '8.30. Other Notes',
         },
         {
           type: 'doc',
-          id: 'topics/08.32.01.Log4j',
+          id: 'topics/08.30.00.Log4j',
           label: '8.32.1. Log4j',
         },
       ],
@@ -1307,60 +1613,178 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'doc',
-              id: 'topics/10.09.01.Remote',
+              id: 'topics/10.10.01.Remote',
               label: '10.9.1. Remote',
             },
             {
               type: 'doc',
-              id: 'topics/10.09.02.RemoteMethod',
+              id: 'topics/10.10.02.RemoteMethod',
               label: '10.9.2. Remote Method',
             },
             {
               type: 'doc',
-              id: 'topics/10.09.03.Content',
+              id: 'topics/10.10.03.Content',
               label: '10.9.3. Content',
             },
             {
               type: 'doc',
-              id: 'topics/10.09.04.FormData',
+              id: 'topics/10.10.04.FormData',
               label: '10.9.4. Form Data',
             },
             {
               type: 'doc',
-              id: 'topics/10.09.05.Query',
+              id: 'topics/10.10.05.Query',
               label: '10.9.5. Query',
             },
             {
               type: 'doc',
-              id: 'topics/10.09.06.Header',
+              id: 'topics/10.10.06.Header',
               label: '10.9.6. Header',
             },
             {
               type: 'doc',
-              id: 'topics/10.09.07.Path',
+              id: 'topics/10.10.07.Path',
               label: '10.9.7. Path',
             },
             {
               type: 'doc',
-              id: 'topics/10.09.08.Request',
+              id: 'topics/10.10.08.Request',
               label: '10.9.8. Request',
             },
             {
               type: 'doc',
-              id: 'topics/10.09.09.Response',
+              id: 'topics/10.10.09.Response',
               label: '10.9.9. Response',
             },
             {
               type: 'doc',
-              id: 'topics/10.09.10.DualPurposeInterfaces',
+              id: 'topics/10.10.10.DualPurposeInterfaces',
               label: '10.9.10. Dual Purpose Interfaces',
             },
           ],
         },
         {
-          type: 'doc',
-          id: 'topics/10.10.00.Proxies',
+
+          type: 'category',
+
           label: '10.10. Proxies',
+
+          collapsed: true,
+
+          items: [
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.10.00.Proxies',
+
+              label: '10.10. Proxies',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.10.01.Remote',
+
+              label: '10.10.1. @Remote',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.10.02.RemoteMethod',
+
+              label: '10.10.2. @RemoteMethod',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.10.03.Content',
+
+              label: '10.10.3. @Content',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.10.04.FormData',
+
+              label: '10.10.4. @FormData',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.10.05.Query',
+
+              label: '10.10.5. @Query',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.10.06.Header',
+
+              label: '10.10.6. @Header',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.10.07.Path',
+
+              label: '10.10.7. @Path',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.10.08.Request',
+
+              label: '10.10.8. @Request',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.10.09.Response',
+
+              label: '10.10.9. @Response',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.10.10.DualPurposeInterfaces',
+
+              label: '10.10.10. Dual-Purpose Interfaces',
+
+            },
+
+          ],
+
         },
         {
           type: 'doc',
@@ -1384,25 +1808,73 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'doc',
-              id: 'topics/10.13.01.AuthenticationBASIC',
+              id: 'topics/10.14.01.AuthenticationBASIC',
               label: '10.13.1. Authentication BASIC',
             },
             {
               type: 'doc',
-              id: 'topics/10.13.02.AuthenticationForm',
+              id: 'topics/10.14.02.AuthenticationForm',
               label: '10.13.2. Authentication Form',
             },
             {
               type: 'doc',
-              id: 'topics/10.13.03.AuthenticationOIDC',
+              id: 'topics/10.14.03.AuthenticationOIDC',
               label: '10.13.3. Authentication OIDC',
             },
           ],
         },
         {
-          type: 'doc',
-          id: 'topics/10.14.00.Authentication',
+
+          type: 'category',
+
           label: '10.14. Authentication',
+
+          collapsed: true,
+
+          items: [
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.14.00.Authentication',
+
+              label: '10.14. Authentication',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.14.01.AuthenticationBASIC',
+
+              label: '10.14.1. BASIC Authentication',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.14.02.AuthenticationForm',
+
+              label: '10.14.2. Form-Based Authentication',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/10.14.03.AuthenticationOIDC',
+
+              label: '10.14.3. OIDC Authentication',
+
+            },
+
+          ],
+
         },
       ],
     },
