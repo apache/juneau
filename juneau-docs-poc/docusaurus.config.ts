@@ -27,6 +27,7 @@ const config: Config = {
   // Custom configuration variables
   customFields: {
     juneauVersion: '9.0.1',
+    apiDocsUrl: '../apidocs',
   },
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -81,7 +82,8 @@ const config: Config = {
               javadocBaseUrl: '../apidocs'
             }],
             [remarkVersionReplacer, {
-              version: '9.0.1'
+              version: '9.0.1',
+              apiDocsUrl: '../apidocs'
             }]
           ]
         },

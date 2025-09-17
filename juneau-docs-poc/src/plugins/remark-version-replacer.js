@@ -14,17 +14,20 @@
 const { visit } = require('unist-util-visit');
 
 /**
- * Remark plugin to replace version placeholders with actual version numbers.
+ * Remark plugin to replace version and API docs placeholders with actual values.
  * This works inside code blocks and anywhere else in the markdown.
  */
 function remarkVersionReplacer(options = {}) {
   const version = options.version || '9.0.1';
+  const apiDocsUrl = options.apiDocsUrl || '../apidocs';
   
   return (tree) => {
     visit(tree, ['text', 'code'], (node) => {
       if (node.value) {
         // Replace {{JUNEAU_VERSION}} with the actual version
         node.value = node.value.replace(/\{\{JUNEAU_VERSION\}\}/g, version);
+        // Replace {{API_DOCS}} with the actual API docs URL
+        node.value = node.value.replace(/\{\{API_DOCS\}\}/g, apiDocsUrl);
       }
     });
     
@@ -32,6 +35,14 @@ function remarkVersionReplacer(options = {}) {
       if (node.value) {
         // Also handle code blocks specifically
         node.value = node.value.replace(/\{\{JUNEAU_VERSION\}\}/g, version);
+        node.value = node.value.replace(/\{\{API_DOCS\}\}/g, apiDocsUrl);
+      }
+    });
+
+    // Handle link nodes specifically for API docs replacements
+    visit(tree, 'link', (node) => {
+      if (node.url) {
+        node.url = node.url.replace(/\{\{API_DOCS\}\}/g, apiDocsUrl);
       }
     });
   };
