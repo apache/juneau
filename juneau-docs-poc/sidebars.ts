@@ -187,63 +187,102 @@ const sidebars: SidebarsConfig = {
           label: '2.9. Complex Data Types',
         },
         {
-          type: 'category',
-          label: '2.10. Swaps',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'topics/02.10.00.SerializerSetsParserSets',
-              label: '2.10. Serializer/Parser Sets',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.10.01.PerMediaTypeSwaps',
-              label: '2.10.1. Per-Media-Type Swaps',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.10.02.OneWaySwaps',
-              label: '2.10.2. One-Way Swaps',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.10.03.SwapAnnotation',
-              label: '2.10.3. @Swap Annotation',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.10.04.TemplatedSwaps',
-              label: '2.10.4. Templated Swaps',
-            },
-            {
-              type: 'doc',
-              id: 'topics/02.10.05.SurrogateClasses',
-              label: '2.10.5. Surrogate Classes',
-            },
-          ],
+          type: 'doc',
+          id: 'topics/02.10.00.SerializerSetsParserSets',
+          label: '2.10. Serializer/Parser Sets',
         },
         {
+
           type: 'category',
+
           label: '2.11. Swaps',
+
           collapsed: true,
+
           items: [
+
             {
+
               type: 'doc',
+
               id: 'topics/02.11.00.Swaps',
+
               label: '2.11. Swaps',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/02.11.01.DefaultSwaps',
+
               label: '2.11.1. Default Swaps',
+
             },
+
             {
+
               type: 'doc',
+
               id: 'topics/02.11.02.AutoSwaps',
-              label: '2.11.2. Auto Swaps',
+
+              label: '2.11.2. Auto-detected swaps',
+
             },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/02.11.03.PerMediaTypeSwaps',
+
+              label: '2.11.3. Per-media-type Swaps',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/02.11.04.OneWaySwaps',
+
+              label: '2.11.4. One-way Swaps',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/02.11.05.SwapAnnotation',
+
+              label: '2.11.5. @Swap Annotation',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/02.11.06.TemplatedSwaps',
+
+              label: '2.11.6. Templated Swaps',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/02.11.07.SurrogateClasses',
+
+              label: '2.11.7. Surrogate Classes',
+
+            },
+
           ],
+
         },
         {
           type: 'category',
