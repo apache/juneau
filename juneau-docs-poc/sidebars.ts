@@ -34,13 +34,13 @@ const sidebars: SidebarsConfig = {
     // 'class-hierarchy-markdown',
     {
       type: 'category',
-      label: '1. Juneau',
+      label: '1. Juneau Ecosystem',
       collapsed: false,
       items: [
         {
           type: 'doc',
-          id: 'topics/01.01.00.Overview',
-          label: '1.1. Juneau Overview',
+          id: 'topics/01.01.00.JuneauEcosystemOverview',
+          label: '1.1. Juneau Ecosystem Overview',
         },
         {
           type: 'doc',
@@ -86,13 +86,13 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: '2. Marshall',
+      label: '2. juneau-marshall',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'topics/02.01.00.Module-juneau-marshall',
-          label: '2.1. Module: juneau-marshall',
+          id: 'topics/02.01.00.JuneauMarshallBasics',
+          label: '2.1. juneau-marshall Basics',
         },
         {
           type: 'doc',
@@ -111,53 +111,53 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/02.04.00.BeanContexts',
-              label: '2.4. Bean Contexts',
+              id: 'topics/02.04.01.BeanContextBasics',
+              label: '2.4.1. Bean Context Basics',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.01.JavaBeansSupport',
-              label: '2.4.1. Java Beans Support',
+              id: 'topics/02.04.02.JavaBeansSupport',
+              label: '2.4.2. Java Beans Support',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.02.BeanAnnotation',
-              label: '2.4.2. @Bean Annotation',
+              id: 'topics/02.04.03.BeanAnnotation',
+              label: '2.4.3. @Bean Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.03.BeanpAnnotation',
-              label: '2.4.3. @Beanp Annotation',
+              id: 'topics/02.04.04.BeanpAnnotation',
+              label: '2.4.4. @Beanp Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.04.BeancAnnotation',
-              label: '2.4.4. @Beanc Annotation',
+              id: 'topics/02.04.05.BeancAnnotation',
+              label: '2.4.5. @Beanc Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.05.BeanIgnoreAnnotation',
-              label: '2.4.5. @BeanIgnore Annotation',
+              id: 'topics/02.04.06.BeanIgnoreAnnotation',
+              label: '2.4.6. @BeanIgnore Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.06.NamePropertyAnnotation',
-              label: '2.4.6. @NameProperty Annotation',
+              id: 'topics/02.04.07.NamePropertyAnnotation',
+              label: '2.4.7. @NameProperty Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.07.ParentPropertyAnnotation',
-              label: '2.4.7. @ParentProperty Annotation',
+              id: 'topics/02.04.08.ParentPropertyAnnotation',
+              label: '2.4.8. @ParentProperty Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.08.PojoBuilders',
-              label: '2.4.8. POJO Builders',
+              id: 'topics/02.04.09.PojoBuilders',
+              label: '2.4.9. POJO Builders',
             },
             {
               type: 'doc',
-              id: 'topics/02.04.09.BypassSerialization',
-              label: '2.4.9. Bypass Serialization',
+              id: 'topics/02.04.10.BypassSerialization',
+              label: '2.4.10. Bypass Serialization',
             },
           ],
         },
@@ -205,19 +205,9 @@ const sidebars: SidebarsConfig = {
 
               type: 'doc',
 
-              id: 'topics/02.11.00.Swaps',
+              id: 'topics/02.11.01.SwapBasics',
 
-              label: '2.11. Swaps',
-
-            },
-
-            {
-
-              type: 'doc',
-
-              id: 'topics/02.11.01.DefaultSwaps',
-
-              label: '2.11.1. Default Swaps',
+              label: '2.11.1. Swap Basics',
 
             },
 
@@ -225,19 +215,9 @@ const sidebars: SidebarsConfig = {
 
               type: 'doc',
 
-              id: 'topics/02.11.02.AutoSwaps',
+              id: 'topics/02.11.02.DefaultSwaps',
 
-              label: '2.11.2. Auto-detected swaps',
-
-            },
-
-            {
-
-              type: 'doc',
-
-              id: 'topics/02.11.03.PerMediaTypeSwaps',
-
-              label: '2.11.3. Per-media-type Swaps',
+              label: '2.11.2. Default Swaps',
 
             },
 
@@ -245,19 +225,9 @@ const sidebars: SidebarsConfig = {
 
               type: 'doc',
 
-              id: 'topics/02.11.04.OneWaySwaps',
+              id: 'topics/02.11.03.AutoSwaps',
 
-              label: '2.11.4. One-way Swaps',
-
-            },
-
-            {
-
-              type: 'doc',
-
-              id: 'topics/02.11.05.SwapAnnotation',
-
-              label: '2.11.5. @Swap Annotation',
+              label: '2.11.3. Auto-detected swaps',
 
             },
 
@@ -265,9 +235,9 @@ const sidebars: SidebarsConfig = {
 
               type: 'doc',
 
-              id: 'topics/02.11.06.TemplatedSwaps',
+              id: 'topics/02.11.04.PerMediaTypeSwaps',
 
-              label: '2.11.6. Templated Swaps',
+              label: '2.11.4. Per-media-type Swaps',
 
             },
 
@@ -275,9 +245,39 @@ const sidebars: SidebarsConfig = {
 
               type: 'doc',
 
-              id: 'topics/02.11.07.SurrogateClasses',
+              id: 'topics/02.11.05.OneWaySwaps',
 
-              label: '2.11.7. Surrogate Classes',
+              label: '2.11.5. One-way Swaps',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/02.11.06.SwapAnnotation',
+
+              label: '2.11.6. @Swap Annotation',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/02.11.07.TemplatedSwaps',
+
+              label: '2.11.7. Templated Swaps',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/02.11.08.SurrogateClasses',
+
+              label: '2.11.8. Surrogate Classes',
 
             },
 
@@ -285,16 +285,9 @@ const sidebars: SidebarsConfig = {
 
         },
         {
-          type: 'category',
-          label: '2.12. Dynamic Annotations',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'topics/02.12.00.DynamicallyAppliedAnnotations',
-              label: '2.12. Dynamically Applied Annotations',
-            },
-          ],
+          type: 'doc',
+          id: 'topics/02.12.00.DynamicallyAppliedAnnotations',
+          label: '2.12. Dynamically Applied Annotations',
         },
         {
           type: 'category',
@@ -303,13 +296,13 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/02.13.00.BeanDictionaries',
-              label: '2.13. Bean Dictionaries',
+              id: 'topics/02.13.01.BeanDictionaryBasics',
+              label: '2.13.1. Bean Dictionary Basics',
             },
             {
               type: 'doc',
-              id: 'topics/02.13.01.BeanSubTypes',
-              label: '2.13.1. Bean Sub Types',
+              id: 'topics/02.13.02.BeanSubTypes',
+              label: '2.13.2. Bean Sub Types',
             },
           ],
         },
@@ -355,28 +348,28 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'topics/02.21.00.SimpleVariableLanguage',
-              label: '2.21. Simple Variable Language',
+              id: 'topics/02.21.01.SimpleVariableLanguageBasics',
+              label: '2.21.1. Simple Variable Language Basics',
             },
             {
               type: 'doc',
-              id: 'topics/02.21.01.SvlVariables',
-              label: '2.21.1. SVL Variables',
+              id: 'topics/02.21.02.SvlVariables',
+              label: '2.21.2. SVL Variables',
             },
             {
               type: 'doc',
-              id: 'topics/02.21.02.VarResolvers',
-              label: '2.21.2. Var Resolvers',
+              id: 'topics/02.21.03.VarResolvers',
+              label: '2.21.3. Var Resolvers',
             },
             {
               type: 'doc',
-              id: 'topics/02.21.03.DefaultVarResolver',
-              label: '2.21.3. Default Var Resolver',
+              id: 'topics/02.21.04.DefaultVarResolver',
+              label: '2.21.4. Default Var Resolver',
             },
             {
               type: 'doc',
-              id: 'topics/02.21.04.SvlOtherNotes',
-              label: '2.21.4. SVL Other Notes',
+              id: 'topics/02.21.05.SvlOtherNotes',
+              label: '2.21.5. SVL Other Notes',
             },
           ],
         },
@@ -392,90 +385,90 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: '2.24. JSON Details',
+          label: '2.24. JSON Support',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/02.24.00.JsonDetails',
-              label: '2.24. JSON Details',
+              id: 'topics/02.24.01.JsonBasics',
+              label: '2.24.1. JSON Basics',
             },
             {
               type: 'doc',
-              id: 'topics/02.24.01.JsonMethodology',
-              label: '2.24.1. JSON Methodology',
+              id: 'topics/02.24.02.JsonMethodology',
+              label: '2.24.2. JSON Methodology',
             },
             {
               type: 'doc',
-              id: 'topics/02.24.02.JsonSerializers',
-              label: '2.24.2. JSON Serializers',
+              id: 'topics/02.24.03.JsonSerializers',
+              label: '2.24.3. JSON Serializers',
             },
             {
               type: 'doc',
-              id: 'topics/02.24.03.Json5',
-              label: '2.24.3. JSON5',
+              id: 'topics/02.24.04.Json5',
+              label: '2.24.4. JSON5',
             },
             {
               type: 'doc',
-              id: 'topics/02.24.04.JsonParsers',
-              label: '2.24.4. JSON Parsers',
+              id: 'topics/02.24.05.JsonParsers',
+              label: '2.24.5. JSON Parsers',
             },
             {
               type: 'doc',
-              id: 'topics/02.24.05.JsonAnnotation',
-              label: '2.24.5. @Json Annotation',
+              id: 'topics/02.24.06.JsonAnnotation',
+              label: '2.24.6. @Json Annotation',
             },
           ],
         },
         {
           type: 'doc',
           id: 'topics/02.25.00.JsonSchemaDetails',
-          label: '2.25. JSON Schema Details',
+          label: '2.25. JSON Schema Support',
         },
         {
           type: 'category',
-          label: '2.26. XML Details',
+          label: '2.26. XML Support',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/02.26.00.XmlDetails',
-              label: '2.26. XML Details',
+              id: 'topics/02.26.01.XmlBasics',
+              label: '2.26.1. XML Basics',
             },
             {
               type: 'doc',
-              id: 'topics/02.26.01.XmlMethodology',
-              label: '2.26.1. XML Methodology',
+              id: 'topics/02.26.02.XmlMethodology',
+              label: '2.26.2. XML Methodology',
             },
             {
               type: 'doc',
-              id: 'topics/02.26.02.XmlSerializers',
-              label: '2.26.2. XML Serializers',
+              id: 'topics/02.26.03.XmlSerializers',
+              label: '2.26.3. XML Serializers',
             },
             {
               type: 'doc',
-              id: 'topics/02.26.03.XmlParsers',
-              label: '2.26.3. XML Parsers',
+              id: 'topics/02.26.04.XmlParsers',
+              label: '2.26.4. XML Parsers',
             },
             {
               type: 'doc',
-              id: 'topics/02.26.04.XmlBeanTypeNameAnnotation',
-              label: '2.26.4. @XmlBeanTypeName Annotation',
+              id: 'topics/02.26.05.XmlBeanTypeNameAnnotation',
+              label: '2.26.5. @XmlBeanTypeName Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.26.05.XmlChildNameAnnotation',
-              label: '2.26.5. @XmlChildName Annotation',
+              id: 'topics/02.26.06.XmlChildNameAnnotation',
+              label: '2.26.6. @XmlChildName Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.26.06.XmlFormatAnnotation',
-              label: '2.26.6. @XmlFormat Annotation',
+              id: 'topics/02.26.07.XmlFormatAnnotation',
+              label: '2.26.7. @XmlFormat Annotation',
             },
             {
               type: 'doc',
-              id: 'topics/02.26.07.XmlNamespaces',
-              label: '2.26.7. XML Namespaces',
+              id: 'topics/02.26.08.XmlNamespaces',
+              label: '2.26.8. XML Namespaces',
             },
           ],
         },
@@ -483,7 +476,7 @@ const sidebars: SidebarsConfig = {
 
           type: 'category',
 
-          label: '2.27. HTML Details',
+          label: '2.27. HTML Support',
 
           collapsed: true,
 
@@ -493,19 +486,9 @@ const sidebars: SidebarsConfig = {
 
               type: 'doc',
 
-              id: 'topics/02.27.00.HtmlDetails',
+              id: 'topics/02.27.01.HtmlBasics',
 
-              label: '2.27. HTML Details',
-
-            },
-
-            {
-
-              type: 'doc',
-
-              id: 'topics/02.27.01.HtmlMethodology',
-
-              label: '2.27.1. HTML Methodology',
+              label: '2.27.1. HTML Basics',
 
             },
 
@@ -513,19 +496,9 @@ const sidebars: SidebarsConfig = {
 
               type: 'doc',
 
-              id: 'topics/02.27.02.HtmlSerializers',
+              id: 'topics/02.27.02.HtmlMethodology',
 
-              label: '2.27.2. HTML Serializers',
-
-            },
-
-            {
-
-              type: 'doc',
-
-              id: 'topics/02.27.03.HtmlParsers',
-
-              label: '2.27.3. HTML Parsers',
+              label: '2.27.2. HTML Methodology',
 
             },
 
@@ -533,19 +506,9 @@ const sidebars: SidebarsConfig = {
 
               type: 'doc',
 
-              id: 'topics/02.27.04.HtmlAnnotation',
+              id: 'topics/02.27.03.HtmlSerializers',
 
-              label: '2.27.4. @Html Annotation',
-
-            },
-
-            {
-
-              type: 'doc',
-
-              id: 'topics/02.27.05.HtmlRenderAnnotation',
-
-              label: '2.27.5. @HtmlRender Annotation',
+              label: '2.27.3. HTML Serializers',
 
             },
 
@@ -553,19 +516,9 @@ const sidebars: SidebarsConfig = {
 
               type: 'doc',
 
-              id: 'topics/02.27.06.HtmlDocSerializer',
+              id: 'topics/02.27.04.HtmlParsers',
 
-              label: '2.27.6. HtmlDocSerializer',
-
-            },
-
-            {
-
-              type: 'doc',
-
-              id: 'topics/02.27.07.BasicHtmlDocTemplate',
-
-              label: '2.27.7. BasicHtmlDocTemplate',
+              label: '2.27.4. HTML Parsers',
 
             },
 
@@ -573,9 +526,49 @@ const sidebars: SidebarsConfig = {
 
               type: 'doc',
 
-              id: 'topics/02.27.08.HtmlCustomTemplates',
+              id: 'topics/02.27.05.HtmlAnnotation',
 
-              label: '2.27.8. HTML Custom Templates',
+              label: '2.27.5. @Html Annotation',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/02.27.06.HtmlRenderAnnotation',
+
+              label: '2.27.6. @HtmlRender Annotation',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/02.27.07.HtmlDocSerializer',
+
+              label: '2.27.7. HtmlDocSerializer',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/02.27.08.BasicHtmlDocTemplate',
+
+              label: '2.27.8. BasicHtmlDocTemplate',
+
+            },
+
+            {
+
+              type: 'doc',
+
+              id: 'topics/02.27.09.HtmlCustomTemplates',
+
+              label: '2.27.9. HTML Custom Templates',
 
             },
 
@@ -584,114 +577,114 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'topics/02.28.00.HtmlSchema',
-          label: '2.28. HTML Schema',
+          id: 'topics/02.28.00.HtmlSchemaSupport',
+          label: '2.28. HTML-Schema Support',
         },
         {
           type: 'category',
-          label: '2.29. UON Details',
+          label: '2.29. UON Support',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/02.29.00.UonDetails',
-              label: '2.29. UON Details',
+              id: 'topics/02.29.01.UonBasics',
+              label: '2.29.1. UON Basics',
             },
             {
               type: 'doc',
-              id: 'topics/02.29.01.UonMethodology',
-              label: '2.29.1. UON Methodology',
+              id: 'topics/02.29.02.UonMethodology',
+              label: '2.29.2. UON Methodology',
             },
             {
               type: 'doc',
-              id: 'topics/02.29.02.UonSerializers',
-              label: '2.29.2. UON Serializers',
+              id: 'topics/02.29.03.UonSerializers',
+              label: '2.29.3. UON Serializers',
             },
             {
               type: 'doc',
-              id: 'topics/02.29.03.UonParsers',
-              label: '2.29.3. UON Parsers',
+              id: 'topics/02.29.04.UonParsers',
+              label: '2.29.4. UON Parsers',
             },
           ],
         },
         {
           type: 'category',
-          label: '2.30. URL-Encoding Details',
+          label: '2.30. URL-Encoding Support',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/02.30.00.UrlEncodingDetails',
-              label: '2.30. URL-Encoding Details',
+              id: 'topics/02.30.01.UrlEncodingBasics',
+              label: '2.30.1. URL-Encoding Basics',
             },
             {
               type: 'doc',
-              id: 'topics/02.30.01.UrlEncMethodology',
-              label: '2.30.1. URL-Encoding Methodology',
+              id: 'topics/02.30.02.UrlEncMethodology',
+              label: '2.30.2. URL-Encoding Methodology',
             },
             {
               type: 'doc',
-              id: 'topics/02.30.02.UrlEncSerializers',
-              label: '2.30.2. URL-Encoding Serializers',
+              id: 'topics/02.30.03.UrlEncSerializers',
+              label: '2.30.3. URL-Encoding Serializers',
             },
             {
               type: 'doc',
-              id: 'topics/02.30.03.UrlEncParsers',
-              label: '2.30.3. URL-Encoding Parsers',
+              id: 'topics/02.30.04.UrlEncParsers',
+              label: '2.30.4. URL-Encoding Parsers',
             },
             {
               type: 'doc',
-              id: 'topics/02.30.04.UrlEncodingAnnotation',
-              label: '2.30.4. @UrlEncoding Annotation',
+              id: 'topics/02.30.05.UrlEncodingAnnotation',
+              label: '2.30.5. @UrlEncoding Annotation',
             },
           ],
         },
         {
           type: 'category',
-          label: '2.31. MessagePack Details',
+          label: '2.31. MessagePack Support',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/02.31.00.MsgPackDetails',
-              label: '2.31. MessagePack Details',
+              id: 'topics/02.31.01.MessagePackBasics',
+              label: '2.31.1. MessagePack Basics',
             },
             {
               type: 'doc',
-              id: 'topics/02.31.01.MsgPackSerializers',
-              label: '2.31.1. MessagePack Serializers',
+              id: 'topics/02.31.02.MsgPackSerializers',
+              label: '2.31.2. MessagePack Serializers',
             },
             {
               type: 'doc',
-              id: 'topics/02.31.02.MsgPackParsers',
-              label: '2.31.2. MessagePack Parsers',
+              id: 'topics/02.31.03.MsgPackParsers',
+              label: '2.31.3. MessagePack Parsers',
             },
           ],
         },
         {
           type: 'category',
-          label: '2.32. OpenAPI Details',
+          label: '2.32. OpenApi Support',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/02.32.00.OpenApiDetails',
-              label: '2.32. OpenAPI Details',
+              id: 'topics/02.32.01.OpenApiBasics',
+              label: '2.32.1. OpenApi Basics',
             },
             {
               type: 'doc',
-              id: 'topics/02.32.01.OpenApiMethodology',
-              label: '2.32.1. OpenAPI Methodology',
+              id: 'topics/02.32.02.OpenApiMethodology',
+              label: '2.32.2. OpenAPI Methodology',
             },
             {
               type: 'doc',
-              id: 'topics/02.32.02.OpenApiSerializers',
-              label: '2.32.2. OpenAPI Serializers',
+              id: 'topics/02.32.03.OpenApiSerializers',
+              label: '2.32.3. OpenAPI Serializers',
             },
             {
               type: 'doc',
-              id: 'topics/02.32.03.OpenApiParsers',
-              label: '2.32.3. OpenAPI Parsers',
+              id: 'topics/02.32.04.OpenApiParsers',
+              label: '2.32.4. OpenAPI Parsers',
             },
           ],
         },
@@ -705,17 +698,17 @@ const sidebars: SidebarsConfig = {
     {
       type: 'doc',
       id: 'topics/03.01.00.Module-juneau-marshall-rdf',
-      label: '3. Module: juneau-marshall-rdf',
+      label: '3. juneau-marshall-rdf',
     },
     {
       type: 'category',
-      label: '4. DTOs',
+      label: '4. juneau-dto',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'topics/04.01.00.Module-juneau-dto',
-          label: '4.1. Module: juneau-dto',
+          id: 'topics/04.01.00.JuneauDtoBasics',
+          label: '4.1. juneau-dto Basics',
         },
         {
           type: 'doc',
@@ -741,224 +734,173 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: '5. Config',
+      label: '5. juneau-config',
       collapsed: true,
       items: [
         {
-
-          type: 'category',
-
-          label: '5.1. Module - juneau-config',
-
-          collapsed: true,
-
-          items: [
-
-            {
-
-              type: 'doc',
-
-              id: 'topics/05.01.00.Module-juneau-config',
-
-              label: '5.1. Module - juneau-config',
-
-            },
-
-            {
-
-              type: 'doc',
-
-              id: 'topics/05.01.01.Overview',
-
-              label: '5.1.1. Overview',
-
-            },
-
-            {
-
-              type: 'doc',
-
-              id: 'topics/05.01.02.SyntaxRules',
-
-              label: '5.1.2. Syntax Rules',
-
-            },
-
-          ],
-
-        },
-        {
-          type: 'category',
-          label: '5.2. Reading Entries',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'topics/05.02.00.ReadingEntries',
-              label: '5.2. Reading Entries',
-            },
-          ],
-        },
-        {
-
-          type: 'category',
-
-          label: '5.3. Variables',
-
-          collapsed: true,
-
-          items: [
-
-            {
-
-              type: 'doc',
-
-              id: 'topics/05.03.00.Variables',
-
-              label: '5.3. Variables',
-
-            },
-
-            {
-
-              type: 'doc',
-
-              id: 'topics/05.03.01.LogicVariables',
-
-              label: '5.3.1. Logic Variables',
-
-            },
-
-          ],
-
+          type: 'doc',
+          id: 'topics/05.01.00.JuneauConfigBasics',
+          label: '5.1. juneau-config Basics',
         },
         {
           type: 'doc',
-          id: 'topics/05.04.00.ModdedEntries',
-          label: '5.5. Modified Entries',
+          id: 'topics/05.02.00.ConfigOverview',
+          label: '5.2. Config Overview',
+        },
+        {
+          type: 'doc',
+          id: 'topics/05.03.00.SyntaxRules',
+          label: '5.3. Syntax Rules',
+        },
+        {
+          type: 'doc',
+          id: 'topics/05.04.00.ReadingEntries',
+          label: '5.4. Reading Entries',
         },
         {
           type: 'category',
-          label: '5.6. Sections',
+          label: '5.5. Variables',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/05.05.00.Sections',
-              label: '5.6. Sections',
+              id: 'topics/05.05.01.VariableBasics',
+              label: '5.5.1. Variable Basics',
             },
             {
               type: 'doc',
-              id: 'topics/05.06.01.FileSystemChanges',
-              label: '5.6.1. File System Changes',
-            },
-            {
-              type: 'doc',
-              id: 'topics/05.06.02.CustomEntrySerialization',
-              label: '5.6.2. Custom Entry Serialization',
-            },
-            {
-              type: 'doc',
-              id: 'topics/05.06.03.BulkSettingValues',
-              label: '5.6.3. Bulk Setting Values',
+              id: 'topics/05.05.02.LogicVariables',
+              label: '5.5.2. Logic Variables',
             },
           ],
         },
         {
           type: 'doc',
-          id: 'topics/05.06.00.SettingValues',
-          label: '5.7. Setting Values',
-        },
-        {
-          type: 'doc',
-          id: 'topics/05.07.00.Listeners',
-          label: '5.8. Listeners',
-        },
-        {
-          type: 'doc',
-          id: 'topics/05.08.00.SerializingConfigs',
-          label: '5.9. Serializing Configs',
+          id: 'topics/05.06.00.ModdedEntries',
+          label: '5.6. Modified Entries',
         },
         {
           type: 'category',
-          label: '5.10. Config Imports',
+          label: '5.7. Sections',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/05.09.00.ConfigImports',
-              label: '5.10. Config Imports',
+              id: 'topics/05.07.01.SectionBasics',
+              label: '5.7.1. Section Basics',
             },
             {
               type: 'doc',
-              id: 'topics/05.10.01.MemoryStore',
-              label: '5.10.1. Memory Store',
+              id: 'topics/05.07.02.FileSystemChanges',
+              label: '5.7.2. File System Changes',
             },
             {
               type: 'doc',
-              id: 'topics/05.10.02.FileStore',
-              label: '5.10.2. File Store',
+              id: 'topics/05.07.03.CustomEntrySerialization',
+              label: '5.7.3. Custom Entry Serialization',
             },
             {
               type: 'doc',
-              id: 'topics/05.10.03.CustomStores',
-              label: '5.10.3. Custom Stores',
-            },
-            {
-              type: 'doc',
-              id: 'topics/05.10.04.StoreListeners',
-              label: '5.10.4. Store Listeners',
+              id: 'topics/05.07.04.BulkSettingValues',
+              label: '5.7.4. Bulk Setting Values',
             },
           ],
         },
         {
           type: 'doc',
-          id: 'topics/05.10.00.ConfigStores',
-          label: '5.11. Config Stores',
+          id: 'topics/05.08.00.SettingValues',
+          label: '5.8. Setting Values',
         },
         {
           type: 'doc',
-          id: 'topics/05.11.00.ReadOnlyConfigs',
-          label: '5.12. Read-Only Configs',
+          id: 'topics/05.09.00.Listeners',
+          label: '5.9. Listeners',
         },
         {
           type: 'doc',
-          id: 'topics/05.12.00.ClosingConfigs',
-          label: '5.13. Closing Configs',
+          id: 'topics/05.10.00.SerializingConfigs',
+          label: '5.10. Serializing Configs',
+        },
+        {
+          type: 'category',
+          label: '5.11. Config Imports',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'topics/05.11.01.ConfigImportBasics',
+              label: '5.11.1. Config Import Basics',
+            },
+            {
+              type: 'doc',
+              id: 'topics/05.11.02.MemoryStore',
+              label: '5.11.2. Memory Store',
+            },
+            {
+              type: 'doc',
+              id: 'topics/05.11.03.FileStore',
+              label: '5.11.3. File Store',
+            },
+            {
+              type: 'doc',
+              id: 'topics/05.11.04.CustomStores',
+              label: '5.11.4. Custom Stores',
+            },
+            {
+              type: 'doc',
+              id: 'topics/05.11.05.StoreListeners',
+              label: '5.11.5. Store Listeners',
+            },
+          ],
         },
         {
           type: 'doc',
-          id: 'topics/05.13.00.SystemDefaultConfig',
-          label: '5.14. System Default Config',
+          id: 'topics/05.12.00.ConfigStores',
+          label: '5.12. Config Stores',
+        },
+        {
+          type: 'doc',
+          id: 'topics/05.13.00.ReadOnlyConfigs',
+          label: '5.13. Read-Only Configs',
+        },
+        {
+          type: 'doc',
+          id: 'topics/05.14.00.ClosingConfigs',
+          label: '5.14. Closing Configs',
+        },
+        {
+          type: 'doc',
+          id: 'topics/05.15.00.SystemDefaultConfig',
+          label: '5.15. System Default Config',
         },
       ],
     },
     {
       type: 'category',
-      label: '6. Assertions',
+      label: '6. juneau-assertions',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'topics/06.01.00.Module-juneau-assertions',
-          label: '6.1. Module: juneau-assertions',
+          id: 'topics/06.01.00.JuneauAssertionBasics',
+          label: '6.1. juneau-assertions Basics',
         },
         {
           type: 'doc',
-          id: 'topics/06.02.00.Overview',
-          label: '6.2. Overview',
+          id: 'topics/06.02.00.AssertionsOverview',
+          label: '6.2. Assertions Overview',
         },
       ],
     },
     {
       type: 'category',
-      label: '7. REST Common',
+      label: '7. juneau-rest-common',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'topics/07.01.00.Module-juneau-rest-common',
-          label: '7.1. Module: juneau-rest-common',
+          id: 'topics/07.01.00.JuneauRestCommonBasics',
+          label: '7.1. juneau-rest-common Basics',
         },
         {
           type: 'doc',
@@ -999,405 +941,387 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: '8. REST Server',
+      label: '8. juneau-rest-server',
       collapsed: true,
       items: [
         {
-
-          type: 'category',
-
-          label: '8.1. Module: juneau-rest-server',
-
-          collapsed: true,
-
-          items: [
-
-            {
-
-              type: 'doc',
-
-              id: 'topics/08.01.00.Module-juneau-rest-server',
-
-              label: '8.1. Module: juneau-rest-server',
-
-            },
-
-          ],
-
-        },
-        {
-          type: 'category',
-          label: '8.2. Overview',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'topics/08.01.01.Overview',
-              label: '8.2. Overview',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.02.01.PredefinedClasses',
-              label: '8.2.1. Predefined Classes',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.02.02.ChildResources',
-              label: '8.2.2. Child Resources',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.02.03.PathVariables',
-              label: '8.2.3. Path Variables',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.02.04.Deployment',
-              label: '8.2.4. Deployment',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.02.05.LifecycleHooks',
-              label: '8.2.5. Lifecycle Hooks',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: '8.3. Annotated Classes',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'topics/08.02.00.AnnotatedClasses',
-              label: '8.3. Annotated Classes',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.03.01.InferredHttpMethodsAndPaths',
-              label: '8.3.1. Inferred HTTP Methods and Paths',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.03.02.JavaMethodParameters',
-              label: '8.3.2. Java Method Parameters',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.03.03.JavaMethodReturnTypes',
-              label: '8.3.3. Java Method Return Types',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.03.04.JavaMethodThrowableTypes',
-              label: '8.3.4. Java Method Throwable Types',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.03.05.PathPatterns',
-              label: '8.3.5. Path Patterns',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.03.06.Matchers',
-              label: '8.3.6. Matchers',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.03.07.OverloadingHttpMethods',
-              label: '8.3.7. Overloading HTTP Methods',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.03.08.AdditionalInformation',
-              label: '8.3.8. Additional Information',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: '8.4. RestOp Annotated Methods',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'topics/08.03.00.RestOpAnnotatedMethods',
-              label: '8.4. RestOp Annotated Methods',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.04.01.PartMarshallers',
-              label: '8.4.1. Part Marshallers',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.04.02.HttpPartAnnotations',
-              label: '8.4.2. HTTP Part Annotations',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.04.03.DefaultParts',
-              label: '8.4.3. Default Parts',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.04.04.RequestBeans',
-              label: '8.4.4. Request Beans',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.04.05.ResponseBeans',
-              label: '8.4.5. Response Beans',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.04.06.HttpPartApis',
-              label: '8.4.6. HTTP Part APIs',
-            },
-          ],
+          type: 'doc',
+          id: 'topics/08.01.00.JuneauRestServerBasics',
+          label: '8.1. juneau-rest-server Basics',
         },
         {
           type: 'doc',
-          id: 'topics/08.04.00.HttpParts',
+          id: 'topics/08.02.00.RestServerOverview',
+          label: '8.2. REST Server Overview',
+        },
+        {
+          type: 'category',
+          label: '8.3. @Rest-Annotated Classes',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'topics/08.03.01.RestAnnotatedClassBasics',
+              label: '8.3.1. @Rest-Annotated Class Basics',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.03.02.PredefinedClasses',
+              label: '8.3.2. Predefined Classes',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.03.03.ChildResources',
+              label: '8.3.3. Child Resources',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.03.04.PathVariables',
+              label: '8.3.4. Path Variables',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.03.05.Deployment',
+              label: '8.3.5. Deployment',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.03.06.LifecycleHooks',
+              label: '8.3.6. Lifecycle Hooks',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: '8.4. @RestOp-Annotated Methods',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'topics/08.04.01.RestOpAnnotatedMethodBasics',
+              label: '8.4.1. @RestOp-Annotated Method Basics',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.04.02.InferredHttpMethodsAndPaths',
+              label: '8.4.2. Inferred HTTP Methods and Paths',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.04.03.JavaMethodParameters',
+              label: '8.4.3. Java Method Parameters',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.04.04.JavaMethodReturnTypes',
+              label: '8.4.4. Java Method Return Types',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.04.05.JavaMethodThrowableTypes',
+              label: '8.4.5. Java Method Throwable Types',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.04.06.PathPatterns',
+              label: '8.4.6. Path Patterns',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.04.07.Matchers',
+              label: '8.4.7. Matchers',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.04.08.OverloadingHttpMethods',
+              label: '8.4.8. Overloading HTTP Methods',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.04.09.AdditionalInformation',
+              label: '8.4.9. Additional Information',
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: '8.5. HTTP Parts',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'topics/08.05.01.HttpPartBasics',
+              label: '8.5.1. HTTP Part Basics',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.05.02.PartMarshallers',
+              label: '8.5.2. Part Marshallers',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.05.03.HttpPartAnnotations',
+              label: '8.5.3. HTTP Part Annotations',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.05.04.DefaultParts',
+              label: '8.5.4. Default Parts',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.05.05.RequestBeans',
+              label: '8.5.5. Request Beans',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.05.06.ResponseBeans',
+              label: '8.5.6. Response Beans',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.05.07.HttpPartApis',
+              label: '8.5.7. HTTP Part APIs',
+            },
+          ],
         },
         {
           type: 'doc',
-          id: 'topics/08.05.00.Marshalling',
+          id: 'topics/08.06.00.Marshalling',
           label: '8.6. Marshalling',
         },
         {
           type: 'doc',
-          id: 'topics/08.06.00.HandlingFormPosts',
+          id: 'topics/08.07.00.HandlingFormPosts',
           label: '8.7. Handling Form Posts',
         },
         {
           type: 'doc',
-          id: 'topics/08.07.00.Guards',
+          id: 'topics/08.08.00.Guards',
           label: '8.8. Guards',
         },
         {
           type: 'doc',
-          id: 'topics/08.08.00.Converters',
+          id: 'topics/08.09.00.Converters',
           label: '8.9. Converters',
         },
         {
           type: 'doc',
-          id: 'topics/08.09.00.LocalizedMessages',
+          id: 'topics/08.10.00.LocalizedMessages',
           label: '8.10. Localized Messages',
         },
         {
           type: 'doc',
-          id: 'topics/08.10.00.Encoders',
+          id: 'topics/08.11.00.Encoders',
           label: '8.11. Encoders',
         },
         {
           type: 'doc',
-          id: 'topics/08.11.00.ConfigurationFiles',
+          id: 'topics/08.12.00.ConfigurationFiles',
           label: '8.12. Configuration Files',
         },
         {
           type: 'doc',
-          id: 'topics/08.12.00.SvlVariables',
+          id: 'topics/08.13.00.SvlVariables',
           label: '8.13. SVL Variables',
         },
         {
           type: 'doc',
-          id: 'topics/08.13.00.StaticFiles',
+          id: 'topics/08.14.00.StaticFiles',
           label: '8.14. Static Files',
         },
         {
-          type: 'category',
+          type: 'doc',
+          id: 'topics/08.15.00.ClientVersioning',
           label: '8.15. Client Versioning',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'topics/08.14.00.ClientVersioning',
-              label: '8.15. Client Versioning',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.15.01.BasicRestServletSwagger',
-              label: '8.15.1. Basic REST Servlet Swagger',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.15.02.BasicSwaggerInfo',
-              label: '8.15.2. Basic Swagger Info',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.15.03.SwaggerTags',
-              label: '8.15.3. Swagger Tags',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.15.04.SwaggerOperations',
-              label: '8.15.4. Swagger Operations',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.15.05.SwaggerParameters',
-              label: '8.15.5. Swagger Parameters',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.15.06.SwaggerResponses',
-              label: '8.15.6. Swagger Responses',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.15.07.SwaggerModels',
-              label: '8.15.7. Swagger Models',
-            },
-            {
-              type: 'doc',
-              id: 'topics/08.15.08.SwaggerStylesheet',
-              label: '8.15.8. Swagger Stylesheet',
-            },
-          ],
-        },
-        {
-          type: 'doc',
-          id: 'topics/08.15.00.Swagger',
-          label: '8.16. Swagger',
         },
         {
           type: 'category',
-          label: '8.17. Execution Statistics',
+          label: '8.16. Swagger',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/08.16.00.ExecutionStatistics',
-              label: '8.17. Execution Statistics',
+              id: 'topics/08.16.01.SwaggerBasics',
+              label: '8.16.1. Swagger Basics',
             },
             {
               type: 'doc',
-              id: 'topics/08.17.01.HtmlUIvsDI',
-              label: '8.17.1. HTML UI vs DI',
+              id: 'topics/08.16.02.BasicRestServletSwagger',
+              label: '8.16.2. Basic REST Servlet Swagger',
             },
             {
               type: 'doc',
-              id: 'topics/08.17.02.HtmlWidgets',
-              label: '8.17.2. HTML Widgets',
+              id: 'topics/08.16.03.BasicSwaggerInfo',
+              label: '8.16.3. Basic Swagger Info',
             },
             {
               type: 'doc',
-              id: 'topics/08.17.03.HtmlPredefinedWidgets',
-              label: '8.17.3. HTML Predefined Widgets',
+              id: 'topics/08.16.04.SwaggerTags',
+              label: '8.16.4. Swagger Tags',
             },
             {
               type: 'doc',
-              id: 'topics/08.17.04.HtmlUiCustomization',
-              label: '8.17.4. HTML UI Customization',
+              id: 'topics/08.16.05.SwaggerOperations',
+              label: '8.16.5. Swagger Operations',
             },
             {
               type: 'doc',
-              id: 'topics/08.17.05.HtmlStylesheets',
-              label: '8.17.5. HTML Stylesheets',
+              id: 'topics/08.16.06.SwaggerParameters',
+              label: '8.16.6. Swagger Parameters',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.16.07.SwaggerResponses',
+              label: '8.16.7. Swagger Responses',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.16.08.SwaggerModels',
+              label: '8.16.8. Swagger Models',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.16.09.SwaggerStylesheet',
+              label: '8.16.9. Swagger Stylesheet',
             },
           ],
         },
         {
           type: 'doc',
-          id: 'topics/08.17.00.HtmlDocAnnotation',
-          label: '8.18. HtmlDoc Annotation',
+          id: 'topics/08.17.00.ExecutionStatistics',
+          label: '8.17. REST method execution statistics',
+        },
+        {
+          type: 'category',
+          label: '8.18. @HtmlDocConfig Annotation',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'topics/08.18.01.HtmlDocConfigAnnotationBasics',
+              label: '8.18.1. @HtmlDocConfig Annotation Basics',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.18.02.HtmlUIvsDI',
+              label: '8.18.2. HTML UI vs DI',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.18.03.HtmlWidgets',
+              label: '8.18.3. HTML Widgets',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.18.04.HtmlPredefinedWidgets',
+              label: '8.18.4. HTML Predefined Widgets',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.18.05.HtmlUiCustomization',
+              label: '8.18.5. HTML UI Customization',
+            },
+            {
+              type: 'doc',
+              id: 'topics/08.18.06.HtmlStylesheets',
+              label: '8.18.6. HTML Stylesheets',
+            },
+          ],
         },
         {
           type: 'doc',
-          id: 'topics/08.18.00.LoggingAndDebugging',
+          id: 'topics/08.19.00.LoggingAndDebugging',
           label: '8.19. Logging and Debugging',
         },
         {
           type: 'doc',
-          id: 'topics/08.19.00.HttpStatusCodes',
+          id: 'topics/08.20.00.HttpStatusCodes',
           label: '8.20. HTTP Status Codes',
         },
         {
           type: 'doc',
-          id: 'topics/08.20.00.BuiltInParameters',
+          id: 'topics/08.21.00.BuiltInParameters',
           label: '8.21. Built-In Parameters',
         },
         {
           type: 'doc',
-          id: 'topics/08.21.00.UsingWithOsgi',
+          id: 'topics/08.22.00.UsingWithOsgi',
           label: '8.22. Using with OSGi',
         },
         {
           type: 'doc',
-          id: 'topics/08.22.00.RestContext',
+          id: 'topics/08.23.00.RestContext',
           label: '8.23. REST Context',
         },
         {
           type: 'doc',
-          id: 'topics/08.23.00.RestOpContext',
+          id: 'topics/08.24.00.RestOpContext',
           label: '8.24. RestOp Context',
         },
         {
           type: 'doc',
-          id: 'topics/08.24.00.ResponseProcessors',
+          id: 'topics/08.25.00.ResponseProcessors',
           label: '8.25. Response Processors',
         },
         {
           type: 'doc',
-          id: 'topics/08.25.00.RestRpc',
+          id: 'topics/08.26.00.RestRpc',
           label: '8.26. REST RPC',
         },
         {
           type: 'doc',
-          id: 'topics/08.26.00.SerializingUris',
+          id: 'topics/08.27.00.SerializingUris',
           label: '8.27. Serializing URIs',
         },
         {
           type: 'doc',
-          id: 'topics/08.27.00.UtilityBeans',
+          id: 'topics/08.28.00.UtilityBeans',
           label: '8.28. Utility Beans',
         },
         {
           type: 'doc',
-          id: 'topics/08.28.00.HtmlBeans',
+          id: 'topics/08.29.00.HtmlBeans',
           label: '8.29. HTML Beans',
         },
         {
           type: 'doc',
-          id: 'topics/08.29.00.OtherNotes',
+          id: 'topics/08.30.00.OtherNotes',
           label: '8.30. Other Notes',
         },
         {
           type: 'doc',
-          id: 'topics/08.30.00.Log4j',
-          label: '8.32.1. Log4j',
+          id: 'topics/08.31.00.Log4j',
+          label: '8.31. Log4J',
         },
       ],
     },
     {
       type: 'category',
-      label: '9. REST Server SpringBoot',
+      label: '9. juneau-rest-server-springboot',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'topics/09.01.00.Module-juneau-rest-server-springboot',
-          label: '9.1. Module: juneau-rest-server-springboot',
+          id: 'topics/09.01.00.JuneauRestServerSpringbootBasics',
+          label: '9.1. juneau-rest-server-springboot Basics',
         },
         {
           type: 'doc',
-          id: 'topics/09.02.00.Overview',
-          label: '9.2. Overview',
+          id: 'topics/09.02.00.SpringBootOverview',
+          label: '9.2. Spring Boot Overview',
         },
       ],
     },
     {
       type: 'category',
-      label: '10. REST Client',
+      label: '10. juneau-rest-client',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'topics/10.01.00.Module-juneau-rest-client',
-          label: '10.1. Module: juneau-rest-client',
+          id: 'topics/10.01.00.JuneauRestClientBasics',
+          label: '10.1. juneau-rest-client Basics',
         },
         {
           type: 'doc',
@@ -1435,189 +1359,71 @@ const sidebars: SidebarsConfig = {
           label: '10.8. Custom Call Handlers',
         },
         {
-          type: 'category',
+          type: 'doc',
+          id: 'topics/10.09.00.Interceptors',
           label: '10.9. Interceptors',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'topics/10.09.00.Interceptors',
-              label: '10.9. Interceptors',
-            },
-            {
-              type: 'doc',
-              id: 'topics/10.10.01.Remote',
-              label: '10.9.1. Remote',
-            },
-            {
-              type: 'doc',
-              id: 'topics/10.10.02.RemoteMethod',
-              label: '10.9.2. Remote Method',
-            },
-            {
-              type: 'doc',
-              id: 'topics/10.10.03.Content',
-              label: '10.9.3. Content',
-            },
-            {
-              type: 'doc',
-              id: 'topics/10.10.04.FormData',
-              label: '10.9.4. Form Data',
-            },
-            {
-              type: 'doc',
-              id: 'topics/10.10.05.Query',
-              label: '10.9.5. Query',
-            },
-            {
-              type: 'doc',
-              id: 'topics/10.10.06.Header',
-              label: '10.9.6. Header',
-            },
-            {
-              type: 'doc',
-              id: 'topics/10.10.07.Path',
-              label: '10.9.7. Path',
-            },
-            {
-              type: 'doc',
-              id: 'topics/10.10.08.Request',
-              label: '10.9.8. Request',
-            },
-            {
-              type: 'doc',
-              id: 'topics/10.10.09.Response',
-              label: '10.9.9. Response',
-            },
-            {
-              type: 'doc',
-              id: 'topics/10.10.10.DualPurposeInterfaces',
-              label: '10.9.10. Dual Purpose Interfaces',
-            },
-          ],
         },
         {
-
           type: 'category',
-
-          label: '10.10. Proxies',
-
+          label: '10.10. REST Proxies',
           collapsed: true,
-
           items: [
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.10.00.Proxies',
-
-              label: '10.10. Proxies',
-
+              id: 'topics/10.10.01.RestProxyBasics',
+              label: '10.10.1. REST Proxy Basics',
             },
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.10.01.Remote',
-
-              label: '10.10.1. @Remote',
-
+              id: 'topics/10.10.02.Remote',
+              label: '10.10.2. @Remote',
             },
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.10.02.RemoteMethod',
-
-              label: '10.10.2. @RemoteMethod',
-
+              id: 'topics/10.10.03.RemoteMethod',
+              label: '10.10.3. @RemoteMethod',
             },
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.10.03.Content',
-
-              label: '10.10.3. @Content',
-
+              id: 'topics/10.10.04.Content',
+              label: '10.10.4. @Content',
             },
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.10.04.FormData',
-
-              label: '10.10.4. @FormData',
-
+              id: 'topics/10.10.05.FormData',
+              label: '10.10.5. @FormData',
             },
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.10.05.Query',
-
-              label: '10.10.5. @Query',
-
+              id: 'topics/10.10.06.Query',
+              label: '10.10.6. @Query',
             },
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.10.06.Header',
-
-              label: '10.10.6. @Header',
-
+              id: 'topics/10.10.07.Header',
+              label: '10.10.7. @Header',
             },
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.10.07.Path',
-
-              label: '10.10.7. @Path',
-
+              id: 'topics/10.10.08.Path',
+              label: '10.10.8. @Path',
             },
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.10.08.Request',
-
-              label: '10.10.8. @Request',
-
+              id: 'topics/10.10.09.Request',
+              label: '10.10.9. @Request',
             },
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.10.09.Response',
-
-              label: '10.10.9. @Response',
-
+              id: 'topics/10.10.10.Response',
+              label: '10.10.10. @Response',
             },
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.10.10.DualPurposeInterfaces',
-
-              label: '10.10.10. Dual-Purpose Interfaces',
-
+              id: 'topics/10.10.11.DualPurposeInterfaces',
+              label: '10.10.11. Dual-Purpose Interfaces',
             },
-
           ],
-
         },
         {
           type: 'doc',
@@ -1630,118 +1436,70 @@ const sidebars: SidebarsConfig = {
           label: '10.12. Customizing HTTP Client',
         },
         {
-          type: 'category',
+          type: 'doc',
+          id: 'topics/10.13.00.ExtendingRestClient',
           label: '10.13. Extending REST Client',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'topics/10.13.00.ExtendingRestClient',
-              label: '10.13. Extending REST Client',
-            },
-            {
-              type: 'doc',
-              id: 'topics/10.14.01.AuthenticationBASIC',
-              label: '10.13.1. Authentication BASIC',
-            },
-            {
-              type: 'doc',
-              id: 'topics/10.14.02.AuthenticationForm',
-              label: '10.13.2. Authentication Form',
-            },
-            {
-              type: 'doc',
-              id: 'topics/10.14.03.AuthenticationOIDC',
-              label: '10.13.3. Authentication OIDC',
-            },
-          ],
         },
         {
-
           type: 'category',
-
           label: '10.14. Authentication',
-
           collapsed: true,
-
           items: [
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.14.00.Authentication',
-
-              label: '10.14. Authentication',
-
+              id: 'topics/10.14.01.AuthenticationBasics',
+              label: '10.14.1. Authentication Basics',
             },
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.14.01.AuthenticationBASIC',
-
-              label: '10.14.1. BASIC Authentication',
-
+              id: 'topics/10.14.02.AuthenticationBASIC',
+              label: '10.14.2. BASIC Authentication',
             },
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.14.02.AuthenticationForm',
-
-              label: '10.14.2. Form-Based Authentication',
-
+              id: 'topics/10.14.03.AuthenticationForm',
+              label: '10.14.3. Form-Based Authentication',
             },
-
             {
-
               type: 'doc',
-
-              id: 'topics/10.14.03.AuthenticationOIDC',
-
-              label: '10.14.3. OIDC Authentication',
-
+              id: 'topics/10.14.04.AuthenticationOIDC',
+              label: '10.14.4. OIDC Authentication',
             },
-
           ],
-
         },
       ],
     },
     {
       type: 'category',
-      label: '11. REST Mock',
+      label: '11. juneau-rest-mock',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'topics/11.01.00.Module-juneau-rest-mock',
-          label: '11.1. Module: juneau-rest-mock',
+          id: 'topics/11.01.00.JuneauRestMockBasics',
+          label: '11.1. juneau-rest-mock Basics',
         },
         {
           type: 'doc',
-          id: 'topics/11.02.00.MockRestClient',
-          label: '11.2. Mock REST Client',
+          id: 'topics/11.02.00.MockRestClientOverview',
+          label: '11.2. Mock REST Client Overview',
         },
       ],
     },
     {
       type: 'category',
-      label: '12. Microservice Core',
+      label: '12. juneau-microservice-core',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'topics/12.01.00.Module-juneau-microservice-core',
-          label: '12.1. Module: juneau-microservice-core',
+          id: 'topics/12.01.00.JuneauMicroserviceCoreBasics',
+          label: '12.1. juneau-microservice-core Basics',
         },
         {
           type: 'doc',
-          id: 'topics/12.02.00.Overview',
-          label: '12.2. Overview',
+          id: 'topics/12.02.00.MicroserviceCoreOverview',
+          label: '12.2. Microservice Core Overview',
         },
         {
           type: 'doc',
@@ -1787,18 +1545,18 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: '13. Microservice Jetty',
+      label: '13. juneau-microservice-jetty',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'topics/13.01.00.Module-juneau-microservice-jetty',
-          label: '13.1. Module: juneau-microservice-jetty',
+          id: 'topics/13.01.00.JuneauMicroserviceJettyBasics',
+          label: '13.1. juneau-microservice-jetty Basics',
         },
         {
           type: 'doc',
-          id: 'topics/13.02.00.Overview',
-          label: '13.2. Overview',
+          id: 'topics/13.02.00.MicroserviceJettyOverview',
+          label: '13.2. Microservice Jetty Overview',
         },
         {
           type: 'doc',
@@ -1844,22 +1602,22 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/14.01.00.My-jetty-microservice',
-          label: '14.1. My Jetty Microservice',
+          id: 'topics/14.01.00.MyJettyMicroserviceBasics',
+          label: '14.1. My Jetty Microservice Basics',
         },
         {
           type: 'doc',
-          id: 'topics/14.02.00.Installing',
+          id: 'topics/14.02.00.MyJettyMicroserviceInstalling',
           label: '14.2. Installing',
         },
         {
           type: 'doc',
-          id: 'topics/14.03.00.Running',
+          id: 'topics/14.03.00.MyJettyMicroserviceRunning',
           label: '14.3. Running',
         },
         {
           type: 'doc',
-          id: 'topics/14.04.00.Building',
+          id: 'topics/14.04.00.MyJettyMicroserviceBuilding',
           label: '14.4. Building',
         },
       ],
@@ -1871,55 +1629,55 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/15.01.00.My-springboot-microservice',
-          label: '15.1. My SpringBoot Microservice',
+          id: 'topics/15.01.00.MySpringBootMicroserviceBasics',
+          label: '15.1. My SpringBoot Microservice Basics',
         },
         {
           type: 'doc',
-          id: 'topics/15.02.00.Installing',
+          id: 'topics/15.02.00.MySpringBootMicroserviceInstalling',
           label: '15.2. Installing',
         },
         {
           type: 'doc',
-          id: 'topics/15.03.00.Running',
+          id: 'topics/15.03.00.MySpringBootMicroserviceRunning',
           label: '15.3. Running',
         },
         {
           type: 'doc',
-          id: 'topics/15.04.00.Building',
+          id: 'topics/15.04.00.MySpringBootMicroserviceBuilding',
           label: '15.4. Building',
         },
       ],
     },
     {
       type: 'category',
-      label: '16. PetStore App',
+      label: '16. juneau-petstore',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'topics/16.01.00.App-juneau-petstore',
-          label: '16.1. App: juneau-petstore',
+          id: 'topics/16.01.00.JuneauPetstoreBasics',
+          label: '16.1. juneau-petstore Basics',
         },
         {
           type: 'doc',
-          id: 'topics/16.02.00.RunningTheApp',
+          id: 'topics/16.02.00.JuneauPetstoreRunning',
           label: '16.2. Running the App',
         },
         {
           type: 'doc',
-          id: 'topics/16.03.00.App-juneau-petstore-api',
-          label: '16.3. App: juneau-petstore-api',
+          id: 'topics/16.03.00.JuneauPetstoreApi',
+          label: '16.3. juneau-petstore-api',
         },
         {
           type: 'doc',
-          id: 'topics/16.04.00.App-juneau-petstore-client',
-          label: '16.4. App: juneau-petstore-client',
+          id: 'topics/16.04.00.JuneauPetstoreClient',
+          label: '16.4. juneau-petstore-client',
         },
         {
           type: 'doc',
-          id: 'topics/16.05.00.App-juneau-petstore-server',
-          label: '16.5. App: juneau-petstore-server',
+          id: 'topics/16.05.00.JuneauPetstoreServer',
+          label: '16.5. juneau-petstore-server',
         },
       ],
     },
@@ -1930,23 +1688,23 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'topics/17.01.00.Security',
-          label: '17.1. Security',
+          id: 'topics/17.01.00.SecurityBasics',
+          label: '17.1. Security Basics',
         },
         {
           type: 'doc',
-          id: 'topics/17.02.00.Marshall',
-          label: '17.2. Marshall',
+          id: 'topics/17.02.00.MarshallingSecurity',
+          label: '17.2. Marshalling Security',
         },
         {
           type: 'doc',
-          id: 'topics/17.03.00.Svl',
-          label: '17.3. SVL',
+          id: 'topics/17.03.00.SvlSecurity',
+          label: '17.3. SVL Security',
         },
         {
           type: 'doc',
-          id: 'topics/17.04.00.Rest',
-          label: '17.4. REST',
+          id: 'topics/17.04.00.RestSecurity',
+          label: '17.4. REST Security',
         },
       ],
     },
@@ -2410,6 +2168,6 @@ const sidebars: SidebarsConfig = {
     },
   ],
    */
-};
+  };
 
 export default sidebars;
