@@ -344,16 +344,9 @@ const sidebars: SidebarsConfig = {
           label: '2.19. Jackson Comparison',
         },
         {
-          type: 'category',
-          label: '2.20. Simple Variable Language',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'topics/02.20.00.PojoCategories',
-              label: '2.20. POJO Categories',
-            },
-          ],
+          type: 'doc',
+          id: 'topics/02.20.00.PojoCategories',
+          label: '2.20. POJO Categories',
         },
         {
           type: 'category',
@@ -393,16 +386,9 @@ const sidebars: SidebarsConfig = {
           label: '2.22. Encoders',
         },
         {
-          type: 'category',
-          label: '2.23. JSON Details',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'topics/02.23.00.ObjectTools',
-              label: '2.23. Object Tools',
-            },
-          ],
+          type: 'doc',
+          id: 'topics/02.23.00.ObjectTools',
+          label: '2.23. Object Tools',
         },
         {
           type: 'category',
@@ -442,114 +428,54 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
+          type: 'doc',
+          id: 'topics/02.25.00.JsonSchemaDetails',
+          label: '2.25. JSON Schema Details',
+        },
+        {
           type: 'category',
-          label: '2.25. XML Details',
+          label: '2.26. XML Details',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/02.25.00.JsonSchemaDetails',
-              label: '2.25. JSON Schema Details',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: '2.26. HTML Details',
-          collapsed: true,
-          items: [
-            {
-
-              type: 'category',
-
+              id: 'topics/02.26.00.XmlDetails',
               label: '2.26. XML Details',
-
-              collapsed: true,
-
-              items: [
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.26.00.XmlDetails',
-
-                  label: '2.26. XML Details',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.26.01.XmlMethodology',
-
-                  label: '2.26.1. XML Methodology',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.26.02.XmlSerializers',
-
-                  label: '2.26.2. XML Serializers',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.26.03.XmlParsers',
-
-                  label: '2.26.3. XML Parsers',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.26.04.XmlBeanTypeNameAnnotation',
-
-                  label: '2.26.4. @XmlBeanTypeName Annotation',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.26.05.XmlChildNameAnnotation',
-
-                  label: '2.26.5. @XmlChildName Annotation',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.26.06.XmlFormatAnnotation',
-
-                  label: '2.26.6. @XmlFormat Annotation',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.26.07.XmlNamespaces',
-
-                  label: '2.26.7. XML Namespaces',
-
-                },
-
-              ],
-
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.26.01.XmlMethodology',
+              label: '2.26.1. XML Methodology',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.26.02.XmlSerializers',
+              label: '2.26.2. XML Serializers',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.26.03.XmlParsers',
+              label: '2.26.3. XML Parsers',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.26.04.XmlBeanTypeNameAnnotation',
+              label: '2.26.4. @XmlBeanTypeName Annotation',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.26.05.XmlChildNameAnnotation',
+              label: '2.26.5. @XmlChildName Annotation',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.26.06.XmlFormatAnnotation',
+              label: '2.26.6. @XmlFormat Annotation',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.26.07.XmlNamespaces',
+              label: '2.26.7. XML Namespaces',
             },
           ],
         },
@@ -657,249 +583,117 @@ const sidebars: SidebarsConfig = {
 
         },
         {
+          type: 'doc',
+          id: 'topics/02.28.00.HtmlSchema',
+          label: '2.28. HTML Schema',
+        },
+        {
           type: 'category',
-          label: '2.28. UON Details',
+          label: '2.29. UON Details',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/02.28.00.HtmlSchema',
-              label: '2.28. HTML Schema',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: '2.29. URL-Encoding Details',
-          collapsed: true,
-          items: [
-            {
-
-              type: 'category',
-
+              id: 'topics/02.29.00.UonDetails',
               label: '2.29. UON Details',
-
-              collapsed: true,
-
-              items: [
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.29.00.UonDetails',
-
-                  label: '2.29. UON Details',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.29.01.UonMethodology',
-
-                  label: '2.29.1. UON Methodology',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.29.02.UonSerializers',
-
-                  label: '2.29.2. UON Serializers',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.29.03.UonParsers',
-
-                  label: '2.29.3. UON Parsers',
-
-                },
-
-              ],
-
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.29.01.UonMethodology',
+              label: '2.29.1. UON Methodology',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.29.02.UonSerializers',
+              label: '2.29.2. UON Serializers',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.29.03.UonParsers',
+              label: '2.29.3. UON Parsers',
             },
           ],
         },
         {
           type: 'category',
-          label: '2.30. MessagePack Details',
+          label: '2.30. URL-Encoding Details',
           collapsed: true,
           items: [
             {
-
-              type: 'category',
-
+              type: 'doc',
+              id: 'topics/02.30.00.UrlEncodingDetails',
               label: '2.30. URL-Encoding Details',
-
-              collapsed: true,
-
-              items: [
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.30.00.UrlEncodingDetails',
-
-                  label: '2.30. URL-Encoding Details',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.30.01.UrlEncMethodology',
-
-                  label: '2.30.1. URL-Encoding Methodology',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.30.02.UrlEncSerializers',
-
-                  label: '2.30.2. URL-Encoding Serializers',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.30.03.UrlEncParsers',
-
-                  label: '2.30.3. URL-Encoding Parsers',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.30.04.UrlEncodingAnnotation',
-
-                  label: '2.30.4. @UrlEncoding Annotation',
-
-                },
-
-              ],
-
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.30.01.UrlEncMethodology',
+              label: '2.30.1. URL-Encoding Methodology',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.30.02.UrlEncSerializers',
+              label: '2.30.2. URL-Encoding Serializers',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.30.03.UrlEncParsers',
+              label: '2.30.3. URL-Encoding Parsers',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.30.04.UrlEncodingAnnotation',
+              label: '2.30.4. @UrlEncoding Annotation',
             },
           ],
         },
         {
           type: 'category',
-          label: '2.31. OpenAPI Details',
+          label: '2.31. MessagePack Details',
           collapsed: true,
           items: [
             {
-
-              type: 'category',
-
+              type: 'doc',
+              id: 'topics/02.31.00.MsgPackDetails',
               label: '2.31. MessagePack Details',
-
-              collapsed: true,
-
-              items: [
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.31.00.MsgPackDetails',
-
-                  label: '2.31. MessagePack Details',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.31.01.MsgPackSerializers',
-
-                  label: '2.31.1. MessagePack Serializers',
-
-                },
-
-                {
-
-                  type: 'doc',
-
-                  id: 'topics/02.31.02.MsgPackParsers',
-
-                  label: '2.31.2. MessagePack Parsers',
-
-                },
-
-              ],
-
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.31.01.MsgPackSerializers',
+              label: '2.31.1. MessagePack Serializers',
+            },
+            {
+              type: 'doc',
+              id: 'topics/02.31.02.MsgPackParsers',
+              label: '2.31.2. MessagePack Parsers',
             },
           ],
         },
         {
-
           type: 'category',
-
           label: '2.32. OpenAPI Details',
-
           collapsed: true,
-
           items: [
-
             {
-
               type: 'doc',
-
               id: 'topics/02.32.00.OpenApiDetails',
-
               label: '2.32. OpenAPI Details',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.32.01.OpenApiMethodology',
-
               label: '2.32.1. OpenAPI Methodology',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.32.02.OpenApiSerializers',
-
               label: '2.32.2. OpenAPI Serializers',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.32.03.OpenApiParsers',
-
               label: '2.32.3. OpenAPI Parsers',
-
             },
-
           ],
-
         },
         {
           type: 'doc',
