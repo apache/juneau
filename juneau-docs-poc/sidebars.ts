@@ -743,51 +743,90 @@ const sidebars: SidebarsConfig = {
           label: '5.1. juneau-config Basics',
         },
         {
-          type: 'doc',
-          id: 'topics/05.02.00.ConfigOverview',
-          label: '5.2. Config Overview',
-        },
-        {
-          type: 'doc',
-          id: 'topics/05.03.00.SyntaxRules',
-          label: '5.3. Syntax Rules',
-        },
-        {
-          type: 'doc',
-          id: 'topics/05.04.00.ReadingEntries',
-          label: '5.4. Reading Entries',
-        },
-        {
           type: 'category',
-          label: '5.5. Variables',
+          label: '5.2. Overview',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/05.05.01.VariableBasics',
-              label: '5.5.1. Variable Basics',
+              id: 'topics/05.02.01.ConfigOverviewBasics',
+              label: '5.2.1. Config Overview Basics',
             },
             {
               type: 'doc',
-              id: 'topics/05.05.02.LogicVariables',
-              label: '5.5.2. Logic Variables',
+              id: 'topics/05.02.02.SyntaxRules',
+              label: '5.2.2. Syntax Rules',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: '5.3. Reading Entries',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'topics/05.03.01.ReadingEntriesBasics',
+              label: '5.3.1. Reading Entries Basics',
+            },
+            {
+              type: 'doc',
+              id: 'topics/05.03.02.Pojos',
+              label: '5.3.2. POJOs',
+            },
+            {
+              type: 'doc',
+              id: 'topics/05.03.03.Arrays',
+              label: '5.3.3. Arrays',
+            },
+            {
+              type: 'doc',
+              id: 'topics/05.03.04.JCFObjects',
+              label: '5.3.4. Java Collection Framework Objects',
+            },
+            {
+              type: 'doc',
+              id: 'topics/05.03.05.BinaryData',
+              label: '5.3.5. Binary Data',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: '5.4. Variables',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'topics/05.04.01.VariableBasics',
+              label: '5.4.1. Variable Basics',
+            },
+            {
+              type: 'doc',
+              id: 'topics/05.04.02.LogicVariables',
+              label: '5.4.2. Logic Variables',
             },
           ],
         },
         {
           type: 'doc',
-          id: 'topics/05.06.00.ModdedEntries',
-          label: '5.6. Modified Entries',
+          id: 'topics/05.05.00.ModdedEntries',
+          label: '5.5. Modded/Encoded Entries',
+        },
+        {
+          type: 'doc',
+          id: 'topics/05.06.00.Sections',
+          label: '5.6. Sections',
         },
         {
           type: 'category',
-          label: '5.7. Sections',
+          label: '5.7. Setting Values',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/05.07.01.SectionBasics',
-              label: '5.7.1. Section Basics',
+              id: 'topics/05.07.01.SettingValuesBasics',
+              label: '5.7.1. Setting Values Basics',
             },
             {
               type: 'doc',
@@ -808,28 +847,28 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'topics/05.08.00.SettingValues',
-          label: '5.8. Setting Values',
+          id: 'topics/05.08.00.Listeners',
+          label: '5.8. Listeners',
         },
         {
           type: 'doc',
-          id: 'topics/05.09.00.Listeners',
-          label: '5.9. Listeners',
+          id: 'topics/05.09.00.SerializingConfigs',
+          label: '5.9. Serializing Configs',
         },
         {
           type: 'doc',
-          id: 'topics/05.10.00.SerializingConfigs',
-          label: '5.10. Serializing Configs',
+          id: 'topics/05.10.00.Imports',
+          label: '5.10. Imports',
         },
         {
           type: 'category',
-          label: '5.11. Config Imports',
+          label: '5.11. Config Stores',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'topics/05.11.01.ConfigImportBasics',
-              label: '5.11.1. Config Import Basics',
+              id: 'topics/05.11.01.ConfigStoresBasics',
+              label: '5.11.1. Config Stores Basics',
             },
             {
               type: 'doc',
@@ -855,23 +894,18 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'topics/05.12.00.ConfigStores',
-          label: '5.12. Config Stores',
+          id: 'topics/05.12.00.ReadOnlyConfigs',
+          label: '5.12. Read-only Configs',
         },
         {
           type: 'doc',
-          id: 'topics/05.13.00.ReadOnlyConfigs',
-          label: '5.13. Read-Only Configs',
+          id: 'topics/05.13.00.ClosingConfigs',
+          label: '5.13. Closing Configs',
         },
         {
           type: 'doc',
-          id: 'topics/05.14.00.ClosingConfigs',
-          label: '5.14. Closing Configs',
-        },
-        {
-          type: 'doc',
-          id: 'topics/05.15.00.SystemDefaultConfig',
-          label: '5.15. System Default Config',
+          id: 'topics/05.14.00.SystemDefaultConfig',
+          label: '5.14. System Default Config',
         },
       ],
     },

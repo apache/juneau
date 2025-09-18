@@ -296,6 +296,104 @@ a[href*="apidocs"]:hover {
   background: rgba(76, 175, 80, 0.05);
 }
 
+/* Full-width code blocks in tables */
+.code-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  border: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.code-table th,
+.code-table td {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  padding: 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.code-table th {
+  background: var(--ifm-color-emphasis-100);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* 3-column table (Type/Format/Valid parameter types) */
+.code-table th:first-child:nth-last-child(3) {
+  width: 15%;
+}
+
+.code-table th:nth-child(2):nth-last-child(2) {
+  width: 20%;
+}
+
+.code-table th:nth-child(3):nth-last-child(1) {
+  width: 65%;
+}
+
+.code-table td:first-child:nth-last-child(3) {
+  width: 15%;
+  text-align: center;
+  font-weight: 600;
+  background: var(--ifm-color-emphasis-50);
+}
+
+.code-table td:nth-child(2):nth-last-child(2) {
+  width: 20%;
+  text-align: center;
+  font-family: monospace;
+  background: var(--ifm-color-emphasis-50);
+}
+
+.code-table td:nth-child(3):nth-last-child(1) {
+  width: 65%;
+  line-height: 1.5;
+}
+
+/* 2-column table (Java code/HTML) */
+.code-table th:first-child:nth-last-child(2),
+.code-table th:nth-child(2):nth-last-child(1) {
+  width: 50%;
+}
+
+.code-table td:first-child:nth-last-child(2),
+.code-table td:nth-child(2):nth-last-child(1) {
+  width: 50%;
+  text-align: left;
+  font-weight: normal;
+  background: transparent;
+  vertical-align: top;
+}
+
+.code-table td ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.code-table td li {
+  margin-bottom: 0.25rem;
+}
+
+.code-table .prism-code {
+  margin: 0;
+  border-radius: 0;
+  border: none;
+}
+
+.code-table pre {
+  margin: 0;
+  padding: 0.5rem;
+  border-radius: 0;
+  background: transparent;
+}
+
+.code-table code {
+  background: transparent;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
 /* Status badges */
 .status-badge {
   display: inline-block;
@@ -388,6 +486,9 @@ node-2 { display: block; margin-left: 4em; }
 node-3 { display: block; margin-left: 6em; }
 node-4 { display: block; margin-left: 8em; }
 node-5 { display: block; margin-left: 10em; }
+node-6 { display: block; margin-left: 12em; }
+node-7 { display: block; margin-left: 14em; }
+node-8 { display: block; margin-left: 16em; }
 
 /* Tree wrapper for proper spacing */
 tree { display: block; margin: 1em 0; }
