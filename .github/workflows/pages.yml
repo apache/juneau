@@ -85,7 +85,7 @@ jobs:
           enablement: true
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           # Upload the complete generated site
           path: './target/site'
