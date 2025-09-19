@@ -10,7 +10,7 @@ This page serves as a placeholder for links that need to be properly connected o
 
 The following sections are planned but not yet linked:
 
-### Core Components
+#### Core Components
 
 - juneau-marshall
 - juneau-marshall-rdf
@@ -18,7 +18,7 @@ The following sections are planned but not yet linked:
 - juneau-config
 - juneau-assertions
 
-### REST Components
+#### REST Components
 
 - juneau-rest-common
 - juneau-rest-server
@@ -34,7 +34,7 @@ The following sections are planned but not yet linked:
 
 :::
 
-### Detailed Topics
+#### Detailed Topics
 
 - PojoCategories
 - Swaps

@@ -15,7 +15,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import remarkJuneauLinks from './src/plugins/remark-juneau-links';
-import remarkVersionReplacer from './src/plugins/remark-version-replacer';
+const remarkVersionReplacer = require('./src/plugins/remark-version-replacer');
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 

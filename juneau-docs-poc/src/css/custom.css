@@ -465,7 +465,12 @@ javac-field,
 javac-field-private, 
 javac-method, 
 javac-method-private, 
-javac-method-annotation { font: monospace; font-size: small; }
+javac-method-annotation { 
+  font: monospace; 
+  font-size: small; 
+  margin-right: 8px; 
+  white-space: nowrap; 
+}
 
 java-package, 
 java-annotation, 
