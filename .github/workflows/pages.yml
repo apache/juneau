@@ -86,7 +86,7 @@ jobs:
                "https://api.github.com/user" || echo "Token validation failed"
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
         with:
           # Enable Pages if not already enabled
           enablement: true
