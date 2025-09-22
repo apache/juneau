@@ -19,4 +19,10 @@ github:
     wiki: true
     issues: true
     projects: true
+    discussions: true
   ghp_path: "/docs"
+  ghp_branch: "master"
+  del_branch_on_merge: true   # Delete head branches after merge
+  squash_merge: true          # Allow squash merging
+  merge_commit: true          # Allow merge commits
+  rebase_merge: true          # Allow rebase merging

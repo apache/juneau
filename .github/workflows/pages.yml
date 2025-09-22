@@ -78,11 +78,19 @@ jobs:
           # Generate complete project site
           mvn site -DskipTests
 
+      - name: Debug Token Permissions
+        run: |
+          echo "Token permissions check..."
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Accept: application/vnd.github.v3+json" 
+               "https://api.github.com/user" || echo "Token validation failed"
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
         with:
           # Enable Pages if not already enabled
           enablement: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
