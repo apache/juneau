@@ -456,6 +456,7 @@ a[href*="apidocs"]:hover {
   }
 }
 
+javac-package,
 javac-annotation, 
 javac-class, 
 javac-abstract-class, 
@@ -499,6 +500,7 @@ node-8 { display: block; margin-left: 16em; }
 tree { display: block; margin: 1em 0; }
 
 /* Make java elements inline after indent */
+javac-package::before { color: #e09c01; content: '\229e\00a0'; font-weight: bolder; font-size: x-small; }
 javac-annotation::before  { color: #00ced1; content: '\24d0\00a0'; font-weight: bolder; font-size: x-small; }
 javac-class::before  { color: #008000; content: '\24d2\00a0'; font-weight: bolder; font-size: x-small; }
 javac-abstract-class::before { color: #CCB404; content: '\24d2\00a0'; font-weight: bolder; font-size: x-small; }
@@ -510,6 +512,7 @@ javac-method::before  { color: #008000; content: '\25cf\00a0'; font-weight: bold
 javac-method-private::before { color: #CCB404; content: '\25c6\00a0'; font-weight: bolder; font-size: x-small; }
 javac-method-annotation::before { color: #00ced1; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
 
+java-package::before { color: #e09c01; content: '\229e\00a0'; font-weight: bolder; font-size: large; }
 java-annotation::before  { color: #00ced1; content: '\24d0\00a0'; font-weight: bolder; font-size: large; }
 java-class::before  { color: #008000; content: '\24d2\00a0'; font-weight: bolder; font-size: large; }
 java-abstract-class::before { color: #CCB404; content: '\24d2\00a0'; font-weight: bolder; font-size: large; }
