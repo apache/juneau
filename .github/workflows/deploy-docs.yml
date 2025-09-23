@@ -16,9 +16,9 @@ name: Deploy Documentation
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 permissions:
   contents: write  # Need write access to push to gh-pages
