@@ -19,7 +19,10 @@
 function replaceInString(content, version, apiDocsUrl) {
   return content
     .replace(/\{\{JUNEAU_VERSION\}\}/g, version)
-    .replace(/\{\{API_DOCS\}\}/g, apiDocsUrl);
+    .replace(/\{\{API_DOCS\}\}/g, apiDocsUrl)
+    // Also handle any potential single-brace variants that might cause MDX issues
+    .replace(/\{JUNEAU_VERSION\}/g, version)
+    .replace(/\{API_DOCS\}/g, apiDocsUrl);
 }
 
 /**
@@ -70,10 +73,29 @@ function remarkVersionReplacer(options = {}) {
       if (file.data) file.data = replacedContent;
       
       const stillHasPlaceholders = replacedContent.includes('{{API_DOCS}}') || replacedContent.includes('{{JUNEAU_VERSION}}');
+      
+      // Check for problematic single-brace or bare references that MDX might interpret as JS
+      const hasSingleBraceApiDocs = replacedContent.includes('{API_DOCS}');
+      const hasBareApiDocs = replacedContent.match(/[^{]API_DOCS[^}]/);
+      
+      if (fileName.includes('10.01.00.JuneauRestClientBasics')) {
+        console.log(`🔍 POST-REPLACEMENT DEBUG - ${fileName}:`);
+        console.log(`📋 Still has {{API_DOCS}}: ${replacedContent.includes('{{API_DOCS}}')}`);
+        console.log(`📋 Has single {API_DOCS}: ${hasSingleBraceApiDocs}`);
+        console.log(`📋 Has bare API_DOCS: ${!!hasBareApiDocs}`);
+        if (hasBareApiDocs) {
+          console.log(`📋 Bare API_DOCS context: ${hasBareApiDocs[0]}`);
+        }
+      }
+      
       if (stillHasPlaceholders) {
         console.log(`⚠️  WARNING: Still has unreplaced placeholders in ${file.path || 'unknown'}`);
       } else if (hasApiDocs || hasVersion) {
         console.log(`✅ Successfully replaced placeholders in ${file.path || 'unknown'}`);
+      }
+      
+      if (hasSingleBraceApiDocs || hasBareApiDocs) {
+        console.log(`🚨 POTENTIAL MDX ISSUE: Found problematic API_DOCS reference in ${file.path || 'unknown'}`);
       }
     }
     // No need for AST traversal since string replacement handles all cases
