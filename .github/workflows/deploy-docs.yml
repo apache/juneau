@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     
     # Only deploy on main branch, not PRs
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master'
     
     steps:
     - name: Checkout
