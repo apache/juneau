@@ -1,0 +1,48 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write  # Need write access to push to gh-pages
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    # Only deploy on main branch, not PRs
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: juneau-docs-poc/package-lock.json
+        
+    - name: Install dependencies
+      run: |
+        cd juneau-docs-poc
+        npm ci
+        
+    - name: Build Docusaurus
+      run: |
+        cd juneau-docs-poc
+        npm run build
+        
+    - name: Deploy to staging branch
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./juneau-docs-poc/build
+        publish_branch: asf-staging  # Safe staging deployment
+        user_name: 'github-actions[bot]'
+        user_email: 'github-actions[bot]@users.noreply.github.com'
+        commit_message: 'Deploy documentation staging from ${{ github.sha }}'
