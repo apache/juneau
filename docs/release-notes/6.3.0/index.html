@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-release-notes/6.3.0" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.8.1">
+<title data-rh="true">Release 6.3.0 | Apache Juneau</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://juneau.apache.org/docs/release-notes/6.3.0"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Release 6.3.0 | Apache Juneau"><meta data-rh="true" name="description" content="Date: Jun 30, 2017"><meta data-rh="true" property="og:description" content="Date: Jun 30, 2017"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://juneau.apache.org/docs/release-notes/6.3.0"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/release-notes/6.3.0" hreflang="en"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/release-notes/6.3.0" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"6.3.0","item":"https://juneau.apache.org/docs/release-notes/6.3.0"}]}</script><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="Apache Juneau RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="Apache Juneau Atom Feed"><link rel="stylesheet" href="/assets/css/styles.284e41d6.css">
+<script src="/assets/js/runtime~main.99a1bf99.js" defer="defer"></script>
+<script src="/assets/js/main.752a1ce2.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t="light";var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",e||t),document.documentElement.setAttribute("data-theme-choice",e||t)}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/img/oakleaf.svg"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/"><div class="navbar__logo"><img src="/img/oakleaf.svg" alt="Apache Juneau" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/img/oakleaf.svg" alt="Apache Juneau" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Apache Juneau</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/docs/topics/01.01.00.JuneauEcosystemOverview">Tutorial</a><a class="navbar__item navbar__link" href="/blog">Blog</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/facebook/docusaurus" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" href="/docs/topics/01.01.00.JuneauEcosystemOverview">1. Juneau Ecosystem</a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/topics/01.01.00.JuneauEcosystemOverview">1.1. Juneau Ecosystem Overview</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/topics/01.02.00.Marshalling">1.2. Marshalling</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/topics/01.03.00.EndToEndRest">1.3. End-to-End REST</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/topics/01.04.00.RestServer">1.4. REST Server</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/topics/01.05.00.RestClient">1.5. REST Client</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/topics/01.06.00.Dtos">1.6. DTOs</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/topics/01.07.00.ConfigFiles">1.7. Config Files</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/topics/01.08.00.FluentAssertions">1.8. Fluent Assertions</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/topics/01.09.00.GeneralDesign">1.9. General Design</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/02.01.00.JuneauMarshallBasics">2. juneau-marshall</a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/topics/03.01.00.Module-juneau-marshall-rdf">3. juneau-marshall-rdf</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/04.01.00.JuneauDtoBasics">4. juneau-dto</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/05.01.00.JuneauConfigBasics">5. juneau-config</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/06.01.00.JuneauAssertionBasics">6. juneau-assertions</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/07.01.00.JuneauRestCommonBasics">7. juneau-rest-common</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/08.01.00.JuneauRestServerBasics">8. juneau-rest-server</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/09.01.00.JuneauRestServerSpringbootBasics">9. juneau-rest-server-springboot</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/10.01.00.JuneauRestClientBasics">10. juneau-rest-client</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/11.01.00.JuneauRestMockBasics">11. juneau-rest-mock</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/12.01.00.JuneauMicroserviceCoreBasics">12. juneau-microservice-core</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/13.01.00.JuneauMicroserviceJettyBasics">13. juneau-microservice-jetty</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/14.01.00.MyJettyMicroserviceBasics">14. My Jetty Microservice</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/15.01.00.MySpringBootMicroserviceBasics">15. My SpringBoot Microservice</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/16.01.00.JuneauPetstoreBasics">16. juneau-petstore</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/topics/17.01.00.SecurityBasics">17. Security</a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/topics/18.01.00.V9.0-migration-guide">18. V9.0 Migration Guide</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/topics/TODO">TODO Links</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/docs/release-notes/9.0.0">Release Notes</a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/release-notes/9.0.0">Version 9.x</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/release-notes/8.2.0">Version 8.x</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/release-notes/7.2.2">Version 7.x</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/docs/release-notes/6.4.0">Version 6.x</a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/release-notes/6.4.0">6.4.0</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/release-notes/6.3.1">6.3.1</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/docs/release-notes/6.3.0">6.3.0</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/release-notes/6.2.0">6.2.0</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/release-notes/6.1.0">6.1.0</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/release-notes/6.0.1">6.0.1</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/release-notes/6.0.0">6.0.0</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/release-notes/5.2.0.1">Version 5.x</a></div></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Release Notes</span></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Version 6.x</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">6.3.0</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Release 6.3.0</h1></header>
+<p><strong>Date:</strong> Jun 30, 2017</p>
+<p>Juneau 6.3.0 is a major update with significant new functionality for defining proxy interfaces against arbitrary
+3rd-party REST interfaces.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="orgapachejuneau">org.apache.juneau<a href="#orgapachejuneau" class="hash-link" aria-label="Direct link to org.apache.juneau" title="Direct link to org.apache.juneau">​</a></h3>
+<ul>
+<li>
+<p>New package: <a href="/docs/apidocs/org/apache/juneau/http.html">org.apache.juneau.http</a>.</p>
+</li>
+<li>
+<p>Support for dynamic beans. See <del>@BeanProperty(name)</del>.</p>
+</li>
+<li>
+<p>New doc: <del>2.8 - Virtual Beans</del></p>
+</li>
+<li>
+<p>New doc: <del>2.13 - Comparison with Jackson</del></p>
+</li>
+<li>
+<p>All parsers now allow for numeric types with <code>&#x27;K&#x27;</code>/<code>&#x27;M&#x27;</code>/<code>&#x27;G&#x27;</code> suffixes to represent kilobytes, megabytes, and
+gigabytes.</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token comment">// Example</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token keyword">int</span><span class="token plain"> i </span><span class="token operator">=</span><span class="token plain"> </span><span class="token class-name">JsonParser</span><span class="token punctuation">.</span><span class="token constant">DEFAULT</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token string">&quot;123M&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token plain">  </span><span class="token comment">// 123MB</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p>New/modified methods on  <del>ConfigFile</del>:</p>
+<ul>
+<li><del>ConfigFile.put(String,String,String,boolean)</del></li>
+<li><del>ConfigFile.put(String,String,Object,Serializer,boolean,boolean)</del></li>
+<li><del>ConfigFile.getObject(String,Type,Type...)</del></li>
+<li><del>ConfigFile.getObject(String,Parser,Type,Type...)</del></li>
+<li><del>ConfigFile.getObject(String,Class)</del></li>
+<li><del>ConfigFile.getObject(String,Parser,Class)</del></li>
+<li><del>ConfigFile.getObject(String,String,Type,Type...)</del></li>
+<li><del>ConfigFile.getObject(String,String,Parser,Type,Type...)</del></li>
+<li><del>ConfigFile.getObject(String,String,Class)</del></li>
+<li><del>ConfigFile.getObject(String,String,Parser,Class)</del></li>
+<li><del>ConfigFile.getObjectWithDefault(String,Object,Type,Type...)</del></li>
+<li><del>ConfigFile.getObjectWithDefault(String,Parser,Object,Type,Type...)</del></li>
+<li><del>ConfigFile.getObjectWithDefault(String,Object,Class)</del></li>
+<li><del>ConfigFile.getObjectWithDefault(String,Parser,Object,Class)</del></li>
+</ul>
+</li>
+<li>
+<p>New ability to interact with config file sections with proxy interfaces with new method
+<del>ConfigFile.getSectionAsInterface(String,Class)</del>.</p>
+</li>
+<li>
+<p><del>@BeanProperty</del> annotation can now be applied to getters and setters defined on interfaces.</p>
+</li>
+<li>
+<p>New methods on <a href="/docs/apidocs/org/apache/juneau/serializer/SerializerSession.html">SerializerSession</a> and <a href="/docs/apidocs/org/apache/juneau/parser/ParserSession.html">ParserSession</a> for retrieving context and runtime-override properties:</p>
+<ul>
+<li><del>Session.getProperty(String)</del></li>
+<li><del>Session.getProperty(String,String)</del></li>
+<li><del>Session.getProperty(Class,String)</del></li>
+<li><del>Session.getProperty(Class,String,Object)</del></li>
+</ul>
+</li>
+<li>
+<p>New <del>PartSerializer</del> interface particularly tailored to HTTP headers, query parameters, form-data parameters,
+and path variables.
+Allows easy user-defined serialization of these objects.
+The interface can be used in the following locations:</p>
+<ul>
+<li><del>Builder.partSerializer(Class)</del></li>
+<li><del>Path.serializer</del></li>
+<li><del>Query.serializer</del></li>
+<li><del>QueryIfNE.serializer</del></li>
+<li><del>FormData.serializer</del></li>
+<li><del>FormDataIfNE.serializer</del></li>
+<li><del>Header.serializer</del></li>
+<li><del>HeaderIfNE.serializer</del></li>
+</ul>
+</li>
+<li>
+<p>Across-the-board improvements to the URI-resolution support (i.e. how URIs get serialized).</p>
+<ul>
+<li>
+<p>New support for resolving URIs with the following newly-recognized protocols:</p>
+<ul>
+<li><code>&quot;context:/...&quot;</code> - Relative to context-root of the application.</li>
+<li><code>&quot;servlet:/...&quot;</code> - Relative to the servlet URI.</li>
+<li><code>&quot;request:/...&quot;</code> - Relative to the request URI.</li>
+</ul>
+<p>For example, currently we define HTML page links using variables and servlet-relative URIs...</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token plain">pages</span><span class="token operator">=</span><span class="token string">&quot;{up:&#x27;$R{requestParentURI}&#x27;, options:&#x27;?method=OPTIONS&#x27;, upload:&#x27;upload&#x27;}&quot;</span><br></span></code></pre></div></div>
+<p>With these new protocols, we can define them like so:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token plain">links</span><span class="token operator">=</span><span class="token string">&quot;{top:&#x27;context:/&#x27;, up:&#x27;request:/..&#x27; ,options:&#x27;servlet:/?method=OPTIONS&#x27;, upload:&#x27;servlet:/upload&#x27;}&quot;</span><br></span></code></pre></div></div>
+<p>The old method of using variables and servlet-relative URIs will still be supported but using these new
+protocols should (hopefully) be easier to understand.
+These protocols work on all serialized URL and URI objects, as well as classes and properties annotated with
+<del>@URI</del>.</p>
+</li>
+<li>
+<p>New classes:</p>
+<ul>
+<li><a href="/docs/apidocs/org/apache/juneau/UriContext.html">UriContext</a></li>
+<li><a href="/docs/apidocs/org/apache/juneau/UriRelativity.html">UriRelativity</a></li>
+<li><a href="/docs/apidocs/org/apache/juneau/UriResolution.html">UriResolution</a></li>
+<li><a href="/docs/apidocs/org/apache/juneau/UriResolver.html">UriResolver</a></li>
+</ul>
+</li>
+<li>
+<p>New configuration properties:</p>
+<ul>
+<li><del>SerializerContext.SERIALIZER_uriContext</del></li>
+<li><del>SerializerContext.SERIALIZER_uriRelativity</del></li>
+<li><del>SerializerContext.SERIALIZER_uriResolution</del></li>
+<li><del>SerializerContext.SERIALIZER_maxIndent</del></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>New annotation property: <del>@BeanProperty(value)</del>.
+The following two annotations are considered equivalent:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token annotation punctuation">@BeanProperty</span><span class="token punctuation">(</span><span class="token plain">name</span><span class="token operator">=</span><span class="token string">&quot;foo&quot;</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token annotation punctuation">@BeanProperty</span><span class="token punctuation">(</span><span class="token string">&quot;foo&quot;</span><span class="token punctuation">)</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p>Fixed a race condition in ClassMeta.</p>
+</li>
+<li>
+<p><code>URLENC_paramFormat</code> has been moved to <del>UonSerializer.UON_paramFormat</del>, and the UON/URL-Encoding serializers
+will now always serialize all values as plain text.
+This means that arrays and maps are converted to simple comma-delimited lists.</p>
+</li>
+<li>
+<p>Listener APIs added to serializers and parsers:</p>
+<ul>
+<li><a href="/docs/apidocs/org/apache/juneau/serializer/SerializerListener.html">SerializerListener</a></li>
+<li><a href="/docs/apidocs/org/apache/juneau/serializer/Serializer.Builder.html#listener(Class)">Serializer.Builder.listener(Class)</a></li>
+<li><del>@RestResource(serializerListener)</del></li>
+<li><del>RestConfig.serializerListener(Class)</del></li>
+<li><a href="/docs/apidocs/org/apache/juneau/parser/ParserListener.html">ParserListener</a></li>
+<li><a href="/docs/apidocs/org/apache/juneau/parser/Parser.Builder.html#listener(Class)">Parser.Builder.listener(Class)</a></li>
+<li><del>@RestResource(parserListener)</del></li>
+<li><del>RestConfig.parserListener(Class)</del></li>
+<li><del>Builder.listeners(Class,Class)</del></li>
+</ul>
+</li>
+<li>
+<p>The <del>BEAN_debug</del> flag will now capture parser input and make it available through the
+<del>ParserSession.getInputAsString()</del> method so that it can be used in the listeners.</p>
+</li>
+<li>
+<p>Significant new functionality introduced to the HTML serializer.
+Lots of new options for customizing the HTML output.</p>
+<ul>
+<li>
+<p>New <a href="/docs/apidocs/org/apache/juneau/html/annotation/Html.html#render()">@Html(render)</a> annotation and <a href="/docs/apidocs/org/apache/juneau/html/HtmlRender.html">HtmlRender</a> class that allows you to customize the HTML output and CSS style on bean properties:</p>
+<p><img decoding="async" loading="lazy" alt="HTML Render Example" src="/assets/images/ReleaseNotes.630.1-5ab4e6126958c2acfddd2a4976ef008e.png" width="522" height="282" class="img_ev3q"></p>
+<p>Annotation can be applied to POJO classes and bean properties.</p>
+</li>
+<li>
+<p>Several new properties for customizing parts of the HTML page:</p>
+<ul>
+<li><del>HtmlDocSerializerContext.HTMLDOC_title</del></li>
+<li><del>HtmlDocSerializerContext.HTMLDOC_description</del></li>
+<li><del>HtmlDocSerializerContext.HTMLDOC_branding</del></li>
+<li><del>HtmlDocSerializerContext.HTMLDOC_header</del></li>
+<li><del>HtmlDocSerializerContext.HTMLDOC_nav</del></li>
+<li><del>HtmlDocSerializerContext.HTMLDOC_aside</del></li>
+<li><del>HtmlDocSerializerContext.HTMLDOC_footer</del></li>
+<li><del>HtmlDocSerializerContext.HTMLDOC_noResultsMessage</del></li>
+<li><del>HtmlDocSerializerContext.HTMLDOC_cssUrl</del></li>
+<li><del>HtmlDocSerializerContext.HTMLDOC_css</del></li>
+<li><del>HtmlDocSerializerContext.HTMLDOC_template</del></li>
+</ul>
+</li>
+<li>
+<p>New interface <a href="/docs/apidocs/org/apache/juneau/html/HtmlDocTemplate.html">HtmlDocTemplate</a> that allows full
+control over rendering of HTML produced by <a href="/docs/apidocs/org/apache/juneau/html/HtmlDocSerializer.html">HtmlDocSerializer</a>.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="/docs/apidocs/org/apache/juneau/annotation/NameProperty.html">@NameProperty</a> and <a href="/docs/apidocs/org/apache/juneau/annotation/ParentProperty.html">@ParentProperty</a> can now be applied to fields.</p>
+</li>
+<li>
+<p>New properties on <a href="/docs/apidocs/org/apache/juneau/BeanContext.html">BeanContext</a>:</p>
+<ul>
+<li><del>BEAN_includeProperties</del></li>
+<li><del>BEAN_excludeProperties</del></li>
+</ul>
+</li>
+<li>
+<p>New annotation property: <del>@BeanProperty(format)</del>.</p>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="orgapachejuneaurest">org.apache.juneau.rest<a href="#orgapachejuneaurest" class="hash-link" aria-label="Direct link to org.apache.juneau.rest" title="Direct link to org.apache.juneau.rest">​</a></h3>
+<ul>
+<li>
+<p>MAJOR enhancements made to the REST API.</p>
+</li>
+<li>
+<p>The <a href="/docs/apidocs/org/apache/juneau/rest/RestRequest.html">RestRequest</a> class functionality has been broken up
+into the following functional pieces to reduce its complexity:</p>
+<ul>
+<li><del>RestRequest.getBody()</del> - The request body.</li>
+<li><a href="/docs/apidocs/org/apache/juneau/rest/RestRequest.html#getHeaders()">RestRequest.getHeaders()</a> - The request
+headers.</li>
+<li><del>RestRequest.getQuery()</del> - The request query parameters.</li>
+<li><del>RestRequest.getFormData()</del> - The request form data parameters.</li>
+<li><del>RestRequest.getPathMatch()</del> - The path variables and remainder.</li>
+</ul>
+<p>The following classes have been introduced:</p>
+<ul>
+<li><del>RequestBody</del></li>
+<li><del>RequestHeaders</del></li>
+<li><del>RequestQuery</del></li>
+<li><del>RequestFormData</del></li>
+<li><del>RequestPath</del></li>
+</ul>
+</li>
+<li>
+<p>The un-annotated parameter types that can be passed in through REST Java methods has been significantly expanded.
+For reference, the previous supported types were:</p>
+<ul>
+<li><a href="/docs/apidocs/org/apache/juneau/rest/RestRequest.html">RestRequest</a> - The request object.</li>
+<li><del>javax.servlet.http.HttpServletRequest</del> - The superclass of <code>RestRequest</code>.</li>
+<li><a href="/docs/apidocs/org/apache/juneau/rest/RestResponse.html">RestResponse</a> - The response object.</li>
+<li><del>javax.servlet.http.HttpServletResponse</del> - The superclass of <code>RestResponse</code>.</li>
+</ul>
+<p>The new supported types are:</p>
+<ul>
+<li><del>Accept</del></li>
+<li><del>AcceptCharset</del></li>
+<li><del>AcceptEncoding</del></li>
+<li><del>AcceptLanguage</del></li>
+<li><del>Authorization</del></li>
+<li><del>CacheControl</del></li>
+<li><del>Connection</del></li>
+<li><del>ContentLength</del></li>
+<li><del>ContentType</del></li>
+<li><del>Date</del></li>
+<li><del>Expect</del></li>
+<li><del>From</del></li>
+<li><del>Host</del></li>
+<li><del>IfMatch</del></li>
+<li><del>IfModifiedSince</del></li>
+<li><del>IfNoneMatch</del></li>
+<li><del>IfRange</del></li>
+<li><del>IfUnmodifiedSince</del></li>
+<li><del>MaxForwards</del></li>
+<li><del>Pragma</del></li>
+<li><del>ProxyAuthorization</del></li>
+<li><del>Range</del></li>
+<li><del>Referer</del></li>
+<li><del>TE</del></li>
+<li><del>UserAgent</del></li>
+<li><del>Upgrade</del></li>
+<li><del>Via</del></li>
+<li><del>Warning</del></li>
+<li><a href="/docs/apidocs/java/util/TimeZone.html">TimeZone</a></li>
+<li><a href="/docs/apidocs/java/io/InputStream.html">InputStream</a></li>
+<li><del>javax.servlet.ServletInputStream</del></li>
+<li><a href="/docs/apidocs/java/io/Reader.html">Reader</a></li>
+<li><a href="/docs/apidocs/java/io/OutputStream.html">OutputStream</a></li>
+<li><del>javax.servlet.ServletOutputStream</del></li>
+<li><a href="/docs/apidocs/java/io/Writer.html">Writer</a></li>
+<li><a href="/docs/apidocs/java/util/ResourceBundle.html">ResourceBundle</a> - Client-localized resource bundle.</li>
+<li><del>MessageBundle</del> - A resource bundle with additional features.</li>
+<li><a href="/docs/apidocs/java/util/Locale.html">Locale</a> - Client locale.</li>
+<li><del>RequestHeaders</del> - API for accessing request headers.</li>
+<li><del>RequestQuery</del> - API for accessing request query parameters.</li>
+<li><del>RequestFormData</del> - API for accessing request form data.</li>
+<li><del>RequestPath</del> - API for accessing path variables.</li>
+<li><del>RequestBody</del> - API for accessing request body.</li>
+<li><a href="/docs/apidocs/org/apache/juneau/http/HttpMethod.html">HttpMethod</a> - The method name matched (when using
+<code>@RestMethod(name=&quot;*&quot;)</code>)</li>
+<li><a href="/docs/apidocs/java/util/logging/Logger.html">Logger</a> - The logger to use for logging.</li>
+<li><del>JuneauLogger</del> - Logger with additional features.</li>
+<li><a href="/docs/apidocs/org/apache/juneau/rest/RestContext.html">RestContext</a> - The resource read-only context.</li>
+<li><a href="/docs/apidocs/org/apache/juneau/parser/Parser.html">Parser</a> - The parser matching the request content type.</li>
+<li><a href="/docs/apidocs/org/apache/juneau/dto/swagger/Swagger.html">Swagger</a> - The auto-generated Swagger doc.</li>
+<li><del>ConfigFile</del> - The external config file for the resource.</li>
+</ul>
+<p>So, for example...</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token comment">/** Old way */</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain"></span><span class="token annotation punctuation">@RestMethod</span><span class="token punctuation">(</span><span class="token plain">name</span><span class="token operator">=</span><span class="token string">&quot;*&quot;</span><span class="token punctuation">,</span><span class="token plain"> path</span><span class="token operator">=</span><span class="token string">&quot;/example1/{a1}/{a2}/{a3}/*&quot;</span><span class="token punctuation">)</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain"></span><span class="token keyword">public</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> </span><span class="token function">example1</span><span class="token punctuation">(</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Method</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> method</span><span class="token punctuation">,</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Path</span><span class="token punctuation">(</span><span class="token string">&quot;a1&quot;</span><span class="token punctuation">)</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> a1</span><span class="token punctuation">,</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Path</span><span class="token punctuation">(</span><span class="token string">&quot;a2&quot;</span><span class="token punctuation">)</span><span class="token plain"> </span><span class="token keyword">int</span><span class="token plain"> a2</span><span class="token punctuation">,</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Path</span><span class="token punctuation">(</span><span class="token string">&quot;a3&quot;</span><span class="token punctuation">)</span><span class="token plain"> </span><span class="token class-name">UUID</span><span class="token plain"> a3</span><span class="token punctuation">,</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Query</span><span class="token punctuation">(</span><span class="token string">&quot;p1&quot;</span><span class="token punctuation">)</span><span class="token plain"> </span><span class="token keyword">int</span><span class="token plain"> p1</span><span class="token punctuation">,</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Query</span><span class="token punctuation">(</span><span class="token string">&quot;p2&quot;</span><span class="token punctuation">)</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> p2</span><span class="token punctuation">,</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Query</span><span class="token punctuation">(</span><span class="token string">&quot;p3&quot;</span><span class="token punctuation">)</span><span class="token plain"> </span><span class="token class-name">UUID</span><span class="token plain"> p3</span><span class="token punctuation">,</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Header</span><span class="token punctuation">(</span><span class="token string">&quot;Accept-Language&quot;</span><span class="token punctuation">)</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> lang</span><span class="token punctuation">,</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Header</span><span class="token punctuation">(</span><span class="token string">&quot;Accept&quot;</span><span class="token punctuation">)</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> accept </span><br></span><span class="token-line"><span class="token plain"></span><span class="token punctuation">)</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token comment">/** New way */</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain"></span><span class="token annotation punctuation">@RestMethod</span><span class="token punctuation">(</span><span class="token plain">name</span><span class="token operator">=</span><span class="token string">&quot;*&quot;</span><span class="token punctuation">,</span><span class="token plain"> path</span><span class="token operator">=</span><span class="token string">&quot;/example2/{a1}/{a2}/{a3}/*&quot;</span><span class="token punctuation">)</span><span class="token plain"> </span><br></span><span class="token-line"><span class="token plain"></span><span class="token keyword">public</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> </span><span class="token function">example2</span><span class="token punctuation">(</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token class-name">HttpMethod</span><span class="token plain"> httpMethod</span><span class="token punctuation">,</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token class-name">RequestPathParams</span><span class="token plain"> pathParams</span><span class="token punctuation">,</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token class-name">RequestQuery</span><span class="token plain"> query</span><span class="token punctuation">,</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token class-name">AcceptLanguage</span><span class="token plain"> acceptLanguage</span><span class="token punctuation">,</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token class-name">Accept</span><span class="token plain"> accept</span><br></span><span class="token-line"><span class="token plain"></span><span class="token punctuation">)</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p>A new annotation <del>@RestResource(paramResolvers)</del> that allows you to define your own custom Java method parameter
+resolvers.</p>
+</li>
+<li>
+<p>Fixed bug where Writer returned by <a href="/docs/apidocs/org/apache/juneau/rest/RestResponse.html#getWriter()">RestResponse.getWriter()</a> was not being flushed automatically at the end of the HTTP call.</p>
+</li>
+<li>
+<p>New annotations added to <del>@RestMethod</del>:</p>
+<ul>
+<li><del>RestMethod.defaultQuery()</del></li>
+<li><del>RestMethod.defaultFormData()</del></li>
+<li><del>bpIncludes()</del></li>
+<li><del>bpExcludes()</del></li>
+</ul>
+</li>
+<li>
+<p>Default values on header, query, and form-data annotations:</p>
+<ul>
+<li><del>@Header(def)</del> - Default header value.</li>
+<li><del>@Query(def)</del> - Default query parameter value.</li>
+<li><del>@FormData(def)</del> - Default form data parameter value.</li>
+</ul>
+</li>
+<li>
+<p>New attributes on <del>@RestResource</del>:</p>
+<ul>
+<li><del>serializerListener()</del></li>
+<li><del>parserListener()</del></li>
+<li><del>widgets()</del></li>
+<li><del>swagger()</del></li>
+<li><del>htmldoc()</del></li>
+</ul>
+</li>
+<li>
+<p>New attributes on <del>@RestMethod</del>:</p>
+<ul>
+<li><del>widgets()</del></li>
+<li><del>RestMethod.swagger()</del></li>
+<li><del>RestMethod.htmldoc()</del></li>
+</ul>
+</li>
+<li>
+<p>New string vars:</p>
+<ul>
+<li><a href="/docs/apidocs/org/apache/juneau/rest/vars/UrlVar.html">UrlVar</a> - Resolve <code>&quot;$U{...}&quot;</code> variables to URLs.</li>
+<li><del>WidgetVar</del> - Resolve <code>&quot;$W{...}&quot;</code> variables to widget contents.</li>
+</ul>
+</li>
+<li>
+<p>New methods on  <del>RestConfig</del>:</p>
+<ul>
+<li><del>setHtmlTitle(String)</del></li>
+<li><del>setHtmlDescription(String)</del></li>
+<li><del>setHtmlBranding(String)</del></li>
+<li><del>setHtmlHeader(String)</del></li>
+<li><del>setHtmlLinks(String)</del></li>
+<li><del>setHtmlNav(String)</del></li>
+<li><del>setHtmlAside(String)</del></li>
+<li><del>setHtmlFooter(String)</del></li>
+<li><del>setHtmlCss(String)</del></li>
+<li><del>setHtmlCssUrl(String)</del></li>
+<li><del>setHtmlNoWrap(boolean)</del></li>
+<li><del>setHtmlNoResultsMessage(String)</del></li>
+<li><del>setHtmlTemplate(Class)</del></li>
+<li><del>setHtmlTemplate(HtmlDocTemplate)</del></li>
+<li><del>addWidget(Class)</del></li>
+</ul>
+</li>
+<li>
+<p>New methods on <a href="/docs/apidocs/org/apache/juneau/rest/RestResponse.html">RestResponse</a>:</p>
+<ul>
+<li><del>setHtmlTitle(Object)</del></li>
+<li><del>setHtmlDescription(Object)</del></li>
+<li><del>setHtmlBranding(Object)</del></li>
+<li><del>setHtmlHeader(Object)</del></li>
+<li><del>setHtmlLinks(Object)</del></li>
+<li><del>setHtmlNav(Object)</del></li>
+<li><del>setHtmlAside(Object)</del></li>
+<li><del>setHtmlFooter(Object)</del></li>
+<li><del>setHtmlCss(Object)</del></li>
+<li><del>setHtmlCssUrl(Object)</del></li>
+<li><del>setHtmlNoWrap(boolean)</del></li>
+<li><del>setHtmlNoResultsMessage(Object)</del></li>
+<li><del>setHtmlTemplate(Class)</del></li>
+<li><del>setHtmlTemplate(HtmlDocTemplate)</del></li>
+</ul>
+</li>
+<li>
+<p><code>&amp;plainText=true</code> parameter now works on byte-based serializers by converting the output to hex.</p>
+</li>
+<li>
+<p>New classes for widget support:</p>
+<ul>
+<li><a href="/docs/apidocs/org/apache/juneau/rest/widget/Widget.html">Widget</a></li>
+<li><del>PoweredByJuneauWidget</del></li>
+<li><del>ContentTypeLinksColumnWidget</del></li>
+<li><del>ContentTypeLinksRowWidget</del></li>
+<li><del>QueryWidget</del></li>
+</ul>
+</li>
+<li>
+<p><code>devops.css</code> cleaned up.</p>
+</li>
+<li>
+<p>Removed a bunch of URL-related methods from <a href="/docs/apidocs/org/apache/juneau/rest/RestRequest.html">RestRequest</a>.
+These all have equivalents in <a href="/docs/apidocs/org/apache/juneau/rest/RestRequest.html#getUriContext()">RestRequest.getUriContext()</a>.</p>
+</li>
+<li>
+<p>New annotation attributes:</p>
+<ul>
+<li><a href="/docs/apidocs/org/apache/juneau/http/annotation/Query.html#name()">@Query(name)</a></li>
+<li><a href="/docs/apidocs/org/apache/juneau/http/annotation/FormData.html#name()">@FormData(name)</a></li>
+<li><a href="/docs/apidocs/org/apache/juneau/http/annotation/Header.html#name()">@Header(name)</a></li>
+<li><a href="/docs/apidocs/org/apache/juneau/http/annotation/Path.html#name()">@Path(name)</a></li>
+<li><a href="/docs/apidocs/org/apache/juneau/http/annotation/HasQuery.html#name()">@HasQuery(name)</a></li>
+<li><a href="/docs/apidocs/org/apache/juneau/http/annotation/HasFormData.html#name()">@HasFormData(name)</a></li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="orgapachejuneaurestclient">org.apache.juneau.rest.client<a href="#orgapachejuneaurestclient" class="hash-link" aria-label="Direct link to org.apache.juneau.rest.client" title="Direct link to org.apache.juneau.rest.client">​</a></h3>
+<ul>
+<li>
+<p>New <del>Path</del> annotation for specifying path variables on remoteable interfaces.</p>
+</li>
+<li>
+<p>New <del>@RequestBean</del> annotation for specifying beans with remoteable annotations defined on properties.</p>
+</li>
+<li>
+<p>The following annotations (and related methods on RestCall) can now take <code>NameValuePairs</code> and beans as input when
+using <code>&quot;*&quot;</code> as the name.
+<del>FormData</del>,  <del>FormDataIfNE</del>,  <del>Query</del>,  <del>QueryIfNE</del>,  <del>Header</del>,  <del>HeaderIfNE</del></p>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="orgapachejuneaumicroservice">org.apache.juneau.microservice<a href="#orgapachejuneaumicroservice" class="hash-link" aria-label="Direct link to org.apache.juneau.microservice" title="Direct link to org.apache.juneau.microservice">​</a></h3>
+<p><em>No changes listed in this release.</em></p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="orgapachejuneauexamplesrest">org.apache.juneau.examples.rest<a href="#orgapachejuneauexamplesrest" class="hash-link" aria-label="Direct link to org.apache.juneau.examples.rest" title="Direct link to org.apache.juneau.examples.rest">​</a></h3>
+<ul>
+<li>
+<p>Many code enhancements made to examples to reflect new functionality.</p>
+</li>
+<li>
+<p>All pages now render aside comments to help explain what feature they&#x27;re trying to explain using the new features
+that allow you to customize various elements of the page.</p>
+<p><img decoding="async" loading="lazy" alt="Release Notes 6.3.0 Example" src="/assets/images/ReleaseNotes.630.2-21c5a98511f7fac4cf456c4625d6a86a.png" width="1732" height="1342" class="img_ev3q"></p>
+</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/apache/juneau/tree/main/juneau-docs-poc/juneau-documentation/docs/release-notes/6.3.0.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/release-notes/6.3.1"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">6.3.1</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/release-notes/6.2.0"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">6.2.0</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#orgapachejuneau" class="table-of-contents__link toc-highlight">org.apache.juneau</a></li><li><a href="#orgapachejuneaurest" class="table-of-contents__link toc-highlight">org.apache.juneau.rest</a></li><li><a href="#orgapachejuneaurestclient" class="table-of-contents__link toc-highlight">org.apache.juneau.rest.client</a></li><li><a href="#orgapachejuneaumicroservice" class="table-of-contents__link toc-highlight">org.apache.juneau.microservice</a></li><li><a href="#orgapachejuneauexamplesrest" class="table-of-contents__link toc-highlight">org.apache.juneau.examples.rest</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/docs/intro">Tutorial</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Stack Overflow<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://discordapp.com/invite/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discord<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://x.com/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">X<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/blog">Blog</a></li><li class="footer__item"><a href="https://github.com/facebook/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 My Project, Inc. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
