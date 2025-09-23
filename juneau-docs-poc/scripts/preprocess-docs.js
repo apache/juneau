@@ -23,7 +23,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const glob = require('glob');
 
 // Configuration
 const JUNEAU_VERSION = '9.0.1';
@@ -83,21 +82,40 @@ function processFile(filePath) {
 }
 
 /**
+ * Recursively find all .md files in a directory
+ */
+function findMarkdownFiles(dir, fileList = []) {
+  const files = fs.readdirSync(dir);
+  
+  for (const file of files) {
+    const filePath = path.join(dir, file);
+    const stat = fs.statSync(filePath);
+    
+    if (stat.isDirectory()) {
+      findMarkdownFiles(filePath, fileList);
+    } else if (file.endsWith('.md')) {
+      fileList.push(filePath);
+    }
+  }
+  
+  return fileList;
+}
+
+/**
  * Main preprocessing function
  */
 function preprocessDocs() {
   const docsDir = path.join(__dirname, '../docs');
   
   // Find all markdown files
-  const markdownFiles = glob.sync('**/*.md', { cwd: docsDir });
+  const markdownFiles = findMarkdownFiles(docsDir);
   
   console.log(`📁 Found ${markdownFiles.length} markdown files`);
   
   let processedCount = 0;
   
-  for (const file of markdownFiles) {
-    const fullPath = path.join(docsDir, file);
-    if (processFile(fullPath)) {
+  for (const filePath of markdownFiles) {
+    if (processFile(filePath)) {
       processedCount++;
     }
   }
