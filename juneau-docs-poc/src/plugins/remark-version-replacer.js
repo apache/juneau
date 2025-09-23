@@ -33,23 +33,47 @@ function remarkVersionReplacer(options = {}) {
   console.log(`🔧 remarkVersionReplacer initialized with version: ${version}, apiDocsUrl: ${apiDocsUrl}`);
   
   return (tree, file) => {
-    console.log(`📄 Processing file: ${file.path || 'unknown'}`);
+    const fileName = file.path || 'unknown';
+    console.log(`📄 Processing file: ${fileName}`);
     
-    // Replace placeholders in the entire file content before parsing
-    if (file.contents) {
-      const originalContent = file.contents;
-      const hasApiDocs = originalContent.includes('{{API_DOCS}}');
-      const hasVersion = originalContent.includes('{{JUNEAU_VERSION}}');
+    // Try different possible content properties
+    const content = file.contents || file.value || file.data;
+    
+    // Show content sample for files that should have placeholders
+    if (fileName.includes('10.01.00.JuneauRestClientBasics')) {
+      console.log(`🔍 SPECIFIC FILE DEBUG - ${fileName}:`);
+      console.log(`📋 File object keys: ${Object.keys(file).join(', ')}`);
+      console.log(`📋 Content type: ${typeof content}`);
+      if (content) {
+        const contentStr = String(content);
+        console.log(`📋 Content length: ${contentStr.length}`);
+        console.log(`📋 First 200 chars: ${contentStr.substring(0, 200)}`);
+        console.log(`📋 Contains {{API_DOCS}}: ${contentStr.includes('{{API_DOCS}}')}`);
+        console.log(`📋 Contains API_DOCS (no braces): ${contentStr.includes('API_DOCS')}`);
+        console.log(`📋 Contains {API_DOCS}: ${contentStr.includes('{API_DOCS}')}`);
+      }
+    }
+    
+    if (content) {
+      const hasApiDocs = content.includes('{{API_DOCS}}');
+      const hasVersion = content.includes('{{JUNEAU_VERSION}}');
       
       if (hasApiDocs || hasVersion) {
         console.log(`🎯 Found placeholders in ${file.path || 'unknown'}: API_DOCS=${hasApiDocs}, VERSION=${hasVersion}`);
       }
       
-      file.contents = replaceInString(file.contents, version, apiDocsUrl);
+      const replacedContent = replaceInString(content, version, apiDocsUrl);
       
-      const stillHasPlaceholders = file.contents.includes('{{API_DOCS}}') || file.contents.includes('{{JUNEAU_VERSION}}');
+      // Update the content property we found
+      if (file.contents) file.contents = replacedContent;
+      if (file.value) file.value = replacedContent;
+      if (file.data) file.data = replacedContent;
+      
+      const stillHasPlaceholders = replacedContent.includes('{{API_DOCS}}') || replacedContent.includes('{{JUNEAU_VERSION}}');
       if (stillHasPlaceholders) {
         console.log(`⚠️  WARNING: Still has unreplaced placeholders in ${file.path || 'unknown'}`);
+      } else if (hasApiDocs || hasVersion) {
+        console.log(`✅ Successfully replaced placeholders in ${file.path || 'unknown'}`);
       }
     }
     // No need for AST traversal since string replacement handles all cases

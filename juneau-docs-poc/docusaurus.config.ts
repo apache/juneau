@@ -18,8 +18,6 @@ import remarkJuneauLinks from './src/plugins/remark-juneau-links';
 const remarkVersionReplacer = require('./src/plugins/remark-version-replacer');
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
-console.log('🚀 Docusaurus config loading...');
-console.log('📦 remarkVersionReplacer loaded:', typeof remarkVersionReplacer);
 
 const config: Config = {
   title: 'Apache Juneau',
@@ -69,28 +67,25 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/apache/juneau/tree/main/juneau-docs-poc/juneau-documentation/',
-          remarkPlugins: (() => {
-            console.log('🔧 Setting up remark plugins...');
-            return [
-              [remarkJuneauLinks, {
-                packageAbbreviations: {
-                  'oaj': 'org.apache.juneau',
-                  'oajr': 'org.apache.juneau.rest',
-                  'oajrc': 'org.apache.juneau.rest.client',
-                  'oajrs': 'org.apache.juneau.rest.server',
-                  'oajrss': 'org.apache.juneau.rest.server.springboot',
-                  'oajrm': 'org.apache.juneau.rest.mock',
-                  'oajmc': 'org.apache.juneau.microservice.core',
-                  'oajmj': 'org.apache.juneau.microservice.jetty',
-                },
-                javadocBaseUrl: '../apidocs'
-              }],
-              [remarkVersionReplacer, {
-                version: '9.0.1',
-                apiDocsUrl: '../apidocs'
-              }]
-            ];
-          })()
+          remarkPlugins: [
+            [remarkJuneauLinks, {
+              packageAbbreviations: {
+                'oaj': 'org.apache.juneau',
+                'oajr': 'org.apache.juneau.rest',
+                'oajrc': 'org.apache.juneau.rest.client',
+                'oajrs': 'org.apache.juneau.rest.server',
+                'oajrss': 'org.apache.juneau.rest.server.springboot',
+                'oajrm': 'org.apache.juneau.rest.mock',
+                'oajmc': 'org.apache.juneau.microservice.core',
+                'oajmj': 'org.apache.juneau.microservice.jetty',
+              },
+              javadocBaseUrl: '../apidocs'
+            }],
+            [remarkVersionReplacer, {
+              version: '9.0.1',
+              apiDocsUrl: '../apidocs'
+            }]
+          ]
         },
         blog: {
           showReadingTime: true,
