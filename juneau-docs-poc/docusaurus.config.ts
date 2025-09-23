@@ -15,7 +15,6 @@ import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import remarkJuneauLinks from './src/plugins/remark-juneau-links';
-const remarkVersionReplacer = require('./src/plugins/remark-version-replacer');
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -68,10 +67,6 @@ const config: Config = {
           editUrl:
             'https://github.com/apache/juneau/tree/main/juneau-docs-poc/juneau-documentation/',
           remarkPlugins: [
-            [remarkVersionReplacer, {
-              version: '9.0.1',
-              apiDocsUrl: '../apidocs'
-            }],
             [remarkJuneauLinks, {
               packageAbbreviations: {
                 'oaj': 'org.apache.juneau',
