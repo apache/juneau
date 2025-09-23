@@ -17,18 +17,16 @@ name: Deploy Documentation
 on:
   push:
     branches: [master]
-  pull_request:
-    branches: [master]
+    paths:
+      - 'juneau-docs-poc/**'
+      - '.github/workflows/deploy-docs.yml'
 
 permissions:
-  contents: write  # Need write access to push to gh-pages
+  contents: write  # Need write access to push to asf-staging
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
-    # Only deploy on main branch, not PRs
-    if: github.ref == 'refs/heads/master'
     
     steps:
     - name: Checkout
