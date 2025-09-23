@@ -39,14 +39,15 @@ function remarkVersionReplacer(options = {}) {
     const fileName = file.path || 'unknown';
     console.log(`📄 Processing file: ${fileName}`);
     
-    // Try different possible content properties
-    const content = file.contents || file.value || file.data;
+    // Force update the primary content property that MDX uses
+    const content = file.value || file.contents || file.data || String(tree);
     
     // Show content sample for files that should have placeholders
     if (fileName.includes('10.01.00.JuneauRestClientBasics')) {
       console.log(`🔍 SPECIFIC FILE DEBUG - ${fileName}:`);
       console.log(`📋 File object keys: ${Object.keys(file).join(', ')}`);
       console.log(`📋 Content type: ${typeof content}`);
+      console.log(`📋 Content source: ${file.value ? 'file.value' : file.contents ? 'file.contents' : file.data ? 'file.data' : 'tree'}`);
       if (content) {
         const contentStr = String(content);
         console.log(`📋 Content length: ${contentStr.length}`);
@@ -67,10 +68,10 @@ function remarkVersionReplacer(options = {}) {
       
       const replacedContent = replaceInString(content, version, apiDocsUrl);
       
-      // Update the content property we found
-      if (file.contents) file.contents = replacedContent;
-      if (file.value) file.value = replacedContent;
-      if (file.data) file.data = replacedContent;
+      // Force update the primary content property that MDX uses (prioritize 'value')
+      file.value = replacedContent;
+      if (file.contents !== undefined) file.contents = replacedContent;
+      if (file.data !== undefined) file.data = replacedContent;
       
       const stillHasPlaceholders = replacedContent.includes('{{API_DOCS}}') || replacedContent.includes('{{JUNEAU_VERSION}}');
       

@@ -68,6 +68,10 @@ const config: Config = {
           editUrl:
             'https://github.com/apache/juneau/tree/main/juneau-docs-poc/juneau-documentation/',
           remarkPlugins: [
+            [remarkVersionReplacer, {
+              version: '9.0.1',
+              apiDocsUrl: '../apidocs'
+            }],
             [remarkJuneauLinks, {
               packageAbbreviations: {
                 'oaj': 'org.apache.juneau',
@@ -80,10 +84,6 @@ const config: Config = {
                 'oajmj': 'org.apache.juneau.microservice.jetty',
               },
               javadocBaseUrl: '../apidocs'
-            }],
-            [remarkVersionReplacer, {
-              version: '9.0.1',
-              apiDocsUrl: '../apidocs'
             }]
           ]
         },
