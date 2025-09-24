@@ -18,7 +18,7 @@ on:
   push:
     branches: [master]
     paths:
-      - 'juneau-docs-poc/**'
+      - 'juneau-docs/**'
       - '.github/workflows/deploy-docs.yml'
 
 permissions:
@@ -37,23 +37,23 @@ jobs:
       with:
         node-version: '18'
         cache: 'npm'
-        cache-dependency-path: juneau-docs-poc/package-lock.json
+        cache-dependency-path: juneau-docs/package-lock.json
         
     - name: Install dependencies
       run: |
-        cd juneau-docs-poc
+        cd juneau-docs
         npm ci
         
     - name: Build Docusaurus
       run: |
-        cd juneau-docs-poc
+        cd juneau-docs
         npm run build
         
     - name: Deploy to staging branch
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./juneau-docs-poc/build
+        publish_dir: ./juneau-docs/build
         publish_branch: asf-staging  # Safe staging deployment
         user_name: 'github-actions[bot]'
         user_email: 'github-actions[bot]@users.noreply.github.com'
