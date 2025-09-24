@@ -7,7 +7,7 @@
 - [Wiki](https://github.com/apache/juneau/wiki) - Community documentation
 
 ### Documentation & Reports
-- [Javadocs](/javadocs/) - API documentation
+- [Javadocs](/site/apidocs/) - API documentation
 - [Maven Site](/site/) - Complete project reports
 - [Source Cross-Reference](/site/xref/) - Browsable source code
 - [Test Reports](/site/surefire-report/) - Unit test results

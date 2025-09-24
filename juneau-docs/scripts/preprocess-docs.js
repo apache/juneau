@@ -26,7 +26,7 @@ const path = require('path');
 
 // Configuration
 const VERSION_VALUE = '9.0.1';
-const API_DOCS_VALUE = '../apidocs';
+const API_DOCS_VALUE = '../site/apidocs';
 
 console.log('🔧 Starting Juneau docs preprocessing...');
 console.log(`📋 JUNEAU_VERSION: ${VERSION_VALUE}`);

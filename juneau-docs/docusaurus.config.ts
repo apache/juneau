@@ -26,7 +26,7 @@ const config: Config = {
   // Custom configuration variables
   customFields: {
     juneauVersion: '9.0.1',
-    apiDocsUrl: '../apidocs',
+    apiDocsUrl: '../site/apidocs',
   },
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -66,7 +66,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/apache/juneau/tree/main/juneau-docs/',
+            'https://github.com/apache/juneau/tree/master/juneau-docs/',
           remarkPlugins: [
             [remarkJuneauLinks, {
               packageAbbreviations: {
@@ -79,7 +79,7 @@ const config: Config = {
                 'oajmc': 'org.apache.juneau.microservice.core',
                 'oajmj': 'org.apache.juneau.microservice.jetty',
               },
-              javadocBaseUrl: '../apidocs'
+              javadocBaseUrl: '../site/apidocs'
             }]
           ]
         },
