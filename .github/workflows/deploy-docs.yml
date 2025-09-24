@@ -19,6 +19,11 @@ on:
     branches: [master]
     paths:
       - 'juneau-docs/**'
+      - 'juneau-core/**'
+      - 'juneau-rest/**'
+      - 'juneau-microservice/**'
+      - 'juneau-bean/**'
+      - 'juneau-examples/**'
       - '.github/workflows/deploy-docs.yml'
 
 permissions:
@@ -48,6 +53,24 @@ jobs:
       run: |
         cd juneau-docs
         npm run build
+        
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+        cache: 'maven'
+        
+    - name: Generate Maven Site
+      run: |
+        mvn clean site -DskipTests
+        
+    - name: Copy Maven Site to build directory
+      run: |
+        mkdir -p juneau-docs/build/site
+        cp -r target/site/* juneau-docs/build/site/
+        # Create direct javadocs access for backward compatibility
+        ln -s site/apidocs juneau-docs/build/javadocs
         
     - name: Deploy to staging branch
       uses: peaceiris/actions-gh-pages@v3

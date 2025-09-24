@@ -2,9 +2,16 @@
 
 ## Quick Links
 
+### Project Resources
 - [GitHub](https://github.com/apache/juneau) - Source code repository
 - [Wiki](https://github.com/apache/juneau/wiki) - Community documentation
-- [Javadocs](https://juneau.apache.org/site/apidocs-9.0.1/index.html) - API documentation
+
+### Documentation & Reports
+- [Javadocs](/javadocs/) - API documentation
+- [Maven Site](/site/) - Complete project reports
+- [Source Cross-Reference](/site/xref/) - Browsable source code
+- [Test Reports](/site/surefire-report/) - Unit test results
+- [Code Coverage](/site/jacoco/) - Test coverage reports
 
 ---
 
