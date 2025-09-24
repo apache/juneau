@@ -13,6 +13,9 @@
  ***************************************************************************************************************************
 -->
 
+> **⚠️ WORK IN PROGRESS**  
+> This README and documentation are currently being updated as part of our migration to Docusaurus. Some links may not work correctly yet. We're actively working to resolve these issues. For the most reliable documentation, please refer to the [official Apache Juneau website](https://juneau.apache.org/).
+
 # Apache Juneau
 
 [![Java CI](https://github.com/apache/juneau/actions/workflows/maven.yml/badge.svg)](https://github.com/apache/juneau/actions/workflows/maven.yml)
