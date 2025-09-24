@@ -1,0 +1,176 @@
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+ * with the License.  You may obtain a copy of the License at                                                              *
+ *                                                                                                                         *
+ *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+ *                                                                                                                         *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+ * specific language governing permissions and limitations under the License.                                              *
+ ***************************************************************************************************************************/
+/***************************************************************************************************************************
+ * Styles for embedded highlighted code.
+ * 
+ * Allows you to embed paragraphs of highlighted code into HTML documents.
+ * For example:
+ * 	<p class='bjava'>
+ *		<jk>public static void</jk> myMethod(<jk>int</jk> <jv>foo</jv>, String <jv>bar</jv>) <jk>throws</jk> Exception {
+ *			System.<jsm>err</jsm>.println(<js>"Hello world!"</js>);
+ *		}
+ * 	</p>
+ *
+ * The various tags can also be used outside of code blocks.
+ * For example:
+ * 	<div>This is how you represent a java <jk>int</jk>.</div> 
+ * 
+ * Available classes:
+ * 	code - Unbordered code block
+ * 	bcode,bjava,bxml,bini,bjson,buon,burlenc,bconsole - Bordered code block
+ * 
+ * Available tags:
+ *	<jc> - Java comment
+ *	<jd> - Javadoc comment
+ *	<jt> - Javadoc tag
+ *	<jk> - Java keyword
+ *	<js> - Java string
+ *	<jf> - Java field
+ *	<jsf> - Java static field
+ *	<jsm> - Java static method
+ *	<ja> - Java annotation
+ *	<jp> - Java parameter
+ *	<jv> - Java local variable
+ * 	<xt> - XML tag
+ * 	<xa> - XML attribute
+ * 	<xc> - XML comment
+ * 	<xs> - XML string
+ * 	<xv> - XML value
+ * 	<mk> - Manifest file key
+ * 	<mv> - Manifest file value
+ *  <cc> - Config file comment	
+ * 	<cs> - Config file section
+ * 	<ck> - Config file key
+ * 	<cv> - Config file value
+ * 	<c> - Synonym for <code>
+ * 	<dc> - Synonym for <code><del>
+ * 	<bc> - <code><b>
+ ***************************************************************************************************************************/
+
+/* Monospaced font size */
+.code,
+.bcode,.bjava,.bjson,.bxml,.bini,.buon,.burlenc,.bconsole,.bschema,
+jc,jd,jt,jk,js,jf,jsf,jsm,ja,jp,jv 
+xt,xa,xc,xs,
+mc,mk,mv,
+cc,cs,ck,ce,
+c,dc,bc {
+	font-size: 10pt;
+	white-space: pre;
+	font-family: monospace;
+	tab-size: 3;
+	-moz-tab-size: 3;
+	-o-tab-size: 3;
+}
+
+.bcode,.bjava,.bjson,.bxml,.bini,.buon,.burlenc,.bconsole,.bschema {
+	width:800px !important;
+}
+
+/* Deleted code */
+dc {
+	text-decoration: line-through;
+}
+
+/* Bold code */
+bc {
+	font-weight: bold;
+}
+
+/*--- Bordered code ---*/
+p.bcode,p.bjava,p.bjson,p.bxml,p.bini,p.buon,p.burlenc,p.bconsole,p.bschema,
+div.bcode,div.bjava,div.bjson,div.bxml,div.bini,div.buon,div.burlenc,div.bconsole,div.bschema {
+	border-left: 3px solid #4c6b87;
+	margin: 0px 20px 5px 20px;
+	overflow: auto;
+	background-color: #f8f8f8;
+}
+
+/*--- Bordered code in a section of a method doc ---*/
+dd p.bcode, dd div.bcode,
+dd p.bjava, dd div.bjava,
+dd p.bjson, dd div.bjson,
+dd p.bxml, dd div.bxml,
+dd p.bini, dd div.bini,
+dd p.buon, dd div.buon,
+dd p.burlenc, dd div.burlenc,
+dd p.bschema, dd div.bschema,
+dd p.bconsole, dd div.bconsole {
+	margin-left:0px;
+	margin-right:20px;
+	margin-bottom:5px;
+}
+
+/* Override padding bottom in javadoc comments. */
+.blockList p.bcode, .blocklist div.bcode,
+.blockList p.bjava, .blocklist div.bjava,
+.blockList p.bjson, .blocklist div.bjson,
+.blockList p.bxml, .blocklist div.bxml,
+.blockList p.buon, .blocklist div.buon,
+.blockList p.burlenc, .blocklist div.burlenc,
+.blockList p.bconsole, .blocklist div.bconsole,
+.blockList p.bschema, .blocklist div.bschema,
+.blockList p.bini, .blocklist div.bini {
+	padding-bottom: 0px !important;
+}
+
+.bconsole { color:#ffcc00; font-weight:bold; font-family:monospace; font-size:1.1em; background-color:black !important; }
+
+/*--- Unbordered code ---*/
+p.code, div.code {
+	padding-bottom: 15px;
+	margin: -15px;
+}
+
+/*--- Java code effects ---*/
+jc { color: green; }
+jd { color: #3f5fbf; }
+jt { color: #7f9fbf; font-weight: bold; }
+jk { color: #7f0055; font-weight: 500; }
+js { color: #00B; }
+jf { color: DarkBlue; }
+jp,jv { color: #654040; }
+jsf { color: DarkBlue; font-style: italic; }
+jsm { font-style: italic; }
+ja { color: grey; }
+
+/*--- JSON code effects ---*/
+joc { color: green; }
+jok { color: purple; }
+jov { color: #00B; }
+
+/*--- XML code effects ---*/
+xt { color: DarkCyan; }
+xa { color: purple; }
+xc { color: mediumblue; }
+xs { color: #00B; font-style: italic; }
+xv { color: black; }
+
+/*--- URLEncoding/UON code effects ---*/
+ua { color: black; } /* Attribute name */
+uk { color: #7f0055; font-weight: bold; } /* true/false/null */
+un { color: DarkBlue; } /* Number value */
+us { color: #00B; } /* String value */
+
+/*--- Manifest-file code effects ---*/
+mc { color: green; }
+mk { color: DarkRed; font-weight: bold; }
+mv { color: DarkBlue;}
+mi { color: DarkBlue; font-style: italic; }
+
+/*--- Config file effects ---*/
+cc { color: green; }
+cs { color: DarkRed;font-weight: bold;}
+ck { color: DarkRed; }
+cv { color: DarkBlue; }
+ci { color: DarkRed; font-weight: bold; font-style: italic; }

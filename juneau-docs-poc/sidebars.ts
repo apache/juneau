@@ -26,17 +26,19 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  Create as many sidebars as you want.
  */
 const sidebars: SidebarsConfig = {
-  // Juneau documentation sidebar
-  tutorialSidebar: [
-    // 'overview',  // Temporarily commented to avoid conflicts
-    // 'syntax-highlighting-demo',
-    // 'class-hierarchy-demo', 
-    // 'class-hierarchy-markdown',
+  // Main Juneau sidebar
+  mainSidebar: [
+    // Documentation section (topics from /docs folder)
     {
       type: 'category',
-      label: '1. Juneau Ecosystem',
+      label: 'Documentation',
       collapsed: false,
       items: [
+        {
+          type: 'category',
+          label: '1. Juneau Ecosystem',
+          collapsed: false,
+          items: [
         {
           type: 'doc',
           id: 'topics/01.01.00.JuneauEcosystemOverview',
@@ -1741,20 +1743,24 @@ const sidebars: SidebarsConfig = {
           label: '17.4. REST Security',
         },
       ],
+        },
+        {
+          type: 'doc',
+          id: 'topics/18.01.00.V9.0-migration-guide',
+          label: '18. V9.0 Migration Guide',
+        },
+        {
+          type: 'doc',
+          id: 'topics/TODO',
+          label: 'TODO Links',
+        },
+      ],
     },
-    {
-      type: 'doc',
-      id: 'topics/18.01.00.V9.0-migration-guide',
-      label: '18. V9.0 Migration Guide',
-    },
-    {
-      type: 'doc',
-      id: 'topics/TODO',
-      label: 'TODO Links',
-    },
+    // Release Notes section 
     {
       type: 'category',
       label: 'Release Notes',
+      collapsed: true,
       items: [
         {
           type: 'category',

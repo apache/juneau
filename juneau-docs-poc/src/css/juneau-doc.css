@@ -1,0 +1,266 @@
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+ * with the License.  You may obtain a copy of the License at                                                              *
+ *                                                                                                                         *
+ *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+ *                                                                                                                         *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+ * specific language governing permissions and limitations under the License.                                              *
+ ***************************************************************************************************************************/
+/***************************************************************************************************************************
+ * Juneau-specific javadoc styles.
+ * 
+ * These are styles available in Javadocs in addition to the general Oracle 
+ * javadoc tags.
+ * 
+ * Available classes:
+ *	fixedWidth - Force block to be 800 px wide.
+ *	table.styled - A table with alternating row colors.
+ *	h2/h3/h4/h5.topic - Topic headers.
+ * 	bordered - Put border around a block (e.g. an image).
+ *	padded - Put padding around a block (e.g. an image).
+ *	ol/ul.toc - Table of contents.
+ *	code.snippet - A code snippet.
+ *	ol/ul.spaced-list - A spaced list.
+ *	ol/ul.javahierarchy - A Java class hierarchy list.
+ *		li.c - Java class.
+ *		li.i - Java interface.
+ *		li.a - Java abstract class.
+ *		li.n - Java annotation.
+ *		li.p - Java package.
+ *		li.m - Java method.
+ *		li.f - Java field.
+ *	p.severe - A severe block.
+ *	p.warn - A warning block.
+ *	p.info - An info block.
+ *	p.todo - A TODO block.
+ *	a.doclink - A link to another document.
+ *
+ * Available tags:
+ * 	<l> - A literal.
+ *	<review> - Identifies code that needs review.
+ ***************************************************************************************************************************/
+
+body { -webkit-font-smoothing:antialiased; }
+
+/*--- Override formatting on <table class='styled'> ---*/
+table.styled,.contentContainer .description table.styled,.contentContainer ul li table.styled,ul.blockList ul.blockList li.blockList table.styled {
+	padding:0px; position:relative; width:auto; border:1px solid #9eadc0; margin-left:20px; margin-right:20px; border-collapse:collapse;
+}
+
+table.styled th { background-color:#dee3e9; border:1px solid #9eadc0; padding:3px 10px 3px 10px; }
+table.styled td { padding:3px; }
+table.styled ul { padding:0px 10px; margin:0px; }
+table.styled tr:nth-child(1) { background-color:#dee3e9; }
+table.styled tr:nth-child(2n+2) { background-color:#eeeeef; }
+table.styled tr:nth-child(2n+3) { background-color:white; }
+/* Same as r1 except with a border on the bottom */
+table.styled tr.bb { border-bottom:1px solid #9eadc0 }
+table.styled tr.light { background-color:white !important;}
+table.styled tr.dark { background-color:#eeeeef !important; }
+
+/*--- Override formatting on <table class='unstyled'> ---*/
+table.unstyled,.contentContainer .description table.unstyled,.contentContainer ul li table.unstyled,ul.blockList ul.blockList li.blockList table.unstyled {
+	padding:0px; position:relative; width:auto; border:1px solid #9eadc0; margin-left:20px; margin-right:20px; border-collapse:collapse;
+}
+
+table.unstyled, table.unstyled table { border:1px solid #9eadc0; border-collapse:collapse; } 
+table.unstyled th { background-color:#dee3e9; border:1px solid #9eadc0; border-collapse:collapse; padding:3px 10px 3px 10px; }
+table.unstyled td { padding:3px !important; border:1px solid #b5c8de; border-collapse:collapse; }
+table.unstyled ul { padding:0px 10px; }
+table.unstyled tr:nth-child(1) { background-color:white; }
+table.unstyled tr:nth-child(2n+2) { background-color:white; }
+table.unstyled tr:nth-child(2n+3) { background-color:white; }
+
+/*--- Juneau topic headers ---*/
+h2.topic, h3.topic, h4.topic {
+	margin-bottom:20px; margin-top:25px; padding-top:3px; padding-left:25px; color:#2c4557; border-top:2px groove #9eadc0;
+	background-image:url('data:image/gif;base64,R0lGODlhEAAQAIQfACZJcSdKcjFTejVWfT5fhUFih0ZnjEhojUxskFFwk1Z0l1d1mFp4ml98nmaComiEpGuHpnKNq3SOrHiRroGZtYeeuJGmv5erwp+yx6O1yqm6zrDA0sTQ3s3X4+Dn7v///yH+EUNyZWF0ZWQgd2l0aCBHSU1QACH5BAEAAB8ALAAAAAAQABAAAAVk4CeOZGmWgmEQG/k0MHw4UY0gY1PvfG3kvaBhUqk4IMgkcuGrdJ7QaCfDiBgunKx2m1VYP5KNeEze0H4VjHrNVh9+HodlTq9bEr9PhMLv+ykOAyIaNEE8ACMFiouMigEnkJGQIQA7');
+	background-repeat:no-repeat; background-position:left center; cursor:zoom-out; max-width:1000px;
+}
+
+h2.topic { font-size:14pt; }
+h3.topic { font-size:13pt; }
+h4.topic { font-size:12pt; }
+h5.topic { font-size:11pt; }
+.topic p { max-width:800px; }
+/*.topic ul li, .topic ol li { max-width:750px; }*/
+div.topic { margin-left:10px; max-width:950px; }
+
+h5.figure { color:#2c4557; margin-left:30px; margin-right:30px; margin-top:10px; margin-bottom:0px; font-style:italic; }
+
+/*--- Override how Javadoc handles unordered lists inside .footer ---*/
+ul.normal { margin-top:0px; }
+ul.normal li { font-size:100%; list-style:disc; }
+
+/*--- Bordered images ---*/
+.bordered { margin:0px 20px; border-radius:10px; }
+
+ol.toc, ul.toc, .toc ol, .toc ul { background:#dee3e9; margin:0px; padding:0px; max-width:900px;}
+ul.toc, .toc ul { list-style: disc; }
+ol.toc p, ul.toc p, .toc ol p, .toc ul p, ol.toc div, ul.toc div, .toc ol div, .toc ul div {
+	color:#353833; font:normal 1em Arial,Helvetica,sans-serif; font-size:1em; padding-bottom:5px; margin:0px;
+}
+.toc li { background:#FFFFFF; margin-left:30px; padding-left:5px; }
+p.toc2 { background-color:#dee3e950; }
+
+span.update { display:block; float:right; font-size:9pt; color:green; }
+
+/* Light-colored background headers */
+h5.toc, 
+h2.title,
+div.docSummary > div.block,
+div.contentContainer > div.block > p:first-child {
+	background:linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
+	background:-moz-linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
+	background:-webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#DEE3E9) );
+	max-width:900px;
+}
+h5.topic {
+	background:linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
+	background:-moz-linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
+	background:-webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#DEE3E9) );
+	max-width:800px;
+}
+
+/* Dark-colored background headers */
+div.header > div.subTitle > div.block,
+div.footer > div.subTitle > div.block > p:first-child, 
+h1.title,
+div.contentContainer > h2:first-of-type,
+body > p:first-child {
+	background:linear-gradient(to bottom, #3B596D, #6289A3) repeat scroll 0% 0% transparent;
+	background:-moz-linear-gradient(to bottom, #3B596D, #6289A3) repeat scroll 0% 0% transparent;
+	background:-webkit-gradient(linear, left top, left bottom, from(#3B596D), to(#6289A3) );
+}
+
+/* Header styles */
+h5.toc, h5.topic { color:#2C4557; padding:5px 30px; margin-bottom:0px; border-radius:10px 10px 10px 0px; text-decoration:none; }
+
+/* Light-colored title on package summary pages */
+div.docSummary > div.block,
+div.contentContainer > div.block > p:first-child {
+	font-size:1.2em; font-weight:bold; color:#2C4557; margin-top:0px; margin-bottom:0px; padding:5px 30px; border-radius:10px; text-decoration:none;
+}
+
+/* Dark-colored title on overview page */
+div.header > div.subTitle > div.block,
+div.footer > div.subTitle > div.block > p:first-child,
+body > p:first-child { font-size:1.2em; font-weight:bold; color:white; margin-bottom:0px; padding:5px 30px; border-radius:10px; text-decoration:none; }
+
+/* Dark-colored package title on package summary pages */
+h1.title, div.contentContainer > h2:first-of-type { font-size:1.2em; font-weight:bold; color:white; margin-bottom:0px; padding:5px 30px; border-radius:10px; text-decoration:none; }
+div.header > div.subTitle > div.block > h1.title { padding:0px; border-radius:0px; background:none; margin:0px; font-size:1em; }
+
+.snippet { border:1px solid #cccccc; margin:2px; padding:2px 5px; border-radius:4px; background-color:#f8f8f8; }
+
+l { color:#3b596d; font-weight:bold; font-family:monospace; font-size:1.1em; }
+
+.spaced-list>li, .notes>li, .values>li, .format>li {  padding:5px; max-width:800px; }
+.footer .spaced-list ul, .notes>li, .values>li, .format>li {  margin:0; max-width:800px; }
+
+/* Documentation Tree */
+.doctree li, .javatree li, .seealso>li, .notes>li, .values>li, .format>li { max-width:800px; margin-top:0px; }
+.doctree>li, .seealso>li { margin-bottom:10px; }
+.doctree li, .seealso li {  margin-top:5px; }
+.doctree ul, .seealso ul {  padding:0px 0px 0px 15px; margin-top:-2px; margin-bottom:-2px; }
+.javatree>li {  margin-bottom:1px; }
+.javatree li { margin-top: 1px; }
+.javatree ul { padding:0px 0px 0px 20px; margin-top:0px; margin-bottom:0px; }
+
+ul.seealso:before { content:'See Also:'; }
+ul.notes:before { content: 'Notes:'; }
+ul.values:before { content: 'Possible Values:'; }
+ul.format:before { content: 'Format:'; }
+div.description ul.seealso:before, 
+div.description ul.notes:before,
+div.description ul.values:before,
+div.description ul.format:before,
+div.topic ul.seealso:before, 
+div.topic ul.notes:before,
+div.topic ul.values:before,
+div.topic ul.format:before {
+	white-space:pre; font-size:1.1em; font-weight:bold; color:#4e4e4e; margin-left:-40px; padding-bottom:20px; line-height:30px;
+}
+div.details ul.seealso:before, 
+div.details ul.notes:before,
+div.details ul.values:before,
+div.details ul.format:before,
+div.topic ul.seealso:before, 
+div.topic ul.notes:before,
+div.topic ul.values:before,
+div.topic ul.format:before {
+	white-space:pre; font-size:1.1em; font-weight:bold; color:#4e4e4e; margin-left:-40px; padding-bottom:20px; line-height:30px;
+}
+ul.seealso, ul.notes, ul.values, ul.format { margin-top:20px; }
+
+li.normal { list-style-image:none; }
+ul.notes ul li, ul.values ul li, ul.format ul li { padding:10px; }
+ul.notes ul.compact li, ul.values li, ul.format li { padding:0px; }
+.topic a { border-bottom:1px dotted #4c6b87; }
+
+/* Article links */
+a.doclink { text-decoration:none; color:#4c6b87; font-weight:bold; border-bottom:1px dotted #4c6b87; }
+
+.w400 { width:400px !important; }
+.w500 { width:500px !important; }
+.w800 { width:800px !important; }
+.w900 { width:900px !important; max-width:900px !important; }
+.w1000 { width:1000px !important; max-width:1000px !important; }
+
+hr { text-align:left; margin-left:0; max-width:900px; }
+
+.console { color:#ffcc00; font-weight:bold; font-family:monospace; font-size:1.1em; background-color:black !important; }
+
+div.info, div.warn, div.severe {
+	background-image:url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgo8c3ZnIAoJaWQ9InN2ZzI4MTAiIAoJeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiAKCXhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiAKCWhlaWdodD0iMjQiIAoJd2lkdGg9IjQyIiAKCXZlcnNpb249IjEuMCIgCgl2aWV3Qm94PSIwIDAgNDgwIDQ4MCI+Cgk8ZGVmcyBpZD0iZGVmczI4MzYiPgoJCTxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyR3JhZGllbnQzODUwIj4KCQkJPHN0b3AgaWQ9InN0b3AzODUyIiBzdG9wLWNvbG9yPSIjZmZmIiBzdG9wLW9wYWNpdHk9Ii43OTM4MSIgb2Zmc2V0PSIwIi8+CgkJCTxzdG9wIGlkPSJzdG9wNDM1MSIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIwIiBvZmZzZXQ9Ii44Mzc4NCIvPgoJCQk8c3RvcCBpZD0ic3RvcDM4NTQiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMCIgb2Zmc2V0PSIxIi8+CgkJPC9saW5lYXJHcmFkaWVudD4KCQk8cmFkaWFsR3JhZGllbnQgaWQ9InJhZGlhbEdyYWRpZW50MjM1MSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIGN5PSIyNDAiIGN4PSIyNDAiIHI9IjIyNSI+CgkJCTxzdG9wIGlkPSJzdG9wNjg5OCIgc3RvcC1jb2xvcj0iIzAwODNmZiIgc3RvcC1vcGFjaXR5PSIwIiBvZmZzZXQ9IjAiLz4KCQkJPHN0b3AgaWQ9InN0b3A2OTAwIiBzdG9wLWNvbG9yPSIjMDA1NGZmIiBzdG9wLW9wYWNpdHk9Ii40MTIzNyIgb2Zmc2V0PSIxIi8+CgkJPC9yYWRpYWxHcmFkaWVudD4KCQk8bGluZWFyR3JhZGllbnQgaWQ9ImxpbmVhckdyYWRpZW50MjM1NiIgeTI9IjMxMS44MyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgyPSI0NTIuNiIgeTE9IjMxMS44MyIgeDE9IjI3LjQwMSI+CgkJCTxzdG9wIGlkPSJzdG9wNTgxNiIgc3RvcC1jb2xvcj0iIzAwNDhjZCIgb2Zmc2V0PSIwIi8+CgkJCTxzdG9wIGlkPSJzdG9wNTgxOCIgc3RvcC1jb2xvcj0iIzAwMmFhMCIgb2Zmc2V0PSIxIi8+CgkJPC9saW5lYXJHcmFkaWVudD4KCQk8bGluZWFyR3JhZGllbnQgaWQ9ImxpbmVhckdyYWRpZW50MjM1OSIgeTI9IjE1Mi43NSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgyPSI0NDEuMTIiIHkxPSIxNTIuNzUiIHgxPSIzOC44ODEiPgoJCQk8c3RvcCBpZD0ic3RvcDU4MjQiIHN0b3AtY29sb3I9IiM1ZTk5ZGQiIG9mZnNldD0iMCIvPgoJCQk8c3RvcCBpZD0ic3RvcDU4MjYiIHN0b3AtY29sb3I9IiMwNDYxYzkiIG9mZnNldD0iMSIvPgoJCTwvbGluZWFyR3JhZGllbnQ+CgkJPHJhZGlhbEdyYWRpZW50IGlkPSJyYWRpYWxHcmFkaWVudDIzNzYiIHhsaW5rOmhyZWY9IiNsaW5lYXJHcmFkaWVudDM4NTAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiBjeT0iMTY3LjUiIGN4PSIxOTYuMDciIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoLS41Njc5MCAtMS40MzQ4IDEuNDAxMSAtLjU1NDU2IC04MS44NzcgNDIwLjE0KSIgcj0iMjQwIi8+CgkJPHJhZGlhbEdyYWRpZW50IGlkPSJyYWRpYWxHcmFkaWVudDIzNzkiIHhsaW5rOmhyZWY9IiNsaW5lYXJHcmFkaWVudDM4NTAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiBjeT0iMjQwIiBjeD0iMjQwIiByPSIyNDAiLz4KCTwvZGVmcz4KCTxwYXRoIGlkPSJwYXRoMjgxOCIgZmlsbD0iIzAwM2ZjMCIgZD0ibTI0MCAwYy0xMzIuMzQgMC0yNDAgMTA3LjY2LTI0MCAyNDBzMTA3LjY2IDI0MCAyNDAgMjQwIDI0MC0xMDcuNjYgMjQwLTI0MC0xMDcuNjYtMjQwLTI0MC0yNDB6Ii8+Cgk8cGF0aCBpZD0icGF0aDI4MjAiIGZpbGw9IiM2NDllZmEiIGQ9Im00NjUgMjQwYzAgMTI0LjA3LTEwMC45MyAyMjUtMjI1IDIyNXMtMjI1LTEwMC45My0yMjUtMjI1IDEwMC45My0yMjUgMjI1LTIyNSAyMjUgMTAwLjkzIDIyNSAyMjV6Ii8+Cgk8cGF0aCBpZD0icGF0aDI4MjYiIGQ9Im0yNDAgMjc4LjA5Yzc4LjE3IDAgMTQ1LjMxLTQ0LjQzIDIwMS4xMi0xMDcuMDMtMjguNy04My40OTEtMTA4LjAxLTE0My42Ni0yMDEuMTItMTQzLjY2LTkzLjExIDAuMDAxLTE3Mi40MiA2MC4xNjktMjAxLjEyIDE0My42NiA1NS44MSA2Mi42IDEyMi45NSAxMDcuMDMgMjAxLjEyIDEwNy4wM3oiIGZpbGw9InVybCgjbGluZWFyR3JhZGllbnQyMzU5KSIvPgoJPHBhdGggaWQ9InBhdGgyODI4IiBkPSJtMjQwIDI3OC4wOWMtNzguMTcgMC0xNDUuMzEtNDQuNDMtMjAxLjEyLTEwNy4wMy03LjQzMyAyMS42My0xMS40NzkgNDQuODItMTEuNDc5IDY4Ljk0IDAgMTE3LjIzIDk1LjM2OSAyMTIuNiAyMTIuNiAyMTIuNnMyMTIuNi05NS4zNyAyMTIuNi0yMTIuNmMwLTI0LjEyLTQuMDUtNDcuMzEtMTEuNDgtNjguOTQtNTUuODEgNjIuNi0xMjIuOTUgMTA3LjAzLTIwMS4xMiAxMDcuMDN6IiBmaWxsPSJ1cmwoI2xpbmVhckdyYWRpZW50MjM1NikiLz4KCTxnIGlkPSJsYXllcjQiPgoJCTxwYXRoIGlkPSJwYXRoMzg0OCIgZD0ibTQ2NSAyNDBjMCAxMjQuMDctMTAwLjkzIDIyNS0yMjUgMjI1cy0yMjUtMTAwLjkzLTIyNS0yMjUgMTAwLjkzLTIyNSAyMjUtMjI1IDIyNSAxMDAuOTMgMjI1IDIyNXoiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZmlsbD0idXJsKCNyYWRpYWxHcmFkaWVudDIzNzYpIi8+Cgk8L2c+Cgk8ZyBpZD0ibGF5ZXIzIj4KCQk8cGF0aCBpZD0icGF0aDM4NDYiIGQ9Im0yNDAgMGMtMTMyLjM0IDAtMjQwIDEwNy42Ni0yNDAgMjQwczEwNy42NiAyNDAgMjQwIDI0MCAyNDAtMTA3LjY2IDI0MC0yNDAtMTA3LjY2LTI0MC0yNDAtMjQweiIgZmlsbC1ydWxlPSJldmVub2RkIiBmaWxsPSJ1cmwoI3JhZGlhbEdyYWRpZW50MjM3OSkiLz4KCTwvZz4KCTxnIGlkPSJsYXllcjEiPgoJCTxwYXRoIGlkPSJwYXRoNjg5NCIgZD0ibTQ2NSAyNDBjMCAxMjQuMDctMTAwLjkzIDIyNS0yMjUgMjI1cy0yMjUtMTAwLjkzLTIyNS0yMjUgMTAwLjkzLTIyNSAyMjUtMjI1IDIyNSAxMDAuOTMgMjI1IDIyNXoiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZmlsbD0idXJsKCNyYWRpYWxHcmFkaWVudDIzNTEpIi8+Cgk8L2c+Cgk8ZyBpZD0ibGF5ZXIyIj4KCQk8ZyBpZD0iZzI4MzEiIHN0cm9rZT0iIzAwNjRkNCI+CgkJCTxwYXRoIGlkPSJwYXRoMjgzMyIgZD0ibTIwMy4yNCAyNTMuMTRjMC0zMC4zOS0xLTMwLjg5LTI4LjktMzQuMzh2LTE2Ljk0aDEwNy4xMnYxNTcuOTRjMCAyOC40IDIuNDkgMzAuODkgMjguOSAzMy44OHYxOS40M2gtMTM2LjAydi0xOS40M2MyNi40MS0yLjk5IDI4LjktNS40OCAyOC45LTMzLjg4di0xMDYuNjJ6bTgxLjIxLTEzNi41MmMwIDIzLjkyLTE4LjkzIDQzLjM1LTQzLjM1IDQzLjM1LTIzLjQxIDAtNDMuMzQtMTkuNDMtNDMuMzQtNDMuMzUgMC0yNC40MDggMTkuOTMtNDMuMzQxIDQzLjM0LTQzLjM0MSAyNC40MiAwIDQzLjM1IDE4LjkzMyA0My4zNSA0My4zNDF6IiBzdHJva2U9IiMwMDY0ZDQiIHN0cm9rZS13aWR0aD0iNSIgZmlsbD0iI2ZmZiIvPgoJCTwvZz4KCTwvZz4KPC9zdmc+Cg==');
+	background-repeat:no-repeat; background-position:left center; padding:15px 50px; margin:10px 0px; width:720px;
+}
+div.info { background-color:#e9eefc; border-left:3px solid #1c43ba; }
+div.warn { background-color:#faecd1; border-left:3px solid #b37700; }
+div.severe { background-color:#faced3; border-left:3px solid #b32400; }
+
+.new { background-color:lightgreen; }
+.updated { background-color:#CFC; }
+.todo { background-color:#FD8; }
+yellow { color:yellow; }
+red { color:red; }
+
+review { display:block; background-color:#ffdf00; padding:10px; border-radius:5px; text-align:center; box-shadow:1px 1px 1px 0px rgba(0, 0, 0, 0.5); margin:20px 0px; font-weight:bold; width:800px !important; }
+reviewed { display:block; background-color:lightgreen; padding:10px; border-radius:5px; text-align:center; box-shadow:1px 1px 1px 0px rgba(0, 0, 0, 0.5); margin:20px 0px; font-weight:bold; width:800px !important; }
+
+ul.javatreec, .javatreec ul {  padding-left:0px; margin:0px; }
+.javatreec li { display:inline-block; padding-left:5px; }
+.javatreec li::before { font-weight:bolder; font-size:x-small; }
+.javatreec li.ja::before  { color:#00ced1; content:'\00a0\00a0\24d0\00a0'; }
+.javatreec li.jc::before  { color:#008000; content:'\00a0\00a0\24d2\00a0'; }
+.javatreec li.jac::before { color:#eed304; content:'\00a0\00a0\24d2\00a0'; }
+.javatreec li.jic::before { color:#5f4ba2; content:'\00a0\00a0\24d8\00a0'; }
+.javatreec li.je::before  { color:#906029; content:'\00a0\00a0\24d4\00a0'; }
+.javatreec li.jf::before  { color:#008000; content:'\00a0\00a0\25cf\00a0'; }
+.javatreec li.jfp::before  { color:#eed304; content:'\00a0\00a0\25cf\00a0'; }
+.javatreec li.jm::before  { color:#008000; content:'\00a0\00a0\25cf\00a0'; }
+.javatreec li.jmp::before  { color:#eed304; content:'\00a0\00a0\25c6\00a0'; }
+.javatreec li.jma::before  { color:#00ced1; content:'\00a0\00a0\25cf\00a0'; }
+
+li.jc::marker  { font-weight:bolder; font-size:small; color:#008000; content:'\00a0\00a0\24d2\00a0\00a0'; }
+li.jac::marker { font-weight:bolder; font-size:small; color:#eed304; content:'\00a0\00a0\24d2\00a0\00a0'; }
+li.jic::marker { font-weight:bolder; font-size:small; color:#5f4ba2; content:'\00a0\00a0\24d8\00a0\00a0'; }
+li.ja::marker  { font-weight:bolder; font-size:small; color:#00ced1; content:'\00a0\00a0\24d0\00a0\00a0'; }
+li.je::marker  { font-weight:bolder; font-size:small; color:#906029; content:'\00a0\00a0\24d4\00a0\00a0'; }
+li.jm::marker  { font-weight:bolder; font-size:small; color:#008000; content:'\00a0\00a0\25cf\00a0\00a0'; }
+li.jf::marker  { font-weight:bolder; font-size:small; color:#008000; content:'\00a0\00a0\25cf\00a0\00a0'; }
+li.jp::marker  { font-weight:bolder; font-size:small; color:#e09c01; content:'\00a0\00a0\229e\00a0\00a0'; }
+li.jmp::marker  { font-weight:bolder; font-size:small; color:#eed304; content:'\00a0\00a0\25c6\00a0\00a0'; }
+li.jma::marker  { font-weight:bolder; font-size:small; color:#00ced1; content:'\00a0\00a0\25cf\00a0\00a0'; }
+
+li.note::marker  { font-weight:bolder; font-size:large; color:#F5A400; content:'\00a0\00a0\270E\00a0\00a0'; }
+li.warn::marker  { font-weight:bolder; font-size:x-large; color:#e09c01; content:'\00a0\00a0\26A0\00a0\00a0'; }
+li.severe::marker  { font-weight:bolder; font-size:x-large; color:#e01200; content:'\00a0\00a0\26A0\00a0\00a0'; }
+li.info::marker  { font-weight:bolder; font-size:large; color:#0e01e0; content:'\00a0\00a0\24D8\00a0\00a0'; }
+li.link::marker  {font-weight:bold;font-size:medium;color:#3f51b5;content: '\00a0\00a0\27a5\00a0\00a0';}
+li.sublink::marker  { font-weight:bold; font-size:medium; color:#727aa7; content:'\00a0\00a0\27a5\00a0\00a0'; }
+li.extlink::marker  { font-weight:bold; font-size:medium; color:#3f51b5; content:'\00a0\00a0\27a6\00a0\00a0'; }

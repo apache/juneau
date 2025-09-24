@@ -115,16 +115,28 @@ const config: Config = {
         src: 'img/oakleaf.svg',
       },
       items: [
+        {to: '/about', label: 'About', position: 'left'},
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'mainSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Documentation',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
+        {to: '/downloads', label: 'Downloads', position: 'left'},
+        {to: '/apache', label: 'Apache', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/apache/juneau',
           label: 'GitHub',
+          position: 'right',
+        },
+        {
+          href: 'https://github.com/apache/juneau/wiki',
+          label: 'Wiki',
+          position: 'right',
+        },
+        {
+          href: 'https://juneau.apache.org/site/apidocs-9.0.1/index.html',
+          label: 'Javadocs',
           position: 'right',
         },
       ],
@@ -133,11 +145,19 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Documentation',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'About',
+              to: '/about',
+            },
+            {
+              label: 'Downloads',
+              to: '/downloads',
+            },
+            {
+              label: 'Javadocs',
+              href: 'https://juneau.apache.org/site/apidocs-9.0.1/index.html',
             },
           ],
         },
@@ -145,34 +165,38 @@ const config: Config = {
           title: 'Community',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'GitHub',
+              href: 'https://github.com/apache/juneau',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: 'Wiki',
+              href: 'https://github.com/apache/juneau/wiki',
             },
             {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
+              label: 'Mailing List',
+              href: 'mailto:dev@juneau.apache.org?Subject=Apache%20Juneau%20question',
             },
           ],
         },
         {
-          title: 'More',
+          title: 'Apache',
           items: [
             {
-              label: 'Blog',
-              to: '/blog',
+              label: 'Apache Foundation',
+              href: 'http://www.apache.org/foundation',
             },
             {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              label: 'License',
+              href: 'http://www.apache.org/licenses/',
+            },
+            {
+              label: 'Security',
+              href: 'http://www.apache.org/security',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} The Apache Software Foundation. Licensed under the Apache License, Version 2.0. Apache, Apache Juneau, and the Apache feather logo are trademarks of The Apache Software Foundation.`,
     },
     prism: {
       theme: {plain: {}, styles: []}, // Use custom Eclipse colors instead of default theme
