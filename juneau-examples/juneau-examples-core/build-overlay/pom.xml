@@ -23,11 +23,6 @@
 	<name>Apache Juneau Core Examples</name>
 	<description>Apache Juneau Examples for Core parser functionality</description>
 
-	<properties>
-		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
-		<maven.javadoc.skip>true</maven.javadoc.skip>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>

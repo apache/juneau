@@ -415,7 +415,7 @@ function convertCodeBlocks(content) {
 }
 
 function processJuneauLinks(content) {
-    const javadocBaseUrl = '../apidocs';
+    const javadocBaseUrl = '../site/apidocs';
     
     function expandPackageAbbreviations(className) {
         for (const [abbrev, fullPackage] of Object.entries(packageAbbreviations)) {

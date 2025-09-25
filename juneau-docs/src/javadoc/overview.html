@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+<body>
+	<h1>Apache Juneau™</h1>
+	
+	<p>Apache Juneau™ is a single cohesive Java ecosystem consisting of a comprehensive toolkit for marshalling POJOs to a wide variety of content types using a common framework, along with universal REST server and client APIs for creating Swagger-based self-documenting REST interfaces.</p>
+
+	<h2>Key Features</h2>
+	<ul>
+		<li><strong>Universal Serialization</strong> - Marshal POJOs to JSON, XML, HTML, URL-Encoding, UON, MessagePack, CSV, and more</li>
+		<li><strong>REST Services</strong> - Create self-documenting REST interfaces with automatic Swagger/OpenAPI generation</li>
+		<li><strong>Microservices</strong> - Build lightweight, standalone microservices with embedded Jetty</li>
+		<li><strong>Configuration Management</strong> - Sophisticated configuration file API with variable resolution</li>
+		<li><strong>Fluent Assertions</strong> - Powerful testing framework with fluent-style assertions</li>
+		<li><strong>Zero Dependencies</strong> - Core marshalling requires no external dependencies</li>
+	</ul>
+
+	<h2>Project Modules</h2>
+	
+	<h3>Core Modules</h3>
+	<table border="1" style="border-collapse: collapse; width: 100%;">
+		<tr style="background-color: #f0f0f0;">
+			<th style="padding: 8px; text-align: left;">Module</th>
+			<th style="padding: 8px; text-align: left;">Description</th>
+		</tr>
+		<tr>
+			<td style="padding: 8px;"><strong>juneau-marshall</strong></td>
+			<td style="padding: 8px;">Core POJO marshalling support for JSON, XML, HTML, URL-encoding, UON, MessagePack, and CSV</td>
+		</tr>
+		<tr style="background-color: #f9f9f9;">
+			<td style="padding: 8px;"><strong>juneau-marshall-rdf</strong></td>
+			<td style="padding: 8px;">Extended marshalling support for RDF/XML, N3, N-Tuple, and Turtle formats</td>
+		</tr>
+		<tr>
+			<td style="padding: 8px;"><strong>juneau-config</strong></td>
+			<td style="padding: 8px;">Sophisticated configuration file API with variable resolution and listeners</td>
+		</tr>
+		<tr style="background-color: #f9f9f9;">
+			<td style="padding: 8px;"><strong>juneau-assertions</strong></td>
+			<td style="padding: 8px;">Fluent-style assertions API for comprehensive testing</td>
+		</tr>
+	</table>
+
+	<h3>REST Modules</h3>
+	<table border="1" style="border-collapse: collapse; width: 100%;">
+		<tr style="background-color: #f0f0f0;">
+			<th style="padding: 8px; text-align: left;">Module</th>
+			<th style="padding: 8px; text-align: left;">Description</th>
+		</tr>
+		<tr>
+			<td style="padding: 8px;"><strong>juneau-rest-server</strong></td>
+			<td style="padding: 8px;">Universal REST server API for creating Swagger-based self-documenting REST interfaces</td>
+		</tr>
+		<tr style="background-color: #f9f9f9;">
+			<td style="padding: 8px;"><strong>juneau-rest-client</strong></td>
+			<td style="padding: 8px;">Universal REST client API for interacting with REST interfaces using POJOs</td>
+		</tr>
+		<tr>
+			<td style="padding: 8px;"><strong>juneau-rest-mock</strong></td>
+			<td style="padding: 8px;">Mock testing framework for REST services</td>
+		</tr>
+		<tr style="background-color: #f9f9f9;">
+			<td style="padding: 8px;"><strong>juneau-rest-server-springboot</strong></td>
+			<td style="padding: 8px;">Spring Boot integration for Juneau REST services</td>
+		</tr>
+	</table>
+
+	<h3>Microservice Modules</h3>
+	<table border="1" style="border-collapse: collapse; width: 100%;">
+		<tr style="background-color: #f0f0f0;">
+			<th style="padding: 8px; text-align: left;">Module</th>
+			<th style="padding: 8px; text-align: left;">Description</th>
+		</tr>
+		<tr>
+			<td style="padding: 8px;"><strong>juneau-microservice-core</strong></td>
+			<td style="padding: 8px;">Core microservice functionality and configuration management</td>
+		</tr>
+		<tr style="background-color: #f9f9f9;">
+			<td style="padding: 8px;"><strong>juneau-microservice-jetty</strong></td>
+			<td style="padding: 8px;">Jetty-based microservice implementation for REST services</td>
+		</tr>
+	</table>
+
+	<h2>Quick Example</h2>
+	
+	<h3>Marshalling Example</h3>
+	<pre style="background-color: #f5f5f5; padding: 10px; border: 1px solid #ddd;">
+// A simple POJO
+public class Person {
+    public String name = "John Smith";
+    public int age = 21;
+}
+
+// Serialize to various formats
+Person person = new Person();
+
+String json = Json.of(person);           // {"name":"John Smith","age":21}
+String xml = Xml.of(person);             // &lt;object&gt;&lt;name&gt;John Smith&lt;/name&gt;&lt;age&gt;21&lt;/age&gt;&lt;/object&gt;
+String html = Html.of(person);           // &lt;table&gt;&lt;tr&gt;&lt;td&gt;name&lt;/td&gt;&lt;td&gt;John Smith&lt;/td&gt;&lt;/tr&gt;...&lt;/table&gt;
+String urlEncoding = UrlEncoding.of(person); // name=John+Smith&amp;age=21
+
+// Parse back from any format
+Person p = Json.to(json, Person.class);
+	</pre>
+
+	<h3>REST Server Example</h3>
+	<pre style="background-color: #f5f5f5; padding: 10px; border: 1px solid #ddd;">
+@Rest(path="/petstore")
+public class PetStoreResource extends BasicRestServlet {
+    
+    @RestGet(path="/pets/{id}")
+    public Pet getPet(@Path int id) {
+        return findPet(id);
+    }
+    
+    @RestPost(path="/pets")
+    public Ok addPet(@Content Pet pet) {
+        addPet(pet);
+        return Ok.OK;
+    }
+}
+	</pre>
+
+	<h2>Key Benefits</h2>
+	<ul>
+		<li><strong>KISS Principle</strong> - No auto-wiring, code generation, or dependency injection</li>
+		<li><strong>Memory Efficient</strong> - Fast, safe parsing that's not susceptible to deserialization attacks</li>
+		<li><strong>Minimal Dependencies</strong> - Core marshalling requires no external libraries</li>
+		<li><strong>Comprehensive Testing</strong> - Exhaustively tested with thousands of unit tests</li>
+		<li><strong>Self-Documenting</strong> - Automatic Swagger/OpenAPI documentation generation</li>
+		<li><strong>Easy to Use</strong> - Simple APIs that are enjoyable to work with</li>
+		<li><strong>Tiny Footprint</strong> - Approximately 1MB for core functionality</li>
+	</ul>
+
+	<h2>Getting Started</h2>
+	<p>To get started with Apache Juneau:</p>
+	<ol>
+		<li>Add the appropriate Juneau modules to your project dependencies</li>
+		<li>Create POJOs to represent your data structures</li>
+		<li>Use the marshalling APIs to serialize/parse your data</li>
+		<li>Build REST services using the <code>@Rest</code> annotations</li>
+		<li>Deploy as a standalone microservice or in any Servlet 3.1+ container</li>
+	</ol>
+
+	<h2>Additional Resources</h2>
+	<ul>
+		<li><a href="https://juneau.apache.org/">Apache Juneau Website</a></li>
+		<li><a href="https://github.com/apache/juneau">GitHub Repository</a></li>
+		<li><a href="https://github.com/apache/juneau/wiki">Community Wiki</a></li>
+		<li><a href="mailto:dev@juneau.apache.org">Mailing List</a></li>
+	</ul>
+
+	<p><em>Questions via email to <a href="mailto:dev@juneau.apache.org">dev@juneau.apache.org</a> are always welcome.</em></p>
+</body>

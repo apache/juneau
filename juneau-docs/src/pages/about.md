@@ -10,8 +10,8 @@
 - [Javadocs](/site/apidocs/) - API documentation
 - [Maven Site](/site/) - Complete project reports
 - [Source Cross-Reference](/site/xref/) - Browsable source code
-- [Test Reports](/site/surefire-report/) - Unit test results
-- [Code Coverage](/site/jacoco/) - Test coverage reports
+- [Test Reports](/site/surefire.html) - Unit test results
+- [Code Coverage](/site/jacoco-aggregate/) - Test coverage reports
 
 ---
 
@@ -21,14 +21,14 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of the following
 
 | Group | Component | Description |
 |-------|-----------|-------------|
-| **juneau-core** | [juneau-marshall](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-marshall) | POJO marshalling support for JSON, JSON5, XML, HTML, URL-encoding, UON, MessagePack, and CSV using no external module dependencies. |
-| | [juneau-marshall-rdf](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-marshall-rdf) | Extended marshalling support for RDF/XML, N3, N-Tuple, and Turtle. |
-| | [juneau-dto](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-dto) | A variety of predefined DTOs for serializing and parsing languages such as HTML5, Swagger and ATOM. |
-| | [juneau-config](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-config) | A sophisticated configuration file API. |
-| | [juneau-assertions](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-assertions) | A fluent assertions API. |
-| **juneau-rest** | [juneau-rest-server](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-rest-server) | A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as one or more top-level servlets in any Servlet 3.1.0+ container. |
-| | [juneau-rest-server-springboot](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-rest-server-springboot) | Spring Boot integration. |
-| | [juneau-rest-client](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-rest-client) | A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces. |
+| **juneau-core** | [juneau-marshall](/docs/topics/JuneauMarshallBasics) | POJO marshalling support for JSON, JSON5, XML, HTML, URL-encoding, UON, MessagePack, and CSV using no external module dependencies. |
+| | [juneau-marshall-rdf](/docs/topics/Module-juneau-marshall-rdf) | Extended marshalling support for RDF/XML, N3, N-Tuple, and Turtle. |
+| | [juneau-dto](/docs/topics/JuneauDtoBasics) | A variety of predefined DTOs for serializing and parsing languages such as HTML5, Swagger and ATOM. |
+| | [juneau-config](/docs/topics/JuneauConfigBasics) | A sophisticated configuration file API. |
+| | [juneau-assertions](/docs/topics/JuneauAssertionBasics) | A fluent assertions API. |
+| **juneau-rest** | [juneau-rest-server](/docs/topics/JuneauRestServerBasics) | A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as one or more top-level servlets in any Servlet 3.1.0+ container. |
+| | [juneau-rest-server-springboot](/docs/topics/JuneauRestServerSpringbootBasics) | Spring Boot integration. |
+| | [juneau-rest-client](/docs/topics/JuneauRestClientBasics) | A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces. |
 
 Questions via email to [dev@juneau.apache.org](mailto:dev@juneau.apache.org?Subject=Apache%20Juneau%20question) are always welcome.
 
@@ -36,7 +36,7 @@ Juneau is packed with features that may not be obvious at first. Users are encou
 
 ## Features
 
-The [juneau-marshall](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-marshall) and [juneau-marshall-rdf](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-marshall-rdf) modules provides memory-efficient typed and untyped POJO serializing and parsing for a variety of languages.
+The [juneau-marshall](/docs/topics/JuneauMarshallBasics) and [juneau-marshall-rdf](/docs/topics/Module-juneau-marshall-rdf) modules provides memory-efficient typed and untyped POJO serializing and parsing for a variety of languages.
 
 ```java
 // A simple bean
@@ -68,7 +68,7 @@ String csv = Csv.of(person);
 byte[] msgPack = MsgPack.of(person);
 ```
 
-The [juneau-rest-server](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-rest-server) and [juneau-rest-client](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-rest-client) libraries provide server and client side REST capabilities that can be used by themselves, or together to create simplified yet sophisticated Java-based REST communications layers that completely hide away the complexities of the REST protocol from end-users.
+The [juneau-rest-server](/docs/topics/JuneauRestServerBasics) and [juneau-rest-client](/docs/topics/JuneauRestClientBasics) libraries provide server and client side REST capabilities that can be used by themselves, or together to create simplified yet sophisticated Java-based REST communications layers that completely hide away the complexities of the REST protocol from end-users.
 
 ```java
 // Server-side endpoint	
@@ -113,7 +113,7 @@ CreatePet createPet = new CreatePet("Fluffy", 9.99);
 Pet pet = store.addPet(createPet, UUID.randomUUID(), true);
 ```
 
-The [juneau-dto](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-dto) module contains several predefined POJOs for generating commonly-used document types that are designed to be used with the Juneau Marshaller APIs for both serializing and parsing. For example, you can build HTML DOMs in Java.
+The [juneau-dto](/docs/topics/JuneauDtoBasics) module contains several predefined POJOs for generating commonly-used document types that are designed to be used with the Juneau Marshaller APIs for both serializing and parsing. For example, you can build HTML DOMs in Java.
 
 ```java
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
@@ -147,7 +147,7 @@ String html = Html.of(mytable);
 </table>
 ```
 
-The [juneau-config](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-config) module contains a powerful API for creating and using INI-style config files.
+The [juneau-config](/docs/topics/JuneauConfigBasics) module contains a powerful API for creating and using INI-style config files.
 
 ```ini
 # A set of entries
@@ -177,7 +177,7 @@ int[] key3 = config.getObject("Section1/key3", int[].class);
 URL key4 = config.getObject("Section1/key4", URL.class);
 ```
 
-The [juneau-assertions](http://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#juneau-assertions) module in Juneau is a powerful API for performing fluent style assertions.
+The [juneau-assertions](/docs/topics/JuneauAssertionBasics) module in Juneau is a powerful API for performing fluent style assertions.
 
 ```java
 import static org.apache.juneau.assertions.Assertions.*;

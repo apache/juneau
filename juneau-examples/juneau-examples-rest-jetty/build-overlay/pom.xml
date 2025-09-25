@@ -38,7 +38,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<derby.version>${derby.version}</derby.version>
 		<springboot.version>${springboot.version}</springboot.version>
 		<juneau.version>${version}</juneau.version>
@@ -101,8 +100,8 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>17</source>
+					<target>17</target>
 				</configuration>
 			</plugin>
 

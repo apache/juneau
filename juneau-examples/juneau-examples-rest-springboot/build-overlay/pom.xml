@@ -48,7 +48,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<juneau.version>${version}</juneau.version>
 		<springboot.version>2.4.2</springboot.version>
 	</properties>
@@ -76,11 +75,11 @@
 			<artifactId>juneau-rest-server-springboot</artifactId>
 			<version>\${juneau.version}</version>
 		</dependency>
-				
+
 		<!-- Spring Boot dependencies-->
 		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-web</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
@@ -118,7 +117,7 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.5</version>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>
@@ -144,7 +143,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -157,8 +156,8 @@
 					</archive>
 				</configuration>
 			</plugin>
-			
+
 		</plugins>
 	</build>
-	
+
 </project>

@@ -14,7 +14,6 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-import remarkJuneauLinks from './src/plugins/remark-juneau-links';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -22,12 +21,6 @@ const config: Config = {
   title: 'Apache Juneau',
   tagline: 'Universal toolkit for marshalling POJOs to a wide variety of content types using a common framework',
   favicon: 'img/favicon.ico',
-
-  // Custom configuration variables
-  customFields: {
-    juneauVersion: '9.0.1',
-    apiDocsUrl: '../site/apidocs',
-  },
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -61,27 +54,12 @@ const config: Config = {
       'classic',
       {
         docs: {
-          path: './docs-staging',
+          path: './docs',
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/apache/juneau/tree/master/juneau-docs/',
-          remarkPlugins: [
-            [remarkJuneauLinks, {
-              packageAbbreviations: {
-                'oaj': 'org.apache.juneau',
-                'oajr': 'org.apache.juneau.rest',
-                'oajrc': 'org.apache.juneau.rest.client',
-                'oajrs': 'org.apache.juneau.rest.server',
-                'oajrss': 'org.apache.juneau.rest.server.springboot',
-                'oajrm': 'org.apache.juneau.rest.mock',
-                'oajmc': 'org.apache.juneau.microservice.core',
-                'oajmj': 'org.apache.juneau.microservice.jetty',
-              },
-              javadocBaseUrl: '../site/apidocs'
-            }]
-          ]
         },
         blog: {
           showReadingTime: true,

@@ -194,97 +194,51 @@ const sidebars: SidebarsConfig = {
           label: '2.10. Serializer/Parser Sets',
         },
         {
-
           type: 'category',
-
           label: '2.11. Swaps',
-
           collapsed: true,
-
           items: [
-
             {
-
               type: 'doc',
-
               id: 'topics/02.11.01.SwapBasics',
-
               label: '2.11.1. Swap Basics',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.11.02.DefaultSwaps',
-
               label: '2.11.2. Default Swaps',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.11.03.AutoSwaps',
-
               label: '2.11.3. Auto-detected swaps',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.11.04.PerMediaTypeSwaps',
-
               label: '2.11.4. Per-media-type Swaps',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.11.05.OneWaySwaps',
-
               label: '2.11.5. One-way Swaps',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.11.06.SwapAnnotation',
-
               label: '2.11.6. @Swap Annotation',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.11.07.TemplatedSwaps',
-
               label: '2.11.7. Templated Swaps',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.11.08.SurrogateClasses',
-
               label: '2.11.8. Surrogate Classes',
-
             },
-
           ],
-
         },
         {
           type: 'doc',
@@ -475,107 +429,56 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-
           type: 'category',
-
           label: '2.27. HTML Support',
-
           collapsed: true,
-
           items: [
-
             {
-
               type: 'doc',
-
               id: 'topics/02.27.01.HtmlBasics',
-
               label: '2.27.1. HTML Basics',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.27.02.HtmlMethodology',
-
               label: '2.27.2. HTML Methodology',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.27.03.HtmlSerializers',
-
               label: '2.27.3. HTML Serializers',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.27.04.HtmlParsers',
-
               label: '2.27.4. HTML Parsers',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.27.05.HtmlAnnotation',
-
               label: '2.27.5. @Html Annotation',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.27.06.HtmlRenderAnnotation',
-
               label: '2.27.6. @HtmlRender Annotation',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.27.07.HtmlDocSerializer',
-
               label: '2.27.7. HtmlDocSerializer',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.27.08.BasicHtmlDocTemplate',
-
               label: '2.27.8. BasicHtmlDocTemplate',
-
             },
-
             {
-
               type: 'doc',
-
               id: 'topics/02.27.09.HtmlCustomTemplates',
-
               label: '2.27.9. HTML Custom Templates',
-
             },
-
           ],
-
         },
         {
           type: 'doc',

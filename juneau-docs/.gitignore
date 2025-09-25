@@ -11,6 +11,9 @@
 # Preprocessing staging directory
 /docs-staging
 
+# Local site generation for testing
+/site
+
 # Misc
 .DS_Store
 .env.local

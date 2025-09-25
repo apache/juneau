@@ -147,18 +147,29 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>aggregate-javadocs</id>
+						<goals>
+							<goal>aggregate</goal>
+						</goals>
+						<phase>site</phase>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 		<pluginManagement>
 			<plugins>
-
-				<!-- Generates the javadocs for all non-test projects. -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>${javadoc.plugin.version}</version>
+					<version>3.11.3</version>
 					<configuration>
-						<doclint>missing,reference,syntax</doclint>
+						<release>${maven.compiler.target}</release>
 						<sourcetab>3</sourcetab>
 						<notimestamp>true</notimestamp>
 						<verbose>true</verbose>
@@ -166,51 +177,28 @@
 							<additionalJOption>-J-DjuneauVersion=${juneauVersion}</additionalJOption>
 							<additionalJOption>-J-DjuneauVersionNext=${juneauVersionNext}</additionalJOption>
 							<additionalJOption>--allow-script-in-comments</additionalJOption>
+							<additionalJOption>-Xdoclint:none</additionalJOption>
 						</additionalJOptions>
 						<show>protected</show>
 						<windowtitle>Apache Juneau ${project.version}</windowtitle>
 						<author>true</author>
 						<linksource>true</linksource>
-						<bootclasspath>${sun.boot.class.path}</bootclasspath>
-						<overview>${basedir}/juneau-doc/src/main/javadoc/overview.html</overview>
-						<stylesheetfile>${basedir}/juneau-doc/src/main/javadoc/javadoc.css</stylesheetfile>
-						<use>false</use>
-						<excludePackageNames>*proto*:*test*:*internal*:org.apache.juneau.doc.internal</excludePackageNames>
-						<linksource>true</linksource>
+						<use>true</use>
+						<nohelp>false</nohelp>
+						<nodeprecatedlist>false</nodeprecatedlist>
+						<doctitle>Apache Juneau ${project.version} API</doctitle>
+						<stylesheetfile>${maven.multiModuleProjectDirectory}/juneau-doc/src/main/javadoc/javadoc.css</stylesheetfile>
+						<overview>${maven.multiModuleProjectDirectory}/juneau-docs/src/javadoc/overview.html</overview>
+						<excludePackageNames>*proto*:*test*:*internal*</excludePackageNames>
  						<links>
 							<link>https://docs.oracle.com/javase/${maven.compiler.target}/docs/api/</link>
 							<link>https://jakarta.ee/specifications/platform/8/apidocs/</link>
 							<link>https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/</link>
 							<link>https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/</link>
 						</links>
-						<docfilessubdirs>true</docfilessubdirs>
-						<javadocDirectory>${basedir}/juneau-doc/src/main/javadoc</javadocDirectory>
-						<javadocExecutable>${javadoc.executable}</javadocExecutable>
-						<release>${maven.compiler.target}</release>
-						<detectJavaApiLink>false</detectJavaApiLink>
-						<sourcepath>src/main/java</sourcepath>
+						<failOnError>false</failOnError>
 					</configuration>
-					<executions>
-						<execution>
-							<id>attach-javadocs</id>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-						<execution>
-							<id>aggregate</id>
-							<phase>site</phase>
-							<goals>
-								<goal>aggregate</goal>
-							</goals>
-							<configuration>
-								<!-- Override output directory for aggregate goal -->
-								<outputDirectory>${basedir}/docs/api</outputDirectory>
-							</configuration>
-						</execution>
-					</executions>
 				</plugin>
-
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.14.0</version>
@@ -256,7 +244,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${javadoc.plugin.version}</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>aggregate</report>
+						</reports>
+					</reportSet>
+				</reportSets>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

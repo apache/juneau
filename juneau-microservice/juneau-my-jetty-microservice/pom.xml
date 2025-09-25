@@ -56,7 +56,7 @@
 				<configuration>
 					<!-- Needed to prevent mvn release:prepare from blowing up. -->
 					<skip>true</skip>
-					<source>8</source>
+					<source>17</source>
 				</configuration>
 			</plugin>
 			<plugin>
