@@ -113,7 +113,7 @@ const config: Config = {
           position: 'right',
         },
         {
-          href: 'https://juneau.apache.org/site/apidocs-9.0.1/index.html',
+          href: 'https://juneau.apache.org/site/apidocs/index.html',
           label: 'Javadocs',
           position: 'right',
         },
@@ -135,7 +135,7 @@ const config: Config = {
             },
             {
               label: 'Javadocs',
-              href: 'https://juneau.apache.org/site/apidocs-9.0.1/index.html',
+              href: 'https://juneau.apache.org/site/apidocs/index.html',
             },
           ],
         },

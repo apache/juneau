@@ -74,6 +74,7 @@ jobs:
         echo "-----Copying site-----"
         mkdir -p juneau-docs/build/site
         cp -v -r target/site/* juneau-docs/build/site/
+        cp .asf.yaml juneau-docs/build
         echo "-----Build directory contents-----"
         cd juneau-docs/build
         find .

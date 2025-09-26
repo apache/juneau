@@ -12,7 +12,7 @@
 /docs-staging
 
 # Local site generation for testing
-/site
+/static/site
 
 # Misc
 .DS_Store
