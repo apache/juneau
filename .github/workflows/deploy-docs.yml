@@ -67,10 +67,15 @@ jobs:
         
     - name: Copy Maven Site to build directory
       run: |
-        pwd
         # cp -v -r target/site/* juneau-docs/build/site/
         # Create direct javadocs access for backward compatibility
+        pwd
+        echo "Current directory contents"
+        ls -l 
+        echo "Target directory contents"
+        ls -l target
         ln -s target/site juneau-docs/build/site
+        echo "Build directory contents"
         ls -RlL juneau-docs/build 
         
     - name: Deploy to staging branch
