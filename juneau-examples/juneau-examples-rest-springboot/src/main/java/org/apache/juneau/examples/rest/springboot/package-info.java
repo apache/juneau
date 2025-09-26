@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 
 /**
- * Examples
+ * REST Spring Boot Examples
+ * 
+ * <p>
+ * Example classes demonstrating how to integrate Juneau REST servers with Spring Boot.
+ * These examples show various Spring Boot-based REST API integration scenarios.
+ * </p>
  */
-package org.apache.juneau.examples.rest.springboot;
+package org.apache.juneau.examples.rest.springboot;
+

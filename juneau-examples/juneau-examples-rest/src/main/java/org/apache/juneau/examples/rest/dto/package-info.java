@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 
 /**
- * Examples
+ * REST DTO Examples
+ * 
+ * <p>
+ * Example classes demonstrating how to use Data Transfer Objects (DTOs) with Juneau's REST server.
+ * These examples show various DTO serialization and validation scenarios.
+ * </p>
  */
-package org.apache.juneau.examples.rest.dto;
+package org.apache.juneau.examples.rest.dto;
+

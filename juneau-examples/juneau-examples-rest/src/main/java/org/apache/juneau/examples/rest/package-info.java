@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 
 /**
- * Examples
+ * REST Server Examples
+ * 
+ * <p>
+ * Example classes demonstrating how to use Juneau's REST server capabilities.
+ * These examples show various REST API creation and deployment scenarios.
+ * </p>
  */
-package org.apache.juneau.examples.rest;
+package org.apache.juneau.examples.rest;
+

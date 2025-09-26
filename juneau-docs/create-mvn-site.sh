@@ -36,7 +36,7 @@ PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdou
 echo "Detected project version: ${PROJECT_VERSION}"
 
 echo "Generating maven site for root project..."
-mvn site
+mvn clean compile site  | tee create-mvn-site.log
 
 # Check if the Maven site was generated successfully
 if [ ! -d "target/site" ]; then
@@ -63,12 +63,10 @@ fi
 
 echo "Found Maven site in: target/site"
 
-# Create the local testing directory (in static/ for Docusaurus)
-echo "Setting up local testing directory for Docusaurus..."
-mkdir -p "$JUNEAU_ROOT/juneau-docs/static/site"
-
 # Remove any existing content in the local testing directory
+echo "Setting up local testing directory for Docusaurus..."
 rm -rf "$JUNEAU_ROOT/juneau-docs/static/site"/*
+mkdir -p "$JUNEAU_ROOT/juneau-docs/static/site"
 
 # Copy the entire Maven site to the Docusaurus static directory
 echo "Copying entire Maven site to Docusaurus static directory..."

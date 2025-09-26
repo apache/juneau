@@ -10,3 +10,5 @@ derby.log
 cursor-*
 
 # Note: Maven site generation creates target/site/ (already ignored by **/target/ above)
+/juneau.code-workspace
+/create-mvn-site.log

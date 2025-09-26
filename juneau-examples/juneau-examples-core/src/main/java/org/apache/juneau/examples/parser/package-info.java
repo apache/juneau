@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 
 /**
- * Examples
+ * Parser Examples
+ * 
+ * <p>
+ * Example classes demonstrating how to use Juneau's parser capabilities.
+ * These examples show various content parsing scenarios and techniques.
+ * </p>
  */
-package org.apache.juneau.examples.parser;
+package org.apache.juneau.examples.parser;
+

@@ -12,6 +12,11 @@
 // ***************************************************************************************************************************
 
 /**
- * Examples
+ * ATOM Bean Examples
+ * 
+ * <p>
+ * Example classes demonstrating how to use Juneau's ATOM bean marshalling capabilities.
+ * These examples show how to serialize and parse ATOM feed and entry objects.
+ * </p>
  */
 package org.apache.juneau.examples.bean.atom;

@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 
 /**
- * Examples
+ * REST Command Examples
+ * 
+ * <p>
+ * Example classes demonstrating how to use command pattern with Juneau's REST server.
+ * These examples show various command-based REST API scenarios.
+ * </p>
  */
-package org.apache.juneau.examples.rest.command;
+package org.apache.juneau.examples.rest.command;
+

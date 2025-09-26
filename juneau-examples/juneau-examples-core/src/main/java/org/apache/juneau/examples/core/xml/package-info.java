@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 
 /**
- * Examples
+ * XML Marshalling Examples
+ * 
+ * <p>
+ * Example classes demonstrating how to use Juneau's XML marshalling capabilities.
+ * These examples show various XML serialization and parsing scenarios.
+ * </p>
  */
-package org.apache.juneau.examples.core.xml;
+package org.apache.juneau.examples.core.xml;
+

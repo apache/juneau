@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 
 /**
- * Examples
+ * SVL (Simple Variable Language) Examples
+ * 
+ * <p>
+ * Example classes demonstrating how to use Juneau's SVL variable language capabilities.
+ * These examples show various variable resolution and template processing scenarios.
+ * </p>
  */
-package org.apache.juneau.examples.core.svl;
+package org.apache.juneau.examples.core.svl;
+

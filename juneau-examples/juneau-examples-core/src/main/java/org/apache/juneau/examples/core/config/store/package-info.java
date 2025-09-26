@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 
 /**
- * Examples
+ * Configuration Store Examples
+ * 
+ * <p>
+ * Example classes demonstrating how to use Juneau's configuration store capabilities.
+ * These examples show various configuration management and storage scenarios.
+ * </p>
  */
-package org.apache.juneau.examples.core.config.store;
+package org.apache.juneau.examples.core.config.store;
+

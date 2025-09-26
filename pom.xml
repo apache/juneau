@@ -171,23 +171,29 @@
 					<configuration>
 						<release>${maven.compiler.target}</release>
 						<sourcetab>3</sourcetab>
-						<notimestamp>true</notimestamp>
 						<verbose>true</verbose>
 						<additionalJOptions>
 							<additionalJOption>-J-DjuneauVersion=${juneauVersion}</additionalJOption>
 							<additionalJOption>-J-DjuneauVersionNext=${juneauVersionNext}</additionalJOption>
 							<additionalJOption>--allow-script-in-comments</additionalJOption>
 							<additionalJOption>-Xdoclint:none</additionalJOption>
+							<additionalJOption>-header</additionalJOption>
+							<additionalJOption>&lt;a href="http://juneau.apache.org" target="_blank"&gt;&lt;img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;"&gt;Apache Juneau&lt;/a&gt;</additionalJOption>
 						</additionalJOptions>
 						<show>protected</show>
 						<windowtitle>Apache Juneau ${project.version}</windowtitle>
 						<author>true</author>
 						<linksource>true</linksource>
+
 						<use>true</use>
+						<notree>false</notree>
+						<noindex>false</noindex>
+						<nooverview>false</nooverview>
 						<nohelp>false</nohelp>
 						<nodeprecatedlist>false</nodeprecatedlist>
+
 						<doctitle>Apache Juneau ${project.version} API</doctitle>
-						<stylesheetfile>${maven.multiModuleProjectDirectory}/juneau-doc/src/main/javadoc/javadoc.css</stylesheetfile>
+						<stylesheetfile>${maven.multiModuleProjectDirectory}/juneau-docs/src/javadoc/javadoc.css</stylesheetfile>
 						<overview>${maven.multiModuleProjectDirectory}/juneau-docs/src/javadoc/overview.html</overview>
 						<excludePackageNames>*proto*:*test*:*internal*</excludePackageNames>
  						<links>

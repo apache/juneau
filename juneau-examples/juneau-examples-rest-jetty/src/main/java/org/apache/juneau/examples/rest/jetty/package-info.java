@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 
 /**
- * Examples
+ * REST Jetty Examples
+ * 
+ * <p>
+ * Example classes demonstrating how to deploy Juneau REST servers using Jetty.
+ * These examples show various Jetty-based REST API deployment scenarios.
+ * </p>
  */
-package org.apache.juneau.examples.rest.jetty;
+package org.apache.juneau.examples.rest.jetty;
+

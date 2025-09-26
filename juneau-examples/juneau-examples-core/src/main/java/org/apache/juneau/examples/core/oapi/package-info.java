@@ -12,6 +12,11 @@
 // ***************************************************************************************************************************
 
 /**
- * Examples
+ * OpenAPI Examples
+ * 
+ * <p>
+ * Example classes demonstrating how to use Juneau's OpenAPI marshalling capabilities.
+ * These examples show various OpenAPI specification serialization and parsing scenarios.
+ * </p>
  */
 package org.apache.juneau.examples.core.oapi;

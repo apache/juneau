@@ -3,15 +3,15 @@
 ## Quick Links
 
 ### Project Resources
-- [GitHub](https://github.com/apache/juneau) - Source code repository
-- [Wiki](https://github.com/apache/juneau/wiki) - Community documentation
+- <a href="https://github.com/apache/juneau" target="_blank">GitHub</a> - Source code repository
+- <a href="https://github.com/apache/juneau/wiki" target="_blank">Wiki</a> - Community documentation
 
 ### Documentation & Reports
-- [Javadocs](/site/apidocs/) - API documentation
-- [Maven Site](/site/) - Complete project reports
-- [Source Cross-Reference](/site/xref/) - Browsable source code
-- [Test Reports](/site/surefire.html) - Unit test results
-- [Code Coverage](/site/jacoco-aggregate/) - Test coverage reports
+- <a href="/site/apidocs/" target="_blank">Javadocs</a> - API documentation
+- <a href="/site/" target="_blank">Maven Site</a> - Complete project reports
+- <a href="/site/xref/" target="_blank">Source Cross-Reference</a> - Browsable source code
+- <a href="/site/surefire.html" target="_blank">Test Reports</a> - Unit test results
+- <a href="/site/jacoco-aggregate/" target="_blank">Code Coverage</a> - Test coverage reports
 
 ---
 
@@ -30,7 +30,7 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of the following
 | | [juneau-rest-server-springboot](/docs/topics/JuneauRestServerSpringbootBasics) | Spring Boot integration. |
 | | [juneau-rest-client](/docs/topics/JuneauRestClientBasics) | A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces. |
 
-Questions via email to [dev@juneau.apache.org](mailto:dev@juneau.apache.org?Subject=Apache%20Juneau%20question) are always welcome.
+Questions via email to <a href="mailto:dev@juneau.apache.org?Subject=Apache%20Juneau%20question" target="_blank">dev@juneau.apache.org</a> are always welcome.
 
 Juneau is packed with features that may not be obvious at first. Users are encouraged to ask for code reviews by providing links to specific source files such as through GitHub. Not only can we help you with feedback, but it helps us understand usage patterns to further improve the product.
 

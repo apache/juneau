@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 
 /**
- * Examples
+ * Serializer Examples
+ * 
+ * <p>
+ * Example classes demonstrating how to use Juneau's serializer capabilities.
+ * These examples show various content serialization scenarios and techniques.
+ * </p>
  */
-package org.apache.juneau.examples.serializer;
+package org.apache.juneau.examples.serializer;
+
