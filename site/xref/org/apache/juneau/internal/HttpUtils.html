@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>HttpUtils xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../apidocs/org/apache/juneau/internal/HttpUtils.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">// ***************************************************************************************************************************</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment">// * with the License.  You may obtain a copy of the License at                                                              *</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment">// * specific language governing permissions and limitations under the License.                                              *</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment">// ***************************************************************************************************************************</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.internal;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * HTTP utilities.</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="HttpUtils" href="../../../../org/apache/juneau/internal/HttpUtils.html#HttpUtils">HttpUtils</a> {
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String[]
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  		LC_METHODS = {<span class="jxr_string">"get"</span>,<span class="jxr_string">"put"</span>,<span class="jxr_string">"post"</span>,<span class="jxr_string">"delete"</span>,<span class="jxr_string">"options"</span>,<span class="jxr_string">"head"</span>,<span class="jxr_string">"connect"</span>,<span class="jxr_string">"trace"</span>,<span class="jxr_string">"patch"</span>},
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  		UC_METHODS = {<span class="jxr_string">"GET"</span>,<span class="jxr_string">"PUT"</span>,<span class="jxr_string">"POST"</span>,<span class="jxr_string">"DELETE"</span>,<span class="jxr_string">"OPTIONS"</span>,<span class="jxr_string">"HEAD"</span>,<span class="jxr_string">"CONNECT"</span>,<span class="jxr_string">"TRACE"</span>,<span class="jxr_string">"PATCH"</span>};
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">	 * Given a method name, infers the REST method name.</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">	 * @param m The Java method.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">	 * @param detectMethod Whether we should auto-detect the HTTP method name from the Java method name.</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">	 * @param def The default HTTP method if not detected.</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">	 * @return The REST method name, or the default value if not found.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String detectHttpMethod(Method m, <strong class="jxr_keyword">boolean</strong> detectMethod, String def) {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		String n = m.getName();
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">if</strong> (detectMethod) {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  			<strong class="jxr_keyword">if</strong> (n.startsWith(<span class="jxr_string">"do"</span>) &amp;&amp; n.length() &gt; 2) {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  				String n2 = n.substring(2).toUpperCase();
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  				<strong class="jxr_keyword">for</strong> (String t : UC_METHODS)
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  					<strong class="jxr_keyword">if</strong> (n2.equals(t))
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  						<strong class="jxr_keyword">return</strong> n2;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  			}
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			<strong class="jxr_keyword">for</strong> (String t : LC_METHODS)
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  				<strong class="jxr_keyword">if</strong> (n.startsWith(t) &amp;&amp; (n.length() == t.length() || Character.isUpperCase(n.charAt(t.length()))))
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  					<strong class="jxr_keyword">return</strong> t.toUpperCase();
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		}
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">return</strong> def;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 * Given a Java method, infers the REST path.</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">	 * @param m The Java method.</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * @param method The HTTP method name if it's known.</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * @return The REST path or &lt;jk&gt;null&lt;/jk&gt; if not detected.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String detectHttpPath(Method m, String method) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		String n = m.getName();
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (method == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">if</strong> (n.startsWith(<span class="jxr_string">"do"</span>) &amp;&amp; n.length() &gt; 2) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  				String n2 = n.substring(2).toUpperCase();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  				<strong class="jxr_keyword">for</strong> (String t : UC_METHODS)
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  					<strong class="jxr_keyword">if</strong> (n2.equals(t))
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  						<strong class="jxr_keyword">return</strong> <span class="jxr_string">"/"</span>;
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			}
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">for</strong> (String t : LC_METHODS) {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  				<strong class="jxr_keyword">if</strong> (n.startsWith(t) &amp;&amp; (n.length() == t.length() || Character.isUpperCase(n.charAt(t.length())))) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  					<strong class="jxr_keyword">return</strong> '/' + java.beans.Introspector.decapitalize(n.substring(t.length()));
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  				}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  			}
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">if</strong> (n.equalsIgnoreCase(method) || n.equals(<span class="jxr_string">"do"</span>) || n.equals(<span class="jxr_string">"_"</span>))
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"/"</span>;
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">if</strong> (n.startsWith(method) &amp;&amp; (n.length() == method.length() || Character.isUpperCase(n.charAt(method.length())))) {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  				<strong class="jxr_keyword">return</strong> '/' + java.beans.Introspector.decapitalize(n.substring(method.length()));
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			}
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		}
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">return</strong> '/' + n;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  }
+</pre>
+<hr/>
+<div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

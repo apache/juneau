@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>DataType xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../apidocs/org/apache/juneau/msgpack/DataType.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">// ***************************************************************************************************************************</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment">// * with the License.  You may obtain a copy of the License at                                                              *</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment">// * specific language governing permissions and limitations under the License.                                              *</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment">// ***************************************************************************************************************************</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.msgpack;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_javadoccomment"> * Constants for the MessagePack format.</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="../../../../index.html#jm.MsgPackDetails"&gt;MessagePack Details&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  enum <a name="DataType" href="../../../../org/apache/juneau/msgpack/DataType.html#DataType">DataType</a> {
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  	NULL, BOOLEAN, INT, LONG, FLOAT, DOUBLE, STRING, BIN, EXT, ARRAY, MAP, INVALID;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  	<strong class="jxr_keyword">boolean</strong> isOneOf(DataType...dataTypes) {
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  		<strong class="jxr_keyword">for</strong> (<a name="DataType" href="../../../../org/apache/juneau/msgpack/DataType.html#DataType">DataType</a> dt : dataTypes)
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  			<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> == dt)
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	}
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		POSFIXINT_L  = 0x00,  <em class="jxr_comment">//   pos fixint     0xxxxxxx     0x00 - 0x7f</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		POSFIXINT_U  = 0x7F,
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		FIXMAP_L     = 0x80,  <em class="jxr_comment">//   fixmap         1000xxxx     0x80 - 0x8f</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		FIXMAP_U     = 0x8F,
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		FIXARRAY_L   = 0x90,  <em class="jxr_comment">//   fixarray       1001xxxx     0x90 - 0x9f</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		FIXARRAY_U   = 0x9F,
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		FIXSTR_L     = 0xA0,  <em class="jxr_comment">//   fixstr         101xxxxx     0xa0 - 0xbf</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		FIXSTR_U     = 0xBF,
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		NIL          = 0xC0,  <em class="jxr_comment">//   nil            11000000     0xc0</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		NU           = 0xC1,  <em class="jxr_comment">//   (never used)   11000001     0xc1</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		FALSE        = 0xC2,  <em class="jxr_comment">//   false          11000010     0xc2</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		TRUE         = 0xC3,  <em class="jxr_comment">//   true           11000011     0xc3</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		BIN8         = 0xC4,  <em class="jxr_comment">//   bin 8          11000100     0xc4</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		BIN16        = 0xC5,  <em class="jxr_comment">//   bin 16         11000101     0xc5</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		BIN32        = 0xC6,  <em class="jxr_comment">//   bin 32         11000110     0xc6</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		EXT8         = 0xC7,  <em class="jxr_comment">//   ext 8          11000111     0xc7</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		EXT16        = 0xC8,  <em class="jxr_comment">//   ext 16         11001000     0xc8</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		EXT32        = 0xC9,  <em class="jxr_comment">//   ext 32         11001001     0xc9</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		FLOAT32      = 0xCA,  <em class="jxr_comment">//   float 32       11001010     0xca</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		FLOAT64      = 0xCB,  <em class="jxr_comment">//   float 64       11001011     0xcb</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		UINT8        = 0xCC,  <em class="jxr_comment">//   uint 8         11001100     0xcc</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		UINT16       = 0xCD,  <em class="jxr_comment">//   uint 16        11001101     0xcd</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		UINT32       = 0xCE,  <em class="jxr_comment">//   uint 32        11001110     0xce</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		UINT64       = 0xCF,  <em class="jxr_comment">//   uint 64        11001111     0xcf</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		INT8         = 0xD0,  <em class="jxr_comment">//   int 8          11010000     0xd0</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		INT16        = 0xD1,  <em class="jxr_comment">//   int 16         11010001     0xd1</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		INT32        = 0xD2,  <em class="jxr_comment">//   int 32         11010010     0xd2</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		INT64        = 0xD3,  <em class="jxr_comment">//   int 64         11010011     0xd3</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		FIXEXT1      = 0xD4,  <em class="jxr_comment">//   fixext 1       11010100     0xd4</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		FIXEXT2      = 0xD5,  <em class="jxr_comment">//   fixext 2       11010101     0xd5</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		FIXEXT4      = 0xD6,  <em class="jxr_comment">//   fixext 4       11010110     0xd6</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		FIXEXT8      = 0xD7,  <em class="jxr_comment">//   fixext 8       11010111     0xd7</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		FIXEXT16     = 0xD8,  <em class="jxr_comment">//   fixext 16      11011000     0xd8</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		STR8         = 0xD9,  <em class="jxr_comment">//   str 8          11011001     0xd9</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		STR16        = 0xDA,  <em class="jxr_comment">//   str 16         11011010     0xda</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		STR32        = 0xDB,  <em class="jxr_comment">//   str 32         11011011     0xdb</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		ARRAY16      = 0xDC,  <em class="jxr_comment">//   array 16       11011100     0xdc</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		ARRAY32      = 0xDD,  <em class="jxr_comment">//   array 32       11011101     0xdd</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		MAP16        = 0xDE,  <em class="jxr_comment">//   map 16         11011110     0xde</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		MAP32        = 0xDF,  <em class="jxr_comment">//   map 32         11011111     0xdf</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		NEGFIXINT_L  = 0xE0,  <em class="jxr_comment">//   neg fixint     111xxxxx     0xe0 - 0xff</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		NEGFIXINT_U  = 0xFF;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  }
+</pre>
+<hr/>
+<div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

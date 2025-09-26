@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>RestOp_Returns_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../testapidocs/org/apache/juneau/rest/RestOp_Returns_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">// ***************************************************************************************************************************</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment">// * with the License.  You may obtain a copy of the License at                                                              *</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment">// * specific language governing permissions and limitations under the License.                                              *</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment">// ***************************************************************************************************************************</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.TestUtils.*;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpResources.*;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpResponses.*;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.resource.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.response.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">class</strong> <a name="RestOp_Returns_Test" href="../../../../org/apache/juneau/rest/RestOp_Returns_Test.html#RestOp_Returns_Test">RestOp_Returns_Test</a> <strong class="jxr_keyword">extends</strong> <a name="SimpleTestBase" href="../../../../org/apache/juneau/SimpleTestBase.html#SimpleTestBase">SimpleTestBase</a> {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<em class="jxr_comment">// Response beans</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	@Rest
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		@RestGet <strong class="jxr_keyword">public</strong> Accepted accepted() { <strong class="jxr_keyword">return</strong> ACCEPTED; }
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		@RestGet <strong class="jxr_keyword">public</strong> AlreadyReported alreadyReported() { <strong class="jxr_keyword">return</strong> ALREADY_REPORTED; }
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		@RestGet(path=<span class="jxr_string">"/continue"</span>) <strong class="jxr_keyword">public</strong> Continue _<strong class="jxr_keyword">continue</strong>() { <strong class="jxr_keyword">return</strong> CONTINUE; }
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		@RestGet <strong class="jxr_keyword">public</strong> Created created() { <strong class="jxr_keyword">return</strong> CREATED; }
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		@RestGet <strong class="jxr_keyword">public</strong> EarlyHints earlyHints() { <strong class="jxr_keyword">return</strong> EARLY_HINTS; }
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		@RestGet <strong class="jxr_keyword">public</strong> Found found() { <strong class="jxr_keyword">return</strong> FOUND; }
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		@RestGet <strong class="jxr_keyword">public</strong> IMUsed imUsed() { <strong class="jxr_keyword">return</strong> IM_USED; }
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		@RestGet <strong class="jxr_keyword">public</strong> MovedPermanently movedPermanently() { <strong class="jxr_keyword">return</strong> MOVED_PERMANENTLY; }
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		@RestGet <strong class="jxr_keyword">public</strong> MultipleChoices multipleChoices() { <strong class="jxr_keyword">return</strong> MULTIPLE_CHOICES; }
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		@RestGet <strong class="jxr_keyword">public</strong> MultiStatus multiStatus() { <strong class="jxr_keyword">return</strong> MULTI_STATUS; }
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		@RestGet <strong class="jxr_keyword">public</strong> NoContent noContent() { <strong class="jxr_keyword">return</strong> NO_CONTENT; }
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		@RestGet <strong class="jxr_keyword">public</strong> NonAuthoritiveInformation nonAuthoritiveInformation() { <strong class="jxr_keyword">return</strong> NON_AUTHORATIVE_INFORMATION; }
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		@RestGet <strong class="jxr_keyword">public</strong> NotModified notModified() { <strong class="jxr_keyword">return</strong> NOT_MODIFIED; }
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		@RestGet <strong class="jxr_keyword">public</strong> Ok ok() { <strong class="jxr_keyword">return</strong> OK; }
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		@RestGet <strong class="jxr_keyword">public</strong> PartialContent partialContent() { <strong class="jxr_keyword">return</strong> PARTIAL_CONTENT; }
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		@RestGet <strong class="jxr_keyword">public</strong> PermanentRedirect permanentRedirect() { <strong class="jxr_keyword">return</strong> PERMANENT_REDIRECT; }
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		@RestGet <strong class="jxr_keyword">public</strong> Processing processing() { <strong class="jxr_keyword">return</strong> PROCESSING; }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		@RestGet <strong class="jxr_keyword">public</strong> ResetContent resetContent() { <strong class="jxr_keyword">return</strong> RESET_CONTENT; }
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		@RestGet <strong class="jxr_keyword">public</strong> SeeOther seeOther() { <strong class="jxr_keyword">return</strong> SEE_OTHER; }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		@RestGet <strong class="jxr_keyword">public</strong> SwitchingProtocols switchingProtocols() { <strong class="jxr_keyword">return</strong> SWITCHING_PROTOCOLS; }
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		@RestGet <strong class="jxr_keyword">public</strong> TemporaryRedirect temporaryRedirect() { <strong class="jxr_keyword">return</strong> TEMPORARY_REDIRECT; }
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		@RestGet <strong class="jxr_keyword">public</strong> UseProxy useProxy() { <strong class="jxr_keyword">return</strong> USE_PROXY; }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	}
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	@Test <strong class="jxr_keyword">void</strong> a01_responseBeans() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">var</strong> c = client(A.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		c.get(<span class="jxr_string">"/accepted"</span>).run().assertStatus().asCode().is(Accepted.STATUS_CODE).assertContent(Accepted.REASON_PHRASE);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		c.get(<span class="jxr_string">"/alreadyReported"</span>).run().assertStatus().asCode().is(AlreadyReported.STATUS_CODE).assertContent(AlreadyReported.REASON_PHRASE);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		c.get(<span class="jxr_string">"/continue"</span>).run().assertStatus().asCode().is(Continue.STATUS_CODE + 1000).assertContent(Continue.REASON_PHRASE);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		c.get(<span class="jxr_string">"/created"</span>).run().assertStatus().asCode().is(Created.STATUS_CODE).assertContent(Created.REASON_PHRASE);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		c.get(<span class="jxr_string">"/earlyHints"</span>).run().assertStatus().asCode().is(EarlyHints.STATUS_CODE + 1000).assertContent(EarlyHints.REASON_PHRASE);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		c.get(<span class="jxr_string">"/found"</span>).run().assertStatus().asCode().is(Found.STATUS_CODE).assertContent(Found.REASON_PHRASE);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		c.get(<span class="jxr_string">"/imUsed"</span>).run().assertStatus().asCode().is(IMUsed.STATUS_CODE).assertContent(IMUsed.REASON_PHRASE);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		c.get(<span class="jxr_string">"/movedPermanently"</span>).run().assertStatus().asCode().is(MovedPermanently.STATUS_CODE).assertContent(MovedPermanently.REASON_PHRASE);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		c.get(<span class="jxr_string">"/multipleChoices"</span>).run().assertStatus().asCode().is(MultipleChoices.STATUS_CODE).assertContent(MultipleChoices.REASON_PHRASE);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		c.get(<span class="jxr_string">"/multiStatus"</span>).run().assertStatus().asCode().is(MultiStatus.STATUS_CODE).assertContent(MultiStatus.REASON_PHRASE);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		c.get(<span class="jxr_string">"/noContent"</span>).run().assertStatus().asCode().is(NoContent.STATUS_CODE).assertContent().isEmpty();
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		c.get(<span class="jxr_string">"/nonAuthoritiveInformation"</span>).run().assertStatus().asCode().is(NonAuthoritiveInformation.STATUS_CODE).assertContent(NonAuthoritiveInformation.REASON_PHRASE);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		c.get(<span class="jxr_string">"/notModified"</span>).run().assertStatus().asCode().is(NotModified.STATUS_CODE).assertContent().isEmpty();
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		c.get(<span class="jxr_string">"/ok"</span>).run().assertStatus().asCode().is(Ok.STATUS_CODE).assertContent(Ok.REASON_PHRASE);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		c.get(<span class="jxr_string">"/partialContent"</span>).run().assertStatus().asCode().is(PartialContent.STATUS_CODE).assertContent(PartialContent.REASON_PHRASE);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		c.get(<span class="jxr_string">"/permanentRedirect"</span>).run().assertStatus().asCode().is(PermanentRedirect.STATUS_CODE).assertContent(PermanentRedirect.REASON_PHRASE);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		c.get(<span class="jxr_string">"/processing"</span>).run().assertStatus().asCode().is(Processing.STATUS_CODE + 1000).assertContent(Processing.REASON_PHRASE);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		c.get(<span class="jxr_string">"/resetContent"</span>).run().assertStatus().asCode().is(ResetContent.STATUS_CODE).assertContent().isEmpty();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		c.get(<span class="jxr_string">"/seeOther"</span>).run().assertStatus().asCode().is(SeeOther.STATUS_CODE).assertContent(SeeOther.REASON_PHRASE);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		c.get(<span class="jxr_string">"/switchingProtocols"</span>).run().assertStatus().asCode().is(SwitchingProtocols.STATUS_CODE + 1000).assertContent(SwitchingProtocols.REASON_PHRASE);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		c.get(<span class="jxr_string">"/temporaryRedirect"</span>).run().assertStatus().asCode().is(TemporaryRedirect.STATUS_CODE).assertContent(TemporaryRedirect.REASON_PHRASE);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		c.get(<span class="jxr_string">"/useProxy"</span>).run().assertStatus().asCode().is(UseProxy.STATUS_CODE).assertContent(UseProxy.REASON_PHRASE);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test <strong class="jxr_keyword">void</strong> a02_responseBeans_swagger() {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> paths = getSwagger(A.<strong class="jxr_keyword">class</strong>).getPaths();
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertEquals(Accepted.REASON_PHRASE, paths.get(<span class="jxr_string">"/accepted"</span>).get(<span class="jxr_string">"get"</span>).getResponse(Accepted.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertEquals(AlreadyReported.REASON_PHRASE, paths.get(<span class="jxr_string">"/alreadyReported"</span>).get(<span class="jxr_string">"get"</span>).getResponse(AlreadyReported.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertEquals(Continue.REASON_PHRASE, paths.get(<span class="jxr_string">"/continue"</span>).get(<span class="jxr_string">"get"</span>).getResponse(Continue.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(Created.REASON_PHRASE, paths.get(<span class="jxr_string">"/created"</span>).get(<span class="jxr_string">"get"</span>).getResponse(Created.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertEquals(EarlyHints.REASON_PHRASE, paths.get(<span class="jxr_string">"/earlyHints"</span>).get(<span class="jxr_string">"get"</span>).getResponse(EarlyHints.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEquals(Found.REASON_PHRASE, paths.get(<span class="jxr_string">"/found"</span>).get(<span class="jxr_string">"get"</span>).getResponse(Found.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertEquals(IMUsed.REASON_PHRASE, paths.get(<span class="jxr_string">"/imUsed"</span>).get(<span class="jxr_string">"get"</span>).getResponse(IMUsed.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertEquals(MovedPermanently.REASON_PHRASE, paths.get(<span class="jxr_string">"/movedPermanently"</span>).get(<span class="jxr_string">"get"</span>).getResponse(MovedPermanently.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertEquals(MultipleChoices.REASON_PHRASE, paths.get(<span class="jxr_string">"/multipleChoices"</span>).get(<span class="jxr_string">"get"</span>).getResponse(MultipleChoices.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(MultiStatus.REASON_PHRASE, paths.get(<span class="jxr_string">"/multiStatus"</span>).get(<span class="jxr_string">"get"</span>).getResponse(MultiStatus.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(NoContent.REASON_PHRASE, paths.get(<span class="jxr_string">"/noContent"</span>).get(<span class="jxr_string">"get"</span>).getResponse(NoContent.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertEquals(NonAuthoritiveInformation.REASON_PHRASE, paths.get(<span class="jxr_string">"/nonAuthoritiveInformation"</span>).get(<span class="jxr_string">"get"</span>).getResponse(NonAuthoritiveInformation.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertEquals(NotModified.REASON_PHRASE, paths.get(<span class="jxr_string">"/notModified"</span>).get(<span class="jxr_string">"get"</span>).getResponse(NotModified.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		assertEquals(Ok.REASON_PHRASE, paths.get(<span class="jxr_string">"/ok"</span>).get(<span class="jxr_string">"get"</span>).getResponse(Ok.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertEquals(PartialContent.REASON_PHRASE, paths.get(<span class="jxr_string">"/partialContent"</span>).get(<span class="jxr_string">"get"</span>).getResponse(PartialContent.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertEquals(PermanentRedirect.REASON_PHRASE, paths.get(<span class="jxr_string">"/permanentRedirect"</span>).get(<span class="jxr_string">"get"</span>).getResponse(PermanentRedirect.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertEquals(Processing.REASON_PHRASE, paths.get(<span class="jxr_string">"/processing"</span>).get(<span class="jxr_string">"get"</span>).getResponse(Processing.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertEquals(ResetContent.REASON_PHRASE, paths.get(<span class="jxr_string">"/resetContent"</span>).get(<span class="jxr_string">"get"</span>).getResponse(ResetContent.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertEquals(SeeOther.REASON_PHRASE, paths.get(<span class="jxr_string">"/seeOther"</span>).get(<span class="jxr_string">"get"</span>).getResponse(SeeOther.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertEquals(SwitchingProtocols.REASON_PHRASE, paths.get(<span class="jxr_string">"/switchingProtocols"</span>).get(<span class="jxr_string">"get"</span>).getResponse(SwitchingProtocols.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertEquals(TemporaryRedirect.REASON_PHRASE, paths.get(<span class="jxr_string">"/temporaryRedirect"</span>).get(<span class="jxr_string">"get"</span>).getResponse(TemporaryRedirect.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertEquals(UseProxy.REASON_PHRASE, paths.get(<span class="jxr_string">"/useProxy"</span>).get(<span class="jxr_string">"get"</span>).getResponse(UseProxy.STATUS_CODE).getDescription());
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<em class="jxr_comment">// BasicHttpResource</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Rest
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		@RestGet
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">public</strong> HttpResource a() {
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			<strong class="jxr_keyword">return</strong> stringResource(<span class="jxr_string">"foo"</span>);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		}
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		@RestGet
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">public</strong> HttpResource b() {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">return</strong> readerResource(<strong class="jxr_keyword">new</strong> StringReader(<span class="jxr_string">"foo"</span>)).setHeader(<span class="jxr_string">"Foo"</span>, <span class="jxr_string">"Bar"</span>);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		}
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		@RestGet
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">public</strong> HttpResource c() {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">return</strong> readerResource(<strong class="jxr_keyword">new</strong> StringReader(<span class="jxr_string">"foo"</span>)).setContentType(<span class="jxr_string">"application/json"</span>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		@RestGet
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">public</strong> HttpResource d(RestRequest req) {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">return</strong> stringResource(()-&gt;req.getVarResolverSession().resolve(<span class="jxr_string">"$RQ{foo}"</span>));
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		}
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		@RestGet
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">public</strong> HttpResource e() {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<strong class="jxr_keyword">return</strong> streamResource(inputStream(<span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		}
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		@RestGet
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">public</strong> HttpResource f() {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">return</strong> readerResource(reader(<span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		}
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	@Test <strong class="jxr_keyword">void</strong> b01_BasicHttpResource() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">var</strong> b = MockRestClient.build(B.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		b.get(<span class="jxr_string">"/a"</span>)
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			.run()
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			.assertContent(<span class="jxr_string">"foo"</span>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		b.get(<span class="jxr_string">"/b"</span>)
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			.run()
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			.assertHeader(<span class="jxr_string">"Foo"</span>).is(<span class="jxr_string">"Bar"</span>);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		b.get(<span class="jxr_string">"/c"</span>)
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			.run()
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			.assertHeader(<span class="jxr_string">"Content-Type"</span>).is(<span class="jxr_string">"application/json"</span>);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		b.get(<span class="jxr_string">"/d?foo=bar"</span>)
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			.run()
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			.assertContent(<span class="jxr_string">"bar"</span>);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		b.get(<span class="jxr_string">"/e"</span>)
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			.run()
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			.assertContent(<span class="jxr_string">"foo"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		b.get(<span class="jxr_string">"/f"</span>)
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			.run()
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			.assertContent(<span class="jxr_string">"foo"</span>);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<em class="jxr_comment">// Helper methods</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> MockRestClient client(Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(c).disableRedirectHandling().ignoreErrors().build();
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	}
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

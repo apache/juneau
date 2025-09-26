@@ -1,0 +1,587 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Utils_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/junit/bct/Utils_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">// ***************************************************************************************************************************</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment">// * with the License.  You may obtain a copy of the License at                                                              *</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment">// * specific language governing permissions and limitations under the License.                                              *</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment">// ***************************************************************************************************************************</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.junit.bct;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.Utils.*;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * Comprehensive unit tests for the {@link Utils} utility class.</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;This test class validates all utility methods for correct behavior, edge cases,</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * and error conditions. Tests are organized by functional groups matching the</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * utility method categories.</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  @DisplayName(<span class="jxr_string">"Utility Methods"</span>)
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">class</strong> <a name="Utils_Test" href="../../../../../org/apache/juneau/junit/bct/Utils_Test.html#Utils_Test">Utils_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/junit/bct/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<em class="jxr_comment">// Array Conversion Tests</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Test
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	@DisplayName(<span class="jxr_string">"arrayToList() - Basic array conversion"</span>)
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">void</strong> a01_arrayToListBasicConversion() {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<em class="jxr_comment">// Test with integer array</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">int</strong>[] intArray = {1, 2, 3, 4, 5};
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">var</strong> result = arrayToList(intArray);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertEquals(5, result.size());
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assertEquals(1, result.get(0));
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertEquals(2, result.get(1));
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		assertEquals(3, result.get(2));
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertEquals(4, result.get(3));
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		assertEquals(5, result.get(4));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<em class="jxr_comment">// Test with string array</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		String[] stringArray = {<span class="jxr_string">"hello"</span>, <span class="jxr_string">"world"</span>, <span class="jxr_string">"test"</span>};
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		result = arrayToList(stringArray);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertEquals(3, result.size());
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		assertEquals(<span class="jxr_string">"hello"</span>, result.get(0));
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		assertEquals(<span class="jxr_string">"world"</span>, result.get(1));
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		assertEquals(<span class="jxr_string">"test"</span>, result.get(2));
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	}
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Test
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	@DisplayName(<span class="jxr_string">"arrayToList() - Empty and single element arrays"</span>)
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">void</strong> a02_arrayToListEdgeCases() {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<em class="jxr_comment">// Empty array</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">int</strong>[] emptyArray = {};
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">var</strong> result = arrayToList(emptyArray);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		assertEmpty(result);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<em class="jxr_comment">// Single element</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		String[] singleElement = {<span class="jxr_string">"single"</span>};
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		result = arrayToList(singleElement);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertList(result, <span class="jxr_string">"single"</span>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Test
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	@DisplayName(<span class="jxr_string">"arrayToList() - Null values in array"</span>)
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">void</strong> a03_arrayToListWithNulls() {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		String[] arrayWithNulls = {<span class="jxr_string">"first"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"third"</span>, <strong class="jxr_keyword">null</strong>};
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">var</strong> result = arrayToList(arrayWithNulls);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertEquals(4, result.size());
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertEquals(<span class="jxr_string">"first"</span>, result.get(0));
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertNull(result.get(1));
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertEquals(<span class="jxr_string">"third"</span>, result.get(2));
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertNull(result.get(3));
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@DisplayName(<span class="jxr_string">"arrayToList() - Different primitive types"</span>)
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">void</strong> a04_arrayToListPrimitiveTypes() {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<em class="jxr_comment">// Boolean array</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">boolean</strong>[] boolArray = {<strong class="jxr_keyword">true</strong>, false, <strong class="jxr_keyword">true</strong>};
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> result = arrayToList(boolArray);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertList(result, <span class="jxr_string">"true"</span>,<span class="jxr_string">"false"</span>,<span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<em class="jxr_comment">// Double array</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">double</strong>[] doubleArray = {1.5, 2.7, 3.14};
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		result = arrayToList(doubleArray);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertList(result, <span class="jxr_string">"1.5"</span>,<span class="jxr_string">"2.7"</span>,<span class="jxr_string">"3.14"</span>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<em class="jxr_comment">// Argument Validation Tests</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Test
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@DisplayName(<span class="jxr_string">"assertArg() - Valid expressions"</span>)
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">void</strong> b01_assertArgValidExpressions() {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<em class="jxr_comment">// Should not throw</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertDoesNotThrow(() -&gt; assertArg(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"Should not fail"</span>));
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertDoesNotThrow(() -&gt; assertArg(5 &gt; 3, <span class="jxr_string">"Math should work"</span>));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertDoesNotThrow(() -&gt; assertArg(<span class="jxr_string">"test"</span>.length() == 4, <span class="jxr_string">"Length check"</span>));
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	@Test
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	@DisplayName(<span class="jxr_string">"assertArg() - Invalid expressions"</span>)
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">void</strong> b02_assertArgInvalidExpressions() {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<em class="jxr_comment">// Simple false expression</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; assertArg(false, <span class="jxr_string">"This should fail"</span>));
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertEquals(<span class="jxr_string">"This should fail"</span>, e.getMessage());
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<em class="jxr_comment">// False expression with parameters</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; assertArg(5 &lt; 3, <span class="jxr_string">"Value {0} should be greater than {1}"</span>, 5, 3));
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertEquals(<span class="jxr_string">"Value 5 should be greater than 3"</span>, e.getMessage());
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	@Test
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@DisplayName(<span class="jxr_string">"assertArg() - Message formatting"</span>)
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">void</strong> b03_assertArgMessageFormatting() {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; assertArg(false, <span class="jxr_string">"User {0} has invalid age {1}"</span>, <span class="jxr_string">"Alice"</span>, -5));
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertEquals(<span class="jxr_string">"User Alice has invalid age -5"</span>, e.getMessage());
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	@Test
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	@DisplayName(<span class="jxr_string">"assertArgNotNull() - Valid arguments"</span>)
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<strong class="jxr_keyword">void</strong> b04_assertArgNotNullValid() {
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> result = assertArgNotNull(<span class="jxr_string">"testParam"</span>, <span class="jxr_string">"validValue"</span>);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertEquals(<span class="jxr_string">"validValue"</span>, result);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> intResult = assertArgNotNull(<span class="jxr_string">"number"</span>, 42);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		assertEquals(Integer.valueOf(42), intResult);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> listResult = assertArgNotNull(<span class="jxr_string">"list"</span>, list);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertSame(list, listResult);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	}
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	@Test
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	@DisplayName(<span class="jxr_string">"assertArgNotNull() - Null arguments"</span>)
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<strong class="jxr_keyword">void</strong> b05_assertArgNotNullInvalid() {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; assertArgNotNull(<span class="jxr_string">"username"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertEquals(<span class="jxr_string">"Argument 'username' cannot be null."</span>, e.getMessage());
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; assertArgNotNull(<span class="jxr_string">"data"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertEquals(<span class="jxr_string">"Argument 'data' cannot be null."</span>, e.getMessage());
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	}
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<em class="jxr_comment">// Assertion Error Creation Tests</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	@Test
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	@DisplayName(<span class="jxr_string">"assertEqualsFailed() - Basic error creation"</span>)
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<strong class="jxr_keyword">void</strong> c01_assertEqualsFailedBasic() {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> error = assertEqualsFailed(<span class="jxr_string">"expected"</span>, <span class="jxr_string">"actual"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertContains(<span class="jxr_string">"expected: &lt;expected&gt;"</span>, error.getMessage());
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertContains(<span class="jxr_string">"but was: &lt;actual&gt;"</span>, error.getMessage());
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		assertEquals(<span class="jxr_string">"expected"</span>, error.getExpected().getValue());
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertEquals(<span class="jxr_string">"actual"</span>, error.getActual().getValue());
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	}
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	@Test
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	@DisplayName(<span class="jxr_string">"assertEqualsFailed() - With custom message"</span>)
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<strong class="jxr_keyword">void</strong> c02_assertEqualsFailedWithMessage() {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">var</strong> msgSupplier = fs(<span class="jxr_string">"Custom context message"</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> error = assertEqualsFailed(100, 200, msgSupplier);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertContains(<span class="jxr_string">"Custom context message"</span>, error.getMessage());
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	@Test
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	@DisplayName(<span class="jxr_string">"assertEqualsFailed() - Null values"</span>)
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<strong class="jxr_keyword">void</strong> c03_assertEqualsFailedNullValues() {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> error = assertEqualsFailed(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"actual"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertContains(<span class="jxr_string">"expected: &lt;null&gt;"</span>, error.getMessage());
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertContains(<span class="jxr_string">"but was: &lt;actual&gt;"</span>, error.getMessage());
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		error = assertEqualsFailed(<span class="jxr_string">"expected"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertContains(<span class="jxr_string">"expected: &lt;expected&gt;"</span>, error.getMessage());
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertContains(<span class="jxr_string">"but was: &lt;null&gt;"</span>, error.getMessage());
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	}
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<em class="jxr_comment">// Equality Testing Tests</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	@Test
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	@DisplayName(<span class="jxr_string">"eq() - Basic equality with Objects.equals()"</span>)
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<strong class="jxr_keyword">void</strong> d01_eqBasicEquality() {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertTrue(eq(<span class="jxr_string">"hello"</span>, <span class="jxr_string">"hello"</span>));
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertTrue(eq(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertTrue(eq(42, 42));
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertFalse(eq(<span class="jxr_string">"hello"</span>, <span class="jxr_string">"world"</span>));
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		assertFalse(eq(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"test"</span>));
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertFalse(eq(<span class="jxr_string">"test"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertFalse(eq(42, 43));
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	}
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	@Test
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	@DisplayName(<span class="jxr_string">"eq() - Custom predicate equality"</span>)
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<strong class="jxr_keyword">void</strong> d02_eqCustomPredicate() {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<em class="jxr_comment">// Case-insensitive string comparison</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		assertTrue(eq(<span class="jxr_string">"HELLO"</span>, <span class="jxr_string">"hello"</span>, (s1, s2) -&gt; s1.equalsIgnoreCase(s2)));
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		assertFalse(eq(<span class="jxr_string">"HELLO"</span>, <span class="jxr_string">"world"</span>, (s1, s2) -&gt; s1.equalsIgnoreCase(s2)));
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<em class="jxr_comment">// Custom object comparison by ID</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">var</strong> bean1 = <strong class="jxr_keyword">new</strong> TestBean(<span class="jxr_string">"Alice"</span>, 25, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">var</strong> bean2 = <strong class="jxr_keyword">new</strong> TestBean(<span class="jxr_string">"Bob"</span>, 25, false);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertTrue(eq(bean1, bean2, (b1, b2) -&gt; b1.getAge() == b2.getAge()));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertFalse(eq(bean1, bean2, (b1, b2) -&gt; b1.getName().equals(b2.getName())));
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	}
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	@Test
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	@DisplayName(<span class="jxr_string">"eq() - Null handling with custom predicate"</span>)
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<strong class="jxr_keyword">void</strong> d03_eqCustomPredicateNulls() {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<em class="jxr_comment">// Both null</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertTrue(eq(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, (s1, s2) -&gt; s1.equals(s2)));
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<em class="jxr_comment">// One null</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		assertFalse(eq(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"test"</span>, (s1, s2) -&gt; s1.equals(s2)));
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		assertFalse(eq(<span class="jxr_string">"test"</span>, <strong class="jxr_keyword">null</strong>, (s1, s2) -&gt; s1.equals(s2)));
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	}
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	@Test
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	@DisplayName(<span class="jxr_string">"eq() - Reference equality optimization"</span>)
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<strong class="jxr_keyword">void</strong> d04_eqReferenceEquality() {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">var</strong> same = <span class="jxr_string">"test"</span>;
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertTrue(eq(same, same, (s1, s2) -&gt; { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Should not be called"</span>); }));
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	}
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	@Test
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	@DisplayName(<span class="jxr_string">"ne() - Negation of equality"</span>)
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<strong class="jxr_keyword">void</strong> d05_neNegation() {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertTrue(ne(<span class="jxr_string">"hello"</span>, <span class="jxr_string">"world"</span>));
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertTrue(ne(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"test"</span>));
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		assertTrue(ne(<span class="jxr_string">"test"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertFalse(ne(<span class="jxr_string">"hello"</span>, <span class="jxr_string">"hello"</span>));
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertFalse(ne(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertFalse(ne(42, 42));
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	}
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<em class="jxr_comment">// String Escaping Tests</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	@Test
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	@DisplayName(<span class="jxr_string">"escapeForJava() - Basic escape sequences"</span>)
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<strong class="jxr_keyword">void</strong> e01_escapeForJavaBasicEscapes() {
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;\&quot;"</span>, escapeForJava(<span class="jxr_string">"\&quot;"</span>));
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;&#92;&#92;"</span>, escapeForJava(<span class="jxr_string">"&#92;&#92;"</span>));
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;n"</span>, escapeForJava(<span class="jxr_string">"\n"</span>));
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;r"</span>, escapeForJava(<span class="jxr_string">"\r"</span>));
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;t"</span>, escapeForJava(<span class="jxr_string">"\t"</span>));
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;f"</span>, escapeForJava(<span class="jxr_string">"\f"</span>));
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;b"</span>, escapeForJava(<span class="jxr_string">"\b"</span>));
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	}
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	@Test
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	@DisplayName(<span class="jxr_string">"escapeForJava() - Combined sequences"</span>)
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<strong class="jxr_keyword">void</strong> e02_escapeForJavaCombined() {
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">var</strong> input = <span class="jxr_string">"Hello\nWorld\&quot;Test\&quot;"</span>;
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">var</strong> expected = <span class="jxr_string">"Hello&#92;&#92;nWorld&#92;&#92;\&quot;Test&#92;&#92;\&quot;"</span>;
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		assertEquals(expected, escapeForJava(input));
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		input = <span class="jxr_string">"Line1\r\nLine2\tTabbed"</span>;
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		expected = <span class="jxr_string">"Line1&#92;&#92;r&#92;&#92;nLine2&#92;&#92;tTabbed"</span>;
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		assertEquals(expected, escapeForJava(input));
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	}
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	@Test
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	@DisplayName(<span class="jxr_string">"escapeForJava() - Unicode escapes"</span>)
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">void</strong> e03_escapeForJavaUnicode() {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<em class="jxr_comment">// Control characters</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u0001"</span>, escapeForJava(<span class="jxr_string">"\u0001"</span>));
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u001f"</span>, escapeForJava(<span class="jxr_string">"\u001f"</span>));
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<em class="jxr_comment">// Non-ASCII characters</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u007f"</span>, escapeForJava(<span class="jxr_string">"\u007f"</span>));
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u0080"</span>, escapeForJava(<span class="jxr_string">"\u0080"</span>));
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		assertEquals(<span class="jxr_string">"&#92;&#92;u00ff"</span>, escapeForJava(<span class="jxr_string">"\u00ff"</span>));
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	}
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	@Test
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	@DisplayName(<span class="jxr_string">"escapeForJava() - Normal characters unchanged"</span>)
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<strong class="jxr_keyword">void</strong> e04_escapeForJavaNormalChars() {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">var</strong> normal = <span class="jxr_string">"ABCabc123!@#$%^&amp;*()_+-=[]{}|;':,.&lt;&gt;?"</span>;
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		assertEquals(normal, escapeForJava(normal));
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	}
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	@Test
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	@DisplayName(<span class="jxr_string">"escapeForJava() - Empty string"</span>)
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	<strong class="jxr_keyword">void</strong> e05_escapeForJavaEmpty() {
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertEquals(<span class="jxr_string">""</span>, escapeForJava(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<em class="jxr_comment">// Message Formatting Tests</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	@Test
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	@DisplayName(<span class="jxr_string">"f() - No parameters"</span>)
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<strong class="jxr_keyword">void</strong> f01_fNoParameters() {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		assertEquals(<span class="jxr_string">"Simple message"</span>, f(<span class="jxr_string">"Simple message"</span>));
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		assertEquals(<span class="jxr_string">""</span>, f(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	}
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	@Test
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	@DisplayName(<span class="jxr_string">"f() - With parameters"</span>)
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<strong class="jxr_keyword">void</strong> f02_fWithParameters() {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		assertEquals(<span class="jxr_string">"User Alice has 5 items"</span>, f(<span class="jxr_string">"User {0} has {1} items"</span>, <span class="jxr_string">"Alice"</span>, 5));
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		assertEquals(<span class="jxr_string">"Value: 42"</span>, f(<span class="jxr_string">"Value: {0}"</span>, 42));
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		assertEquals(<span class="jxr_string">"a, b, c"</span>, f(<span class="jxr_string">"{0}, {1}, {2}"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	}
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	@Test
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	@DisplayName(<span class="jxr_string">"f() - Complex parameter types"</span>)
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">void</strong> f03_fComplexParameters() {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<em class="jxr_comment">// Test with Boolean</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertString(f(<span class="jxr_string">"Flag: {0}"</span>, <strong class="jxr_keyword">true</strong>), <span class="jxr_string">"Flag: true"</span>);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		assertString(f(<span class="jxr_string">"Flag: {0}"</span>, false), <span class="jxr_string">"Flag: false"</span>);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<em class="jxr_comment">// Test with List</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">var</strong> list = Arrays.asList(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		assertString(f(<span class="jxr_string">"List: {0}"</span>, list), <span class="jxr_string">"List: [a, b, c]"</span>);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<em class="jxr_comment">// Test with mixed types</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		assertString(f(<span class="jxr_string">"User {0} (age {1}) is active: {2}"</span>, <span class="jxr_string">"Alice"</span>, 25, <strong class="jxr_keyword">true</strong>), <span class="jxr_string">"User Alice (age 25) is active: true"</span>);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	}
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	@Test
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	@DisplayName(<span class="jxr_string">"f() - Edge cases and special characters"</span>)
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<strong class="jxr_keyword">void</strong> f04_fEdgeCases() {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<em class="jxr_comment">// Test with special characters (avoid braces in parameters for MessageFormat compatibility)</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		assertEquals(<span class="jxr_string">"Pattern: .*items=&#92;&#92;[a,b&#92;&#92;].*"</span>, f(<span class="jxr_string">"Pattern: {0}"</span>, <span class="jxr_string">".*items=&#92;&#92;[a,b&#92;&#92;].*"</span>));
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		assertEquals(<span class="jxr_string">"Simple: no braces here"</span>, f(<span class="jxr_string">"Simple: {0}"</span>, <span class="jxr_string">"no braces here"</span>));
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		assertEquals(<span class="jxr_string">"Mixed: string with data and 42"</span>, f(<span class="jxr_string">"Mixed: {0} and {1}"</span>, <span class="jxr_string">"string with data"</span>, 42));
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<em class="jxr_comment">// Test with non-string arguments</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		assertEquals(<span class="jxr_string">"Number: 42"</span>, f(<span class="jxr_string">"Number: {0}"</span>, 42));
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		assertEquals(<span class="jxr_string">"Boolean: true"</span>, f(<span class="jxr_string">"Boolean: {0}"</span>, <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<em class="jxr_comment">// Test that single quotes in input are properly handled (need to be doubled in MessageFormat)</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		assertEquals(<span class="jxr_string">"Text with 'single quotes'"</span>, f(<span class="jxr_string">"Text with {0}"</span>, <span class="jxr_string">"'single quotes'"</span>));
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	}
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	@Test
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	@DisplayName(<span class="jxr_string">"fs() - Supplier creation"</span>)
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<strong class="jxr_keyword">void</strong> f05_fsSupplierCreation() {
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">var</strong> supplier = fs(<span class="jxr_string">"User {0} has {1} items"</span>, <span class="jxr_string">"Bob"</span>, 3);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertEquals(<span class="jxr_string">"User Bob has 3 items"</span>, supplier.get());
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<em class="jxr_comment">// Multiple calls should produce same result</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertEquals(<span class="jxr_string">"User Bob has 3 items"</span>, supplier.get());
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	}
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	@Test
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	@DisplayName(<span class="jxr_string">"fs() - No parameters supplier"</span>)
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	<strong class="jxr_keyword">void</strong> f06_fsNoParameters() {
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		assertEquals(<span class="jxr_string">"Static message"</span>, fs(<span class="jxr_string">"Static message"</span>).get());
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	}
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	<em class="jxr_comment">// Pattern Matching Tests</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	@Test
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	@DisplayName(<span class="jxr_string">"getGlobMatchPattern() - Basic wildcard patterns"</span>)
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">void</strong> g01_getGlobMatchPatternBasicWildcards() {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">var</strong> pattern = getGlobMatchPattern(<span class="jxr_string">"user_*_temp"</span>);
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"user_alice_temp"</span>).matches());
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"user_bob_temp"</span>).matches());
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"user__temp"</span>).matches());  <em class="jxr_comment">// Empty match</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		assertFalse(pattern.matcher(<span class="jxr_string">"admin_alice_temp"</span>).matches());
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		assertFalse(pattern.matcher(<span class="jxr_string">"user_alice_data"</span>).matches());
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	@Test
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	@DisplayName(<span class="jxr_string">"getGlobMatchPattern() - Question mark patterns"</span>)
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	<strong class="jxr_keyword">void</strong> g02_getGlobMatchPatternQuestionMark() {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">var</strong> pattern = getGlobMatchPattern(<span class="jxr_string">"file?.txt"</span>);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"file1.txt"</span>).matches());
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"fileA.txt"</span>).matches());
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"file_.txt"</span>).matches());
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertFalse(pattern.matcher(<span class="jxr_string">"file.txt"</span>).matches());    <em class="jxr_comment">// Missing character</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertFalse(pattern.matcher(<span class="jxr_string">"file12.txt"</span>).matches());  <em class="jxr_comment">// Too many characters</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	@Test
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	@DisplayName(<span class="jxr_string">"getGlobMatchPattern() - Combined wildcards"</span>)
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	<strong class="jxr_keyword">void</strong> g03_getGlobMatchPatternCombined() {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">var</strong> pattern = getGlobMatchPattern(<span class="jxr_string">"test_*.?"</span>);
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"test_data.1"</span>).matches());
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"test_long_filename.x"</span>).matches());
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"test_.a"</span>).matches());
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		assertFalse(pattern.matcher(<span class="jxr_string">"test_data"</span>).matches());   <em class="jxr_comment">// Missing single char</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertFalse(pattern.matcher(<span class="jxr_string">"test_data.ab"</span>).matches()); <em class="jxr_comment">// Too many chars at end</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	}
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	@Test
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	@DisplayName(<span class="jxr_string">"getGlobMatchPattern() - Special regex characters"</span>)
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	<strong class="jxr_keyword">void</strong> g04_getGlobMatchPatternSpecialChars() {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<em class="jxr_comment">// Test that regex special characters are properly escaped</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">var</strong> pattern = getGlobMatchPattern(<span class="jxr_string">"file[1].txt"</span>);
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"file[1].txt"</span>).matches());
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		assertFalse(pattern.matcher(<span class="jxr_string">"file1.txt"</span>).matches());   <em class="jxr_comment">// Should not match as character class</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		pattern = getGlobMatchPattern(<span class="jxr_string">"amount$100"</span>);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"amount$100"</span>).matches());
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertFalse(pattern.matcher(<span class="jxr_string">"amount100"</span>).matches());   <em class="jxr_comment">// Should require the $ character</em>
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 	}
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	@Test
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	@DisplayName(<span class="jxr_string">"getGlobMatchPattern() - With flags"</span>)
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	<strong class="jxr_keyword">void</strong> g05_getGlobMatchPatternWithFlags() {
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">var</strong> pattern = getGlobMatchPattern(<span class="jxr_string">"USER_*"</span>, Pattern.CASE_INSENSITIVE);
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"user_alice"</span>).matches());
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"USER_BOB"</span>).matches());
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"User_Charlie"</span>).matches());
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	}
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	@Test
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	@DisplayName(<span class="jxr_string">"getGlobMatchPattern() - Null input"</span>)
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<strong class="jxr_keyword">void</strong> g06_getGlobMatchPatternNull() {
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		assertNull(getGlobMatchPattern(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		assertNull(getGlobMatchPattern(<strong class="jxr_keyword">null</strong>, Pattern.CASE_INSENSITIVE));
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	@Test
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	@DisplayName(<span class="jxr_string">"getGlobMatchPattern() - Empty and edge cases"</span>)
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	<strong class="jxr_keyword">void</strong> g07_getGlobMatchPatternEdgeCases() {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<em class="jxr_comment">// Empty string</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">var</strong> pattern = getGlobMatchPattern(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		assertTrue(pattern.matcher(<span class="jxr_string">""</span>).matches());
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		assertFalse(pattern.matcher(<span class="jxr_string">"a"</span>).matches());
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<em class="jxr_comment">// Only wildcards</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		pattern = getGlobMatchPattern(<span class="jxr_string">"*"</span>);
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		assertTrue(pattern.matcher(<span class="jxr_string">""</span>).matches());
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"anything"</span>).matches());
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		pattern = getGlobMatchPattern(<span class="jxr_string">"?"</span>);
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		assertTrue(pattern.matcher(<span class="jxr_string">"a"</span>).matches());
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		assertFalse(pattern.matcher(<span class="jxr_string">""</span>).matches());
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		assertFalse(pattern.matcher(<span class="jxr_string">"ab"</span>).matches());
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	}
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	<em class="jxr_comment">// Safe Execution Tests</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 	@Test
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	@DisplayName(<span class="jxr_string">"safe() - Successful execution"</span>)
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	<strong class="jxr_keyword">void</strong> h01_safeSuccessfulExecution() {
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		assertEquals(<span class="jxr_string">"success"</span>, safe(() -&gt; <span class="jxr_string">"success"</span>));
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		assertEquals(Integer.valueOf(42), safe(() -&gt; 42));
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	}
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	@Test
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	@DisplayName(<span class="jxr_string">"safe() - Runtime exception passthrough"</span>)
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 	<strong class="jxr_keyword">void</strong> h02_safeRuntimeExceptionPassthrough() {
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">var</strong> original = <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Test runtime exception"</span>);
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">var</strong> thrown = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; safe(() -&gt; { <strong class="jxr_keyword">throw</strong> original; }));
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		assertSame(original, thrown);
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">var</strong> argException = <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Invalid arg"</span>);
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<strong class="jxr_keyword">var</strong> thrownArg = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; safe(() -&gt; { <strong class="jxr_keyword">throw</strong> argException; }));
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		assertSame(argException, thrownArg);
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	}
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	@Test
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 	@DisplayName(<span class="jxr_string">"safe() - Checked exception wrapping"</span>)
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	<strong class="jxr_keyword">void</strong> h03_safeCheckedExceptionWrapping() {
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">var</strong> checkedException = <strong class="jxr_keyword">new</strong> Exception(<span class="jxr_string">"Checked exception"</span>);
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">var</strong> thrown = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; safe(() -&gt; { <strong class="jxr_keyword">throw</strong> checkedException; }));
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		assertSame(checkedException, thrown.getCause());
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		assertEquals(RuntimeException.<strong class="jxr_keyword">class</strong>, thrown.getClass());
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	}
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 	<em class="jxr_comment">// Type Name Tests</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 	@Test
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 	@DisplayName(<span class="jxr_string">"t() - Various object types"</span>)
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	<strong class="jxr_keyword">void</strong> i01_tVariousTypes() {
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		assertString(t(<span class="jxr_string">"hello"</span>), <span class="jxr_string">"String"</span>);
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		assertString(t(42), <span class="jxr_string">"Integer"</span>);
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		assertString(t(<strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;()), <span class="jxr_string">"ArrayList"</span>);
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		assertString(t(<strong class="jxr_keyword">new</strong> HashMap&lt;&gt;()), <span class="jxr_string">"HashMap"</span>);
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		assertString(t(Pattern.compile(<span class="jxr_string">"test"</span>)), <span class="jxr_string">"Pattern"</span>);
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	}
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	@Test
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 	@DisplayName(<span class="jxr_string">"t() - Null input"</span>)
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	<strong class="jxr_keyword">void</strong> i02_tNullInput() {
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		assertNull(t(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	}
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	@Test
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	@DisplayName(<span class="jxr_string">"t() - Array types"</span>)
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	<strong class="jxr_keyword">void</strong> i03_tArrayTypes() {
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		assertString(t(<strong class="jxr_keyword">new</strong> String[0]), <span class="jxr_string">"String[]"</span>);
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		assertString(t(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[0]), <span class="jxr_string">"int[]"</span>);
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		assertString(t(<strong class="jxr_keyword">new</strong> Object[0]), <span class="jxr_string">"Object[]"</span>);
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 	}
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	<em class="jxr_comment">// Tokenization Tests</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	@Test
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	@DisplayName(<span class="jxr_string">"tokenize() - Basic tokenization"</span>)
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 	<strong class="jxr_keyword">void</strong> j01_tokenizeBasic() {
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 		<em class="jxr_comment">// This test assumes NestedTokenizer.tokenize() works correctly</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		<em class="jxr_comment">// We're just testing the delegation</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		assertNotNull(tokenize(<span class="jxr_string">"name,age"</span>));
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<em class="jxr_comment">// The actual behavior depends on NestedTokenizer implementation</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	}
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	@Test
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 	@DisplayName(<span class="jxr_string">"tokenize() - Nested fields"</span>)
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	<strong class="jxr_keyword">void</strong> j02_tokenizeNested() {
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<em class="jxr_comment">// Test with nested structure</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		assertNotNull(tokenize(<span class="jxr_string">"name,address{street,city}"</span>));
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<em class="jxr_comment">// The actual behavior depends on NestedTokenizer implementation</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 	}
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	<em class="jxr_comment">// Test Helper Classes</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 * Simple test bean for testing purposes.</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestBean {
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String name;
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> age;
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> active;
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">public</strong> TestBean(String name, <strong class="jxr_keyword">int</strong> age, <strong class="jxr_keyword">boolean</strong> active) {
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 			<strong class="jxr_keyword">this</strong>.name = name;
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 			<strong class="jxr_keyword">this</strong>.age = age;
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 			<strong class="jxr_keyword">this</strong>.active = active;
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		}
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> name; }
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getAge() { <strong class="jxr_keyword">return</strong> age; }
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isActive() { <strong class="jxr_keyword">return</strong> active; }
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		@Override
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object obj) {
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 			<strong class="jxr_keyword">return</strong> (obj instanceof TestBean other) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, other, (x,y) -&gt; eq(x.age, y.age) &amp;&amp; eq(x.active, y.active) &amp;&amp; eq(x.name, y.name));
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		}
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		@Override
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			<strong class="jxr_keyword">return</strong> Objects.hash(name, age, active);
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		}
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		@Override
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 			<strong class="jxr_keyword">return</strong> f(<span class="jxr_string">"TestBean{name=''{0}'', age=''{1}'', active=''{2}''}"</span>, name, age, active);
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		}
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	}
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

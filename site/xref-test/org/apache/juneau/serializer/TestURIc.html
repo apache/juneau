@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>TestURIc xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../testapidocs/org/apache/juneau/serializer/TestURIc.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">// ***************************************************************************************************************************</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment">// * with the License.  You may obtain a copy of the License at                                                              *</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment">// * specific language governing permissions and limitations under the License.                                              *</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment">// ***************************************************************************************************************************</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.serializer;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.internal.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.xml.annotation.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  @Bean(sort=<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="TestURIc" href="../../../../org/apache/juneau/serializer/TestURIc.html#TestURIc">TestURIc</a> {
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  	@Uri(on=<span class="jxr_string">"Dummy1"</span>)
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  	@Uri(on=<span class="jxr_string">"TestURIc.f0,TestURIc.f2a,TestURIc.f2b,TestURIc.f2c,TestURIc.f2d,TestURIc.f2e,TestURIc.f2f,TestURIc.f2g,TestURIc.f2h,TestURIc.f2i,TestURIc.f2j,TestURIc.f2k,TestURIc.f2l,TestURIc.f2m,TestURIc.f2n,TestURIc.f2o,TestURIc.f3a,,TestURIc.f3b,TestURIc.f3c,TestURIc.getF5,TestURIbc"</span>)
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  	@Uri(on=<span class="jxr_string">"Dummy2"</span>)
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Config {}
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  	<em class="jxr_comment">// String annotated as a URI</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	@Xml(format=XmlFormat.ATTR)
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<strong class="jxr_keyword">public</strong> String f0 = <span class="jxr_string">"f0/x0"</span>;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<em class="jxr_comment">// URI properties</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">public</strong> URI
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		f1a = URI.create(<span class="jxr_string">"http://www.apache.org/f1a"</span>),
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		f1b = URI.create(<span class="jxr_string">"/f1b"</span>),
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		f1c = URI.create(<span class="jxr_string">"/f1c/x/y"</span>),
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		f1d = URI.create(<span class="jxr_string">"f1d"</span>),
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		f1e = URI.create(<span class="jxr_string">"f1e/x/y"</span>),
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		f1f = URI.create(<span class="jxr_string">""</span>),
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		f1g = URI.create(<span class="jxr_string">"servlet:/f1g/x"</span>),
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		f1h = URI.create(<span class="jxr_string">"servlet:/f1h"</span>),
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		f1i = URI.create(<span class="jxr_string">"servlet:/"</span>),
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		f1j = URI.create(<span class="jxr_string">"servlet:/.."</span>),
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		f1k = URI.create(<span class="jxr_string">"context:/f1j/x"</span>),
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		f1l = URI.create(<span class="jxr_string">"context:/f1k"</span>),
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		f1m = URI.create(<span class="jxr_string">"context:/"</span>),
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		f1n = URI.create(<span class="jxr_string">"context:/.."</span>),
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		fio = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<em class="jxr_comment">// Strings annotated with @URI properties</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">public</strong> String
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		f2a = <span class="jxr_string">"http://www.apache.org/f2a"</span>,
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		f2b = <span class="jxr_string">"/f2b"</span>,
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		f2c = <span class="jxr_string">"/f2c/x/y"</span>,
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		f2d = <span class="jxr_string">"f2d"</span>,
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		f2e = <span class="jxr_string">"f2e/x/y"</span>,
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		f2f = <span class="jxr_string">""</span>,
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		f2g = <span class="jxr_string">"servlet:/f2g/x"</span>,
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		f2h = <span class="jxr_string">"servlet:/f2h"</span>,
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		f2i = <span class="jxr_string">"servlet:/"</span>,
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		f2j = <span class="jxr_string">"servlet:/.."</span>,
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		f2k = <span class="jxr_string">"context:/f2j/x"</span>,
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		f2l = <span class="jxr_string">"context:/f2k"</span>,
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		f2m = <span class="jxr_string">"context:/"</span>,
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		f2n = <span class="jxr_string">"context:/.."</span>,
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		f2o = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<em class="jxr_comment">// Strings with labels</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">public</strong> String
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		f3a = <span class="jxr_string">"http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar"</span>,
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		f3b = StringUtils.urlEncode(<span class="jxr_string">"&lt;&gt;&amp;'\&quot;"</span>),
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		f3c = <span class="jxr_string">"&lt;&gt;&amp;'\&quot;"</span>;  <em class="jxr_comment">// Invalid URI, but should produce parsable output.</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<em class="jxr_comment">// @URI on bean</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">public</strong> TestURIbc f4 = <strong class="jxr_keyword">new</strong> TestURIbc();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<em class="jxr_comment">// @URI on bean property method.</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">public</strong> String getF5() {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"f5/x"</span>;
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestURIbc {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"test/uri/b"</span>;
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		}
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  }
+</pre>
+<hr/>
+<div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>
