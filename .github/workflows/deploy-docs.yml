@@ -68,11 +68,10 @@ jobs:
     - name: Copy Maven Site to build directory
       run: |
         pwd
-        rm juneau-docs/build/site
         # cp -v -r target/site/* juneau-docs/build/site/
         # Create direct javadocs access for backward compatibility
         ln -s target/site juneau-docs/build/site
-        ls -Rl juneau-docs/build 
+        ls -RlL juneau-docs/build 
         
     - name: Deploy to staging branch
       uses: peaceiris/actions-gh-pages@v4
