@@ -74,7 +74,7 @@ jobs:
         ls -l 
         echo "Target directory contents"
         ls -l target
-        ln -s target/site juneau-docs/build/site
+        ln -s juneau-docs/build/site target/site 
         echo "Build directory contents"
         ls -RlL juneau-docs/build 
         
