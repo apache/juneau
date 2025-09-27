@@ -10,10 +10,17 @@ Apache Juneau takes security seriously and uses automated tools to help identify
 ## Current Security Status
 
 [![Security Analysis](https://github.com/apache/juneau/workflows/CodeQL/badge.svg)](https://github.com/apache/juneau/security/code-scanning)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
 
-[**View latest security analysis results →**](https://github.com/apache/juneau/security/code-scanning)
+### Analysis Results
+- [**GitHub CodeQL Analysis →**](https://github.com/apache/juneau/security/code-scanning) - Security vulnerability detection
+- [**SonarCloud Quality Analysis →**](https://sonarcloud.io/summary/new_code?id=apache_juneau) - Code quality, security, and maintainability
 
-## About CodeQL
+## About Our Analysis Tools
+
+### GitHub CodeQL
 
 We use [GitHub CodeQL](https://codeql.github.com/) for automated security analysis. CodeQL is GitHub's semantic code analysis engine that helps identify:
 
@@ -21,11 +28,23 @@ We use [GitHub CodeQL](https://codeql.github.com/) for automated security analys
 - **Bugs and errors** - Logic errors and potential runtime issues  
 - **Code quality issues** - Patterns that could lead to problems
 
+### SonarCloud
+
+We use [SonarCloud](https://sonarcloud.io/) for comprehensive code quality analysis. SonarCloud provides:
+
+- **Code quality metrics** - Maintainability, reliability, and security ratings
+- **Technical debt analysis** - Time to fix code quality issues
+- **Code coverage integration** - Test coverage analysis with JaCoCo
+- **Security hotspot detection** - Potential security vulnerabilities
+- **Code smell detection** - Anti-patterns and maintainability issues
+- **Duplication analysis** - Code duplication detection
+
 ## Analysis Schedule
 
-Our security analysis runs automatically:
+Our security and quality analysis runs automatically:
 
-- **Scheduled runs**: Every Thursday at 3:15 AM UTC
+- **CodeQL**: Every Thursday at 3:15 AM UTC
+- **SonarCloud**: Every Monday at 2:00 AM UTC
 - **On every push** to the master branch
 - **On every pull request** to the master branch
 - **Languages analyzed**: Java

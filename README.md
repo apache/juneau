@@ -13,34 +13,32 @@
  ***************************************************************************************************************************
 -->
 
-> **⚠️ WORK IN PROGRESS**  
-> This README and documentation are currently being updated as part of our migration to Docusaurus. Some links may not work correctly yet. We're actively working to resolve these issues. For the most reliable documentation, please refer to the [official Apache Juneau website](https://juneau.apache.org/).
+> **📢 Documentation Update**  
+> This README has been updated to reflect our new Docusaurus-based documentation site. For the most current documentation, please visit the [official Apache Juneau website](https://juneau.staged.apache.org/).
 
 # Apache Juneau
 
 [![Java CI](https://github.com/apache/juneau/actions/workflows/maven.yml/badge.svg)](https://github.com/apache/juneau/actions/workflows/maven.yml)
 [![CodeQL](https://github.com/apache/juneau/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/apache/juneau/actions/workflows/codeql-analysis.yml)
-[![GitHub Pages](https://github.com/apache/juneau/actions/workflows/pages.yml/badge.svg)](https://github.com/apache/juneau/actions/workflows/pages.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
 
 ## 📚 Documentation & Resources
 
 ### 🌐 Official Resources
-* **[🏠 Homepage](https://juneau.apache.org/)** - Official Apache Juneau website
+* **[🏠 Homepage](https://juneau.staged.apache.org/)** - Official Apache Juneau website
 * **[📖 Wiki](https://github.com/apache/juneau/wiki)** - Community documentation and guides
 * **[🎯 Pet Store App](https://github.com/apache/juneau-petstore)** - Complete example application
 
-### 📋 Stable Documentation
-* **[📚 Official Javadocs](https://juneau.apache.org/site/apidocs-9.0.0/index.html)** - Released API documentation (v9.0.0)
-* **[📖 Official Documentation](https://juneau.apache.org/site/apidocs-9.0.0/overview-summary.html#overview.description)** - Complete framework documentation
+### 📋 Documentation
+* **[📚 Javadocs](https://juneau.staged.apache.org/site/apidocs/)** - Complete API documentation
+* **[📖 User Guide](https://juneau.staged.apache.org/docs/)** - Comprehensive framework documentation
+* **[🔧 Examples](https://juneau.staged.apache.org/docs/examples/)** - Code examples and tutorials
+* **[📊 Test Reports](https://juneau.staged.apache.org/site/surefire.html)** - JUnit test execution results
+* **[📦 Dependencies](https://juneau.staged.apache.org/site/dependencies.html)** - Project dependency analysis
+* **[📋 Project Reports](https://juneau.staged.apache.org/site/project-reports.html)** - Complete Maven site reports
 
-### 🚀 Development Documentation
-* **[📖 Project Site](https://github.com/pages/apache/juneau/)** - Latest project documentation with API docs, test reports, and project information
-* **[🔧 API Documentation](https://github.com/pages/apache/juneau/apidocs/)** - Current development Javadoc API documentation  
-* **[📊 Test Reports](https://github.com/pages/apache/juneau/surefire.html)** - JUnit test execution results
-* **[📦 Dependencies](https://github.com/pages/apache/juneau/dependencies.html)** - Project dependency analysis
-* **[📋 Project Reports](https://github.com/pages/apache/juneau/project-reports.html)** - Complete Maven site reports
-
-> **Note:** The development documentation is automatically updated with each commit and provides the most current project information.
+> **Note:** The documentation is automatically updated and provides the most current project information.
 
 ## Description
 
