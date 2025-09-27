@@ -1,22 +1,5 @@
 # About Apache Juneau™
 
-## Quick Links
-
-### Project Resources
-- <a href="https://github.com/apache/juneau" target="_blank">GitHub</a> - Source code repository
-- <a href="https://github.com/apache/juneau/wiki" target="_blank">Wiki</a> - Community documentation
-
-### Documentation & Reports
-- <a href="/site/apidocs/" target="_blank">Javadocs</a> - API documentation
-- <a href="/site/" target="_blank">Maven Site</a> - Complete project reports
-- <a href="/site/xref/" target="_blank">Source Cross-Reference</a> - Browsable source code
-- <a href="/site/surefire.html" target="_blank">Test Reports</a> - Unit test results
-- <a href="/site/jacoco-aggregate/" target="_blank">Code Coverage</a> - Test coverage reports
-
----
-
-## Overview
-
 Apache Juneau™ is a single cohesive Java ecosystem consisting of the following parts:
 
 | Group | Component | Description |
@@ -208,3 +191,14 @@ assertBeanList(myListOfBeans)
 - Lots of up-to-date documentation and examples
 - Minimal module dependencies making them optimal for uber-jars 
 - Built on top of Servlet and Apache HttpClient APIs that allow you to use the newest HTTP/2 features such as request/response multiplexing and server push.
+
+---
+
+## Quick Links
+
+### Documentation & Reports
+- <a href="/site/apidocs/" target="_blank">Javadocs</a> - API documentation
+- <a href="/site/" target="_blank">Maven Site</a> - Complete project reports
+- <a href="/site/xref/" target="_blank">Source Cross-Reference</a> - Browsable source code
+- <a href="/site/surefire.html" target="_blank">Test Reports</a> - Unit test results
+- <a href="/site/jacoco-aggregate/" target="_blank">Code Coverage</a> - Test coverage reports

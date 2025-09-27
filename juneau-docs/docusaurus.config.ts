@@ -101,6 +101,7 @@ const config: Config = {
           label: 'Documentation',
         },
         {to: '/downloads', label: 'Downloads', position: 'left'},
+        {to: '/security', label: 'Security', position: 'left'},
         {to: '/apache', label: 'Apache', position: 'left'},
         {
           href: 'https://github.com/apache/juneau',
@@ -113,7 +114,7 @@ const config: Config = {
           position: 'right',
         },
         {
-          href: 'https://juneau.apache.org/site/apidocs/index.html',
+          href: '/site/apidocs/index.html',
           label: 'Javadocs',
           position: 'right',
         },
@@ -135,7 +136,7 @@ const config: Config = {
             },
             {
               label: 'Javadocs',
-              href: 'https://juneau.apache.org/site/apidocs/index.html',
+              href: '/site/apidocs/index.html',
             },
           ],
         },
