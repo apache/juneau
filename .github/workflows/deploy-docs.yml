@@ -67,17 +67,9 @@ jobs:
         
     - name: Copy Maven Site to build directory
       run: |
-        echo "-----Present working directory-----"
-        pwd
-        echo "-----Current directory contents-----"
-        find .
-        echo "-----Copying site-----"
         mkdir -p juneau-docs/build/site
-        cp -v -r target/site/* juneau-docs/build/site/
+        cp -r target/site/* juneau-docs/build/site/
         cp .asf.yaml juneau-docs/build
-        echo "-----Build directory contents-----"
-        cd juneau-docs/build
-        find .
         
     - name: Deploy to staging branch
       uses: peaceiris/actions-gh-pages@v4
