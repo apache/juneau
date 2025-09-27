@@ -63,7 +63,7 @@ jobs:
         
     - name: Generate Maven Site
       run: |
-        mvn clean site -DskipTests
+        mvn clean site
         
     - name: Copy Maven Site to build directory
       run: |

@@ -282,7 +282,7 @@
 						<fileSet implementation="org.apache.maven.shared.model.fileset.FileSet">
 							<directory>${project.parent.build.directory}</directory>
 							<includes>
-								<include>*.exec</include>
+								<include>**/*.exec</include>
 							</includes>
 						</fileSet>
 					</fileSets>
