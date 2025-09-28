@@ -32,13 +32,31 @@
 
 ### 📋 Documentation
 * **[📚 Javadocs](https://juneau.staged.apache.org/site/apidocs/)** - Complete API documentation
-* **[📖 User Guide](https://juneau.staged.apache.org/docs/)** - Comprehensive framework documentation
-* **[🔧 Examples](https://juneau.staged.apache.org/docs/examples/)** - Code examples and tutorials
+* **[📖 User Guide](https://juneau.staged.apache.org/docs/topics/JuneauEcosystemOverview)** - Comprehensive framework documentation
+* **[🔧 Examples](https://juneau.staged.apache.org/docs/topics/JuneauExamplesCore)** - Code examples and tutorials
+  * [juneau-examples-core](https://juneau.staged.apache.org/docs/topics/JuneauExamplesCore) - Core serialization examples
+  * [juneau-examples-rest](https://juneau.staged.apache.org/docs/topics/JuneauExamplesRest) - REST API examples
+  * [juneau-examples-rest-jetty](https://juneau.staged.apache.org/docs/topics/JuneauExamplesRestJetty) - Jetty microservice examples
+  * [juneau-examples-rest-springboot](https://juneau.staged.apache.org/docs/topics/JuneauExamplesRestSpringboot) - Spring Boot examples
 * **[📊 Test Reports](https://juneau.staged.apache.org/site/surefire.html)** - JUnit test execution results
-* **[📦 Dependencies](https://juneau.staged.apache.org/site/dependencies.html)** - Project dependency analysis
+* **[📦 Dependencies](https://juneau.staged.apache.org/site/dependency-info.html)** - Project dependency analysis
 * **[📋 Project Reports](https://juneau.staged.apache.org/site/project-reports.html)** - Complete Maven site reports
 
 > **Note:** The documentation is automatically updated and provides the most current project information.
+
+## Common Use Cases
+
+Apache Juneau™ excels in the following scenarios:
+
+* **Marshalling Java beans to a variety of languages using zero dependencies** - Serialize POJOs to JSON, XML, HTML, URL-Encoding, UON, OpenAPI, PlainText, CSV, SOAP, MessagePack, and RDF formats with minimal setup
+* **Creation of self-documenting Bean-based REST APIs for SpringBoot and Jetty applications** - Build REST services with automatic Swagger documentation, content negotiation, and POJO-based request/response handling
+* **Creation of Java interface proxies on top of existing REST APIs** - Generate type-safe client proxies that make REST calls feel like local method invocations
+* **Powerful INI-based configuration files** - Manage application configuration with support for POJOs, arrays, collections, binary data, and real-time file watching
+* **Serverless unit testing of REST APIs** - Test REST services without servlet containers using MockRestClient for fast, comprehensive testing
+* **Microservice development** - Build lightweight microservices with embedded Jetty or Spring Boot integration
+* **Data transformation and mapping** - Convert between different data formats and handle complex object hierarchies with swap mechanisms
+* **Fluent-style assertions and testing** - Write readable test assertions with comprehensive validation capabilities
+* **Content negotiation and HTTP/2 support** - Handle multiple content types automatically with modern HTTP features
 
 ## Description
 

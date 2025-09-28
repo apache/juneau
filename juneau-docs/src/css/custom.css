@@ -466,7 +466,9 @@ javac-field,
 javac-field-private, 
 javac-method, 
 javac-method-private, 
-javac-method-annotation { 
+javac-method-annotation,
+javac-project,
+javac-doc { 
   font: monospace; 
   font-size: small; 
   margin-right: 8px; 
@@ -483,7 +485,9 @@ java-field,
 java-field-private, 
 java-method, 
 java-method-private, 
-java-method-annotation { font-family: monospace; font-size: medium; }
+java-method-annotation,
+java-project,
+java-doc { font-family: monospace; font-size: medium; }
 
 /* Custom node elements for hierarchy levels */
 node-0 { display: block; margin-left: 0em; }
@@ -511,6 +515,8 @@ javac-field-private::before { color: #CCB404; content: '\25cf\00a0'; font-weight
 javac-method::before  { color: #008000; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
 javac-method-private::before { color: #CCB404; content: '\25c6\00a0'; font-weight: bolder; font-size: x-small; }
 javac-method-annotation::before { color: #00ced1; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
+javac-project::before { color: #ff6b35; content: '\1f4c2\00a0'; font-weight: bolder; font-size: small; }
+javac-doc::before { color: #4a90e2; content: '\1f4d6\00a0'; font-weight: bolder; font-size: small; }
 
 java-package::before { color: #e09c01; content: '\229e\00a0'; font-weight: bolder; font-size: large; }
 java-annotation::before  { color: #00ced1; content: '\24d0\00a0'; font-weight: bolder; font-size: large; }
@@ -523,3 +529,5 @@ java-field-private::before { color: #CCB404; content: '\25cf\00a0'; font-weight:
 java-method::before  { color: #008000; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
 java-method-private::before { color: #CCB404; content: '\25c6\00a0'; font-weight: bolder; font-size: x-small; }
 java-method-annotation::before { color: #00ced1; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
+java-project::before { color: #ff6b35; content: '\1f4c2\00a0'; font-weight: bolder; font-size: x-large; }
+java-doc::before { color: #4a90e2; content: '\1f4d6\00a0'; font-weight: bolder; font-size: x-large; }

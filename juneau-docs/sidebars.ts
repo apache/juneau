@@ -1622,40 +1622,62 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: '17. Security',
+      label: '17. juneau-examples',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'topics/17.01.00.SecurityBasics',
-          label: '17.1. Security Basics',
+          id: 'topics/17.01.00.JuneauExamplesCore',
+          label: '17.1. juneau-examples-core',
         },
         {
           type: 'doc',
-          id: 'topics/17.02.00.MarshallingSecurity',
-          label: '17.2. Marshalling Security',
+          id: 'topics/17.02.00.JuneauExamplesRest',
+          label: '17.2. juneau-examples-rest',
         },
         {
           type: 'doc',
-          id: 'topics/17.03.00.SvlSecurity',
-          label: '17.3. SVL Security',
+          id: 'topics/17.03.00.JuneauExamplesRestJetty',
+          label: '17.3. juneau-examples-rest-jetty',
         },
         {
           type: 'doc',
-          id: 'topics/17.04.00.RestSecurity',
-          label: '17.4. REST Security',
+          id: 'topics/17.04.00.JuneauExamplesRestSpringboot',
+          label: '17.4. juneau-examples-rest-springboot',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: '18. Security',
+      collapsed: true,
+      items: [
+        {
+          type: 'doc',
+          id: 'topics/18.01.00.SecurityBasics',
+          label: '18.1. Security Basics',
+        },
+        {
+          type: 'doc',
+          id: 'topics/18.02.00.MarshallingSecurity',
+          label: '18.2. Marshalling Security',
+        },
+        {
+          type: 'doc',
+          id: 'topics/18.03.00.SvlSecurity',
+          label: '18.3. SVL Security',
+        },
+        {
+          type: 'doc',
+          id: 'topics/18.04.00.RestSecurity',
+          label: '18.4. REST Security',
         },
       ],
         },
         {
           type: 'doc',
-          id: 'topics/18.01.00.V9.0-migration-guide',
-          label: '18. V9.0 Migration Guide',
-        },
-        {
-          type: 'doc',
-          id: 'topics/TODO',
-          label: 'TODO Links',
+          id: 'topics/19.01.00.V9.0-migration-guide',
+          label: '19. V9.0 Migration Guide',
         },
       ],
     },
