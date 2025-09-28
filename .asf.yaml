@@ -15,13 +15,27 @@ github:
   description: "Apache Juneau"
   homepage: https://juneau.apache.org/
   labels:
+    # Top 20 most important topics for discoverability
+    - java
+    - serialization
+    - rest-api
+    - microservices
     - json
+    - xml
+    - spring-boot
+    - jetty
+    - configuration
+    - testing
+    - mocking
+    - data-binding
+    - swagger
+    - openapi
+    - pojo
+    - zero-dependency
+    - lightweight
+    - performance
     - juneau
-    - http
-    - rest
     - apache
-    - website
-    - docusaurus
   features:
     wiki: true
     issues: true
