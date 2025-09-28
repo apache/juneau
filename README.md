@@ -174,12 +174,12 @@ public class ApiTest {
 import org.apache.juneau.xml.*;
 
 // Serialize to XML
-String xml = XmlSerializer.DEFAULT_READABLE.serialize(person);
+String xml = Xml.of(person);
 System.out.println(xml);
 // Output: <object><name>John</name><age>30</age></object>
 
 // Parse XML back to POJO
-Person parsed = XmlParser.DEFAULT.parse(xml, Person.class);
+Person parsed = Xml.to(xml, Person.class);
 ```
 
 ### HTML Serialization
@@ -188,7 +188,7 @@ Person parsed = XmlParser.DEFAULT.parse(xml, Person.class);
 import org.apache.juneau.html.*;
 
 // Serialize to HTML table
-String html = HtmlSerializer.DEFAULT_READABLE.serialize(person);
+String html = Html.of(person);
 System.out.println(html);
 // Output: <table><tr><th>name</th><td>John</td></tr><tr><th>age</th><td>30</td></tr></table>
 ```
