@@ -23,25 +23,25 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
 
-## 📚 Documentation & Resources
+## Documentation & Resources
 
-### 🌐 Official Resources
-* **[🏠 Homepage](https://juneau.staged.apache.org/)** - Official Apache Juneau website
-* **[📖 Wiki](https://github.com/apache/juneau/wiki)** - Community documentation and guides
-* **[🎯 Pet Store App](https://github.com/apache/juneau-petstore)** - Complete example application
+### Official Resources
+* **[Homepage](https://juneau.staged.apache.org/)** - Official Apache Juneau website
+* **[Wiki](https://github.com/apache/juneau/wiki)** - Community documentation and guides
+* **[Pet Store App](https://github.com/apache/juneau-petstore)** - Complete example application
 
-### 📋 Documentation
-* **[📚 Javadocs](https://juneau.staged.apache.org/site/apidocs/)** - Complete API documentation
-* **[📖 User Guide](https://juneau.staged.apache.org/docs/topics/JuneauEcosystemOverview)** - Comprehensive framework documentation
-* **[⚖️ Framework Comparisons](https://juneau.staged.apache.org/docs/topics/FrameworkComparisons)** - Compare Juneau with Jackson, Spring Boot, and JAX-RS
-* **[🔧 Examples](https://juneau.staged.apache.org/docs/topics/JuneauExamplesCore)** - Code examples and tutorials
+### Documentation
+* **[Javadocs](https://juneau.staged.apache.org/site/apidocs/)** - Complete API documentation
+* **[User Guide](https://juneau.staged.apache.org/docs/topics/JuneauEcosystemOverview)** - Comprehensive framework documentation
+* **[Framework Comparisons](https://juneau.staged.apache.org/docs/topics/FrameworkComparisons)** - Compare Juneau with Jackson, Spring Boot, and JAX-RS
+* **[Examples](https://juneau.staged.apache.org/docs/topics/JuneauExamplesCore)** - Code examples and tutorials
   * [juneau-examples-core](https://juneau.staged.apache.org/docs/topics/JuneauExamplesCore) - Core serialization examples
   * [juneau-examples-rest](https://juneau.staged.apache.org/docs/topics/JuneauExamplesRest) - REST API examples
   * [juneau-examples-rest-jetty](https://juneau.staged.apache.org/docs/topics/JuneauExamplesRestJetty) - Jetty microservice examples
   * [juneau-examples-rest-springboot](https://juneau.staged.apache.org/docs/topics/JuneauExamplesRestSpringboot) - Spring Boot examples
-* **[📊 Test Reports](https://juneau.staged.apache.org/site/surefire.html)** - JUnit test execution results
-* **[📦 Dependencies](https://juneau.staged.apache.org/site/dependency-info.html)** - Project dependency analysis
-* **[📋 Project Reports](https://juneau.staged.apache.org/site/project-reports.html)** - Complete Maven site reports
+* **[Test Reports](https://juneau.staged.apache.org/site/surefire.html)** - JUnit test execution results
+* **[Dependencies](https://juneau.staged.apache.org/site/dependency-info.html)** - Project dependency analysis
+* **[Project Reports](https://juneau.staged.apache.org/site/project-reports.html)** - Complete Maven site reports
 
 > **Note:** The documentation is automatically updated and provides the most current project information.
 
@@ -56,8 +56,114 @@ Apache Juneau™ excels in the following scenarios:
 * **Serverless unit testing of REST APIs** - Test REST services without servlet containers using MockRestClient for fast, comprehensive testing
 * **Microservice development** - Build lightweight microservices with embedded Jetty or Spring Boot integration
 * **Data transformation and mapping** - Convert between different data formats and handle complex object hierarchies with swap mechanisms
-* **Fluent-style assertions and testing** - Write readable test assertions with comprehensive validation capabilities
+* **Bean-Centric Testing and fluent-style assertions** - Write readable test assertions with comprehensive validation capabilities using juneau-bct and juneau-assertions
 * **Content negotiation and HTTP/2 support** - Handle multiple content types automatically with modern HTTP features
+
+## Getting Started in 5 Minutes
+
+### 1. Add Dependency
+
+```xml
+<dependency>
+    <groupId>org.apache.juneau</groupId>
+    <artifactId>juneau-all</artifactId>
+    <version>9.1.0</version>
+</dependency>
+```
+
+### 2. Serialize a POJO to JSON
+
+```java
+import org.apache.juneau.json.*;
+
+public class QuickStart {
+    public static void main(String[] args) {
+        // Create a simple POJO
+        Person person = new Person("John", 30);
+        
+        // Serialize to JSON
+        String json = JsonSerializer.DEFAULT_READABLE.serialize(person);
+        System.out.println(json);
+        // Output: {"name":"John","age":30}
+    }
+    
+    public static class Person {
+        public String name;
+        public int age;
+        
+        public Person(String name, int age) {
+            this.name = name;
+            this.age = age;
+        }
+    }
+}
+```
+
+### 3. Parse JSON back to POJO
+
+```java
+// Parse JSON back to POJO
+Person parsed = JsonParser.DEFAULT.parse(json, Person.class);
+System.out.println(parsed.name); // Output: John
+```
+
+### 4. Create a REST API
+
+```java
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.servlet.*;
+
+@Rest(
+    title="Hello World API",
+    description="Simple REST API example"
+)
+public class HelloWorldResource extends BasicRestServlet {
+    
+    @RestGet("/hello/{name}")
+    public String sayHello(@Path String name) {
+        return "Hello " + name + "!";
+    }
+    
+    @RestGet("/person")
+    public Person getPerson() {
+        return new Person("Jane", 25);
+    }
+}
+```
+
+### 5. Test Your API
+
+```java
+import org.apache.juneau.rest.mock.*;
+
+public class ApiTest {
+    @Test
+    public void testHello() throws Exception {
+        String response = MockRestClient
+            .create(HelloWorldResource.class)
+            .json5()
+            .build()
+            .get("/hello/World")
+            .run()
+            .assertStatus().is(200)
+            .getContent().asString();
+        
+        assertEquals("Hello World!", response);
+    }
+}
+```
+
+**That's it!** You now have:
+- JSON serialization/parsing
+- A working REST API with automatic content negotiation
+- Built-in testing support
+- Zero external dependencies
+
+### Next Steps
+- **Multi-format support**: Try XML, HTML, or other formats
+- **Configuration files**: Use `juneau-config` for INI-style configs
+- **Spring Boot integration**: Add `juneau-rest-server-springboot`
+- **Examples**: Check out our [comprehensive examples](/docs/topics/JuneauExamplesCore)
 
 ## Description
 
@@ -67,9 +173,18 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of the following
 * **juneau-marshall-rdf**	- Additional support for various RDF languages.
 * **juneau-bean-atom, juneau-bean-common, juneau-bean-html5, juneau-bean-jsonschema, juneau-bean-openapi3**	- A variety of predefined serializable beans such as HTML5, Swagger and ATOM.
 * **juneau-config**	- A sophisticated configuration file API.
+* **juneau-assertions** - Fluent-style assertions API.
+* **juneau-bct** - Bean-Centric Testing framework that extends JUnit with streamlined assertion methods for Java objects.
 * **juneau-rest-server**	- A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as one or more top-level servlets in any Servlet 3.1.0+ container. Includes Spring Boot and JAX-RS integration support.
 * **juneau-rest-client** - A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces.
-* **juneau-rest-springboot** - Spring boot integration for juneau-rest-servlet. 
+* **juneau-rest-springboot** - Spring boot integration for juneau-rest-servlet.
+* **juneau-rest-mock** - REST testing API.
+* **juneau-microservice-core** - Core microservice API.
+* **juneau-microservice-jetty** - Jetty microservice API.
+* **juneau-examples-core** - Core code examples.
+* **juneau-examples-rest** - REST code examples.
+* **juneau-examples-rest-jetty** - Jetty microservice examples.
+* **juneau-examples-rest-springboot** - Spring Boot examples. 
 
 Questions via email to dev@juneau.apache.org are always welcome.
 
