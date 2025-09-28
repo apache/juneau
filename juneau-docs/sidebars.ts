@@ -84,6 +84,11 @@ const sidebars: SidebarsConfig = {
           id: 'topics/01.09.00.GeneralDesign',
           label: '1.9. General Design',
         },
+        {
+          type: 'doc',
+          id: 'topics/01.10.00.FrameworkComparisons',
+          label: '1.10. Framework Comparisons',
+        },
       ],
     },
     {
