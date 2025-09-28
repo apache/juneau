@@ -89,6 +89,11 @@ const sidebars: SidebarsConfig = {
           id: 'topics/01.10.00.FrameworkComparisons',
           label: '1.10. Framework Comparisons',
         },
+        {
+          type: 'doc',
+          id: 'topics/01.11.00.WhyJuneau',
+          label: '1.11. Why Choose Juneau?',
+        },
       ],
     },
     {

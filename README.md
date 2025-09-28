@@ -33,6 +33,7 @@
 ### Documentation
 * **[Javadocs](https://juneau.staged.apache.org/site/apidocs/)** - Complete API documentation
 * **[User Guide](https://juneau.staged.apache.org/docs/topics/JuneauEcosystemOverview)** - Comprehensive framework documentation
+* **[Why Choose Juneau?](https://juneau.staged.apache.org/docs/topics/WhyJuneau)** - Benefits and comparisons with alternatives
 * **[Framework Comparisons](https://juneau.staged.apache.org/docs/topics/FrameworkComparisons)** - Compare Juneau with Jackson, Spring Boot, and JAX-RS
 * **[Examples](https://juneau.staged.apache.org/docs/topics/JuneauExamplesCore)** - Code examples and tutorials
   * [juneau-examples-core](https://juneau.staged.apache.org/docs/topics/JuneauExamplesCore) - Core serialization examples
