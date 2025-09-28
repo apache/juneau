@@ -83,7 +83,7 @@ public class QuickStart {
         Person person = new Person("John", 30);
         
         // Serialize to JSON
-        String json = JsonSerializer.DEFAULT_READABLE.serialize(person);
+        String json = Json.of(person);
         System.out.println(json);
         // Output: {"name":"John","age":30}
     }
@@ -104,7 +104,7 @@ public class QuickStart {
 
 ```java
 // Parse JSON back to POJO
-Person parsed = JsonParser.DEFAULT.parse(json, Person.class);
+Person parsed = Json.to(json, Person.class);
 System.out.println(parsed.name); // Output: John
 ```
 
