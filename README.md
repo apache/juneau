@@ -165,6 +165,108 @@ public class ApiTest {
 - **Spring Boot integration**: Add `juneau-rest-server-springboot`
 - **Examples**: Check out our [comprehensive examples](/docs/topics/JuneauExamplesCore)
 
+## More Examples
+
+### XML Serialization
+
+```java
+import org.apache.juneau.xml.*;
+
+// Serialize to XML
+String xml = XmlSerializer.DEFAULT_READABLE.serialize(person);
+System.out.println(xml);
+// Output: <object><name>John</name><age>30</age></object>
+
+// Parse XML back to POJO
+Person parsed = XmlParser.DEFAULT.parse(xml, Person.class);
+```
+
+### HTML Serialization
+
+```java
+import org.apache.juneau.html.*;
+
+// Serialize to HTML table
+String html = HtmlSerializer.DEFAULT_READABLE.serialize(person);
+System.out.println(html);
+// Output: <table><tr><th>name</th><td>John</td></tr><tr><th>age</th><td>30</td></tr></table>
+```
+
+### Configuration Files
+
+```java
+import org.apache.juneau.config.*;
+
+// Create configuration
+Config config = Config.create()
+    .set("database.host", "localhost")
+    .set("database.port", 5432)
+    .set("features.enabled", true)
+    .build();
+
+// Read configuration
+String host = config.get("database.host");
+int port = config.get("database.port", Integer.class);
+boolean enabled = config.get("features.enabled", Boolean.class);
+```
+
+### REST Client Proxy
+
+```java
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.http.annotation.*;
+
+// Define REST interface
+@Remote("http://api.example.com")
+public interface UserService {
+    @Get("/users/{id}")
+    User getUser(@Path String id);
+    
+    @Post("/users")
+    User createUser(@Body User user);
+}
+
+// Use as regular Java interface
+UserService service = RestClient.create().build().getRemote(UserService.class);
+User user = service.getUser("123");
+```
+
+### Testing REST APIs
+
+```java
+import org.apache.juneau.rest.mock.*;
+
+// Test without starting a server
+@Test
+public void testUserAPI() throws Exception {
+    String response = MockRestClient
+        .create(UserResource.class)
+        .json5()
+        .build()
+        .get("/users/123")
+        .run()
+        .assertStatus().is(200)
+        .getContent().asString();
+    
+    assertThat(response).contains("John");
+}
+```
+
+### Microservice with Jetty
+
+```java
+import org.apache.juneau.microservice.*;
+
+// Create microservice
+Microservice microservice = Microservice.create()
+    .servlet(UserResource.class)
+    .port(8080)
+    .build();
+
+// Start server
+microservice.start();
+```
+
 ## Description
 
 Apache Juneau™ is a single cohesive Java ecosystem consisting of the following parts:
