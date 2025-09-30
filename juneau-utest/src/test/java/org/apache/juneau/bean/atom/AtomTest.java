@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.atom;
+package org.apache.juneau.bean.atom;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.bean.atom.AtomBuilder.*;
@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.bean.atom.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 

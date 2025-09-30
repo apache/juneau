@@ -10,93 +10,87 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.swagger;
+package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Testcase for {@link Xml}.
+ * Testcase for {@link Tag}.
  */
-class Xml_Test extends SimpleTestBase {
+class Tag_Test extends SimpleTestBase {
 
 	/**
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		var t = new Xml();
+		var t = new Tag();
 
 		// Basic property setters
 		assertBean(
-			t.setName("a").setNamespace("b").setPrefix("c").setAttribute(true).setWrapped(true),
-			"name,namespace,prefix,attribute,wrapped",
-			"a,b,c,true,true"
+			t.setName("a").setDescription("b").setExternalDocs(externalDocumentation("c")),
+			"name,description,externalDocs{url}",
+			"a,b,{c}"
 		);
 
 		// Null values
 		assertBean(
-			t.setName(null).setNamespace(null).setPrefix(null),
-			"name,namespace,prefix",
-			"<null>,<null>,<null>"
+			t.setName(null).setDescription(null),
+			"name,description",
+			"<null>,<null>"
 		);
 	}
 
 	/**
-	 * Test method for {@link Xml#set(java.lang.String, java.lang.Object)}.
+	 * Test method for {@link Tag#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void b01_set() {
-		var t = new Xml();
+		var t = new Tag();
 
 		t
-			.set("attribute", true)
-			.set("name", "a")
-			.set("namespace", "b")
-			.set("prefix", "c")
-			.set("wrapped", true)
-			.set("$ref", "d");
+			.set("description", "a")
+			.set("externalDocs", externalDocumentation("b"))
+			.set("name", "c")
+			.set("$ref", "ref");
 
 		// Comprehensive object state validation
 		assertBean(t,
-			"name,namespace,prefix,attribute,wrapped,$ref",
-			"a,b,c,true,true,d");
+			"name,description,externalDocs{url},$ref",
+			"c,a,{b},ref");
 
 		t
-			.set("attribute", "true")
-			.set("name", "a")
-			.set("namespace", "b")
-			.set("prefix", "c")
-			.set("wrapped", "true")
-			.set("$ref", "d");
+			.set("description", "a")
+			.set("externalDocs", "{url:'b'}")
+			.set("name", "c")
+			.set("$ref", "ref");
 
 		assertBean(t,
-			"name,namespace,prefix,attribute,wrapped,$ref",
-			"a,b,c,true,true,d");
+			"name,description,externalDocs{url},$ref",
+			"c,a,{b},ref");
 
 		t
-			.set("attribute", Utils.sb("true"))
-			.set("name", Utils.sb("a"))
-			.set("namespace", Utils.sb("b"))
-			.set("prefix", Utils.sb("c"))
-			.set("wrapped", Utils.sb("true"))
-			.set("$ref", Utils.sb("d"));
+			.set("description", Utils.sb("a"))
+			.set("externalDocs", Utils.sb("{url:'b'}"))
+			.set("name", Utils.sb("c"))
+			.set("$ref", Utils.sb("ref"));
 
 		assertBean(t,
-			"name,namespace,prefix,attribute,wrapped,$ref",
-			"a,b,c,true,true,d");
+			"name,description,externalDocs{url},$ref",
+			"c,a,{b},ref");
 
 		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
-			"attribute,name,namespace,prefix,wrapped,$ref",
-			"true,a,b,c,true,d");
+			"description,externalDocs,name,$ref",
+			"a,{url:'b'},c,ref");
 
 		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
-			"attribute,name,namespace,prefix,wrapped,$ref",
-			"Boolean,String,String,String,Boolean,StringBuilder");
+			"description,externalDocs,name,$ref",
+			"String,ExternalDocumentation,String,StringBuilder");
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
@@ -105,44 +99,40 @@ class Xml_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_roundTripJson() {
-		var s = "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'d'}";
-		assertJson(s, JsonParser.DEFAULT.parse(s, Xml.class));
+		var s = "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}";
+		assertJson(s, JsonParser.DEFAULT.parse(s, Tag.class));
 	}
 
 	@Test void b03_copy() {
-		var t = new Xml();
+		var t = new Tag();
 
 		t = t.copy();
 
-		assertBean(t, "attribute,name,namespace,prefix,wrapped", "<null>,<null>,<null>,<null>,<null>");
+		assertBean(t, "description,externalDocs,name", "<null>,<null>,<null>");
 
 		t
-			.set("attribute", true)
-			.set("name", "a")
-			.set("namespace", "b")
-			.set("prefix", "c")
-			.set("wrapped", true)
-			.set("$ref", "d")
+			.set("description", "a")
+			.set("externalDocs", externalDocumentation("b"))
+			.set("name", "c")
+			.set("$ref", "ref")
 			.copy();
 
 		assertBean(t,
-			"name,namespace,prefix,attribute,wrapped,$ref",
-			"a,b,c,true,true,d");
+			"name,description,externalDocs{url},$ref",
+			"c,a,{b},ref");
 	}
 
 	@Test void b04_keySet() {
-		var t = new Xml();
+		var t = new Tag();
 
 		assertEmpty(t.keySet());
 
 		t
-			.set("attribute", true)
-			.set("name", "a")
-			.set("namespace", "b")
-			.set("prefix", "c")
-			.set("wrapped", true)
-			.set("$ref", "d");
+			.set("description", "a")
+			.set("externalDocs", externalDocumentation("b"))
+			.set("name", "c")
+			.set("$ref", "ref");
 
-		assertList(t.keySet(), "$ref", "attribute", "name", "namespace", "prefix", "wrapped");
+		assertList(t.keySet(), "$ref", "description", "externalDocs", "name");
 	}
 }

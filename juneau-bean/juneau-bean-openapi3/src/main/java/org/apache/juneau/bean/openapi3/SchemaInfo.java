@@ -18,7 +18,6 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
@@ -1280,7 +1279,7 @@ public class SchemaInfo extends OpenApiElement {
 	/**
 	 * Resolves any <js>"$ref"</js> attributes in this element.
 	 *
-	 * @param swagger The swagger document containing the definitions.
+	 * @param openApi The swagger document containing the definitions.
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
 	 * @param maxDepth
 	 * 	The maximum depth to resolve references.
@@ -1290,26 +1289,27 @@ public class SchemaInfo extends OpenApiElement {
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
-	public SchemaInfo resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
+	public SchemaInfo resolveRefs(OpenApi openApi, Deque<String> refStack, int maxDepth) {
 
 		if (ref != null) {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
-			var r = swagger.findRef(ref, SchemaInfo.class).resolveRefs(swagger, refStack, maxDepth);
+			var r = openApi.findRef(ref, SchemaInfo.class);
+			r = r.resolveRefs(openApi, refStack, maxDepth);
 			refStack.removeLast();
 			return r;
 		}
 
 		if (items != null)
-			items = items.resolveRefs(swagger, refStack, maxDepth);
+			items = items.resolveRefs(openApi, refStack, maxDepth);
 
 		if (properties != null)
 			for (var e : properties.entrySet())
-				e.setValue(e.getValue().resolveRefs(swagger, refStack, maxDepth));
+				e.setValue(e.getValue().resolveRefs(openApi, refStack, maxDepth));
 
 		if (additionalProperties != null)
-			additionalProperties = additionalProperties.resolveRefs(swagger, refStack, maxDepth);
+			additionalProperties = additionalProperties.resolveRefs(openApi, refStack, maxDepth);
 
 		this.example = null;
 

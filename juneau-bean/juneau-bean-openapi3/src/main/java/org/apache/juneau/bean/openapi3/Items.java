@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
@@ -745,7 +744,7 @@ public class Items extends OpenApiElement {
 	/**
 	 * Resolves any <js>"$ref"</js> attributes in this element.
 	 *
-	 * @param swagger The swagger document containing the definitions.
+	 * @param openApi The swagger document containing the definitions.
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
 	 * @param maxDepth
 	 * 	The maximum depth to resolve references.
@@ -755,21 +754,22 @@ public class Items extends OpenApiElement {
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
-	public Items resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
+	public Items resolveRefs(OpenApi openApi, Deque<String> refStack, int maxDepth) {
 
 		if (ref != null) {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
-			var r = swagger.findRef(ref, Items.class).resolveRefs(swagger, refStack, maxDepth);
+			var r = openApi.findRef(ref, Items.class);
+			r = r.resolveRefs(openApi, refStack, maxDepth);
 			refStack.removeLast();
 			return r;
 		}
 
-		set("properties", resolveRefs(get("properties"), swagger, refStack, maxDepth));
+		set("properties", resolveRefs(get("properties"), openApi, refStack, maxDepth));
 
 		if (items != null)
-			items = items.resolveRefs(swagger, refStack, maxDepth);
+			items = items.resolveRefs(openApi, refStack, maxDepth);
 
 		set("example", null);
 
@@ -777,7 +777,7 @@ public class Items extends OpenApiElement {
 	}
 
 	/* Resolve references in extra attributes */
-	private Object resolveRefs(Object o, Swagger swagger, Deque<String> refStack, int maxDepth) {
+	private Object resolveRefs(Object o, OpenApi openApi, Deque<String> refStack, int maxDepth) {
 		if (o instanceof JsonMap om) {
 			var ref2 = om.get("$ref");
 			if (ref2 instanceof CharSequence) {
@@ -785,17 +785,17 @@ public class Items extends OpenApiElement {
 				if (refStack.contains(sref) || refStack.size() >= maxDepth)
 					return o;
 				refStack.addLast(sref);
-				var o2 = swagger.findRef(sref, Object.class);
-				o2 = resolveRefs(o2, swagger, refStack, maxDepth);
+				var o2 = openApi.findRef(sref, Object.class);
+				o2 = resolveRefs(o2, openApi, refStack, maxDepth);
 				refStack.removeLast();
 				return o2;
 			}
 			for (var e : om.entrySet())
-				e.setValue(resolveRefs(e.getValue(), swagger, refStack, maxDepth));
+				e.setValue(resolveRefs(e.getValue(), openApi, refStack, maxDepth));
 		}
 		if (o instanceof JsonList x)
 			for (var li = x.listIterator(); li.hasNext();)
-				li.set(resolveRefs(li.next(), swagger, refStack, maxDepth));
+				li.set(resolveRefs(li.next(), openApi, refStack, maxDepth));
 		return o;
 	}
 }

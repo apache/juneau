@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.swagger;
+package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,63 +18,60 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Testcase for {@link Contact}.
+ * Testcase for {@link ExternalDocumentation}.
  */
-class Contact_Test extends SimpleTestBase {
+class ExternalDocumentation_Test extends SimpleTestBase {
 
 	/**
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		var t = new Contact();
+		var t = new ExternalDocumentation();
 
 		// General - Combined assertBean test
 		assertBean(
-			t.setName("a").setEmail("b").setUrl(URI.create("http://c")),
-			"name,email,url",
-			"a,b,http://c"
+			t.setDescription("a").setUrl(URI.create("http://b")),
+			"description,url",
+			"a,http://b"
 		);
 
 		// Null cases
 		assertBean(
-			t.setName(null).setEmail(null),
-			"name,email",
-			"<null>,<null>"
+			t.setDescription(null),
+			"description",
+			"<null>"
 		);
 	}
 
 	/**
-	 * Test method for {@link Contact#set(String, Object)}.
+	 * Test method for {@link ExternalDocumentation#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void b01_set() {
-		var t = new Contact();
+		var t = new ExternalDocumentation();
 
 		t
-			.set("email", "a")
-			.set("name", "b")
-			.set("$ref", "c")
-			.set("url", "d");
+			.set("description", "a")
+			.set("url", "b")
+			.set("$ref", "c");
 
-		assertBean(t, "email,name,$ref,url", "a,b,c,d");
+		assertBean(t, "description,url,$ref", "a,b,c");
 
 		t
-			.set("email", Utils.sb("a"))
-			.set("name", Utils.sb("b"))
-			.set("$ref", Utils.sb("c"))
-			.set("url", Utils.sb("d"));
+			.set("description", Utils.sb("a2"))
+			.set("url", Utils.sb("b2"))
+			.set("$ref", Utils.sb("c2"));
 
-		assertBean(t, "email,name,$ref,url", "a,b,c,d");
+		assertBean(t, "description,url,$ref", "a2,b2,c2");
 
 		assertMapped(
 			t, (obj,prop) -> obj.get(prop, String.class),
-			"email,name,$ref,url",
-			"a,b,c,d"
+			"description,url,$ref",
+			"a2,b2,c2"
 		);
 
 		t.set("null", null).set(null, "null");
@@ -84,37 +81,35 @@ class Contact_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_roundTripJson() {
-		assertBean(JsonParser.DEFAULT.parse("{name:'a',url:'b',email:'c','$ref':'d'}", Contact.class), "name,url,email,$ref", "a,b,c,d");
+		assertBean(JsonParser.DEFAULT.parse("{description:'a',url:'b','$ref':'c'}", ExternalDocumentation.class), "description,url,$ref", "a,b,c");
 	}
 
 	@Test void b03_copy() {
-		var t = new Contact();
+		var t = new ExternalDocumentation();
 
 		t = t.copy();
 
-		assertBean(t, "email,name,url", "<null>,<null>,<null>");
+		assertBean(t, "description,url", "<null>,<null>");
 
 		t
-			.set("name", "a")
+			.set("description", "a")
 			.set("url", "b")
-			.set("email", "c")
-			.set("$ref", "d")
+			.set("$ref", "c")
 			.copy();
 
-		assertBean(t, "name,url,email,$ref", "a,b,c,d");
+		assertBean(t, "description,url,$ref", "a,b,c");
 	}
 
 	@Test void b04_keySet() {
-		var t = new Contact();
+		var t = new ExternalDocumentation();
 
 		assertEmpty(t.keySet());
 
 		t
-			.set("name", "a")
-			.set("url", "b")
-			.set("email", "c")
-			.set("$ref", "d");
+			.set("description", "foo")
+			.set("url", "bar")
+			.set("$ref", "baz");
 
-		assertList(t.keySet(), "$ref", "email", "name", "url");
+		assertList(t.keySet(), "$ref", "description", "url");
 	}
 }

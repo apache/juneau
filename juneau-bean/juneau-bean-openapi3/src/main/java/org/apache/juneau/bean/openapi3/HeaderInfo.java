@@ -18,7 +18,6 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
@@ -449,7 +448,7 @@ public class HeaderInfo extends OpenApiElement {
 	/**
 	 * Resolves any <js>"$ref"</js> attributes in this element.
 	 *
-	 * @param swagger The swagger document containing the definitions.
+	 * @param openApi The swagger document containing the definitions.
 	 * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.
 	 * @param maxDepth
 	 * 	The maximum depth to resolve references.
@@ -459,13 +458,14 @@ public class HeaderInfo extends OpenApiElement {
 	 * 	This object with references resolved.
 	 * 	<br>May or may not be the same object.
 	 */
-	public HeaderInfo resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
+	public HeaderInfo resolveRefs(OpenApi openApi, Deque<String> refStack, int maxDepth) {
 
 		if (ref != null) {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
-			var r = swagger.findRef(ref, HeaderInfo.class).resolveRefs(swagger, refStack, maxDepth);
+			var r = openApi.findRef(ref, HeaderInfo.class);
+			r = r.resolveRefs(openApi, refStack, maxDepth);
 			refStack.removeLast();
 			return r;
 		}
