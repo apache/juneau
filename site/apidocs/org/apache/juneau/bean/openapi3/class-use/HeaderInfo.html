@@ -82,8 +82,18 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Make a deep copy of this object.</div>
 </div>
+<div class="col-first even-row-color"><code>static final <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OpenApiBuilder.</span><code><a href="../OpenApiBuilder.html#headerInfo()" class="member-name-link">headerInfo</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates an empty <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3"><code>HeaderInfo</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color"><code>static final <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OpenApiBuilder.</span><code><a href="../OpenApiBuilder.html#headerInfo(org.apache.juneau.bean.openapi3.SchemaInfo)" class="member-name-link">headerInfo</a><wbr>(<a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;schema)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Creates an <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3"><code>HeaderInfo</code></a> element with the specified <a href="../HeaderInfo.html#setSchema(org.apache.juneau.bean.openapi3.SchemaInfo)"><code>schema</code></a> attribute.</div>
+</div>
 <div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#resolveRefs(org.apache.juneau.bean.swagger.Swagger,java.util.Deque,int)" class="member-name-link">resolveRefs</a><wbr>(<a href="../../swagger/Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a>&nbsp;swagger,
+<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#resolveRefs(org.apache.juneau.bean.openapi3.OpenApi,java.util.Deque,int)" class="member-name-link">resolveRefs</a><wbr>(<a href="../OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>&nbsp;openApi,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Deque.html" title="class or interface in java.util" class="external-link">Deque</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;refStack,
  int&nbsp;maxDepth)</code></div>
 <div class="col-last even-row-color">
@@ -153,13 +163,18 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Encoding.</span><code><a href="../Encoding.html#getHeaders()" class="member-name-link">getHeaders</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Components.</span><code><a href="../Components.html#getHeaders()" class="member-name-link">getHeaders</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">Bean property getter:  <property>variables</property>.</div>
+<div class="block">Returns the headers map.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#getHeaders()" class="member-name-link">getHeaders</a>()</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Encoding.</span><code><a href="../Encoding.html#getHeaders()" class="member-name-link">getHeaders</a>()</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Bean property getter:  <property>variables</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#getHeaders()" class="member-name-link">getHeaders</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property getter:  <property>headers</property>.</div>
 </div>
 </div>
@@ -186,14 +201,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Encoding.</span><code><a href="../Encoding.html#setHeaders(java.util.Map)" class="member-name-link">setHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a>&gt;&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code><a href="../Components.html" title="class in org.apache.juneau.bean.openapi3">Components</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Components.</span><code><a href="../Components.html#setHeaders(java.util.Map)" class="member-name-link">setHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Sets the headers map.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Encoding.</span><code><a href="../Encoding.html#setHeaders(java.util.Map)" class="member-name-link">setHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a>&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean property setter:  <property>variables</property>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#setHeaders(java.util.Map)" class="member-name-link">setHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a>&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#setHeaders(java.util.Map)" class="member-name-link">setHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>headers</property>.</div>
 </div>
 </div>
