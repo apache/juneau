@@ -33,6 +33,7 @@
 		<module>juneau-bean-common</module>
 		<module>juneau-bean-html5</module>
 		<module>juneau-bean-jsonschema</module>
-		<module>juneau-bean-openapi3</module>
+		<module>juneau-bean-openapi-v3</module>
+		<module>juneau-bean-swagger-v2</module>
 	</modules>
 </project>

@@ -250,6 +250,15 @@ public class SwaggerBuilder {
 	}
 
 	/**
+	 * Creates an empty {@link OperationMap} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final OperationMap operationMap() {
+		return new OperationMap();
+	}
+
+	/**
 	 * Creates an empty {@link ParameterInfo} element.
 	 *
 	 * @return The new element.

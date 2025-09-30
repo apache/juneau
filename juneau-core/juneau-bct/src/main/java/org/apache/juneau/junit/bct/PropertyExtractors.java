@@ -107,6 +107,11 @@ public class PropertyExtractors {
 						m.setAccessible(true);
 						return m.invoke(o);
 					}
+					if (o instanceof Map.Entry<?,?> me) {
+						// Reflection to classes inside java.util are restricted in Java 9+.
+						if ("key".equals(name)) return me.getKey();
+						if ("value".equals(name)) return me.getValue();
+					}
 					m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get"+n) && x.getParameterCount() == 0).findFirst().orElse(null);
 					if (m != null) {
 						m.setAccessible(true);

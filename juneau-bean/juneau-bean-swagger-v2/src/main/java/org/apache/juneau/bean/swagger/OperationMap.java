@@ -51,12 +51,13 @@ public class OperationMap extends TreeMap<String,Operation> {
 
 		@Override
 		public int compare(String o1, String o2) {
-			var s1 = methods.get(o1);
-			var s2 = methods.get(o2);
+			// Since keys are now stored in lowercase, we need to normalize them for comparison
+			var s1 = methods.get(emptyIfNull(o1).toLowerCase());
+			var s2 = methods.get(emptyIfNull(o2).toLowerCase());
 			if (s1 == null)
-				s1 = o1;
+				s1 = emptyIfNull(o1).toLowerCase();
 			if (s2 == null)
-				s2 = o2;
+				s2 = emptyIfNull(o2).toLowerCase();
 			return StringUtils.compare(s1, s2);
 		}
 	};
@@ -69,6 +70,18 @@ public class OperationMap extends TreeMap<String,Operation> {
 	}
 
 	/**
+	 * Override put to normalize keys to lowercase.
+	 *
+	 * @param key The key.
+	 * @param value The value.
+	 * @return The previous value associated with key, or null if there was no mapping for key.
+	 */
+	@Override
+	public Operation put(String key, Operation value) {
+		return super.put(emptyIfNull(key).toLowerCase(), value);
+	}
+
+	/**
 	 * Fluent-style put method.
 	 *
 	 * @param httpMethodName The HTTP method name.
@@ -76,7 +89,7 @@ public class OperationMap extends TreeMap<String,Operation> {
 	 * @return This object.
 	 */
 	public OperationMap append(String httpMethodName, Operation operation) {
-		put(emptyIfNull(httpMethodName).toLowerCase(), operation);
+		put(httpMethodName, operation);
 		return this;
 	}
 }

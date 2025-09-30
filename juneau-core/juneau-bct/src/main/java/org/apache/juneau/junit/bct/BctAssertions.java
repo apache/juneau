@@ -465,13 +465,11 @@ public class BctAssertions {
 			actualStrings.add(tokens.stream().map(x -> converter.getNested(o, x)).collect(joining(",")));
 		}
 
-		if (errors.size() == 1) throw errors.get(0);
-
 		throw assertEqualsFailed(
 			Stream.of(expected).map(Utils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
 			actualStrings.stream().map(Utils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
 			args.getMessage("{0} bean assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n")))
-			);
+		);
 	}
 
 	/**

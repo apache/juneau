@@ -23,9 +23,9 @@
 		<version>9.2.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-bean-openapi3</artifactId>
-	<name>juneau/bean/openapi3</name>
-	<description>Apache Juneau Serializable Beans - OpenAPI v3</description>
+	<artifactId>juneau-bean-swagger-v2</artifactId>
+	<name>juneau/bean/swagger-v2</name>
+	<description>Apache Juneau Serializable Beans - Swagger v2</description>
 	<packaging>bundle</packaging>
 
 	<properties>
@@ -53,7 +53,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Automatic-Module-Name>org.apache.juneau.bean.openapi3</Automatic-Module-Name>
+						<Automatic-Module-Name>org.apache.juneau.bean.swagger</Automatic-Module-Name>
 					</instructions>
 				</configuration>
 			</plugin>

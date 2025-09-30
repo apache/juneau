@@ -83,7 +83,7 @@ class Swagger_Test extends SimpleTestBase {
 
 		// addX methods.
 		assertBean(t.setPaths(null).addPath("a", "a1", operation().setDescription("a2")).addPath("b", null, null),
-			"paths", "{a={a1={\"description\":\"a2\"}},b={<null>=<null>}}");
+			"paths", "{a={a1={\"description\":\"a2\"}},b={=<null>}}");
 		assertBean(t.setDefinitions(null).addDefinition("a", JsonMap.of("type","a1")).addDefinition("b", (JsonMap)null).addDefinition(null, JsonMap.of("type", "c1")),
 			"definitions", "{a={type=a1},b=<null>,<null>={type=c1}}");
 		assertBean(t.setParameters(null).addParameter("a", parameterInfo().setIn("a1")).addParameter("b", null).addParameter(null, parameterInfo().setIn("c1")),

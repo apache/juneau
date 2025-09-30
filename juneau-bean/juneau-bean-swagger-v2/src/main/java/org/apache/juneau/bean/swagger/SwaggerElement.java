@@ -15,6 +15,7 @@ package org.apache.juneau.bean.swagger;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -105,7 +106,11 @@ public abstract class SwaggerElement {
 	 */
 	@Beanp("*")
 	public Object get(String property) {
-		if (property == null || extra == null)
+		if (property == null)
+			return null;
+		if ("strict".equals(property))
+			return toType(isStrict(), Object.class);
+		if (extra == null)
 			return null;
 		return extra.get(property);
 	}
@@ -179,6 +184,9 @@ public abstract class SwaggerElement {
 
 	@Override /* Object */
 	public String toString() {
+		if (Modifier.isAbstract(getClass().getModifiers())) {
+			return JsonMap.of("strict", strict, "extra", extra).toString();
+		}
 		return JsonSerializer.DEFAULT.toString(this);
 	}
 }

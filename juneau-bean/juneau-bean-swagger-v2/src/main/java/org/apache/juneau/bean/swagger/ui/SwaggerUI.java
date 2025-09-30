@@ -156,24 +156,30 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	private HtmlElement tagBlockSummary(Tag t) {
 		var ed = t.getExternalDocs();
 
-		var content = ed.getDescription() != null ? ed.getDescription() : ed.getUrl();
-		return div()._class("tag-block-summary").children(
-			span(t.getName())._class("name"),
-			span(toBRL(t.getDescription()))._class("description"),
-			span(a(ed.getUrl(), content))._class("extdocs")
-		).onclick("toggleTagBlock(this)");
+		var children = new ArrayList<HtmlElement>();
+		children.add(span(t.getName())._class("name"));
+		children.add(span(toBRL(t.getDescription()))._class("description"));
+
+		if (ed != null) {
+			var content = ed.getDescription() != null ? ed.getDescription() : ed.getUrl();
+			children.add(span(a(ed.getUrl(), content))._class("extdocs"));
+		}
+
+		return div()._class("tag-block-summary").children(children).onclick("toggleTagBlock(this)");
 	}
 
 	// Creates the contents under the "pet  Everything about your Pets  ext-link" header.
 	private Div tagBlockContents(Session s, Tag t) {
 		var tagBlockContents = div()._class("tag-block-contents");
 
-		s.swagger.getPaths().forEach((path,v) ->
-			v.forEach((opName,op) -> {
-				if ((t == null && op.getTags() == null) || (t != null && op.getTags() != null && op.getTags() != null && op.getTags().contains(t.getName())))
-					tagBlockContents.child(opBlock(s, path, opName, op));
-			})
-		);
+		if (s.swagger.getPaths() != null) {
+			s.swagger.getPaths().forEach((path,v) ->
+				v.forEach((opName,op) -> {
+					if ((t == null && op.getTags() == null) || (t != null && op.getTags() != null && op.getTags() != null && op.getTags().contains(t.getName())))
+						tagBlockContents.child(opBlock(s, path, opName, op));
+				})
+			);
+		}
 
 		return tagBlockContents;
 	}
