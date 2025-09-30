@@ -141,13 +141,13 @@ public class Text extends Common {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
 	public Text setBase(Object value) {
 		super.setBase(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
 	public Text setLang(String value) {
 		super.setLang(value);
 		return this;

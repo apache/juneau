@@ -276,379 +276,379 @@ public class Textarea extends HtmlElementRawText {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea _class(String _class) {  // NOSONAR - Intentional naming.
 		super._class(_class);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea accesskey(String accesskey) {
 		super.accesskey(accesskey);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea contenteditable(Object contenteditable) {
 		super.contenteditable(contenteditable);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea dir(String dir) {
 		super.dir(dir);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea hidden(Object hidden) {
 		super.hidden(hidden);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea id(String id) {
 		super.id(id);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea lang(String lang) {
 		super.lang(lang);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onabort(String onabort) {
 		super.onabort(onabort);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onblur(String onblur) {
 		super.onblur(onblur);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea oncancel(String oncancel) {
 		super.oncancel(oncancel);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea oncanplay(String oncanplay) {
 		super.oncanplay(oncanplay);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea oncanplaythrough(String oncanplaythrough) {
 		super.oncanplaythrough(oncanplaythrough);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onchange(String onchange) {
 		super.onchange(onchange);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onclick(String onclick) {
 		super.onclick(onclick);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea oncuechange(String oncuechange) {
 		super.oncuechange(oncuechange);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea ondblclick(String ondblclick) {
 		super.ondblclick(ondblclick);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea ondurationchange(String ondurationchange) {
 		super.ondurationchange(ondurationchange);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onemptied(String onemptied) {
 		super.onemptied(onemptied);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onended(String onended) {
 		super.onended(onended);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onerror(String onerror) {
 		super.onerror(onerror);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onfocus(String onfocus) {
 		super.onfocus(onfocus);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea oninput(String oninput) {
 		super.oninput(oninput);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea oninvalid(String oninvalid) {
 		super.oninvalid(oninvalid);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onkeydown(String onkeydown) {
 		super.onkeydown(onkeydown);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onkeypress(String onkeypress) {
 		super.onkeypress(onkeypress);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onkeyup(String onkeyup) {
 		super.onkeyup(onkeyup);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onload(String onload) {
 		super.onload(onload);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onloadeddata(String onloadeddata) {
 		super.onloadeddata(onloadeddata);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onloadedmetadata(String onloadedmetadata) {
 		super.onloadedmetadata(onloadedmetadata);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onloadstart(String onloadstart) {
 		super.onloadstart(onloadstart);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onmousedown(String onmousedown) {
 		super.onmousedown(onmousedown);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onmouseenter(String onmouseenter) {
 		super.onmouseenter(onmouseenter);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onmouseleave(String onmouseleave) {
 		super.onmouseleave(onmouseleave);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onmousemove(String onmousemove) {
 		super.onmousemove(onmousemove);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onmouseout(String onmouseout) {
 		super.onmouseout(onmouseout);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onmouseover(String onmouseover) {
 		super.onmouseover(onmouseover);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onmouseup(String onmouseup) {
 		super.onmouseup(onmouseup);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onmousewheel(String onmousewheel) {
 		super.onmousewheel(onmousewheel);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onpause(String onpause) {
 		super.onpause(onpause);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onplay(String onplay) {
 		super.onplay(onplay);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onplaying(String onplaying) {
 		super.onplaying(onplaying);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onprogress(String onprogress) {
 		super.onprogress(onprogress);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onratechange(String onratechange) {
 		super.onratechange(onratechange);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onreset(String onreset) {
 		super.onreset(onreset);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onresize(String onresize) {
 		super.onresize(onresize);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onscroll(String onscroll) {
 		super.onscroll(onscroll);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onseeked(String onseeked) {
 		super.onseeked(onseeked);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onseeking(String onseeking) {
 		super.onseeking(onseeking);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onselect(String onselect) {
 		super.onselect(onselect);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onshow(String onshow) {
 		super.onshow(onshow);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onstalled(String onstalled) {
 		super.onstalled(onstalled);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onsubmit(String onsubmit) {
 		super.onsubmit(onsubmit);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onsuspend(String onsuspend) {
 		super.onsuspend(onsuspend);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea ontimeupdate(String ontimeupdate) {
 		super.ontimeupdate(ontimeupdate);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea ontoggle(String ontoggle) {
 		super.ontoggle(ontoggle);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onvolumechange(String onvolumechange) {
 		super.onvolumechange(onvolumechange);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea onwaiting(String onwaiting) {
 		super.onwaiting(onwaiting);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea spellcheck(Object spellcheck) {
 		super.spellcheck(spellcheck);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea style(String style) {
 		super.style(style);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea tabindex(Object tabindex) {
 		super.tabindex(tabindex);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea title(String title) {
 		super.title(title);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Textarea translate(Object translate) {
 		super.translate(translate);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElementRawText */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementRawText */
 	public Textarea text(Object text) {
 		super.text(text);
 		return this;

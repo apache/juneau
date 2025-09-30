@@ -255,85 +255,85 @@ public class Feed extends CommonEntry {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
 	public Feed setBase(Object value) {
 		super.setBase(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
 	public Feed setLang(String value) {
 		super.setLang(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Feed setAuthors(Person...value) {
 		super.setAuthors(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Feed setCategories(Category...value) {
 		super.setCategories(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Feed setContributors(Person...value) {
 		super.setContributors(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Feed setId(String value) {
 		super.setId(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Feed setId(Id value) {
 		super.setId(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Feed setLinks(Link...value) {
 		super.setLinks(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Feed setRights(String value) {
 		super.setRights(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Feed setRights(Text value) {
 		super.setRights(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Feed setTitle(String value) {
 		super.setTitle(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Feed setTitle(Text value) {
 		super.setTitle(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Feed setUpdated(String value) {
 		super.setUpdated(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Feed setUpdated(Calendar value) {
 		super.setUpdated(value);
 		return this;

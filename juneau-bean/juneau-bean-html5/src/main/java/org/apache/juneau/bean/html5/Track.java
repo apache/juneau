@@ -133,373 +133,373 @@ public class Track extends HtmlElementVoid {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track _class(String _class) {  // NOSONAR - Intentional naming.
 		super._class(_class);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track accesskey(String accesskey) {
 		super.accesskey(accesskey);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track contenteditable(Object contenteditable) {
 		super.contenteditable(contenteditable);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track dir(String dir) {
 		super.dir(dir);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track hidden(Object hidden) {
 		super.hidden(hidden);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track id(String id) {
 		super.id(id);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track lang(String lang) {
 		super.lang(lang);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onabort(String onabort) {
 		super.onabort(onabort);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onblur(String onblur) {
 		super.onblur(onblur);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track oncancel(String oncancel) {
 		super.oncancel(oncancel);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track oncanplay(String oncanplay) {
 		super.oncanplay(oncanplay);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track oncanplaythrough(String oncanplaythrough) {
 		super.oncanplaythrough(oncanplaythrough);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onchange(String onchange) {
 		super.onchange(onchange);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onclick(String onclick) {
 		super.onclick(onclick);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track oncuechange(String oncuechange) {
 		super.oncuechange(oncuechange);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track ondblclick(String ondblclick) {
 		super.ondblclick(ondblclick);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track ondurationchange(String ondurationchange) {
 		super.ondurationchange(ondurationchange);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onemptied(String onemptied) {
 		super.onemptied(onemptied);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onended(String onended) {
 		super.onended(onended);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onerror(String onerror) {
 		super.onerror(onerror);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onfocus(String onfocus) {
 		super.onfocus(onfocus);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track oninput(String oninput) {
 		super.oninput(oninput);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track oninvalid(String oninvalid) {
 		super.oninvalid(oninvalid);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onkeydown(String onkeydown) {
 		super.onkeydown(onkeydown);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onkeypress(String onkeypress) {
 		super.onkeypress(onkeypress);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onkeyup(String onkeyup) {
 		super.onkeyup(onkeyup);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onload(String onload) {
 		super.onload(onload);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onloadeddata(String onloadeddata) {
 		super.onloadeddata(onloadeddata);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onloadedmetadata(String onloadedmetadata) {
 		super.onloadedmetadata(onloadedmetadata);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onloadstart(String onloadstart) {
 		super.onloadstart(onloadstart);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onmousedown(String onmousedown) {
 		super.onmousedown(onmousedown);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onmouseenter(String onmouseenter) {
 		super.onmouseenter(onmouseenter);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onmouseleave(String onmouseleave) {
 		super.onmouseleave(onmouseleave);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onmousemove(String onmousemove) {
 		super.onmousemove(onmousemove);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onmouseout(String onmouseout) {
 		super.onmouseout(onmouseout);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onmouseover(String onmouseover) {
 		super.onmouseover(onmouseover);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onmouseup(String onmouseup) {
 		super.onmouseup(onmouseup);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onmousewheel(String onmousewheel) {
 		super.onmousewheel(onmousewheel);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onpause(String onpause) {
 		super.onpause(onpause);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onplay(String onplay) {
 		super.onplay(onplay);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onplaying(String onplaying) {
 		super.onplaying(onplaying);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onprogress(String onprogress) {
 		super.onprogress(onprogress);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onratechange(String onratechange) {
 		super.onratechange(onratechange);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onreset(String onreset) {
 		super.onreset(onreset);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onresize(String onresize) {
 		super.onresize(onresize);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onscroll(String onscroll) {
 		super.onscroll(onscroll);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onseeked(String onseeked) {
 		super.onseeked(onseeked);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onseeking(String onseeking) {
 		super.onseeking(onseeking);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onselect(String onselect) {
 		super.onselect(onselect);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onshow(String onshow) {
 		super.onshow(onshow);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onstalled(String onstalled) {
 		super.onstalled(onstalled);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onsubmit(String onsubmit) {
 		super.onsubmit(onsubmit);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onsuspend(String onsuspend) {
 		super.onsuspend(onsuspend);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track ontimeupdate(String ontimeupdate) {
 		super.ontimeupdate(ontimeupdate);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track ontoggle(String ontoggle) {
 		super.ontoggle(ontoggle);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onvolumechange(String onvolumechange) {
 		super.onvolumechange(onvolumechange);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track onwaiting(String onwaiting) {
 		super.onwaiting(onwaiting);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track spellcheck(Object spellcheck) {
 		super.spellcheck(spellcheck);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track style(String style) {
 		super.style(style);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track tabindex(Object tabindex) {
 		super.tabindex(tabindex);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track title(String title) {
 		super.title(title);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
 	public Track translate(Object translate) {
 		super.translate(translate);
 		return this;

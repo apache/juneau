@@ -158,13 +158,13 @@ public class Person extends Common {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
 	public Person setBase(Object value) {
 		super.setBase(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
 	public Person setLang(String value) {
 		super.setLang(value);
 		return this;

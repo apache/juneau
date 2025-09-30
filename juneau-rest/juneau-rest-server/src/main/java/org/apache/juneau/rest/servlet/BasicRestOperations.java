@@ -79,7 +79,7 @@ import org.apache.juneau.rest.stats.*;
 	// Add example to the following types:
 	addExamplesTo="bean,collection,array,map",
 	// Don't generate schema information on the Swagger bean itself or HTML beans.
-	ignoreTypes="Swagger,org.apache.juneau.dto.html5.*",
+	ignoreTypes="Swagger,org.apache.juneau.bean.html5.*",
 	// Use $ref references for bean definitions to reduce duplication in Swagger.
 	useBeanDefs="true"
 )

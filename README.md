@@ -278,16 +278,20 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of the following
 * **juneau-config**	- A sophisticated configuration file API.
 * **juneau-assertions** - Fluent-style assertions API.
 * **juneau-bct** - Bean-Centric Testing framework that extends JUnit with streamlined assertion methods for Java objects.
+* **juneau-svl** - Simple Variable Language for dynamic string processing.
+* **juneau-rest-common** - REST APIs common to client and server side.
 * **juneau-rest-server**	- A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as one or more top-level servlets in any Servlet 3.1.0+ container. Includes Spring Boot and JAX-RS integration support.
 * **juneau-rest-client** - A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces.
-* **juneau-rest-springboot** - Spring boot integration for juneau-rest-servlet.
+* **juneau-rest-server-springboot** - Spring boot integration for juneau-rest-servlet.
 * **juneau-rest-mock** - REST testing API.
 * **juneau-microservice-core** - Core microservice API.
 * **juneau-microservice-jetty** - Jetty microservice API.
 * **juneau-examples-core** - Core code examples.
 * **juneau-examples-rest** - REST code examples.
 * **juneau-examples-rest-jetty** - Jetty microservice examples.
-* **juneau-examples-rest-springboot** - Spring Boot examples. 
+* **juneau-examples-rest-springboot** - Spring Boot examples.
+* **juneau-petstore** - Complete REST application example.
+* **juneau-all** - Convenience dependency combining all core Juneau modules. 
 
 Questions via email to dev@juneau.apache.org are always welcome.
 

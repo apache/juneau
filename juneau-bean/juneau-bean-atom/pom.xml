@@ -48,7 +48,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Automatic-Module-Name>org.apache.juneau.dto</Automatic-Module-Name>
+						<Automatic-Module-Name>org.apache.juneau.bean.atom</Automatic-Module-Name>
 					</instructions>
 				</configuration>
 			</plugin>

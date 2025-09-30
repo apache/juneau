@@ -37,7 +37,7 @@
 <div class='topic'>
 	<p>
 		Juneau supports serializing and parsing of JSON-Schema documents through the use of beans defined in the 
-		<code>org.apache.juneau.dto.jsonschema</code> package.
+		<code>org.apache.juneau.bean.jsonschema</code> package.
 		<br>These beans are used with the existing {@link org.apache.juneau.json.JsonSerializer} and 
 		{@link org.apache.juneau.json.JsonParser} classes to produce and consume JSON-Schema documents. 
 	</p>
@@ -212,21 +212,21 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>
-				{@link org.apache.juneau.dto.jsonschema.JsonSchema} - Top level schema object.
+				{@link org.apache.juneau.bean.jsonschema.JsonSchema} - Top level schema object.
 			<li>
-				{@link org.apache.juneau.dto.jsonschema.JsonSchemaProperty} - A subclass of <code>Schema</code> for 
+				{@link org.apache.juneau.bean.jsonschema.JsonSchemaProperty} - A subclass of <code>Schema</code> for 
 				representing properties.
 			<li>
-				{@link org.apache.juneau.dto.jsonschema.JsonSchemaPropertySimpleArray} - A convenience subclass of 
+				{@link org.apache.juneau.bean.jsonschema.JsonSchemaPropertySimpleArray} - A convenience subclass of 
 				<code>SchemaProperty</code> for representing properties of simple array types.
 			<li>
-				{@link org.apache.juneau.dto.jsonschema.JsonSchemaRef} - Represents a URI reference to another schema.
+				{@link org.apache.juneau.bean.jsonschema.JsonSchemaRef} - Represents a URI reference to another schema.
 			<li>
-				{@link org.apache.juneau.dto.jsonschema.JsonSchemaArray} - An array of <code>Schema</code> objects.
+				{@link org.apache.juneau.bean.jsonschema.JsonSchemaArray} - An array of <code>Schema</code> objects.
 			<li>
-				{@link org.apache.juneau.dto.jsonschema.JsonType} - An enum of possible JSON data types.
+				{@link org.apache.juneau.bean.jsonschema.JsonType} - An enum of possible JSON data types.
 			<li>
-				{@link org.apache.juneau.dto.jsonschema.JsonTypeArray} - An array of <code>JsonType</code> objects.
+				{@link org.apache.juneau.bean.jsonschema.JsonTypeArray} - An array of <code>JsonType</code> objects.
 		</ul>
 	</div>	
 

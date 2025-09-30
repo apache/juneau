@@ -15,7 +15,11 @@
 - **`/lib`** - Individual Jars
   - `juneau-marshall.jar` - Marshalling
   - `juneau-marshall-rdf.jar` - Marshalling RDF extension (requires Apache Jena 2.7.1+)
-  - `juneau-dto.jar` - Data Transfer Objects
+  - `juneau-bean-atom.jar` - ATOM Data Transfer Object Beans
+  - `juneau-bean-common.jar` - Common Data Transfer Object Beans
+  - `juneau-bean-html5.jar` - HTML5 Data Transfer Object Beans
+  - `juneau-bean-jsonschema.jar` - JSON Schema Data Transfer Object Beans
+  - `juneau-bean-openapi3.jar` - OpenAPI 3 Data Transfer Object Beans
   - `juneau-svl.jar` - Simple Variable Language
   - `juneau-config.jar` - Config File
   - `juneau-rest-server.jar` - REST Servlet
@@ -26,7 +30,11 @@
 - **`/osgi`** - OSGi Libraries
   - `org.apache.juneau.marshall.jar` - Marshalling
   - `org.apache.juneau.marshall.rdf.jar` - Marshalling RDF extension
-  - `org.apache.juneau.dto.jar` - Data Transfer Objects
+  - `org.apache.juneau.bean.atom.jar` - ATOM Data Transfer Object Beans
+  - `org.apache.juneau.bean.common.jar` - Common Data Transfer Object Beans
+  - `org.apache.juneau.bean.html5.jar` - HTML5 Data Transfer Object Beans
+  - `org.apache.juneau.bean.jsonschema.jar` - JSON Schema Data Transfer Object Beans
+  - `org.apache.juneau.bean.openapi3.jar` - OpenAPI 3 Data Transfer Object Beans
   - `org.apache.juneau.svl.jar` - Simple Variable Language
   - `org.apache.juneau.config.jar` - Config File
   - `org.apache.juneau.rest.server.jar` - REST Servlet
@@ -57,7 +65,11 @@
 <!-- ...but can also be any of the following... -->
 <artifactId>juneau-marshall</artifactId>
 <artifactId>juneau-marshall-rdf</artifactId>
-<artifactId>juneau-dto</artifactId>
+<artifactId>juneau-bean-atom</artifactId>
+<artifactId>juneau-bean-common</artifactId>
+<artifactId>juneau-bean-html5</artifactId>
+<artifactId>juneau-bean-jsonschema</artifactId>
+<artifactId>juneau-bean-openapi3</artifactId>
 <artifactId>juneau-svl</artifactId>
 <artifactId>juneau-config</artifactId>
 <artifactId>juneau-rest-server</artifactId>

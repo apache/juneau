@@ -52,11 +52,11 @@
 		<p>
 			The Juneau ATOM feed DTOs are simply beans with fluent-style setters.
 			<br>The following code shows a feed being created programmatically using the 
-			{@link org.apache.juneau.dto.atom.AtomBuilder} class.
+			{@link org.apache.juneau.bean.atom.AtomBuilder} class.
 		</p>
 		<p class='bjava'>
 		
-	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
+	<jk>import static</jk> org.apache.juneau.bean.atom.AtomBuilder.*;
 	
 	Feed <jv>feed</jv> = 
 		<jsm>feed</jsm>(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)

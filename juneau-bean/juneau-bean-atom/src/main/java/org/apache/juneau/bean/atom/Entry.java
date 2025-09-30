@@ -237,85 +237,85 @@ public class Entry extends CommonEntry {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
 	public Entry setBase(Object value) {
 		super.setBase(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
 	public Entry setLang(String value) {
 		super.setLang(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Entry setAuthors(Person...value) {
 		super.setAuthors(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Entry setCategories(Category...value) {
 		super.setCategories(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Entry setContributors(Person...value) {
 		super.setContributors(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Entry setId(String value) {
 		super.setId(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Entry setId(Id value) {
 		super.setId(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Entry setLinks(Link...value) {
 		super.setLinks(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Entry setRights(String value) {
 		super.setRights(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Entry setRights(Text value) {
 		super.setRights(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Entry setTitle(String value) {
 		super.setTitle(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Entry setTitle(Text value) {
 		super.setTitle(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Entry setUpdated(String value) {
 		super.setUpdated(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	@Override /* GENERATED - org.apache.juneau.bean.atom.CommonEntry */
 	public Entry setUpdated(Calendar value) {
 		super.setUpdated(value);
 		return this;

@@ -66,8 +66,8 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'topics/01.06.00.Dtos',
-          label: '1.6. DTOs',
+          id: 'topics/01.06.00.DtoBeans',
+          label: '1.6. DTO Beans',
         },
         {
           type: 'doc',
@@ -1676,35 +1676,47 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: '19. Security',
+      label: '19. juneau-all',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'topics/19.01.00.SecurityBasics',
-          label: '19.1. Security Basics',
+          id: 'topics/19.01.00.JuneauAllBasics',
+          label: '19.1. juneau-all Basics',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: '20. Security',
+      collapsed: true,
+      items: [
+        {
+          type: 'doc',
+          id: 'topics/20.01.00.SecurityBasics',
+          label: '20.1. Security Basics',
         },
         {
           type: 'doc',
-          id: 'topics/19.02.00.MarshallingSecurity',
-          label: '19.2. Marshalling Security',
+          id: 'topics/20.02.00.MarshallingSecurity',
+          label: '20.2. Marshalling Security',
         },
         {
           type: 'doc',
-          id: 'topics/19.03.00.SvlSecurity',
-          label: '19.3. SVL Security',
+          id: 'topics/20.03.00.SvlSecurity',
+          label: '20.3. SVL Security',
         },
         {
           type: 'doc',
-          id: 'topics/19.04.00.RestSecurity',
-          label: '19.4. REST Security',
+          id: 'topics/20.04.00.RestSecurity',
+          label: '20.4. REST Security',
         },
       ],
         },
         {
           type: 'doc',
-          id: 'topics/20.01.00.V9.0-migration-guide',
-          label: '20. V9.0 Migration Guide',
+          id: 'topics/21.01.00.V9.0-migration-guide',
+          label: '21. V9.0 Migration Guide',
         },
       ],
     },
