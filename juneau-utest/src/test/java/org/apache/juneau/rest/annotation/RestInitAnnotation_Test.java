@@ -21,7 +21,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests {@link RestInit}.
  */
-class RestInitAnnotation_Test extends SimpleTestBase {
+class RestInitAnnotation_Test extends TestBase {
 
 	private static final String CNAME = RestInitAnnotation_Test.class.getName();
 

@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class Age_Test extends SimpleTestBase {
+class Age_Test extends TestBase {
 
 	private static final String HEADER = "Age";
 	private static final String VALUE = "123";

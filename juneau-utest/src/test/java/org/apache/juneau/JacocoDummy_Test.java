@@ -19,7 +19,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
 
-class JacocoDummy_Test extends SimpleTestBase {
+class JacocoDummy_Test extends TestBase {
 
 	//====================================================================================================
 	// Dummy code to add test coverage in Jacoco.

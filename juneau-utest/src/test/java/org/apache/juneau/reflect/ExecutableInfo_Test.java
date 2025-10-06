@@ -28,7 +28,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
 
-class ExecutableInfo_Test extends SimpleTestBase {
+class ExecutableInfo_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));

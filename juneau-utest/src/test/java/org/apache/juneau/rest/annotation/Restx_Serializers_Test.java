@@ -20,7 +20,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-class Restx_Serializers_Test extends SimpleTestBase {
+class Restx_Serializers_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests

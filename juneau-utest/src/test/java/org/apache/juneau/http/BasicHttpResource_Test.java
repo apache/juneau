@@ -25,7 +25,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.junit.jupiter.api.*;
 
-class BasicHttpResource_Test extends SimpleTestBase {
+class BasicHttpResource_Test extends TestBase {
 
 	@Test void a01_basic() throws Exception {
 		var f = Files.createTempFile("test","txt").toFile();

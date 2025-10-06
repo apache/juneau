@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class Authorization_Test extends SimpleTestBase {
+class Authorization_Test extends TestBase {
 
 	private static final String HEADER = "Authorization";
 	private static final String VALUE = "foo";

@@ -18,7 +18,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class HasFormData_Test extends SimpleTestBase {
+class HasFormData_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Simple tests

@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class HasQueryAnnotation_Test extends SimpleTestBase {
+class HasQueryAnnotation_Test extends TestBase {
 
 	public static class X1 {}
 

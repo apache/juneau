@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the example code in the ObjectSwap class.
  */
-class ObjectSwapTest extends SimpleTestBase {
+class ObjectSwapTest extends TestBase {
 
 	public static class MyPojo {}
 

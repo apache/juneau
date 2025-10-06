@@ -18,7 +18,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-class BeanIgnore_Test extends SimpleTestBase {
+class BeanIgnore_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test @BeanIgnore on properties

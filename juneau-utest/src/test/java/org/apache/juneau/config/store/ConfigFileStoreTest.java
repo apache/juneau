@@ -24,7 +24,7 @@ import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
 
-class ConfigFileStoreTest extends SimpleTestBase {
+class ConfigFileStoreTest extends TestBase {
 
 	private static final File DIR = new File("./target/config");
 

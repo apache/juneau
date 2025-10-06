@@ -21,7 +21,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests {@link AsciiSet}.
  */
-class AsciiSet_Test extends SimpleTestBase {
+class AsciiSet_Test extends TestBase {
 
 	//====================================================================================================
 	// test - Basic tests

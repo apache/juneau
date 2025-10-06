@@ -20,7 +20,7 @@ import org.apache.juneau.common.internal.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-class StringVarResolver_Test extends SimpleTestBase {
+class StringVarResolver_Test extends TestBase {
 
 	//====================================================================================================
 	// test - Basic tests

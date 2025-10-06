@@ -20,7 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-public class JsonSchema_Test extends SimpleTestBase {
+public class JsonSchema_Test extends TestBase {
 
 	@Test void a01_schema1() throws Exception {
 		var s = JsonSerializer.create().json5().ws().build();

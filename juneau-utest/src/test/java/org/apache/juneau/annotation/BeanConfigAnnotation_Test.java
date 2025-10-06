@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @BeanConfig annotation.
  */
-class BeanConfigAnnotation_Test extends SimpleTestBase {
+class BeanConfigAnnotation_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));

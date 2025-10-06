@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests: {@link PartBeanMeta}
  */
-class PartBeanMeta_Test extends SimpleTestBase {
+class PartBeanMeta_Test extends TestBase {
 
 	private static final String TNAME = PartBeanMeta_Test.class.getName();
 

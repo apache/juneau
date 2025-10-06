@@ -23,7 +23,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
 
-class UrlEncodingSerializer_Test extends SimpleTestBase {
+class UrlEncodingSerializer_Test extends TestBase {
 
 	static UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT.copy().addRootType().build();
 	static UrlEncodingSerializer sr = UrlEncodingSerializer.DEFAULT_READABLE.copy().addRootType().build();

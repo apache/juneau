@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Base class for JUnit 5 one-way string swap tests.
  */
-public abstract class OneWayStringSwapTest_Base extends SimpleTestBase {
+public abstract class OneWayStringSwapTest_Base extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")

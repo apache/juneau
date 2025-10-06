@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-class BeanConfig_Swaps_Test extends SimpleTestBase {
+class BeanConfig_Swaps_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests

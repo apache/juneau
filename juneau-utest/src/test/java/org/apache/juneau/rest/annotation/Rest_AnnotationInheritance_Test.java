@@ -18,7 +18,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class Rest_AnnotationInheritance_Test extends SimpleTestBase {
+class Rest_AnnotationInheritance_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Body on parameter

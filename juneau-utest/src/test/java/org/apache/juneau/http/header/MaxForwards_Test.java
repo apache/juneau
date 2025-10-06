@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class MaxForwards_Test extends SimpleTestBase {
+class MaxForwards_Test extends TestBase {
 
 	private static final String HEADER = "Max-Forwards";
 	private static final String VALUE = "123";

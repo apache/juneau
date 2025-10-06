@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests {@link IOUtils}.
  */
-class IOUtilsTest extends SimpleTestBase {
+class IOUtilsTest extends TestBase {
 
 	@Test void a01_readPath() throws IOException {
 		var p = new Properties();

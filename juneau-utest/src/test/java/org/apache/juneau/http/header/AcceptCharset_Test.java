@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class AcceptCharset_Test extends SimpleTestBase {
+class AcceptCharset_Test extends TestBase {
 
 	private static final String HEADER = "Accept-Charset";
 	private static final String VALUE = "utf-8";

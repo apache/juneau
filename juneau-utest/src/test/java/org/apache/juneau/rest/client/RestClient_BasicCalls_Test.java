@@ -35,7 +35,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-class RestClient_BasicCalls_Test extends SimpleTestBase {
+class RestClient_BasicCalls_Test extends TestBase {
 
 	public static class ABean {
 		public int f;

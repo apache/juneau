@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class WeightedAverageTest extends SimpleTestBase {
+class WeightedAverageTest extends TestBase {
 
 	@Test void a01_empty() {
 		var w = new WeightedAverage();

@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class MockServletRequest_Test extends SimpleTestBase {
+class MockServletRequest_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// URIs

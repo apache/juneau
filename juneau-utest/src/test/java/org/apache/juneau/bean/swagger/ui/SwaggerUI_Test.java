@@ -24,7 +24,7 @@ import org.junit.jupiter.api.*;
 /**
  * Testcase for {@link SwaggerUI}.
  */
-class SwaggerUI_Test extends SimpleTestBase {
+class SwaggerUI_Test extends TestBase {
 
 	private final BeanSession bs = BeanContext.DEFAULT_SESSION;
 

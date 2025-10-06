@@ -18,7 +18,7 @@ import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class RestOp_Guards_Test extends SimpleTestBase {
+class RestOp_Guards_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Overlapping guards

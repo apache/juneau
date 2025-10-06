@@ -18,7 +18,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
 
-class ArrayBuilder_Test extends SimpleTestBase {
+class ArrayBuilder_Test extends TestBase {
 
 	@Test void a01_basic() {
 		String[] empty = {};

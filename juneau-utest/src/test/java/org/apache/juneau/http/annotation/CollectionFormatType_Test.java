@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class CollectionFormatType_Test extends SimpleTestBase {
+class CollectionFormatType_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertDoesNotThrow(CollectionFormatType::new);

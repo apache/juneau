@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @JsonConfig annotation.
  */
-class JsonConfigAnnotationTest extends SimpleTestBase {
+class JsonConfigAnnotationTest extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));

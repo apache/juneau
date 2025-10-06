@@ -33,7 +33,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
-class SerializedHttpEntity_Test extends SimpleTestBase {
+class SerializedHttpEntity_Test extends TestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {

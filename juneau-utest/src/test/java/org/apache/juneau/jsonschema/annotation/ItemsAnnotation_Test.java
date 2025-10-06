@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
 
-class ItemsAnnotation_Test extends SimpleTestBase {
+class ItemsAnnotation_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests

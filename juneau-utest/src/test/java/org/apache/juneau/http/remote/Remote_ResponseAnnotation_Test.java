@@ -27,7 +27,7 @@ import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class Remote_ResponseAnnotation_Test extends SimpleTestBase {
+class Remote_ResponseAnnotation_Test extends TestBase {
 
 	public static class ABean {
 		public int f;

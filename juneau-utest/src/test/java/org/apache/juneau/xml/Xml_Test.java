@@ -31,7 +31,7 @@ import org.apache.juneau.xml.xml1c.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-class Xml_Test extends SimpleTestBase {
+class Xml_Test extends TestBase {
 
 	//====================================================================================================
 	// Simple comparison test with JSON serializer

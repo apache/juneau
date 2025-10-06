@@ -22,7 +22,7 @@ import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"resource"})
-class UonParserReader_Test extends SimpleTestBase {
+class UonParserReader_Test extends TestBase {
 
 	//====================================================================================================
 	// Basic tests

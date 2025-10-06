@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests various error conditions when defining beans.
  */
-class BeanMapErrors_Test extends SimpleTestBase {
+class BeanMapErrors_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Beanp(name) on method not in @Bean(properties)

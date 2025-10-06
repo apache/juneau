@@ -34,7 +34,7 @@ import org.junit.jupiter.params.provider.*;
  * with the same objects for all serializers and parsers.
  */
 @SuppressWarnings({"deprecation"})
-class RoundTripMaps_Test extends SimpleTestBase {
+class RoundTripMaps_Test extends TestBase {
 
 	private static RoundTrip_Tester[] TESTERS = {
 		tester(1, "Json - default")

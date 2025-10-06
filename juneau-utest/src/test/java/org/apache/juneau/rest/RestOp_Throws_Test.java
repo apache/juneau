@@ -24,7 +24,7 @@ import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class RestOp_Throws_Test extends SimpleTestBase {
+class RestOp_Throws_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic sanity tests
 	//-----------------------------------------------------------------------------------------------------------------

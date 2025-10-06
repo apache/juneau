@@ -25,7 +25,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-class Remote_RequestAnnotation_Test  extends SimpleTestBase{
+class Remote_RequestAnnotation_Test  extends TestBase{
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests

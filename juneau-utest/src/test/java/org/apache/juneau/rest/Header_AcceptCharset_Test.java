@@ -20,7 +20,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-class Header_AcceptCharset_Test extends SimpleTestBase {
+class Header_AcceptCharset_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that Q-values are being resolved correctly.

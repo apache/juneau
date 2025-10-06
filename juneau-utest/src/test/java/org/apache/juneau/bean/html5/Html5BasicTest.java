@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class Html5BasicTest extends SimpleTestBase {
+class Html5BasicTest extends TestBase {
 
 	@Test void a01_toString() {
 		Form f = form("bar",

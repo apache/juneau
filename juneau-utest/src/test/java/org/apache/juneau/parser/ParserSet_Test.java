@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-class ParserSet_Test extends SimpleTestBase {
+class ParserSet_Test extends TestBase {
 
 	//====================================================================================================
 	// Test parser group matching

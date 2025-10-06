@@ -21,7 +21,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class ArrayUtilsTest extends SimpleTestBase {
+class ArrayUtilsTest extends TestBase {
 
 	//====================================================================================================
 	// append(T[], T...)

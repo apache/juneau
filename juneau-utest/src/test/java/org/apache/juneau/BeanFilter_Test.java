@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-class BeanFilter_Test extends SimpleTestBase {
+class BeanFilter_Test extends TestBase {
 
 	//====================================================================================================
 	// Test sub types

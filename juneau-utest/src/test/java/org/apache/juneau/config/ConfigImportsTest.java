@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 /**
  * Validates aspects of config imports.
  */
-class ConfigImportsTest extends SimpleTestBase {
+class ConfigImportsTest extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Value inheritance

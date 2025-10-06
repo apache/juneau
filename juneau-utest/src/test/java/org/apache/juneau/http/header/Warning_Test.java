@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class Warning_Test extends SimpleTestBase {
+class Warning_Test extends TestBase {
 
 	private static final String HEADER = "Warning";
 	private static final String VALUE = "foo";

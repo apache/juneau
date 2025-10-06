@@ -24,7 +24,7 @@ import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
-class CommonParser_UrlEncodingTest extends SimpleTestBase {
+class CommonParser_UrlEncodingTest extends TestBase {
 
 	ReaderParser p = UrlEncodingParser.create().beanDictionary(A1.class).build();
 

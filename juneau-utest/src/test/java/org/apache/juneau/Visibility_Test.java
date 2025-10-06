@@ -19,7 +19,7 @@ import org.apache.juneau.a.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-class Visibility_Test extends SimpleTestBase {
+class Visibility_Test extends TestBase {
 
 	//====================================================================================================
 	// testVisibility

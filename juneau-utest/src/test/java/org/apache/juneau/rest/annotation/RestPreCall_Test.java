@@ -21,7 +21,7 @@ import org.junit.jupiter.api.*;
 
 import jakarta.servlet.http.*;
 
-class RestPreCall_Test extends SimpleTestBase {
+class RestPreCall_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @RestPreCall

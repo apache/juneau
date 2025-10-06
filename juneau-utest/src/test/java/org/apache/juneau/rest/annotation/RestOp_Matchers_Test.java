@@ -21,7 +21,7 @@ import org.junit.jupiter.api.*;
 
 import jakarta.servlet.http.*;
 
-class RestOp_Matchers_Test extends SimpleTestBase {
+class RestOp_Matchers_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Overlapping matchers

@@ -19,7 +19,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class RestOp_ClientVersion_Test extends SimpleTestBase {
+class RestOp_ClientVersion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests - default Client-Version header.

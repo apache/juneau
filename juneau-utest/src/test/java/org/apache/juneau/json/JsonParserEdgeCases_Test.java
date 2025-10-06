@@ -24,7 +24,7 @@ import org.apache.juneau.parser.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
-class JsonParserEdgeCases_Test extends SimpleTestBase {
+class JsonParserEdgeCases_Test extends TestBase {
 
 	private static final Input[] INPUTS = {
 		input(1, "is_structure_500_nested_arrays", repeat(500, "[") + repeat(500, "]"), null),

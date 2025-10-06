@@ -22,7 +22,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.stats.*;
 import org.junit.jupiter.api.*;
 
-class MethodExecStore_Test extends SimpleTestBase {
+class MethodExecStore_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Builder tests.

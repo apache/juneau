@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
 
-class AnnotationInfoTest extends SimpleTestBase {
+class AnnotationInfoTest extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Is in group.

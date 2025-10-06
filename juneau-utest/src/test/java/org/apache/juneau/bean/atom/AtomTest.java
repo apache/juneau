@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
-class AtomTest extends SimpleTestBase {
+class AtomTest extends TestBase {
 
 	public Feed createFeed() throws Exception {
 		return

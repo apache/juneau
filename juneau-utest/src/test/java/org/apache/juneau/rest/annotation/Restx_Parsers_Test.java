@@ -20,7 +20,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-class Restx_Parsers_Test extends SimpleTestBase {
+class Restx_Parsers_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Setup

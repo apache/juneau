@@ -33,7 +33,7 @@ import org.junit.jupiter.params.provider.*;
  */
 @Disabled
 @SuppressWarnings({"serial"})
-class RoundTripLargeObjects_Test extends SimpleTestBase {
+class RoundTripLargeObjects_Test extends TestBase {
 
 	private static final int NUM_RUNS = 10;
 	private static final int SIZE_PARAM = 20000;

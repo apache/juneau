@@ -19,7 +19,7 @@ import java.io.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-class ParserReader_Test extends SimpleTestBase {
+class ParserReader_Test extends TestBase {
 
 	//====================================================================================================
 	// testBasic

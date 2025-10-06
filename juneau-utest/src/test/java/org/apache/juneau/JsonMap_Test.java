@@ -21,7 +21,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.objecttools.*;
 import org.junit.jupiter.api.*;
 
-class JsonMap_Test extends SimpleTestBase {
+class JsonMap_Test extends TestBase {
 
 	//====================================================================================================
 	// testBasic

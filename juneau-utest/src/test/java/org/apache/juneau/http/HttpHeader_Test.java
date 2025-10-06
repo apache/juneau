@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class HttpHeader_Test extends SimpleTestBase {
+class HttpHeader_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertDoesNotThrow(HttpMethod::new);

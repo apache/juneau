@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Base class for JUnit 5 round-trip string swap tests.
  */
-public abstract class StringSwapTest_Base extends SimpleTestBase {
+public abstract class StringSwapTest_Base extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")

@@ -22,7 +22,7 @@ import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
-class ClassMeta_Test extends SimpleTestBase {
+class ClassMeta_Test extends TestBase {
 
 	BeanContext bc = BeanContext.DEFAULT;
 

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 
 import jakarta.servlet.http.*;
 
-class Rest_PredefinedStatusCodes_Test extends SimpleTestBase {
+class Rest_PredefinedStatusCodes_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// OK (200)

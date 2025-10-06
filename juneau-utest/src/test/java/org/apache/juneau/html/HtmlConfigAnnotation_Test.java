@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @HtmlConfig annotation.
  */
-class HtmlConfigAnnotation_Test extends SimpleTestBase {
+class HtmlConfigAnnotation_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));

@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
-class Json5_Test extends SimpleTestBase {
+class Json5_Test extends TestBase {
 
 	@Test void a01_to() throws Exception {
 		var in1 = "foo";

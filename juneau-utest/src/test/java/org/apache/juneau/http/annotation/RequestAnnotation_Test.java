@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
 
-class RequestAnnotation_Test extends SimpleTestBase {
+class RequestAnnotation_Test extends TestBase {
 
 	private static final String CNAME = RequestAnnotation_Test.class.getName();
 

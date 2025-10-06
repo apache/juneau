@@ -32,7 +32,7 @@ import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
-class Swagger_Test extends SimpleTestBase {
+class Swagger_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Setup

@@ -26,7 +26,7 @@ import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
-class ObjectRest_Test extends SimpleTestBase {
+class ObjectRest_Test extends TestBase {
 
 	//====================================================================================================
 	// testBasic

@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class MediaRanges_Test extends SimpleTestBase {
+class MediaRanges_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Verifies that media type parameters are distinguished from media range extensions.

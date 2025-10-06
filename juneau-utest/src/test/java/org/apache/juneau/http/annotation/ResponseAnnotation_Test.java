@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
 
-class ResponseAnnotation_Test extends SimpleTestBase {
+class ResponseAnnotation_Test extends TestBase {
 
 	private static final String CNAME = ResponseAnnotation_Test.class.getName();
 

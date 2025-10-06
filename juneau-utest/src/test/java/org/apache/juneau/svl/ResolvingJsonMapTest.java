@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
-class ResolvingJsonMapTest extends SimpleTestBase {
+class ResolvingJsonMapTest extends TestBase {
 
 	//====================================================================================================
 	// test - Basic tests

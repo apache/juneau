@@ -28,7 +28,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 @SuppressWarnings({"serial","rawtypes"})
-class BasicHtml_Test extends SimpleTestBase {
+class BasicHtml_Test extends TestBase {
 
 	private static final Class<?>[] ANNOTATED_CLASSES = {
 		BeanWithWhitespaceTextFields2Config.class, BeanWithWhitespaceTextPwsFields2Config.class, BeanWithWhitespaceMixedFields2Config.class, BeanWithWhitespaceMixedPwsFields2Config.class, LinkBeanCConfig.class

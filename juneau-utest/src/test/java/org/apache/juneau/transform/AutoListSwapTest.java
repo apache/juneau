@@ -27,7 +27,7 @@ import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"unchecked","rawtypes"})
-class AutoListSwapTest extends SimpleTestBase {
+class AutoListSwapTest extends TestBase {
 
 	private static final List<String> STRINGLIST = list("foo");
 	private static final JsonList JSONLIST = JsonList.ofJsonOrCdl("foo");

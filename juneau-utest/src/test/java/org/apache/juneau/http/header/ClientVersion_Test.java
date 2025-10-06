@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class ClientVersion_Test extends SimpleTestBase {
+class ClientVersion_Test extends TestBase {
 
 	private static final String HEADER = "Client-Version";
 	private static final String VALUE = "1.2.3";

@@ -21,7 +21,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-class ObjectSwap_Test extends SimpleTestBase {
+class ObjectSwap_Test extends TestBase {
 
 	//====================================================================================================
 	// Test same type

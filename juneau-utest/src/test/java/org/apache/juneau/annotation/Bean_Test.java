@@ -21,7 +21,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-class Bean_Test extends SimpleTestBase {
+class Bean_Test extends TestBase {
 
 	static VarResolverSession vr = VarResolver.create().vars(XVar.class).build().createSession();
 

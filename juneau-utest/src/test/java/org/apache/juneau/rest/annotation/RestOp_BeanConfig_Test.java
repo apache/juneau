@@ -19,7 +19,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings("serial")
-class RestOp_BeanConfig_Test extends SimpleTestBase {
+class RestOp_BeanConfig_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @BeanConfig(bpi)

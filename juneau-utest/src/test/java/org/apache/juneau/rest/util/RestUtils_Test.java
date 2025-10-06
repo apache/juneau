@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.urlencoding.*;
 import org.junit.jupiter.api.*;
 
-class RestUtils_Test extends SimpleTestBase {
+class RestUtils_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// decode(String)

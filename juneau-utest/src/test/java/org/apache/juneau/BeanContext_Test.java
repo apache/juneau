@@ -19,7 +19,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
-class BeanContext_Test extends SimpleTestBase {
+class BeanContext_Test extends TestBase {
 
 	BeanContext bc = BeanContext.DEFAULT;
 	BeanSession bs = BeanContext.DEFAULT_SESSION;

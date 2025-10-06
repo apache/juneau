@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.*;
 
-class PropertyNamerTest extends SimpleTestBase {
+class PropertyNamerTest extends TestBase {
 
 	//====================================================================================================
 	// test dashed-lower-case

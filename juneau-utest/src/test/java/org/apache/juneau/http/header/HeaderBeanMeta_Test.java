@@ -20,7 +20,7 @@ import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;
 
-class HeaderBeanMeta_Test extends SimpleTestBase {
+class HeaderBeanMeta_Test extends TestBase {
 
 	private static final String TNAME = HeaderBeanMeta_Test.class.getName();
 

@@ -21,7 +21,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the PojoPaginator class.
  */
-class ObjectSorter_Test extends SimpleTestBase {
+class ObjectSorter_Test extends TestBase {
 
 	ObjectSorter os = new ObjectSorter();
 	BeanSession bs = BeanContext.DEFAULT_SESSION;

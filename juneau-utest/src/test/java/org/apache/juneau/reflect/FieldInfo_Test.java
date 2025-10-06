@@ -25,7 +25,7 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class FieldInfo_Test extends SimpleTestBase {
+class FieldInfo_Test extends TestBase {
 
 	@Documented
 	@Target(FIELD)

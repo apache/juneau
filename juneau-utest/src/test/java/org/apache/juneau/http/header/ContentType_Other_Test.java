@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class ContentType_Other_Test extends SimpleTestBase {
+class ContentType_Other_Test extends TestBase {
 
 	@Test void a01_basic() {
 		var ct = contentType("application/json");

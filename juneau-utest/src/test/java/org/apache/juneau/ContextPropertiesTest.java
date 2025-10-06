@@ -21,7 +21,7 @@ import org.junit.jupiter.api.*;
 /**
  * Test the ContextProperties class.
  */
-class ContextPropertiesTest extends SimpleTestBase {
+class ContextPropertiesTest extends TestBase {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Other tests

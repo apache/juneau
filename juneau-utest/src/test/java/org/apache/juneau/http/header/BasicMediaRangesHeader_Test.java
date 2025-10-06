@@ -28,7 +28,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class BasicMediaRangesHeader_Test extends SimpleTestBase {
+class BasicMediaRangesHeader_Test extends TestBase {
 
 	private static final String HEADER = "Foo";
 	private static final String VALUE = "foo/bar;x=1";

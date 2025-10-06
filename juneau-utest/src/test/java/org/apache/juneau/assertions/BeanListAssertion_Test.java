@@ -25,7 +25,7 @@ import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 @Deprecated
-class BeanListAssertion_Test extends SimpleTestBase {
+class BeanListAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helpers

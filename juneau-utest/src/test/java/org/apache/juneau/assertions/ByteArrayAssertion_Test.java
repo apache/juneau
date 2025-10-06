@@ -22,7 +22,7 @@ import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 @Deprecated
-class ByteArrayAssertion_Test extends SimpleTestBase {
+class ByteArrayAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helpers

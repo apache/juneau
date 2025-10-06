@@ -20,7 +20,7 @@ import java.io.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class IOUtils_Test extends SimpleTestBase {
+class IOUtils_Test extends TestBase {
 
 	//====================================================================================================
 	// read(File)

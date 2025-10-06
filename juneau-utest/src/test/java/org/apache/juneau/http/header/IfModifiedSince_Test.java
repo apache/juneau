@@ -30,7 +30,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class IfModifiedSince_Test extends SimpleTestBase {
+class IfModifiedSince_Test extends TestBase {
 
 	private static final String HEADER = "If-Modified-Since";
 	private static final String VALUE = "Sat, 29 Oct 1994 19:43:31 GMT";

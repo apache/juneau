@@ -23,7 +23,7 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class ConstructorInfoTest extends SimpleTestBase {
+class ConstructorInfoTest extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));

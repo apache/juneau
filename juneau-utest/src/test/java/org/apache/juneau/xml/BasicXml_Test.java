@@ -25,7 +25,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 @SuppressWarnings({"serial"})
-class BasicXml_Test extends SimpleTestBase {
+class BasicXml_Test extends TestBase {
 
 	private static final XmlSerializer
 		s1 = XmlSerializer.DEFAULT_SQ,

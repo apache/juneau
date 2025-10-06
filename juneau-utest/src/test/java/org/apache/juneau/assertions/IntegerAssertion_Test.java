@@ -21,7 +21,7 @@ import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 @Deprecated
-class IntegerAssertion_Test extends SimpleTestBase {
+class IntegerAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helpers

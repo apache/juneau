@@ -30,7 +30,7 @@ import jakarta.xml.bind.*;
 /**
  * Tests the OpenApiSerializer and OpenApiParser classes.
  */
-public class OpenApi_Test extends SimpleTestBase {
+public class OpenApi_Test extends TestBase {
 
 	public static final OpenApiSerializer DS = OpenApiSerializer.DEFAULT;
 	public static final OpenApiParser DP = OpenApiParser.DEFAULT;

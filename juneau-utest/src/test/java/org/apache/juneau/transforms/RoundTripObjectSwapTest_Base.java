@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Base class for JUnit 5 round-trip object swap tests.
  */
-public abstract class RoundTripObjectSwapTest_Base extends SimpleTestBase {
+public abstract class RoundTripObjectSwapTest_Base extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")

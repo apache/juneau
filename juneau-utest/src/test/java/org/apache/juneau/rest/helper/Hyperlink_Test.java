@@ -22,7 +22,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings("serial")
-class Hyperlink_Test extends SimpleTestBase {
+class Hyperlink_Test extends TestBase {
 
 	@Rest
 	public static class A extends BasicRestServlet {

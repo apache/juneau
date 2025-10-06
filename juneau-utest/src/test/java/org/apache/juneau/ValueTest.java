@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.*;
 
-class ValueTest extends SimpleTestBase {
+class ValueTest extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Value defined on parent class.

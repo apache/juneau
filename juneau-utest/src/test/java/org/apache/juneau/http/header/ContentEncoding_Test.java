@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class ContentEncoding_Test extends SimpleTestBase {
+class ContentEncoding_Test extends TestBase {
 
 	private static final String HEADER = "Content-Encoding";
 	private static final String VALUE = "foo";

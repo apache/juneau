@@ -29,7 +29,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
-class RestClient_Body_Test extends SimpleTestBase {
+class RestClient_Body_Test extends TestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {

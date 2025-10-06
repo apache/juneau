@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-class BasicBeans_Test extends SimpleTestBase {
+class BasicBeans_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Beans with transient fields and methods.

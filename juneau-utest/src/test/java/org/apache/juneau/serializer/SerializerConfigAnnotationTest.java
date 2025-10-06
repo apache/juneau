@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @SerializerConfig annotation.
  */
-class SerializerConfigAnnotationTest extends SimpleTestBase {
+class SerializerConfigAnnotationTest extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));

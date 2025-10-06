@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-class SerializerSet_Test extends SimpleTestBase {
+class SerializerSet_Test extends TestBase {
 
 	//====================================================================================================
 	// Trim nulls from beans

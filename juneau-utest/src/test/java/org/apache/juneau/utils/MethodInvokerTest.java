@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.stats.*;
 import org.junit.jupiter.api.*;
 
-class MethodInvokerTest extends SimpleTestBase {
+class MethodInvokerTest extends TestBase {
 
 	private MethodExecStore store = MethodExecStore
 		.create()

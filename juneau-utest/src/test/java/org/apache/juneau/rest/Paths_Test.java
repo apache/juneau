@@ -20,7 +20,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class Paths_Test extends SimpleTestBase {
+class Paths_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Setup

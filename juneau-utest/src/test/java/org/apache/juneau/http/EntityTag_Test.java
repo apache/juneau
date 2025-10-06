@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.junit.jupiter.api.*;
 
-class EntityTag_Test extends SimpleTestBase {
+class EntityTag_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Method tests

@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class UrlEncodingAnnotation_Test extends SimpleTestBase {
+class UrlEncodingAnnotation_Test extends TestBase {
 
 	private static final String CNAME = UrlEncodingAnnotation_Test.class.getName();
 

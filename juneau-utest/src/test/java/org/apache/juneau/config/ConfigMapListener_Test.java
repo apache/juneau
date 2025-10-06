@@ -23,7 +23,7 @@ import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
 
-class ConfigMapListener_Test extends SimpleTestBase {
+class ConfigMapListener_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Sanity tests.

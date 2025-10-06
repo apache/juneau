@@ -34,7 +34,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-class RestClient_Response_Test extends SimpleTestBase {
+class RestClient_Response_Test extends TestBase {
 
 	public static class ABean {
 		public int f;

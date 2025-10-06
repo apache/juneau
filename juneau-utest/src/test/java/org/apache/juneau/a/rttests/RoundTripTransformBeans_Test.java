@@ -42,7 +42,7 @@ import org.junit.jupiter.params.provider.*;
  * with the same objects for all serializers and parsers.
  */
 @SuppressWarnings({"rawtypes","serial"})
-class RoundTripTransformBeans_Test extends SimpleTestBase {
+class RoundTripTransformBeans_Test extends TestBase {
 
 	private static RoundTrip_Tester[] TESTERS = {
 		tester(1, "Json - default")

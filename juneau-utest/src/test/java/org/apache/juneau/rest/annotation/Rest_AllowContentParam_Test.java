@@ -18,7 +18,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class Rest_AllowContentParam_Test extends SimpleTestBase {
+class Rest_AllowContentParam_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Rest(disableBodyParam)

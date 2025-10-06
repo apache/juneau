@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class CsvAnnotation_Test extends SimpleTestBase {
+class CsvAnnotation_Test extends TestBase {
 
 	private static final String CNAME = CsvAnnotation_Test.class.getName();
 

@@ -20,7 +20,7 @@ import java.lang.reflect.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class ReflectionMapTest extends SimpleTestBase {
+class ReflectionMapTest extends TestBase {
 
 	private static ReflectionMap.Builder<Number> create() {
 		return ReflectionMap.create(Number.class);

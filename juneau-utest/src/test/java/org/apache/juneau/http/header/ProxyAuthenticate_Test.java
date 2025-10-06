@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class ProxyAuthenticate_Test extends SimpleTestBase {
+class ProxyAuthenticate_Test extends TestBase {
 
 	private static final String HEADER = "Proxy-Authenticate";
 	private static final String VALUE = "foo";

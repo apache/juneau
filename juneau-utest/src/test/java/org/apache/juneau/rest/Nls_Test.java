@@ -20,7 +20,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-class Nls_Test extends SimpleTestBase {
+class Nls_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test getting an NLS property defined on a class or method.

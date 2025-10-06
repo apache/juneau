@@ -29,7 +29,7 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Tests {@link RoleMatcher}.
  */
-class RoleMatcher_Test extends SimpleTestBase {
+class RoleMatcher_Test extends TestBase {
 
 	private void test(String expression, String toString, String expressionRoles, String[] shouldMatch, String[] shouldNotMatch) {
 		var m = safe(()->new RoleMatcher(expression));

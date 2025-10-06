@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
 
-class FormDataAnnotation_Test extends SimpleTestBase {
+class FormDataAnnotation_Test extends TestBase {
 
 	private static final String CNAME = FormDataAnnotation_Test.class.getName();
 

@@ -20,7 +20,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
 import org.junit.jupiter.api.*;
 
-class ReadWriteOnlyProperties_Test extends SimpleTestBase {
+class ReadWriteOnlyProperties_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Beanp(ro/wo)

@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
 
-class XmlContent_Test extends SimpleTestBase {
+class XmlContent_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test beans with @Xml(format=CONTENT)

@@ -35,7 +35,7 @@ import org.junit.jupiter.api.*;
 
 import jakarta.servlet.*;
 
-class RestOp_Params_Test extends SimpleTestBase {
+class RestOp_Params_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Various parameters

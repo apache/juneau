@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class StringRanges_Test extends SimpleTestBase {
+class StringRanges_Test extends TestBase {
 
 	@Test void a01_match() {
 		var x = alist("foo","bar","baz");

@@ -17,7 +17,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class ResponseStatus_Test extends SimpleTestBase {
+class ResponseStatus_Test extends TestBase {
 
 	@Rest
 	public static class A {

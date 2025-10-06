@@ -32,7 +32,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-class Remote_Test extends SimpleTestBase {
+class Remote_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Remote(path), relative paths

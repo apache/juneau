@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @MsgPackConfig annotation.
  */
-class MsgPackConfigAnnotationTest extends SimpleTestBase {
+class MsgPackConfigAnnotationTest extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));

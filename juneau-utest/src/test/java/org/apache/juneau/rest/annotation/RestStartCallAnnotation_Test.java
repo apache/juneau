@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class RestStartCallAnnotation_Test extends SimpleTestBase {
+class RestStartCallAnnotation_Test extends TestBase {
 
 	private static final String CNAME = RestStartCallAnnotation_Test.class.getName();
 

@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class HasFormDataAnnotation_Test extends SimpleTestBase {
+class HasFormDataAnnotation_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests

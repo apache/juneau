@@ -30,7 +30,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
-class Path_Test extends SimpleTestBase {
+class Path_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests

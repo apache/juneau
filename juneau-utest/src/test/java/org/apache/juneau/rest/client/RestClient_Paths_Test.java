@@ -24,7 +24,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-class RestClient_Paths_Test extends SimpleTestBase {
+class RestClient_Paths_Test extends TestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {

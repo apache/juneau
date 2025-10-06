@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class ObjectIntrospector_Test extends SimpleTestBase {
+class ObjectIntrospector_Test extends TestBase {
 
 	//====================================================================================================
 	// testBasic

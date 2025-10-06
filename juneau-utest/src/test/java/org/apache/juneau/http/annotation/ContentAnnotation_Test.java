@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class ContentAnnotation_Test extends SimpleTestBase {
+class ContentAnnotation_Test extends TestBase {
 
 	private static final String CNAME = ContentAnnotation_Test.class.getName();
 

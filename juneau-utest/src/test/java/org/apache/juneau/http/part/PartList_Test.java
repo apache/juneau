@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests: {@link PartList}, {@link PartList.Builder}, {@link BasicPartIterator}
  */
-class PartList_Test extends SimpleTestBase {
+class PartList_Test extends TestBase {
 
 	private static final NameValuePair
 		FOO_1 = part("Foo","1"),

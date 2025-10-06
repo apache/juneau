@@ -22,7 +22,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-class JsonParser_Test extends SimpleTestBase {
+class JsonParser_Test extends TestBase {
 
 	private static final JsonParser p = JsonParser.DEFAULT;
 	private static final JsonParser sp = JsonParser.DEFAULT_STRICT;

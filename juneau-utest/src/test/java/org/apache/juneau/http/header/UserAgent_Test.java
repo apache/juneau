@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class UserAgent_Test extends SimpleTestBase {
+class UserAgent_Test extends TestBase {
 
 	private static final String HEADER = "User-Agent";
 	private static final String VALUE = "foo";

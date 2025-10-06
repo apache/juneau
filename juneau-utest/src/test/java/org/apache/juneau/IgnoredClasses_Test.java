@@ -20,7 +20,7 @@ import java.io.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-class IgnoredClasses_Test extends SimpleTestBase {
+class IgnoredClasses_Test extends TestBase {
 
 	//====================================================================================================
 	// testFilesRenderedAsStrings

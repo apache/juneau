@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class Marshall_Test extends SimpleTestBase {
+class Marshall_Test extends TestBase {
 
 	@Test void basic() {
 		var m = Json5.DEFAULT;

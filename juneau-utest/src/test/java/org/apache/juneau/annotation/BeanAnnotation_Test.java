@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-class BeanAnnotation_Test extends SimpleTestBase {
+class BeanAnnotation_Test extends TestBase {
 
 	private static final String CNAME = BeanAnnotation_Test.class.getName();
 

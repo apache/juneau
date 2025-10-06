@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class From_Test extends SimpleTestBase {
+class From_Test extends TestBase {
 
 	private static final String HEADER = "From";
 	private static final String VALUE = "foo";

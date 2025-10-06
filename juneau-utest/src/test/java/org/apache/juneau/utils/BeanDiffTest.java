@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class BeanDiffTest extends SimpleTestBase {
+class BeanDiffTest extends TestBase {
 
 	public static class A {
 		public int f1;

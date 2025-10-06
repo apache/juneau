@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class ContentLength_Test extends SimpleTestBase {
+class ContentLength_Test extends TestBase {
 
 	private static final String HEADER = "Content-Length";
 	private static final String VALUE = "123";

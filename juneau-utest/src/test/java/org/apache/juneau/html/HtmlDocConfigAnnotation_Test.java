@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @HtmlDocConfig annotation.
  */
-class HtmlDocConfigAnnotation_Test extends SimpleTestBase {
+class HtmlDocConfigAnnotation_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));

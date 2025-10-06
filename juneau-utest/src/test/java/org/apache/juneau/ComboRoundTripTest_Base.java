@@ -20,7 +20,7 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Superclass for tests that verify results against all supported content types.
  */
-public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
+public abstract class ComboRoundTripTest_Base extends TestBase {
 
 	/**
 	 * Creates a ClassMeta for the given types.

@@ -18,7 +18,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class RestPostInit_Test extends SimpleTestBase {
+class RestPostInit_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @RestPostInit

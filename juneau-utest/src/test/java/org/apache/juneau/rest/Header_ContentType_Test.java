@@ -20,7 +20,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-class Header_ContentType_Test extends SimpleTestBase {
+class Header_ContentType_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that default Content-Type headers on servlet annotation are picked up.

@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-class Swagger_Response_Test extends SimpleTestBase {
+class Swagger_Response_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Swagger tests

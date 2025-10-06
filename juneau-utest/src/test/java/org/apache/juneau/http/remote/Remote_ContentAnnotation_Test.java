@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @Body annotation.
  */
-class Remote_ContentAnnotation_Test extends SimpleTestBase {
+class Remote_ContentAnnotation_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helpers

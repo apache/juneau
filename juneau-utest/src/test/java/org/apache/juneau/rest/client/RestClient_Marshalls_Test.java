@@ -24,7 +24,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-public class RestClient_Marshalls_Test extends SimpleTestBase {
+public class RestClient_Marshalls_Test extends TestBase {
 
 	public static class Bean {
 		public int f;

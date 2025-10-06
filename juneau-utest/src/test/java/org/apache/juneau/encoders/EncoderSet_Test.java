@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class EncoderSet_Test extends SimpleTestBase {
+class EncoderSet_Test extends TestBase {
 
 	//====================================================================================================
 	// Test matching

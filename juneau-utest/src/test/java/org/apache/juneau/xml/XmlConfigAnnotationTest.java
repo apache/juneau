@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @XmlConfig annotation.
  */
-class XmlConfigAnnotationTest extends SimpleTestBase {
+class XmlConfigAnnotationTest extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));

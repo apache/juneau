@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
 
-class AnnotationUtils_Test extends SimpleTestBase {
+class AnnotationUtils_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test empty checks

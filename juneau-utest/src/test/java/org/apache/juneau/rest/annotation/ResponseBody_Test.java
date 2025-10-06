@@ -17,6 +17,6 @@ import org.apache.juneau.*;
 /**
  * Tests the @Response annotation.
  */
-public class ResponseBody_Test extends SimpleTestBase {
+public class ResponseBody_Test extends TestBase {
 
 }

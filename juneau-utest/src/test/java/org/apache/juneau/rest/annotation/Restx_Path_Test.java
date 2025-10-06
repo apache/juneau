@@ -17,7 +17,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class Restx_Path_Test extends SimpleTestBase {
+class Restx_Path_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Nested children.

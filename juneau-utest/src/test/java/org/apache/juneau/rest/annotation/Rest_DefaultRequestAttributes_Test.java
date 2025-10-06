@@ -27,7 +27,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-class Rest_DefaultRequestAttributes_Test extends SimpleTestBase {
+class Rest_DefaultRequestAttributes_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @RestPreCall

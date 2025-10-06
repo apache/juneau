@@ -21,7 +21,7 @@ import org.junit.jupiter.api.*;
 /**
  * Most of the heavy testing for JsonSchemaSerializer is done in JsonSchemaGeneratorTest.
  */
-class JsonSchemaSerializer_Test extends SimpleTestBase {
+class JsonSchemaSerializer_Test extends TestBase {
 
 	//====================================================================================================
 	// Simple objects

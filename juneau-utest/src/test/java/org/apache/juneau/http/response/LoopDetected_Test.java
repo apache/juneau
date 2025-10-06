@@ -20,7 +20,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class LoopDetected_Test extends SimpleTestBase {
+class LoopDetected_Test extends TestBase {
 
 	@Rest
 	public static class A {

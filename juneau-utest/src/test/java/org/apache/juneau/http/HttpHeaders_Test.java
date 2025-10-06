@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.junit.jupiter.api.*;
 
-class HttpHeaders_Test extends SimpleTestBase {
+class HttpHeaders_Test extends TestBase {
 
 	@Test void a01_cast() {
 		var x1 = part("X1","1");

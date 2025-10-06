@@ -20,7 +20,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class ConfigClasspathStore_Test extends SimpleTestBase {
+class ConfigClasspathStore_Test extends TestBase {
 
 	@Test void a01_noFile() throws Exception {
 		var fs = ClasspathStore.create().build();

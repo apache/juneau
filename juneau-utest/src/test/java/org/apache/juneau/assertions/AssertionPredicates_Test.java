@@ -29,7 +29,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 @Deprecated
-class AssertionPredicates_Test extends SimpleTestBase {
+class AssertionPredicates_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests

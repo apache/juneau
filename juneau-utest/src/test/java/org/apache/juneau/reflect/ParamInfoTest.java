@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 /**
  * ParamInfo tests.
  */
-class ParamInfoTest extends SimpleTestBase {
+class ParamInfoTest extends TestBase {
 
 	@Documented
 	@Target(METHOD)

@@ -24,7 +24,7 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Verifies that the correct error messages are displayed when you do something wrong with the @Xml annotation.
  */
-class InvalidXmlBeans_Test extends SimpleTestBase {
+class InvalidXmlBeans_Test extends TestBase {
 
 	private static final XmlSerializer
 		s1 = XmlSerializer.DEFAULT_SQ;

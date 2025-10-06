@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class ParentPropertyAnnotation_Test extends SimpleTestBase {
+class ParentPropertyAnnotation_Test extends TestBase {
 
 	private static final String CNAME = ParentPropertyAnnotation_Test.class.getName();
 

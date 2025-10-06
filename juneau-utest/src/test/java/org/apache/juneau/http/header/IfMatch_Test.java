@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class IfMatch_Test extends SimpleTestBase {
+class IfMatch_Test extends TestBase {
 
 	private static final String HEADER = "If-Match";
 	private static final String VALUE = "\"foo\", \"bar\"";

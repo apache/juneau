@@ -24,7 +24,7 @@ import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-class Common_UrlEncodingTest extends SimpleTestBase {
+class Common_UrlEncodingTest extends TestBase {
 	UrlEncodingParser p = UrlEncodingParser.DEFAULT;
 
 	//====================================================================================================

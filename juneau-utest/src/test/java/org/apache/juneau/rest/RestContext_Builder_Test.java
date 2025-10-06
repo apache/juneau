@@ -23,7 +23,7 @@ import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class RestContext_Builder_Test extends SimpleTestBase {
+class RestContext_Builder_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// beanStore

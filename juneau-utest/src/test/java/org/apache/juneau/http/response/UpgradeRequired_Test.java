@@ -20,7 +20,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class UpgradeRequired_Test extends SimpleTestBase {
+class UpgradeRequired_Test extends TestBase {
 
 	@Rest
 	public static class A {

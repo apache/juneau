@@ -27,7 +27,7 @@ import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"unchecked","rawtypes"})
-class AutoObjectSwapTest extends SimpleTestBase {
+class AutoObjectSwapTest extends TestBase {
 
 
 	private static final Map<String,String> STRINGMAP = map("foo","bar");

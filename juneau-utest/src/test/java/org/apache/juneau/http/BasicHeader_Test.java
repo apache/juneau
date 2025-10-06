@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.junit.jupiter.api.*;
 
-class BasicHeader_Test extends SimpleTestBase {
+class BasicHeader_Test extends TestBase {
 
 	@Test void a01_ofPair() {
 		var x = stringHeader("Foo:bar");

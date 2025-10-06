@@ -19,7 +19,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class ControlledArrayList_Test extends SimpleTestBase {
+class ControlledArrayList_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// test - Basic tests

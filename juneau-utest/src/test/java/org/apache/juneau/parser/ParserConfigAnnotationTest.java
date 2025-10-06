@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @ParserConfig annotation.
  */
-class ParserConfigAnnotationTest extends SimpleTestBase {
+class ParserConfigAnnotationTest extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));

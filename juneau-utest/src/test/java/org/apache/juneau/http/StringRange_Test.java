@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class StringRange_Test extends SimpleTestBase {
+class StringRange_Test extends TestBase {
 
 	@Test void a01_basic() {
 		StringRange x1 = of("foo;a=1;q=0.5;b=2");

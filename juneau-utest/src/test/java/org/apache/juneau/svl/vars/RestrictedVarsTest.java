@@ -20,7 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-class RestrictedVarsTest extends SimpleTestBase {
+class RestrictedVarsTest extends TestBase {
 
 	@Test void a01_noNest() throws Exception {
 		var vr = VarResolver.create().vars(NoNestVar.class).build();

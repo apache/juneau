@@ -31,7 +31,7 @@ import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class Remote_CommonInterfaces_Test extends SimpleTestBase {
+class Remote_CommonInterfaces_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Simple tests, split annotations.

@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
 
-class SimpleMap_Test extends SimpleTestBase {
+class SimpleMap_Test extends TestBase {
 
 	@Test void doTest() {
 		var keys = a("a","b");

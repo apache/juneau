@@ -24,7 +24,7 @@ import org.apache.juneau.xml.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-public abstract class RoundTripTest_Base extends SimpleTestBase {
+public abstract class RoundTripTest_Base extends TestBase {
 
 	private static RoundTrip_Tester[] TESTERS = {
 		tester(1, "Json - default")

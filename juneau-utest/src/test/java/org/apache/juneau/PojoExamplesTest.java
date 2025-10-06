@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 /*
  * Tests the BEAN_examples property and @Example annotation.
  */
-class PojoExamplesTest extends SimpleTestBase {
+class PojoExamplesTest extends TestBase {
 
 	private final JsonParserSession session = JsonParser.DEFAULT.getSession();
 

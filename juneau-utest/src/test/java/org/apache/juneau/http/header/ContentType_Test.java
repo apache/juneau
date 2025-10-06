@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class ContentType_Test extends SimpleTestBase {
+class ContentType_Test extends TestBase {
 
 	private static final String HEADER = "Content-Type";
 	private static final String VALUE = "foo/bar";

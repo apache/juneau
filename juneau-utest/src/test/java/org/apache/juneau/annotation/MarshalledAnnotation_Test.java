@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class MarshalledAnnotation_Test extends SimpleTestBase {
+class MarshalledAnnotation_Test extends TestBase {
 
 	private static final String CNAME = MarshalledAnnotation_Test.class.getName();
 

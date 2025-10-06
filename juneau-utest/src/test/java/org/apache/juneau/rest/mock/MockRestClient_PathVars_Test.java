@@ -17,7 +17,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.junit.jupiter.api.*;
 
-class MockRestClient_PathVars_Test extends SimpleTestBase {
+class MockRestClient_PathVars_Test extends TestBase {
 
 	@Rest
 	public static class A {

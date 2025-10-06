@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @CsvConfig annotation.
  */
-class CsvConfig_Test extends SimpleTestBase {
+class CsvConfig_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotation with no values.

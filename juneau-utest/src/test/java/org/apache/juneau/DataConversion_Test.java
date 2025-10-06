@@ -21,7 +21,7 @@ import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings("rawtypes")
-class DataConversion_Test extends SimpleTestBase {
+class DataConversion_Test extends TestBase {
 
 	@BeforeEach
 	void beforeTest() {

@@ -28,7 +28,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-class MethodInfo_Test extends SimpleTestBase {
+class MethodInfo_Test extends TestBase {
 
 	@Documented
 	@Target({METHOD,TYPE})

@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @PlainTextConfig annotation.
  */
-class PlainTextConfigAnnotation_Test extends SimpleTestBase {
+class PlainTextConfigAnnotation_Test extends TestBase {
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 

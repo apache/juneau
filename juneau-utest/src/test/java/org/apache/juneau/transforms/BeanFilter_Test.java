@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
 
-class BeanFilter_Test extends SimpleTestBase {
+class BeanFilter_Test extends TestBase {
 
 	//====================================================================================================
 	// Interface bean filters

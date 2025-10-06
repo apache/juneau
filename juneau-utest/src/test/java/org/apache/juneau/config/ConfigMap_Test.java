@@ -22,7 +22,7 @@ import org.apache.juneau.common.internal.*;
 import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
 
-class ConfigMap_Test extends SimpleTestBase {
+class ConfigMap_Test extends TestBase {
 
 	static final String ENCODED = "*";
 	static final String BASE64 = "^";

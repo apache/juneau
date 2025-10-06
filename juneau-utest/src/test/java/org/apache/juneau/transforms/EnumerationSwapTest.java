@@ -21,7 +21,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.swaps.*;
 import org.junit.jupiter.api.*;
 
-class EnumerationSwapTest extends SimpleTestBase {
+class EnumerationSwapTest extends TestBase {
 
 	//====================================================================================================
 	// test

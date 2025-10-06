@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class AcceptLanguage_Test extends SimpleTestBase {
+class AcceptLanguage_Test extends TestBase {
 
 	private static final String HEADER = "Accept-Language";
 	private static final String VALUE = "foo";

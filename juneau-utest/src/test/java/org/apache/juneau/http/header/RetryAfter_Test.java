@@ -31,7 +31,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class RetryAfter_Test extends SimpleTestBase {
+class RetryAfter_Test extends TestBase {
 
 	private static final String HEADER = "Retry-After";
 	private static final String VALUE1 = "123";

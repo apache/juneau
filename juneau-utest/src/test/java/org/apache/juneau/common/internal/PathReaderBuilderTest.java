@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests {@link PathReaderBuilder}.
  */
-class PathReaderBuilderTest extends SimpleTestBase {
+class PathReaderBuilderTest extends TestBase {
 
 	private static final Path PATH = Paths.get("src/test/resources/files/Test3.properties");
 

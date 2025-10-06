@@ -25,7 +25,7 @@ import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 @Deprecated
-class ZonedDateTimeAssertion_Test extends SimpleTestBase {
+class ZonedDateTimeAssertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helpers

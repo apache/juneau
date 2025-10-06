@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class ParameterType_Test extends SimpleTestBase {
+class ParameterType_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertDoesNotThrow(ParameterType::new);

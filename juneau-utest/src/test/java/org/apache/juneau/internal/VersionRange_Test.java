@@ -18,7 +18,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
-class VersionRange_Test extends SimpleTestBase {
+class VersionRange_Test extends TestBase {
 
 	private static final Input[] INPUT = {
 		/* 00 */ input("1.1", "1.1.3", true),

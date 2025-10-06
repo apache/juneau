@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the {@link StackTraceElementSwap} class.
  */
-class StackTraceElementSwap_Test extends SimpleTestBase {
+class StackTraceElementSwap_Test extends TestBase {
 
 	private String write(StackTraceElement ste) {
 		return Json5.of(ste);

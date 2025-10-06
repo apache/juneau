@@ -23,7 +23,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
-class PathRemainder_Test extends SimpleTestBase {
+class PathRemainder_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Simple tests

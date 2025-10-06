@@ -27,7 +27,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-class BasicHttpRequestRetryHandler_Test extends SimpleTestBase {
+class BasicHttpRequestRetryHandler_Test extends TestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {

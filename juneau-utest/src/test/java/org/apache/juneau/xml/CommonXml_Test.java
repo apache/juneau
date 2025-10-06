@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
 
-class CommonXml_Test extends SimpleTestBase {
+class CommonXml_Test extends TestBase {
 
 	//====================================================================================================
 	// Test 18a - @Bean.uri annotation

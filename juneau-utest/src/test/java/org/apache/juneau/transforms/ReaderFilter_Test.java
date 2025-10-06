@@ -27,7 +27,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
-class ReaderFilter_Test extends SimpleTestBase {
+class ReaderFilter_Test extends TestBase {
 
 	//====================================================================================================
 	// testJson

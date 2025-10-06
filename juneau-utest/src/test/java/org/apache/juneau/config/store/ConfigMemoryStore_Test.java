@@ -19,7 +19,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class ConfigMemoryStore_Test extends SimpleTestBase {
+class ConfigMemoryStore_Test extends TestBase {
 
 	@Test void a01_noFile() {
 		var fs = MemoryStore.create().build();

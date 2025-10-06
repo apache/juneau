@@ -23,7 +23,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
-class ProxyBeanTest extends SimpleTestBase {
+class ProxyBeanTest extends TestBase {
 
 	//====================================================================================================
 	// testBasic

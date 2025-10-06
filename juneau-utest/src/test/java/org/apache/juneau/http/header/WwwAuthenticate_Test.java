@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class WwwAuthenticate_Test extends SimpleTestBase {
+class WwwAuthenticate_Test extends TestBase {
 
 	private static final String HEADER = "WWW-Authenticate";
 	private static final String VALUE = "foo";

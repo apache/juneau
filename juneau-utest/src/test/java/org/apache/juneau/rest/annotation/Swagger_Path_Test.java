@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;
 
-class Swagger_Path_Test extends SimpleTestBase {
+class Swagger_Path_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Swagger tests

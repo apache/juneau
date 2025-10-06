@@ -21,7 +21,7 @@ import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.matcher.*;
 import org.junit.jupiter.api.*;
 
-class RestDeleteAnnotation_Test extends SimpleTestBase {
+class RestDeleteAnnotation_Test extends TestBase {
 
 	private static final String CNAME = RestDeleteAnnotation_Test.class.getName();
 

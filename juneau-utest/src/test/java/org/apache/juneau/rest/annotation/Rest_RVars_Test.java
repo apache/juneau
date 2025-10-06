@@ -21,7 +21,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-class Rest_RVars_Test extends SimpleTestBase {
+class Rest_RVars_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests

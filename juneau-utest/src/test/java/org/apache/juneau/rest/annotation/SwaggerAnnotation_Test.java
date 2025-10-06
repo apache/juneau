@@ -21,7 +21,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Tag;
 import org.junit.jupiter.api.*;
 
-class SwaggerAnnotation_Test extends SimpleTestBase {
+class SwaggerAnnotation_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests

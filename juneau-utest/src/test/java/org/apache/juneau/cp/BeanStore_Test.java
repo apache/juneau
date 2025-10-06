@@ -26,7 +26,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.junit.jupiter.api.*;
 
-class BeanStore_Test extends SimpleTestBase {
+class BeanStore_Test extends TestBase {
 
 	@Documented
 	@Target({PARAMETER})

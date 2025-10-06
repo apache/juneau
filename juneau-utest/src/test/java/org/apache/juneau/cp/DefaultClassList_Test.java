@@ -18,7 +18,7 @@ import static org.apache.juneau.cp.DefaultClassList.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class DefaultClassList_Test extends SimpleTestBase {
+class DefaultClassList_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests.

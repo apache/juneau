@@ -21,7 +21,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
-class Xml_Test extends SimpleTestBase {
+class Xml_Test extends TestBase {
 
 	@Test void a01_to() throws Exception {
 		var in1 = "foo";

@@ -20,7 +20,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class Rest_Encoders_Test extends SimpleTestBase {
+class Rest_Encoders_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Setup classes

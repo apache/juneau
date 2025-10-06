@@ -20,7 +20,7 @@ import org.junit.jupiter.api.*;
 /**
  * Test the PojoMerge class.
  */
-class ObjectMerger_Test extends SimpleTestBase {
+class ObjectMerger_Test extends TestBase {
 
 	//====================================================================================================
 	// Basic tests

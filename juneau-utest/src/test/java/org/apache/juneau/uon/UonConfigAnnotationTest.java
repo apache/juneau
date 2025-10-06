@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @UonConfig annotation.
  */
-class UonConfigAnnotationTest extends SimpleTestBase {
+class UonConfigAnnotationTest extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));

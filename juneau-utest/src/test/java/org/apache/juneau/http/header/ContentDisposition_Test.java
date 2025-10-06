@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class ContentDisposition_Test extends SimpleTestBase {
+class ContentDisposition_Test extends TestBase {
 
 	private static final String HEADER = "Content-Disposition";
 	private static final String VALUE = "foo";

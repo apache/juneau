@@ -28,7 +28,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.junit.jupiter.api.*;
 
-class BasicPart_Test extends SimpleTestBase {
+class BasicPart_Test extends TestBase {
 
 	@Test void a01_ofPair() {
 		var x = basicPart("Foo:bar");

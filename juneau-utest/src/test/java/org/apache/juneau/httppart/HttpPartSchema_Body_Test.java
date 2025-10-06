@@ -21,7 +21,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.junit.jupiter.api.*;
 
-class HttpPartSchema_Body_Test extends SimpleTestBase {
+class HttpPartSchema_Body_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic test

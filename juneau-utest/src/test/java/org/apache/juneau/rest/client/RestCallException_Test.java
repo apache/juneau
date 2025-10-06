@@ -26,7 +26,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-class RestCallException_Test extends SimpleTestBase {
+class RestCallException_Test extends TestBase {
 
 	public static class ABean {
 		public int f;

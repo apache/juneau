@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests: {@link Accept}
  */
-class Accept_Test extends SimpleTestBase {
+class Accept_Test extends TestBase {
 
 	private static final String HEADER = "Accept";
 	private static final String VALUE = "foo";

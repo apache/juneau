@@ -23,7 +23,7 @@ import org.apache.juneau.rest.stats.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings("serial")
-class ThrownStore_Test extends SimpleTestBase {
+class ThrownStore_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests

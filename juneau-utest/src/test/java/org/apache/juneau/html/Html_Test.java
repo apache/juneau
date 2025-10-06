@@ -25,7 +25,7 @@ import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings("serial")
-class Html_Test extends SimpleTestBase {
+class Html_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Verifies that lists of maps/beans are converted to tables correctly.

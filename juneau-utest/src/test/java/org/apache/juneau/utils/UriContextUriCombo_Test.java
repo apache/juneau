@@ -22,7 +22,7 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Verifies that the getUri() methods in UriContext work correctly.
  */
-class UriContextUriCombo_Test extends SimpleTestBase {
+class UriContextUriCombo_Test extends TestBase {
 
 	private static final Data[] DATA = {
 

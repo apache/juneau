@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class HttpUtilsTest extends SimpleTestBase {
+class HttpUtilsTest extends TestBase {
 
 	public interface A {
 		void doGet();

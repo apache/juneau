@@ -30,7 +30,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-class DefaultSwaps_Test extends SimpleTestBase {
+class DefaultSwaps_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Setup

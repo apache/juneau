@@ -30,7 +30,7 @@ import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 import org.junit.jupiter.api.*;
 
-class Config_Test extends SimpleTestBase {
+class Config_Test extends TestBase {
 
 	private Config.Builder cb = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg");
 

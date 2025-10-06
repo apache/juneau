@@ -34,7 +34,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-class Remote_HeaderAnnotation_Test extends SimpleTestBase {
+class Remote_HeaderAnnotation_Test extends TestBase {
 
 	public static class Bean {
 		public int f;

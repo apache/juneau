@@ -18,7 +18,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
 
-class KeywordStoreTest extends SimpleTestBase {
+class KeywordStoreTest extends TestBase {
 
 	//====================================================================================================
 	// test - Basic tests

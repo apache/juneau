@@ -20,7 +20,7 @@ import java.util.*;
 
 import org.junit.jupiter.api.*;
 
-class Version_Test extends SimpleTestBase {
+class Version_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertNull(of(null));

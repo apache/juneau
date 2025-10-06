@@ -29,7 +29,7 @@ import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
-class BeanMap_Test extends SimpleTestBase {
+class BeanMap_Test extends TestBase {
 
 	JsonSerializer serializer = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 

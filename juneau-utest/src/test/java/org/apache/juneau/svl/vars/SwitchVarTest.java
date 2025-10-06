@@ -18,7 +18,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-class SwitchVarTest extends SimpleTestBase {
+class SwitchVarTest extends TestBase {
 
 	//====================================================================================================
 	// test - Basic tests

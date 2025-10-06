@@ -40,7 +40,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.opentest4j.*;
 
-class RrpcInterface_Test extends SimpleTestBase {
+class RrpcInterface_Test extends TestBase {
 
 	private static final Input[] INPUT = {
 		input("Json", JsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), JsonParser.DEFAULT),

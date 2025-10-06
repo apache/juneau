@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class RestOp_Returns_Test extends SimpleTestBase {
+class RestOp_Returns_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Response beans

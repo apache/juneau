@@ -23,7 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
 
-class ConfigBuilder_Test extends SimpleTestBase {
+class ConfigBuilder_Test extends TestBase {
 
 	private static File tempDir;
 	private static String TEMP_DIR;

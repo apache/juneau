@@ -21,7 +21,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class ResponseHeader_Test extends SimpleTestBase {
+class ResponseHeader_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Header on method parameters

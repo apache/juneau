@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class Console_Test extends SimpleTestBase {
+class Console_Test extends TestBase {
 
 	@Test void basic() {
 		assertDoesNotThrow(()->Console.out("test{0}", 1));

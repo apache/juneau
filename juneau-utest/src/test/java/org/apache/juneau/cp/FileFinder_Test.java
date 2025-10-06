@@ -24,7 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.cp.sub.*;
 import org.junit.jupiter.api.*;
 
-public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be public.
+public class FileFinder_Test extends TestBase {  // NOSONAR - Needs to be public.
 
 	private String read(FileFinder ff, String path) throws Exception {
 		return toUtf8(ff.getStream(path, null).orElse(null));

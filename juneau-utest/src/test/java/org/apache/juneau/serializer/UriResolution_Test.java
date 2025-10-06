@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Superclass for tests that verify results against all supported content types.
  */
-class UriResolution_Test extends SimpleTestBase {
+class UriResolution_Test extends TestBase {
 
 	private static class Tester {
 		final String label;

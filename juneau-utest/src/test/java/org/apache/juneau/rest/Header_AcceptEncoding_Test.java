@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class Header_AcceptEncoding_Test extends SimpleTestBase {
+class Header_AcceptEncoding_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test with no compression enabled.

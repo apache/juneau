@@ -22,7 +22,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-class Csv_Test extends SimpleTestBase{
+class Csv_Test extends TestBase{
 
 	@Test void a01_to() throws Exception {
 		var in1 = "foo";

@@ -24,7 +24,7 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Verifies that the resolveUri() methods in UriContext work correctly.
  */
-class UriContextResolutionCombo_Test extends SimpleTestBase {
+class UriContextResolutionCombo_Test extends TestBase {
 
 	private static final Tester[] TESTERS = {
 

@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests: {@link HeaderList}, {@link HeaderListBuilder}, {@link BasicHeaderIterator}
  */
-class HeaderList_Test extends SimpleTestBase {
+class HeaderList_Test extends TestBase {
 
 	private static final Header
 		FOO_1 = header("Foo","1"),

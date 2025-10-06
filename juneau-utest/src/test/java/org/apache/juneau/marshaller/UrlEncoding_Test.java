@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
-class UrlEncoding_Test extends SimpleTestBase {
+class UrlEncoding_Test extends TestBase {
 
 	@Test void a01_to() throws Exception {
 		var in1 = "foo";

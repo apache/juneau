@@ -20,7 +20,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-class Header_Accept_Test extends SimpleTestBase {
+class Header_Accept_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Setup classes

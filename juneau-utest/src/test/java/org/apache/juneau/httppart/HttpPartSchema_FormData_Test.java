@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.junit.jupiter.api.*;
 
-class HttpPartSchema_FormData_Test extends SimpleTestBase {
+class HttpPartSchema_FormData_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic test

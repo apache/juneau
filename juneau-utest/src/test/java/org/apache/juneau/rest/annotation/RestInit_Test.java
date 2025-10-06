@@ -20,7 +20,7 @@ import org.junit.jupiter.api.*;
 
 import jakarta.servlet.*;
 
-class RestInit_Test extends SimpleTestBase {
+class RestInit_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @RestInit

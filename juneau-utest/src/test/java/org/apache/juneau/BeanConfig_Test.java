@@ -29,7 +29,7 @@ import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings("rawtypes")
-class BeanConfig_Test extends SimpleTestBase {
+class BeanConfig_Test extends TestBase {
 
 	//====================================================================================================
 	// testBasic

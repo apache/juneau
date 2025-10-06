@@ -24,7 +24,7 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Verifies that the Content-Type class handles matching correctly.
  */
-class ContentType_Match_Test extends SimpleTestBase {
+class ContentType_Match_Test extends TestBase {
 
 	private static final Input[] INPUT = {
 		// Simple matches

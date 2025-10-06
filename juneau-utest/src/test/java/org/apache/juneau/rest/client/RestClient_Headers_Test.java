@@ -34,7 +34,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-public class RestClient_Headers_Test extends SimpleTestBase {
+public class RestClient_Headers_Test extends TestBase {
 
 	public static final CaptureLogger LOGGER = new CaptureLogger();
 

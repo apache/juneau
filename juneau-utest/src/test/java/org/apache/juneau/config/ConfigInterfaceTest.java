@@ -22,7 +22,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
-class ConfigInterfaceTest extends SimpleTestBase {
+class ConfigInterfaceTest extends TestBase {
 
 	Config cf;
 	ConfigInterface proxy;

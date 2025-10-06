@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-class UrlPathMatcher_Test extends SimpleTestBase {
+class UrlPathMatcher_Test extends TestBase {
 
 	private void check(UrlPathMatcher p, String path, String expected) {
 		assertString(expected, p.match(UrlPath.of(path)));

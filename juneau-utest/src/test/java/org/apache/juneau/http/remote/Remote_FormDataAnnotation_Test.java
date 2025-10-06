@@ -38,7 +38,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-class Remote_FormDataAnnotation_Test extends SimpleTestBase {
+class Remote_FormDataAnnotation_Test extends TestBase {
 
 	public static class Bean {
 		public int f;

@@ -20,7 +20,7 @@ import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-class ParserGenerics_Test extends SimpleTestBase {
+class ParserGenerics_Test extends TestBase {
 
 	//====================================================================================================
 	// Test generic maps

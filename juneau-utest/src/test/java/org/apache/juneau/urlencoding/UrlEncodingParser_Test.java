@@ -23,7 +23,7 @@ import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings("rawtypes")
-class UrlEncodingParser_Test extends SimpleTestBase {
+class UrlEncodingParser_Test extends TestBase {
 
 	static UrlEncodingParser p = UrlEncodingParser.DEFAULT;
 	static BeanSession bs = p.getBeanContext().getSession();

@@ -18,7 +18,7 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Superclass for tests that verify results against all supported content types.
  */
-public abstract class ComboSerializeTest_Base extends SimpleTestBase {
+public abstract class ComboSerializeTest_Base extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// JSON

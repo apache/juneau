@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class RestDestroyAnnotation_Test extends SimpleTestBase {
+class RestDestroyAnnotation_Test extends TestBase {
 
 	private static final String CNAME = RestDestroyAnnotation_Test.class.getName();
 

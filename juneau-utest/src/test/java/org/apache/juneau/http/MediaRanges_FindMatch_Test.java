@@ -26,7 +26,7 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Verifies that the Accept class handles matching correctly.
  */
-class MediaRanges_FindMatch_Test extends SimpleTestBase {
+class MediaRanges_FindMatch_Test extends TestBase {
 
 	private static final Input[] INPUT = {
 

@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class ContentLanguage_Test extends SimpleTestBase {
+class ContentLanguage_Test extends TestBase {
 
 	private static final String HEADER = "Content-Language";
 	private static final String VALUE = "foo";

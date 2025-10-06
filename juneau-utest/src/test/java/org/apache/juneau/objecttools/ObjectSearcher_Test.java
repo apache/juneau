@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the PojoSearcher class.
  */
-public class ObjectSearcher_Test extends SimpleTestBase {
+public class ObjectSearcher_Test extends TestBase {
 
 	private static BeanSession bs = BeanContext.DEFAULT_SESSION;
 	private static ObjectSearcher os = ObjectSearcher.DEFAULT;

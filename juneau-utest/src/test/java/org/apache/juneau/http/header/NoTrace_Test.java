@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class NoTrace_Test extends SimpleTestBase {
+class NoTrace_Test extends TestBase {
 
 	private static final String HEADER = "No-Trace";
 	private static final String VALUE = "true";

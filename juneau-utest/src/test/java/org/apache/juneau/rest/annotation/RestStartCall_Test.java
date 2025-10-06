@@ -20,7 +20,7 @@ import org.junit.jupiter.api.*;
 
 import jakarta.servlet.http.*;
 
-class RestStartCall_Test extends SimpleTestBase {
+class RestStartCall_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @RestStartCall

@@ -28,7 +28,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class ETag_Test extends SimpleTestBase {
+class ETag_Test extends TestBase {
 
 	private static final String HEADER = "ETag";
 	private static final String VALUE = "\"foo\"";

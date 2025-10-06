@@ -24,7 +24,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
 import org.junit.jupiter.api.*;
 
-class StringUtils_Test extends SimpleTestBase {
+class StringUtils_Test extends TestBase {
 
 	//====================================================================================================
 	// isNumeric(String,Class)

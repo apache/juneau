@@ -22,7 +22,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-class HtmlDocConfig_Test extends SimpleTestBase {
+class HtmlDocConfig_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @HtmlDocConfig(aside)

@@ -22,7 +22,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
 
-class FilteredMapTest extends SimpleTestBase {
+class FilteredMapTest extends TestBase {
 
 	Map<?,?> m3;
 

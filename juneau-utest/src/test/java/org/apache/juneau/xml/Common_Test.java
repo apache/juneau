@@ -25,7 +25,7 @@ import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-class Common_Test extends SimpleTestBase {
+class Common_Test extends TestBase {
 
 	//====================================================================================================
 	// Trim nulls from beans

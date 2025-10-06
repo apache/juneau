@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 @Deprecated
-class Verify_Test extends SimpleTestBase {
+class Verify_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helpers

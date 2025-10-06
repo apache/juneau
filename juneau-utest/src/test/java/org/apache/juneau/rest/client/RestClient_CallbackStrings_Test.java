@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class RestClient_CallbackStrings_Test extends SimpleTestBase {
+class RestClient_CallbackStrings_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests

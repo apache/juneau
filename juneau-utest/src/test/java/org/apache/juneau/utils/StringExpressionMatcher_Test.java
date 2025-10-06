@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests {@link StringExpressionMatcher}.
  */
-class StringExpressionMatcher_Test extends SimpleTestBase {
+class StringExpressionMatcher_Test extends TestBase {
 
 	private void test(String expression, String toString, String[] shouldMatch, String[] shouldNotMatch) {
 		var m = safe(()->new StringExpressionMatcher(expression));

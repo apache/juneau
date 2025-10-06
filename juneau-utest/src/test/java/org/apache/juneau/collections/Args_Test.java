@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class Args_Test extends SimpleTestBase {
+class Args_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// test - Basic tests

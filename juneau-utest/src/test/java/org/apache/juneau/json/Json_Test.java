@@ -23,7 +23,7 @@ import org.apache.juneau.json.annotation.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-class Json_Test extends SimpleTestBase{
+class Json_Test extends TestBase{
 
 	//====================================================================================================
 	// testBasic

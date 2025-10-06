@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class JsonAnnotation_Test extends SimpleTestBase {
+class JsonAnnotation_Test extends TestBase {
 
 	private static final String CNAME = JsonAnnotation_Test.class.getName();
 

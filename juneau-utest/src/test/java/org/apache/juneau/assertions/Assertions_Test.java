@@ -33,7 +33,7 @@ import org.junit.jupiter.api.MethodOrderer.*;
 
 @TestMethodOrder(MethodName.class)
 @Deprecated
-class Assertions_Test extends SimpleTestBase {
+class Assertions_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests

@@ -29,7 +29,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-class RestClient_Config_BeanContext_Test extends SimpleTestBase {
+class RestClient_Config_BeanContext_Test extends TestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {

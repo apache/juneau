@@ -20,7 +20,7 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings("serial")
 @Deprecated
-class Assertion_Test extends SimpleTestBase {
+class Assertion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helpers

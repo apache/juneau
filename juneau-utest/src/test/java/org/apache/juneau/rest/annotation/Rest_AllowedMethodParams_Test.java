@@ -16,7 +16,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class Rest_AllowedMethodParams_Test extends SimpleTestBase {
+class Rest_AllowedMethodParams_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Rest(allowedMethodParams)

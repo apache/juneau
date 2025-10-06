@@ -20,7 +20,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class MediaType_Test extends SimpleTestBase {
+class MediaType_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertEquals(new MediaType("text/foo"), new MediaType("text/foo"));

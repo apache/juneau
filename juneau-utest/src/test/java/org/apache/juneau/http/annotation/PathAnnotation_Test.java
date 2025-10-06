@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
 
-class PathAnnotation_Test extends SimpleTestBase {
+class PathAnnotation_Test extends TestBase {
 
 	private static final String CNAME = PathAnnotation_Test.class.getName();
 

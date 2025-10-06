@@ -27,7 +27,7 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
-class OpenApiPartSerializer_Test extends SimpleTestBase {
+class OpenApiPartSerializer_Test extends TestBase {
 
 	static OpenApiSerializerSession s = OpenApiSerializer.DEFAULT.getSession();
 

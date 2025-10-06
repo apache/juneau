@@ -26,7 +26,7 @@ import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"unchecked","rawtypes"})
-class AutoNumberSwapTest extends SimpleTestBase {
+class AutoNumberSwapTest extends TestBase {
 
 	private static ObjectSwap find(Class<?> c) {
 		return AutoNumberSwap.find(BeanContext.DEFAULT, ClassInfo.of(c));

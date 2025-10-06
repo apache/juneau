@@ -24,7 +24,7 @@ import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
-class RestPostAnnotation_Test extends SimpleTestBase {
+class RestPostAnnotation_Test extends TestBase {
 
 	private static final String CNAME = RestPostAnnotation_Test.class.getName();
 

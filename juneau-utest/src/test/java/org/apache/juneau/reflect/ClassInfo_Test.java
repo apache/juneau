@@ -32,7 +32,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-public class ClassInfo_Test extends SimpleTestBase {
+public class ClassInfo_Test extends TestBase {
 
 	@Documented
 	@Target(TYPE)
