@@ -30,7 +30,7 @@ import org.apache.juneau.collections.*;
  * All other data types are left as-is.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SimpleVariableLanguage">Simple Variable Language</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language</a>
  * </ul>
  */
 @SuppressWarnings({"serial"})

@@ -38,7 +38,7 @@ import org.apache.juneau.rest.httppart.*;
  * {@link HttpPartSchema schema} is derived from the {@link Content} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.JavaMethodParameters">Java Method Parameters</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JavaMethodParameters">Java Method Parameters</a>
  * </ul>
  */
 public class ContentArg implements RestOpArg {

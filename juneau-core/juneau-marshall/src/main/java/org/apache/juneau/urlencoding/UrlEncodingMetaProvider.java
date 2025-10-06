@@ -18,7 +18,7 @@ import org.apache.juneau.*;
  * Interface for providing access to {@link UrlEncodingClassMeta} and {@link UrlEncodingBeanPropertyMeta} objects.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.UrlEncodingDetails">URL-Encoding Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Details</a>
  * </ul>
  */
 public interface UrlEncodingMetaProvider extends AnnotationProvider {

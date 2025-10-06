@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * Extended annotation for {@link Rest#swagger() @Rest(swagger)}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>
  * </ul>
  */
 @Retention(RUNTIME)
@@ -33,7 +33,7 @@ public @interface Swagger {
 	 * Defines the swagger field <c>/info/contact</c>.
 	 *
 	 * <p>
-	 * A <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a> string with the following fields:
+	 * A <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a> string with the following fields:
 	 * <p class='bschema'>
 	 * 	{
 	 * 		name: string,
@@ -58,10 +58,10 @@ public @interface Swagger {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a> object.
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -96,7 +96,7 @@ public @interface Swagger {
 	 * 			<li>{@link Rest#description()} on this class, then any parent classes.
 	 * 		</ol>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -134,7 +134,7 @@ public @interface Swagger {
 	 * It is used to populate the Swagger license field and to display on HTML pages.
 	 *
 	 * <p>
-	 * A <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a> string with the following fields:
+	 * A <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a> string with the following fields:
 	 * <p class='bschema'>
 	 * 	{
 	 * 		name: string,
@@ -158,10 +158,10 @@ public @interface Swagger {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a> object.
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -178,7 +178,7 @@ public @interface Swagger {
 	 * It is used to populate the Swagger tags field and to display on HTML pages.
 	 *
 	 * <p>
-	 * A <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a> string with the following fields:
+	 * A <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a> string with the following fields:
 	 * <p class='bschema'>
 	 * 	[
 	 * 		{
@@ -208,10 +208,10 @@ public @interface Swagger {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a> array.
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a> array.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -236,7 +236,7 @@ public @interface Swagger {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -268,7 +268,7 @@ public @interface Swagger {
 	 * 			<li>{@link Rest#title()} on this class, then any parent classes.
 	 * 		</ol>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -279,7 +279,7 @@ public @interface Swagger {
 	 * Free-form value for the swagger of a resource.
 	 *
 	 * <p>
-	 * This is a <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a> object that makes up the swagger information for this resource.
+	 * This is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a> object that makes up the swagger information for this resource.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of a resource:
@@ -368,7 +368,7 @@ public @interface Swagger {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a> object.
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a> object.
 	 * 	<li class='note'>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -381,7 +381,7 @@ public @interface Swagger {
 	 * 	<li class='note'>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
 	 * </ul>
@@ -408,7 +408,7 @@ public @interface Swagger {
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.

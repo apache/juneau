@@ -26,7 +26,7 @@ import org.apache.juneau.annotation.*;
  * Useful for rendering simple information about a bean during REST OPTIONS requests.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.UtilityBeans">Utility Beans</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UtilityBeans">Utility Beans</a>
  * </ul>
  */
 @Bean(properties="type,properties")

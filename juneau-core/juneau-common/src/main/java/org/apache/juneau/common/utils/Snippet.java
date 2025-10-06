@@ -22,7 +22,7 @@ package org.apache.juneau.common.utils;
  * See <c>Assertions.<jsm>assertThrown</jsm>(Snippet)</c> for an example.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#ja.Overview">Fluent Assertions</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Fluent Assertions</a>
  * </ul>
  */
 public interface Snippet {

@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
  * This class can be subclassed to customize page rendering.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Details</a>
  * </ul>
  */
 public class BasicHtmlDocTemplate implements HtmlDocTemplate {

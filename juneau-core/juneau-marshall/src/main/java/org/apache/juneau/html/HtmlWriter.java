@@ -23,7 +23,7 @@ import org.apache.juneau.xml.*;
  * Specialized writer for serializing HTML.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Details</a>
  * </ul>
  */
 public class HtmlWriter extends XmlWriter {

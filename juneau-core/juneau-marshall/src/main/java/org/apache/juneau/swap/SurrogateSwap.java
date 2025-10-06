@@ -26,7 +26,7 @@ import org.apache.juneau.serializer.*;
  * Specialized {@link ObjectSwap} for {@link Surrogate} classes.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
  * </ul>
  *
  * @param <T> The class type that this transform applies to.

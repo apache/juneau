@@ -50,7 +50,7 @@ import org.apache.juneau.svl.*;
  * A single session of generating a Swagger document.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>
  * </ul>
  */
 public class BasicSwaggerProviderSession {

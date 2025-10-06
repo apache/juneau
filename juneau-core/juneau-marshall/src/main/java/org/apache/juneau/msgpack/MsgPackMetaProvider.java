@@ -18,7 +18,7 @@ import org.apache.juneau.*;
  * Interface for providing access to {@link MsgPackClassMeta} and {@link MsgPackBeanPropertyMeta} objects.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.MsgPackDetails">MessagePack Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Details</a>
  * </ul>
  */
 public interface MsgPackMetaProvider extends AnnotationProvider {

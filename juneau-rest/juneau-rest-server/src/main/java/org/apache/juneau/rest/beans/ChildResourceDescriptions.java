@@ -24,7 +24,7 @@ import org.apache.juneau.rest.servlet.*;
  * Typically used in top-level GET methods of router resources to render a list of available child resources.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.UtilityBeans">Utility Beans</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UtilityBeans">Utility Beans</a>
  * 	<li class='jic'>{@link BasicGroupOperations}
  * </ul>
  *

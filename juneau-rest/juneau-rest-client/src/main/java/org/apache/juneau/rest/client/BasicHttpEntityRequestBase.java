@@ -18,7 +18,7 @@ import org.apache.http.client.methods.*;
  * Inner request class of {@link RestRequest} for requests with bodies.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client</a>
  * </ul>
  */
 final class BasicHttpEntityRequestBase extends HttpEntityEnclosingRequestBase implements RestRequestCreated {

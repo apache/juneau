@@ -29,7 +29,7 @@ import org.apache.juneau.http.annotation.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.UtilityBeans">Utility Beans</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UtilityBeans">Utility Beans</a>
  * </ul>
  */
 @Bean(properties="name,description", findFluentSetters=true)

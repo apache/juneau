@@ -37,7 +37,7 @@ import org.apache.juneau.rest.*;
  * objects with arbitrary headers.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.StaticFiles">Static files</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
  * </ul>
  */
 public class BasicStaticFiles implements StaticFiles {

@@ -23,7 +23,7 @@ import org.apache.http.*;
  * Response handler for {@link HttpResponse} objects.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.ResponseProcessors">Response Processors</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */
 public final class HttpResponseProcessor implements ResponseProcessor {

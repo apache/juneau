@@ -16,7 +16,7 @@ package org.apache.juneau.httppart;
  * Base class for implementations of {@link HttpPartSerializerSession}
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
  * </ul>
  */
 public abstract class BaseHttpPartSerializerSession implements HttpPartSerializerSession {}

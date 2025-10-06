@@ -30,7 +30,7 @@ import org.apache.juneau.swap.*;
  * Generates an OpenAPI-UI interface from an OpenAPI document.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../../index.html#jd.OpenApiUi">Overview &gt; juneau-dto &gt; OpenAPI UI</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
  * </ul>
  */
 public class OpenApiUI extends ObjectSwap<OpenApi,Div> {

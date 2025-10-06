@@ -24,7 +24,7 @@ import org.apache.juneau.swap.*;
  * Transforms <code>InputStreams</code> to {@link String Strings}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
  * </ul>
  */
 public abstract class InputStreamSwap extends StringSwap<InputStream> {

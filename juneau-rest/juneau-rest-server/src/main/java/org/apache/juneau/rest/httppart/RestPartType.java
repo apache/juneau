@@ -16,7 +16,7 @@ package org.apache.juneau.rest.httppart;
  * Represents the possible parameter types as defined by the Swagger 2.0 specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>
  * </ul>
  */
 public enum RestPartType {

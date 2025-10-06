@@ -50,7 +50,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
  * </ul>
  */
 public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {

@@ -37,7 +37,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.UonDetails">UON Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics">UON Details</a>
  * </ul>
  */
 public class UonSerializerSession extends WriterSerializerSession implements HttpPartSerializerSession {

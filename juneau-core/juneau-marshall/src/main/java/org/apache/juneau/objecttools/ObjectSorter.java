@@ -48,7 +48,7 @@ import org.apache.juneau.common.internal.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})

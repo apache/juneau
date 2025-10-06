@@ -41,7 +41,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.SvlVariables">SVL Variables</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
  * </ul>
  */
 public class RequestQueryVar extends MultipartResolvingVar {

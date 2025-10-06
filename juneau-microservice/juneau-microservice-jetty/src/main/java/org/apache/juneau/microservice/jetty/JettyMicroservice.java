@@ -78,7 +78,7 @@ import jakarta.servlet.Servlet;
  * Top-level REST resources are defined in the <c>jetty.xml</c> file as normal servlets.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-microservice-jetty">juneau-microservice-jetty</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJettyBasics">juneau-microservice-jetty</a>
  * </ul>
  */
 public class JettyMicroservice extends Microservice {

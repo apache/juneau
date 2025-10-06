@@ -34,7 +34,7 @@ package org.apache.juneau.json;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.JsonDetails">JSON Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Details</a>
  * </ul>
  */
 public class Json5Serializer extends JsonSerializer {

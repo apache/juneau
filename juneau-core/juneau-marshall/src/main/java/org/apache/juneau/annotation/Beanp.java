@@ -33,7 +33,7 @@ import org.apache.juneau.*;
  * This annotation is applied to public fields and public getter/setter methods of beans.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.BeanpAnnotation">@Beanp Annotation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanpAnnotation">@Beanp Annotation</a>
  * </ul>
  */
 @Documented
@@ -282,7 +282,7 @@ public @interface Beanp {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

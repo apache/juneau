@@ -96,7 +96,7 @@ import org.apache.juneau.http.part.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link RequestPathParam}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HttpParts">HTTP Parts</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
 */
 public class RequestPathParams extends ArrayList<RequestPathParam> {

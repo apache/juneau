@@ -16,7 +16,7 @@ package org.apache.juneau.parser;
  * Interface for objects with positions (lines/columns/byte-positions for example).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
 public interface Positionable {

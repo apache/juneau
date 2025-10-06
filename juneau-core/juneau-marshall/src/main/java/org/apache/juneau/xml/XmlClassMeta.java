@@ -23,7 +23,7 @@ import org.apache.juneau.xml.annotation.*;
  * class.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlDetails">XML Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Details</a>
  * </ul>
  */
 public class XmlClassMeta extends ExtendedClassMeta {

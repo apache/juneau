@@ -23,7 +23,7 @@ import org.apache.juneau.http.header.*;
  * Identifies a proxy against a REST interface.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Proxies">REST Proxies</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxies</a> * </ul>
  */
 @Documented
 @Target({TYPE})
@@ -42,7 +42,7 @@ public @interface Remote {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -58,7 +58,7 @@ public @interface Remote {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -110,7 +110,7 @@ public @interface Remote {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -126,7 +126,7 @@ public @interface Remote {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
 	 *

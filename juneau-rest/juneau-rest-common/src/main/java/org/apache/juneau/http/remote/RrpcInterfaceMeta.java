@@ -29,7 +29,7 @@ import org.apache.juneau.reflect.*;
  * Captures the information in {@link Remote @Remote} annotations for caching and reuse.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestRpc">REST/RPC</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
  * </ul>
  */
 public class RrpcInterfaceMeta {

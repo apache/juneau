@@ -45,7 +45,7 @@ import org.apache.juneau.rest.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.LoggingAndDebugging">Logging / Debugging</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  */
 public class BasicTestCallLogger extends CallLogger {

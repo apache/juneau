@@ -16,7 +16,7 @@ package org.apache.juneau.encoders;
  * Represents a encoder and encoding that matches an HTTP <c>Accept-Encoding</c> header value.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Encoders">Encoders</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Encoders">Encoders</a>
  * </ul>
  */
 public final class EncoderMatch {

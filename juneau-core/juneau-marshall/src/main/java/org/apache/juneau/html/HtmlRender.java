@@ -25,8 +25,8 @@ import org.apache.juneau.serializer.*;
  * Using this class, you can alter the CSS style and HTML content of the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlRenderAnnotation">@Html(render) Annotation</a>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlRenderAnnotation">@Html(render) Annotation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Details</a>
  * </ul>
  *
  * @param <T> The bean property type.

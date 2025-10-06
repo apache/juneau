@@ -18,7 +18,7 @@ import org.eclipse.jetty.server.*;
  * Interface for creating Jetty servers.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-microservice-jetty">juneau-microservice-jetty</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJettyBasics">juneau-microservice-jetty</a>
  * </ul>
  */
 public interface JettyServerFactory {

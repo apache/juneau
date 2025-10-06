@@ -31,7 +31,7 @@ import org.apache.juneau.utils.*;
  * API for retrieving localized static files from either the classpath or file system.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.StaticFiles">Static files</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
  * </ul>
  */
 public interface StaticFiles extends FileFinder {

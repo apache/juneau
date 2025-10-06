@@ -19,7 +19,7 @@ import org.apache.juneau.swap.*;
  * Transforms {@link Class} objects to and from {@link String Strings}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
  * </ul>
  */
 public class ClassSwap extends StringSwap<Class<?>> {

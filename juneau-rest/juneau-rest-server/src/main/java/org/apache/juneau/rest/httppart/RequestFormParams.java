@@ -103,7 +103,7 @@ import org.apache.juneau.svl.*;
  * 	<li class='jc'>{@link RequestFormParam}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HttpParts">HTTP Parts</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
 public class RequestFormParams extends ArrayList<RequestFormParam> {

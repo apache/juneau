@@ -18,7 +18,7 @@ package org.apache.juneau.rest.client;
  * All default methods are no-ops.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client</a>
  * </ul>
  */
 public abstract class BasicRestCallInterceptor implements RestCallInterceptor {

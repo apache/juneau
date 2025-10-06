@@ -24,7 +24,7 @@ import org.apache.juneau.microservice.*;
  * Implements the 'config' console command to get or set configuration.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-microservice-core">juneau-microservice-core</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceCoreBasics">juneau-microservice-core</a>
  * </ul>
  */
 public class ConfigCommand extends ConsoleCommand {

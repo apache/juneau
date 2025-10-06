@@ -26,7 +26,7 @@ import org.apache.juneau.reflect.*;
  * Specialized matcher for matching client versions.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.ClientVersioning">Client Versioning</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ClientVersioning">Client Versioning</a>
  * </ul>
  */
 public class ClientVersionMatcher extends RestMatcher {

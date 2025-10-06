@@ -28,7 +28,7 @@ import org.apache.juneau.swap.*;
  * Uses the {@link DateTimeFormatter} class for converting {@link Calendar} objects.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
  * </ul>
  */
 public class TemporalCalendarSwap extends StringSwap<Calendar> {

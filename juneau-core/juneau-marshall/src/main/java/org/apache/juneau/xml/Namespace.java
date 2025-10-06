@@ -28,7 +28,7 @@ import org.apache.juneau.annotation.*;
  * in the serializer.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlDetails">XML Details</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Details</a> * </ul>
  */
 @Bean(sort=true)
 public final class Namespace {

@@ -100,7 +100,7 @@ import org.apache.juneau.http.header.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link RequestHeader}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HttpParts">HTTP Parts</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
 public class RequestHeaders extends ArrayList<RequestHeader> {

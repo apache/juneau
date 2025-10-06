@@ -20,7 +20,7 @@ import org.apache.juneau.oapi.annotation.*;
  * annotation on the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.OpenApiDetails">OpenAPI Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenAPI Details</a>
  * </ul>
  */
 public final class OpenApiBeanPropertyMeta extends ExtendedBeanPropertyMeta {

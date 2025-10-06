@@ -20,7 +20,7 @@ import jakarta.xml.bind.*;
  * Static utility methods for ATOM marshalling code.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jd.Atom">Overview &gt; juneau-dto &gt; Atom</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
  * </ul>
  */
 final class Utils {

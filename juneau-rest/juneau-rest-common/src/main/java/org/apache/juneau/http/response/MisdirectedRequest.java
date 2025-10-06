@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The request was directed at a server that is not able to produce a response (for example because of connection reuse).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common</a>
  * </ul>
  *
  * @serial exclude

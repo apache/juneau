@@ -27,7 +27,7 @@ import org.apache.juneau.utils.*;
  * Parsers HTTP plain text request bodies into Group 5 POJOs.
  *
  * <p>
- * See <a class="doclink" href="../../../../index.html#jm.PojoCategories">POJO Categories</a>.
+ * See <a class="doclink" href="https://juneau.apache.org/docs/topics/PojoCategories">POJO Categories</a>.
  *
  * <h5 class='topic'>Media types</h5>
  *

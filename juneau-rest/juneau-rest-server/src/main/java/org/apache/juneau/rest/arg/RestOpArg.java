@@ -45,7 +45,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOpArgs(Class...)}
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Methods</a>
  * </ul>
  */
 public interface RestOpArg {

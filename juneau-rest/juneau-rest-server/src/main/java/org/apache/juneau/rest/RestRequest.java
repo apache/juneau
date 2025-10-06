@@ -405,7 +405,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
 	 * </ul>
 	 *
 	 * @return
@@ -634,7 +634,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
 	 * </ul>
 	 *
 	 * @return
@@ -701,7 +701,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
 	 * </ul>
 	 *
 	 * @return
@@ -788,7 +788,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
 	 * </ul>
 	 *
 	 * @return
@@ -946,7 +946,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
 	 * </ul>
 	 *
 	 * @return
@@ -1146,7 +1146,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(Class)}
 	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
-	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Swagger">Swagger</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>
 	 * </ul>
 	 *
 	 * @return
@@ -1234,7 +1234,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessage(String,Object...)}
-	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.LocalizedMessages">Localized Messages</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LocalizedMessages">Localized Messages</a>
 	 * </ul>
 	 *
 	 * @return
@@ -1388,7 +1388,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.SvlVariables">SVL Variables</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
 	 * </ul>
 	 *
 	 * @return The variable resolver for this request.
@@ -1449,7 +1449,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ConfigurationFiles">Configuration Files</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ConfigurationFiles">Configuration Files</a>
 	 * </ul>
 	 *
 	 * @return

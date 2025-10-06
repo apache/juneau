@@ -44,7 +44,7 @@ import org.apache.juneau.rest.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HttpParts">HTTP Parts</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
 @FluentSetters
@@ -185,7 +185,7 @@ public class RequestHttpPart {
 	 * Converts this part to the specified POJO type using the request {@link HttpPartParser} and optional schema.
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../../index.html#jm.ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
+	 * See <a class="doclink" href="https://juneau.apache.org/docs/topics/ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
 	 *
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.

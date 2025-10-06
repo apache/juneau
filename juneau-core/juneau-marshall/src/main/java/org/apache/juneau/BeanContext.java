@@ -153,7 +153,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../index.html#jm.BeanContexts">Bean Contexts</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanContextBasics">Bean Contexts</a>
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})

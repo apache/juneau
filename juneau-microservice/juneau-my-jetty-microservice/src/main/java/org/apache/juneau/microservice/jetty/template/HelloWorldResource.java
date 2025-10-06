@@ -19,7 +19,7 @@ import org.apache.juneau.rest.servlet.BasicRestServlet;
  * Sample REST resource that prints out a simple "Hello world!" message.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../../index.html#my-jetty-microservice">my-jetty-microservice</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MyJettyMicroserviceBasics">my-jetty-microservice</a> * </ul>
  *
  * @serial exclude
  */

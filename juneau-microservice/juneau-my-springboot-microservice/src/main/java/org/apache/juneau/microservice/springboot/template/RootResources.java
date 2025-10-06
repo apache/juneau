@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.annotation.*;
  * Sample REST resource showing how to implement a "router" resource page.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../../index.html#my-springboot-microservice">my-springboot-microservice</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MySpringBootMicroserviceBasics">my-springboot-microservice</a>
  * </ul>
  *
  * @serial exclude

@@ -87,7 +87,7 @@ import org.apache.juneau.rest.util.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HttpParts">HTTP Parts</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
 @SuppressWarnings("unchecked")
@@ -244,7 +244,7 @@ public class RequestContent {
 	 * </table>
 	 *
 	 * <p>
-	 * Refer to <a class="doclink" href="../../../../../index.html#jm.PojoCategories">POJO Categories</a> for a complete definition of supported POJOs.
+	 * Refer to <a class="doclink" href="https://juneau.apache.org/docs/topics/PojoCategories">POJO Categories</a> for a complete definition of supported POJOs.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>

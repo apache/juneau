@@ -27,7 +27,7 @@ import jakarta.servlet.http.*;
  * that can be passed to the {@link MockRestRequest#httpSession(HttpSession)} method.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-mock">juneau-rest-mock</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock</a>
  * </ul>
  */
 public class MockHttpSession implements HttpSession {

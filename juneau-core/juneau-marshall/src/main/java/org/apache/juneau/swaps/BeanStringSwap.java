@@ -26,10 +26,10 @@ import org.apache.juneau.swap.*;
  * <p>
  * This is usually a one-way transform.
  * Beans serialized as strings cannot be reconstituted using a parser unless it is a
- * <a class="doclink" href="../../../../index.html#jm.PojoCategories">parsable POJO</a>.
+ * <a class="doclink" href="https://juneau.apache.org/docs/topics/PojoCategories">parsable POJO</a>.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
  * </ul>
  *
  * @param <T> The class type of the bean.

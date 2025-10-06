@@ -73,7 +73,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()}
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Converters">Converters</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  * </ul>
  * </ul>
  */

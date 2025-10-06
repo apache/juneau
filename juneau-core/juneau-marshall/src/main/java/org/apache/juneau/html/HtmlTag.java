@@ -25,7 +25,7 @@ import org.apache.juneau.xml.*;
  * Predefined tags that occur in the serialized output of the HTML serializer.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Details</a>
  * </ul>
  */
 enum HtmlTag {

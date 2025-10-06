@@ -127,7 +127,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlDetails">XML Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Details</a>
  * </ul>
  */
 public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
@@ -366,7 +366,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * This setting is ignored if {@link #enableNamespaces()} is not enabled.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlNamespaces">Namespaces</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 		 * </ul>
 		 *
 		 * @return This object.
@@ -413,7 +413,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlNamespaces">Namespaces</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 		 * </ul>
 		 *
 		 * @return This object.
@@ -442,7 +442,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * Specifies the default namespace URI for this document.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlNamespaces">Namespaces</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 		 * </ul>
 		 *
 		 * @param value
@@ -463,7 +463,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlNamespaces">Namespaces</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 		 * </ul>
 		 *
 		 * @return This object.

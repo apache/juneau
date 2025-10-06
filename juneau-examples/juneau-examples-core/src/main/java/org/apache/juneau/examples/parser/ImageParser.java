@@ -24,7 +24,7 @@ import org.apache.juneau.parser.*;
  * Example parser that converts byte streams to {@link BufferedImage} objects.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Marshalling">REST Marshalling</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">REST Marshalling</a>
  * </ul>
  */
 @SuppressWarnings("javadoc")
