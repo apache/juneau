@@ -121,7 +121,7 @@ loadScripts(document, 'script');</script>
  </ul>
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="../../../../index.html#jm.JsonDetails">JSON Details</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Details</a>
  </ul></div>
 </section>
 <section class="summary">
@@ -167,6 +167,11 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><code><a href="#DEFAULT_READABLE" class="member-name-link">DEFAULT_READABLE</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Default serializer, single quotes, simple mode, with whitespace.</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="Json5Serializer.html" title="class in org.apache.juneau.json">Json5Serializer</a></code></div>
+<div class="col-second even-row-color"><code><a href="#DEFAULT_SORTED" class="member-name-link">DEFAULT_SORTED</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Default serializer, single quotes, <a href="JsonSerializer.Builder.html#simpleAttrs()"><code>simple mode</code></a>, sorted bean properties.</div>
 </div>
 </div>
 <div class="inherited-list">
@@ -259,9 +264,16 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="DEFAULT_SORTED">
+<h3>DEFAULT_SORTED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Json5Serializer.html" title="class in org.apache.juneau.json">Json5Serializer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/Json5Serializer.html#line-50">DEFAULT_SORTED</a></span></div>
+<div class="block">Default serializer, single quotes, <a href="JsonSerializer.Builder.html#simpleAttrs()"><code>simple mode</code></a>, sorted bean properties.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="DEFAULT_READABLE">
 <h3>DEFAULT_READABLE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Json5Serializer.html" title="class in org.apache.juneau.json">Json5Serializer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/Json5Serializer.html#line-50">DEFAULT_READABLE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Json5Serializer.html" title="class in org.apache.juneau.json">Json5Serializer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/Json5Serializer.html#line-53">DEFAULT_READABLE</a></span></div>
 <div class="block">Default serializer, single quotes, simple mode, with whitespace.</div>
 </section>
 </li>
@@ -276,7 +288,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.json.JsonSerializer.Builder)">
 <h3>Json5Serializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/Json5Serializer.html#line-87">Json5Serializer</a></span><wbr><span class="parameters">(<a href="JsonSerializer.Builder.html" title="class in org.apache.juneau.json">JsonSerializer.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/Json5Serializer.html#line-90">Json5Serializer</a></span><wbr><span class="parameters">(<a href="JsonSerializer.Builder.html" title="class in org.apache.juneau.json">JsonSerializer.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -295,7 +307,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonSerializer.Builder.html" title="class in org.apache.juneau.json">JsonSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/Json5Serializer.html#line-57">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonSerializer.Builder.html" title="class in org.apache.juneau.json">JsonSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/Json5Serializer.html#line-60">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -306,7 +318,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSerializer.Builder.html" title="class in org.apache.juneau.json">JsonSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/Json5Serializer.html#line-91">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSerializer.Builder.html" title="class in org.apache.juneau.json">JsonSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/Json5Serializer.html#line-94">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 

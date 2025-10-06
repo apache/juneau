@@ -80,13 +80,50 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="annotations"><a href="../../annotation/Bean.html" title="annotation interface in org.apache.juneau.annotation">@Bean</a>(<a href="../../annotation/Bean.html#properties()">properties</a>="*")
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-29">Callback</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-68">Callback</a></span>
 <span class="extends-implements">extends <a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></span></div>
 <div class="block">A map of possible out-of-band callbacks related to the parent operation.
 
+ <p>
+ The Callback Object is a map of possible out-of-band callbacks related to the parent operation. Each value in the 
+ map is a Path Item Object that describes a set of requests that may be initiated by the API provider and the expected 
+ responses. The key value used to identify the callback object is an expression, evaluated at runtime, that identifies 
+ a URL to use for the callback operation.
+
+ <h5 class='section'>OpenAPI Specification:</h5>
+ <p>
+ The Callback Object is composed of the following fields:
+ <ul class='spaced-list'>
+   <li><c>callbacks</c> (map of <a href="PathItem.html" title="class in org.apache.juneau.bean.openapi3"><code>PathItem</code></a>) - A map of possible out-of-band callbacks related to the parent operation
+ </ul>
+
+ <h5 class='section'>Example:</h5>
+ <p class='bcode'>
+   <jc>// Construct using SwaggerBuilder.</jc>
+   Callback <jv>x</jv> = <jsm>callback</jsm>()
+      .setCallbacks(<jsm>map</jsm>(<js>"myCallback"</js>, <jsm>pathItem</jsm>().setPost(<jsm>operation</jsm>().setSummary(<js>"Callback"</js>))));
+
+   <jc>// Serialize using JsonSerializer.</jc>
+   String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
+
+   <jc>// Or just use toString() which does the same as above.</jc>
+   <jv>json</jv> = <jv>x</jv>.toString();
+ </p>
+ <p class='bcode'>
+   <jc>// Output</jc>
+   {
+      <js>"callbacks"</js>: {
+         <js>"myCallback"</js>: {
+            <js>"post"</js>: { <js>"summary"</js>: <js>"Callback"</js> }
+         }
+      }
+   }
+ </p>
+
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="../../../../../index.html#jrs.OpenApi">Overview &gt; juneau-rest-server &gt; OpenAPI</a>
+   <li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#callback-object">OpenAPI Specification &gt; Callback Object</a>
+   <li class='link'><a class="doclink" href="https://swagger.io/docs/specification/callbacks/">OpenAPI Callbacks</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
  </ul></div>
 </section>
 <section class="summary">
@@ -127,22 +164,54 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a callback.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copy()" class="member-name-link">copy</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Creates a copy of this object.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#get(java.lang.String,java.lang.Class)" class="member-name-link">get</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Generic property getter.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="PathItem.html" title="class in org.apache.juneau.bean.openapi3">PathItem</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCallbacks()" class="member-name-link">getCallbacks</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the callbacks map.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#keySet()" class="member-name-link">keySet</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns all the keys on this element.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#set(java.lang.String,java.lang.Object)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Generic property setter.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCallbacks(java.util.Map)" class="member-name-link">setCallbacks</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="PathItem.html" title="class in org.apache.juneau.bean.openapi3">PathItem</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the callbacks map.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#strict()" class="member-name-link">strict</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets strict mode on this bean.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#strict(java.lang.Object)" class="member-name-link">strict</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets strict mode on this bean.</div>
+</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.bean.openapi3.OpenApiElement">Methods inherited from class&nbsp;org.apache.juneau.bean.openapi3.<a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></h3>
-<code><a href="OpenApiElement.html#asMap()">asMap</a>, <a href="OpenApiElement.html#extraKeys()">extraKeys</a>, <a href="OpenApiElement.html#get(java.lang.String)">get</a>, <a href="OpenApiElement.html#get(java.lang.String,java.lang.Class)">get</a>, <a href="OpenApiElement.html#isStrict()">isStrict</a>, <a href="OpenApiElement.html#keySet()">keySet</a>, <a href="OpenApiElement.html#set(java.lang.String,java.lang.Object)">set</a>, <a href="OpenApiElement.html#strict()">strict</a>, <a href="OpenApiElement.html#strict(java.lang.Object)">strict</a>, <a href="OpenApiElement.html#toString()">toString</a></code></div>
+<code><a href="OpenApiElement.html#asMap()">asMap</a>, <a href="OpenApiElement.html#extraKeys()">extraKeys</a>, <a href="OpenApiElement.html#get(java.lang.String)">get</a>, <a href="OpenApiElement.html#isStrict()">isStrict</a>, <a href="OpenApiElement.html#toString()">toString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -160,14 +229,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Callback</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-38">Callback</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-76">Callback</a></span>()</div>
 <div class="block">Default constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.bean.openapi3.Callback)">
 <h3>Callback</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-45">Callback</a></span><wbr><span class="parameters">(<a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-83">Callback</a></span><wbr><span class="parameters">(<a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -186,7 +255,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getCallbacks()">
 <h3>getCallbacks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="PathItem.html" title="class in org.apache.juneau.bean.openapi3">PathItem</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-55">getCallbacks</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="PathItem.html" title="class in org.apache.juneau.bean.openapi3">PathItem</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-93">getCallbacks</a></span>()</div>
 <div class="block">Returns the callbacks map.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -197,7 +266,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setCallbacks(java.util.Map)">
 <h3>setCallbacks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-65">setCallbacks</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="PathItem.html" title="class in org.apache.juneau.bean.openapi3">PathItem</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-103">setCallbacks</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="PathItem.html" title="class in org.apache.juneau.bean.openapi3">PathItem</a>&gt;&nbsp;value)</span></div>
 <div class="block">Sets the callbacks map.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -210,15 +279,117 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addCallback(java.lang.String,org.apache.juneau.bean.openapi3.PathItem)">
 <h3>addCallback</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-77">addCallback</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expression,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-115">addCallback</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expression,
  <a href="PathItem.html" title="class in org.apache.juneau.bean.openapi3">PathItem</a>&nbsp;pathItem)</span></div>
 <div class="block">Adds a callback.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>expression</code> - The callback expression.</dd>
-<dd><code>pathItem</code> - The path item for the callback.</dd>
+<dd><code>expression</code> - The callback expression.  Must not be <jk>null</jk>.</dd>
+<dd><code>pathItem</code> - The path item for the callback.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="copy()">
+<h3>copy</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-129">copy</a></span>()</div>
+<div class="block">Creates a copy of this object.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>A copy of this object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="get(java.lang.String,java.lang.Class)">
+<h3>get</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-133">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#get(java.lang.String,java.lang.Class)">OpenApiElement</a></code></span></div>
+<div class="block">Generic property getter.
+
+ <p>
+ Can be used to retrieve non-standard Swagger fields such as <js>"$ref"</js>.</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="OpenApiElement.html#get(java.lang.String,java.lang.Class)">get</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - The datatype to cast the value to.</dd>
+<dt>Parameters:</dt>
+<dd><code>property</code> - The property name to retrieve.</dd>
+<dd><code>type</code> - The datatype to cast the value to.</dd>
+<dt>Returns:</dt>
+<dd>The property value, or <jk>null</jk> if the property does not exist or is not set.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="set(java.lang.String,java.lang.Object)">
+<h3>set</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-142">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#set(java.lang.String,java.lang.Object)">OpenApiElement</a></code></span></div>
+<div class="block">Generic property setter.
+
+ <p>
+ Can be used to set non-standard Swagger fields such as <js>"$ref"</js>.</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="OpenApiElement.html#set(java.lang.String,java.lang.Object)">set</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>.</dd>
+<dd><code>value</code> - The new value for the property.</dd>
+<dt>Returns:</dt>
+<dd>This object</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="keySet()">
+<h3>keySet</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-154">keySet</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#keySet()">OpenApiElement</a></code></span></div>
+<div class="block">Returns all the keys on this element.</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="OpenApiElement.html#keySet()">keySet</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
+<dt>Returns:</dt>
+<dd>All the keys on this element.
+   <br>Never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="strict()">
+<h3>strict</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-164">strict</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#strict()">OpenApiElement</a></code></span></div>
+<div class="block">Sets strict mode on this bean.</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="OpenApiElement.html#strict()">strict</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
+<dt>Returns:</dt>
+<dd>This object</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="strict(java.lang.Object)">
+<h3>strict</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Callback.html#line-170">strict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#strict(java.lang.Object)">OpenApiElement</a></code></span></div>
+<div class="block">Sets strict mode on this bean.</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="OpenApiElement.html#strict(java.lang.Object)">strict</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new value for this property.
+   <br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+   <br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).</dd>
+<dt>Returns:</dt>
+<dd>This object</dd>
 </dl>
 </section>
 </li>

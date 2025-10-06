@@ -80,10 +80,52 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="annotations"><a href="../../annotation/Bean.html" title="annotation interface in org.apache.juneau.annotation">@Bean</a>(<a href="../../annotation/Bean.html#properties()">properties</a>="propertyName,mapping,*")
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-28">Discriminator</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-71">Discriminator</a></span>
 <span class="extends-implements">extends <a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></span></div>
-<div class="block">Used to aid in serialization, deserialization, and validation.</div>
+<div class="block">Used to aid in serialization, deserialization, and validation.
+
+ <p>
+ The Discriminator Object is used to aid in serialization, deserialization, and validation. It adds support for 
+ polymorphism by allowing schemas to be discriminated based on the value of a specific property. This is particularly 
+ useful when working with inheritance hierarchies in object-oriented programming.
+
+ <h5 class='section'>OpenAPI Specification:</h5>
+ <p>
+ The Discriminator Object is composed of the following fields:
+ <ul class='spaced-list'>
+   <li><c>propertyName</c> (string, REQUIRED) - The name of the property in the payload that will hold the discriminator value
+   <li><c>mapping</c> (map of strings) - An object to hold mappings between payload values and schema names or references
+ </ul>
+
+ <h5 class='section'>Example:</h5>
+ <p class='bcode'>
+   <jc>// Construct using SwaggerBuilder.</jc>
+   Discriminator <jv>x</jv> = <jsm>discriminator</jsm>()
+      .setPropertyName(<js>"petType"</js>)
+      .setMapping(<jsm>map</jsm>(<js>"dog"</js>, <js>"#/components/schemas/Dog"</js>, <js>"cat"</js>, <js>"#/components/schemas/Cat"</js>));
+
+   <jc>// Serialize using JsonSerializer.</jc>
+   String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
+
+   <jc>// Or just use toString() which does the same as above.</jc>
+   <jv>json</jv> = <jv>x</jv>.toString();
+ </p>
+ <p class='bcode'>
+   <jc>// Output</jc>
+   {
+      <js>"propertyName"</js>: <js>"petType"</js>,
+      <js>"mapping"</js>: {
+         <js>"dog"</js>: <js>"#/components/schemas/Dog"</js>,
+         <js>"cat"</js>: <js>"#/components/schemas/Cat"</js>
+      }
+   }
+ </p>
+
+ <h5 class='section'>See Also:</h5><ul>
+   <li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#discriminator-object">OpenAPI Specification &gt; Discriminator Object</a>
+   <li class='link'><a class="doclink" href="https://swagger.io/docs/specification/data-models/inheritance-and-polymorphism/">OpenAPI Inheritance and Polymorphism</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -165,12 +207,22 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Bean property setter:  <property>propertyName</property>.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#strict()" class="member-name-link">strict</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets strict mode on this bean.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#strict(java.lang.Object)" class="member-name-link">strict</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets strict mode on this bean.</div>
+</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.bean.openapi3.OpenApiElement">Methods inherited from class&nbsp;org.apache.juneau.bean.openapi3.<a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></h3>
-<code><a href="OpenApiElement.html#asMap()">asMap</a>, <a href="OpenApiElement.html#extraKeys()">extraKeys</a>, <a href="OpenApiElement.html#get(java.lang.String)">get</a>, <a href="OpenApiElement.html#isStrict()">isStrict</a>, <a href="OpenApiElement.html#strict()">strict</a>, <a href="OpenApiElement.html#strict(java.lang.Object)">strict</a>, <a href="OpenApiElement.html#toString()">toString</a></code></div>
+<code><a href="OpenApiElement.html#asMap()">asMap</a>, <a href="OpenApiElement.html#extraKeys()">extraKeys</a>, <a href="OpenApiElement.html#get(java.lang.String)">get</a>, <a href="OpenApiElement.html#isStrict()">isStrict</a>, <a href="OpenApiElement.html#toString()">toString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -188,14 +240,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Discriminator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-38">Discriminator</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-80">Discriminator</a></span>()</div>
 <div class="block">Default constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.bean.openapi3.Discriminator)">
 <h3>Discriminator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-45">Discriminator</a></span><wbr><span class="parameters">(<a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-87">Discriminator</a></span><wbr><span class="parameters">(<a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -214,7 +266,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-57">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-99">copy</a></span>()</div>
 <div class="block">Make a deep copy of this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -225,7 +277,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPropertyName()">
 <h3>getPropertyName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-69">getPropertyName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-111">getPropertyName</a></span>()</div>
 <div class="block">Bean property getter:  <property>propertyName</property>.
 
  <p>
@@ -239,7 +291,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setPropertyName(java.lang.String)">
 <h3>setPropertyName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-84">setPropertyName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-126">setPropertyName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>propertyName</property>.
 
  <p>
@@ -256,7 +308,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMapping()">
 <h3>getMapping</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-97">getMapping</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-139">getMapping</a></span>()</div>
 <div class="block">Bean property getter:  <property>mapping</property>.
 
  <p>
@@ -270,7 +322,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setMapping(java.util.Map)">
 <h3>setMapping</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-113">setMapping</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-156">setMapping</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>mapping</property>.
 
  <p>
@@ -279,7 +331,8 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new value for this property.
    <br>Property value is required.
-   <br>URIs defined by <a href="../../UriResolver.html" title="class in org.apache.juneau"><code>UriResolver</code></a> can be used for values.</dd>
+   <br>URIs defined by <a href="../../UriResolver.html" title="class in org.apache.juneau"><code>UriResolver</code></a> can be used for values.
+   <br>Can be <jk>null</jk> to unset the property.</dd>
 <dt>Returns:</dt>
 <dd>This object</dd>
 </dl>
@@ -288,13 +341,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addMapping(java.lang.String,java.lang.String)">
 <h3>addMapping</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-125">addMapping</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-168">addMapping</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Adds one or more values to the <property>mapping</property> property.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - The key.</dd>
-<dd><code>value</code> - The value.</dd>
+<dd><code>key</code> - The key.  Must not be <jk>null</jk>.</dd>
+<dd><code>value</code> - The value.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object</dd>
 </dl>
@@ -303,7 +356,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.String,java.lang.Class)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-134">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-179">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#get(java.lang.String,java.lang.Class)">OpenApiElement</a></code></span></div>
 <div class="block">Generic property getter.
@@ -326,7 +379,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-145">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-189">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#set(java.lang.String,java.lang.Object)">OpenApiElement</a></code></span></div>
 <div class="block">Generic property setter.
@@ -337,7 +390,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="OpenApiElement.html#set(java.lang.String,java.lang.Object)">set</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>property</code> - The property name to set.</dd>
+<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>.</dd>
 <dd><code>value</code> - The new value for the property.</dd>
 <dt>Returns:</dt>
 <dd>This object</dd>
@@ -347,7 +400,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="keySet()">
 <h3>keySet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-159">keySet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-202">keySet</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#keySet()">OpenApiElement</a></code></span></div>
 <div class="block">Returns all the keys on this element.</div>
 <dl class="notes">
@@ -356,6 +409,38 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>All the keys on this element.
    <br>Never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="strict()">
+<h3>strict</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-213">strict</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#strict()">OpenApiElement</a></code></span></div>
+<div class="block">Sets strict mode on this bean.</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="OpenApiElement.html#strict()">strict</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
+<dt>Returns:</dt>
+<dd>This object</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="strict(java.lang.Object)">
+<h3>strict</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/Discriminator.html#line-219">strict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#strict(java.lang.Object)">OpenApiElement</a></code></span></div>
+<div class="block">Sets strict mode on this bean.</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="OpenApiElement.html#strict(java.lang.Object)">strict</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new value for this property.
+   <br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+   <br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).</dd>
+<dt>Returns:</dt>
+<dd>This object</dd>
 </dl>
 </section>
 </li>

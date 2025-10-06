@@ -172,7 +172,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
  </ul>
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="../../../../index.html#jm.JsonDetails">JSON Details</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Details</a>
 
  </ul></div>
 </section>
@@ -226,6 +226,11 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <div class="col-second odd-row-color"><code><a href="#DEFAULT_READABLE" class="member-name-link">DEFAULT_READABLE</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Default serializer, all default settings.</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="JsonSerializer.html" title="class in org.apache.juneau.json">JsonSerializer</a></code></div>
+<div class="col-second even-row-color"><code><a href="#DEFAULT_SORTED" class="member-name-link">DEFAULT_SORTED</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Default serializer, single quotes, <a href="JsonSerializer.Builder.html#simpleAttrs()"><code>simple mode</code></a>, sorted bean properties.</div>
 </div>
 </div>
 <div class="inherited-list">
@@ -360,9 +365,16 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 </section>
 </li>
 <li>
+<section class="detail" id="DEFAULT_SORTED">
+<h3>DEFAULT_SORTED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="JsonSerializer.html" title="class in org.apache.juneau.json">JsonSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-117">DEFAULT_SORTED</a></span></div>
+<div class="block">Default serializer, single quotes, <a href="JsonSerializer.Builder.html#simpleAttrs()"><code>simple mode</code></a>, sorted bean properties.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="DEFAULT_READABLE">
 <h3>DEFAULT_READABLE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="JsonSerializer.html" title="class in org.apache.juneau.json">JsonSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-117">DEFAULT_READABLE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="JsonSerializer.html" title="class in org.apache.juneau.json">JsonSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-120">DEFAULT_READABLE</a></span></div>
 <div class="block">Default serializer, all default settings.</div>
 </section>
 </li>
@@ -377,7 +389,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.json.JsonSerializer.Builder)">
 <h3>JsonSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1074">JsonSerializer</a></span><wbr><span class="parameters">(<a href="JsonSerializer.Builder.html" title="class in org.apache.juneau.json">JsonSerializer.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1077">JsonSerializer</a></span><wbr><span class="parameters">(<a href="JsonSerializer.Builder.html" title="class in org.apache.juneau.json">JsonSerializer.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -396,7 +408,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonSerializer.Builder.html" title="class in org.apache.juneau.json">JsonSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-124">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonSerializer.Builder.html" title="class in org.apache.juneau.json">JsonSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-127">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -407,7 +419,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSerializer.Builder.html" title="class in org.apache.juneau.json">JsonSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1083">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSerializer.Builder.html" title="class in org.apache.juneau.json">JsonSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1086">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -424,7 +436,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSerializerSession.Builder.html" title="class in org.apache.juneau.json">JsonSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1088">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSerializerSession.Builder.html" title="class in org.apache.juneau.json">JsonSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1091">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -442,7 +454,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSerializerSession.html" title="class in org.apache.juneau.json">JsonSerializerSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1093">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSerializerSession.html" title="class in org.apache.juneau.json">JsonSerializerSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1096">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -459,7 +471,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getSchemaSerializer()">
 <h3>getSchemaSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchemaSerializer.html" title="class in org.apache.juneau.json">JsonSchemaSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1107">getSchemaSerializer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchemaSerializer.html" title="class in org.apache.juneau.json">JsonSchemaSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1110">getSchemaSerializer</a></span>()</div>
 <div class="block">Returns the schema serializer based on the settings of this serializer.
 
  <p>
@@ -474,7 +486,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getJsonClassMeta(org.apache.juneau.ClassMeta)">
 <h3>getJsonClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonClassMeta.html" title="class in org.apache.juneau.json">JsonClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1117">getJsonClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonClassMeta.html" title="class in org.apache.juneau.json">JsonClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1120">getJsonClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="JsonMetaProvider.html#getJsonClassMeta(org.apache.juneau.ClassMeta)">JsonMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -490,7 +502,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getJsonBeanPropertyMeta(org.apache.juneau.BeanPropertyMeta)">
 <h3>getJsonBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonBeanPropertyMeta.html" title="class in org.apache.juneau.json">JsonBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1127">getJsonBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonBeanPropertyMeta.html" title="class in org.apache.juneau.json">JsonBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1130">getJsonBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="JsonMetaProvider.html#getJsonBeanPropertyMeta(org.apache.juneau.BeanPropertyMeta)">JsonMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -506,7 +518,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="isAddBeanTypes()">
 <h3>isAddBeanTypes</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1151">isAddBeanTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1154">isAddBeanTypes</a></span>()</div>
 <div class="block">Add <js>"_type"</js> properties when needed.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
@@ -526,7 +538,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="isEscapeSolidus()">
 <h3>isEscapeSolidus</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1163">isEscapeSolidus</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1166">isEscapeSolidus</a></span>()</div>
 <div class="block">Prefix solidus <js>'/'</js> characters with escapes.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -543,7 +555,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="isSimpleAttrs()">
 <h3>isSimpleAttrs</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1175">isSimpleAttrs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1178">isSimpleAttrs</a></span>()</div>
 <div class="block">Simple JSON mode.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -561,7 +573,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1183">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonSerializer.html#line-1186">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

@@ -80,14 +80,25 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="annotations"><a href="../../annotation/Bean.html" title="annotation interface in org.apache.juneau.annotation">@Bean</a>(<a href="../../annotation/Bean.html#properties()">properties</a>="name,namespace,prefix,attribute,wrapped,*")
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-56">Xml</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-70">Xml</a></span>
 <span class="extends-implements">extends <a href="SwaggerElement.html" title="class in org.apache.juneau.bean.swagger">SwaggerElement</a></span></div>
 <div class="block">A metadata object that allows for more fine-tuned XML model definitions.
 
  <p>
- When using arrays, XML element names are not inferred (for singular/plural forms) and the name property should be
- used to add that information.
+ The Xml Object is a metadata object that allows for more fine-tuned XML model definitions in Swagger 2.0. When using 
+ arrays, XML element names are not inferred (for singular/plural forms) and the name property should be used to add 
+ that information. This object is used to control how schema properties are serialized to XML.
+
+ <h5 class='section'>Swagger Specification:</h5>
+ <p>
+ The Xml Object is composed of the following fields:
+ <ul class='spaced-list'>
+   <li><c>name</c> (string) - Replaces the name of the element/attribute used for the described schema property
+   <li><c>namespace</c> (string) - The URI of the namespace definition
+   <li><c>prefix</c> (string) - The prefix to be used for the name
+   <li><c>attribute</c> (boolean) - Declares whether the property definition translates to an attribute instead of an element
+   <li><c>wrapped</c> (boolean) - May be used only for an array definition. Signifies whether the array is wrapped
+ </ul>
 
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
@@ -97,7 +108,7 @@ loadScripts(document, 'script');</script>
       .namespace(<js>"http://foo"</js>)
 
    <jc>// Serialize using JsonSerializer.</jc>
-   String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>xml</jv>);
+   String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>xml</jv>);
 
    <jc>// Or just use toString() which does the same as above.</jc>
   <jv>json</jv> = <jv>xml</jv>.toString();
@@ -111,7 +122,9 @@ loadScripts(document, 'script');</script>
  </p>
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+   <li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#xml-object">Swagger 2.0 Specification &gt; XML Object</a>
+   <li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/describing-models/">Swagger Describing Models</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  </ul></div>
 </section>
 <section class="summary">
@@ -218,12 +231,22 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Bean property setter:  <property>wrapped</property>.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#strict()" class="member-name-link">strict</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets strict mode on this bean.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#strict(java.lang.Object)" class="member-name-link">strict</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets strict mode on this bean.</div>
+</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.bean.swagger.SwaggerElement">Methods inherited from class&nbsp;org.apache.juneau.bean.swagger.<a href="SwaggerElement.html" title="class in org.apache.juneau.bean.swagger">SwaggerElement</a></h3>
-<code><a href="SwaggerElement.html#asMap()">asMap</a>, <a href="SwaggerElement.html#extraKeys()">extraKeys</a>, <a href="SwaggerElement.html#get(java.lang.String)">get</a>, <a href="SwaggerElement.html#isStrict()">isStrict</a>, <a href="SwaggerElement.html#strict()">strict</a>, <a href="SwaggerElement.html#strict(java.lang.Object)">strict</a>, <a href="SwaggerElement.html#toString()">toString</a></code></div>
+<code><a href="SwaggerElement.html#asMap()">asMap</a>, <a href="SwaggerElement.html#extraKeys()">extraKeys</a>, <a href="SwaggerElement.html#get(java.lang.String)">get</a>, <a href="SwaggerElement.html#isStrict()">isStrict</a>, <a href="SwaggerElement.html#toString()">toString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -241,14 +264,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Xml</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-71">Xml</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-84">Xml</a></span>()</div>
 <div class="block">Default constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.bean.swagger.Xml)">
 <h3>Xml</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-78">Xml</a></span><wbr><span class="parameters">(<a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-91">Xml</a></span><wbr><span class="parameters">(<a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -267,7 +290,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-93">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-106">copy</a></span>()</div>
 <div class="block">Make a deep copy of this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -278,7 +301,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAttribute()">
 <h3>getAttribute</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-109">getAttribute</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-122">getAttribute</a></span>()</div>
 <div class="block">Bean property getter:  <property>attribute</property>.
 
  <p>
@@ -292,7 +315,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setAttribute(java.lang.Boolean)">
 <h3>setAttribute</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-125">setAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-138">setAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>attribute</property>.
 
  <p>
@@ -310,7 +333,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getName()">
 <h3>getName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-138">getName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-151">getName</a></span>()</div>
 <div class="block">Bean property getter:  <property>name</property>.
 
  <p>
@@ -324,7 +347,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setName(java.lang.String)">
 <h3>setName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-153">setName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-166">setName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>name</property>.
 
  <p>
@@ -341,7 +364,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getNamespace()">
 <h3>getNamespace</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-166">getNamespace</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-179">getNamespace</a></span>()</div>
 <div class="block">Bean property getter:  <property>namespace</property>.
 
  <p>
@@ -355,7 +378,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setNamespace(java.lang.String)">
 <h3>setNamespace</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-181">setNamespace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-194">setNamespace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>namespace</property>.
 
  <p>
@@ -372,7 +395,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPrefix()">
 <h3>getPrefix</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-194">getPrefix</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-207">getPrefix</a></span>()</div>
 <div class="block">Bean property getter:  <property>prefix</property>.
 
  <p>
@@ -386,7 +409,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setPrefix(java.lang.String)">
 <h3>setPrefix</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-209">setPrefix</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-222">setPrefix</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>prefix</property>.
 
  <p>
@@ -403,7 +426,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getWrapped()">
 <h3>getWrapped</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-226">getWrapped</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-239">getWrapped</a></span>()</div>
 <div class="block">Bean property getter:  <property>wrapped</property>.
 
  <p>
@@ -421,7 +444,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setWrapped(java.lang.Boolean)">
 <h3>setWrapped</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-246">setWrapped</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-259">setWrapped</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>wrapped</property>.
 
 
@@ -443,7 +466,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.String,java.lang.Class)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-255">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-268">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SwaggerElement.html#get(java.lang.String,java.lang.Class)">SwaggerElement</a></code></span></div>
 <div class="block">Generic property getter.
@@ -466,7 +489,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-269">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-281">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SwaggerElement.html#set(java.lang.String,java.lang.Object)">SwaggerElement</a></code></span></div>
 <div class="block">Generic property setter.
@@ -477,7 +500,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="SwaggerElement.html#set(java.lang.String,java.lang.Object)">set</a></code>&nbsp;in class&nbsp;<code><a href="SwaggerElement.html" title="class in org.apache.juneau.bean.swagger">SwaggerElement</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>property</code> - The property name to set.</dd>
+<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>.</dd>
 <dd><code>value</code> - The new value for the property.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
@@ -487,7 +510,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="keySet()">
 <h3>keySet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-286">keySet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-297">keySet</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SwaggerElement.html#keySet()">SwaggerElement</a></code></span></div>
 <div class="block">Returns all the keys on this element.</div>
 <dl class="notes">
@@ -496,6 +519,36 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>All the keys on this element.
    <br>Never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="strict()">
+<h3>strict</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-314">strict</a></span>()</div>
+<div class="block">Sets strict mode on this bean.</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="SwaggerElement.html#strict()">strict</a></code>&nbsp;in class&nbsp;<code><a href="SwaggerElement.html" title="class in org.apache.juneau.bean.swagger">SwaggerElement</a></code></dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="strict(java.lang.Object)">
+<h3>strict</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Xml.html#line-329">strict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="block">Sets strict mode on this bean.</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="SwaggerElement.html#strict(java.lang.Object)">strict</a></code>&nbsp;in class&nbsp;<code><a href="SwaggerElement.html" title="class in org.apache.juneau.bean.swagger">SwaggerElement</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new value for this property.
+   <br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+   <br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
 </dl>
 </section>
 </li>

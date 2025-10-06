@@ -108,25 +108,36 @@ loadScripts(document, 'script');</script>
 <div class="block">Same as <a href="../Operation.html#addSecurity(java.lang.String,java.lang.String...)"><code>addSecurity(String, String...)</code></a>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#addTags(java.lang.String...)" class="member-name-link">addTags</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#addSecurity(java.util.Collection)" class="member-name-link">addSecurity</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Bean property fluent adder:  <property>tags</property>.</div>
+<div class="block">Bean property adder:  <property>security</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#copy()" class="member-name-link">copy</a>()</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#addTags(java.lang.String...)" class="member-name-link">addTags</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Make a deep copy of this object.</div>
+<div class="block">Bean property fluent adder:  <property>tags</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Swagger.</span><code><a href="../Swagger.html#getOperation(java.lang.String,java.lang.String)" class="member-name-link">getOperation</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#copy()" class="member-name-link">copy</a>()</code></div>
 <div class="col-last even-row-color">
+<div class="block">Make a deep copy of this object.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Swagger.</span><code><a href="../Swagger.html#getOperation(java.lang.String,java.lang.String)" class="member-name-link">getOperation</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Shortcut for calling <c>getPaths().get(path).get(operation);</c></div>
 </div>
-<div class="col-first odd-row-color"><code>static final <a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SwaggerBuilder.</span><code><a href="../SwaggerBuilder.html#operation()" class="member-name-link">operation</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static final <a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SwaggerBuilder.</span><code><a href="../SwaggerBuilder.html#operation()" class="member-name-link">operation</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Creates an empty <a href="../Operation.html" title="class in org.apache.juneau.bean.swagger"><code>Operation</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OperationMap.</span><code><a href="../OperationMap.html#put(java.lang.String,org.apache.juneau.bean.swagger.Operation)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Override put to normalize keys to lowercase.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#set(java.lang.String,java.lang.Object)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
@@ -188,12 +199,22 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property setter:  <property>responses</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#setSchemes(java.util.Collection)" class="member-name-link">setSchemes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#setSchemes(java.lang.String...)" class="member-name-link">setSchemes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>schemes</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#setSecurity(java.util.Collection)" class="member-name-link">setSecurity</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;&gt;&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#setSchemes(java.util.Collection)" class="member-name-link">setSchemes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property setter:  <property>schemes</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#setSecurity(java.util.Collection)" class="member-name-link">setSecurity</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property setter:  <property>security</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code>final <a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#setSecurity(java.util.Map...)" class="member-name-link">setSecurity</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;...&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Bean property setter:  <property>security</property>.</div>
 </div>
@@ -211,6 +232,16 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#setTags(java.util.Collection)" class="member-name-link">setTags</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>tags</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#strict()" class="member-name-link">strict</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Sets strict mode on this bean.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#strict(java.lang.Object)" class="member-name-link">strict</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets strict mode on this bean.</div>
 </div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.bean.swagger</a> with parameters of type <a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></span></div>
@@ -230,6 +261,12 @@ loadScripts(document, 'script');</script>
  <a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a>&nbsp;operation)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Fluent-style put method.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OperationMap.</span><code><a href="../OperationMap.html#put(java.lang.String,org.apache.juneau.bean.swagger.Operation)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Override put to normalize keys to lowercase.</div>
 </div>
 </div>
 <div class="caption"><span>Constructors in <a href="../package-summary.html">org.apache.juneau.bean.swagger</a> with parameters of type <a href="../Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></span></div>

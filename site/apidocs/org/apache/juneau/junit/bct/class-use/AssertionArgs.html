@@ -141,40 +141,47 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Same as <a href="../BctAssertions.html#assertList(java.lang.Object,java.lang.Object...)"><code>BctAssertions.assertList(Object, Object...)</code></a> but with configurable assertion behavior.</div>
 </div>
-<div class="col-first even-row-color"><code>static &lt;T&gt;&nbsp;void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BctAssertions.</span><code><a href="../BctAssertions.html#assertMapped(org.apache.juneau.junit.bct.AssertionArgs,T,java.util.function.BiFunction,java.lang.String,java.lang.String)" class="member-name-link">assertMapped</a><wbr>(<a href="../AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a>&nbsp;args,
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BctAssertions.</span><code><a href="../BctAssertions.html#assertMap(org.apache.juneau.junit.bct.AssertionArgs,java.util.Map,java.lang.Object...)" class="member-name-link">assertMap</a><wbr>(<a href="../AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a>&nbsp;args,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;?,<wbr>?&gt;&nbsp;actual,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;expected)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Same as <a href="../BctAssertions.html#assertMap(java.util.Map,java.lang.Object...)"><code>BctAssertions.assertMap(Map, Object...)</code></a> but with configurable assertion behavior.</div>
+</div>
+<div class="col-first odd-row-color"><code>static &lt;T&gt;&nbsp;void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BctAssertions.</span><code><a href="../BctAssertions.html#assertMapped(org.apache.juneau.junit.bct.AssertionArgs,T,java.util.function.BiFunction,java.lang.String,java.lang.String)" class="member-name-link">assertMapped</a><wbr>(<a href="../AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a>&nbsp;args,
  T&nbsp;actual,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;T,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;function,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;properties,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expected)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Same as <a href="../BctAssertions.html#assertMapped(T,java.util.function.BiFunction,java.lang.String,java.lang.String)"><code>BctAssertions.assertMapped(Object, BiFunction, String, String)</code></a> but with configurable assertion behavior.</div>
 </div>
-<div class="col-first odd-row-color"><code>static void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BctAssertions.</span><code><a href="../BctAssertions.html#assertMatchesGlob(org.apache.juneau.junit.bct.AssertionArgs,java.lang.String,java.lang.Object)" class="member-name-link">assertMatchesGlob</a><wbr>(<a href="../AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a>&nbsp;args,
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BctAssertions.</span><code><a href="../BctAssertions.html#assertMatchesGlob(org.apache.juneau.junit.bct.AssertionArgs,java.lang.String,java.lang.Object)" class="member-name-link">assertMatchesGlob</a><wbr>(<a href="../AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a>&nbsp;args,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Same as <a href="../BctAssertions.html#assertMatchesGlob(java.lang.String,java.lang.Object)"><code>BctAssertions.assertMatchesGlob(String, Object)</code></a> but with configurable assertion behavior.</div>
 </div>
-<div class="col-first even-row-color"><code>static void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BctAssertions.</span><code><a href="../BctAssertions.html#assertNotEmpty(org.apache.juneau.junit.bct.AssertionArgs,java.lang.Object)" class="member-name-link">assertNotEmpty</a><wbr>(<a href="../AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a>&nbsp;args,
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BctAssertions.</span><code><a href="../BctAssertions.html#assertNotEmpty(org.apache.juneau.junit.bct.AssertionArgs,java.lang.Object)" class="member-name-link">assertNotEmpty</a><wbr>(<a href="../AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a>&nbsp;args,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Same as <a href="../BctAssertions.html#assertNotEmpty(java.lang.Object)"><code>BctAssertions.assertNotEmpty(Object)</code></a> but with configurable assertion behavior.</div>
 </div>
-<div class="col-first odd-row-color"><code>static void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BctAssertions.</span><code><a href="../BctAssertions.html#assertSize(org.apache.juneau.junit.bct.AssertionArgs,int,java.lang.Object)" class="member-name-link">assertSize</a><wbr>(<a href="../AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a>&nbsp;args,
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BctAssertions.</span><code><a href="../BctAssertions.html#assertSize(org.apache.juneau.junit.bct.AssertionArgs,int,java.lang.Object)" class="member-name-link">assertSize</a><wbr>(<a href="../AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a>&nbsp;args,
  int&nbsp;expected,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;actual)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Same as <a href="../BctAssertions.html#assertSize(int,java.lang.Object)"><code>BctAssertions.assertSize(int, Object)</code></a> but with configurable assertion behavior.</div>
 </div>
-<div class="col-first even-row-color"><code>static void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BctAssertions.</span><code><a href="../BctAssertions.html#assertString(org.apache.juneau.junit.bct.AssertionArgs,java.lang.String,java.lang.Object)" class="member-name-link">assertString</a><wbr>(<a href="../AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a>&nbsp;args,
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BctAssertions.</span><code><a href="../BctAssertions.html#assertString(org.apache.juneau.junit.bct.AssertionArgs,java.lang.String,java.lang.Object)" class="member-name-link">assertString</a><wbr>(<a href="../AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a>&nbsp;args,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expected,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;actual)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Same as <a href="../BctAssertions.html#assertString(java.lang.String,java.lang.Object)"><code>BctAssertions.assertString(String, Object)</code></a> but with configurable assertion behavior.</div>
 </div>
 </div>

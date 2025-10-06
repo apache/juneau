@@ -34,7 +34,7 @@
 <span class="source-line-no">021</span><span id="line-21"> * Various useful static methods for creating OpenAPI elements.</span>
 <span class="source-line-no">022</span><span id="line-22"> *</span>
 <span class="source-line-no">023</span><span id="line-23"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">024</span><span id="line-24"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="../../../../../index.html#jrs.OpenApi"&gt;Overview &amp;gt; juneau-rest-server &amp;gt; OpenAPI&lt;/a&gt;</span>
+<span class="source-line-no">024</span><span id="line-24"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3"&gt;juneau-bean-openapi3&lt;/a&gt;</span>
 <span class="source-line-no">025</span><span id="line-25"> * &lt;/ul&gt;</span>
 <span class="source-line-no">026</span><span id="line-26"> */</span>
 <span class="source-line-no">027</span><span id="line-27">public class OpenApiBuilder {</span>
@@ -312,7 +312,202 @@
 <span class="source-line-no">299</span><span id="line-299">   public static final Xml xml() {</span>
 <span class="source-line-no">300</span><span id="line-300">      return new Xml();</span>
 <span class="source-line-no">301</span><span id="line-301">   }</span>
-<span class="source-line-no">302</span><span id="line-302">}</span>
+<span class="source-line-no">302</span><span id="line-302"></span>
+<span class="source-line-no">303</span><span id="line-303">   /**</span>
+<span class="source-line-no">304</span><span id="line-304">    * Creates an empty {@link Operation} element.</span>
+<span class="source-line-no">305</span><span id="line-305">    *</span>
+<span class="source-line-no">306</span><span id="line-306">    * @return The new element.</span>
+<span class="source-line-no">307</span><span id="line-307">    */</span>
+<span class="source-line-no">308</span><span id="line-308">   public static final Operation operation() {</span>
+<span class="source-line-no">309</span><span id="line-309">      return new Operation();</span>
+<span class="source-line-no">310</span><span id="line-310">   }</span>
+<span class="source-line-no">311</span><span id="line-311"></span>
+<span class="source-line-no">312</span><span id="line-312">   /**</span>
+<span class="source-line-no">313</span><span id="line-313">    * Creates an empty {@link Parameter} element.</span>
+<span class="source-line-no">314</span><span id="line-314">    *</span>
+<span class="source-line-no">315</span><span id="line-315">    * @return The new element.</span>
+<span class="source-line-no">316</span><span id="line-316">    */</span>
+<span class="source-line-no">317</span><span id="line-317">   public static final Parameter parameter() {</span>
+<span class="source-line-no">318</span><span id="line-318">      return new Parameter();</span>
+<span class="source-line-no">319</span><span id="line-319">   }</span>
+<span class="source-line-no">320</span><span id="line-320"></span>
+<span class="source-line-no">321</span><span id="line-321">   /**</span>
+<span class="source-line-no">322</span><span id="line-322">    * Creates a {@link Parameter} element with the specified {@link Parameter#setIn(String) in} and {@link Parameter#setName(String) name} attributes.</span>
+<span class="source-line-no">323</span><span id="line-323">    *</span>
+<span class="source-line-no">324</span><span id="line-324">    * @param in The {@link Parameter#setIn(String) in} attribute.</span>
+<span class="source-line-no">325</span><span id="line-325">    * @param name The {@link Parameter#setName(String) name} attribute.</span>
+<span class="source-line-no">326</span><span id="line-326">    * @return The new element.</span>
+<span class="source-line-no">327</span><span id="line-327">    */</span>
+<span class="source-line-no">328</span><span id="line-328">   public static final Parameter parameter(String in, String name) {</span>
+<span class="source-line-no">329</span><span id="line-329">      return parameter().setIn(in).setName(name);</span>
+<span class="source-line-no">330</span><span id="line-330">   }</span>
+<span class="source-line-no">331</span><span id="line-331"></span>
+<span class="source-line-no">332</span><span id="line-332">   /**</span>
+<span class="source-line-no">333</span><span id="line-333">    * Creates an empty {@link PathItem} element.</span>
+<span class="source-line-no">334</span><span id="line-334">    *</span>
+<span class="source-line-no">335</span><span id="line-335">    * @return The new element.</span>
+<span class="source-line-no">336</span><span id="line-336">    */</span>
+<span class="source-line-no">337</span><span id="line-337">   public static final PathItem pathItem() {</span>
+<span class="source-line-no">338</span><span id="line-338">      return new PathItem();</span>
+<span class="source-line-no">339</span><span id="line-339">   }</span>
+<span class="source-line-no">340</span><span id="line-340"></span>
+<span class="source-line-no">341</span><span id="line-341">   /**</span>
+<span class="source-line-no">342</span><span id="line-342">    * Creates an empty {@link Response} element.</span>
+<span class="source-line-no">343</span><span id="line-343">    *</span>
+<span class="source-line-no">344</span><span id="line-344">    * @return The new element.</span>
+<span class="source-line-no">345</span><span id="line-345">    */</span>
+<span class="source-line-no">346</span><span id="line-346">   public static final Response response() {</span>
+<span class="source-line-no">347</span><span id="line-347">      return new Response();</span>
+<span class="source-line-no">348</span><span id="line-348">   }</span>
+<span class="source-line-no">349</span><span id="line-349"></span>
+<span class="source-line-no">350</span><span id="line-350">   /**</span>
+<span class="source-line-no">351</span><span id="line-351">    * Creates a {@link Response} element with the specified {@link Response#setDescription(String) description} attribute.</span>
+<span class="source-line-no">352</span><span id="line-352">    *</span>
+<span class="source-line-no">353</span><span id="line-353">    * @param description The {@link Response#setDescription(String) description} attribute.</span>
+<span class="source-line-no">354</span><span id="line-354">    * @return The new element.</span>
+<span class="source-line-no">355</span><span id="line-355">    */</span>
+<span class="source-line-no">356</span><span id="line-356">   public static final Response response(String description) {</span>
+<span class="source-line-no">357</span><span id="line-357">      return response().setDescription(description);</span>
+<span class="source-line-no">358</span><span id="line-358">   }</span>
+<span class="source-line-no">359</span><span id="line-359"></span>
+<span class="source-line-no">360</span><span id="line-360">   /**</span>
+<span class="source-line-no">361</span><span id="line-361">    * Creates an empty {@link Components} element.</span>
+<span class="source-line-no">362</span><span id="line-362">    *</span>
+<span class="source-line-no">363</span><span id="line-363">    * @return The new element.</span>
+<span class="source-line-no">364</span><span id="line-364">    */</span>
+<span class="source-line-no">365</span><span id="line-365">   public static final Components components() {</span>
+<span class="source-line-no">366</span><span id="line-366">      return new Components();</span>
+<span class="source-line-no">367</span><span id="line-367">   }</span>
+<span class="source-line-no">368</span><span id="line-368"></span>
+<span class="source-line-no">369</span><span id="line-369">   /**</span>
+<span class="source-line-no">370</span><span id="line-370">    * Creates an empty {@link SecurityRequirement} element.</span>
+<span class="source-line-no">371</span><span id="line-371">    *</span>
+<span class="source-line-no">372</span><span id="line-372">    * @return The new element.</span>
+<span class="source-line-no">373</span><span id="line-373">    */</span>
+<span class="source-line-no">374</span><span id="line-374">   public static final SecurityRequirement securityRequirement() {</span>
+<span class="source-line-no">375</span><span id="line-375">      return new SecurityRequirement();</span>
+<span class="source-line-no">376</span><span id="line-376">   }</span>
+<span class="source-line-no">377</span><span id="line-377"></span>
+<span class="source-line-no">378</span><span id="line-378">   /**</span>
+<span class="source-line-no">379</span><span id="line-379">    * Creates an empty {@link RequestBodyInfo} element.</span>
+<span class="source-line-no">380</span><span id="line-380">    *</span>
+<span class="source-line-no">381</span><span id="line-381">    * @return The new element.</span>
+<span class="source-line-no">382</span><span id="line-382">    */</span>
+<span class="source-line-no">383</span><span id="line-383">   public static final RequestBodyInfo requestBodyInfo() {</span>
+<span class="source-line-no">384</span><span id="line-384">      return new RequestBodyInfo();</span>
+<span class="source-line-no">385</span><span id="line-385">   }</span>
+<span class="source-line-no">386</span><span id="line-386"></span>
+<span class="source-line-no">387</span><span id="line-387">   /**</span>
+<span class="source-line-no">388</span><span id="line-388">    * Creates an empty {@link Example} element.</span>
+<span class="source-line-no">389</span><span id="line-389">    *</span>
+<span class="source-line-no">390</span><span id="line-390">    * @return The new element.</span>
+<span class="source-line-no">391</span><span id="line-391">    */</span>
+<span class="source-line-no">392</span><span id="line-392">   public static final Example example() {</span>
+<span class="source-line-no">393</span><span id="line-393">      return new Example();</span>
+<span class="source-line-no">394</span><span id="line-394">   }</span>
+<span class="source-line-no">395</span><span id="line-395"></span>
+<span class="source-line-no">396</span><span id="line-396">   /**</span>
+<span class="source-line-no">397</span><span id="line-397">    * Creates an empty {@link Link} element.</span>
+<span class="source-line-no">398</span><span id="line-398">    *</span>
+<span class="source-line-no">399</span><span id="line-399">    * @return The new element.</span>
+<span class="source-line-no">400</span><span id="line-400">    */</span>
+<span class="source-line-no">401</span><span id="line-401">   public static final Link link() {</span>
+<span class="source-line-no">402</span><span id="line-402">      return new Link();</span>
+<span class="source-line-no">403</span><span id="line-403">   }</span>
+<span class="source-line-no">404</span><span id="line-404"></span>
+<span class="source-line-no">405</span><span id="line-405">   /**</span>
+<span class="source-line-no">406</span><span id="line-406">    * Creates an empty {@link Callback} element.</span>
+<span class="source-line-no">407</span><span id="line-407">    *</span>
+<span class="source-line-no">408</span><span id="line-408">    * @return The new element.</span>
+<span class="source-line-no">409</span><span id="line-409">    */</span>
+<span class="source-line-no">410</span><span id="line-410">   public static final Callback callback() {</span>
+<span class="source-line-no">411</span><span id="line-411">      return new Callback();</span>
+<span class="source-line-no">412</span><span id="line-412">   }</span>
+<span class="source-line-no">413</span><span id="line-413"></span>
+<span class="source-line-no">414</span><span id="line-414">   /**</span>
+<span class="source-line-no">415</span><span id="line-415">    * Creates an empty {@link Discriminator} element.</span>
+<span class="source-line-no">416</span><span id="line-416">    *</span>
+<span class="source-line-no">417</span><span id="line-417">    * @return The new element.</span>
+<span class="source-line-no">418</span><span id="line-418">    */</span>
+<span class="source-line-no">419</span><span id="line-419">   public static final Discriminator discriminator() {</span>
+<span class="source-line-no">420</span><span id="line-420">      return new Discriminator();</span>
+<span class="source-line-no">421</span><span id="line-421">   }</span>
+<span class="source-line-no">422</span><span id="line-422"></span>
+<span class="source-line-no">423</span><span id="line-423">   /**</span>
+<span class="source-line-no">424</span><span id="line-424">    * Creates a {@link Discriminator} element with the specified {@link Discriminator#setPropertyName(String) propertyName} attribute.</span>
+<span class="source-line-no">425</span><span id="line-425">    *</span>
+<span class="source-line-no">426</span><span id="line-426">    * @param propertyName The {@link Discriminator#setPropertyName(String) propertyName} attribute.</span>
+<span class="source-line-no">427</span><span id="line-427">    * @return The new element.</span>
+<span class="source-line-no">428</span><span id="line-428">    */</span>
+<span class="source-line-no">429</span><span id="line-429">   public static final Discriminator discriminator(String propertyName) {</span>
+<span class="source-line-no">430</span><span id="line-430">      return discriminator().setPropertyName(propertyName);</span>
+<span class="source-line-no">431</span><span id="line-431">   }</span>
+<span class="source-line-no">432</span><span id="line-432"></span>
+<span class="source-line-no">433</span><span id="line-433">   /**</span>
+<span class="source-line-no">434</span><span id="line-434">    * Creates an empty {@link Encoding} element.</span>
+<span class="source-line-no">435</span><span id="line-435">    *</span>
+<span class="source-line-no">436</span><span id="line-436">    * @return The new element.</span>
+<span class="source-line-no">437</span><span id="line-437">    */</span>
+<span class="source-line-no">438</span><span id="line-438">   public static final Encoding encoding() {</span>
+<span class="source-line-no">439</span><span id="line-439">      return new Encoding();</span>
+<span class="source-line-no">440</span><span id="line-440">   }</span>
+<span class="source-line-no">441</span><span id="line-441"></span>
+<span class="source-line-no">442</span><span id="line-442">   /**</span>
+<span class="source-line-no">443</span><span id="line-443">    * Creates an {@link Encoding} element with the specified {@link Encoding#setContentType(String) contentType} attribute.</span>
+<span class="source-line-no">444</span><span id="line-444">    *</span>
+<span class="source-line-no">445</span><span id="line-445">    * @param contentType The {@link Encoding#setContentType(String) contentType} attribute.</span>
+<span class="source-line-no">446</span><span id="line-446">    * @return The new element.</span>
+<span class="source-line-no">447</span><span id="line-447">    */</span>
+<span class="source-line-no">448</span><span id="line-448">   public static final Encoding encoding(String contentType) {</span>
+<span class="source-line-no">449</span><span id="line-449">      return encoding().setContentType(contentType);</span>
+<span class="source-line-no">450</span><span id="line-450">   }</span>
+<span class="source-line-no">451</span><span id="line-451"></span>
+<span class="source-line-no">452</span><span id="line-452">   /**</span>
+<span class="source-line-no">453</span><span id="line-453">    * Creates an empty {@link MediaType} element.</span>
+<span class="source-line-no">454</span><span id="line-454">    *</span>
+<span class="source-line-no">455</span><span id="line-455">    * @return The new element.</span>
+<span class="source-line-no">456</span><span id="line-456">    */</span>
+<span class="source-line-no">457</span><span id="line-457">   public static final MediaType mediaType() {</span>
+<span class="source-line-no">458</span><span id="line-458">      return new MediaType();</span>
+<span class="source-line-no">459</span><span id="line-459">   }</span>
+<span class="source-line-no">460</span><span id="line-460"></span>
+<span class="source-line-no">461</span><span id="line-461">   /**</span>
+<span class="source-line-no">462</span><span id="line-462">    * Creates an empty {@link OAuthFlow} element.</span>
+<span class="source-line-no">463</span><span id="line-463">    *</span>
+<span class="source-line-no">464</span><span id="line-464">    * @return The new element.</span>
+<span class="source-line-no">465</span><span id="line-465">    */</span>
+<span class="source-line-no">466</span><span id="line-466">   public static final OAuthFlow oAuthFlow() {</span>
+<span class="source-line-no">467</span><span id="line-467">      return new OAuthFlow();</span>
+<span class="source-line-no">468</span><span id="line-468">   }</span>
+<span class="source-line-no">469</span><span id="line-469"></span>
+<span class="source-line-no">470</span><span id="line-470">   /**</span>
+<span class="source-line-no">471</span><span id="line-471">    * Creates an empty {@link OAuthFlows} element.</span>
+<span class="source-line-no">472</span><span id="line-472">    *</span>
+<span class="source-line-no">473</span><span id="line-473">    * @return The new element.</span>
+<span class="source-line-no">474</span><span id="line-474">    */</span>
+<span class="source-line-no">475</span><span id="line-475">   public static final OAuthFlows oAuthFlows() {</span>
+<span class="source-line-no">476</span><span id="line-476">      return new OAuthFlows();</span>
+<span class="source-line-no">477</span><span id="line-477">   }</span>
+<span class="source-line-no">478</span><span id="line-478"></span>
+<span class="source-line-no">479</span><span id="line-479">   /**</span>
+<span class="source-line-no">480</span><span id="line-480">    * Creates an empty {@link ServerVariable} element.</span>
+<span class="source-line-no">481</span><span id="line-481">    *</span>
+<span class="source-line-no">482</span><span id="line-482">    * @return The new element.</span>
+<span class="source-line-no">483</span><span id="line-483">    */</span>
+<span class="source-line-no">484</span><span id="line-484">   public static final ServerVariable serverVariable() {</span>
+<span class="source-line-no">485</span><span id="line-485">      return new ServerVariable();</span>
+<span class="source-line-no">486</span><span id="line-486">   }</span>
+<span class="source-line-no">487</span><span id="line-487"></span>
+<span class="source-line-no">488</span><span id="line-488">   /**</span>
+<span class="source-line-no">489</span><span id="line-489">    * Creates a {@link ServerVariable} element with the specified {@link ServerVariable#setDefault(String) default} attribute.</span>
+<span class="source-line-no">490</span><span id="line-490">    *</span>
+<span class="source-line-no">491</span><span id="line-491">    * @param defaultValue The {@link ServerVariable#setDefault(String) default} attribute.</span>
+<span class="source-line-no">492</span><span id="line-492">    * @return The new element.</span>
+<span class="source-line-no">493</span><span id="line-493">    */</span>
+<span class="source-line-no">494</span><span id="line-494">   public static final ServerVariable serverVariable(String defaultValue) {</span>
+<span class="source-line-no">495</span><span id="line-495">      return serverVariable().setDefault(defaultValue);</span>
+<span class="source-line-no">496</span><span id="line-496">   }</span>
+<span class="source-line-no">497</span><span id="line-497">}</span>
 
 
 

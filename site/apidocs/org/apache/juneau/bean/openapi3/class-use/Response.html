@@ -75,24 +75,44 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#addContent(java.lang.String,org.apache.juneau.bean.openapi3.MediaType)" class="member-name-link">addContent</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="../MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Adds one or more values to the <property>variables</property> property.</div>
+<div class="block">Adds one or more values to the <property>content</property> property.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#addHeader(java.lang.String,org.apache.juneau.bean.openapi3.HeaderInfo)" class="member-name-link">addHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Adds one or more values to the <property>variables</property> property.</div>
+<div class="block">Adds one or more values to the <property>headers</property> property.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#addLink(java.lang.String,org.apache.juneau.bean.openapi3.Link)" class="member-name-link">addLink</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="../Link.html" title="class in org.apache.juneau.bean.openapi3">Link</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Adds one or more values to the <property>variables</property> property.</div>
+<div class="block">Adds one or more values to the <property>links</property> property.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#copy()" class="member-name-link">copy</a>()</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Make a deep copy of this object.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#getResponse(int)" class="member-name-link">getResponse</a><wbr>(int&nbsp;status)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the response with the given status code.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Operation.</span><code><a href="../Operation.html#getResponse(java.lang.String)" class="member-name-link">getResponse</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;status)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the response with the given status code.</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OpenApiBuilder.</span><code><a href="../OpenApiBuilder.html#response()" class="member-name-link">response</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates an empty <a href="../Response.html" title="class in org.apache.juneau.bean.openapi3"><code>Response</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color"><code>static final <a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OpenApiBuilder.</span><code><a href="../OpenApiBuilder.html#response(java.lang.String)" class="member-name-link">response</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Creates a <a href="../Response.html" title="class in org.apache.juneau.bean.openapi3"><code>Response</code></a> element with the specified <a href="../Response.html#setDescription(java.lang.String)"><code>description</code></a> attribute.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#set(java.lang.String,java.lang.Object)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
@@ -116,11 +136,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#setLinks(java.util.Map)" class="member-name-link">setLinks</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../Link.html" title="class in org.apache.juneau.bean.openapi3">Link</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Bean property setter:  <property>Link</property>.</div>
+<div class="block">Bean property setter:  <property>links</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected <a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#strict()" class="member-name-link">strict</a>()</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#strict(java.lang.Object)" class="member-name-link">strict</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.bean.openapi3</a> that return types with arguments of type <a href="../Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></span></div>
 <div class="summary-table three-column-summary">

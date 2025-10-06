@@ -82,79 +82,87 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Make a deep copy of this object.</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">OpenApiBuilder.</span><code><a href="../OpenApiBuilder.html#headerInfo()" class="member-name-link">headerInfo</a>()</code></div>
+<div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#getHeader(java.lang.String)" class="member-name-link">getHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Creates an empty <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3"><code>HeaderInfo</code></a> element.</div>
+<div class="block">Returns the header with the specified name.</div>
 </div>
 <div class="col-first odd-row-color"><code>static final <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">OpenApiBuilder.</span><code><a href="../OpenApiBuilder.html#headerInfo(org.apache.juneau.bean.openapi3.SchemaInfo)" class="member-name-link">headerInfo</a><wbr>(<a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;schema)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OpenApiBuilder.</span><code><a href="../OpenApiBuilder.html#headerInfo()" class="member-name-link">headerInfo</a>()</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Creates an empty <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3"><code>HeaderInfo</code></a> element.</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OpenApiBuilder.</span><code><a href="../OpenApiBuilder.html#headerInfo(org.apache.juneau.bean.openapi3.SchemaInfo)" class="member-name-link">headerInfo</a><wbr>(<a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;schema)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Creates an <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3"><code>HeaderInfo</code></a> element with the specified <a href="../HeaderInfo.html#setSchema(org.apache.juneau.bean.openapi3.SchemaInfo)"><code>schema</code></a> attribute.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#resolveRefs(org.apache.juneau.bean.openapi3.OpenApi,java.util.Deque,int)" class="member-name-link">resolveRefs</a><wbr>(<a href="../OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>&nbsp;openApi,
+<div class="col-first odd-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#resolveRefs(org.apache.juneau.bean.openapi3.OpenApi,java.util.Deque,int)" class="member-name-link">resolveRefs</a><wbr>(<a href="../OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>&nbsp;openApi,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Deque.html" title="class or interface in java.util" class="external-link">Deque</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;refStack,
  int&nbsp;maxDepth)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Resolves any <js>"$ref"</js> attributes in this element.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#set(java.lang.String,java.lang.Object)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setAllowEmptyValue(java.lang.Boolean)" class="member-name-link">setAllowEmptyValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#set(java.lang.String,java.lang.Object)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setAllowEmptyValue(java.lang.Boolean)" class="member-name-link">setAllowEmptyValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean property setter:  <property>allowEmptyValue</property>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setAllowReserved(java.lang.Boolean)" class="member-name-link">setAllowReserved</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setAllowReserved(java.lang.Boolean)" class="member-name-link">setAllowReserved</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>allowReserved</property>.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setDeprecated(java.lang.Boolean)" class="member-name-link">setDeprecated</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setDeprecated(java.lang.Boolean)" class="member-name-link">setDeprecated</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean property setter:  <property>deprecated</property>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setDescription(java.lang.String)" class="member-name-link">setDescription</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setDescription(java.lang.String)" class="member-name-link">setDescription</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>description</property>.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setExample(java.lang.Object)" class="member-name-link">setExample</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setExample(java.lang.Object)" class="member-name-link">setExample</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean property setter:  <property>examples</property>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setExamples(java.util.Map)" class="member-name-link">setExamples</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../Example.html" title="class in org.apache.juneau.bean.openapi3">Example</a>&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setExamples(java.util.Map)" class="member-name-link">setExamples</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../Example.html" title="class in org.apache.juneau.bean.openapi3">Example</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>headers</property>.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setExplode(java.lang.Boolean)" class="member-name-link">setExplode</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setExplode(java.lang.Boolean)" class="member-name-link">setExplode</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean property setter:  <property>explode</property>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setRef(java.lang.String)" class="member-name-link">setRef</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setRef(java.lang.String)" class="member-name-link">setRef</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>$ref</property>.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setRequired(java.lang.Boolean)" class="member-name-link">setRequired</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setRequired(java.lang.Boolean)" class="member-name-link">setRequired</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean property setter:  <property>required</property>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setSchema(org.apache.juneau.bean.openapi3.SchemaInfo)" class="member-name-link">setSchema</a><wbr>(<a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#setSchema(org.apache.juneau.bean.openapi3.SchemaInfo)" class="member-name-link">setSchema</a><wbr>(<a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>schema</property>.</div>
 </div>
-<div class="col-first even-row-color"><code>protected <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#strict()" class="member-name-link">strict</a>()</code></div>
+<div class="col-first odd-row-color"><code>protected <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#strict()" class="member-name-link">strict</a>()</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HeaderInfo.</span><code><a href="../HeaderInfo.html#strict(java.lang.Object)" class="member-name-link">strict</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.bean.openapi3</a> that return types with arguments of type <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></span></div>
@@ -193,7 +201,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">Response.</span><code><a href="../Response.html#addHeader(java.lang.String,org.apache.juneau.bean.openapi3.HeaderInfo)" class="member-name-link">addHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Adds one or more values to the <property>variables</property> property.</div>
+<div class="block">Adds one or more values to the <property>headers</property> property.</div>
 </div>
 </div>
 <div class="caption"><span>Method parameters in <a href="../package-summary.html">org.apache.juneau.bean.openapi3</a> with type arguments of type <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></span></div>

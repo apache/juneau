@@ -47,7 +47,7 @@
 <span class="source-line-no">034</span><span id="line-34"> * &lt;/ul&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="../../../../index.html#jm.JsonDetails"&gt;JSON Details&lt;/a&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics"&gt;JSON Details&lt;/a&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;/ul&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> */</span>
 <span class="source-line-no">040</span><span id="line-40">public class Json5Serializer extends JsonSerializer {</span>
@@ -59,53 +59,56 @@
 <span class="source-line-no">046</span><span id="line-46">   /** Default serializer, single quotes, {@link JsonSerializer.Builder#simpleAttrs() simple mode}. */</span>
 <span class="source-line-no">047</span><span id="line-47">   public static final Json5Serializer DEFAULT = new Json5Serializer(create());</span>
 <span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   /** Default serializer, single quotes, simple mode, with whitespace. */</span>
-<span class="source-line-no">050</span><span id="line-50">   public static final Json5Serializer DEFAULT_READABLE = new Readable(create());</span>
+<span class="source-line-no">049</span><span id="line-49">   /** Default serializer, single quotes, {@link JsonSerializer.Builder#simpleAttrs() simple mode}, sorted bean properties. */</span>
+<span class="source-line-no">050</span><span id="line-50">   public static final Json5Serializer DEFAULT_SORTED = new Json5Serializer(create().sortProperties());</span>
 <span class="source-line-no">051</span><span id="line-51"></span>
-<span class="source-line-no">052</span><span id="line-52">   /**</span>
-<span class="source-line-no">053</span><span id="line-53">    * Creates a new builder for this object.</span>
-<span class="source-line-no">054</span><span id="line-54">    *</span>
-<span class="source-line-no">055</span><span id="line-55">    * @return A new builder.</span>
-<span class="source-line-no">056</span><span id="line-56">    */</span>
-<span class="source-line-no">057</span><span id="line-57">   public static JsonSerializer.Builder create() {</span>
-<span class="source-line-no">058</span><span id="line-58">      return JsonSerializer.create().simpleAttrs().quoteChar('\'').produces("application/json5").accept("application/json5,text/json5,application/json;q=0.9,text/json;q=0.9").type(Json5Serializer.class);</span>
-<span class="source-line-no">059</span><span id="line-59">   }</span>
-<span class="source-line-no">060</span><span id="line-60"></span>
-<span class="source-line-no">061</span><span id="line-61">   //-------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">062</span><span id="line-62">   // Static subclasses</span>
-<span class="source-line-no">063</span><span id="line-63">   //-------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">   /** Default serializer, single quotes, simple mode, with whitespace. */</span>
-<span class="source-line-no">066</span><span id="line-66">   public static class Readable extends Json5Serializer {</span>
+<span class="source-line-no">052</span><span id="line-52">   /** Default serializer, single quotes, simple mode, with whitespace. */</span>
+<span class="source-line-no">053</span><span id="line-53">   public static final Json5Serializer DEFAULT_READABLE = new Readable(create());</span>
+<span class="source-line-no">054</span><span id="line-54"></span>
+<span class="source-line-no">055</span><span id="line-55">   /**</span>
+<span class="source-line-no">056</span><span id="line-56">    * Creates a new builder for this object.</span>
+<span class="source-line-no">057</span><span id="line-57">    *</span>
+<span class="source-line-no">058</span><span id="line-58">    * @return A new builder.</span>
+<span class="source-line-no">059</span><span id="line-59">    */</span>
+<span class="source-line-no">060</span><span id="line-60">   public static JsonSerializer.Builder create() {</span>
+<span class="source-line-no">061</span><span id="line-61">      return JsonSerializer.create().simpleAttrs().quoteChar('\'').produces("application/json5").accept("application/json5,text/json5,application/json;q=0.9,text/json;q=0.9").type(Json5Serializer.class);</span>
+<span class="source-line-no">062</span><span id="line-62">   }</span>
+<span class="source-line-no">063</span><span id="line-63"></span>
+<span class="source-line-no">064</span><span id="line-64">   //-------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">065</span><span id="line-65">   // Static subclasses</span>
+<span class="source-line-no">066</span><span id="line-66">   //-------------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">      /**</span>
-<span class="source-line-no">069</span><span id="line-69">       * Constructor.</span>
-<span class="source-line-no">070</span><span id="line-70">       *</span>
-<span class="source-line-no">071</span><span id="line-71">       * @param builder The builder for this object.</span>
-<span class="source-line-no">072</span><span id="line-72">       */</span>
-<span class="source-line-no">073</span><span id="line-73">      public Readable(JsonSerializer.Builder builder) {</span>
-<span class="source-line-no">074</span><span id="line-74">         super(builder.simpleAttrs().quoteChar('\'').useWhitespace());</span>
-<span class="source-line-no">075</span><span id="line-75">      }</span>
-<span class="source-line-no">076</span><span id="line-76">   }</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">   //-------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">079</span><span id="line-79">   // Instance</span>
-<span class="source-line-no">080</span><span id="line-80">   //-------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82">   /**</span>
-<span class="source-line-no">083</span><span id="line-83">    * Constructor.</span>
-<span class="source-line-no">084</span><span id="line-84">    *</span>
-<span class="source-line-no">085</span><span id="line-85">    * @param builder The builder for this object.</span>
-<span class="source-line-no">086</span><span id="line-86">    */</span>
-<span class="source-line-no">087</span><span id="line-87">   public Json5Serializer(JsonSerializer.Builder builder) {</span>
-<span class="source-line-no">088</span><span id="line-88">      super(builder.simpleAttrs().quoteChar('\''));</span>
-<span class="source-line-no">089</span><span id="line-89">   }</span>
-<span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">   @Override /* Context */</span>
-<span class="source-line-no">092</span><span id="line-92">   public Builder copy() {</span>
-<span class="source-line-no">093</span><span id="line-93">      return new Builder(this);</span>
-<span class="source-line-no">094</span><span id="line-94">   }</span>
-<span class="source-line-no">095</span><span id="line-95">}</span>
+<span class="source-line-no">068</span><span id="line-68">   /** Default serializer, single quotes, simple mode, with whitespace. */</span>
+<span class="source-line-no">069</span><span id="line-69">   public static class Readable extends Json5Serializer {</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">      /**</span>
+<span class="source-line-no">072</span><span id="line-72">       * Constructor.</span>
+<span class="source-line-no">073</span><span id="line-73">       *</span>
+<span class="source-line-no">074</span><span id="line-74">       * @param builder The builder for this object.</span>
+<span class="source-line-no">075</span><span id="line-75">       */</span>
+<span class="source-line-no">076</span><span id="line-76">      public Readable(JsonSerializer.Builder builder) {</span>
+<span class="source-line-no">077</span><span id="line-77">         super(builder.simpleAttrs().quoteChar('\'').useWhitespace());</span>
+<span class="source-line-no">078</span><span id="line-78">      }</span>
+<span class="source-line-no">079</span><span id="line-79">   }</span>
+<span class="source-line-no">080</span><span id="line-80"></span>
+<span class="source-line-no">081</span><span id="line-81">   //-------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">082</span><span id="line-82">   // Instance</span>
+<span class="source-line-no">083</span><span id="line-83">   //-------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">   /**</span>
+<span class="source-line-no">086</span><span id="line-86">    * Constructor.</span>
+<span class="source-line-no">087</span><span id="line-87">    *</span>
+<span class="source-line-no">088</span><span id="line-88">    * @param builder The builder for this object.</span>
+<span class="source-line-no">089</span><span id="line-89">    */</span>
+<span class="source-line-no">090</span><span id="line-90">   public Json5Serializer(JsonSerializer.Builder builder) {</span>
+<span class="source-line-no">091</span><span id="line-91">      super(builder.simpleAttrs().quoteChar('\''));</span>
+<span class="source-line-no">092</span><span id="line-92">   }</span>
+<span class="source-line-no">093</span><span id="line-93"></span>
+<span class="source-line-no">094</span><span id="line-94">   @Override /* Context */</span>
+<span class="source-line-no">095</span><span id="line-95">   public Builder copy() {</span>
+<span class="source-line-no">096</span><span id="line-96">      return new Builder(this);</span>
+<span class="source-line-no">097</span><span id="line-97">   }</span>
+<span class="source-line-no">098</span><span id="line-98">}</span>
 
 
 

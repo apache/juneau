@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Various useful static methods for creating Swagger elements.
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  </ul></div>
 </section>
 <section class="summary">
@@ -215,78 +215,83 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an empty <a href="Operation.html" title="class in org.apache.juneau.bean.swagger"><code>Operation</code></a> element.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parameterInfo()" class="member-name-link">parameterInfo</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="OperationMap.html" title="class in org.apache.juneau.bean.swagger">OperationMap</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#operationMap()" class="member-name-link">operationMap</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an empty <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger"><code>ParameterInfo</code></a> element.</div>
+<div class="block">Creates an empty <a href="OperationMap.html" title="class in org.apache.juneau.bean.swagger"><code>OperationMap</code></a> element.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parameterInfo(java.lang.String,java.lang.String)" class="member-name-link">parameterInfo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parameterInfo()" class="member-name-link">parameterInfo</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger"><code>ParameterInfo</code></a> element with the specified <a href="ParameterInfo.html#setIn(java.lang.String)"><code>in</code></a> and
- <a href="ParameterInfo.html#setName(java.lang.String)"><code>name</code></a> attributes.</div>
+<div class="block">Creates an empty <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger"><code>ParameterInfo</code></a> element.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parameterInfoStrict(java.lang.String,java.lang.String)" class="member-name-link">parameterInfoStrict</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parameterInfo(java.lang.String,java.lang.String)" class="member-name-link">parameterInfo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger"><code>ParameterInfo</code></a> element with the specified <a href="ParameterInfo.html#setIn(java.lang.String)"><code>in</code></a> and
  <a href="ParameterInfo.html#setName(java.lang.String)"><code>name</code></a> attributes.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#responseInfo()" class="member-name-link">responseInfo</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parameterInfoStrict(java.lang.String,java.lang.String)" class="member-name-link">parameterInfoStrict</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an empty <a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger"><code>ResponseInfo</code></a> element.</div>
+<div class="block">Creates an <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger"><code>ParameterInfo</code></a> element with the specified <a href="ParameterInfo.html#setIn(java.lang.String)"><code>in</code></a> and
+ <a href="ParameterInfo.html#setName(java.lang.String)"><code>name</code></a> attributes.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#responseInfo(java.lang.String)" class="member-name-link">responseInfo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#responseInfo()" class="member-name-link">responseInfo</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger"><code>ResponseInfo</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#responseInfo(java.lang.String)" class="member-name-link">responseInfo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger"><code>ResponseInfo</code></a> element with the specified <a href="ResponseInfo.html#setDescription(java.lang.String)"><code>description</code></a> attribute.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="SchemaInfo.html" title="class in org.apache.juneau.bean.swagger">SchemaInfo</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#schemaInfo()" class="member-name-link">schemaInfo</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="SchemaInfo.html" title="class in org.apache.juneau.bean.swagger">SchemaInfo</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#schemaInfo()" class="member-name-link">schemaInfo</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an empty <a href="SchemaInfo.html" title="class in org.apache.juneau.bean.swagger"><code>SchemaInfo</code></a> element.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#securityScheme()" class="member-name-link">securityScheme</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#securityScheme()" class="member-name-link">securityScheme</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an empty <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger"><code>SecurityScheme</code></a> element.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#securityScheme(java.lang.String)" class="member-name-link">securityScheme</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger"><code>SecurityScheme</code></a> element with the specified <a href="SecurityScheme.html#setType(java.lang.String)"><code>type</code></a> attribute.</div>
-</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#securitySchemeStrict(java.lang.String)" class="member-name-link">securitySchemeStrict</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#securityScheme(java.lang.String)" class="member-name-link">securityScheme</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger"><code>SecurityScheme</code></a> element with the specified <a href="SecurityScheme.html#setType(java.lang.String)"><code>type</code></a> attribute.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#swagger()" class="member-name-link">swagger</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#securitySchemeStrict(java.lang.String)" class="member-name-link">securitySchemeStrict</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an empty <a href="Swagger.html" title="class in org.apache.juneau.bean.swagger"><code>Swagger</code></a> element.</div>
+<div class="block">Creates an <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger"><code>SecurityScheme</code></a> element with the specified <a href="SecurityScheme.html#setType(java.lang.String)"><code>type</code></a> attribute.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#swagger(org.apache.juneau.bean.swagger.Info)" class="member-name-link">swagger</a><wbr>(<a href="Info.html" title="class in org.apache.juneau.bean.swagger">Info</a>&nbsp;info)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#swagger()" class="member-name-link">swagger</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="Swagger.html" title="class in org.apache.juneau.bean.swagger"><code>Swagger</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#swagger(org.apache.juneau.bean.swagger.Info)" class="member-name-link">swagger</a><wbr>(<a href="Info.html" title="class in org.apache.juneau.bean.swagger">Info</a>&nbsp;info)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="Swagger.html" title="class in org.apache.juneau.bean.swagger"><code>Swagger</code></a> element with the specified <a href="Swagger.html#setInfo(org.apache.juneau.bean.swagger.Info)"><code>info</code></a> attribute.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#tag()" class="member-name-link">tag</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#tag()" class="member-name-link">tag</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an empty <a href="Tag.html" title="class in org.apache.juneau.bean.swagger"><code>Tag</code></a> element.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#tag(java.lang.String)" class="member-name-link">tag</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#tag(java.lang.String)" class="member-name-link">tag</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="Tag.html" title="class in org.apache.juneau.bean.swagger"><code>Tag</code></a> element with the specified <a href="Tag.html#setName(java.lang.String)"><code>name</code></a> attribute.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#xml()" class="member-name-link">xml</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#xml()" class="member-name-link">xml</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an empty <a href="Xml.html" title="class in org.apache.juneau.bean.swagger"><code>Xml</code></a> element.</div>
 </div>
 </div>
@@ -587,9 +592,20 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="operationMap()">
+<h3>operationMap</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OperationMap.html" title="class in org.apache.juneau.bean.swagger">OperationMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-257">operationMap</a></span>()</div>
+<div class="block">Creates an empty <a href="OperationMap.html" title="class in org.apache.juneau.bean.swagger"><code>OperationMap</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="parameterInfo()">
 <h3>parameterInfo</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-257">parameterInfo</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-266">parameterInfo</a></span>()</div>
 <div class="block">Creates an empty <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger"><code>ParameterInfo</code></a> element.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -600,7 +616,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parameterInfo(java.lang.String,java.lang.String)">
 <h3>parameterInfo</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-269">parameterInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-278">parameterInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Creates an <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger"><code>ParameterInfo</code></a> element with the specified <a href="ParameterInfo.html#setIn(java.lang.String)"><code>in</code></a> and
  <a href="ParameterInfo.html#setName(java.lang.String)"><code>name</code></a> attributes.</div>
@@ -616,7 +632,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parameterInfoStrict(java.lang.String,java.lang.String)">
 <h3>parameterInfoStrict</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-293">parameterInfoStrict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-302">parameterInfoStrict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Creates an <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger"><code>ParameterInfo</code></a> element with the specified <a href="ParameterInfo.html#setIn(java.lang.String)"><code>in</code></a> and
  <a href="ParameterInfo.html#setName(java.lang.String)"><code>name</code></a> attributes.
@@ -643,7 +659,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="responseInfo()">
 <h3>responseInfo</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-302">responseInfo</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-311">responseInfo</a></span>()</div>
 <div class="block">Creates an empty <a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger"><code>ResponseInfo</code></a> element.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -654,7 +670,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="responseInfo(java.lang.String)">
 <h3>responseInfo</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-312">responseInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-321">responseInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</span></div>
 <div class="block">Creates an <a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger"><code>ResponseInfo</code></a> element with the specified <a href="ResponseInfo.html#setDescription(java.lang.String)"><code>description</code></a> attribute.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -667,7 +683,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="schemaInfo()">
 <h3>schemaInfo</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SchemaInfo.html" title="class in org.apache.juneau.bean.swagger">SchemaInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-321">schemaInfo</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SchemaInfo.html" title="class in org.apache.juneau.bean.swagger">SchemaInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-330">schemaInfo</a></span>()</div>
 <div class="block">Creates an empty <a href="SchemaInfo.html" title="class in org.apache.juneau.bean.swagger"><code>SchemaInfo</code></a> element.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -678,7 +694,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="securityScheme()">
 <h3>securityScheme</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-330">securityScheme</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-339">securityScheme</a></span>()</div>
 <div class="block">Creates an empty <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger"><code>SecurityScheme</code></a> element.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -689,7 +705,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="securityScheme(java.lang.String)">
 <h3>securityScheme</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-340">securityScheme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-349">securityScheme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
 <div class="block">Creates an <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger"><code>SecurityScheme</code></a> element with the specified <a href="SecurityScheme.html#setType(java.lang.String)"><code>type</code></a> attribute.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -702,7 +718,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="securitySchemeStrict(java.lang.String)">
 <h3>securitySchemeStrict</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-360">securitySchemeStrict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-369">securitySchemeStrict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
 <div class="block">Creates an <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger"><code>SecurityScheme</code></a> element with the specified <a href="SecurityScheme.html#setType(java.lang.String)"><code>type</code></a> attribute.
 
  <p>
@@ -724,7 +740,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="swagger()">
 <h3>swagger</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-369">swagger</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-378">swagger</a></span>()</div>
 <div class="block">Creates an empty <a href="Swagger.html" title="class in org.apache.juneau.bean.swagger"><code>Swagger</code></a> element.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -735,7 +751,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="swagger(org.apache.juneau.bean.swagger.Info)">
 <h3>swagger</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-379">swagger</a></span><wbr><span class="parameters">(<a href="Info.html" title="class in org.apache.juneau.bean.swagger">Info</a>&nbsp;info)</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-388">swagger</a></span><wbr><span class="parameters">(<a href="Info.html" title="class in org.apache.juneau.bean.swagger">Info</a>&nbsp;info)</span></div>
 <div class="block">Creates an <a href="Swagger.html" title="class in org.apache.juneau.bean.swagger"><code>Swagger</code></a> element with the specified <a href="Swagger.html#setInfo(org.apache.juneau.bean.swagger.Info)"><code>info</code></a> attribute.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -748,7 +764,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag()">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-388">tag</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-397">tag</a></span>()</div>
 <div class="block">Creates an empty <a href="Tag.html" title="class in org.apache.juneau.bean.swagger"><code>Tag</code></a> element.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -759,7 +775,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag(java.lang.String)">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-398">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-407">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Creates an <a href="Tag.html" title="class in org.apache.juneau.bean.swagger"><code>Tag</code></a> element with the specified <a href="Tag.html#setName(java.lang.String)"><code>name</code></a> attribute.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -772,7 +788,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="xml()">
 <h3>xml</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-407">xml</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.swagger">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/SwaggerBuilder.html#line-416">xml</a></span>()</div>
 <div class="block">Creates an empty <a href="Xml.html" title="class in org.apache.juneau.bean.swagger"><code>Xml</code></a> element.</div>
 <dl class="notes">
 <dt>Returns:</dt>

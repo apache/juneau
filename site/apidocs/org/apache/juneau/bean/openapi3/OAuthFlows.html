@@ -80,70 +80,54 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="annotations"><a href="../../annotation/Bean.html" title="annotation interface in org.apache.juneau.annotation">@Bean</a>(<a href="../../annotation/Bean.html#properties()">properties</a>="implicit,password,clientCredentials,authorizationCode,*")
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-86">OAuthFlows</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-71">OAuthFlows</a></span>
 <span class="extends-implements">extends <a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></span></div>
-<div class="block">Describes a single operation parameter.
+<div class="block">Allows configuration of the supported OAuth Flows.
 
  <p>
- A unique parameter is defined by a combination of a name and location.
+ The OAuthFlows Object allows configuration of the supported OAuth Flows. This object contains the configuration 
+ for different OAuth 2.0 flows that can be used to secure the API. Each flow type has its own specific configuration 
+ requirements and use cases.
 
+ <h5 class='section'>OpenAPI Specification:</h5>
  <p>
- There are five possible parameter types.
+ The OAuthFlows Object is composed of the following fields:
  <ul class='spaced-list'>
-   <li><js>"path"</js> - Used together with Path Templating, where the parameter value is actually part of the
-      operation's URL.
-      This does not include the host or base path of the API.
-      For example, in <code>/items/{itemId}</code>, the path parameter is <code>itemId</code>.
-   <li><js>"query"</js> - Parameters that are appended to the URL.
-      For example, in <code>/items?id=###</code>, the query parameter is <code>id</code>.
-   <li><js>"header"</js> - Custom headers that are expected as part of the request.
-   <li><js>"body"</js> - The payload that's appended to the HTTP request.
-      Since there can only be one payload, there can only be one body parameter.
-      The name of the body parameter has no effect on the parameter itself and is used for documentation purposes
-      only.
-      Since Form parameters are also in the payload, body and form parameters cannot exist together for the same
-      operation.
-   <li><js>"formData"</js> - Used to describe the payload of an HTTP request when either
-      <code>application/x-www-form-urlencoded</code>, <code>multipart/form-data</code> or both are used as the
-      content type of the request (in Swagger's definition, the consumes property of an operation).
-      This is the only parameter type that can be used to send files, thus supporting the file type.
-      Since form parameters are sent in the payload, they cannot be declared together with a body parameter for the
-      same operation.
-      Form parameters have a different format based on the content-type used (for further details, consult
-      <code>http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4</code>):
-      <ul>
-         <li><js>"application/x-www-form-urlencoded"</js> - Similar to the format of Query parameters but as a
-            payload.
-            For example, <code>foo=1&amp;bar=swagger</code> - both <code>foo</code> and <code>bar</code> are form
-            parameters.
-            This is normally used for simple parameters that are being transferred.
-         <li><js>"multipart/form-data"</js> - each parameter takes a section in the payload with an internal header.
-            For example, for the header <code>Content-Disposition: form-data; name="submit-name"</code> the name of
-            the parameter is <code>submit-name</code>.
-            This type of form parameters is more commonly used for file transfers.
-      </ul>
-   </li>
+   <li><c>implicit</c> (<a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3"><code>OAuthFlow</code></a>) - Configuration for the OAuth Implicit flow
+   <li><c>password</c> (<a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3"><code>OAuthFlow</code></a>) - Configuration for the OAuth Resource Owner Password flow
+   <li><c>clientCredentials</c> (<a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3"><code>OAuthFlow</code></a>) - Configuration for the OAuth Client Credentials flow
+   <li><c>authorizationCode</c> (<a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3"><code>OAuthFlow</code></a>) - Configuration for the OAuth Authorization Code flow
  </ul>
 
  <h5 class='section'>Example:</h5>
  <p class='bcode'>
    <jc>// Construct using SwaggerBuilder.</jc>
-   ParameterInfo x = <jsm>parameterInfo</jsm>(<js>"query"</js>, <js>"foo"</js>);
+   OAuthFlows <jv>x</jv> = <jsm>oauthFlows</jsm>()
+      .setAuthorizationCode(<jsm>oauthFlow</jsm>()
+         .setAuthorizationUrl(<js>"https://example.com/oauth/authorize"</js>)
+         .setTokenUrl(<js>"https://example.com/oauth/token"</js>));
 
    <jc>// Serialize using JsonSerializer.</jc>
-   String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+   String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
 
    <jc>// Or just use toString() which does the same as above.</jc>
-   String json = x.toString();
+   <jv>json</jv> = <jv>x</jv>.toString();
  </p>
  <p class='bcode'>
    <jc>// Output</jc>
    {
-      <js>"in"</js>: <js>"query"</js>,
-      <js>"name"</js>: <js>"foo"</js>
+      <js>"authorizationCode"</js>: {
+         <js>"authorizationUrl"</js>: <js>"https://example.com/oauth/authorize"</js>,
+         <js>"tokenUrl"</js>: <js>"https://example.com/oauth/token"</js>
+      }
    }
- </p></div>
+ </p>
+
+ <h5 class='section'>See Also:</h5><ul>
+   <li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#oauth-flows-object">OpenAPI Specification &gt; OAuth Flows Object</a>
+   <li class='link'><a class="doclink" href="https://swagger.io/docs/specification/authentication/oauth2/">OpenAPI OAuth2 Authentication</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -244,12 +228,17 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets strict mode on this bean.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#strict(java.lang.Object)" class="member-name-link">strict</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets strict mode on this bean.</div>
+</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.bean.openapi3.OpenApiElement">Methods inherited from class&nbsp;org.apache.juneau.bean.openapi3.<a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></h3>
-<code><a href="OpenApiElement.html#asMap()">asMap</a>, <a href="OpenApiElement.html#extraKeys()">extraKeys</a>, <a href="OpenApiElement.html#get(java.lang.String)">get</a>, <a href="OpenApiElement.html#isStrict()">isStrict</a>, <a href="OpenApiElement.html#strict(java.lang.Object)">strict</a>, <a href="OpenApiElement.html#toString()">toString</a></code></div>
+<code><a href="OpenApiElement.html#asMap()">asMap</a>, <a href="OpenApiElement.html#extraKeys()">extraKeys</a>, <a href="OpenApiElement.html#get(java.lang.String)">get</a>, <a href="OpenApiElement.html#isStrict()">isStrict</a>, <a href="OpenApiElement.html#toString()">toString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -267,14 +256,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>OAuthFlows</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-98">OAuthFlows</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-82">OAuthFlows</a></span>()</div>
 <div class="block">Default constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.bean.openapi3.OAuthFlows)">
 <h3>OAuthFlows</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-105">OAuthFlows</a></span><wbr><span class="parameters">(<a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-89">OAuthFlows</a></span><wbr><span class="parameters">(<a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -293,7 +282,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-119">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-103">copy</a></span>()</div>
 <div class="block">Make a deep copy of this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -304,7 +293,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="strict()">
 <h3>strict</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-123">strict</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-107">strict</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#strict()">OpenApiElement</a></code></span></div>
 <div class="block">Sets strict mode on this bean.</div>
 <dl class="notes">
@@ -316,9 +305,27 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="strict(java.lang.Object)">
+<h3>strict</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-113">strict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#strict(java.lang.Object)">OpenApiElement</a></code></span></div>
+<div class="block">Sets strict mode on this bean.</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="OpenApiElement.html#strict(java.lang.Object)">strict</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new value for this property.
+   <br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+   <br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).</dd>
+<dt>Returns:</dt>
+<dd>This object</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getImplicit()">
 <h3>getImplicit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-137">getImplicit</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-127">getImplicit</a></span>()</div>
 <div class="block">Bean property getter:  <property>implicit</property>.
 
  <p>
@@ -332,7 +339,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setImplicit(org.apache.juneau.bean.openapi3.OAuthFlow)">
 <h3>setImplicit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-153">setImplicit</a></span><wbr><span class="parameters">(<a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-143">setImplicit</a></span><wbr><span class="parameters">(<a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>items</property>.
 
  <p>
@@ -350,7 +357,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPassword()">
 <h3>getPassword</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-166">getPassword</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-156">getPassword</a></span>()</div>
 <div class="block">Bean property getter:  <property>password</property>.
 
  <p>
@@ -364,7 +371,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setPassword(org.apache.juneau.bean.openapi3.OAuthFlow)">
 <h3>setPassword</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-182">setPassword</a></span><wbr><span class="parameters">(<a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-172">setPassword</a></span><wbr><span class="parameters">(<a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>items</property>.
 
  <p>
@@ -382,7 +389,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getClientCredentials()">
 <h3>getClientCredentials</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-195">getClientCredentials</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-185">getClientCredentials</a></span>()</div>
 <div class="block">Bean property getter:  <property>clientCredentials</property>.
 
  <p>
@@ -396,7 +403,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setClientCredentials(org.apache.juneau.bean.openapi3.OAuthFlow)">
 <h3>setClientCredentials</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-211">setClientCredentials</a></span><wbr><span class="parameters">(<a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-201">setClientCredentials</a></span><wbr><span class="parameters">(<a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>items</property>.
 
  <p>
@@ -414,7 +421,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAuthorizationCode()">
 <h3>getAuthorizationCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-224">getAuthorizationCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-214">getAuthorizationCode</a></span>()</div>
 <div class="block">Bean property getter:  <property>authorizationCode</property>.
 
  <p>
@@ -428,7 +435,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setAuthorizationCode(org.apache.juneau.bean.openapi3.OAuthFlow)">
 <h3>setAuthorizationCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-240">setAuthorizationCode</a></span><wbr><span class="parameters">(<a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-230">setAuthorizationCode</a></span><wbr><span class="parameters">(<a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>authorizationCode</property>.
 
  <p>
@@ -446,7 +453,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.String,java.lang.Class)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-249">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-239">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#get(java.lang.String,java.lang.Class)">OpenApiElement</a></code></span></div>
 <div class="block">Generic property getter.
@@ -469,7 +476,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-262">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-251">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#set(java.lang.String,java.lang.Object)">OpenApiElement</a></code></span></div>
 <div class="block">Generic property setter.
@@ -480,7 +487,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="OpenApiElement.html#set(java.lang.String,java.lang.Object)">set</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>property</code> - The property name to set.</dd>
+<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>.</dd>
 <dd><code>value</code> - The new value for the property.</dd>
 <dt>Returns:</dt>
 <dd>This object</dd>
@@ -490,7 +497,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="keySet()">
 <h3>keySet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-278">keySet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OAuthFlows.html#line-266">keySet</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#keySet()">OpenApiElement</a></code></span></div>
 <div class="block">Returns all the keys on this element.</div>
 <dl class="notes">

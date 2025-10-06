@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Various useful static methods for creating OpenAPI elements.
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="../../../../../index.html#jrs.OpenApi">Overview &gt; juneau-rest-server &gt; OpenAPI</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
  </ul></div>
 </section>
 <section class="summary">
@@ -116,6 +116,16 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#callback()" class="member-name-link">callback</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="Callback.html" title="class in org.apache.juneau.bean.openapi3"><code>Callback</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Components.html" title="class in org.apache.juneau.bean.openapi3">Components</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#components()" class="member-name-link">components</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="Components.html" title="class in org.apache.juneau.bean.openapi3"><code>Components</code></a> element.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Contact.html" title="class in org.apache.juneau.bean.openapi3">Contact</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#contact()" class="member-name-link">contact</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
@@ -134,81 +144,162 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates an <a href="Contact.html" title="class in org.apache.juneau.bean.openapi3"><code>Contact</code></a> element with the specified <a href="Contact.html#setName(java.lang.String)"><code>name</code></a>, <a href="Contact.html#setUrl(java.net.URI)"><code>url</code></a>,
  and <a href="Contact.html#setEmail(java.lang.String)"><code>email</code></a> attributes.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.openapi3">ExternalDocumentation</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#externalDocumentation()" class="member-name-link">externalDocumentation</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#discriminator()" class="member-name-link">discriminator</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an empty <a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.openapi3"><code>ExternalDocumentation</code></a> element.</div>
+<div class="block">Creates an empty <a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3"><code>Discriminator</code></a> element.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#discriminator(java.lang.String)" class="member-name-link">discriminator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;propertyName)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates a <a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3"><code>Discriminator</code></a> element with the specified <a href="Discriminator.html#setPropertyName(java.lang.String)"><code>propertyName</code></a> attribute.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#encoding()" class="member-name-link">encoding</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3"><code>Encoding</code></a> element.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#encoding(java.lang.String)" class="member-name-link">encoding</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentType)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an <a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3"><code>Encoding</code></a> element with the specified <a href="Encoding.html#setContentType(java.lang.String)"><code>contentType</code></a> attribute.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Example.html" title="class in org.apache.juneau.bean.openapi3">Example</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#example()" class="member-name-link">example</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="Example.html" title="class in org.apache.juneau.bean.openapi3"><code>Example</code></a> element.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.openapi3">ExternalDocumentation</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#externalDocumentation(java.lang.Object)" class="member-name-link">externalDocumentation</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#externalDocumentation()" class="member-name-link">externalDocumentation</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.openapi3"><code>ExternalDocumentation</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.openapi3">ExternalDocumentation</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#externalDocumentation(java.lang.Object)" class="member-name-link">externalDocumentation</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.openapi3"><code>ExternalDocumentation</code></a> element with the specified <a href="ExternalDocumentation.html#setUrl(java.net.URI)"><code>url</code></a>
  attribute.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.openapi3">ExternalDocumentation</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#externalDocumentation(java.lang.Object,java.lang.String)" class="member-name-link">externalDocumentation</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.openapi3">ExternalDocumentation</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#externalDocumentation(java.lang.Object,java.lang.String)" class="member-name-link">externalDocumentation</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.openapi3"><code>ExternalDocumentation</code></a> element with the specified <a href="ExternalDocumentation.html#setUrl(java.net.URI)"><code>url</code></a>
  and <a href="ExternalDocumentation.html#setDescription(java.lang.String)"><code>description</code></a> attributes.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#headerInfo()" class="member-name-link">headerInfo</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#headerInfo()" class="member-name-link">headerInfo</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an empty <a href="HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3"><code>HeaderInfo</code></a> element.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#headerInfo(org.apache.juneau.bean.openapi3.SchemaInfo)" class="member-name-link">headerInfo</a><wbr>(<a href="SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;schema)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#headerInfo(org.apache.juneau.bean.openapi3.SchemaInfo)" class="member-name-link">headerInfo</a><wbr>(<a href="SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;schema)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3"><code>HeaderInfo</code></a> element with the specified <a href="HeaderInfo.html#setSchema(org.apache.juneau.bean.openapi3.SchemaInfo)"><code>schema</code></a> attribute.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Info.html" title="class in org.apache.juneau.bean.openapi3">Info</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#info()" class="member-name-link">info</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Info.html" title="class in org.apache.juneau.bean.openapi3">Info</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#info()" class="member-name-link">info</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an empty <a href="Info.html" title="class in org.apache.juneau.bean.openapi3"><code>Info</code></a> element.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Info.html" title="class in org.apache.juneau.bean.openapi3">Info</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#info(java.lang.String,java.lang.String)" class="member-name-link">info</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Info.html" title="class in org.apache.juneau.bean.openapi3">Info</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#info(java.lang.String,java.lang.String)" class="member-name-link">info</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;version)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="Info.html" title="class in org.apache.juneau.bean.openapi3"><code>Info</code></a> element with the specified <a href="Info.html#setTitle(java.lang.String)"><code>title</code></a> and <a href="Info.html#setVersion(java.lang.String)"><code>version</code></a>
  attributes.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Items.html" title="class in org.apache.juneau.bean.openapi3">Items</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#items()" class="member-name-link">items</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Items.html" title="class in org.apache.juneau.bean.openapi3">Items</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#items()" class="member-name-link">items</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an empty <a href="Items.html" title="class in org.apache.juneau.bean.openapi3"><code>Items</code></a> element.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Items.html" title="class in org.apache.juneau.bean.openapi3">Items</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#items(java.lang.String)" class="member-name-link">items</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Items.html" title="class in org.apache.juneau.bean.openapi3">Items</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#items(java.lang.String)" class="member-name-link">items</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="Items.html" title="class in org.apache.juneau.bean.openapi3"><code>Items</code></a> element with the specified <a href="Items.html#setType(java.lang.String)"><code>type</code></a> attribute.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="License.html" title="class in org.apache.juneau.bean.openapi3">License</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#license()" class="member-name-link">license</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="License.html" title="class in org.apache.juneau.bean.openapi3">License</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#license()" class="member-name-link">license</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an empty <a href="License.html" title="class in org.apache.juneau.bean.openapi3"><code>License</code></a> element.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="License.html" title="class in org.apache.juneau.bean.openapi3">License</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#license(java.lang.String)" class="member-name-link">license</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="License.html" title="class in org.apache.juneau.bean.openapi3">License</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#license(java.lang.String)" class="member-name-link">license</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="License.html" title="class in org.apache.juneau.bean.openapi3"><code>License</code></a> element with the specified <a href="License.html#setName(java.lang.String)"><code>name</code></a> attribute.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="License.html" title="class in org.apache.juneau.bean.openapi3">License</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#license(java.lang.String,java.net.URI)" class="member-name-link">license</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="License.html" title="class in org.apache.juneau.bean.openapi3">License</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#license(java.lang.String,java.net.URI)" class="member-name-link">license</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;url)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="License.html" title="class in org.apache.juneau.bean.openapi3"><code>License</code></a> element with the specified <a href="License.html#setName(java.lang.String)"><code>name</code></a> and <a href="License.html#setUrl(java.net.URI)"><code>url</code></a> attributes.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#openApi()" class="member-name-link">openApi</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Link.html" title="class in org.apache.juneau.bean.openapi3">Link</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#link()" class="member-name-link">link</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="Link.html" title="class in org.apache.juneau.bean.openapi3"><code>Link</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#mediaType()" class="member-name-link">mediaType</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an empty <a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3"><code>OpenApi</code></a> element.</div>
+<div class="block">Creates an empty <a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3"><code>MediaType</code></a> element.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#oAuthFlow()" class="member-name-link">oAuthFlow</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3"><code>OAuthFlow</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#oAuthFlows()" class="member-name-link">oAuthFlows</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3"><code>OAuthFlows</code></a> element.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#openApi(org.apache.juneau.bean.openapi3.Info)" class="member-name-link">openApi</a><wbr>(<a href="Info.html" title="class in org.apache.juneau.bean.openapi3">Info</a>&nbsp;info)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#openApi()" class="member-name-link">openApi</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3"><code>OpenApi</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#openApi(org.apache.juneau.bean.openapi3.Info)" class="member-name-link">openApi</a><wbr>(<a href="Info.html" title="class in org.apache.juneau.bean.openapi3">Info</a>&nbsp;info)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3"><code>OpenApi</code></a> element with the specified <a href="OpenApi.html#setInfo(org.apache.juneau.bean.openapi3.Info)"><code>info</code></a> attribute.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Operation.html" title="class in org.apache.juneau.bean.openapi3">Operation</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#operation()" class="member-name-link">operation</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="Operation.html" title="class in org.apache.juneau.bean.openapi3"><code>Operation</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Parameter.html" title="class in org.apache.juneau.bean.openapi3">Parameter</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parameter()" class="member-name-link">parameter</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="Parameter.html" title="class in org.apache.juneau.bean.openapi3"><code>Parameter</code></a> element.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Parameter.html" title="class in org.apache.juneau.bean.openapi3">Parameter</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parameter(java.lang.String,java.lang.String)" class="member-name-link">parameter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates a <a href="Parameter.html" title="class in org.apache.juneau.bean.openapi3"><code>Parameter</code></a> element with the specified <a href="Parameter.html#setIn(java.lang.String)"><code>in</code></a> and <a href="Parameter.html#setName(java.lang.String)"><code>name</code></a> attributes.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="PathItem.html" title="class in org.apache.juneau.bean.openapi3">PathItem</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#pathItem()" class="member-name-link">pathItem</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="PathItem.html" title="class in org.apache.juneau.bean.openapi3"><code>PathItem</code></a> element.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="RequestBodyInfo.html" title="class in org.apache.juneau.bean.openapi3">RequestBodyInfo</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#requestBodyInfo()" class="member-name-link">requestBodyInfo</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="RequestBodyInfo.html" title="class in org.apache.juneau.bean.openapi3"><code>RequestBodyInfo</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#response()" class="member-name-link">response</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="Response.html" title="class in org.apache.juneau.bean.openapi3"><code>Response</code></a> element.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#response(java.lang.String)" class="member-name-link">response</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates a <a href="Response.html" title="class in org.apache.juneau.bean.openapi3"><code>Response</code></a> element with the specified <a href="Response.html#setDescription(java.lang.String)"><code>description</code></a> attribute.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#schemaInfo()" class="member-name-link">schemaInfo</a>()</code></div>
@@ -220,39 +311,54 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3"><code>SchemaInfo</code></a> element with the specified <a href="SchemaInfo.html#setType(java.lang.String)"><code>type</code></a> attribute.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="SecuritySchemeInfo.html" title="class in org.apache.juneau.bean.openapi3">SecuritySchemeInfo</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#securitySchemeInfo()" class="member-name-link">securitySchemeInfo</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="SecurityRequirement.html" title="class in org.apache.juneau.bean.openapi3">SecurityRequirement</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#securityRequirement()" class="member-name-link">securityRequirement</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an empty <a href="SecuritySchemeInfo.html" title="class in org.apache.juneau.bean.openapi3"><code>SecuritySchemeInfo</code></a> element.</div>
+<div class="block">Creates an empty <a href="SecurityRequirement.html" title="class in org.apache.juneau.bean.openapi3"><code>SecurityRequirement</code></a> element.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="SecuritySchemeInfo.html" title="class in org.apache.juneau.bean.openapi3">SecuritySchemeInfo</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#securitySchemeInfo(java.lang.String)" class="member-name-link">securitySchemeInfo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#securitySchemeInfo()" class="member-name-link">securitySchemeInfo</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="SecuritySchemeInfo.html" title="class in org.apache.juneau.bean.openapi3"><code>SecuritySchemeInfo</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="SecuritySchemeInfo.html" title="class in org.apache.juneau.bean.openapi3">SecuritySchemeInfo</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#securitySchemeInfo(java.lang.String)" class="member-name-link">securitySchemeInfo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="SecuritySchemeInfo.html" title="class in org.apache.juneau.bean.openapi3"><code>SecuritySchemeInfo</code></a> element with the specified <a href="SecuritySchemeInfo.html#setType(java.lang.String)"><code>type</code></a> attribute.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Server.html" title="class in org.apache.juneau.bean.openapi3">Server</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#server()" class="member-name-link">server</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Server.html" title="class in org.apache.juneau.bean.openapi3">Server</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#server()" class="member-name-link">server</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an empty <a href="Server.html" title="class in org.apache.juneau.bean.openapi3"><code>Server</code></a> element.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Server.html" title="class in org.apache.juneau.bean.openapi3">Server</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#server(java.net.URI)" class="member-name-link">server</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;url)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Server.html" title="class in org.apache.juneau.bean.openapi3">Server</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#server(java.net.URI)" class="member-name-link">server</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;url)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="Server.html" title="class in org.apache.juneau.bean.openapi3"><code>Server</code></a> element with the specified <a href="Server.html#setUrl(java.net.URI)"><code>url</code></a> attribute.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Tag.html" title="class in org.apache.juneau.bean.openapi3">Tag</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#tag()" class="member-name-link">tag</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ServerVariable.html" title="class in org.apache.juneau.bean.openapi3">ServerVariable</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#serverVariable()" class="member-name-link">serverVariable</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="ServerVariable.html" title="class in org.apache.juneau.bean.openapi3"><code>ServerVariable</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ServerVariable.html" title="class in org.apache.juneau.bean.openapi3">ServerVariable</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#serverVariable(java.lang.String)" class="member-name-link">serverVariable</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;defaultValue)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an empty <a href="Tag.html" title="class in org.apache.juneau.bean.openapi3"><code>Tag</code></a> element.</div>
+<div class="block">Creates a <a href="ServerVariable.html" title="class in org.apache.juneau.bean.openapi3"><code>ServerVariable</code></a> element with the specified <a href="ServerVariable.html#setDefault(java.lang.String)"><code>default</code></a> attribute.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Tag.html" title="class in org.apache.juneau.bean.openapi3">Tag</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#tag(java.lang.String)" class="member-name-link">tag</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#tag()" class="member-name-link">tag</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates an empty <a href="Tag.html" title="class in org.apache.juneau.bean.openapi3"><code>Tag</code></a> element.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Tag.html" title="class in org.apache.juneau.bean.openapi3">Tag</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#tag(java.lang.String)" class="member-name-link">tag</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an <a href="Tag.html" title="class in org.apache.juneau.bean.openapi3"><code>Tag</code></a> element with the specified <a href="Tag.html#setName(java.lang.String)"><code>name</code></a> attribute.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Xml.html" title="class in org.apache.juneau.bean.openapi3">Xml</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#xml()" class="member-name-link">xml</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Xml.html" title="class in org.apache.juneau.bean.openapi3">Xml</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#xml()" class="member-name-link">xml</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates an empty <a href="Xml.html" title="class in org.apache.juneau.bean.openapi3"><code>Xml</code></a> element.</div>
 </div>
 </div>
@@ -619,6 +725,249 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Xml.html" title="class in org.apache.juneau.bean.openapi3">Xml</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-299">xml</a></span>()</div>
 <div class="block">Creates an empty <a href="Xml.html" title="class in org.apache.juneau.bean.openapi3"><code>Xml</code></a> element.</div>
 <dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="operation()">
+<h3>operation</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Operation.html" title="class in org.apache.juneau.bean.openapi3">Operation</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-308">operation</a></span>()</div>
+<div class="block">Creates an empty <a href="Operation.html" title="class in org.apache.juneau.bean.openapi3"><code>Operation</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="parameter()">
+<h3>parameter</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Parameter.html" title="class in org.apache.juneau.bean.openapi3">Parameter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-317">parameter</a></span>()</div>
+<div class="block">Creates an empty <a href="Parameter.html" title="class in org.apache.juneau.bean.openapi3"><code>Parameter</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="parameter(java.lang.String,java.lang.String)">
+<h3>parameter</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Parameter.html" title="class in org.apache.juneau.bean.openapi3">Parameter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-328">parameter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="block">Creates a <a href="Parameter.html" title="class in org.apache.juneau.bean.openapi3"><code>Parameter</code></a> element with the specified <a href="Parameter.html#setIn(java.lang.String)"><code>in</code></a> and <a href="Parameter.html#setName(java.lang.String)"><code>name</code></a> attributes.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>in</code> - The <a href="Parameter.html#setIn(java.lang.String)"><code>in</code></a> attribute.</dd>
+<dd><code>name</code> - The <a href="Parameter.html#setName(java.lang.String)"><code>name</code></a> attribute.</dd>
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="pathItem()">
+<h3>pathItem</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PathItem.html" title="class in org.apache.juneau.bean.openapi3">PathItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-337">pathItem</a></span>()</div>
+<div class="block">Creates an empty <a href="PathItem.html" title="class in org.apache.juneau.bean.openapi3"><code>PathItem</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="response()">
+<h3>response</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-346">response</a></span>()</div>
+<div class="block">Creates an empty <a href="Response.html" title="class in org.apache.juneau.bean.openapi3"><code>Response</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="response(java.lang.String)">
+<h3>response</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Response.html" title="class in org.apache.juneau.bean.openapi3">Response</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-356">response</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</span></div>
+<div class="block">Creates a <a href="Response.html" title="class in org.apache.juneau.bean.openapi3"><code>Response</code></a> element with the specified <a href="Response.html#setDescription(java.lang.String)"><code>description</code></a> attribute.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>description</code> - The <a href="Response.html#setDescription(java.lang.String)"><code>description</code></a> attribute.</dd>
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="components()">
+<h3>components</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Components.html" title="class in org.apache.juneau.bean.openapi3">Components</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-365">components</a></span>()</div>
+<div class="block">Creates an empty <a href="Components.html" title="class in org.apache.juneau.bean.openapi3"><code>Components</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="securityRequirement()">
+<h3>securityRequirement</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SecurityRequirement.html" title="class in org.apache.juneau.bean.openapi3">SecurityRequirement</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-374">securityRequirement</a></span>()</div>
+<div class="block">Creates an empty <a href="SecurityRequirement.html" title="class in org.apache.juneau.bean.openapi3"><code>SecurityRequirement</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="requestBodyInfo()">
+<h3>requestBodyInfo</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="RequestBodyInfo.html" title="class in org.apache.juneau.bean.openapi3">RequestBodyInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-383">requestBodyInfo</a></span>()</div>
+<div class="block">Creates an empty <a href="RequestBodyInfo.html" title="class in org.apache.juneau.bean.openapi3"><code>RequestBodyInfo</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="example()">
+<h3>example</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Example.html" title="class in org.apache.juneau.bean.openapi3">Example</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-392">example</a></span>()</div>
+<div class="block">Creates an empty <a href="Example.html" title="class in org.apache.juneau.bean.openapi3"><code>Example</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="link()">
+<h3>link</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Link.html" title="class in org.apache.juneau.bean.openapi3">Link</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-401">link</a></span>()</div>
+<div class="block">Creates an empty <a href="Link.html" title="class in org.apache.juneau.bean.openapi3"><code>Link</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="callback()">
+<h3>callback</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Callback.html" title="class in org.apache.juneau.bean.openapi3">Callback</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-410">callback</a></span>()</div>
+<div class="block">Creates an empty <a href="Callback.html" title="class in org.apache.juneau.bean.openapi3"><code>Callback</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="discriminator()">
+<h3>discriminator</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-419">discriminator</a></span>()</div>
+<div class="block">Creates an empty <a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3"><code>Discriminator</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="discriminator(java.lang.String)">
+<h3>discriminator</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3">Discriminator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-429">discriminator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;propertyName)</span></div>
+<div class="block">Creates a <a href="Discriminator.html" title="class in org.apache.juneau.bean.openapi3"><code>Discriminator</code></a> element with the specified <a href="Discriminator.html#setPropertyName(java.lang.String)"><code>propertyName</code></a> attribute.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>propertyName</code> - The <a href="Discriminator.html#setPropertyName(java.lang.String)"><code>propertyName</code></a> attribute.</dd>
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="encoding()">
+<h3>encoding</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-438">encoding</a></span>()</div>
+<div class="block">Creates an empty <a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3"><code>Encoding</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="encoding(java.lang.String)">
+<h3>encoding</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-448">encoding</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentType)</span></div>
+<div class="block">Creates an <a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3"><code>Encoding</code></a> element with the specified <a href="Encoding.html#setContentType(java.lang.String)"><code>contentType</code></a> attribute.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>contentType</code> - The <a href="Encoding.html#setContentType(java.lang.String)"><code>contentType</code></a> attribute.</dd>
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="mediaType()">
+<h3>mediaType</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-457">mediaType</a></span>()</div>
+<div class="block">Creates an empty <a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3"><code>MediaType</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="oAuthFlow()">
+<h3>oAuthFlow</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlow</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-466">oAuthFlow</a></span>()</div>
+<div class="block">Creates an empty <a href="OAuthFlow.html" title="class in org.apache.juneau.bean.openapi3"><code>OAuthFlow</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="oAuthFlows()">
+<h3>oAuthFlows</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3">OAuthFlows</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-475">oAuthFlows</a></span>()</div>
+<div class="block">Creates an empty <a href="OAuthFlows.html" title="class in org.apache.juneau.bean.openapi3"><code>OAuthFlows</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="serverVariable()">
+<h3>serverVariable</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ServerVariable.html" title="class in org.apache.juneau.bean.openapi3">ServerVariable</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-484">serverVariable</a></span>()</div>
+<div class="block">Creates an empty <a href="ServerVariable.html" title="class in org.apache.juneau.bean.openapi3"><code>ServerVariable</code></a> element.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The new element.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="serverVariable(java.lang.String)">
+<h3>serverVariable</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ServerVariable.html" title="class in org.apache.juneau.bean.openapi3">ServerVariable</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApiBuilder.html#line-494">serverVariable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;defaultValue)</span></div>
+<div class="block">Creates a <a href="ServerVariable.html" title="class in org.apache.juneau.bean.openapi3"><code>ServerVariable</code></a> element with the specified <a href="ServerVariable.html#setDefault(java.lang.String)"><code>default</code></a> attribute.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>defaultValue</code> - The <a href="ServerVariable.html#setDefault(java.lang.String)"><code>default</code></a> attribute.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>
