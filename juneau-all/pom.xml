@@ -80,7 +80,8 @@
 							<include>org.apache.juneau:juneau-bean-common</include>
 							<include>org.apache.juneau:juneau-bean-html5</include>
 							<include>org.apache.juneau:juneau-bean-jsonschema</include>
-							<include>org.apache.juneau:juneau-bean-openapi3</include>
+							<include>org.apache.juneau:juneau-bean-openapi-v3</include>
+							<include>org.apache.juneau:juneau-bean-swagger-v2</include>
 							<include>org.apache.juneau:juneau-rest-server</include>
 							<include>org.apache.juneau:juneau-rest-client</include>
 							<include>org.apache.juneau:juneau-rest-mock</include>

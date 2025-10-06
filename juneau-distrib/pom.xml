@@ -201,7 +201,7 @@
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-bean-openapi3</artifactId>
+									<artifactId>juneau-bean-openapi-v3</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
@@ -209,15 +209,15 @@
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-bean-openapi3</artifactId>
+									<artifactId>juneau-bean-openapi-v3</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-bean-openapi3</artifactId>
+									<artifactId>juneau-bean-openapi-v3</artifactId>
 									<version>${project.version}</version>
-									<destFileName>org.apache.juneau.bean.openapi3_${project.version}.jar</destFileName>
+									<destFileName>org.apache.juneau.bean.openapi.v3_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<!-- juneau-rest-server -->
