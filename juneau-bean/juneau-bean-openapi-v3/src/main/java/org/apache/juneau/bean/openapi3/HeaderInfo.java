@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -24,16 +25,37 @@ import org.apache.juneau.internal.*;
 /**
  * Describes a single HTTP header.
  *
+ * <p>
+ * The Header Object follows the structure of the Parameter Object with the following changes: it does not have a 
+ * <c>name</c> field since the header name is specified in the key, and it does not have a <c>required</c> field 
+ * since headers are always optional in HTTP.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Header Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>description</c> (string) - A brief description of the header (CommonMark syntax may be used)
+ * 	<li><c>required</c> (boolean) - Determines whether this header is mandatory (default is <jk>false</jk>)
+ * 	<li><c>deprecated</c> (boolean) - Specifies that a header is deprecated
+ * 	<li><c>allowEmptyValue</c> (boolean) - Sets the ability to pass empty-valued headers
+ * 	<li><c>style</c> (string) - Describes how the header value will be serialized
+ * 	<li><c>explode</c> (boolean) - When true, header values of type array or object generate separate headers for each value
+ * 	<li><c>allowReserved</c> (boolean) - Determines whether the header value should allow reserved characters
+ * 	<li><c>schema</c> ({@link SchemaInfo}) - The schema defining the type used for the header
+ * 	<li><c>example</c> (any) - Example of the header's potential value
+ * 	<li><c>examples</c> (map of {@link Example}) - Examples of the header's potential value
+ * </ul>
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	HeaderInfo x = <jsm>headerInfo</jsm>(<js>"integer"</js>).description(<js>"The number of allowed requests in the current period"</js>);
+ * 	HeaderInfo <jv>x</jv> = <jsm>headerInfo</jsm>(<js>"integer"</js>).description(<js>"The number of allowed requests in the current period"</js>);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	String <jv>json</jv> = <jv>x</jv>.toString();
  * </p>
  * <p class='bcode'>
  * 	<jc>// Output</jc>
@@ -42,8 +64,13 @@ import org.apache.juneau.internal.*;
  * 		<js>"type"</js>: <js>"integer"</js>
  * 	}
  * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#header-object">OpenAPI Specification &gt; Header Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/describing-parameters/">OpenAPI Describing Parameters</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="description,explode,deprecated,allowEmptyValue,allowReserved,schema,example,examples,$ref,*")
 @FluentSetters
 public class HeaderInfo extends OpenApiElement {
 
@@ -98,6 +125,12 @@ public class HeaderInfo extends OpenApiElement {
 	@Override /* OpenApiElement */
 	protected HeaderInfo strict() {
 		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public HeaderInfo strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 
@@ -158,6 +191,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * 		<li><js>"boolean"</js>
 	 * 		<li><js>"array"</js>
 	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public HeaderInfo setRequired(Boolean value) {
@@ -185,6 +219,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public HeaderInfo setExplode(Boolean value) {
@@ -212,6 +247,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public HeaderInfo setDeprecated(Boolean value) {
@@ -239,6 +275,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public HeaderInfo setAllowEmptyValue(Boolean value) {
@@ -266,6 +303,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public HeaderInfo setAllowReserved(Boolean value) {
@@ -374,11 +412,13 @@ public class HeaderInfo extends OpenApiElement {
 	/**
 	 * Adds a single value to the <property>examples</property> property.
 	 *
-	 * @param name The example name.
-	 * @param example The example.
+	 * @param name The example name.  Must not be <jk>null</jk>.
+	 * @param example The example.  Must not be <jk>null</jk>.
 	 * @return This object
 	 */
 	public HeaderInfo addExample(String name, Example example) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("example", example);
 		examples = mapBuilder(examples).sparse().add(name, example).build();
 		return this;
 	}
@@ -389,8 +429,7 @@ public class HeaderInfo extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> (T)getDescription();
 			case "required" -> toType(getRequired(), type);
@@ -408,18 +447,18 @@ public class HeaderInfo extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public HeaderInfo set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
-			case "description" -> setDescription(Utils.s(value));
-			case "required" -> setRequired(toBoolean(value));
-			case "explode" -> setExplode(toBoolean(value));
-			case "deprecated" -> setDeprecated(toBoolean(value));
-			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
 			case "$ref" -> setRef(Utils.s(value));
-			case "schema" -> setSchema(toType(value, SchemaInfo.class));
-			case "x-example" -> setExample(Utils.s(value));
+			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
+			case "allowReserved" -> setAllowReserved(toBoolean(value));
+			case "deprecated" -> setDeprecated(toBoolean(value));
+			case "description" -> setDescription(Utils.s(value));
 			case "examples" -> setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
+			case "explode" -> setExplode(toBoolean(value));
+			case "required" -> setRequired(toBoolean(value));
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			case "x-example" -> setExample(value);
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -430,16 +469,16 @@ public class HeaderInfo extends OpenApiElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
-			.addIf(description != null, "description")
-			.addIf(required != null, "required")
-			.addIf(explode != null, "explode")
-			.addIf(deprecated != null, "deprecated")
-			.addIf(allowEmptyValue != null, "allowEmptyValue")
 			.addIf(ref != null, "$ref")
+			.addIf(allowEmptyValue != null, "allowEmptyValue")
 			.addIf(allowReserved != null, "allowReserved")
-			.addIf(schema != null, "schema")
-			.addIf(example != null, "example")
+			.addIf(deprecated != null, "deprecated")
+			.addIf(description != null, "description")
 			.addIf(examples != null, "examples")
+			.addIf(explode != null, "explode")
+			.addIf(required != null, "required")
+			.addIf(schema != null, "schema")
+			.addIf(example != null, "x-example")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 

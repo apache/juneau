@@ -20,7 +20,6 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
@@ -28,13 +27,60 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.objecttools.*;
 
 /**
- * This is the root document object for the API specification.
+ * This is the root document object for the Swagger 2.0 API specification.
+ *
+ * <p>
+ * The Swagger Object is the root document that describes an entire API. It contains metadata about the API,
+ * available paths and operations, parameters, responses, security definitions, and other information. This is 
+ * the Swagger 2.0 specification (predecessor to OpenAPI 3.0).
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The Swagger Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>swagger</c> (string, REQUIRED) - The Swagger Specification version (must be <js>"2.0"</js>)
+ * 	<li><c>info</c> ({@link Info}, REQUIRED) - Provides metadata about the API
+ * 	<li><c>host</c> (string) - The host (name or IP) serving the API
+ * 	<li><c>basePath</c> (string) - The base path on which the API is served (relative to host)
+ * 	<li><c>schemes</c> (array of string) - The transfer protocols of the API (e.g., <js>"http"</js>, <js>"https"</js>)
+ * 	<li><c>consumes</c> (array of string) - A list of MIME types the APIs can consume
+ * 	<li><c>produces</c> (array of string) - A list of MIME types the APIs can produce
+ * 	<li><c>paths</c> (map of {@link OperationMap}, REQUIRED) - The available paths and operations for the API
+ * 	<li><c>definitions</c> (map of {@link SchemaInfo}) - Schema definitions that can be referenced
+ * 	<li><c>parameters</c> (map of {@link ParameterInfo}) - Parameters definitions that can be referenced
+ * 	<li><c>responses</c> (map of {@link ResponseInfo}) - Response definitions that can be referenced
+ * 	<li><c>securityDefinitions</c> (map of {@link SecurityScheme}) - Security scheme definitions
+ * 	<li><c>security</c> (array of map) - Security requirements applied to all operations
+ * 	<li><c>tags</c> (array of {@link Tag}) - A list of tags used by the specification with additional metadata
+ * 	<li><c>externalDocs</c> ({@link ExternalDocumentation}) - Additional external documentation
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create a Swagger document</jc>
+ * 	Swagger <jv>doc</jv> = <jk>new</jk> Swagger()
+ * 		.setSwagger(<js>"2.0"</js>)
+ * 		.setInfo(
+ * 			<jk>new</jk> Info()
+ * 				.setTitle(<js>"Pet Store API"</js>)
+ * 				.setVersion(<js>"1.0.0"</js>)
+ * 		)
+ * 		.setHost(<js>"petstore.swagger.io"</js>)
+ * 		.setBasePath(<js>"/v2"</js>)
+ * 		.setSchemes(<js>"https"</js>)
+ * 		.addPath(<js>"/pets"</js>, <js>"get"</js>, 
+ * 			<jk>new</jk> Operation()
+ * 				.setSummary(<js>"List all pets"</js>)
+ * 				.addResponse(<js>"200"</js>, <jk>new</jk> ResponseInfo(<js>"Success"</js>))
+ * 		);
+ * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/">Swagger 2.0 Specification</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/basic-structure/">Swagger Basic Structure</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
-@Bean(properties="swagger,info,tags,externalDocs,basePath,schemes,consumes,produces,paths,definitions,parameters,responses,securityDefinitions,security,*")
 @FluentSetters
 public class Swagger extends SwaggerElement {
 
@@ -244,11 +290,13 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>definitions</property> property.
 	 *
-	 * @param name A definition name.
-	 * @param schema The schema that the name defines.
+	 * @param name A definition name.  Must not be <jk>null</jk>.
+	 * @param schema The schema that the name defines.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Swagger addDefinition(String name, JsonMap schema) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("schema", schema);
 		definitions = mapBuilder(definitions).sparse().add(name, schema).build();
 		return this;
 	}
@@ -334,6 +382,7 @@ public class Swagger extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Swagger setInfo(Info value) {
@@ -375,11 +424,13 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>parameter</property> property.
 	 *
-	 * @param name The parameter name.
-	 * @param parameter The parameter definition.
+	 * @param name The parameter name.  Must not be <jk>null</jk>.
+	 * @param parameter The parameter definition.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Swagger addParameter(String name, ParameterInfo parameter) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("parameter", parameter);
 		parameters = mapBuilder(parameters).sparse().add(name, parameter).build();
 		return this;
 	}
@@ -405,6 +456,7 @@ public class Swagger extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Swagger setPaths(Map<String,OperationMap> value) {
@@ -418,12 +470,15 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>paths</property> property.
 	 *
-	 * @param path The path template.
-	 * @param methodName The HTTP method name.
-	 * @param operation The operation that describes the path.
+	 * @param path The path template.  Must not be <jk>null</jk>.
+	 * @param methodName The HTTP method name.  Must not be <jk>null</jk>.
+	 * @param operation The operation that describes the path.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Swagger addPath(String path, String methodName, Operation operation) {
+		assertArgNotNull("path", path);
+		assertArgNotNull("methodName", methodName);
+		assertArgNotNull("operation", operation);
 		if (paths == null)
 			paths = new TreeMap<>(PATH_COMPARATOR);
 		getPaths().computeIfAbsent(path, k -> new OperationMap()).put(methodName, operation);
@@ -525,11 +580,13 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>responses</property> property.
 	 *
-	 * @param name The response name.
-	 * @param response The response definition.
+	 * @param name The response name.  Must not be <jk>null</jk>.
+	 * @param response The response definition.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Swagger addResponse(String name, ResponseInfo response) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("response", response);
 		responses = mapBuilder(responses).sparse().add(name, response).build();
 		return this;
 	}
@@ -642,12 +699,13 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>securityDefinitions</property> property.
 	 *
-	 * @param scheme The security scheme that applies to this operation
+	 * @param scheme The security scheme that applies to this operation  Must not be <jk>null</jk>.
 	 * @param alternatives
 	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
 	 * @return This object.
 	 */
 	public Swagger addSecurity(String scheme, String...alternatives) {
+		assertArgNotNull("scheme", scheme);
 		Map<String,List<String>> m = map();
 		m.put(scheme, alist(alternatives));
 		security = listBuilder(security).sparse().addAll(Collections.singleton(m)).build();
@@ -688,11 +746,13 @@ public class Swagger extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>securityDefinitions</property> property.
 	 *
-	 * @param name A security name.
-	 * @param securityScheme A security schema.
+	 * @param name A security name.  Must not be <jk>null</jk>.
+	 * @param securityScheme A security schema.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Swagger addSecurityDefinition(String name, SecurityScheme securityScheme) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("securityScheme", securityScheme);
 		securityDefinitions = mapBuilder(securityDefinitions).sparse().add(name, securityScheme).build();
 		return this;
 	}
@@ -718,6 +778,7 @@ public class Swagger extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Swagger setSwagger(String value) {
@@ -784,21 +845,24 @@ public class Swagger extends SwaggerElement {
 	/**
 	 * Shortcut for calling <c>getPaths().get(path);</c>
 	 *
-	 * @param path The path (e.g. <js>"/foo"</js>).
+	 * @param path The path (e.g. <js>"/foo"</js>).  Must not be <jk>null</jk>.
 	 * @return The operation map for the specified path, or <jk>null</jk> if it doesn't exist.
 	 */
 	public OperationMap getPath(String path) {
+		assertArgNotNull("path", path);
 		return getPaths().get(path);
 	}
 
 	/**
 	 * Shortcut for calling <c>getPaths().get(path).get(operation);</c>
 	 *
-	 * @param path The path (e.g. <js>"/foo"</js>).
-	 * @param operation The HTTP operation (e.g. <js>"get"</js>).
+	 * @param path The path (e.g. <js>"/foo"</js>).  Must not be <jk>null</jk>.
+	 * @param operation The HTTP operation (e.g. <js>"get"</js>).  Must not be <jk>null</jk>.
 	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
 	 */
 	public Operation getOperation(String path, String operation) {
+		assertArgNotNull("path", path);
+		assertArgNotNull("operation", operation);
 		var om = getPath(path);
 		if (om == null)
 			return null;
@@ -808,12 +872,15 @@ public class Swagger extends SwaggerElement {
 	/**
 	 * Shortcut for calling <c>getPaths().get(path).get(operation).getResponse(status);</c>
 	 *
-	 * @param path The path (e.g. <js>"/foo"</js>).
-	 * @param operation The HTTP operation (e.g. <js>"get"</js>).
-	 * @param status The HTTP response status (e.g. <js>"200"</js>).
+	 * @param path The path (e.g. <js>"/foo"</js>).  Must not be <jk>null</jk>.
+	 * @param operation The HTTP operation (e.g. <js>"get"</js>).  Must not be <jk>null</jk>.
+	 * @param status The HTTP response status (e.g. <js>"200"</js>).  Must not be <jk>null</jk>.
 	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
 	 */
 	public ResponseInfo getResponseInfo(String path, String operation, String status) {
+		assertArgNotNull("path", path);
+		assertArgNotNull("operation", operation);
+		assertArgNotNull("status", status);
 		var om = getPath(path);
 		if (om == null)
 			return null;
@@ -838,13 +905,16 @@ public class Swagger extends SwaggerElement {
 	/**
 	 * Convenience method for calling <c>getPath(path).get(method).getParameter(in,name);</c>
 	 *
-	 * @param path The HTTP path.
-	 * @param method The HTTP method.
-	 * @param in The parameter type.
-	 * @param name The parameter name.
+	 * @param path The HTTP path.  Must not be <jk>null</jk>.
+	 * @param method The HTTP method.  Must not be <jk>null</jk>.
+	 * @param in The parameter type.  Must not be <jk>null</jk>.
+	 * @param name The parameter name.  Can be <jk>null</jk> for parameter type <c>body</c>.
 	 * @return The parameter information or <jk>null</jk> if not found.
 	 */
 	public ParameterInfo getParameterInfo(String path, String method, String in, String name) {
+		assertArgNotNull("path", path);
+		assertArgNotNull("method", method);
+		assertArgNotNull("in", in);
 		var om = getPath(path);
 		if (om != null) {
 			var o = om.get(method);
@@ -861,8 +931,7 @@ public class Swagger extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "basePath" -> toType(getBasePath(), type);
 			case "consumes" -> toType(getConsumes(), type);
@@ -886,8 +955,7 @@ public class Swagger extends SwaggerElement {
 	@SuppressWarnings("rawtypes")
 	@Override /* SwaggerElement */
 	public Swagger set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "basePath" -> setBasePath(Utils.s(value));
 			case "consumes" -> setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
@@ -950,13 +1018,13 @@ public class Swagger extends SwaggerElement {
 	 * Resolves a <js>"$ref"</js> tags to nodes in this swagger document.
 	 *
 	 * @param <T> The class to convert the reference to.
-	 * @param ref The ref tag value.
-	 * @param c The class to convert the reference to.
-	 * @return The referenced node, or <jk>null</jk> if the ref was <jk>null</jk> or empty or not found.
+	 * @param ref The ref tag value.  Must not be <jk>null</jk> or blank.
+	 * @param c The class to convert the reference to.  Must not be <jk>null</jk>.
+	 * @return The referenced node, or <jk>null</jk> if not found.
 	 */
 	public <T> T findRef(String ref, Class<T> c) {
-		if (Utils.isEmpty(ref))
-			return null;
+		assertArgNotNullOrBlank("ref", ref);
+		assertArgNotNull("c", c);
 		if (! ref.startsWith("#/"))
 			throw new BasicRuntimeException("Unsupported reference:  ''{0}''", ref);
 		try {
@@ -965,4 +1033,31 @@ public class Swagger extends SwaggerElement {
 			throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, className(c));
 		}
 	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @return This object.
+	 */
+	@Override
+	public Swagger strict() {
+		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public Swagger strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
 }

@@ -772,6 +772,83 @@ public class BctAssertions {
 	}
 
 	/**
+	 * Asserts that a Map contains the expected key/value pairs using flexible comparison logic.
+	 *
+	 * <h5 class='section'>Map Entry Serialization:</h5>
+	 * <p>Map entries are serialized to strings as key/value pairs in the format <js>"key=value"</js>.
+	 * Nested maps and collections are supported with appropriate formatting.</p>
+	 *
+	 * <h5 class='section'>Testing Nested Maps and Collections:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test simple map entries</jc>
+	 *    Map&lt;String,String&gt; <jv>simpleMap</jv> = Map.<jsm>of</jsm>(<js>"a"</js>, <js>"1"</js>, <js>"b"</js>, <js>"2"</js>);
+	 *    <jsm>assertMap</jsm>(<jv>simpleMap</jv>, <js>"a=1"</js>, <js>"b=2"</js>);
+	 *
+	 *    <jc>// Test nested maps</jc>
+	 *    Map&lt;String,Map&lt;String,Integer&gt;&gt; <jv>nestedMap</jv> = Map.<jsm>of</jsm>(<js>"a"</js>, Map.<jsm>of</jsm>(<js>"b"</js>, 1));
+	 *    <jsm>assertMap</jsm>(<jv>nestedMap</jv>, <js>"a={b=1}"</js>);
+	 *
+	 *    <jc>// Test maps with arrays/collections</jc>
+	 *    Map&lt;String,Map&lt;String,Integer[]&gt;&gt; <jv>mapWithArrays</jv> = Map.<jsm>of</jsm>(<js>"a"</js>, Map.<jsm>of</jsm>(<js>"b"</js>, <jk>new</jk> Integer[]{1,2}));
+	 *    <jsm>assertMap</jsm>(<jv>mapWithArrays</jv>, <js>"a={b=[1,2]}"</js>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Comparison Modes:</h5>
+	 * <p>The method supports the same comparison modes as {@link #assertList(Object, Object...)}:</p>
+	 *
+	 * <h6 class='section'>1. String Comparison (Readable Format):</h6>
+	 * <p class='bjava'>
+	 *    <jc>// Map entries are converted to strings and compared as strings</jc>
+	 *    <jsm>assertMap</jsm>(Map.<jsm>of</jsm>(<js>"key1"</js>, <js>"value1"</js>), <js>"key1=value1"</js>);
+	 *    <jsm>assertMap</jsm>(Map.<jsm>of</jsm>(<js>"count"</js>, 42), <js>"count=42"</js>);
+	 * </p>
+	 *
+	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
+	 * <p class='bjava'>
+	 *    <jc>// Use Predicate&lt;Map.Entry&lt;K,V&gt;&gt; for functional testing</jc>
+	 *    Predicate&lt;Map.Entry&lt;String,Integer&gt;&gt; <jv>valueGreaterThanTen</jv> = <jv>entry</jv> -&gt; <jv>entry</jv>.getValue() &gt; 10;
+	 *    <jsm>assertMap</jsm>(Map.<jsm>of</jsm>(<js>"count"</js>, 42), <jv>valueGreaterThanTen</jv>);
+	 * </p>
+	 *
+	 * <h6 class='section'>3. Object Equality (Direct Comparison):</h6>
+	 * <p class='bjava'>
+	 *    <jc>// Non-String, non-Predicate objects use <jsm>Objects.equals</jsm>() comparison</jc>
+	 *    <jsm>assertMap</jsm>(Map.<jsm>of</jsm>(<js>"key"</js>, <jv>myObject</jv>), <jv>expectedEntry</jv>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Map Ordering Behavior:</h5>
+	 * <p>The {@link Listifiers#mapListifier()} method ensures deterministic ordering for map entries:</p>
+	 * <ul>
+	 *    <li><b>{@link SortedMap} (TreeMap, etc.):</b> Preserves existing sort order</li>
+	 *    <li><b>{@link LinkedHashMap}:</b> Preserves insertion order</li>
+	 *    <li><b>{@link HashMap} and other unordered Maps:</b> Converts to {@link TreeMap} for natural key ordering</li>
+	 * </ul>
+	 * <p>This ensures predictable test results regardless of the original map implementation.</p>
+	 *
+	 * @param actual The Map to test. Must not be null.
+	 * @param expected Multiple arguments of expected map entries.
+	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
+	 * @throws AssertionError if the Map size or contents don't match expected values
+	 * @see #assertList(Object, Object...)
+	 */
+	public static void assertMap(Map<?,?> actual, Object...expected) {
+		assertList(args(), actual, expected);
+	}
+
+	/**
+	 * Same as {@link #assertMap(Map, Object...)} but with configurable assertion behavior.
+	 *
+	 * @param args Assertion configuration. See {@link #args()} for usage examples.
+	 * @param actual The Map to test. Must not be null.
+	 * @param expected Multiple arguments of expected map entries.
+	 * @see #assertMap(Map, Object...)
+	 * @see #args()
+	 */
+	public static void assertMap(AssertionArgs args, Map<?,?> actual, Object...expected) {
+		assertList(args, actual, expected);
+	}
+
+	/**
 	 * Same as {@link #assertList(Object, Object...)} but with configurable assertion behavior.
 	 *
 	 * @param args Assertion configuration. See {@link #args()} for usage examples.

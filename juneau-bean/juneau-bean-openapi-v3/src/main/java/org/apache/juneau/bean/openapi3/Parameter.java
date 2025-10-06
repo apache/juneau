@@ -14,22 +14,66 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 
 /**
  * Describes a single operation parameter.
  *
+ * <p>
+ * The Parameter Object describes a single parameter used in an API operation. Parameters can be passed in various 
+ * locations including the path, query string, headers, or cookies. Each parameter has a name, location, and schema 
+ * that defines its type and constraints.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Parameter Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>name</c> (string, REQUIRED) - The name of the parameter
+ * 	<li><c>in</c> (string, REQUIRED) - The location of the parameter. Possible values: <js>"query"</js>, <js>"header"</js>, <js>"path"</js>, or <js>"cookie"</js>
+ * 	<li><c>description</c> (string) - A brief description of the parameter (CommonMark syntax may be used)
+ * 	<li><c>required</c> (boolean) - Determines whether this parameter is mandatory (must be <jk>true</jk> if <c>in</c> is <js>"path"</js>)
+ * 	<li><c>deprecated</c> (boolean) - Specifies that a parameter is deprecated
+ * 	<li><c>allowEmptyValue</c> (boolean) - Sets the ability to pass empty-valued parameters (valid only for <js>"query"</js> parameters)
+ * 	<li><c>style</c> (string) - Describes how the parameter value will be serialized
+ * 	<li><c>explode</c> (boolean) - When true, parameter values of type array or object generate separate parameters for each value
+ * 	<li><c>allowReserved</c> (boolean) - Determines whether the parameter value should allow reserved characters
+ * 	<li><c>schema</c> ({@link SchemaInfo}) - The schema defining the type used for the parameter
+ * 	<li><c>example</c> (any) - Example of the parameter's potential value
+ * 	<li><c>examples</c> (map of {@link Example}) - Examples of the parameter's potential value
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create a query parameter</jc>
+ * 	Parameter <jv>param</jv> = <jk>new</jk> Parameter()
+ * 		.setName(<js>"status"</js>)
+ * 		.setIn(<js>"query"</js>)
+ * 		.setDescription(<js>"Status values to filter by"</js>)
+ * 		.setRequired(<jk>false</jk>)
+ * 		.setSchema(
+ * 			<jk>new</jk> SchemaInfo()
+ * 				.setType(<js>"array"</js>)
+ * 				.setItems(
+ * 					<jk>new</jk> Items().setType(<js>"string"</js>)
+ * 				)
+ * 		)
+ * 		.setStyle(<js>"form"</js>)
+ * 		.setExplode(<jk>true</jk>);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.OpenApi">Overview &gt; juneau-rest-server &gt; OpenAPI</a>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#parameter-object">OpenAPI Specification &gt; Parameter Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/describing-parameters/">OpenAPI Describing Parameters</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
  * </ul>
  */
-@Bean(properties="name,in,description,required,deprecated,allowEmptyValue,style,explode,allowReserved,schema,example,examples,*")
 @FluentSetters
 public class Parameter extends OpenApiElement {
 
@@ -66,6 +110,15 @@ public class Parameter extends OpenApiElement {
 		this.schema = copyFrom.schema;
 		this.example = copyFrom.example;
 		this.examples = copyOf(copyFrom.examples);
+	}
+
+	/**
+	 * Makes a copy of this object.
+	 *
+	 * @return A new copy of this object.
+	 */
+	public Parameter copy() {
+		return new Parameter(this);
 	}
 
 	/**
@@ -317,4 +370,82 @@ public class Parameter extends OpenApiElement {
 		this.examples = value;
 		return this;
 	}
+
+	@Override /* OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "name" -> toType(getName(), type);
+			case "in" -> toType(getIn(), type);
+			case "description" -> toType(getDescription(), type);
+			case "required" -> toType(getRequired(), type);
+			case "deprecated" -> toType(getDeprecated(), type);
+			case "allowEmptyValue" -> toType(getAllowEmptyValue(), type);
+			case "style" -> toType(getStyle(), type);
+			case "explode" -> toType(getExplode(), type);
+			case "allowReserved" -> toType(getAllowReserved(), type);
+			case "schema" -> toType(getSchema(), type);
+			case "example" -> toType(getExample(), type);
+			case "examples" -> toType(getExamples(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	@Override /* OpenApiElement */
+	public Parameter set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "allowEmptyValue" -> setAllowEmptyValue(toType(value, Boolean.class));
+			case "allowReserved" -> setAllowReserved(toType(value, Boolean.class));
+			case "description" -> setDescription(Utils.s(value));
+			case "deprecated" -> setDeprecated(toType(value, Boolean.class));
+			case "example" -> setExample(value);
+			case "examples" -> setExamples(mapBuilder(String.class, Example.class).sparse().addAny(value).build());
+			case "explode" -> setExplode(toType(value, Boolean.class));
+			case "in" -> setIn(Utils.s(value));
+			case "name" -> setName(Utils.s(value));
+			case "required" -> setRequired(toType(value, Boolean.class));
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			case "style" -> setStyle(Utils.s(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	@Override /* OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(allowEmptyValue != null, "allowEmptyValue")
+			.addIf(allowReserved != null, "allowReserved")
+			.addIf(description != null, "description")
+			.addIf(deprecated != null, "deprecated")
+			.addIf(example != null, "example")
+			.addIf(examples != null, "examples")
+			.addIf(explode != null, "explode")
+			.addIf(in != null, "in")
+			.addIf(name != null, "name")
+			.addIf(required != null, "required")
+			.addIf(schema != null, "schema")
+			.addIf(style != null, "style")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public Parameter strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public Parameter strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

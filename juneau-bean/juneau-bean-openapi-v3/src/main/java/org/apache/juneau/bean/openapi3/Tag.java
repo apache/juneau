@@ -12,33 +12,44 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Allows adding meta data to a single tag that is used by the operation object.
+ * Allows adding metadata to a single tag that is used by the operation object.
  *
  * <p>
- * It is not mandatory to have a Tag Object per tag used there.
+ * The Tag Object allows adding metadata to a single tag that is used by the Operation Object. It is not mandatory 
+ * to have a Tag Object per tag used there, but it can be useful for providing additional information about tags 
+ * such as descriptions and external documentation.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Tag Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>name</c> (string, REQUIRED) - The name of the tag
+ * 	<li><c>description</c> (string) - A short description for the tag (CommonMark syntax may be used)
+ * 	<li><c>externalDocs</c> ({@link ExternalDocumentation}) - Additional external documentation for this tag
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	Tag x = <jsm>tag</jsm>()
+ * 	Tag <jv>x</jv> = <jsm>tag</jsm>()
  * 		.name(<js>"pet"</js>)
  * 		.description(<js>"Pets operations"</js>)
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	String <jv>json</jv> = <jv>x</jv>.toString();
  * </p>
  * <p class='bcode'>
  * 	<jc>// Output</jc>
@@ -47,8 +58,13 @@ import org.apache.juneau.internal.*;
  * 		<js>"description"</js>: <js>"Pets operations"</js>
  * 	}
  * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#tag-object">OpenAPI Specification &gt; Tag Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/grouping-operations-with-tags/">OpenAPI Grouping Operations with Tags</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="name,description,externalDocs,*")
 @FluentSetters
 public class Tag extends OpenApiElement {
 
@@ -105,6 +121,7 @@ public class Tag extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public Tag setName(String value) {
@@ -174,8 +191,7 @@ public class Tag extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "name" -> toType(getName(), type);
 			case "description" -> toType(getDescription(), type);
@@ -186,12 +202,11 @@ public class Tag extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Tag set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
-			case "name" -> setName(Utils.s(value));
 			case "description" -> setDescription(Utils.s(value));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "name" -> setName(Utils.s(value));
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -202,10 +217,26 @@ public class Tag extends OpenApiElement {
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
-			.addIf(name != null, "name")
 			.addIf(description != null, "description")
 			.addIf(externalDocs != null, "externalDocs")
+			.addIf(name != null, "name")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public Tag strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public Tag strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

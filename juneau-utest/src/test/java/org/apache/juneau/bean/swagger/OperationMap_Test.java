@@ -14,18 +14,17 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link OperationMap}.
  */
-class OperationMap_Test extends SimpleTestBase {
+class OperationMap_Test extends TestBase {
 
 	/**
 	 * Test method for operation ordering.
@@ -68,15 +67,15 @@ class OperationMap_Test extends SimpleTestBase {
 		var map = operationMap();
 
 		// Add standard methods
-		map.put("get", operation().setSummary("Get operation"));
-		map.put("post", operation().setSummary("Post operation"));
+		map.put("get", operation().setSummary("a"));
+		map.put("post", operation().setSummary("b"));
 
 		// Add custom methods
-		map.put("custom1", operation().setSummary("Custom1 operation"));
-		map.put("custom2", operation().setSummary("Custom2 operation"));
+		map.put("custom1", operation().setSummary("c"));
+		map.put("custom2", operation().setSummary("d"));
 
 		// Verify custom methods come after standard methods
-		assertBeans(map, "key,value{summary}", "get,{Get operation}", "post,{Post operation}", "custom1,{Custom1 operation}", "custom2,{Custom2 operation}");
+		assertBeans(map, "key,value{summary}", "get,{a}", "post,{b}", "custom1,{c}", "custom2,{d}");
 	}
 
 	/**
@@ -94,11 +93,11 @@ class OperationMap_Test extends SimpleTestBase {
 	@Test void a06_duplicateKeys() {
 		var map = operationMap();
 
-		map.put("get", operation().setSummary("First operation"));
-		map.put("get", operation().setSummary("Second operation"));
+		map.put("get", operation().setSummary("a"));
+		map.put("get", operation().setSummary("b"));
 
 		// Verify the second operation overwrites the first
-		assertBeans(map, "key,value{summary}", "get,{Second operation}");
+		assertBeans(map, "key,value{summary}", "get,{b}");
 	}
 
 	/**
@@ -118,22 +117,22 @@ class OperationMap_Test extends SimpleTestBase {
 	 */
 	@Test void a08_serialization() {
 		var map = operationMap();
-		map.put("get", operation().setSummary("Get operation"));
-		map.put("post", operation().setSummary("Post operation"));
+		map.put("get", operation().setSummary("a"));
+		map.put("post", operation().setSummary("b"));
 
 		// Test that it can be serialized to JSON
-		var json = Json5Serializer.DEFAULT.toString(map);
+		var json = json(map);
 		assertNotNull(json);
-		assertEquals("{get:{summary:'Get operation'},post:{summary:'Post operation'}}", json);
+		assertEquals("{get:{summary:'a'},post:{summary:'b'}}", json);
 	}
 
 	/**
 	 * Test method for deserialization.
 	 */
 	@Test void a09_deserialization() {
-		var json = "{get:{summary:'Get operation'},post:{summary:'Post operation'}}";
-		var map = Json5Parser.DEFAULT.parse(json, OperationMap.class);
-		assertBeans(map, "key,value{summary}", "get,{Get operation}", "post,{Post operation}");
+		var json = "{get:{summary:'a'},post:{summary:'b'}}";
+		var map = json(json, OperationMap.class);
+		assertBeans(map, "key,value{summary}", "get,{a}", "post,{b}");
 	}
 
 	/**
@@ -141,10 +140,10 @@ class OperationMap_Test extends SimpleTestBase {
 	 */
 	@Test void a10_iterationOrder() {
 		var map = operationMap();
-		map.put("delete", operation().setSummary("Delete"));
-		map.put("get", operation().setSummary("Get"));
-		map.put("post", operation().setSummary("Post"));
-		map.put("put", operation().setSummary("Put"));
+		map.put("delete", operation());
+		map.put("get", operation());
+		map.put("post", operation());
+		map.put("put", operation());
 
 		assertList(map.keySet(), "get", "put", "post", "delete");
 	}
@@ -156,9 +155,9 @@ class OperationMap_Test extends SimpleTestBase {
 		var map = operationMap();
 
 		// Test that put() normalizes keys to lowercase
-		map.put("GET", operation().setSummary("Get operation"));
-		map.put("Post", operation().setSummary("Post operation"));
-		map.put("DELETE", operation().setSummary("Delete operation"));
+		map.put("GET", operation().setSummary("a"));
+		map.put("Post", operation().setSummary("b"));
+		map.put("DELETE", operation().setSummary("c"));
 
 
 		// Verify that keys are stored in lowercase
@@ -178,6 +177,6 @@ class OperationMap_Test extends SimpleTestBase {
 		assertFalse(keys.contains("DELETE"));
 
 		// Verify that we can retrieve using lowercase keys
-		assertBeans(map, "value{summary}", "{Get operation}", "{Post operation}", "{Delete operation}");
+		assertBeans(map, "value{summary}", "{a}", "{b}", "{c}");
 	}
 }

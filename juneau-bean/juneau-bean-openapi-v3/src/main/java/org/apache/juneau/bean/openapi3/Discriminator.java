@@ -12,20 +12,62 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Used to aid in serialization, deserialization, and validation.
+ *
+ * <p>
+ * The Discriminator Object is used to aid in serialization, deserialization, and validation. It adds support for 
+ * polymorphism by allowing schemas to be discriminated based on the value of a specific property. This is particularly 
+ * useful when working with inheritance hierarchies in object-oriented programming.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Discriminator Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>propertyName</c> (string, REQUIRED) - The name of the property in the payload that will hold the discriminator value
+ * 	<li><c>mapping</c> (map of strings) - An object to hold mappings between payload values and schema names or references
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	Discriminator <jv>x</jv> = <jsm>discriminator</jsm>()
+ * 		.setPropertyName(<js>"petType"</js>)
+ * 		.setMapping(<jsm>map</jsm>(<js>"dog"</js>, <js>"#/components/schemas/Dog"</js>, <js>"cat"</js>, <js>"#/components/schemas/Cat"</js>));
+ *
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
+ *
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	<jv>json</jv> = <jv>x</jv>.toString();
+ * </p>
+ * <p class='bcode'>
+ * 	<jc>// Output</jc>
+ * 	{
+ * 		<js>"propertyName"</js>: <js>"petType"</js>,
+ * 		<js>"mapping"</js>: {
+ * 			<js>"dog"</js>: <js>"#/components/schemas/Dog"</js>,
+ * 			<js>"cat"</js>: <js>"#/components/schemas/Cat"</js>
+ * 		}
+ * 	}
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#discriminator-object">OpenAPI Specification &gt; Discriminator Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/data-models/inheritance-and-polymorphism/">OpenAPI Inheritance and Polymorphism</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="propertyName,mapping,*")
 @FluentSetters
 public class Discriminator extends OpenApiElement {
 
@@ -108,6 +150,7 @@ public class Discriminator extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public Discriminator setMapping(Map<String,String> value) {
@@ -118,11 +161,13 @@ public class Discriminator extends OpenApiElement {
 	/**
 	 * Adds one or more values to the <property>mapping</property> property.
 	 *
-	 * @param key The key.
-	 * @param value The value.
+	 * @param key The key.  Must not be <jk>null</jk>.
+	 * @param value The value.  Must not be <jk>null</jk>.
 	 * @return This object
 	 */
 	public Discriminator addMapping(String key, String value) {
+		assertArgNotNull("key", key);
+		assertArgNotNull("value", value);
 		mapping = mapBuilder(mapping).sparse().add(key, value).build();
 		return this;
 	}
@@ -133,8 +178,7 @@ public class Discriminator extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "propertyName" -> toType(getPropertyName(), type);
 			case "mapping" -> toType(getMapping(), type);
@@ -144,11 +188,10 @@ public class Discriminator extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Discriminator set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
-			case "propertyName" -> setPropertyName(Utils.s(value));
 			case "mapping" -> setMapping(mapBuilder(String.class,String.class).sparse().addAny(value).build());
+			case "propertyName" -> setPropertyName(Utils.s(value));
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -159,9 +202,25 @@ public class Discriminator extends OpenApiElement {
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
-			.addIf(propertyName != null, "propertyName")
 			.addIf(mapping != null, "mapping")
+			.addIf(propertyName != null, "propertyName")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public Discriminator strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public Discriminator strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

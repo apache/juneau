@@ -117,10 +117,10 @@ class Swagger_Query_Test extends SimpleTestBase {
 		assertJson("{'in':'query',name:'Q',type:'string'}", x);
 
 		x = s.getParameterInfo("/b","put","query","Q");
-		assertJson("{'in':'query',name:'Q',type:'object',schema:{properties:{f1:{type:'string'}}}}", x);
+		assertJson("{'in':'query',name:'Q',schema:{properties:{f1:{type:'string'}}},type:'object'}", x);
 
 		x = s.getParameterInfo("/c","post","query","Q");
-		assertJson("{'in':'query',name:'Q',type:'array',items:{type:'string'}}", x);
+		assertJson("{'in':'query',items:{type:'string'},name:'Q',type:'array'}", x);
 
 		x = s.getParameterInfo("/d","delete","query","Q");
 		assertJson("{'in':'query',name:'Q',type:'string'}", x);

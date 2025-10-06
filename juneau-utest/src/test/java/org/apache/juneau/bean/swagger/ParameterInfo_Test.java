@@ -19,244 +19,477 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link ParameterInfo}.
  */
-class ParameterInfo_Test extends SimpleTestBase {
+class ParameterInfo_Test extends TestBase {
 
-	/**
-	 * Test method for getters and setters.
-	 */
-	@Test void a01_gettersAndSetters() {
-		var t = new ParameterInfo();
+	@Nested class A_basicTests extends TestBase {
 
-		// General - Combined assertBean test
-		assertBean(
-			t.setAllowEmptyValue(true).setCollectionFormat("a").setDefault("b").setDescription("c").setEnum(set("d1","d2"))
-				.setExclusiveMaximum(true).setExclusiveMinimum(true).setFormat("e").setIn("f").setItems(items("g"))
-				.setMaxItems(1).setMaxLength(2).setMaximum(3).setMinItems(4).setMinLength(5).setMinimum(6)
-				.setMultipleOf(7).setName("h").setPattern("i").setRequired(true).setSchema(schemaInfo().setTitle("j"))
-				.setType("k").setUniqueItems(true),
-			"allowEmptyValue,collectionFormat,default,description,enum,exclusiveMaximum,exclusiveMinimum,format,in,items{type},maxItems,maxLength,maximum,minItems,minLength,minimum,multipleOf,name,pattern,required,schema{title},type,uniqueItems",
-			"true,a,b,c,[d1,d2],true,true,e,f,{g},1,2,3,4,5,6,7,h,i,true,{j},k,true"
-		);
+		private static final BeanTester<ParameterInfo> TESTER =
+			testBean(
+				bean()
+					.setAllowEmptyValue(true)
+					.setCollectionFormat("a")
+					.setDefault("b")
+					.setDescription("c")
+					.setEnum(set("d"))
+					.setExclusiveMaximum(true)
+					.setExclusiveMinimum(true)
+					.setFormat("e")
+					.setIn("f")
+					.setItems(items().setType("g"))
+					.setMaximum(1)
+					.setMaxItems(2)
+					.setMaxLength(3)
+					.setMinimum(4)
+					.setMinItems(5)
+					.setMinLength(6)
+					.setMultipleOf(7)
+					.setName("h")
+					.setPattern("i")
+					.setRequired(true)
+					.setSchema(schemaInfo().setType("j"))
+					.setType("k")
+					.setUniqueItems(true)
+			)
+			.props("allowEmptyValue,collectionFormat,default,description,enum,exclusiveMaximum,exclusiveMinimum,format,in,items{type},maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,name,pattern,required,schema{type},type,uniqueItems")
+			.vals("true,a,b,c,[d],true,true,e,f,{g},1,2,3,4,5,6,7,h,i,true,{j},k,true")
+			.json("{allowEmptyValue:true,collectionFormat:'a','default':'b',description:'c','enum':['d'],exclusiveMaximum:true,exclusiveMinimum:true,format:'e','in':'f',items:{type:'g'},maxItems:2,maxLength:3,maximum:1,minItems:5,minLength:6,minimum:4,multipleOf:7,name:'h',pattern:'i',required:true,schema:{type:'j'},type:'k',uniqueItems:true}")
+			.string("{'allowEmptyValue':true,'collectionFormat':'a','default':'b','description':'c','enum':['d'],'exclusiveMaximum':true,'exclusiveMinimum':true,'format':'e','in':'f','items':{'type':'g'},'maxItems':2,'maxLength':3,'maximum':1,'minItems':5,'minLength':6,'minimum':4,'multipleOf':7,'name':'h','pattern':'i','required':true,'schema':{'type':'j'},'type':'k','uniqueItems':true}".replace('\'', '"'))
+		;
 
-		// Null cases
-		assertBean(
-			t.setCollectionFormat(null).setDefault(null).setDescription(null).setEnum((Collection<Object>)null)
-				.setFormat(null).setIn(null).setName(null).setPattern(null).setType(null),
-			"collectionFormat,default,description,enum,format,in,name,pattern,type",
-			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>"
-		);
+		@Test void b01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
 
-		// Empty collections
-		assertBean(
-			t.setEnum(set()),
-			"enum",
-			"[]"
-		);
+		@Test void b02_copy() {
+			TESTER.assertCopy();
+		}
 
-		// Other
-		assertBean(
-			t.setDefault(Utils.sb("a")).setMaximum(1f).setMinimum(2f).setMultipleOf(3f),
-			"default,maximum,minimum,multipleOf", "a,1.0,2.0,3.0");
+		@Test void b03_toJson() {
+			TESTER.assertToJson();
+		}
 
-		// addEnum
-		assertList(t.addEnum("a","b").getEnum(), "a", "b");
-		assertList(t.addEnum("c").getEnum(), "a", "b", "c");
+		@Test void b04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void b05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void b06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void b07_keySet() {
+			assertList(TESTER.bean().keySet(), "allowEmptyValue", "collectionFormat", "default", "description", "enum", "exclusiveMaximum", "exclusiveMinimum", "format", "in", "items", "maxItems", "maxLength", "maximum", "minItems", "minLength", "minimum", "multipleOf", "name", "pattern", "required", "schema", "type", "uniqueItems");
+		}
 	}
 
-	/**
-	 * Test method for {@link ParameterInfo#set(java.lang.String, java.lang.Object)}.
-	 */
-	@Test void a01_set() {
-		var t = new ParameterInfo();
+	@Nested class B_emptyTests extends TestBase {
 
-		t
-			.set("default", "a")
-			.set("enum", set("b"))
-			.set("allowEmptyValue", true)
-			.set("collectionFormat", "c")
-			.set("description", "d")
-			.set("exclusiveMaximum", true)
-			.set("exclusiveMinimum", true)
-			.set("format", "e")
-			.set("in", "f")
-			.set("items", items("g"))
-			.set("maximum", 1f)
-			.set("maxItems", 2)
-			.set("maxLength", 3)
-			.set("minimum", 4f)
-			.set("minItems", 5)
-			.set("minLength", 6)
-			.set("multipleOf", 7f)
-			.set("name", "h")
-			.set("pattern", "i")
-			.set("required", true)
-			.set("schema", schemaInfo().setTitle("j"))
-			.set("type", "k")
-			.set("uniqueItems", true)
-			.set("$ref", "l");
+		private static final BeanTester<ParameterInfo> TESTER =
+			testBean(bean())
+			.props("description,in,name,required,schema,type,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf")
+			.vals("<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>")
+			.json("{}")
+			.string("{}")
+		;
 
-		assertBean(t,
-			"in,name,type,description,required,schema{title},format,allowEmptyValue,items{type},collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref",
-			"f,h,k,d,true,{j},e,true,{g},c,a,1.0,true,4.0,true,3,6,i,2,5,true,[b],7.0,l");
+		@Test void b01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
 
-		t
-			.set("default", "a")
-			.set("enum", "['b']")
-			.set("allowEmptyValue", "true")
-			.set("collectionFormat", "c")
-			.set("description", "d")
-			.set("exclusiveMaximum", "true")
-			.set("exclusiveMinimum", "true")
-			.set("format", "e")
-			.set("in", "f")
-			.set("items", "{type:'g'}")
-			.set("maximum", "1.0")
-			.set("maxItems", "2")
-			.set("maxLength", "3")
-			.set("minimum", "4.0")
-			.set("minItems", "5")
-			.set("minLength", "6")
-			.set("multipleOf", "7.0")
-			.set("name", "h")
-			.set("pattern", "i")
-			.set("required", "true")
-			.set("schema", "{title:'j'}")
-			.set("type", "k")
-			.set("uniqueItems", "true")
-			.set("$ref", "l");
+		@Test void b02_copy() {
+			TESTER.assertCopy();
+		}
 
-		assertBean(t,
-			"in,name,type,description,required,schema{title},format,allowEmptyValue,items{type},collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref",
-			"f,h,k,d,true,{j},e,true,{g},c,a,1.0,true,4.0,true,3,6,i,2,5,true,[b],7.0,l");
+		@Test void b03_toJson() {
+			TESTER.assertToJson();
+		}
 
-		t
-			.set("default", Utils.sb("a"))
-			.set("enum", Utils.sb("['b']"))
-			.set("allowEmptyValue", Utils.sb("true"))
-			.set("collectionFormat", Utils.sb("c"))
-			.set("description", Utils.sb("d"))
-			.set("exclusiveMaximum", Utils.sb("true"))
-			.set("exclusiveMinimum", Utils.sb("true"))
-			.set("format", Utils.sb("e"))
-			.set("in", Utils.sb("f"))
-			.set("items", Utils.sb("{type:'g'}"))
-			.set("maxItems", Utils.sb("2"))
-			.set("maxLength", Utils.sb("3"))
-			.set("maximum", Utils.sb("1.0"))
-			.set("minItems", Utils.sb("5"))
-			.set("minLength", Utils.sb("6"))
-			.set("minimum", Utils.sb("4.0"))
-			.set("multipleOf", Utils.sb("7.0"))
-			.set("name", Utils.sb("h"))
-			.set("pattern", Utils.sb("i"))
-			.set("$ref", Utils.sb("l"))
-			.set("required", Utils.sb("true"))
-			.set("schema", Utils.sb("{title:'j'}"))
-			.set("type", Utils.sb("k"))
-			.set("uniqueItems", Utils.sb("true"));
+		@Test void b04_fromJson() {
+			TESTER.assertFromJson();
+		}
 
-		assertBean(t,
-			"allowEmptyValue,collectionFormat,default,description,enum,exclusiveMaximum,exclusiveMinimum,format,in,items{type},maxItems,maxLength,maximum,minItems,minLength,minimum,multipleOf,name,pattern,$ref,required,schema{title},type,uniqueItems",
-			"true,c,a,d,[b],true,true,e,f,{g},2,3,1.0,5,6,4.0,7.0,h,i,l,true,{j},k,true");
+		@Test void b05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
 
-		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
-			"allowEmptyValue,collectionFormat,default,description,enum,exclusiveMaximum,exclusiveMinimum,format,in,items,maxItems,maxLength,maximum,minItems,minLength,minimum,multipleOf,name,pattern,$ref,required,schema,type,uniqueItems",
-			"true,c,a,d,['b'],true,true,e,f,{type:'g'},2,3,1.0,5,6,4.0,7.0,h,i,l,true,{title:'j'},k,true");
+		@Test void b06_toString() {
+			TESTER.assertToString();
+		}
 
-		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
-			"allowEmptyValue,collectionFormat,default,description,enum,exclusiveMaximum,exclusiveMinimum,format,in,items,maxItems,maxLength,maximum,minItems,minLength,minimum,multipleOf,name,pattern,$ref,required,schema,type,uniqueItems",
-			"Boolean,String,StringBuilder,String,LinkedHashSet,Boolean,Boolean,String,String,Items,Integer,Integer,Float,Integer,Integer,Float,Float,String,String,StringBuilder,Boolean,SchemaInfo,String,Boolean");
-
-		t.set("null", null).set(null, "null");
-		assertNull(t.get("null", Object.class));
-		assertNull(t.get(null, Object.class));
-		assertNull(t.get("foo", Object.class));
+		@Test void b07_keySet() {
+			assertEmpty(TESTER.bean().keySet());
+		}
 	}
 
-	@Test void b02_roundTripJson() {
-		var s = "{'in':'f',name:'h',type:'k',description:'d',required:true,schema:{title:'j'},format:'e',allowEmptyValue:true,items:{type:'g'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}";
-		assertJson(s, JsonParser.DEFAULT.parse(s, ParameterInfo.class));
+	@Nested class C_extraProperties extends TestBase {
+
+		private static final BeanTester<ParameterInfo> TESTER =
+			testBean(
+				bean()
+					.set("allowEmptyValue", true)
+					.set("collectionFormat", "a")
+					.set("default", "b")
+					.set("description", "c")
+					.set("enum", set("d"))
+					.set("exclusiveMaximum", true)
+					.set("exclusiveMinimum", true)
+					.set("format", "e")
+					.set("in", "f")
+					.set("items", items().setType("g"))
+					.set("maximum", 1)
+					.set("maxItems", 2)
+					.set("maxLength", 3)
+					.set("minimum", 4)
+					.set("minItems", 5)
+					.set("minLength", 6)
+					.set("multipleOf", 7)
+					.set("name", "h")
+					.set("pattern", "i")
+					.set("required", true)
+					.set("schema", schemaInfo().setType("j"))
+					.set("type", "k")
+					.set("uniqueItems", true)
+					.set("x3", "x3a")
+					.set("x4", null)
+			)
+			.props("allowEmptyValue,collectionFormat,default,description,enum,exclusiveMaximum,exclusiveMinimum,format,in,items{type},maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,name,pattern,required,schema{type},type,uniqueItems,x3,x4")
+			.vals("true,a,b,c,[d],true,true,e,f,{g},1,2,3,4,5,6,7,h,i,true,{j},k,true,x3a,<null>")
+			.json("{allowEmptyValue:true,collectionFormat:'a','default':'b',description:'c','enum':['d'],exclusiveMaximum:true,exclusiveMinimum:true,format:'e','in':'f',items:{type:'g'},maxItems:2,maxLength:3,maximum:1,minItems:5,minLength:6,minimum:4,multipleOf:7,name:'h',pattern:'i',required:true,schema:{type:'j'},type:'k',uniqueItems:true,x3:'x3a'}")
+			.string("{'allowEmptyValue':true,'collectionFormat':'a','default':'b','description':'c','enum':['d'],'exclusiveMaximum':true,'exclusiveMinimum':true,'format':'e','in':'f','items':{'type':'g'},'maxItems':2,'maxLength':3,'maximum':1,'minItems':5,'minLength':6,'minimum':4,'multipleOf':7,'name':'h','pattern':'i','required':true,'schema':{'type':'j'},'type':'k','uniqueItems':true,'x3':'x3a'}".replace('\'', '"'))
+		;
+
+		@Test void c01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void c02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void c03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void c04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void c05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void c06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void c07_keySet() {
+			assertList(TESTER.bean().keySet(), "allowEmptyValue", "collectionFormat", "default", "description", "enum", "exclusiveMaximum", "exclusiveMinimum", "format", "in", "items", "maxItems", "maxLength", "maximum", "minItems", "minLength", "minimum", "multipleOf", "name", "pattern", "required", "schema", "type", "uniqueItems", "x3", "x4");
+		}
+
+		@Test void c08_get() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> obj.get(prop, Object.class),
+				"allowEmptyValue,collectionFormat,default,description,enum,exclusiveMaximum,exclusiveMinimum,format,in,items{type},maxItems,maxLength,maximum,minItems,minLength,minimum,multipleOf,name,pattern,required,schema{type},type,uniqueItems,x3,x4",
+				"true,a,b,c,[d],true,true,e,f,{g},2,3,1,5,6,4,7,h,i,true,{j},k,true,x3a,<null>"
+			);
+		}
+
+		@Test void c09_getTypes() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				"allowEmptyValue,collectionFormat,default,description,enum,exclusiveMaximum,exclusiveMinimum,format,in,items,maxItems,maxLength,maximum,minItems,minLength,minimum,multipleOf,name,pattern,required,schema,type,uniqueItems,x3,x4",
+				"Boolean,String,String,String,LinkedHashSet,Boolean,Boolean,String,String,Items,Integer,Integer,Integer,Integer,Integer,Integer,Integer,String,String,Boolean,SchemaInfo,String,Boolean,String,<null>"
+			);
+		}
+
+		@Test void c10_nullPropertyValue() {
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+		}
 	}
 
-	@Test void b03_copy() {
-		var t = new ParameterInfo();
+	@Nested class D_additionalMethods extends TestBase {
 
-		t = t.copy();
+		@Test void d01_addMethods() {
+			var x = bean().addEnum("a1");
+			assertNotNull(x);
+			assertNotNull(x.getEnum());
+		}
 
-		assertBean(t,
-			"default,enum,allowEmptyValue,collectionFormat,description,exclusiveMaximum,exclusiveMinimum,format,in,items,maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,name,pattern,required,type,uniqueItems",
-			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
+		@Test void d01b_setEnumVarargs() {
+			var x = bean().setEnum("a", "b", "c");
+			assertBean(x, "enum", "[a,b,c]");
+		}
 
-		t
-			.set("default", "a")
-			.set("enum", set("b"))
-			.set("allowEmptyValue", true)
-			.set("collectionFormat", "c")
-			.set("description", "d")
-			.set("exclusiveMaximum", true)
-			.set("exclusiveMinimum", true)
-			.set("format", "e")
-			.set("in", "f")
-			.set("items", items("g"))
-			.set("maximum", 1f)
-			.set("maxItems", 2)
-			.set("maxLength", 3)
-			.set("minimum", 4f)
-			.set("minItems", 5)
-			.set("minLength", 6)
-			.set("multipleOf", 7f)
-			.set("name", "h")
-			.set("pattern", "i")
-			.set("required", true)
-			.set("schema", schemaInfo().setTitle("j"))
-			.set("type", "k")
-			.set("uniqueItems", true)
-			.set("$ref", "l")
-			.copy();
+		@Test void d01c_setEnumVarargsEmpty() {
+			var x = bean().setEnum();
+			assertBean(x, "enum", "<null>");
+		}
 
-		assertBean(t,
-			"in,name,type,description,required,schema{title},format,allowEmptyValue,items{type},collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref",
-			"f,h,k,d,true,{j},e,true,{g},c,a,1.0,true,4.0,true,3,6,i,2,5,true,[b],7.0,l");
+		@Test void d01d_setEnumVarargsNull() {
+			var x = bean().setEnum((Object[])null);
+			assertBean(x, "enum", "<null>");
+		}
+
+		@Test void d02_asMap() {
+			assertBean(
+				bean()
+					.setDescription("a")
+					.setIn("b")
+					.setName("c")
+					.set("x1", "x1a")
+					.asMap(),
+				"description,in,name,x1",
+				"a,b,c,x1a"
+			);
+		}
+
+		@Test void d03_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void d04_strict() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+		}
+
+		@Test void d05_copyFrom() {
+			var x = bean().setName("a").setIn("b");
+			var y = bean().copyFrom(x);
+			assertBean(y, "name,in", "a,b");
+
+			y = bean().setName("c").copyFrom(x);
+			assertBean(y, "name,in", "a,b");
+
+			y = bean().setName("c").copyFrom(null);
+			assertBean(y, "name", "c");
+		}
+
+		@Test void d06_setInPathSetsRequired() {
+			var x = bean().setIn("path");
+			assertBean(x, "in,required", "path,true");
+		}
+
+		@Test void d07_setInNonPathDoesNotSetRequired() {
+			var x = bean().setIn("query");
+			assertBean(x, "in,required", "query,<null>");
+		}
+
+		@Test void d08_setNameWithBodyInDoesNotSetName() {
+			var x = bean().setIn("body").setName("test");
+			assertBean(x, "in,name", "body,<null>");
+		}
+
+		@Test void d09_setNameWithNonBodyInSetsName() {
+			var x = bean().setIn("query").setName("test");
+			assertBean(x, "in,name", "query,test");
+		}
+
+		@Test void d10_copyFromAllProperties() {
+			var source = bean()
+				.setName("a")
+				.setIn("b")
+				.setDescription("c")
+				.setType("d")
+				.setFormat("e")
+				.setPattern("f")
+				.setCollectionFormat("g")
+				.setMaximum(1)
+				.setMinimum(2)
+				.setMultipleOf(3)
+				.setMaxLength(4)
+				.setMinLength(5)
+				.setMaxItems(6)
+				.setMinItems(7)
+				.setRequired(true)
+				.setAllowEmptyValue(true)
+				.setExclusiveMaximum(true)
+				.setExclusiveMinimum(true)
+				.setUniqueItems(true)
+				.setSchema(schemaInfo().setType("h"))
+				.setItems(items().setType("i"))
+				.setDefault("j")
+				.setEnum(set("k"));
+
+			var target = bean().copyFrom(source);
+			assertBean(target, 
+				"name,in,description,type,format,pattern,collectionFormat,maximum,minimum,multipleOf,maxLength,minLength,maxItems,minItems,required,allowEmptyValue,exclusiveMaximum,exclusiveMinimum,uniqueItems,schema{type},items{type},default,enum",
+				"a,b,c,d,e,f,g,1,2,3,4,5,6,7,true,true,true,true,true,{h},{i},j,[k]"
+			);
+		}
+
+		@Test void d11_copyFromPartialProperties() {
+			var source = bean()
+				.setName("a")
+				.setIn("b")
+				.setDescription("c");
+			// Leave other properties null
+
+			var target = bean()
+				.setType("d")
+				.setFormat("e")
+				.copyFrom(source);
+
+			assertBean(
+				target, 
+				"name,in,description,type,format",
+				"a,b,c,d,e"
+			);
+		}
 	}
 
-	@Test void b04_keySet() {
-		var t = new ParameterInfo();
+	@Nested class E_strictMode extends TestBase {
 
-		assertEmpty(t.keySet());
+		@Test void e01_strictModeSetThrowsException() {
+			var x = bean().strict();
+			assertThrowsWithMessage(RuntimeException.class, "Cannot set property 'foo' in strict mode", () -> x.set("foo", "bar"));
+		}
 
-		t
-			.set("allowEmptyValue", true)
-			.set("collectionFormat", "c")
-			.set("default", "a")
-			.set("description", "d")
-			.set("enum", set("b"))
-			.set("exclusiveMaximum", true)
-			.set("exclusiveMinimum", true)
-			.set("format", "e")
-			.set("in", "f")
-			.set("items", items("g"))
-			.set("maximum", 1f)
-			.set("maxItems", 2)
-			.set("maxLength", 3)
-			.set("minimum", 4f)
-			.set("minItems", 5)
-			.set("minLength", 6)
-			.set("multipleOf", 7f)
-			.set("name", "h")
-			.set("pattern", "i")
-			.set("required", true)
-			.set("schema", schemaInfo().setTitle("j"))
-			.set("type", "k")
-			.set("uniqueItems", true)
-			.set("$ref", "l");
+		@Test void e02_nonStrictModeAllowsSet() {
+			var x = bean(); // not strict
+			assertDoesNotThrow(() -> x.set("foo", "bar"));
+		}
 
-		assertList(t.keySet(), "$ref", "allowEmptyValue", "collectionFormat", "default", "description", "enum", "exclusiveMaximum", "exclusiveMinimum", "format", "in", "items", "maxItems", "maxLength", "maximum", "minItems", "minLength", "minimum", "multipleOf", "name", "pattern", "required", "schema", "type", "uniqueItems");
+		@Test void e03_strictModeToggle() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+			x.strict(false);
+			assertFalse(x.isStrict());
+		}
+
+		@Test void e04_strictModeSetCollectionFormat() {
+			var x = bean().strict();
+			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setCollectionFormat(String).  Value='invalid', valid values=['csv','ssv','tsv','pipes','multi']", () -> x.setCollectionFormat("invalid"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("csv"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("ssv"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("tsv"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("pipes"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("multi"));
+			var y = bean(); // not strict
+			assertDoesNotThrow(() -> y.setCollectionFormat("invalid"));
+		}
+
+		@Test void e05_strictModeSetIn() {
+			var x = bean().strict();
+			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setIn(String).  Value='invalid', valid values=['query','header','path','formData','body']", () -> x.setIn("invalid"));
+			assertDoesNotThrow(() -> x.setIn("query"));
+			assertDoesNotThrow(() -> x.setIn("header"));
+			assertDoesNotThrow(() -> x.setIn("path"));
+			assertDoesNotThrow(() -> x.setIn("formData"));
+			assertDoesNotThrow(() -> x.setIn("body"));
+			var y = bean(); // not strict
+			assertDoesNotThrow(() -> y.setIn("invalid"));
+		}
+
+		@Test void e06_strictModeSetType() {
+			var x = bean().strict();
+			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setType(String).  Value='invalid', valid values=['string','number','integer','boolean','array','file']", () -> x.setType("invalid"));
+			assertDoesNotThrow(() -> x.setType("string"));
+			assertDoesNotThrow(() -> x.setType("number"));
+			assertDoesNotThrow(() -> x.setType("integer"));
+			assertDoesNotThrow(() -> x.setType("boolean"));
+			assertDoesNotThrow(() -> x.setType("array"));
+			assertDoesNotThrow(() -> x.setType("file"));
+			var y = bean(); // not strict
+			assertDoesNotThrow(() -> y.setType("invalid"));
+		}
+
+		@Test void e07_strictModeSetCollectionFormatNull() {
+			var x = bean().strict();
+			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setCollectionFormat(String).  Value='null', valid values=['csv','ssv','tsv','pipes','multi']", () -> x.setCollectionFormat(null));
+		}
+
+		@Test void e08_strictModeSetInNull() {
+			var x = bean().strict();
+			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setIn(String).  Value='null', valid values=['query','header','path','formData','body']", () -> x.setIn(null));
+		}
+
+		@Test void e09_strictModeSetTypeNull() {
+			var x = bean().strict();
+			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setType(String).  Value='null', valid values=['string','number','integer','boolean','array','file']", () -> x.setType(null));
+		}
 	}
+
+	@Nested class F_refs extends TestBase {
+
+		@Test void f01_resolveRefs_schema() {
+			var swagger = swagger()
+				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"));
+
+			var x = parameterInfo().setName("pet").setIn("body").setSchema(schemaInfo().setRef("#/definitions/Pet"));
+			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
+			assertBean(y, "name,in,schema{type,title}", "pet,body,{object,Pet}");
+		}
+
+		@Test void f02_resolveRefs_items() {
+			var swagger = swagger()
+				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"));
+
+			var x = parameterInfo().setName("pets").setIn("query").setType("array").setItems(items().setRef("#/definitions/Pet"));
+			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
+			assertBean(y, "name,in,type,items{type,title}", "pets,query,array,{object,Pet}");
+		}
+
+		@Test void f03_resolveRefs_maxDepth() {
+			var swagger = swagger()
+				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"));
+
+			var x = parameterInfo().setName("pet").setIn("body").setSchema(schemaInfo().setRef("#/definitions/Pet"));
+			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 0);
+			assertBean(y, "name,in,schema{ref}", "pet,body,{#/definitions/Pet}");
+		}
+
+		@Test void f04_resolveRefs_nullSchema() {
+			var swagger = swagger()
+				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"));
+
+			var x = parameterInfo().setName("pet").setIn("body");
+			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
+			assertBean(y, "name,in,schema", "pet,body,<null>");
+		}
+
+		@Test void f05_resolveRefs_nullItems() {
+			var swagger = swagger()
+				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"));
+
+			var x = parameterInfo().setName("pets").setIn("query").setType("array");
+			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
+			assertBean(y, "name,in,type,items", "pets,query,array,<null>");
+		}
+
+		@Test void f06_resolveRefs_bothNull() {
+			var swagger = swagger()
+				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"));
+
+			var x = parameterInfo().setName("test").setIn("query");
+			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
+			assertBean(y, "name,in,schema,items", "test,query,<null>,<null>");
+		}
+	}
+
+
+	//---------------------------------------------------------------------------------------------
+	// Helper methods
+	//---------------------------------------------------------------------------------------------
+
+	private static ParameterInfo bean() {
+		return parameterInfo();
+	}
+
 }

@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 import org.opentest4j.*;
 
@@ -36,7 +37,7 @@ class BctAssertions_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class a_AssertionArgs {
+	class A_assertionArgs extends TestBase {
 
 		@Test
 		void a01_args() {
@@ -52,7 +53,7 @@ class BctAssertions_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class b_AssertBean {
+	class B_assertBean extends TestBase {
 
 		@Test
 		void b01_basicAssertion() {
@@ -100,7 +101,7 @@ class BctAssertions_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class c_AssertBeans {
+	class C_assertBeans extends TestBase {
 
 		@Test
 		void c01_basicBeansAssertion() {
@@ -150,7 +151,7 @@ class BctAssertions_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class d_AssertMapped {
+	class D_assertMapped extends TestBase {
 
 		@Test
 		void d01_basicMapping() {
@@ -185,7 +186,7 @@ class BctAssertions_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class e_AssertContains {
+	class E_assertContains extends TestBase {
 
 		@Test
 		void e01_basicContains() {
@@ -217,7 +218,7 @@ class BctAssertions_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class f_AssertContainsAll {
+	class F_assertContainsAll extends TestBase {
 
 		@Test
 		void f01_basicContainsAll() {
@@ -286,7 +287,7 @@ class BctAssertions_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class g_AssertEmpty {
+	class G_assertEmpty extends TestBase {
 
 		@Test
 		void g01_basicEmpty() {
@@ -319,7 +320,7 @@ class BctAssertions_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class h_AssertList {
+	class H_assertList extends TestBase {
 
 		@Test
 		void h01_basicList() {
@@ -358,7 +359,7 @@ class BctAssertions_Test extends TestBase {
 			var numbers = Arrays.asList(1, 2, 3, 4, 5);
 
 			// Test successful predicate validation
-			assertDoesNotThrow(() -> assertList(args, numbers, 
+			assertDoesNotThrow(() -> assertList(args, numbers,
 				(Predicate<Integer>) x -> x == 1,   // First element should equal 1
 				(Predicate<Integer>) x -> x > 1,    // Second element should be > 1
 				"3",                                // Third element as string
@@ -368,7 +369,7 @@ class BctAssertions_Test extends TestBase {
 
 			// Test failed predicate validation - use single element list to avoid length mismatch
 			var singleNumber = Arrays.asList(1);
-			var e = assertThrows(AssertionFailedError.class, () -> 
+			var e = assertThrows(AssertionFailedError.class, () ->
 				assertList(args, singleNumber, (Predicate<Integer>) x -> x == 99)); // Should fail
 			assertContains("Element at index 0 did not pass predicate", e.getMessage());
 			assertContains("actual: <1>", e.getMessage());
@@ -411,11 +412,151 @@ class BctAssertions_Test extends TestBase {
 	}
 
 	// ====================================================================================================
+	// Map Tests
+	// ====================================================================================================
+
+	@Nested
+	class H_assertMap extends TestBase {
+
+		@Test
+		void h01_basicMap() {
+			assertDoesNotThrow(() -> assertMap(Map.of("a", "1", "b", "2"), "a=1", "b=2"));
+		}
+
+		@Test
+		void h02_withCustomArgs() {
+			var args = args().setMessage("Custom map message");
+			assertDoesNotThrow(() -> assertMap(args, Map.of("key", "value"), "key=value"));
+		}
+
+		@Test
+		void h03_sizeMismatch() {
+			var e = assertThrows(AssertionFailedError.class, () -> assertMap(Map.of("a", "1"), "a=1", "b=2"));
+			assertContains("Wrong list length", e.getMessage());
+		}
+
+		@Test
+		void h04_elementMismatch() {
+			var e = assertThrows(AssertionFailedError.class, () -> assertMap(Map.of("a", "1", "b", "2"), "a=1", "b=wrong"));
+			assertContains("Element at index 1 did not match", e.getMessage());
+		}
+
+		@Test
+		void h05_nullValue() {
+			var e = assertThrows(AssertionFailedError.class, () -> assertMap(null, "test"));
+			assertContains("Value was null", e.getMessage());
+		}
+
+		@Test
+		void h06_predicateValidation() {
+			// Test predicate-based map entry validation
+			var args = args().setMessage("Custom predicate message");
+			var map = Map.of("count", 42, "enabled", true);
+
+			// Test successful predicate validation
+			assertDoesNotThrow(() -> assertMap(args, map,
+				(Predicate<Map.Entry<String, Object>>) entry -> entry.getKey().equals("count") && entry.getValue().equals(42),
+				(Predicate<Map.Entry<String, Object>>) entry -> entry.getKey().equals("enabled") && entry.getValue().equals(true)
+			));
+
+			// Test failed predicate validation
+			var singleEntryMap = Map.of("count", 1);
+			var e = assertThrows(AssertionFailedError.class, () ->
+				assertMap(args, singleEntryMap, (Predicate<Map.Entry<String, Object>>) entry -> entry.getValue().equals(99))); // Should fail
+			assertContains("Element at index 0 did not pass predicate", e.getMessage());
+			assertContains("actual: <count=1>", e.getMessage());
+		}
+
+		@Test
+		void h07_multipleErrors() {
+			// Test that multiple assertion errors are collected and reported together
+			var map = Map.of("a", "1", "b", "wrong1", "c", "3", "d", "wrong2");
+			var expected = new Object[]{"a=1", "b=2", "c=3", "d=4"};
+
+			var e = assertThrows(AssertionFailedError.class, () -> assertMap(map, expected));
+
+			// Should report multiple errors in a single assertion failure
+			var message = e.getMessage();
+			assertContains("2 list assertions failed", message);
+			assertContains("Element at index 1 did not match", message);
+			assertContains("Element at index 3 did not match", message);
+
+			// Should include both expected and actual values
+			assertContains("expected: <b=2>", message);
+			assertContains("but was: <b=wrong1>", message);
+			assertContains("expected: <d=4>", message);
+			assertContains("but was: <d=wrong2>", message);
+		}
+
+		@Test
+		void h08_singleError() {
+			// Test that single errors are still reported as single assertion failures
+			var map = Map.of("a", "1", "b", "wrong");
+			var e = assertThrows(AssertionFailedError.class, () -> assertMap(map, "a=1", "b=2"));
+
+			// Should be a single assertion failure, not multiple
+			var message = e.getMessage();
+			assertDoesNotThrow(() -> assertContains("Element at index 1 did not match", message));
+			assertDoesNotThrow(() -> assertContains("expected: <b=2>", message));
+			assertDoesNotThrow(() -> assertContains("but was: <b=wrong>", message));
+		}
+
+		@Test
+		void h09_nestedMaps() {
+			// Test nested map structures
+			var nestedMap = Map.of("a", Map.of("b", 1));
+			assertDoesNotThrow(() -> assertMap(nestedMap, "a={b=1}"));
+		}
+
+		@Test
+		void h10_mapsWithArrays() {
+			// Test maps with array values
+			var mapWithArrays = Map.of("a", Map.of("b", new Integer[]{1, 2}));
+			assertDoesNotThrow(() -> assertMap(mapWithArrays, "a={b=[1,2]}"));
+		}
+
+		@Test
+		void h11_mapOrdering() {
+			// Test that map ordering is deterministic (HashMap gets converted to TreeMap)
+			var unorderedMap = new HashMap<String, String>();
+			unorderedMap.put("z", "last");
+			unorderedMap.put("a", "first");
+			unorderedMap.put("m", "middle");
+
+			// Should be ordered by key: a=first, m=middle, z=last
+			assertDoesNotThrow(() -> assertMap(unorderedMap, "a=first", "m=middle", "z=last"));
+		}
+
+		@Test
+		void h12_linkedHashMapOrdering() {
+			// Test that LinkedHashMap preserves insertion order
+			var linkedMap = new LinkedHashMap<String, String>();
+			linkedMap.put("first", "1");
+			linkedMap.put("second", "2");
+			linkedMap.put("third", "3");
+
+			assertDoesNotThrow(() -> assertMap(linkedMap, "first=1", "second=2", "third=3"));
+		}
+
+		@Test
+		void h13_treeMapOrdering() {
+			// Test that TreeMap preserves natural ordering
+			var treeMap = new TreeMap<String, String>();
+			treeMap.put("zebra", "last");
+			treeMap.put("apple", "first");
+			treeMap.put("monkey", "middle");
+
+			// Should be ordered by key: apple=first, monkey=middle, zebra=last
+			assertDoesNotThrow(() -> assertMap(treeMap, "apple=first", "monkey=middle", "zebra=last"));
+		}
+	}
+
+	// ====================================================================================================
 	// Not Empty Tests
 	// ====================================================================================================
 
 	@Nested
-	class i_AssertNotEmpty {
+	class I_assertNotEmpty extends TestBase {
 
 		@Test
 		void i01_basicNotEmpty() {
@@ -448,7 +589,7 @@ class BctAssertions_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class j_AssertSize {
+	class J_assertSize extends TestBase {
 
 		@Test
 		void j01_basicSizes() {
@@ -481,7 +622,7 @@ class BctAssertions_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class k_AssertString {
+	class K_assertString extends TestBase {
 
 		@Test
 		void k01_basicString() {
@@ -514,7 +655,7 @@ class BctAssertions_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class l_AssertMatchesGlob {
+	class L_assertMatchesGlob extends TestBase {
 
 		@Test
 		void l01_basicGlobPatterns() {
@@ -603,7 +744,7 @@ class BctAssertions_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class h_EnhancedEdgeCases {
+	class H_enhancedEdgeCases extends TestBase {
 
 		@Test
 		void h01_assertListWithMixedTypes() {
@@ -620,7 +761,7 @@ class BctAssertions_Test extends TestBase {
 		void h02_assertMatchesGlobWithComplexPatterns() {
 			// Test glob matching with various patterns
 			var testStrings = Arrays.asList(
-				"hello.txt", "test_file.log", "document.pdf", 
+				"hello.txt", "test_file.log", "document.pdf",
 				"IMG_001.jpg", "data.xml", "script.js"
 			);
 

@@ -12,39 +12,65 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
- * information for Link object.
+ * Configuration details for a supported OAuth Flow.
+ *
+ * <p>
+ * The OAuthFlow Object provides configuration details for a supported OAuth Flow. This object contains the URLs and 
+ * scopes needed to configure a specific OAuth 2.0 flow. Different flows require different combinations of URLs and 
+ * have different security characteristics.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The OAuthFlow Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>authorizationUrl</c> (string) - The authorization URL to be used for this flow. This MUST be in the form of a URL
+ * 	<li><c>tokenUrl</c> (string) - The token URL to be used for this flow. This MUST be in the form of a URL
+ * 	<li><c>refreshUrl</c> (string) - The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL
+ * 	<li><c>scopes</c> (map of strings) - The available scopes for the OAuth2 security scheme. A map between the scope name and a short description for it
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	Contact x = <jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>);
+ * 	OAuthFlow <jv>x</jv> = <jsm>oauthFlow</jsm>()
+ * 		.setAuthorizationUrl(<js>"https://example.com/oauth/authorize"</js>)
+ * 		.setTokenUrl(<js>"https://example.com/oauth/token"</js>)
+ * 		.setScopes(<jsm>map</jsm>(<js>"read"</js>, <js>"Read access"</js>, <js>"write"</js>, <js>"Write access"</js>));
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	<jv>json</jv> = <jv>x</jv>.toString();
  * </p>
  * <p class='bcode'>
  * 	<jc>// Output</jc>
  * 	{
- * 		<js>"name"</js>: <js>"API Support"</js>,
- * 		<js>"url"</js>: <js>"http://www.swagger.io/support"</js>,
- * 		<js>"email"</js>: <js>"support@swagger.io"</js>
+ * 		<js>"authorizationUrl"</js>: <js>"https://example.com/oauth/authorize"</js>,
+ * 		<js>"tokenUrl"</js>: <js>"https://example.com/oauth/token"</js>,
+ * 		<js>"scopes"</js>: {
+ * 			<js>"read"</js>: <js>"Read access"</js>,
+ * 			<js>"write"</js>: <js>"Write access"</js>
+ * 		}
  * 	}
  * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#oauth-flow-object">OpenAPI Specification &gt; OAuth Flow Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/authentication/oauth2/">OpenAPI OAuth2 Authentication</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="authorizationUrl,tokenUrl,refreshUrl,scopes,*")
 @FluentSetters
 public class OAuthFlow extends OpenApiElement {
 
@@ -195,11 +221,13 @@ public class OAuthFlow extends OpenApiElement {
 	/**
 	 * Adds a single value to the <property>examples</property> property.
 	 *
-	 * @param name The mime-type string.
-	 * @param description The example.
+	 * @param name The mime-type string.  Must not be <jk>null</jk>.
+	 * @param description The example.  Must not be <jk>null</jk>.
 	 * @return This object
 	 */
 	public OAuthFlow addScope(String name, String description) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("description", description);
 		scopes = mapBuilder(scopes).sparse().add(name, description).build();
 		return this;
 	}
@@ -210,8 +238,7 @@ public class OAuthFlow extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "refreshUrl" -> toType(getRefreshUrl(), type);
 			case "tokenUrl" -> toType(getTokenUrl(), type);
@@ -223,13 +250,12 @@ public class OAuthFlow extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public OAuthFlow set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "authorizationUrl" -> setAuthorizationUrl(Utils.s(value));
-			case "tokenUrl" -> setTokenUrl(Utils.s(value));
 			case "refreshUrl" -> setRefreshUrl(Utils.s(value));
 			case "scopes" -> setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
+			case "tokenUrl" -> setTokenUrl(Utils.s(value));
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -241,10 +267,26 @@ public class OAuthFlow extends OpenApiElement {
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(authorizationUrl != null, "authorizationUrl")
-			.addIf(tokenUrl != null, "tokenUrl")
 			.addIf(refreshUrl != null, "refreshUrl")
 			.addIf(scopes != null, "scopes")
+			.addIf(tokenUrl != null, "tokenUrl")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public OAuthFlow strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public OAuthFlow strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

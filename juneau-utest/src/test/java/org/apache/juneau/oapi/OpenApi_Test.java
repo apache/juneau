@@ -549,18 +549,18 @@ public class OpenApi_Test extends SimpleTestBase {
 	}
 
 	@Test void f02a_tArray_StringList() throws Exception {
-		var in = list("123");
+		var in = list("a1");
 		var ps = T_ARRAY;
 		var s = serialize(ps, in);
-		assertEquals("123", s);
+		assertEquals("a1", s);
 		var r = parse(ps, s, List.class, String.class);
-		assertEquals(in, r);
+		assertBean(r, "0", "a1");
 
-		in = list("123","456");
+		in = list("a1","a2");
 		s = serialize(ps, in);
-		assertEquals("123,456", s);
+		assertEquals("a1,a2", s);
 		r = parse(ps, s, List.class, String.class);
-		assertEquals(in, r);
+		assertBean(r, "0,1", "a1,a2");
 	}
 
 	@Test void f02b_tArray_3dStringList() throws Exception {
@@ -588,13 +588,13 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("123", s);
 		var r = parse(ps, s, int[].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123,456", s);
 		r = parse(ps, s, int[].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 	@Test void f03b_tArray_3dIntArray() throws Exception {
@@ -607,14 +607,14 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\\\\\,2\\,3\\\\\\,4,5\\\\\\,6\\,7\\\\\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 
@@ -631,18 +631,18 @@ public class OpenApi_Test extends SimpleTestBase {
 	}
 
 	@Test void f04_tArray_StringArrayMutator() throws Exception {
-		var in = new F04("a");
+		var in = new F04("a1");
 		var ps = T_ARRAY;
 		var s = serialize(ps, in);
-		assertEquals("a", s);
+		assertEquals("a1", s);
 		var r = parse(ps, s, F04.class);
-		assertEquals(json(r.toStringArray()), json(in.toStringArray()));
+		assertJson(json(in.toStringArray()), r.toStringArray());
 
-		in = new F04("a","b");
+		in = new F04("a1","a2");
 		s = serialize(ps, in);
-		assertEquals("a,b", s);
+		assertEquals("a1,a2", s);
 		r = parse(ps, s, F04.class);
-		assertEquals(json(r.toStringArray()), json(in.toStringArray()));
+		assertJson(json(in.toStringArray()), r.toStringArray());
 	}
 
 	@Test void f05a_tArrayUon_IntArray() throws Exception {
@@ -651,13 +651,13 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("@(123)", s);
 		int[] r = parse(ps, s, int[].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("@(123,456)", s);
 		r = parse(ps, s, int[].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 	@Test void f05b_tArrayUon_3dIntArray() throws Exception {
@@ -666,14 +666,14 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("@(@(@(123)))", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("@(@(@(1,2),@(3,4)),@(@(5,6),@(7,8)))", s);
 		r = parse(ps, s, int[][][].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 	@Test void f06a_tArrayPipes_IntArray() throws Exception {
@@ -682,13 +682,13 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123|456", s);
 		r = parse(ps, s, int[].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 	@Test void f06b_tArrayPipes_3dIntArray() throws Exception {
@@ -697,14 +697,14 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\\\,2,3\\\\,4|5\\\\,6,7\\\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 	@Test void f07a_tArraySsv_IntArray() throws Exception {
@@ -713,13 +713,13 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123 456", s);
 		r = parse(ps, s, int[].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 	@Test void f07b_tArraySsv_3dIntArray() throws Exception {
@@ -728,14 +728,14 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\,2,3\\,4 5\\,6,7\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 	@Test void f08a_tArrayTsv_IntArray() throws Exception {
@@ -744,13 +744,13 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123\t456", s);
 		r = parse(ps, s, int[].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 	@Test void f08b_tArrayTsv_3dIntArray() throws Exception {
@@ -759,14 +759,14 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\,2,3\\,4\t5\\,6,7\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 	@Test void f09a_tArrayCsv_IntArray() throws Exception {
@@ -775,13 +775,13 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123,456", s);
 		r = parse(ps, s, int[].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 	@Test void f09b_tArrayCsv_3dIntArray() throws Exception {
@@ -790,14 +790,14 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\\\\\,2\\,3\\\\\\,4,5\\\\\\,6\\,7\\\\\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 
@@ -811,7 +811,7 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("1 2|3 4,5 6|7 8", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -824,13 +824,13 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("a=b", s);
 		var r = parse(ps, s, JsonMap.class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		in = JsonMap.of("a","b","c","d");
 		s = serialize(ps, in);
 		assertEquals("a=b,c=d", s);
 		r = parse(ps, s, JsonMap.class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 	@Test void g01b_objectType_formatDefault_Map_3d() throws Exception {
@@ -844,13 +844,13 @@ public class OpenApi_Test extends SimpleTestBase {
 		var s = serialize(ps, in);
 		assertEquals("a=b\\=c\\\\\\=d", s);
 		var r = parse(ps, s, JsonMap.class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 
 		in = JsonMap.of("a",JsonMap.of("b",JsonMap.of("c","d"),"e",JsonMap.of("f","g")));
 		s = serialize(ps, in);
 		assertEquals("a=b\\=c\\\\\\=d\\,e\\=f\\\\\\=g", s);
 		r = parse(ps, s, JsonMap.class);
-		assertEquals(json(r), json(in));
+		assertJson(json(in), r);
 	}
 
 	//---------------------------------------------------------------------------------------------

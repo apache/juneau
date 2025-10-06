@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.swagger;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
@@ -25,8 +25,20 @@ import org.apache.juneau.internal.*;
  * A metadata object that allows for more fine-tuned XML model definitions.
  *
  * <p>
- * When using arrays, XML element names are not inferred (for singular/plural forms) and the name property should be
- * used to add that information.
+ * The Xml Object is a metadata object that allows for more fine-tuned XML model definitions in Swagger 2.0. When using 
+ * arrays, XML element names are not inferred (for singular/plural forms) and the name property should be used to add 
+ * that information. This object is used to control how schema properties are serialized to XML.
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The Xml Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>name</c> (string) - Replaces the name of the element/attribute used for the described schema property
+ * 	<li><c>namespace</c> (string) - The URI of the namespace definition
+ * 	<li><c>prefix</c> (string) - The prefix to be used for the name
+ * 	<li><c>attribute</c> (boolean) - Declares whether the property definition translates to an attribute instead of an element
+ * 	<li><c>wrapped</c> (boolean) - May be used only for an array definition. Signifies whether the array is wrapped
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -36,7 +48,7 @@ import org.apache.juneau.internal.*;
  * 		.namespace(<js>"http://foo"</js>)
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>xml</jv>);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>xml</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  *  <jv>json</jv> = <jv>xml</jv>.toString();
@@ -50,10 +62,11 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#xml-object">Swagger 2.0 Specification &gt; XML Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/describing-models/">Swagger Describing Models</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
-@Bean(properties="name,namespace,prefix,attribute,wrapped,*")
 @FluentSetters
 public class Xml extends SwaggerElement {
 
@@ -254,8 +267,7 @@ public class Xml extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "attribute" -> toType(getAttribute(), type);
 			case "name" -> toType(getName(), type);
@@ -268,8 +280,7 @@ public class Xml extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Xml set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "attribute" -> setAttribute(toBoolean(value));
 			case "name" -> setName(Utils.s(value));
@@ -294,4 +305,31 @@ public class Xml extends SwaggerElement {
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @return This object.
+	 */
+	@Override
+	public Xml strict() {
+		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public Xml strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
 }

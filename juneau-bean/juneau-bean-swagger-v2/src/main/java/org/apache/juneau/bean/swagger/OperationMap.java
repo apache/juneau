@@ -23,6 +23,25 @@ import org.apache.juneau.common.internal.*;
  * Map meant for method-name/operation mappings.
  *
  * <p>
+ * The OperationMap is a specialized TreeMap that represents the operations available on a single path in Swagger 2.0. 
+ * It forces entries to be sorted in a specific order to ensure consistent output. This map is used within PathItem 
+ * objects to define the HTTP methods and their corresponding operations.
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The OperationMap represents the operations field in a Path Item Object, where each key is an HTTP method and each 
+ * value is an Operation object. The supported HTTP methods are:
+ * <ul class='spaced-list'>
+ * 	<li><c>get</c> ({@link Operation}) - A definition of a GET operation
+ * 	<li><c>put</c> ({@link Operation}) - A definition of a PUT operation
+ * 	<li><c>post</c> ({@link Operation}) - A definition of a POST operation
+ * 	<li><c>delete</c> ({@link Operation}) - A definition of a DELETE operation
+ * 	<li><c>options</c> ({@link Operation}) - A definition of an OPTIONS operation
+ * 	<li><c>head</c> ({@link Operation}) - A definition of a HEAD operation
+ * 	<li><c>patch</c> ({@link Operation}) - A definition of a PATCH operation
+ * </ul>
+ *
+ * <p>
  * Forces entries to be sorted in the following order:
  * <ul>
  * 	<li><c>GET</c>
@@ -35,8 +54,31 @@ import org.apache.juneau.common.internal.*;
  * 	<li>Everything else.
  * </ul>
  *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	OperationMap <jv>operations</jv> = <jsm>operationMap</jsm>()
+ * 		.append(<js>"get"</js>, <jsm>operation</jsm>().setSummary(<js>"Get users"</js>))
+ * 		.append(<js>"post"</jsm>, <jsm>operation</jsm>().setSummary(<js>"Create user"</js>));
+ *
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>operations</jv>);
+ *
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	<jv>json</jv> = <jv>operations</jv>.toString();
+ * </p>
+ * <p class='bjson'>
+ * 	<jc>// Output</jc>
+ * 	{
+ * 		<js>"get"</js>: { <js>"summary"</js>: <js>"Get users"</js> },
+ * 		<js>"post"</js>: { <js>"summary"</js>: <js>"Create user"</js> }
+ * 	}
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#path-item-object">Swagger 2.0 Specification &gt; Path Item Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/paths-and-operations/">Swagger Paths and Operations</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  *
  * @serial exclude

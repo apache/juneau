@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -21,9 +22,47 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * TODO
+ * Provides schema and examples for the media type identified by its key.
+ *
+ * <p>
+ * Each Media Type Object provides schema and examples for the media type identified by its key (e.g., <js>"application/json"</js>).
+ * Media types are used in request bodies and response content to describe the structure and format of the data being sent or received.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Media Type Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>schema</c> ({@link SchemaInfo}) - The schema defining the content
+ * 	<li><c>example</c> (any) - Example of the media type (mutually exclusive with <c>examples</c>)
+ * 	<li><c>examples</c> (map of {@link Example}) - Examples of the media type (mutually exclusive with <c>example</c>)
+ * 	<li><c>encoding</c> (map of {@link Encoding}) - A map between a property name and its encoding information
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create a MediaType for JSON content</jc>
+ * 	MediaType <jv>mediaType</jv> = <jk>new</jk> MediaType()
+ * 		.setSchema(
+ * 			<jk>new</jk> SchemaInfo()
+ * 				.setType(<js>"object"</js>)
+ * 				.setProperties(
+ * 					JsonMap.<jsm>of</jsm>(
+ * 						<js>"id"</js>, <jk>new</jk> SchemaInfo().setType(<js>"integer"</js>),
+ * 						<js>"name"</js>, <jk>new</jk> SchemaInfo().setType(<js>"string"</js>)
+ * 					)
+ * 				)
+ * 		)
+ * 		.setExample(
+ * 			JsonMap.<jsm>of</jsm>(<js>"id"</js>, 123, <js>"name"</js>, <js>"Fluffy"</js>)
+ * 		);
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#media-type-object">OpenAPI Specification &gt; Media Type Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/media-types/">OpenAPI Media Types</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="schema,example,examples,encoding,*")
 @FluentSetters
 public class MediaType extends OpenApiElement{
 	private SchemaInfo schema;
@@ -62,6 +101,12 @@ public class MediaType extends OpenApiElement{
 	@Override /* OpenApiElement */
 	protected MediaType strict() {
 		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public MediaType strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 
@@ -125,6 +170,7 @@ public class MediaType extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public MediaType setEncoding(Map<String, Encoding> value) {
@@ -135,13 +181,15 @@ public class MediaType extends OpenApiElement{
 	/**
 	 * Adds one or more values to the <property>variables</property> property.
 	 *
-	 * @param key The mapping key.
-	 * @param value
+	 * @param key The mapping key.  Must not be <jk>null</jk>.
+	 * @param value 
 	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object
 	 */
 	public MediaType addEncoding(String key, Encoding value) {
+		assertArgNotNull("key", key);
+		assertArgNotNull("value", value);
 		encoding = mapBuilder(encoding).sparse().add(key, value).build();
 		return this;
 	}
@@ -177,11 +225,13 @@ public class MediaType extends OpenApiElement{
 	/**
 	 * Adds a single value to the <property>examples</property> property.
 	 *
-	 * @param name The example name.
-	 * @param example The example.
+	 * @param name The example name.  Must not be <jk>null</jk>.
+	 * @param example The example.  Must not be <jk>null</jk>.
 	 * @return This object
 	 */
 	public MediaType addExample(String name, Example example) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("example", example);
 		examples = mapBuilder(examples).add(name, example).build();
 		return this;
 	}
@@ -192,26 +242,24 @@ public class MediaType extends OpenApiElement{
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
-			case "schema" -> toType(getSchema(), type);
-			case "example" -> toType(getExample(), type);
-			case "examples" -> toType(getExamples(), type);
 			case "encoding" -> toType(getEncoding(), type);
+			case "examples" -> toType(getExamples(), type);
+			case "schema" -> toType(getSchema(), type);
+			case "x-example" -> toType(getExample(), type);
 			default -> super.get(property, type);
 		};
 	}
 
 	@Override /* OpenApiElement */
 	public MediaType set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
-			case "schema" -> setSchema(toType(value, SchemaInfo.class));
-			case "example" -> setExample(value);
-			case "examples" -> setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
 			case "encoding" -> setEncoding(mapBuilder(String.class,Encoding.class).sparse().addAny(value).build());
+			case "examples" -> setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			case "x-example" -> setExample(value);
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -223,7 +271,7 @@ public class MediaType extends OpenApiElement{
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(schema != null, "schema")
-			.addIf(example != null, "example")
+			.addIf(example != null, "x-example")
 			.addIf(encoding != null, "encoding")
 			.addIf(examples != null, "examples")
 			.build();

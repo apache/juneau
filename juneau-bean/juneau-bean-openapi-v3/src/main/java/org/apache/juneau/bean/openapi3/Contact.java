@@ -13,6 +13,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -20,23 +21,35 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Contact information for the exposed API.
  *
+ * <p>
+ * The Contact Object provides contact information for the exposed API. This information can be used by clients 
+ * to get in touch with the API maintainers for support, questions, or other inquiries.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Contact Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>name</c> (string) - The identifying name of the contact person/organization
+ * 	<li><c>url</c> (string) - The URL pointing to the contact information
+ * 	<li><c>email</c> (string) - The email address of the contact person/organization
+ * </ul>
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	Contact x = <jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>);
+ * 	Contact <jv>x</jv> = <jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	String <jv>json</jv> = <jv>x</jv>.toString();
  * </p>
  * <p class='bcode'>
  * 	<jc>// Output</jc>
@@ -46,8 +59,13 @@ import org.apache.juneau.internal.*;
  * 		<js>"email"</js>: <js>"support@swagger.io"</js>
  * 	}
  * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#contact-object">OpenAPI Specification &gt; Contact Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/api-general-info/">OpenAPI API General Info</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="name,url,email,*")
 @FluentSetters
 public class Contact extends OpenApiElement {
 
@@ -177,8 +195,7 @@ public class Contact extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "name" -> toType(getName(), type);
 			case "url" -> toType(getUrl(), type);
@@ -189,12 +206,11 @@ public class Contact extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Contact set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
+			case "email" -> setEmail(Utils.s(value));
 			case "name" -> setName(Utils.s(value));
 			case "url" -> setUrl(toURI(value));
-			case "email" -> setEmail(Utils.s(value));
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -205,10 +221,26 @@ public class Contact extends OpenApiElement {
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
+			.addIf(email != null, "email")
 			.addIf(name != null, "name")
 			.addIf(url != null, "url")
-			.addIf(email != null, "email")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public Contact strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public Contact strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

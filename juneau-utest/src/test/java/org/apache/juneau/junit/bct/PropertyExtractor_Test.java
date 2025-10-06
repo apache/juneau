@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -31,7 +32,7 @@ class PropertyExtractor_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class a_InterfaceContract {
+	class A_interfaceContract extends TestBase {
 
 		@SuppressWarnings("cast")
 		@Test
@@ -113,7 +114,7 @@ class PropertyExtractor_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class b_CustomImplementations {
+	class B_customImplementations extends TestBase {
 
 		@Test
 		void b01_customCanExtractLogic() {
@@ -200,7 +201,7 @@ class PropertyExtractor_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class c_EdgeCases {
+	class C_edgeCases extends TestBase {
 
 		@Test
 		void c01_exceptionHandling() {
@@ -295,7 +296,7 @@ class PropertyExtractor_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class d_Integration {
+	class D_integration extends TestBase {
 
 		@Test
 		void d01_integrationWithBasicBeanConverter() {

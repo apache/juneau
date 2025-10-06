@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -26,7 +27,7 @@ import org.junit.jupiter.api.*;
 class Listifiers_Test extends TestBase {
 
 	@Nested
-	class a_CollectionListifier {
+	class A_collectionListifier extends TestBase {
 
 		@Test
 		void a01_listifyList() {
@@ -98,7 +99,7 @@ class Listifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class b_IterableListifier {
+	class B_iterableListifier extends TestBase {
 
 		@Test
 		void b01_listifyIterable() {
@@ -142,7 +143,7 @@ class Listifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class c_IteratorListifier {
+	class C_iteratorListifier extends TestBase {
 
 		@Test
 		void c01_listifyIterator() {
@@ -187,7 +188,7 @@ class Listifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class d_EnumerationListifier {
+	class D_enumerationListifier extends TestBase {
 
 		@Test
 		void d01_listifyEnumeration() {
@@ -238,7 +239,7 @@ class Listifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class e_StreamListifier {
+	class E_streamListifier extends TestBase {
 
 		@Test
 		void e01_listifyStream() {
@@ -291,7 +292,7 @@ class Listifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class f_MapListifier {
+	class F_mapListifier extends TestBase {
 
 		@Test
 		void f01_listifyMap() {
@@ -400,7 +401,7 @@ class Listifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class g_Integration {
+	class G_integration extends TestBase {
 
 		@Test
 		void g01_useInBasicBeanConverter() {

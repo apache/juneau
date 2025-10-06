@@ -17,137 +17,228 @@ import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link Info}.
  */
-class Info_Test extends SimpleTestBase {
+class Info_Test extends TestBase {
 
-	/**
-	 * Test method for getters and setters.
-	 */
-	@Test void a01_gettersAndSetters() {
-		var t = new Info();
+	@Nested class A_basicTests extends TestBase {
 
-		// Basic property setters
-		assertBean(
-			t.setTitle("a").setDescription("b").setTermsOfService("c").setContact(contact("d")).setLicense(license("e")).setVersion("f"),
-			"title,description,termsOfService,contact{name},license{name},version",
-			"a,b,c,{d},{e},f"
-		);
+		private static final BeanTester<Info> TESTER =
+			testBean(
+				bean()
+					.setContact(contact().setName("a"))
+					.setDescription("b")
+					.setLicense(license().setName("c"))
+					.setSiteName("d")
+					.setTermsOfService("e")
+					.setTitle("f")
+					.setVersion("g")
+			)
+			.props("contact{name},description,license{name},siteName,termsOfService,title,version")
+			.vals("{a},b,{c},d,e,f,g")
+			.json("{contact:{name:'a'},description:'b',license:{name:'c'},siteName:'d',termsOfService:'e',title:'f',version:'g'}")
+			.string("{'contact':{'name':'a'},'description':'b','license':{'name':'c'},'siteName':'d','termsOfService':'e','title':'f','version':'g'}".replace('\'', '"'))
+		;
 
-		// Null values
-		assertBean(
-			t.setTitle(null).setDescription(null).setTermsOfService(null).setVersion(null),
-			"title,description,termsOfService,version",
-			"<null>,<null>,<null>,<null>"
-		);
+		@Test void a01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void a02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void a03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void a04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void a05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void a06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void a07_keySet() {
+			assertList(TESTER.bean().keySet(), "contact", "description", "license", "siteName", "termsOfService", "title", "version");
+		}
 	}
 
-	/**
-	 * Test method for {@link Info#set(java.lang.String, java.lang.Object)}.
-	 */
-	@Test void b01_set() {
-		var t = new Info();
+	@Nested class B_emptyTests extends TestBase {
 
-		t
-			.set("contact", contact("a"))
-			.set("description", "b")
-			.set("license", license("c"))
-			.set("termsOfService", "d")
-			.set("title", "e")
-			.set("version", "f")
-			.set("$ref", "ref");
+		private static final BeanTester<Info> TESTER =
+			testBean(bean())
+			.props("description,title,version,termsOfService,contact,license")
+			.vals("<null>,<null>,<null>,<null>,<null>,<null>")
+			.json("{}")
+			.string("{}")
+		;
 
-		// Comprehensive object state validation
-		assertBean(t,
-			"title,description,version,contact{name},license{name},termsOfService,$ref",
-			"e,b,f,{a},{c},d,ref");
+		@Test void b01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
 
-		t
-			.set("contact", "{name:'a'}")
-			.set("description", "b")
-			.set("license", "{name:'c'}")
-			.set("termsOfService", "d")
-			.set("title", "e")
-			.set("version", "f")
-			.set("$ref", "ref");
+		@Test void b02_copy() {
+			TESTER.assertCopy();
+		}
 
-		assertBean(t,
-			"title,description,version,contact{name},license{name},termsOfService,$ref",
-			"e,b,f,{a},{c},d,ref");
+		@Test void b03_toJson() {
+			TESTER.assertToJson();
+		}
 
-		t
-			.set("contact", Utils.sb("{name:'a'}"))
-			.set("description", Utils.sb("b"))
-			.set("license", Utils.sb("{name:'c'}"))
-			.set("termsOfService", Utils.sb("d"))
-			.set("title", Utils.sb("e"))
-			.set("version", Utils.sb("f"))
-			.set("$ref", Utils.sb("ref"));
+		@Test void b04_fromJson() {
+			TESTER.assertFromJson();
+		}
 
-		assertBean(t,
-			"title,description,version,contact{name},license{name},termsOfService,$ref",
-			"e,b,f,{a},{c},d,ref");
+		@Test void b05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
 
-		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
-			"contact,description,license,termsOfService,title,version,$ref",
-			"{name:'a'},b,{name:'c'},d,e,f,ref");
+		@Test void b06_toString() {
+			TESTER.assertToString();
+		}
 
-		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
-			"contact,description,license,termsOfService,title,version,$ref",
-			"Contact,String,License,String,String,String,StringBuilder");
-
-		t.set("null", null).set(null, "null");
-		assertNull(t.get("null", Object.class));
-		assertNull(t.get(null, Object.class));
-		assertNull(t.get("foo", Object.class));
+		@Test void b07_keySet() {
+			assertEmpty(TESTER.bean().keySet());
+		}
 	}
 
-	@Test void b02_roundTripJson() {
-		var s = "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}";
-		assertJson(s, JsonParser.DEFAULT.parse(s, Info.class));
+	@Nested class C_extraProperties extends TestBase {
+
+		private static final BeanTester<Info> TESTER =
+			testBean(
+				bean()
+					.set("contact", contact().setName("a"))
+					.set("description", "b")
+					.set("license", license().setName("c"))
+					.set("siteName", "d")
+					.set("termsOfService", "e")
+					.set("title", "f")
+					.set("version", "g")
+					.set("x1", "x1a")
+					.set("x2", null)
+			)
+			.props("contact{name},description,license{name},siteName,termsOfService,title,version,x1,x2")
+			.vals("{a},b,{c},d,e,f,g,x1a,<null>")
+			.json("{contact:{name:'a'},description:'b',license:{name:'c'},siteName:'d',termsOfService:'e',title:'f',version:'g',x1:'x1a'}")
+			.string("{'contact':{'name':'a'},'description':'b','license':{'name':'c'},'siteName':'d','termsOfService':'e','title':'f','version':'g','x1':'x1a'}".replace('\'', '"'))
+		;
+
+		@Test void c01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void c02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void c03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void c04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void c05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void c06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void c07_keySet() {
+			assertList(TESTER.bean().keySet(), "contact", "description", "license", "siteName", "termsOfService", "title", "version", "x1", "x2");
+		}
+
+		@Test void c08_get() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> obj.get(prop, Object.class),
+				"contact{name},description,license{name},siteName,termsOfService,title,version,x1,x2",
+				"{a},b,{c},d,e,f,g,x1a,<null>"
+			);
+		}
+
+		@Test void c09_getTypes() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				"contact,description,license,siteName,termsOfService,title,version,x1,x2",
+				"Contact,String,License,String,String,String,String,String,<null>"
+			);
+		}
+
+		@Test void c10_nullPropertyValue() {
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+		}
 	}
 
-	@Test void b03_copy() {
-		var t = new Info();
+	@Nested class D_additionalMethods extends TestBase {
 
-		t = t.copy();
+		@Test void d01_asMap() {
+			assertBean(
+				bean()
+					.setDescription("a")
+					.setTitle("b")
+					.setVersion("c")
+					.set("x1", "x1a")
+					.asMap(),
+				"description,title,version,x1",
+				"a,b,c,x1a"
+			);
+		}
 
-		assertBean(t, "contact,description,license,termsOfService,title,version", "<null>,<null>,<null>,<null>,<null>,<null>");
+		@Test void d02_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
 
-		t
-			.set("contact", contact("a"))
-			.set("description", "b")
-			.set("license", license("c"))
-			.set("termsOfService", "d")
-			.set("title", "e")
-			.set("version", "f")
-			.set("$ref", "ref")
-			.copy();
-
-		assertBean(t,
-			"title,description,version,contact{name},license{name},termsOfService,$ref",
-			"e,b,f,{a},{c},d,ref");
+		@Test void d03_strict() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+		}
 	}
 
-	@Test void b04_keySet() {
-		var t = new Info();
+	@Nested class E_strictMode extends TestBase {
 
-		assertEmpty(t.keySet());
+		@Test void e01_strictModeSetThrowsException() {
+			var x = bean().strict();
+			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
+		}
 
-		t
-			.set("contact", contact("a"))
-			.set("description", "b")
-			.set("license", license("c"))
-			.set("termsOfService", "d")
-			.set("title", "e")
-			.set("version", "f")
-			.set("$ref", "ref");
+		@Test void e02_nonStrictModeAllowsSet() {
+			var x = bean(); // not strict
+			assertDoesNotThrow(() -> x.set("foo", "bar"));
+		}
 
-		assertList(t.keySet(), "$ref", "contact", "description", "license", "termsOfService", "title", "version");
+		@Test void e03_strictModeToggle() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+			x.strict(false);
+			assertFalse(x.isStrict());
+		}
+	}
+
+	//---------------------------------------------------------------------------------------------
+	// Helper methods
+	//---------------------------------------------------------------------------------------------
+
+	private static Info bean() {
+		return info();
 	}
 }

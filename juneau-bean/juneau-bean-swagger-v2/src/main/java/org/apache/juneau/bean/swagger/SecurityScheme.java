@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.swagger;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.contains;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.copyOf;
@@ -20,7 +21,6 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
@@ -29,8 +29,23 @@ import org.apache.juneau.marshaller.*;
  * Allows the definition of a security scheme that can be used by the operations.
  *
  * <p>
+ * The Security Scheme Object defines a security scheme that can be used by the operations in Swagger 2.0. 
  * Supported schemes are basic authentication, an API key (either as a header or as a query parameter) and OAuth2's
  * common flows (implicit, password, application and access code).
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The Security Scheme Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>type</c> (string, REQUIRED) - The type of the security scheme. Values: <js>"basic"</js>, <js>"apiKey"</js>, <js>"oauth2"</js>
+ * 	<li><c>description</c> (string) - A short description for security scheme
+ * 	<li><c>name</c> (string) - The name of the header or query parameter to be used (for <js>"apiKey"</js> type)
+ * 	<li><c>in</c> (string) - The location of the API key (for <js>"apiKey"</js> type). Values: <js>"query"</js>, <js>"header"</js>
+ * 	<li><c>flow</c> (string) - The flow used by the OAuth2 security scheme (for <js>"oauth2"</js> type). Values: <js>"implicit"</js>, <js>"password"</js>, <js>"application"</js>, <js>"accessCode"</js>
+ * 	<li><c>authorizationUrl</c> (string) - The authorization URL to be used for this flow (for <js>"oauth2"</js> type)
+ * 	<li><c>tokenUrl</c> (string) - The token URL to be used for this flow (for <js>"oauth2"</js> type)
+ * 	<li><c>scopes</c> (map of string) - The available scopes for the OAuth2 security scheme (for <js>"oauth2"</js> type)
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjson'>
@@ -59,10 +74,11 @@ import org.apache.juneau.marshaller.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#security-scheme-object">Swagger 2.0 Specification &gt; Security Scheme Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/authentication/">Swagger Authentication</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
-@Bean(properties="type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,*")
 @FluentSetters
 public class SecurityScheme extends SwaggerElement {
 
@@ -112,8 +128,23 @@ public class SecurityScheme extends SwaggerElement {
 
 
 	@Override /* SwaggerElement */
-	protected SecurityScheme strict() {
+	public SecurityScheme strict() {
 		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public SecurityScheme strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 
@@ -308,11 +339,13 @@ public class SecurityScheme extends SwaggerElement {
 	 * <p>
 	 * The available scopes for the OAuth2 security scheme.
 	 *
-	 * @param key The scope key.
-	 * @param value The scope value.
+	 * @param key The scope key.  Must not be <jk>null</jk>.
+	 * @param value The scope value.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public SecurityScheme addScope(String key, String value) {
+		assertArgNotNull("key", key);
+		assertArgNotNull("value", value);
 		scopes = mapBuilder(scopes).sparse().add(key, value).build();
 		return this;
 	}
@@ -373,6 +406,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * 		<li><js>"oauth2"</js>
 	 * 	</ul>
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public SecurityScheme setType(String value) {
@@ -391,8 +425,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "authorizationUrl" -> toType(getAuthorizationUrl(), type);
 			case "description" -> toType(getDescription(), type);
@@ -408,8 +441,7 @@ public class SecurityScheme extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public SecurityScheme set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "authorizationUrl" -> setAuthorizationUrl(Utils.s(value));
 			case "description" -> setDescription(Utils.s(value));
@@ -440,4 +472,5 @@ public class SecurityScheme extends SwaggerElement {
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
 }

@@ -16,236 +16,354 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link Swagger}.
  */
-class Swagger_Test extends SimpleTestBase {
+class Swagger_Test extends TestBase {
 
-	/**
-	 * Test method for getters and setters.
-	 */
-	@Test void a01_gettersAndSetters() {
-		var t = new Swagger();
+	@Nested class A_basicTests extends TestBase {
 
-		// Basic property setters
-		assertBean(
-			t.setBasePath("a").setHost("b").setSwagger("c"),
-			"basePath,host,swagger",
-			"a,b,c"
+		private static final BeanTester<Swagger> TESTER =
+			testBean(
+				bean()
+					.setBasePath("a")
+					.setConsumes(MediaType.of("b"))
+					.setDefinitions(map("c1", JsonMap.of("type", "c2")))
+					.setExternalDocs(externalDocumentation("d"))
+					.setHost("e")
+					.setInfo(info("f1", "f2"))
+					.setParameters(map("g1", parameterInfo("g2", "g3")))
+					.setPaths(map("h1", operationMap().append("get", operation().setSummary("h2"))))
+					.setProduces(MediaType.of("i"))
+					.setResponses(map("j1", responseInfo().setDescription("j2")))
+					.setSchemes("k")
+					.setSecurity(list(map("l1", list("l2"))))
+					.setSecurityDefinitions(map("m1", securityScheme().setType("m2")))
+					.setSwagger("n")
+					.setTags(list(tag().setName("o")))
+			)
+			.props("basePath,consumes,definitions{c1{type}},externalDocs{url},host,info{title,version},parameters{g1{in,name}},paths{h1{get{summary}}},produces,responses{j1{description}},schemes,security{0{l1}},securityDefinitions{m1{type}},swagger,tags{0{name}}")
+			.vals("a,[b],{{c2}},{d},e,{f1,f2},{{g2,g3}},{{{h2}}},[i],{{j2}},[k],{{[l2]}},{{m2}},n,{{o}}")
+			.json("{basePath:'a',consumes:['b'],definitions:{c1:{type:'c2'}},externalDocs:{url:'d'},host:'e',info:{title:'f1',version:'f2'},parameters:{g1:{'in':'g2',name:'g3'}},paths:{h1:{get:{summary:'h2'}}},produces:['i'],responses:{j1:{description:'j2'}},schemes:['k'],security:[{l1:['l2']}],securityDefinitions:{m1:{type:'m2'}},swagger:'n',tags:[{name:'o'}]}")
+			.string("{'basePath':'a','consumes':['b'],'definitions':{'c1':{'type':'c2'}},'externalDocs':{'url':'d'},'host':'e','info':{'title':'f1','version':'f2'},'parameters':{'g1':{'in':'g2','name':'g3'}},'paths':{'h1':{'get':{'summary':'h2'}}},'produces':['i'],'responses':{'j1':{'description':'j2'}},'schemes':['k'],'security':[{'l1':['l2']}],'securityDefinitions':{'m1':{'type':'m2'}},'swagger':'n','tags':[{'name':'o'}]}".replace('\'', '"'))
+		;
+
+		@Test void a01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void a02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void a03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void a04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void a05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void a06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void a07_keySet() {
+			assertList(TESTER.bean().keySet(), "basePath", "consumes", "definitions", "externalDocs", "host", "info", "parameters", "paths", "produces", "responses", "schemes", "security", "securityDefinitions", "swagger", "tags");
+		}
+
+	@Test void a08_otherGettersAndSetters() {
+		// Test Collection variants of setters
+		var x = bean()
+			.setConsumes(list(
+				MediaType.of("a1"),
+				MediaType.of("a2")
+			))
+			.setProduces(list(
+				MediaType.of("b1"),
+				MediaType.of("b2")
+			))
+			.setSchemes(list("c1", "c2"))
+			.setSecurity(list(
+				map("d1", list("d2")),
+				map("d3", list("d4"))
+			));
+
+		assertBean(x,
+			"consumes,produces,schemes,security{0{d1},1{d3}}",
+			"[a1,a2],[b1,b2],[c1,c2],{{[d2]},{[d4]}}"
 		);
 
-		// Complex objects
-		assertBean(
-			t.setInfo(info("a", "b")).setExternalDocs(externalDocumentation("c"))
-				.setSchemes(set("d","e")).setConsumes(set(MediaType.of("text/f")))
-				.setProduces(set(MediaType.of("text/g")))
-				.setPaths(map("h", new OperationMap().append("i",operation().setSummary("j"))))
-				.setDefinitions(map("k",JsonMap.of("type","l")))
-				.setParameters(map("m",parameterInfo().setName("n")))
-				.setResponses(map("1",responseInfo("o")))
-				.setSecurityDefinitions(map("p",securityScheme("q")))
-				.setSecurity(set(map("r",alist("s"))))
-				.setTags(set(tag("t"))),
-			"consumes,definitions{k{type}},externalDocs{url},info{title,version},parameters{m{name}},paths{h{i{summary}}},produces,responses{1{description}},schemes,security,securityDefinitions{p{type}},tags{#{name}}",
-			"[text/f],{{l}},{c},{a,b},{{n}},{{{j}}},[text/g],{{o}},[d,e],[{r=[s]}],{{q}},{[{t}]}"
-		);
+		// Test special getters
+		x = bean()
+			.addPath("a1", "get", operation().setSummary("a2"))
+			.addPath("b1", "get", operation().addResponse("200", responseInfo("b2")).setParameters(parameterInfo("b3", "b4")))
+			.addParameter("c1", parameterInfo("c2", "c3"));
 
-		// Null values
-		assertBean(
-			t.setSwagger(null).setHost(null).setBasePath(null).setSchemes((Collection<String>)null)
-				.setConsumes((Collection<MediaType>)null).setProduces((Collection<MediaType>)null)
-				.setPaths((Map<String,OperationMap>)null).setDefinitions((Map<String,JsonMap>)null)
-				.setParameters((Map<String,ParameterInfo>)null).setResponses((Map<String,ResponseInfo>)null)
-				.setSecurityDefinitions((Map<String,SecurityScheme>)null).setSecurity((Collection<Map<String, List<String>>>)null)
-				.setTags((Collection<Tag>)null),
-			"basePath,consumes,definitions,host,parameters,paths,produces,responses,schemes,security,securityDefinitions,swagger,tags",
-			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>"
-		);
-
-		// Other methods - empty collections/maps
-		assertBean(
-			t.setSchemes(set()).setConsumes(set()).setProduces(set()).setDefinitions(map())
-				.setParameters(map()).setResponses(map()).setSecurityDefinitions(map())
-				.setSecurity(set()).setTags(set()),
-			"consumes,definitions,parameters,produces,responses,schemes,security,securityDefinitions,tags",
-			"[],{},{},[],{},[],[],{},[]"
-		);
-
-		assertNull(t.setPaths(map()).getPaths());  // BUG?
-
-		// addX methods.
-		assertBean(t.setPaths(null).addPath("a", "a1", operation().setDescription("a2")).addPath("b", null, null),
-			"paths", "{a={a1={\"description\":\"a2\"}},b={=<null>}}");
-		assertBean(t.setDefinitions(null).addDefinition("a", JsonMap.of("type","a1")).addDefinition("b", (JsonMap)null).addDefinition(null, JsonMap.of("type", "c1")),
-			"definitions", "{a={type=a1},b=<null>,<null>={type=c1}}");
-		assertBean(t.setParameters(null).addParameter("a", parameterInfo().setIn("a1")).addParameter("b", null).addParameter(null, parameterInfo().setIn("c1")),
-			"parameters", "{a={\"in\":\"a1\"},b=<null>,<null>={\"in\":\"c1\"}}");
-		assertBean(t.setResponses(null).addResponse("a", responseInfo("a1")).addResponse(null, responseInfo("b1")).addResponse("c", null),
-			"responses", "{a={\"description\":\"a1\"},<null>={\"description\":\"b1\"},c=<null>}");
-		assertBean(t.setSecurityDefinitions(null).addSecurityDefinition("a", securityScheme("a1")).addSecurityDefinition("b", null).addSecurityDefinition(null, securityScheme("c1")),
-			"securityDefinitions", "{a={\"type\":\"a1\"},b=<null>,<null>={\"type\":\"c1\"}}");
-		assertBean(t.setSecurity(null).addSecurity("a", "a1", "a2").addSecurity("b", (String)null).addSecurity(null, "d1", "d2"),
-			"security", "[{a=[a1,a2]},{b=[<null>]},{<null>=[d1,d2]}]");
+		assertBean(x.getPath("a1"), "get{summary}", "{a2}");
+		assertBean(x.getOperation("a1", "get"), "summary", "a2");
+		assertBean(x.getResponseInfo("b1", "get", "200"), "description", "b2");
+		assertBean(x.getResponseInfo("b1", "get", 200), "description", "b2");
+		assertBean(x.getParameterInfo("b1", "get", "b3", "b4"), "in,name", "b3,b4");
 	}
 
-	/**
-	 * Test method for {@link Swagger#set(java.lang.String, java.lang.Object)}.
-	 */
-	@Test void b01_set() {
-		var t = new Swagger();
+		@Test void a09_nullParameters() {
+			var x = bean();
 
-		t
-			.set("basePath", "a")
-			.set("consumes", set(MediaType.of("text/b")))
-			.set("definitions", map("c",schemaInfo().setType("c1")))
-			.set("externalDocs", externalDocumentation("d"))
-			.set("host", "e")
-			.set("info", info("f1", "f2"))
-			.set("parameters", map("g",parameterInfo("g1", "g2")))
-			.set("paths", map("h",map("h1",operation().setOperationId("h2"))))
-			.set("produces", set(MediaType.of("text/i")))
-			.set("responses", map("j",responseInfo("j1")))
-			.set("schemes", set("k1"))
-			.set("security", set(map("l1",alist("l2"))))
-			.set("securityDefinitions", map("m",securityScheme("m1")))
-			.set("swagger", "n")
-			.set("tags", set(tag("o")))
-			.set("$ref", "p");
-
-		assertBean(t,
-			"basePath,consumes,definitions{c{type}},externalDocs{url},host,info{title,version},parameters{g{in,name}},paths{h{h1{operationId}}},produces,$ref,responses{j{description}},schemes,security,securityDefinitions{m{type}},swagger,tags{#{name}}",
-			"a,[text/b],{{c1}},{d},e,{f1,f2},{{g1,g2}},{{{h2}}},[text/i],p,{{j1}},[k1],[{l1=[l2]}],{{m1}},n,{[{o}]}");
-
-		t
-			.set("basePath", "a")
-			.set("consumes", "['text/b']")
-			.set("definitions", "{c:{type:'c1'}}")
-			.set("externalDocs", "{url:'d'}")
-			.set("host", "e")
-			.set("info", "{title:'f1',version:'f2'}")
-			.set("parameters", "{g:{'in':'g1',name:'g2'}}")
-			.set("paths", "{h:{h1:{operationId:'h2'}}}")
-			.set("produces", "['text/i']")
-			.set("responses", "{j:{description:'j1'}}")
-			.set("schemes", "['k1']")
-			.set("security", "[{l1:['l2']}]")
-			.set("securityDefinitions", "{m:{type:'m1'}}")
-			.set("swagger", "n")
-			.set("tags", "[{name:'o'}]")
-			.set("$ref", "ref");
-
-		assertBean(t,
-			"swagger,info{title,version},tags{#{name}},externalDocs{url},basePath,schemes,consumes,produces,paths{h{h1{operationId}}},definitions{c{type}},parameters{g{in,name}},responses{j{description}},securityDefinitions{m{type}},security,$ref",
-			"n,{f1,f2},{[{o}]},{d},a,[k1],[text/b],[text/i],{{{h2}}},{{c1}},{{g1,g2}},{{j1}},{{m1}},[{l1=[l2]}],ref");
-
-		t
-			.set("basePath", Utils.sb("a"))
-			.set("consumes", Utils.sb("['text/b']"))
-			.set("definitions", Utils.sb("{c:{type:'c1'}}"))
-			.set("externalDocs", Utils.sb("{url:'d'}"))
-			.set("host", Utils.sb("e"))
-			.set("info", Utils.sb("{title:'f1',version:'f2'}"))
-			.set("parameters", Utils.sb("{g:{'in':'g1',name:'g2'}}"))
-			.set("paths", Utils.sb("{h:{h1:{operationId:'h2'}}}"))
-			.set("produces", Utils.sb("['text/i']"))
-			.set("responses", Utils.sb("{j:{description:'j1'}}"))
-			.set("schemes", Utils.sb("['k1']"))
-			.set("security", Utils.sb("[{l1:['l2']}]"))
-			.set("securityDefinitions", Utils.sb("{m:{type:'m1'}}"))
-			.set("swagger", Utils.sb("n"))
-			.set("tags", Utils.sb("[{name:'o'}]"))
-			.set("$ref", Utils.sb("ref"));
-
-		assertBean(t,
-			"swagger,info{title,version},tags{#{name}},externalDocs{url},basePath,schemes,consumes,produces,paths{h{h1{operationId}}},definitions{c{type}},parameters{g{in,name}},responses{j{description}},securityDefinitions{m{type}},security,$ref",
-			"n,{f1,f2},{[{o}]},{d},a,[k1],[text/b],[text/i],{{{h2}}},{{c1}},{{g1,g2}},{{j1}},{{m1}},[{l1=[l2]}],ref");
-
-		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
-			"basePath,consumes,definitions,externalDocs,host,info,parameters,paths,produces,responses,schemes,security,securityDefinitions,swagger,tags,$ref",
-			"a,['text/b'],{c:{type:'c1'}},{url:'d'},e,{title:'f1',version:'f2'},{g:{'in':'g1',name:'g2'}},{h:{h1:{operationId:'h2'}}},['text/i'],{j:{description:'j1'}},['k1'],[{l1:['l2']}],{m:{type:'m1'}},n,[{name:'o'}],ref");
-
-		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
-			"basePath,consumes,definitions,externalDocs,host,info,parameters,paths,produces,responses,schemes,security,securityDefinitions,swagger,tags,$ref",
-			"String,LinkedHashSet,LinkedHashMap,ExternalDocumentation,String,Info,LinkedHashMap,TreeMap,LinkedHashSet,LinkedHashMap,LinkedHashSet,ArrayList,LinkedHashMap,String,LinkedHashSet,StringBuilder");
-
-		assertMapped(t, (o,k) -> o.get(k, List.class).get(0).getClass().getSimpleName(), "consumes,tags", "MediaType,Tag");
-		assertMapped(t, (o,k) -> o.get(k, Map.class).values().iterator().next().getClass().getSimpleName(), "definitions,parameters,responses,securityDefinitions", "JsonMap,ParameterInfo,ResponseInfo,SecurityScheme");
-
-		t.set("null", null).set(null, "null");
-		assertNull(t.get("null", Object.class));
-		assertNull(t.get(null, Object.class));
-		assertNull(t.get("foo", Object.class));
+			assertThrows(IllegalArgumentException.class, ()->x.getPath(null));
+			assertThrows(IllegalArgumentException.class, ()->x.getOperation(null, "a"));
+			assertThrows(IllegalArgumentException.class, ()->x.getOperation("a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.getResponseInfo(null, "a", "a"));
+			assertThrows(IllegalArgumentException.class, ()->x.getResponseInfo("a", null, "a"));
+			assertThrows(IllegalArgumentException.class, ()->x.getResponseInfo("a", "a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.getParameterInfo(null, "a", "a", "a"));
+			assertThrows(IllegalArgumentException.class, ()->x.getParameterInfo("a", null, "a", "a"));
+			assertThrows(IllegalArgumentException.class, ()->x.getParameterInfo("a", "a", null, "a"));
+		}
 	}
 
-	@Test void b02_roundTripJson() {
-		var s = "{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}";
-		assertJson(s, JsonParser.DEFAULT.parse(s, Swagger.class));
+	@Nested class B_emptyTests extends TestBase {
+
+		private static final BeanTester<Swagger> TESTER =
+			testBean(bean())
+			.props("basePath,host,swagger,info,tags,schemes,consumes,produces,paths,definitions,parameters,responses,securityDefinitions,security,externalDocs")
+			.vals("<null>,<null>,2.0,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>")
+			.json("{swagger:'2.0'}")
+			.string("{\"swagger\":\"2.0\"}")
+		;
+
+		@Test void b01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void b02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void b03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void b04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void b05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void b06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void b07_keySet() {
+			assertList(TESTER.bean().keySet(), "swagger");
+		}
 	}
 
-	@Test void b03_copy() {
-		var t = new Swagger();
+	@Nested class C_extraProperties extends TestBase {
 
-		t = t.copy();
+		private static final BeanTester<Swagger> TESTER =
+			testBean(
+				bean()
+					.setBasePath("a")
+					.setHost("b")
+					.setSwagger("c")
+					.set("x1", "x1a")
+					.set("x2", null)
+			)
+			.props("basePath,host,swagger,x1,x2")
+			.vals("a,b,c,x1a,<null>")
+			.json("{basePath:'a',host:'b',swagger:'c',x1:'x1a'}")
+			.string("{'basePath':'a','host':'b','swagger':'c','x1':'x1a'}".replace('\'', '"'))
+		;
 
-		assertBean(t,
-			"swagger,basePath,consumes,definitions,externalDocs,host,info,parameters,paths,produces,responses,schemes,security,securityDefinitions,tags",
-			"2.0,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
+		@Test void c01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
 
-		t
-			.set("basePath", "a")
-			.set("consumes", set(MediaType.of("text/b")))
-			.set("definitions", map("c",schemaInfo().setType("c1")))
-			.set("externalDocs", externalDocumentation("d"))
-			.set("host", "e")
-			.set("info", info("f1", "f2"))
-			.set("parameters", map("g",parameterInfo("g1", "g2")))
-			.set("paths", map("h",map("h1",operation().setOperationId("h2"))))
-			.set("produces", set(MediaType.of("text/i")))
-			.set("responses", map("j",responseInfo("j1")))
-			.set("schemes", set("k1"))
-			.set("security", set(map("l1",alist("l2"))))
-			.set("securityDefinitions", map("m",securityScheme("m1")))
-			.set("swagger", "n")
-			.set("tags", set(tag("o")))
-			.set("$ref", "p")
-			.copy();
+		@Test void c02_copy() {
+			TESTER.assertCopy();
+		}
 
-		assertBean(t,
-			"swagger,info{title,version},tags{#{name}},externalDocs{url},basePath,schemes,consumes,produces,paths{h{h1{operationId}}},definitions{c{type}},parameters{g{in,name}},responses{j{description}},securityDefinitions{m{type}},security,$ref",
-			"n,{f1,f2},{[{o}]},{d},a,[k1],[text/b],[text/i],{{{h2}}},{{c1}},{{g1,g2}},{{j1}},{{m1}},[{l1=[l2]}],p");
+		@Test void c03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void c04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void c05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void c06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void c07_keySet() {
+			assertList(TESTER.bean().keySet(), "basePath", "host", "swagger", "x1", "x2");
+		}
+
+		@Test void c08_get() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> obj.get(prop, Object.class),
+				"basePath,host,swagger,x1,x2",
+				"a,b,c,x1a,<null>"
+			);
+		}
+
+		@Test void c09_getTypes() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				"basePath,host,swagger,x1,x2",
+				"String,String,String,String,<null>"
+			);
+		}
+
+		@Test void c10_nullPropertyValue() {
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+		}
 	}
 
-	@Test void b04_keySet() {
-		var t = new Swagger();
+	@Nested class D_additionalMethods extends TestBase {
 
-		assertList(t.keySet(), "swagger");
+		@Test void d01_addMethods() {
+			// Call add methods twice - first call creates collection, second adds to existing
+			var x = bean()
+				.addConsumes(MediaType.of("a"))
+				.addConsumes(MediaType.of("b"))
+				.addDefinition("c1", JsonMap.of("type", "c2"))
+				.addDefinition("d1", JsonMap.of("type", "d2"))
+				.addParameter("e1", parameterInfo("e2", "e3"))
+				.addParameter("f1", parameterInfo("f2", "f3"))
+				.addPath("g1", "get", operation().setSummary("g2"))
+				.addPath("h1", "post", operation().setSummary("h2"))
+				.addProduces(MediaType.of("i"))
+				.addProduces(MediaType.of("j"))
+				.addResponse("k1", responseInfo().setDescription("k2"))
+				.addResponse("l1", responseInfo().setDescription("l2"))
+				.addSchemes("m")
+				.addSchemes("n")
+				.addSecurity("o1", "o2")
+				.addSecurity("p1", "p2")
+				.addSecurityDefinition("q1", securityScheme().setType("q2"))
+				.addSecurityDefinition("r1", securityScheme().setType("r2"))
+				.addTags(tag().setName("s"))
+				.addTags(tag().setName("t"));
 
-		t
-			.set("basePath", "a")
-			.set("consumes", set(MediaType.of("text/b")))
-			.set("definitions", map("c",schemaInfo().setType("c1")))
-			.set("externalDocs", externalDocumentation("d"))
-			.set("host", "e")
-			.set("info", info("f1", "f2"))
-			.set("parameters", map("g",parameterInfo("g1", "g2")))
-			.set("paths", map("h",map("h1",operation().setOperationId("h2"))))
-			.set("produces", set(MediaType.of("text/i")))
-			.set("responses", map("j",responseInfo("j1")))
-			.set("schemes", set("k1"))
-			.set("security", set(map("l1",alist("l2"))))
-			.set("securityDefinitions", map("m",securityScheme("m1")))
-			.set("swagger", "n")
-			.set("tags", set(tag("o")))
-			.set("$ref", "p");
+			assertBean(x,
+				"consumes,definitions{c1{type},d1{type}},parameters{e1{in,name},f1{in,name}},paths{g1{get{summary}},h1{post{summary}}},produces,responses{k1{description},l1{description}},schemes,security{0{o1},1{p1}},securityDefinitions{q1{type},r1{type}},tags{0{name},1{name}}",
+				"[a,b],{{c2},{d2}},{{e2,e3},{f2,f3}},{{{g2}},{{h2}}},[i,j],{{k2},{l2}},[m,n],{{[o2]},{[p2]}},{{q2},{r2}},{{s},{t}}"
+			);
+		}
 
-		assertList(t.keySet(), "$ref", "basePath", "consumes", "definitions", "externalDocs", "host", "info", "parameters", "paths", "produces", "responses", "schemes", "security", "securityDefinitions", "swagger", "tags");
+		@Test void d02_asMap() {
+			assertBean(
+				bean()
+					.setBasePath("a")
+					.setHost("b")
+					.set("x1", "x1a")
+					.asMap(),
+				"basePath,host,swagger,x1",
+				"a,b,2.0,x1a"
+			);
+		}
+
+		@Test void d03_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void d04_strict() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+		}
+
+		@Test void d05_addMethodsWithNullParameters() {
+			var x = bean();
+			assertThrows(IllegalArgumentException.class, ()->x.addDefinition(null, JsonMap.of("a", "b")));
+			assertThrows(IllegalArgumentException.class, ()->x.addDefinition("a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addParameter(null, parameterInfo("a", "b")));
+			assertThrows(IllegalArgumentException.class, ()->x.addParameter("a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addPath(null, "get", operation()));
+			assertThrows(IllegalArgumentException.class, ()->x.addPath("a", null, operation()));
+			assertThrows(IllegalArgumentException.class, ()->x.addPath("a", "get", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addResponse(null, responseInfo()));
+			assertThrows(IllegalArgumentException.class, ()->x.addResponse("a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addSecurity(null, "a"));
+			assertThrows(IllegalArgumentException.class, ()->x.addSecurityDefinition(null, securityScheme()));
+			assertThrows(IllegalArgumentException.class, ()->x.addSecurityDefinition("a", null));
+		}
 	}
+
+	@Nested class E_strictMode extends TestBase {
+
+		@Test void e01_strictModeSetThrowsException() {
+			var x = bean().strict();
+			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
+		}
+
+		@Test void e02_nonStrictModeAllowsSet() {
+			var x = bean(); // not strict
+			assertDoesNotThrow(() -> x.set("foo", "bar"));
+		}
+
+		@Test void e03_strictModeToggle() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+			x.strict(false);
+			assertFalse(x.isStrict());
+		}
+	}
+
+	@Nested class G_utilityMethods extends TestBase {
+
+		@Test void g01_asJson() {
+			var x = swagger().setHost("a");
+			var json = x.asJson();
+			assertTrue(json.contains("a"));
+		}
+
+		@Test void g02_findRef() {
+			var x = swagger().addDefinition("a1", JsonMap.of("type", "a2"));
+			assertBean(
+				x.findRef("#/definitions/a1", JsonMap.class), 
+				"type", 
+				"a2"
+			);
+
+			assertNull(x.findRef("#/definitions/notfound", JsonMap.class));
+
+			assertThrows(IllegalArgumentException.class, () -> x.findRef(null, JsonMap.class));
+			assertThrows(IllegalArgumentException.class, () -> x.findRef("a", null));
+			assertThrows(IllegalArgumentException.class, () -> x.findRef("", JsonMap.class));
+			assertThrowsWithMessage(BasicRuntimeException.class, "Unsupported reference:  'invalid'", () -> x.findRef("invalid", JsonMap.class));
+		}
+	}
+
+	//---------------------------------------------------------------------------------------------
+	// Helper methods
+	//---------------------------------------------------------------------------------------------
+
+	private static Swagger bean() {
+		return swagger();
+	}
+
 }

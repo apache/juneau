@@ -17,6 +17,7 @@ import static org.apache.juneau.junit.bct.Utils.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -32,7 +33,7 @@ class BeanConverter_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class a_ContractCompliance {
+	class A_contractCompliance extends TestBase {
 
 		@Test
 		void a01_basicContractVerification() {
@@ -106,7 +107,7 @@ class BeanConverter_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class b_EdgeCases {
+	class B_edgeCases extends TestBase {
 
 		@Test
 		void b01_nullInputHandling() {
@@ -199,7 +200,7 @@ class BeanConverter_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class c_ImplementationVerification {
+	class C_implementationVerification extends TestBase {
 
 		@Test
 		void c01_builderPatternVerification() {
@@ -255,7 +256,7 @@ class BeanConverter_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class d_ErrorHandling {
+	class D_errorHandling extends TestBase {
 
 		@Test
 		void d01_invalidPropertyAccess_throwsPropertyNotFoundException() {

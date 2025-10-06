@@ -13,80 +13,74 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.internal.ArrayUtils.contains;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Describes a single operation parameter.
+ * Defines a security scheme that can be used by the operations.
  *
  * <p>
- * A unique parameter is defined by a combination of a name and location.
+ * The Security Scheme Object defines a security scheme that can be used by the operations. Supported schemes are 
+ * HTTP authentication, an API key (either as a header or as a query parameter), OAuth2's common flows (implicit, 
+ * password, client credentials and authorization code) as defined in RFC6749, and OpenID Connect Discovery.
  *
+ * <h5 class='section'>OpenAPI Specification:</h5>
  * <p>
- * There are five possible parameter types.
+ * The Security Scheme Object is composed of the following fields:
  * <ul class='spaced-list'>
- * 	<li><js>"path"</js> - Used together with Path Templating, where the parameter value is actually part of the
- * 		operation's URL.
- * 		This does not include the host or base path of the API.
- * 		For example, in <code>/items/{itemId}</code>, the path parameter is <code>itemId</code>.
- * 	<li><js>"query"</js> - Parameters that are appended to the URL.
- * 		For example, in <code>/items?id=###</code>, the query parameter is <code>id</code>.
- * 	<li><js>"header"</js> - Custom headers that are expected as part of the request.
- * 	<li><js>"body"</js> - The payload that's appended to the HTTP request.
- * 		Since there can only be one payload, there can only be one body parameter.
- * 		The name of the body parameter has no effect on the parameter itself and is used for documentation purposes
- * 		only.
- * 		Since Form parameters are also in the payload, body and form parameters cannot exist together for the same
- * 		operation.
- * 	<li><js>"formData"</js> - Used to describe the payload of an HTTP request when either
- * 		<code>application/x-www-form-urlencoded</code>, <code>multipart/form-data</code> or both are used as the
- * 		content type of the request (in Swagger's definition, the consumes property of an operation).
- * 		This is the only parameter type that can be used to send files, thus supporting the file type.
- * 		Since form parameters are sent in the payload, they cannot be declared together with a body parameter for the
- * 		same operation.
- * 		Form parameters have a different format based on the content-type used (for further details, consult
- * 		<code>http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4</code>):
- * 		<ul>
- * 			<li><js>"application/x-www-form-urlencoded"</js> - Similar to the format of Query parameters but as a
- * 				payload.
- * 				For example, <code>foo=1&amp;bar=swagger</code> - both <code>foo</code> and <code>bar</code> are form
- * 				parameters.
- * 				This is normally used for simple parameters that are being transferred.
- * 			<li><js>"multipart/form-data"</js> - each parameter takes a section in the payload with an internal header.
- * 				For example, for the header <code>Content-Disposition: form-data; name="submit-name"</code> the name of
- * 				the parameter is <code>submit-name</code>.
- * 				This type of form parameters is more commonly used for file transfers.
- * 		</ul>
- * 	</li>
+ * 	<li><c>type</c> (string, REQUIRED) - The type of the security scheme. Values: <js>"apiKey"</js>, <js>"http"</js>, <js>"oauth2"</js>, <js>"openIdConnect"</js>
+ * 	<li><c>description</c> (string) - A short description for security scheme (CommonMark syntax may be used)
+ * 	<li><c>name</c> (string) - The name of the header, query or cookie parameter to be used (for <js>"apiKey"</js> type)
+ * 	<li><c>in</c> (string) - The location of the API key (for <js>"apiKey"</js> type). Values: <js>"query"</js>, <js>"header"</js>, <js>"cookie"</js>
+ * 	<li><c>scheme</c> (string) - The name of the HTTP Authorization scheme to be used in the Authorization header (for <js>"http"</js> type)
+ * 	<li><c>bearerFormat</c> (string) - A hint to the client to identify how the bearer token is formatted (for <js>"http"</js> type with <js>"bearer"</js> scheme)
+ * 	<li><c>flows</c> ({@link OAuthFlows}) - An object containing configuration information for the flow types supported (for <js>"oauth2"</js> type)
+ * 	<li><c>openIdConnectUrl</c> (string) - OpenId Connect URL to discover OAuth2 configuration values (for <js>"openIdConnect"</js> type)
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
- * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	ParameterInfo x = <jsm>parameterInfo</jsm>(<js>"query"</js>, <js>"foo"</js>);
- *
- * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
- *
- * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * <p class='bjava'>
+ * 	<jc>// Create an API key security scheme</jc>
+ * 	SecuritySchemeInfo <jv>scheme</jv> = <jk>new</jk> SecuritySchemeInfo()
+ * 		.setType(<js>"apiKey"</js>)
+ * 		.setDescription(<js>"API key authentication"</js>)
+ * 		.setName(<js>"X-API-Key"</js>)
+ * 		.setIn(<js>"header"</js>);
  * </p>
- * <p class='bcode'>
- * 	<jc>// Output</jc>
- * 	{
- * 		<js>"in"</js>: <js>"query"</js>,
- * 		<js>"name"</js>: <js>"foo"</js>
- * 	}
+ * <p class='bjava'>
+ * 	<jc>// Create an OAuth2 security scheme</jc>
+ * 	SecuritySchemeInfo <jv>oauthScheme</jv> = <jk>new</jk> SecuritySchemeInfo()
+ * 		.setType(<js>"oauth2"</js>)
+ * 		.setDescription(<js>"OAuth2 authentication"</js>)
+ * 		.setFlows(
+ * 			<jk>new</jk> OAuthFlows()
+ * 				.setAuthorizationCode(
+ * 					<jk>new</jk> OAuthFlow()
+ * 						.setAuthorizationUrl(<js>"https://example.com/oauth/authorize"</js>)
+ * 						.setTokenUrl(<js>"https://example.com/oauth/token"</js>)
+ * 						.setScopes(
+ * 							JsonMap.<jsm>of</jsm>(
+ * 								<js>"read"</js>, <js>"Read access to resources"</js>,
+ * 								<js>"write"</js>, <js>"Write access to resources"</js>
+ * 							)
+ * 						)
+ * 				)
+ * 		);
  * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#security-scheme-object">OpenAPI Specification &gt; Security Scheme Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/authentication/">OpenAPI Authentication</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="in,name,type,description,scheme,bearerFormat,flows,*")
 @FluentSetters
 public class SecuritySchemeInfo extends OpenApiElement {
 
@@ -142,6 +136,12 @@ public class SecuritySchemeInfo extends OpenApiElement {
 		return this;
 	}
 
+	@Override /* GENERATED - do not modify */
+	public SecuritySchemeInfo strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
 	/**
 	 * Bean property getter:  <property>name</property>.
 	 *
@@ -185,6 +185,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public SecuritySchemeInfo setName(String value) {
@@ -221,6 +222,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * 		<li><js>"body"</js>
 	 * 	</ul>
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public SecuritySchemeInfo setIn(String value) {
@@ -284,6 +286,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public SecuritySchemeInfo setScheme(String value) {
@@ -323,6 +326,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * 	<br>If type is <js>"file"</js>, the <code>consumes</code> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
 	 * 		or both and the parameter MUST be <code>in</code> <js>"formData"</js>.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public SecuritySchemeInfo setType(String value) {
@@ -354,6 +358,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * The extending format for the previously mentioned type.
 	 *
 	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public SecuritySchemeInfo setBearerFormat(String value) {
@@ -409,6 +414,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * Determines the format of the array if type array is used.
 	 *
 	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public SecuritySchemeInfo setOpenIdConnectUrl(String value) {
@@ -422,8 +428,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "name" -> toType(getName(), type);
 			case "in" -> toType(getIn(), type);
@@ -439,17 +444,16 @@ public class SecuritySchemeInfo extends OpenApiElement {
 
 	@Override /* SwaggerElement */
 	public SecuritySchemeInfo set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
-			case "name" -> setName(Utils.s(value));
-			case "in" -> setIn(Utils.s(value));
-			case "description" -> setDescription(Utils.s(value));
-			case "scheme" -> setScheme(Utils.s(value));
 			case "bearerFormat" -> setBearerFormat(Utils.s(value));
-			case "type" -> setType(Utils.s(value));
+			case "description" -> setDescription(Utils.s(value));
 			case "flows" -> setFlows(toType(value, OAuthFlow.class));
+			case "in" -> setIn(Utils.s(value));
+			case "name" -> setName(Utils.s(value));
 			case "openIdConnectUrl" -> setOpenIdConnectUrl(Utils.s(value));
+			case "scheme" -> setScheme(Utils.s(value));
+			case "type" -> setType(Utils.s(value));
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -460,14 +464,14 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
-			.addIf(name != null, "name")
-			.addIf(in != null, "in")
-			.addIf(description != null, "description")
-			.addIf(scheme != null, "scheme")
 			.addIf(bearerFormat != null, "bearerFormat")
-			.addIf(type != null, "type")
+			.addIf(description != null, "description")
 			.addIf(flows != null, "flows")
+			.addIf(in != null, "in")
+			.addIf(name != null, "name")
 			.addIf(openIdConnectUrl != null, "openIdConnectUrl")
+			.addIf(scheme != null, "scheme")
+			.addIf(type != null, "type")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

@@ -13,157 +13,259 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link SecurityScheme}.
  */
-class SecurityScheme_Test extends SimpleTestBase {
+class SecurityScheme_Test extends TestBase {
 
-	/**
-	 * Test method for getters and setters.
-	 */
-	@Test void a01_gettersAndSetters() {
-		var t = new SecurityScheme();
+	@Nested class A_basicTests extends TestBase {
 
-		// Basic property setters
-		assertBean(
-			t.setType("a").setDescription("b").setName("c").setIn("d").setFlow("e")
-			.setAuthorizationUrl("f").setTokenUrl("g").setScopes(map("h1","h2")),
-			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes",
-			"a,b,c,d,e,f,g,{h1=h2}"
-		);
+		private static final BeanTester<SecurityScheme> TESTER =
+			testBean(
+				bean()
+					.setAuthorizationUrl("a")
+					.setDescription("b")
+					.setFlow("c")
+					.setIn("d")
+					.setName("e")
+					.setScopes(map("x1", "x2"))
+					.setTokenUrl("f")
+					.setType("g")
+			)
+			.props("authorizationUrl,description,flow,in,name,scopes{x1},tokenUrl,type")
+			.vals("a,b,c,d,e,{x2},f,g")
+			.json("{authorizationUrl:'a',description:'b',flow:'c','in':'d',name:'e',scopes:{x1:'x2'},tokenUrl:'f',type:'g'}")
+			.string("{'authorizationUrl':'a','description':'b','flow':'c','in':'d','name':'e','scopes':{'x1':'x2'},'tokenUrl':'f','type':'g'}".replace('\'', '"'))
+		;
 
-		// Null values
-		assertBean(
-			t.setType(null).setDescription(null).setName(null).setIn(null).setFlow(null)
-				.setAuthorizationUrl(null).setTokenUrl(null).setScopes((Map<String,String>)null),
-			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes",
-			"<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>"
-		);
+		@Test void b01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
 
-		// Other methods
-		assertEmpty(t.setScopes(map()).getScopes());
+		@Test void b02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void b03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void b04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void b05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void b06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void b07_keySet() {
+			assertList(TESTER.bean().keySet(), "authorizationUrl", "description", "flow", "in", "name", "scopes", "tokenUrl", "type");
+		}
 	}
 
-	/**
-	 * Test method for {@link SecurityScheme#set(java.lang.String, java.lang.Object)}.
-	 */
-	@Test void b01_set() {
-		var t = new SecurityScheme();
+	@Nested class B_emptyTests extends TestBase {
 
-		t
-			.set("authorizationUrl", "a")
-			.set("description", "b")
-			.set("flow", "c")
-			.set("in", "d")
-			.set("name", "e")
-			.set("scopes", map("foo","bar"))
-			.set("tokenUrl", "f")
-			.set("type", "g")
-			.set("$ref", "ref");
+		private static final BeanTester<SecurityScheme> TESTER =
+			testBean(bean())
+			.props("description,type,name,in,flow,authorizationUrl,tokenUrl,scopes")
+			.vals("<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>")
+			.json("{}")
+			.string("{}")
+		;
 
-		// Comprehensive object state validation
-		assertBean(t,
-			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,$ref",
-			"g,b,e,d,c,a,f,{foo=bar},ref");
+		@Test void b01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
 
-		t
-			.set("authorizationUrl", "a")
-			.set("description", "b")
-			.set("flow", "c")
-			.set("in", "d")
-			.set("name", "e")
-			.set("scopes", "{foo:'bar'}")
-			.set("tokenUrl", "f")
-			.set("type", "g")
-			.set("$ref", "ref");
+		@Test void b02_copy() {
+			TESTER.assertCopy();
+		}
 
-		assertBean(t,
-			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,$ref",
-			"g,b,e,d,c,a,f,{foo=bar},ref");
+		@Test void b03_toJson() {
+			TESTER.assertToJson();
+		}
 
-		t
-			.set("authorizationUrl", Utils.sb("a"))
-			.set("description", Utils.sb("b"))
-			.set("flow", Utils.sb("c"))
-			.set("in", Utils.sb("d"))
-			.set("name", Utils.sb("e"))
-			.set("scopes", Utils.sb("{foo:'bar'}"))
-			.set("tokenUrl", Utils.sb("f"))
-			.set("type", Utils.sb("g"))
-			.set("$ref", Utils.sb("ref"));
+		@Test void b04_fromJson() {
+			TESTER.assertFromJson();
+		}
 
-		assertBean(t,
-			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,$ref",
-			"g,b,e,d,c,a,f,{foo=bar},ref");
+		@Test void b05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
 
-		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
-			"authorizationUrl,description,flow,in,name,scopes,tokenUrl,type,$ref",
-			"a,b,c,d,e,{foo:'bar'},f,g,ref");
+		@Test void b06_toString() {
+			TESTER.assertToString();
+		}
 
-		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
-			"authorizationUrl,description,flow,in,name,scopes,tokenUrl,type,$ref",
-			"String,String,String,String,String,LinkedHashMap,String,String,StringBuilder");
-
-		t.set("null", null).set(null, "null");
-		assertNull(t.get("null", Object.class));
-		assertNull(t.get(null, Object.class));
-		assertNull(t.get("foo", Object.class));
+		@Test void b07_keySet() {
+			assertEmpty(TESTER.bean().keySet());
+		}
 	}
 
-	@Test void b02_roundTripJson() {
-		var s = "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}";
-		assertJson(s, JsonParser.DEFAULT.parse(s, SecurityScheme.class));
+	@Nested class C_extraProperties extends TestBase {
+
+		private static final BeanTester<SecurityScheme> TESTER =
+			testBean(
+				bean()
+					.set("authorizationUrl", "a")
+					.set("description", "b")
+					.set("flow", "c")
+					.set("in", "d")
+					.set("name", "e")
+					.set("scopes", map("x1", "x2"))
+					.set("tokenUrl", "f")
+					.set("type", "g")
+					.set("x3", "x3a")
+					.set("x4", null)
+			)
+			.props("authorizationUrl,description,flow,in,name,scopes{x1},tokenUrl,type,x3,x4")
+			.vals("a,b,c,d,e,{x2},f,g,x3a,<null>")
+			.json("{authorizationUrl:'a',description:'b',flow:'c','in':'d',name:'e',scopes:{x1:'x2'},tokenUrl:'f',type:'g',x3:'x3a'}")
+			.string("{'authorizationUrl':'a','description':'b','flow':'c','in':'d','name':'e','scopes':{'x1':'x2'},'tokenUrl':'f','type':'g','x3':'x3a'}".replace('\'', '"'))
+		;
+
+		@Test void c01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void c02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void c03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void c04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void c05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void c06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void c07_keySet() {
+			assertList(TESTER.bean().keySet(), "authorizationUrl", "description", "flow", "in", "name", "scopes", "tokenUrl", "type", "x3", "x4");
+		}
+
+		@Test void c08_get() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> obj.get(prop, Object.class),
+				"authorizationUrl,description,flow,in,name,scopes{x1},tokenUrl,type,x3,x4",
+				"a,b,c,d,e,{x2},f,g,x3a,<null>"
+			);
+		}
+
+		@Test void c09_getTypes() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				"authorizationUrl,description,flow,in,name,scopes,tokenUrl,type,x3,x4",
+				"String,String,String,String,String,LinkedHashMap,String,String,String,<null>"
+			);
+		}
+
+		@Test void c10_nullPropertyValue() {
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+		}
 	}
 
-	@Test void b03_copy() {
-		var t = new SecurityScheme();
+	@Nested class D_additionalMethods extends TestBase {
 
-		t = t.copy();
+		@Test void d01_addMethods() {
+			var x = bean()
+				.setScopes(map("a1", "a2"))
+				.addScope("b1", "b2");
 
-		assertBean(t, "authorizationUrl,description,flow,in,name,scopes,tokenUrl,type", "<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
+			assertBean(x, "scopes{a1,b1}", "{a2,b2}");
+		}
 
-		t
-			.set("authorizationUrl", "a")
-			.set("description", "b")
-			.set("flow", "c")
-			.set("in", "d")
-			.set("name", "e")
-			.set("scopes", map("foo","bar"))
-			.set("tokenUrl", "f")
-			.set("type", "g")
-			.set("$ref", "ref")
-			.copy();
+		@Test void d02_addMethodsWithNullParameters() {
+			var x = bean();
+			assertThrows(IllegalArgumentException.class, () -> x.addScope(null, "a"));
+			assertThrows(IllegalArgumentException.class, () -> x.addScope("a", null));
+		}
 
-		assertBean(t,
-			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,$ref",
-			"g,b,e,d,c,a,f,{foo=bar},ref");
+		@Test void d03_asMap() {
+			assertBean(
+				bean()
+					.setDescription("a")
+					.setType("b")
+					.set("x1", "x1a")
+					.asMap(),
+				"description,type,x1",
+				"a,b,x1a"
+			);
+		}
+
+		@Test void d04_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void d05_strict() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+		}
 	}
 
-	@Test void b04_keySet() {
-		var t = new SecurityScheme();
+	@Nested class E_strictMode extends TestBase {
 
-		assertEmpty(t.keySet());
+		@Test void e01_strictModeSetThrowsException() {
+			var x = bean().strict();
+			assertThrowsWithMessage(RuntimeException.class, "Cannot set property 'foo' in strict mode", () -> x.set("foo", "bar"));
+		}
 
-		t
-			.set("authorizationUrl", "a")
-			.set("description", "b")
-			.set("flow", "c")
-			.set("in", "d")
-			.set("name", "e")
-			.set("scopes", map("foo","bar"))
-			.set("tokenUrl", "f")
-			.set("type", "g")
-			.set("$ref", "ref");
+		@Test void e02_nonStrictModeAllowsSet() {
+			var x = bean(); // not strict
+			assertDoesNotThrow(() -> x.set("foo", "bar"));
+		}
 
-		assertList(t.keySet(), "$ref", "authorizationUrl", "description", "flow", "in", "name", "scopes", "tokenUrl", "type");
+		@Test void e03_strictModeToggle() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+			x.strict(false);
+			assertFalse(x.isStrict());
+		}
+
+		@Test void e04_strictModeSetType() {
+			var x = bean().strict();
+			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setType(String).  Value='invalid', valid values=['basic','apiKey','oauth2']", () -> x.setType("invalid"));
+			assertDoesNotThrow(() -> x.setType("basic"));
+			assertDoesNotThrow(() -> x.setType("apiKey"));
+			assertDoesNotThrow(() -> x.setType("oauth2"));
+			var y = bean(); // not strict
+			assertDoesNotThrow(() -> y.setType("invalid"));
+		}
 	}
+
+
+	//---------------------------------------------------------------------------------------------
+	// Helper methods
+	//---------------------------------------------------------------------------------------------
+
+	private static SecurityScheme bean() {
+		return securityScheme();
+	}
+
 }

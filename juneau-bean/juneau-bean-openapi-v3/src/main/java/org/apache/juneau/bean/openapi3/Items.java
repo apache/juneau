@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.contains;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.copyOf;
@@ -30,18 +31,36 @@ import org.apache.juneau.json.*;
  * A limited subset of JSON-Schema's items object.
  *
  * <p>
- * It is used by parameter definitions that are not located in "body".
+ * The Items Object is a limited subset of JSON-Schema's items object. It is used by parameter definitions that are 
+ * not located in "body" to describe the type of items in an array. This is particularly useful for query parameters, 
+ * path parameters, and header parameters that accept arrays.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Items Object supports the following fields from JSON Schema:
+ * <ul class='spaced-list'>
+ * 	<li><c>type</c> (string, REQUIRED) - The data type. Values: <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, <js>"array"</js>
+ * 	<li><c>format</c> (string) - The format modifier (e.g., <js>"int32"</js>, <js>"int64"</js>, <js>"float"</js>, <js>"double"</js>, <js>"date"</js>, <js>"date-time"</js>)
+ * 	<li><c>items</c> ({@link Items}) - Required if type is <js>"array"</js>. Describes the type of items in the array
+ * 	<li><c>collectionFormat</c> (string) - How multiple values are formatted. Values: <js>"csv"</js>, <js>"ssv"</js>, <js>"tsv"</js>, <js>"pipes"</js>, <js>"multi"</js>
+ * 	<li><c>default</c> (any) - The default value
+ * 	<li><c>maximum</c> (number), <c>exclusiveMaximum</c> (boolean), <c>minimum</c> (number), <c>exclusiveMinimum</c> (boolean) - Numeric constraints
+ * 	<li><c>maxLength</c> (integer), <c>minLength</c> (integer), <c>pattern</c> (string) - String constraints
+ * 	<li><c>maxItems</c> (integer), <c>minItems</c> (integer), <c>uniqueItems</c> (boolean) - Array constraints
+ * 	<li><c>enum</c> (array) - Possible values for this item
+ * 	<li><c>multipleOf</c> (number) - Must be a multiple of this value
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	Items x = <jsm>items</jsm>(<js>"string"</js>).minLength(2);
+ * 	Items <jv>x</jv> = <jsm>items</jsm>(<js>"string"</js>).minLength(2);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	String <jv>json</jv> = <jv>x</jv>.toString();
  * </p>
  * <p class='bcode'>
  * 	<jc>// Output</jc>
@@ -50,8 +69,13 @@ import org.apache.juneau.json.*;
  * 		<js>"minLength"</js>: 2
  * 	}
  * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#items-object">OpenAPI Specification &gt; Items Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/describing-parameters/">OpenAPI Describing Parameters</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,*")
 @FluentSetters
 public class Items extends OpenApiElement {
 
@@ -130,6 +154,12 @@ public class Items extends OpenApiElement {
 		return this;
 	}
 
+	@Override /* GENERATED - do not modify */
+	public Items strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
 	/**
 	 * Bean property getter:  <property>type</property>.
 	 *
@@ -159,6 +189,7 @@ public class Items extends OpenApiElement {
 	 * 		<li><js>"array"</js>
 	 * 	</ul>
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public Items setType(String value) {
@@ -565,7 +596,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items addEnum(Object...values) {
-		_enum = listBuilder(_enum).sparse().addAny(values).build();
+		_enum = listBuilder(_enum).elementType(Object.class).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -593,7 +624,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setEnum(Object...values) {  // NOSONAR - Intentional naming.
-		_enum = listBuilder(_enum).sparse().addAny(values).build();
+		_enum = listBuilder(_enum).elementType(Object.class).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -643,26 +674,13 @@ public class Items extends OpenApiElement {
 		return this;
 	}
 
-	/**
-	 * Same as {@link #setRef(Object)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items ref(Object value) {
-		return setRef(value);
-	}
-
 	// <FluentSetters>
 
 	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "type" -> toType(getType(), type);
 			case "format" -> toType(getFormat(), type);
@@ -688,27 +706,26 @@ public class Items extends OpenApiElement {
 
 	@Override /* SwaggerElement */
 	public Items set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
-			case "type" -> setType(Utils.s(value));
-			case "format" -> setFormat(Utils.s(value));
-			case "items" -> setItems(toType(value,Items.class));
+			case "$ref" -> setRef(value);
 			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
 			case "default" -> setDefault(value);
-			case "maximum" -> setMaximum(toNumber(value));
-			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
-			case "minimum" -> setMinimum(toNumber(value));
-			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
-			case "maxLength" -> setMaxLength(toInteger(value));
-			case "minLength" -> setMinLength(toInteger(value));
-			case "pattern" -> setPattern(Utils.s(value));
-			case "maxItems" -> setMaxItems(toInteger(value));
-			case "minItems" -> setMinItems(toInteger(value));
-			case "uniqueItems" -> setUniqueItems(toBoolean(value));
 			case "enum" -> setEnum(value);
+			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
+			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
+			case "format" -> setFormat(Utils.s(value));
+			case "items" -> setItems(toType(value, Items.class));
+			case "maxItems" -> setMaxItems(toInteger(value));
+			case "maxLength" -> setMaxLength(toInteger(value));
+			case "maximum" -> setMaximum(toNumber(value));
+			case "minItems" -> setMinItems(toInteger(value));
+			case "minLength" -> setMinLength(toInteger(value));
+			case "minimum" -> setMinimum(toNumber(value));
 			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "$ref" -> ref(value);
+			case "pattern" -> setPattern(Utils.s(value));
+			case "type" -> setType(Utils.s(value));
+			case "uniqueItems" -> setUniqueItems(toBoolean(value));
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -719,24 +736,24 @@ public class Items extends OpenApiElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
-			.addIf(type != null, "type")
-			.addIf(format != null, "format")
-			.addIf(items != null, "items")
+			.addIf(ref != null, "$ref")
 			.addIf(collectionFormat != null, "collectionFormat")
 			.addIf(_default != null, "default")
-			.addIf(maximum != null, "maximum")
-			.addIf(exclusiveMaximum != null, "exclusiveMaximum")
-			.addIf(minimum != null, "minimum")
-			.addIf(exclusiveMinimum != null, "exclusiveMinimum")
-			.addIf(maxLength != null, "maxLength")
-			.addIf(minLength != null, "minLength")
-			.addIf(pattern != null, "pattern")
-			.addIf(maxItems != null, "maxItems")
-			.addIf(minItems != null, "minItems")
-			.addIf(uniqueItems != null, "uniqueItems")
 			.addIf(_enum != null, "enum")
+			.addIf(exclusiveMaximum != null, "exclusiveMaximum")
+			.addIf(exclusiveMinimum != null, "exclusiveMinimum")
+			.addIf(format != null, "format")
+			.addIf(items != null, "items")
+			.addIf(maxItems != null, "maxItems")
+			.addIf(maxLength != null, "maxLength")
+			.addIf(maximum != null, "maximum")
+			.addIf(minItems != null, "minItems")
+			.addIf(minLength != null, "minLength")
+			.addIf(minimum != null, "minimum")
 			.addIf(multipleOf != null, "multipleOf")
-			.addIf(ref != null, "$ref")
+			.addIf(pattern != null, "pattern")
+			.addIf(type != null, "type")
+			.addIf(uniqueItems != null, "uniqueItems")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.junit.bct;
+package org.apache.juneau;
 
 import org.junit.jupiter.api.*;
 
@@ -21,6 +21,7 @@ import org.junit.jupiter.api.*;
  * test execution order across all test classes in the package.</p>
  */
 @TestMethodOrder(MethodOrderer.MethodName.class)
+@TestClassOrder(ClassOrderer.ClassName.class)
 public abstract class TestBase {
 	// Base class for common test configuration
 }

@@ -20,6 +20,7 @@ import java.nio.file.*;
 import java.time.format.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -30,7 +31,7 @@ import org.junit.jupiter.params.provider.*;
 class Stringifiers_Test extends TestBase {
 
 	@Nested
-	class a_MapEntryStringifier {
+	class A_mapEntryStringifier extends TestBase {
 
 		@Test
 		void a01_stringifySimpleEntry() {
@@ -87,7 +88,7 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class b_CalendarStringifier {
+	class B_calendarStringifier extends TestBase {
 
 		@Test
 		void b01_stringifyGregorianCalendar() {
@@ -115,7 +116,7 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class c_DateStringifier {
+	class C_dateStringifier extends TestBase {
 
 		@Test
 		void c01_stringifyDate() {
@@ -138,7 +139,7 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class d_InputStreamStringifier {
+	class D_inputStreamStringifier extends TestBase {
 
 		@Test
 		void d01_stringifyInputStream() {
@@ -169,7 +170,7 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class e_ByteArrayStringifier {
+	class E_byteArrayStringifier extends TestBase {
 
 		@Test
 		void e01_stringifyByteArray() {
@@ -200,7 +201,7 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class f_ReaderStringifier {
+	class F_readerStringifier extends TestBase {
 
 		@ParameterizedTest
 		@ValueSource(strings = {
@@ -218,7 +219,7 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class g_FileStringifier {
+	class G_fileStringifier extends TestBase {
 
 		@Test
 		void g01_stringifyTempFile() throws Exception {
@@ -249,7 +250,7 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class h_EnumStringifier {
+	class H_enumStringifier extends TestBase {
 
 		enum TestEnum { VALUE1, VALUE2, LONG_VALUE_NAME }
 
@@ -279,7 +280,7 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class i_ClassStringifier {
+	class I_classStringifier extends TestBase {
 
 		@Test
 		void i01_stringifyClassSimple() {
@@ -328,7 +329,7 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class j_ConstructorStringifier {
+	class J_constructorStringifier extends TestBase {
 
 		@Test
 		void j01_stringifyNoArgConstructor() throws Exception {
@@ -362,7 +363,7 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class k_MethodStringifier {
+	class K_methodStringifier extends TestBase {
 
 		@Test
 		void k01_stringifyNoArgMethod() throws Exception {
@@ -396,7 +397,7 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class l_ListStringifier {
+	class L_listStringifier extends TestBase {
 
 		@Test
 		void l01_stringifyList() {
@@ -445,7 +446,7 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class m_MapStringifier {
+	class M_mapStringifier extends TestBase {
 
 		@Test
 		void m01_stringifyMap() {
@@ -499,7 +500,7 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class n_Integration {
+	class N_integration extends TestBase {
 
 		@Test
 		void n01_useInBasicBeanConverter() {

@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -32,7 +33,7 @@ class Listifier_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class a_FunctionalInterfaceCompliance {
+	class A_functionalInterfaceCompliance extends TestBase {
 
 		@SuppressWarnings("cast")
 		@Test
@@ -89,7 +90,7 @@ class Listifier_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class b_LambdaComposition {
+	class B_lambdaComposition extends TestBase {
 
 		@Test
 		void b01_andThenComposition() {
@@ -133,7 +134,7 @@ class Listifier_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class c_EdgeCases {
+	class C_edgeCases extends TestBase {
 
 		@Test
 		void c01_nullInputHandling() {
@@ -204,7 +205,7 @@ class Listifier_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class d_Integration {
+	class D_integration extends TestBase {
 
 		@Test
 		void d01_converterIntegration() {
@@ -267,7 +268,7 @@ class Listifier_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class e_Performance {
+	class E_performance extends TestBase {
 
 		@Test
 		void e01_performanceWithLargeLists() {

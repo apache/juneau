@@ -21,7 +21,7 @@ import org.apache.juneau.common.internal.*;
  * Various useful static methods for creating Swagger elements.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
 public class SwaggerBuilder {

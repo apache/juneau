@@ -12,78 +12,62 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Describes a single operation parameter.
+ * Allows configuration of the supported OAuth Flows.
  *
  * <p>
- * A unique parameter is defined by a combination of a name and location.
+ * The OAuthFlows Object allows configuration of the supported OAuth Flows. This object contains the configuration 
+ * for different OAuth 2.0 flows that can be used to secure the API. Each flow type has its own specific configuration 
+ * requirements and use cases.
  *
+ * <h5 class='section'>OpenAPI Specification:</h5>
  * <p>
- * There are five possible parameter types.
+ * The OAuthFlows Object is composed of the following fields:
  * <ul class='spaced-list'>
- * 	<li><js>"path"</js> - Used together with Path Templating, where the parameter value is actually part of the
- * 		operation's URL.
- * 		This does not include the host or base path of the API.
- * 		For example, in <code>/items/{itemId}</code>, the path parameter is <code>itemId</code>.
- * 	<li><js>"query"</js> - Parameters that are appended to the URL.
- * 		For example, in <code>/items?id=###</code>, the query parameter is <code>id</code>.
- * 	<li><js>"header"</js> - Custom headers that are expected as part of the request.
- * 	<li><js>"body"</js> - The payload that's appended to the HTTP request.
- * 		Since there can only be one payload, there can only be one body parameter.
- * 		The name of the body parameter has no effect on the parameter itself and is used for documentation purposes
- * 		only.
- * 		Since Form parameters are also in the payload, body and form parameters cannot exist together for the same
- * 		operation.
- * 	<li><js>"formData"</js> - Used to describe the payload of an HTTP request when either
- * 		<code>application/x-www-form-urlencoded</code>, <code>multipart/form-data</code> or both are used as the
- * 		content type of the request (in Swagger's definition, the consumes property of an operation).
- * 		This is the only parameter type that can be used to send files, thus supporting the file type.
- * 		Since form parameters are sent in the payload, they cannot be declared together with a body parameter for the
- * 		same operation.
- * 		Form parameters have a different format based on the content-type used (for further details, consult
- * 		<code>http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4</code>):
- * 		<ul>
- * 			<li><js>"application/x-www-form-urlencoded"</js> - Similar to the format of Query parameters but as a
- * 				payload.
- * 				For example, <code>foo=1&amp;bar=swagger</code> - both <code>foo</code> and <code>bar</code> are form
- * 				parameters.
- * 				This is normally used for simple parameters that are being transferred.
- * 			<li><js>"multipart/form-data"</js> - each parameter takes a section in the payload with an internal header.
- * 				For example, for the header <code>Content-Disposition: form-data; name="submit-name"</code> the name of
- * 				the parameter is <code>submit-name</code>.
- * 				This type of form parameters is more commonly used for file transfers.
- * 		</ul>
- * 	</li>
+ * 	<li><c>implicit</c> ({@link OAuthFlow}) - Configuration for the OAuth Implicit flow
+ * 	<li><c>password</c> ({@link OAuthFlow}) - Configuration for the OAuth Resource Owner Password flow
+ * 	<li><c>clientCredentials</c> ({@link OAuthFlow}) - Configuration for the OAuth Client Credentials flow
+ * 	<li><c>authorizationCode</c> ({@link OAuthFlow}) - Configuration for the OAuth Authorization Code flow
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	ParameterInfo x = <jsm>parameterInfo</jsm>(<js>"query"</js>, <js>"foo"</js>);
+ * 	OAuthFlows <jv>x</jv> = <jsm>oauthFlows</jsm>()
+ * 		.setAuthorizationCode(<jsm>oauthFlow</jsm>()
+ * 			.setAuthorizationUrl(<js>"https://example.com/oauth/authorize"</js>)
+ * 			.setTokenUrl(<js>"https://example.com/oauth/token"</js>));
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	<jv>json</jv> = <jv>x</jv>.toString();
  * </p>
  * <p class='bcode'>
  * 	<jc>// Output</jc>
  * 	{
- * 		<js>"in"</js>: <js>"query"</js>,
- * 		<js>"name"</js>: <js>"foo"</js>
+ * 		<js>"authorizationCode"</js>: {
+ * 			<js>"authorizationUrl"</js>: <js>"https://example.com/oauth/authorize"</js>,
+ * 			<js>"tokenUrl"</js>: <js>"https://example.com/oauth/token"</js>
+ * 		}
  * 	}
  * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#oauth-flows-object">OpenAPI Specification &gt; OAuth Flows Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/authentication/oauth2/">OpenAPI OAuth2 Authentication</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="implicit,password,clientCredentials,authorizationCode,*")
 @FluentSetters
 public class OAuthFlows extends OpenApiElement {
 
@@ -123,6 +107,12 @@ public class OAuthFlows extends OpenApiElement {
 	@Override /* SwaggerElement */
 	protected OAuthFlows strict() {
 		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public OAuthFlows strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 
@@ -248,8 +238,7 @@ public class OAuthFlows extends OpenApiElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "implicit" -> toType(getImplicit(), type);
 			case "password" -> toType(getPassword(), type);
@@ -261,13 +250,12 @@ public class OAuthFlows extends OpenApiElement {
 
 	@Override /* SwaggerElement */
 	public OAuthFlows set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
+			case "authorizationCode" -> setAuthorizationCode(toType(value, OAuthFlow.class));
+			case "clientCredentials" -> setClientCredentials(toType(value, OAuthFlow.class));
 			case "implicit" -> setImplicit(toType(value, OAuthFlow.class));
 			case "password" -> setPassword(toType(value, OAuthFlow.class));
-			case "clientCredentials" -> setClientCredentials(toType(value, OAuthFlow.class));
-			case "authorizationCode" -> setAuthorizationCode(toType(value, OAuthFlow.class));
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -278,10 +266,10 @@ public class OAuthFlows extends OpenApiElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
+			.addIf(authorizationCode != null, "authorizationCode")
+			.addIf(clientCredentials != null, "clientCredentials")
 			.addIf(implicit != null, "implicit")
 			.addIf(password != null, "password")
-			.addIf(clientCredentials != null, "clientCredentials")
-			.addIf(authorizationCode != null, "authorizationCode")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

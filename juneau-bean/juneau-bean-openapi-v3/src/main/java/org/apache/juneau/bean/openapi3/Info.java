@@ -12,51 +12,73 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
- * The object provides metadata about the API.
+ * Provides metadata about the API.
  *
  * <p>
- * The metadata can be used by the clients if needed, and can be presented
- * in the Swagger-UI for convenience.
+ * The Info Object contains required and optional metadata about the API, including the title, version, description, 
+ * terms of service, contact information, and license. This metadata can be used by client tooling and is typically 
+ * displayed in API documentation interfaces.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Info Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>title</c> (string, REQUIRED) - The title of the API
+ * 	<li><c>version</c> (string, REQUIRED) - The version of the OpenAPI document (not the API itself)
+ * 	<li><c>description</c> (string) - A short description of the API (CommonMark syntax may be used)
+ * 	<li><c>termsOfService</c> (string) - A URL to the Terms of Service for the API
+ * 	<li><c>contact</c> ({@link Contact}) - Contact information for the exposed API
+ * 	<li><c>license</c> ({@link License}) - License information for the exposed API
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
- * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	Info x = <jsm>info</jsm>(<js>"Swagger Sample App"</js>, <js>"1.0.1"</js>)
- * 		.description(<js>"This is a sample server Petstore server."</js>)
- * 		.termsOfService(<js>"http://swagger.io/terms/"</js>)
- * 		.contact(
- * 			<jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>)
+ * <p class='bjava'>
+ * 	<jc>// Create an Info object</jc>
+ * 	Info <jv>info</jv> = <jk>new</jk> Info()
+ * 		.setTitle(<js>"Pet Store API"</js>)
+ * 		.setVersion(<js>"1.0.0"</js>)
+ * 		.setDescription(<js>"This is a sample Pet Store Server based on the OpenAPI 3.0 specification."</js>)
+ * 		.setTermsOfService(<js>"http://example.com/terms/"</js>)
+ * 		.setContact(
+ * 			<jk>new</jk> Contact()
+ * 				.setName(<js>"API Support"</js>)
+ * 				.setUrl(URI.<jsm>create</jsm>(<js>"http://www.example.com/support"</js>))
+ * 				.setEmail(<js>"support@example.com"</js>)
  * 		)
- * 		.license(
- * 			<jsm>license</jsm>(<js>"Apache 2.0"</js>, <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>)
+ * 		.setLicense(
+ * 			<jk>new</jk> License()
+ * 				.setName(<js>"Apache 2.0"</js>)
+ * 				.setUrl(URI.<jsm>create</jsm>(<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>))
  * 		);
- *
- * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// Serialize to JSON</jc>
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>info</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	<jv>json</jv> = <jv>info</jv>.toString();
  * </p>
  * <p class='bcode'>
  * 	<jc>// Output</jc>
  * 	{
- * 		<js>"title"</js>: <js>"Swagger Sample App"</js>,
- * 		<js>"description"</js>: <js>"This is a sample server Petstore server."</js>,
- * 		<js>"termsOfService"</js>: <js>"http://swagger.io/terms/"</js>,
+ * 		<js>"title"</js>: <js>"Pet Store API"</js>,
+ * 		<js>"version"</js>: <js>"1.0.0"</js>,
+ * 		<js>"description"</js>: <js>"This is a sample Pet Store Server based on the OpenAPI 3.0 specification."</js>,
+ * 		<js>"termsOfService"</js>: <js>"http://example.com/terms/"</js>,
  * 		<js>"contact"</js>: {
  * 			<js>"name"</js>: <js>"API Support"</js>,
- * 			<js>"url"</js>: <js>"http://www.swagger.io/support"</js>,
- * 			<js>"email"</js>: <js>"support@swagger.io"</js>
+ * 			<js>"url"</js>: <js>"http://www.example.com/support"</js>,
+ * 			<js>"email"</js>: <js>"support@example.com"</js>
  * 		},
  * 		<js>"license"</js>: {
  * 			<js>"name"</js>: <js>"Apache 2.0"</js>,
@@ -65,8 +87,13 @@ import org.apache.juneau.internal.*;
  * 		<js>"version"</js>: <js>"1.0.1"</js>
  * 	}
  * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#info-object">OpenAPI Specification &gt; Info Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/api-general-info/">OpenAPI API General Info</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="title,description,version,contact,license,termsOfService,*")
 @FluentSetters
 public class Info extends OpenApiElement {
 
@@ -129,6 +156,7 @@ public class Info extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public Info setTitle(String value) {
@@ -269,6 +297,7 @@ public class Info extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public Info setVersion(String value) {
@@ -282,8 +311,7 @@ public class Info extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "title" -> toType(getTitle(), type);
 			case "description" -> toType(getDescription(), type);
@@ -297,14 +325,13 @@ public class Info extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Info set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
-			case "title" -> setTitle(Utils.s(value));
-			case "description" -> setDescription(Utils.s(value));
-			case "termsOfService" -> setTermsOfService(Utils.s(value));
 			case "contact" -> setContact(toType(value, Contact.class));
+			case "description" -> setDescription(Utils.s(value));
 			case "license" -> setLicense(toType(value, License.class));
+			case "termsOfService" -> setTermsOfService(Utils.s(value));
+			case "title" -> setTitle(Utils.s(value));
 			case "version" -> setVersion(Utils.s(value));
 			default -> {
 				super.set(property, value);
@@ -316,13 +343,29 @@ public class Info extends OpenApiElement {
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
-			.addIf(title != null, "title")
-			.addIf(description != null, "description")
-			.addIf(termsOfService != null, "termsOfService")
 			.addIf(contact != null, "contact")
+			.addIf(description != null, "description")
 			.addIf(license != null, "license")
+			.addIf(termsOfService != null, "termsOfService")
+			.addIf(title != null, "title")
 			.addIf(version != null, "version")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public Info strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public Info strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

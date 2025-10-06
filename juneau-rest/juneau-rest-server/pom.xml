@@ -60,7 +60,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-bean-openapi3</artifactId>
+			<artifactId>juneau-bean-swagger-v2</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

@@ -40,7 +40,7 @@ class BeanIgnore_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_beanIgnoreOnProperties() {
-		assertJson("{c:'c',a:'a'}", new A());
+		assertJson("{a:'a',c:'c'}", new A());
 	}
 
 	@BeanIgnore(on="Ac.getB")

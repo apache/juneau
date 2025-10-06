@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.swagger;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -22,16 +23,46 @@ import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
- * The Schema Object allows the definition of input and output data types.
+ * Allows the definition of input and output data types.
  *
  * <p>
- * These types can be objects, but also primitives and arrays.
- * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it.
- * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
+ * The Schema Object allows the definition of input and output data types for Swagger 2.0, including objects, 
+ * primitives, and arrays. This object is an extended subset of the JSON Schema Specification Draft 4, with 
+ * additional extensions provided by the Swagger Specification to allow for more complete documentation.
  *
+ * <h5 class='section'>Swagger Specification:</h5>
  * <p>
- * Further information about the properties can be found in JSON Schema Core and JSON Schema Validation.
- * Unless stated otherwise, the property definitions follow the JSON Schema specification as referenced here.
+ * The Schema Object supports all properties from JSON Schema Draft 4, including but not limited to:
+ * <ul class='spaced-list'>
+ * 	<li><c>type</c> (string) - The data type. Values: <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, <js>"array"</js>, <js>"object"</js>, <js>"file"</js>
+ * 	<li><c>format</c> (string) - The format modifier (e.g., <js>"int32"</js>, <js>"int64"</js>, <js>"float"</js>, <js>"double"</js>, <js>"date"</js>, <js>"date-time"</js>)
+ * 	<li><c>title</c> (string) - A short title for the schema
+ * 	<li><c>description</c> (string) - A description of the schema
+ * 	<li><c>default</c> (any) - The default value
+ * 	<li><c>multipleOf</c> (number) - Must be a multiple of this value
+ * 	<li><c>maximum</c> (number) - Maximum value (inclusive by default)
+ * 	<li><c>exclusiveMaximum</c> (boolean) - If true, maximum is exclusive
+ * 	<li><c>minimum</c> (number) - Minimum value (inclusive by default)
+ * 	<li><c>exclusiveMinimum</c> (boolean) - If true, minimum is exclusive
+ * 	<li><c>maxLength</c> (integer) - Maximum string length
+ * 	<li><c>minLength</c> (integer) - Minimum string length
+ * 	<li><c>pattern</c> (string) - Regular expression pattern the string must match
+ * 	<li><c>maxItems</c> (integer) - Maximum array length
+ * 	<li><c>minItems</c> (integer) - Minimum array length
+ * 	<li><c>uniqueItems</c> (boolean) - If true, array items must be unique
+ * 	<li><c>maxProperties</c> (integer) - Maximum number of object properties
+ * 	<li><c>minProperties</c> (integer) - Minimum number of object properties
+ * 	<li><c>required</c> (array of string) - Required property names
+ * 	<li><c>enum</c> (array) - Possible values for this schema
+ * 	<li><c>properties</c> (map of {@link SchemaInfo}) - Object property definitions
+ * 	<li><c>items</c> ({@link Items}) - Schema for array items
+ * 	<li><c>allOf</c> (array of {@link SchemaInfo}) - Must validate against all schemas
+ * 	<li><c>discriminator</c> (string) - Property name for polymorphism (Swagger extension)
+ * 	<li><c>readOnly</c> (boolean) - Relevant only for Schema properties (Swagger extension)
+ * 	<li><c>xml</c> ({@link Xml}) - XML representation details (Swagger extension)
+ * 	<li><c>externalDocs</c> ({@link ExternalDocumentation}) - Additional external documentation (Swagger extension)
+ * 	<li><c>example</c> (any) - Example value (Swagger extension)
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -41,7 +72,7 @@ import org.apache.juneau.internal.*;
  * 		.title(<js>"foo"</js>)
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>info</jv>);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>info</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>info</jv>.toString();
@@ -55,10 +86,12 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#schema-object">Swagger 2.0 Specification &gt; Schema Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/data-models/">Swagger Data Models</a>
+ * 	<li class='link'><a class="doclink" href="https://json-schema.org/">JSON Schema Specification</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
-@Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,requiredProperties,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example,$ref,*")
 @FluentSetters
 public class SchemaInfo extends SwaggerElement {
 
@@ -93,9 +126,8 @@ public class SchemaInfo extends SwaggerElement {
 	private Items items;
 	private Xml xml;
 	private ExternalDocumentation externalDocs;
-	private Set<Object>
-		_enum,  // NOSONAR - Intentional naming.
-		allOf;
+	private Set<Object> _enum;  // NOSONAR - Intentional naming.
+	private Set<SchemaInfo> allOf;
 	private Set<String>
 		requiredProperties;
 	private Map<String,SchemaInfo> properties;
@@ -187,7 +219,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Object> getAllOf() {
+	public Set<SchemaInfo> getAllOf() {
 		return allOf;
 	}
 
@@ -199,7 +231,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public SchemaInfo setAllOf(Collection<Object> value) {
+	public SchemaInfo setAllOf(Collection<SchemaInfo> value) {
 		allOf = setFrom(value);
 		return this;
 	}
@@ -212,8 +244,8 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object.
 	 */
-	public SchemaInfo addAllOf(Object...values) {
-		allOf = setBuilder(allOf).sparse().add(values).build();
+	public SchemaInfo addAllOf(SchemaInfo...values) {
+		allOf = setBuilder(allOf).elementType(SchemaInfo.class).sparse().add(values).build();
 		return this;
 	}
 
@@ -226,8 +258,8 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	<br>Valid types:
 	 * @return This object.
 	 */
-	public SchemaInfo setAllOf(Object...value) {
-		setAllOf(setBuilder(Object.class).sparse().addAny(value).build());
+	public SchemaInfo setAllOf(SchemaInfo...value) {
+		setAllOf(setBuilder(SchemaInfo.class).elementType(SchemaInfo.class).sparse().addAny(value).build());
 		return this;
 	}
 
@@ -742,11 +774,13 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property appender:  <property>properties</property>.
 	 *
-	 * @param key The property key.
-	 * @param value The property value.
+	 * @param key The property key.  Must not be <jk>null</jk>.
+	 * @param value The property value.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public SchemaInfo addProperty(String key, SchemaInfo value) {
+		assertArgNotNull("key", key);
+		assertArgNotNull("value", value);
 		properties = mapBuilder(properties).sparse().add(key, value).build();
 		return this;
 	}
@@ -986,8 +1020,7 @@ public class SchemaInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {  // NOSONAR
 			case "additionalProperties" -> toType(getAdditionalProperties(), type);
 			case "allOf" -> toType(getAllOf(), type);
@@ -1014,7 +1047,7 @@ public class SchemaInfo extends SwaggerElement {
 			case "properties" -> toType(getProperties(), type);
 			case "readOnly" -> toType(getReadOnly(), type);
 			case "$ref" -> toType(getRef(), type);
-			case "rquired" -> toType(getRequired(), type);
+			case "required" -> toType(getRequired(), type);
 			case "requiredProperties" -> toType(getRequiredProperties(), type);
 			case "title" -> toType(getTitle(), type);
 			case "type" -> toType(getType(), type);
@@ -1026,11 +1059,10 @@ public class SchemaInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public SchemaInfo set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {  // NOSONAR
 			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
-			case "allOf" -> setAllOf(value);
+			case "allOf" -> setAllOf(setBuilder(SchemaInfo.class).sparse().addAny(value).build());
 			case "default" -> setDefault(value);
 			case "description" -> setDescription(Utils.s(value));
 			case "discriminator" -> setDiscriminator(Utils.s(value));
@@ -1142,4 +1174,31 @@ public class SchemaInfo extends SwaggerElement {
 
 		return this;
 	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @return This object.
+	 */
+	@Override
+	public SchemaInfo strict() {
+		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public SchemaInfo strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
 }

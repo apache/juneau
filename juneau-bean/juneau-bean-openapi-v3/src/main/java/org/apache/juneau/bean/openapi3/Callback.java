@@ -12,21 +12,59 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
  * A map of possible out-of-band callbacks related to the parent operation.
  *
+ * <p>
+ * The Callback Object is a map of possible out-of-band callbacks related to the parent operation. Each value in the 
+ * map is a Path Item Object that describes a set of requests that may be initiated by the API provider and the expected 
+ * responses. The key value used to identify the callback object is an expression, evaluated at runtime, that identifies 
+ * a URL to use for the callback operation.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Callback Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>callbacks</c> (map of {@link PathItem}) - A map of possible out-of-band callbacks related to the parent operation
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	Callback <jv>x</jv> = <jsm>callback</jsm>()
+ * 		.setCallbacks(<jsm>map</jsm>(<js>"myCallback"</js>, <jsm>pathItem</jsm>().setPost(<jsm>operation</jsm>().setSummary(<js>"Callback"</js>))));
+ *
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
+ *
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	<jv>json</jv> = <jv>x</jv>.toString();
+ * </p>
+ * <p class='bcode'>
+ * 	<jc>// Output</jc>
+ * 	{
+ * 		<js>"callbacks"</js>: {
+ * 			<js>"myCallback"</js>: {
+ * 				<js>"post"</js>: { <js>"summary"</js>: <js>"Callback"</js> }
+ * 			}
+ * 		}
+ * 	}
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.OpenApi">Overview &gt; juneau-rest-server &gt; OpenAPI</a>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#callback-object">OpenAPI Specification &gt; Callback Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/callbacks/">OpenAPI Callbacks</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
  * </ul>
  */
-@Bean(properties="*")
 @FluentSetters
 public class Callback extends OpenApiElement {
 
@@ -70,14 +108,70 @@ public class Callback extends OpenApiElement {
 	/**
 	 * Adds a callback.
 	 *
-	 * @param expression The callback expression.
-	 * @param pathItem The path item for the callback.
+	 * @param expression The callback expression.  Must not be <jk>null</jk>.
+	 * @param pathItem The path item for the callback.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Callback addCallback(String expression, PathItem pathItem) {
+		assertArgNotNull("expression", expression);
+		assertArgNotNull("pathItem", pathItem);
 		if (callbacks == null)
 			callbacks = new LinkedHashMap<>();
 		callbacks.put(expression, pathItem);
 		return this;
 	}
+
+	/**
+	 * Creates a copy of this object.
+	 *
+	 * @return A copy of this object.
+	 */
+	public Callback copy() {
+		return new Callback(this);
+	}
+
+	@Override /* OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "callbacks" -> toType(getCallbacks(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	@Override /* OpenApiElement */
+	public Callback set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "callbacks" -> setCallbacks(mapBuilder(String.class, PathItem.class).sparse().addAny(value).build());
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	@Override /* OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(callbacks != null, "callbacks")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public Callback strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public Callback strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

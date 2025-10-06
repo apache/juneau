@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.swagger;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -26,13 +27,35 @@ import org.apache.juneau.marshaller.*;
 /**
  * Describes a single HTTP header.
  *
+ * <p>
+ * The Header Object follows the structure of the Parameter Object with the following changes: it does not have a 
+ * <c>name</c> field since the header name is specified in the key, and it does not have a <c>required</c> field 
+ * since headers are always optional in HTTP for Swagger 2.0.
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The Header Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>description</c> (string) - A brief description of the header
+ * 	<li><c>type</c> (string, REQUIRED) - The type of the header. Values: <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, <js>"array"</js>
+ * 	<li><c>format</c> (string) - The format modifier (e.g., <js>"int32"</js>, <js>"int64"</js>, <js>"float"</js>, <js>"double"</js>, <js>"date"</js>, <js>"date-time"</js>)
+ * 	<li><c>items</c> ({@link Items}) - Required if type is <js>"array"</js>. Describes the type of items in the array
+ * 	<li><c>collectionFormat</c> (string) - How multiple values are formatted. Values: <js>"csv"</js>, <js>"ssv"</js>, <js>"tsv"</js>, <js>"pipes"</js>, <js>"multi"</js>
+ * 	<li><c>default</c> (any) - The default value
+ * 	<li><c>maximum</c> (number), <c>exclusiveMaximum</c> (boolean), <c>minimum</c> (number), <c>exclusiveMinimum</c> (boolean) - Numeric constraints
+ * 	<li><c>maxLength</c> (integer), <c>minLength</c> (integer), <c>pattern</c> (string) - String constraints
+ * 	<li><c>maxItems</c> (integer), <c>minItems</c> (integer), <c>uniqueItems</c> (boolean) - Array constraints
+ * 	<li><c>enum</c> (array) - Possible values for this header
+ * 	<li><c>multipleOf</c> (number) - Must be a multiple of this value
+ * </ul>
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	HeaderInfo <jv>headerInfo</jv> = <jsm>headerInfo</jsm>(<js>"integer"</js>).description(<js>"The number of allowed requests in the current period"</js>);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>headerInfo</jv>);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>headerInfo</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>headerInfo</jv>.toString();
@@ -46,10 +69,11 @@ import org.apache.juneau.marshaller.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#header-object">Swagger 2.0 Specification &gt; Header Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/describing-responses/">Swagger Describing Responses</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
-@Bean(properties="description,type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,example,*")
 @FluentSetters
 public class HeaderInfo extends SwaggerElement {
 
@@ -111,6 +135,7 @@ public class HeaderInfo extends SwaggerElement {
 		this.minLength = copyFrom.minLength;
 		this.multipleOf = copyFrom.multipleOf;
 		this.pattern = copyFrom.pattern;
+		this.ref = copyFrom.ref;
 		this.type = copyFrom.type;
 		this.uniqueItems = copyFrom.uniqueItems;
 	}
@@ -271,6 +296,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public HeaderInfo setEnum(Object...value) {
@@ -635,6 +661,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * 	<br>Valid values:
 	 * 	<ul>
 	 * 		<li><js>"string"</js>
@@ -683,8 +710,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "collectionFormat" -> toType(getCollectionFormat(), type);
 			case "default" -> toType(getDefault(), type);
@@ -712,8 +738,7 @@ public class HeaderInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public HeaderInfo set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
 			case "default" -> setDefault(value);

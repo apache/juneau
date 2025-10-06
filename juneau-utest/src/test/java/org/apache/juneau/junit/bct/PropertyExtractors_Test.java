@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -39,7 +40,7 @@ class PropertyExtractors_Test extends TestBase {
 
 	@Nested
 	@DisplayName("ObjectPropertyExtractor")
-	class a_ObjectPropertyExtractorTest {
+	class A_objectPropertyExtractorTest extends TestBase {
 
 		private PropertyExtractors.ObjectPropertyExtractor extractor = new PropertyExtractors.ObjectPropertyExtractor();
 
@@ -176,7 +177,7 @@ class PropertyExtractors_Test extends TestBase {
 
 	@Nested
 	@DisplayName("ListPropertyExtractor")
-	class b_ListPropertyExtractorTest {
+	class B_listPropertyExtractorTest extends TestBase {
 
 		private PropertyExtractors.ListPropertyExtractor extractor = new PropertyExtractors.ListPropertyExtractor();
 
@@ -255,7 +256,7 @@ class PropertyExtractors_Test extends TestBase {
 
 	@Nested
 	@DisplayName("MapPropertyExtractor")
-	class c_MapPropertyExtractorTest {
+	class C_mapPropertyExtractorTest extends TestBase {
 
 		private PropertyExtractors.MapPropertyExtractor extractor = new PropertyExtractors.MapPropertyExtractor();
 

@@ -12,39 +12,52 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
- * information for Link object.
+ * The Link object represents a possible design-time link for a response.
+ *
+ * <p>
+ * The Link Object represents a possible design-time link for a response. The presence of a link does not guarantee 
+ * the caller's ability to successfully invoke it, rather it provides a known relationship and traversal mechanism 
+ * between responses and other operations.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Link Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>operationRef</c> (string) - A relative or absolute reference to an OAS operation (mutually exclusive with <c>operationId</c>)
+ * 	<li><c>operationId</c> (string) - The name of an existing, resolvable OAS operation (mutually exclusive with <c>operationRef</c>)
+ * 	<li><c>parameters</c> (map of any) - A map representing parameters to pass to an operation as specified with <c>operationId</c> or identified via <c>operationRef</c>
+ * 	<li><c>requestBody</c> (any) - A literal value or expression to use as a request body when calling the target operation
+ * 	<li><c>description</c> (string) - A description of the link (CommonMark syntax may be used)
+ * 	<li><c>server</c> ({@link Server}) - A server object to be used by the target operation
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
- * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	Contact x = <jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>);
- *
- * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
- *
- * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * <p class='bjava'>
+ * 	<jc>// Create a link to another operation</jc>
+ * 	Link <jv>link</jv> = <jk>new</jk> Link()
+ * 		.setOperationId(<js>"getUserById"</js>)
+ * 		.setParameters(
+ * 			JsonMap.<jsm>of</jsm>(<js>"userId"</js>, <js>"$response.body#/id"</js>)
+ * 		)
+ * 		.setDescription(<js>"The id value returned in the response can be used as userId parameter in GET /users/{userId}"</js>);
  * </p>
- * <p class='bcode'>
- * 	<jc>// Output</jc>
- * 	{
- * 		<js>"name"</js>: <js>"API Support"</js>,
- * 		<js>"url"</js>: <js>"http://www.swagger.io/support"</js>,
- * 		<js>"email"</js>: <js>"support@swagger.io"</js>
- * 	}
- * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#link-object">OpenAPI Specification &gt; Link Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/links/">OpenAPI Links</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="operationRef,operationId,description,requestBody,server,parameters,*")
 @FluentSetters
 public class Link extends OpenApiElement {
 
@@ -193,6 +206,7 @@ public class Link extends OpenApiElement {
 	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
 	 *
 	 * @param val The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public Link setRequestBody(Object val) {
@@ -254,12 +268,14 @@ public class Link extends OpenApiElement {
 	/**
 	 * Adds a single value to the <property>examples</property> property.
 	 *
-	 * @param mimeType The mime-type string.
-	 * @param parameter The example.
+	 * @param mimeType The mime-type string.  Must not be <jk>null</jk>.
+	 * @param parameter The example.  Must not be <jk>null</jk>.
 	 * @return This object
 	 */
 	public Link addParameter(String mimeType, Object parameter) {
-		parameters = mapBuilder(parameters).sparse().add(mimeType, parameters).build();
+		assertArgNotNull("mimeType", mimeType);
+		assertArgNotNull("parameter", parameter);
+		parameters = mapBuilder(parameters).sparse().add(mimeType, parameter).build();
 		return this;
 	}
 
@@ -269,8 +285,7 @@ public class Link extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> toType(getDescription(), type);
 			case "operationRef" -> toType(getOperationRef(), type);
@@ -284,15 +299,14 @@ public class Link extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Link set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> setDescription(Utils.s(value));
 			case "operationId" -> setOperationId(Utils.s(value));
 			case "operationRef" -> setOperationRef(Utils.s(value));
+			case "parameters" -> setParameters(mapBuilder(String.class, Object.class).sparse().addAny(value).build());
 			case "requestBody" -> setRequestBody(value);
 			case "server" -> setServer(toType(value, Server.class));
-			case "parameters" -> setParameters(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -306,10 +320,26 @@ public class Link extends OpenApiElement {
 			.addIf(description != null, "description")
 			.addIf(operationId != null, "operationId")
 			.addIf(operationRef != null, "operationRef")
-			.addIf(requestBody != null, "requestBody")
 			.addIf(parameters != null, "parameters")
+			.addIf(requestBody != null, "requestBody")
 			.addIf(server != null, "server")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public Link strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public Link strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

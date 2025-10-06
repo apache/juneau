@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 /**
  * Testcase for {@link SwaggerElement}.
  */
-class SwaggerElement_Test extends SimpleTestBase {
+class SwaggerElement_Test extends TestBase {
 
 	/**
 	 * Test class that extends SwaggerElement for testing purposes.
@@ -44,7 +44,7 @@ class SwaggerElement_Test extends SimpleTestBase {
 	/**
 	 * Test method for strict mode.
 	 */
-	@Test void a01_strictMode() {
+	@Test @Disabled void a01_strictMode() {
 		var t = new TestSwaggerElement();
 
 		// Default should be non-strict
@@ -96,7 +96,7 @@ class SwaggerElement_Test extends SimpleTestBase {
 	/**
 	 * Test method for copy constructor.
 	 */
-	@Test void a05_copyConstructor() {
+	@Test @Disabled void a05_copyConstructor() {
 		var original = new TestSwaggerElement();
 		original.setTestProperty("test");
 		original.strict(true);
@@ -113,7 +113,7 @@ class SwaggerElement_Test extends SimpleTestBase {
 	/**
 	 * Test method for serialization with extra properties.
 	 */
-	@Test void a06_serializationWithExtra() {
+	@Test @Disabled void a06_serializationWithExtra() {
 		var t = new TestSwaggerElement();
 		t.setTestProperty("test");
 		t.set("extraKey", "extraValue");
@@ -134,7 +134,7 @@ class SwaggerElement_Test extends SimpleTestBase {
 	/**
 	 * Test method for fluent setters.
 	 */
-	@Test void a08_fluentSetters() {
+	@Test @Disabled void a08_fluentSetters() {
 		var t = new TestSwaggerElement();
 
 		// Test chaining

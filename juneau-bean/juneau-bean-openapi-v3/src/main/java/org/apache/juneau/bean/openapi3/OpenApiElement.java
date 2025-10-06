@@ -12,9 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -83,10 +85,7 @@ public abstract class OpenApiElement {
 	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
 	 */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
-		if ("strict".equals(property))
-			return toType(isStrict(), type);
+		assertArgNotNull("property", property);
 		return toType(get(property), type);
 	}
 
@@ -96,12 +95,13 @@ public abstract class OpenApiElement {
 	 * <p>
 	 * Can be used to retrieve non-standard Swagger fields such as <js>"$ref"</js>.
 	 *
-	 * @param property The property name to retrieve.
+	 * @param property The property name to retrieve.  Must not be <jk>null</jk>.
 	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
 	 */
 	@Beanp("*")
 	public Object get(String property) {
-		if (property == null || extra == null)
+		assertArgNotNull("property", property);
+		if (extra == null)
 			return null;
 		return extra.get(property);
 	}
@@ -112,19 +112,18 @@ public abstract class OpenApiElement {
 	 * <p>
 	 * Can be used to set non-standard Swagger fields such as <js>"$ref"</js>.
 	 *
-	 * @param property The property name to set.
+	 * @param property The property name to set.  Must not be <jk>null</jk>.
 	 * @param value The new value for the property.
 	 * @return This object
+	 * @throws RuntimeException if strict mode is enabled.
 	 */
 	@Beanp("*")
 	public OpenApiElement set(String property, Object value) {
-		if (property == null)
-			return this;
-		if ("strict".equals(property)) {
-			return strict(value);
-		}
+		assertArgNotNull("property", property);
+		if (strict)
+			throw new RuntimeException("Cannot set property '" + property + "' in strict mode.");
 		if (extra == null)
-			extra = new LinkedHashMap<>();
+			extra = map();
 		extra.put(property, value);
 		return this;
 	}
@@ -149,11 +148,7 @@ public abstract class OpenApiElement {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(strict, "strict")
-			.build();
-		s.addAll(extraKeys());
-		return s;
+		return extraKeys();
 	}
 
 	/**
@@ -177,6 +172,9 @@ public abstract class OpenApiElement {
 
 	@Override /* Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT.toString(this);
+		if (Modifier.isAbstract(getClass().getModifiers())) {
+			return JsonSerializer.DEFAULT_SORTED.toString(extra);
+		}
+		return JsonSerializer.DEFAULT_SORTED.toString(this);
 	}
 }

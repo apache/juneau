@@ -21,7 +21,7 @@ import org.apache.juneau.common.internal.*;
  * Various useful static methods for creating OpenAPI elements.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.OpenApi">Overview &gt; juneau-rest-server &gt; OpenAPI</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
  * </ul>
  */
 public class OpenApiBuilder {
@@ -298,5 +298,200 @@ public class OpenApiBuilder {
 	 */
 	public static final Xml xml() {
 		return new Xml();
+	}
+
+	/**
+	 * Creates an empty {@link Operation} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Operation operation() {
+		return new Operation();
+	}
+
+	/**
+	 * Creates an empty {@link Parameter} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Parameter parameter() {
+		return new Parameter();
+	}
+
+	/**
+	 * Creates a {@link Parameter} element with the specified {@link Parameter#setIn(String) in} and {@link Parameter#setName(String) name} attributes.
+	 *
+	 * @param in The {@link Parameter#setIn(String) in} attribute.
+	 * @param name The {@link Parameter#setName(String) name} attribute.
+	 * @return The new element.
+	 */
+	public static final Parameter parameter(String in, String name) {
+		return parameter().setIn(in).setName(name);
+	}
+
+	/**
+	 * Creates an empty {@link PathItem} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final PathItem pathItem() {
+		return new PathItem();
+	}
+
+	/**
+	 * Creates an empty {@link Response} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Response response() {
+		return new Response();
+	}
+
+	/**
+	 * Creates a {@link Response} element with the specified {@link Response#setDescription(String) description} attribute.
+	 *
+	 * @param description The {@link Response#setDescription(String) description} attribute.
+	 * @return The new element.
+	 */
+	public static final Response response(String description) {
+		return response().setDescription(description);
+	}
+
+	/**
+	 * Creates an empty {@link Components} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Components components() {
+		return new Components();
+	}
+
+	/**
+	 * Creates an empty {@link SecurityRequirement} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final SecurityRequirement securityRequirement() {
+		return new SecurityRequirement();
+	}
+
+	/**
+	 * Creates an empty {@link RequestBodyInfo} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final RequestBodyInfo requestBodyInfo() {
+		return new RequestBodyInfo();
+	}
+
+	/**
+	 * Creates an empty {@link Example} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Example example() {
+		return new Example();
+	}
+
+	/**
+	 * Creates an empty {@link Link} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Link link() {
+		return new Link();
+	}
+
+	/**
+	 * Creates an empty {@link Callback} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Callback callback() {
+		return new Callback();
+	}
+
+	/**
+	 * Creates an empty {@link Discriminator} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Discriminator discriminator() {
+		return new Discriminator();
+	}
+
+	/**
+	 * Creates a {@link Discriminator} element with the specified {@link Discriminator#setPropertyName(String) propertyName} attribute.
+	 *
+	 * @param propertyName The {@link Discriminator#setPropertyName(String) propertyName} attribute.
+	 * @return The new element.
+	 */
+	public static final Discriminator discriminator(String propertyName) {
+		return discriminator().setPropertyName(propertyName);
+	}
+
+	/**
+	 * Creates an empty {@link Encoding} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Encoding encoding() {
+		return new Encoding();
+	}
+
+	/**
+	 * Creates an {@link Encoding} element with the specified {@link Encoding#setContentType(String) contentType} attribute.
+	 *
+	 * @param contentType The {@link Encoding#setContentType(String) contentType} attribute.
+	 * @return The new element.
+	 */
+	public static final Encoding encoding(String contentType) {
+		return encoding().setContentType(contentType);
+	}
+
+	/**
+	 * Creates an empty {@link MediaType} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final MediaType mediaType() {
+		return new MediaType();
+	}
+
+	/**
+	 * Creates an empty {@link OAuthFlow} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final OAuthFlow oAuthFlow() {
+		return new OAuthFlow();
+	}
+
+	/**
+	 * Creates an empty {@link OAuthFlows} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final OAuthFlows oAuthFlows() {
+		return new OAuthFlows();
+	}
+
+	/**
+	 * Creates an empty {@link ServerVariable} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final ServerVariable serverVariable() {
+		return new ServerVariable();
+	}
+
+	/**
+	 * Creates a {@link ServerVariable} element with the specified {@link ServerVariable#setDefault(String) default} attribute.
+	 *
+	 * @param defaultValue The {@link ServerVariable#setDefault(String) default} attribute.
+	 * @return The new element.
+	 */
+	public static final ServerVariable serverVariable(String defaultValue) {
+		return serverVariable().setDefault(defaultValue);
 	}
 }

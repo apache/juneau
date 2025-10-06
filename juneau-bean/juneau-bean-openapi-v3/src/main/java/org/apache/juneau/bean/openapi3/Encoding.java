@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -19,14 +20,56 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
- * TODO
+ * A single encoding definition applied to a single schema property.
+ *
+ * <p>
+ * The Encoding Object is a single encoding definition applied to a single schema property. It allows you to define 
+ * how a property should be serialized when it's part of a request or response body with a specific media type.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Encoding Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>contentType</c> (string) - The Content-Type for encoding a specific property. Default value depends on the property type
+ * 	<li><c>headers</c> (map of {@link HeaderInfo}) - A map allowing additional information to be provided as headers
+ * 	<li><c>style</c> (string) - Describes how a specific property value will be serialized depending on its type
+ * 	<li><c>explode</c> (boolean) - When this is true, property values of type array or object generate separate parameters for each value
+ * 	<li><c>allowReserved</c> (boolean) - Determines whether the parameter value should allow reserved characters
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	Encoding <jv>x</jv> = <jsm>encoding</jsm>()
+ * 		.setContentType(<js>"application/x-www-form-urlencoded"</js>)
+ * 		.setStyle(<js>"form"</js>)
+ * 		.setExplode(<jk>true</jk>);
+ *
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
+ *
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	<jv>json</jv> = <jv>x</jv>.toString();
+ * </p>
+ * <p class='bcode'>
+ * 	<jc>// Output</jc>
+ * 	{
+ * 		<js>"contentType"</js>: <js>"application/x-www-form-urlencoded"</js>,
+ * 		<js>"style"</js>: <js>"form"</js>,
+ * 		<js>"explode"</js>: <jk>true</jk>
+ * 	}
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#encoding-object">OpenAPI Specification &gt; Encoding Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/describing-request-body/">OpenAPI Describing Request Body</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="contentType,style,explode,headers,allowReserved,*")
 @FluentSetters
 public class Encoding extends OpenApiElement{
 
@@ -68,6 +111,12 @@ public class Encoding extends OpenApiElement{
 	@Override /* OpenApiElement */
 	protected Encoding strict() {
 		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public Encoding strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 
@@ -117,6 +166,7 @@ public class Encoding extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public Encoding setStyle(String value) {
@@ -138,6 +188,7 @@ public class Encoding extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public Encoding setHeaders(Map<String, HeaderInfo> value) {
@@ -148,13 +199,15 @@ public class Encoding extends OpenApiElement{
 	/**
 	 * Adds one or more values to the <property>headers</property> property.
 	 *
-	 * @param key The mapping key.
+	 * @param key The mapping key.  Must not be <jk>null</jk>.
 	 * @param value
 	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object
 	 */
 	public Encoding addHeader(String key, HeaderInfo value) {
+		assertArgNotNull("key", key);
+		assertArgNotNull("value", value);
 		headers = mapBuilder(headers).sparse().add(key, value).build();
 		return this;
 	}
@@ -180,7 +233,7 @@ public class Encoding extends OpenApiElement{
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public Encoding setExplode(Boolean value) {
@@ -209,7 +262,7 @@ public class Encoding extends OpenApiElement{
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public Encoding setAllowReserved(Boolean value) {
@@ -223,8 +276,7 @@ public class Encoding extends OpenApiElement{
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "contentType" -> toType(getContentType(), type);
 			case "style" -> toType(getStyle(), type);
@@ -237,14 +289,13 @@ public class Encoding extends OpenApiElement{
 
 	@Override /* OpenApiElement */
 	public Encoding set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
-			case "contentType" -> setContentType(Utils.s(value));
-			case "style" -> setStyle(Utils.s(value));
-			case "headers" -> setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
-			case "explode" -> setExplode(toBoolean(value));
 			case "allowReserved" -> setAllowReserved(toBoolean(value));
+			case "contentType" -> setContentType(Utils.s(value));
+			case "explode" -> setExplode(toBoolean(value));
+			case "headers" -> setHeaders(mapBuilder(String.class, HeaderInfo.class).sparse().addAny(value).build());
+			case "style" -> setStyle(Utils.s(value));
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -255,11 +306,11 @@ public class Encoding extends OpenApiElement{
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
-			.addIf(contentType != null, "contentType")
-			.addIf(style != null, "style")
-			.addIf(headers != null, "headers")
-			.addIf(explode != null, "explode")
 			.addIf(allowReserved != null, "allowReserved")
+			.addIf(contentType != null, "contentType")
+			.addIf(explode != null, "explode")
+			.addIf(headers != null, "headers")
+			.addIf(style != null, "style")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

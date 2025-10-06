@@ -14,6 +14,7 @@ package org.apache.juneau.junit.bct;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -22,7 +23,7 @@ import org.junit.jupiter.api.*;
 class PropertyNotFoundException_Test extends TestBase {
 
 	@Nested
-	class a_Construction {
+	class A_construction extends TestBase {
 
 		@Test
 		void a01_messageConstructor() {
@@ -66,7 +67,7 @@ class PropertyNotFoundException_Test extends TestBase {
 	}
 
 	@Nested
-	class b_Integration {
+	class B_integration extends TestBase {
 
 		@Test
 		void b01_thrownByPropertyExtractor() {

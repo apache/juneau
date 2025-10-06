@@ -1,0 +1,280 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.bean.openapi3;
+
+import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiBuilder.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
+
+/**
+ * Testcase for {@link Response}.
+ */
+class Response_Test extends TestBase {
+
+	@Nested class A_basicTests extends TestBase {
+
+		private static final BeanTester<Response> TESTER =
+			testBean(
+				bean()
+					.setContent(map("a1", mediaType().setSchema(schemaInfo().setType("a2"))))
+					.setDescription("b")
+					.setHeaders(map("c1", headerInfo(schemaInfo().setType("c2"))))
+					.setLinks(map("d1", link().setOperationId("d2")))
+			)
+			.props("content{a1{schema{type}}},description,headers{c1{schema{type}}},links{d1{operationId}}")
+			.vals("{{{a2}}},b,{{{c2}}},{{d2}}")
+			.json("{content:{a1:{schema:{type:'a2'}}},description:'b',headers:{c1:{schema:{type:'c2'}}},links:{d1:{operationId:'d2'}}}")
+			.string("{'content':{'a1':{'schema':{'type':'a2'}}},'description':'b','headers':{'c1':{'schema':{'type':'c2'}}},'links':{'d1':{'operationId':'d2'}}}".replace('\'','"'))
+		;
+
+		@Test void a01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void a02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void a03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void a04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void a05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void a06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void a07_keySet() {
+			assertList(TESTER.bean().keySet(), "content", "description", "headers", "links");
+		}
+
+		@Test void a08_otherGettersAndSetters() {
+			// No Collection variants for Response setters
+
+			// Test special getters
+			var x = bean()
+				.setHeaders(map(
+					"a1", headerInfo(schemaInfo("a2")),
+					"a3", headerInfo(schemaInfo("a4"))
+				))
+				.setContent(map(
+					"b1", mediaType().setSchema(schemaInfo("b2")),
+					"b3", mediaType().setSchema(schemaInfo("b4"))
+				))
+				.setLinks(map(
+					"c1", link().setOperationId("c2"),
+					"c3", link().setOperationId("c4")
+				));
+
+			assertBean(x.getHeader("a1"), "schema{type}", "{a2}");
+			assertBean(x.getContent("b1"), "schema{type}", "{b2}");
+			assertBean(x.getLink("c1"), "operationId", "c2");
+		}
+
+		@Test void a09_nullParameters() {
+			var x = bean();
+
+			assertThrows(IllegalArgumentException.class, ()->x.getHeader(null));
+			assertThrows(IllegalArgumentException.class, ()->x.getContent(null));
+			assertThrows(IllegalArgumentException.class, ()->x.getLink(null));
+		}
+	}
+
+	@Nested class B_emptyTests extends TestBase {
+
+		private static final BeanTester<Response> TESTER =
+			testBean(bean())
+			.props("description,headers,content,links")
+			.vals("<null>,<null>,<null>,<null>")
+			.json("{}")
+			.string("{}")
+		;
+
+		@Test void b01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void b02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void b03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void b04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void b05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void b06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void b07_keySet() {
+			assertEmpty(TESTER.bean().keySet());
+		}
+	}
+
+	@Nested class C_extraProperties extends TestBase {
+		private static final BeanTester<Response> TESTER =
+			testBean(
+				bean()
+					.set("content", map("a1", mediaType().setSchema(schemaInfo("a2"))))
+					.set("description", "b")
+					.set("headers", map("c1", headerInfo(schemaInfo("c2"))))
+					.set("links", map("d1", link().setOperationId("d2")))
+					.set("x1", "x1a")
+					.set("x2", null)
+			)
+			.props("content{a1{schema{type}}},description,headers{c1{schema{type}}},links{d1{operationId}},x1,x2")
+			.vals("{{{a2}}},b,{{{c2}}},{{d2}},x1a,<null>")
+			.json("{content:{a1:{schema:{type:'a2'}}},description:'b',headers:{c1:{schema:{type:'c2'}}},links:{d1:{operationId:'d2'}},x1:'x1a'}")
+			.string("{'content':{'a1':{'schema':{'type':'a2'}}},'description':'b','headers':{'c1':{'schema':{'type':'c2'}}},'links':{'d1':{'operationId':'d2'}},'x1':'x1a'}".replace('\'', '"'))
+		;
+
+		@Test void c01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void c02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void c03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void c04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void c05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void c06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void c07_keySet() {
+			assertList(TESTER.bean().keySet(), "content", "description", "headers", "links", "x1", "x2");
+		}
+
+		@Test void c08_get() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> obj.get(prop, Object.class),
+				"content{a1{schema{type}}},description,headers{c1{schema{type}}},links{d1{operationId}},x1,x2",
+				"{{{a2}}},b,{{{c2}}},{{d2}},x1a,<null>"
+			);
+		}
+
+		@Test void c09_getTypes() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				"content,description,headers,links,x1,x2",
+				"LinkedHashMap,String,LinkedHashMap,LinkedHashMap,String,<null>"
+			);
+		}
+
+		@Test void c10_nullPropertyValue() {
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+		}
+	}
+
+	@Nested class D_additionalMethods extends TestBase {
+
+		@Test void d01_addMethods() {
+			assertBean(
+				bean()
+					.addHeader("a1", headerInfo(schemaInfo("a2")))
+					.addContent("b1", mediaType().setSchema(schemaInfo("b2")))
+					.addLink("c1", link().setOperationId("c2")),
+				"headers{a1{schema{type}}},content{b1{schema{type}}},links{c1{operationId}}",
+				"{{{a2}}},{{{b2}}},{{c2}}"
+			);
+		}
+
+		@Test void d02_asMap() {
+			assertBean(
+				bean()
+					.setDescription("a")
+					.set("x1", "x1a")
+					.asMap(),
+				"description,x1",
+				"a,x1a"
+			);
+		}
+
+		@Test void d03_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void d04_addMethodsWithNullParameters() {
+			var x = bean();
+			assertThrows(IllegalArgumentException.class, ()->x.addHeader(null, headerInfo()));
+			assertThrows(IllegalArgumentException.class, ()->x.addHeader("a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addContent(null, mediaType()));
+			assertThrows(IllegalArgumentException.class, ()->x.addContent("a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addLink(null, link()));
+			assertThrows(IllegalArgumentException.class, ()->x.addLink("a", null));
+		}
+	}
+
+	@Nested class E_strictMode extends TestBase {
+
+		@Test void e01_strictModeSetThrowsException() {
+			var x = bean().strict();
+			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
+		}
+
+		@Test void e02_nonStrictModeAllowsSet() {
+			var x = bean(); // not strict
+			assertDoesNotThrow(() -> x.set("foo", "bar"));
+		}
+
+		@Test void e03_strictModeToggle() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+			x.strict(false);
+			assertFalse(x.isStrict());
+		}
+	}
+
+	//---------------------------------------------------------------------------------------------
+	// Helper methods
+	//---------------------------------------------------------------------------------------------
+
+	private static Response bean() {
+		return response();
+	}
+}

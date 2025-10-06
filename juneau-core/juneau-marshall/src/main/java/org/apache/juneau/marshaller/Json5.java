@@ -56,6 +56,11 @@ public class Json5 extends CharMarshaller {
 	public static final Json5 DEFAULT = new Json5();
 
 	/**
+	 * Default reusable instance, sorted bean properties.
+	 */
+	public static final Json5 DEFAULT_SORTED = new Json5(Json5Serializer.DEFAULT_SORTED, Json5Parser.DEFAULT);
+
+	/**
 	 * Default reusable instance, readable format.
 	 */
 	public static final Json5 DEFAULT_READABLE = new Json5(Json5Serializer.DEFAULT_READABLE, Json5Parser.DEFAULT);

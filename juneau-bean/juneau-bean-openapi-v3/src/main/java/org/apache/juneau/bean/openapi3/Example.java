@@ -12,39 +12,61 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
  * information for Examples object.
  *
+ * <p>
+ * The Example Object provides an example of a media type. The example object is mutually exclusive of the examples 
+ * object. Furthermore, if referencing a schema which contains an example, the example value shall override the example 
+ * provided by the schema.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Example Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>summary</c> (string) - Short description for the example
+ * 	<li><c>description</c> (string) - Long description for the example. CommonMark syntax MAY be used for rich text representation
+ * 	<li><c>value</c> (any) - Embedded literal example. The value field and externalValue field are mutually exclusive
+ * 	<li><c>externalValue</c> (string) - A URI that points to the literal example. This provides the capability to reference 
+ * 		examples that cannot easily be included in JSON or YAML documents. The value field and externalValue field are mutually exclusive
+ * </ul>
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	Contact x = <jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>);
+ * 	Example <jv>x</jv> = <jsm>example</jsm>()
+ * 		.setSummary(<js>"User example"</js>)
+ * 		.setValue(<js>"John Doe"</js>);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	<jv>json</jv> = <jv>x</jv>.toString();
  * </p>
  * <p class='bcode'>
  * 	<jc>// Output</jc>
  * 	{
- * 		<js>"name"</js>: <js>"API Support"</js>,
- * 		<js>"url"</js>: <js>"http://www.swagger.io/support"</js>,
- * 		<js>"email"</js>: <js>"support@swagger.io"</js>
+ * 		<js>"summary"</js>: <js>"User example"</js>,
+ * 		<js>"value"</js>: <js>"John Doe"</js>
  * 	}
  * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#example-object">OpenAPI Specification &gt; Example Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/adding-examples/">OpenAPI Adding Examples</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="summary,description,externalValue,value,*")
 @FluentSetters
 public class Example extends OpenApiElement {
 
@@ -188,6 +210,7 @@ public class Example extends OpenApiElement {
 	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
 	 *
 	 * @param val The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public Example setValue(Object val) {
@@ -201,8 +224,7 @@ public class Example extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> toType(getDescription(), type);
 			case "externalValue" -> toType(getExternalValue(), type);
@@ -214,8 +236,7 @@ public class Example extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Example set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> setDescription(Utils.s(value));
 			case "externalValue" -> setExternalValue(Utils.s(value));
@@ -232,10 +253,26 @@ public class Example extends OpenApiElement {
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(description != null, "description")
-			.addIf(summary != null, "summary")
 			.addIf(externalValue != null, "externalValue")
+			.addIf(summary != null, "summary")
 			.addIf(value != null, "value")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public Example strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public Example strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

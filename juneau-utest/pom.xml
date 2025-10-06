@@ -70,6 +70,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-openapi-v3</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-mock</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -168,6 +173,19 @@
 						<goals>
 							<goal>report</goal>
 						</goals>
+					</execution>
+					<execution>
+						<id>report-aggregate</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report-aggregate</goal>
+						</goals>
+						<configuration>
+							<excludes>
+								<exclude>**/doc/**/*</exclude>
+								<exclude>**/examples/**/*</exclude>
+							</excludes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

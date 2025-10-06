@@ -12,20 +12,31 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.swagger;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Allows adding meta data to a single tag that is used by the <a class="doclink" href="https://swagger.io/specification/v2#operationObject">Operation Object</a>.
+ * Allows adding metadata to a single tag that is used by the Operation Object.
  *
  * <p>
- * It is not mandatory to have a Tag Object per tag used there.
+ * The Tag Object allows adding metadata to a single tag that is used by the Operation Object in Swagger 2.0. 
+ * It is not mandatory to have a Tag Object per tag used there, but it can be useful for providing additional 
+ * information about tags such as descriptions and external documentation.
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The Tag Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>name</c> (string, REQUIRED) - The name of the tag
+ * 	<li><c>description</c> (string) - A short description for the tag
+ * 	<li><c>externalDocs</c> ({@link ExternalDocumentation}) - Additional external documentation for this tag
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -35,7 +46,7 @@ import org.apache.juneau.internal.*;
  * 		.description(<js>"Pets operations"</js>)
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>tag</jv>);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>tag</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>tag</jv>.toString();
@@ -49,10 +60,11 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#tag-object">Swagger 2.0 Specification &gt; Tag Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/grouping-operations-with-tags/">Swagger Grouping Operations with Tags</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
-@Bean(properties="name,description,externalDocs,*")
 @FluentSetters
 public class Tag extends SwaggerElement {
 
@@ -170,6 +182,7 @@ public class Tag extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Tag setName(String value) {
@@ -183,8 +196,7 @@ public class Tag extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> toType(getDescription(), type);
 			case "externalDocs" -> toType(getExternalDocs(), type);
@@ -195,8 +207,7 @@ public class Tag extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Tag set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> setDescription(Utils.s(value));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
@@ -217,4 +228,31 @@ public class Tag extends SwaggerElement {
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @return This object.
+	 */
+	@Override
+	public Tag strict() {
+		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public Tag strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
 }

@@ -19,12 +19,34 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Describes a single API operation on a path.
+ *
+ * <p>
+ * The Operation Object describes a single operation (such as GET, POST, PUT, DELETE) that can be performed on a path
+ * in Swagger 2.0. Operations define what actions can be taken, what parameters they accept, what they consume/produce,
+ * and what responses they return.
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The Operation Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>tags</c> (array of string) - A list of tags for API documentation control
+ * 	<li><c>summary</c> (string) - A short summary of what the operation does
+ * 	<li><c>description</c> (string) - A verbose explanation of the operation behavior
+ * 	<li><c>externalDocs</c> ({@link ExternalDocumentation}) - Additional external documentation for this operation
+ * 	<li><c>operationId</c> (string) - Unique string used to identify the operation
+ * 	<li><c>consumes</c> (array of string) - A list of MIME types the operation can consume
+ * 	<li><c>produces</c> (array of string) - A list of MIME types the operation can produce
+ * 	<li><c>parameters</c> (array of {@link ParameterInfo}) - A list of parameters that are applicable for this operation
+ * 	<li><c>responses</c> (map of {@link ResponseInfo}, REQUIRED) - The list of possible responses as they are returned from executing this operation
+ * 	<li><c>schemes</c> (array of string) - The transfer protocol for the operation (overrides the Swagger-level schemes)
+ * 	<li><c>deprecated</c> (boolean) - Declares this operation to be deprecated
+ * 	<li><c>security</c> (array of map) - A declaration of which security schemes are applied for this operation
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -61,7 +83,7 @@ import org.apache.juneau.internal.*;
  * 		.security(<js>"petstore_auth"</js>, <js>"write:pets"</js>, <js>"read:pets"</js>);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>operation</jv>);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>operation</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>operation</jv>.toString();
@@ -125,10 +147,11 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#operation-object">Swagger 2.0 Specification &gt; Operation Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/paths-and-operations/">Swagger Paths and Operations</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
-@Bean(properties="operationId,summary,description,tags,externalDocs,consumes,produces,parameters,responses,schemes,deprecated,security,*")
 @FluentSetters
 public class Operation extends SwaggerElement {
 
@@ -248,6 +271,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Values MUST be as described under <a class="doclink" href="https://swagger.io/specification#mimeTypes">Swagger Mime Types</a>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Operation setConsumes(MediaType...value) {
@@ -300,6 +324,7 @@ public class Operation extends SwaggerElement {
 	 * Declares this operation to be deprecated.
 	 *
 	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Operation setDeprecated(Boolean value) {
@@ -425,11 +450,13 @@ public class Operation extends SwaggerElement {
 	/**
 	 * Returns the parameter with the specified type and name.
 	 *
-	 * @param in The parameter in.
+	 * @param in The parameter in.  Must not be <jk>null</jk>.
 	 * @param name The parameter name.  Can be <jk>null</jk> for parameter type <c>body</c>.
 	 * @return The matching parameter info, or <jk>null</jk> if not found.
 	 */
 	public ParameterInfo getParameter(String in, String name) {
+		assertArgNotNull("in", in);
+		// Note: name can be null for "body" parameters
 		if (parameters != null)
 			for (var pi : parameters)
 				if (Utils.eq(pi.getIn(), in) && (Utils.eq(pi.getName(), name) || "body".equals(pi.getIn())))
@@ -461,6 +488,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Operation setParameters(ParameterInfo...value) {
@@ -524,6 +552,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Value MUST be as described under <a class="doclink" href="https://swagger.io/specification#mimeTypes">Swagger Mime Types</a>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Operation setProduces(MediaType...value) {
@@ -560,13 +589,12 @@ public class Operation extends SwaggerElement {
 	/**
 	 * Returns the response info with the given status code.
 	 *
-	 * @param status The HTTP status code.
+	 * @param status The HTTP status code.  Must not be <jk>null</jk>.
 	 * @return The response info, or <jk>null</jk> if not found.
 	 */
 	public ResponseInfo getResponse(String status) {
-		if (responses != null)
-			return responses.get(status);
-		return null;
+		assertArgNotNull("status", status);
+		return responses == null ? null : responses.get(status);
 	}
 
 	/**
@@ -588,6 +616,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Operation setResponses(Map<String,ResponseInfo> value) {
@@ -598,11 +627,13 @@ public class Operation extends SwaggerElement {
 	/**
 	 * Adds a single value to the <property>responses</property> property.
 	 *
-	 * @param statusCode The HTTP status code.
-	 * @param response The response description.
+	 * @param statusCode The HTTP status code.  Must not be <jk>null</jk>.
+	 * @param response The response description.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public Operation addResponse(String statusCode, ResponseInfo response) {
+		assertArgNotNull("statusCode", statusCode);
+		assertArgNotNull("response", response);
 		responses = mapBuilder(responses).add(statusCode, response).build();
 		return this;
 	}
@@ -639,6 +670,22 @@ public class Operation extends SwaggerElement {
 	 */
 	public Operation setSchemes(Collection<String> value) {
 		schemes = setFrom(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol for the operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Operation setSchemes(String...value) {
+		setSchemes(setBuilder(String.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -687,19 +734,56 @@ public class Operation extends SwaggerElement {
 	}
 
 	/**
+	 * Bean property setter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for this operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	@SafeVarargs
+	public final Operation setSecurity(Map<String,List<String>>...value) {
+		security = alist(value);
+		return this;
+	}
+
+	/**
 	 * Same as {@link #addSecurity(String, String...)}.
 	 *
 	 * @param scheme
 	 * 	The scheme name.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @param alternatives
 	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR
 	 * 	between the security requirements).
 	 * @return This object.
 	 */
 	public Operation addSecurity(String scheme, String...alternatives) {
+		assertArgNotNull("scheme", scheme);
 		Map<String,List<String>> m = map();
 		m.put(scheme, alist(alternatives));
 		security = listBuilder(security).add(m).build();
+		return this;
+	}
+
+	/**
+	 * Bean property adder:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for this operation.
+	 *
+	 * @param value
+	 * 	The values to add to this property.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	@SuppressWarnings("unchecked")
+	public Operation addSecurity(Collection<Map<String,List<String>>> value) {
+		assertArgNotNull("value", value);
+		security = listBuilder(security).addAll(value).build();
 		return this;
 	}
 
@@ -799,8 +883,7 @@ public class Operation extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "consumes" -> toType(getConsumes(), type);
 			case "deprecated" -> toType(getDeprecated(), type);
@@ -821,8 +904,7 @@ public class Operation extends SwaggerElement {
 	@SuppressWarnings("rawtypes")
 	@Override /* SwaggerElement */
 	public Operation set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "consumes" -> setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
 			case "deprecated" -> setDeprecated(toBoolean(value));
@@ -861,4 +943,31 @@ public class Operation extends SwaggerElement {
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @return This object.
+	 */
+	@Override
+	public Operation strict() {
+		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public Operation strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
 }

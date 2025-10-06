@@ -82,6 +82,17 @@ public final class ListBuilder<E> {
 	}
 
 	/**
+	 * Specifies the element type on this list.
+	 * 
+	 * @param value The element type.
+	 * @return This object.
+	 */
+	public ListBuilder<E> elementType(Class<E> value) {
+		this.elementType = value;
+		return this;
+	}
+
+	/**
 	 * Builds the list.
 	 *
 	 * @return A list conforming to the settings on this builder.

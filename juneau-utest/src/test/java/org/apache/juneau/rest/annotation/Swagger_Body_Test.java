@@ -115,10 +115,10 @@ class Swagger_Body_Test extends SimpleTestBase {
 		assertJson("{type:'object'}", x.getSchema());
 
 		x = s.getParameterInfo("/b","put","body",null);
-		assertJson("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+		assertJson("{properties:{f1:{type:'string'}},type:'object'}", x.getSchema());
 
 		x = s.getParameterInfo("/c","post","body",null);
-		assertJson("{type:'array',items:{type:'string'}}", x.getSchema());
+		assertJson("{items:{type:'string'},type:'array'}", x.getSchema());
 
 		x = s.getParameterInfo("/d","delete","body",null);
 		assertJson("{type:'string'}", x.getSchema());
@@ -220,10 +220,10 @@ class Swagger_Body_Test extends SimpleTestBase {
 		assertJson("{type:'object'}", x.getSchema());
 
 		x = s.getParameterInfo("/b","put","body",null);
-		assertJson("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+		assertJson("{properties:{f1:{type:'string'}},type:'object'}", x.getSchema());
 
 		x = s.getParameterInfo("/c","post","body",null);
-		assertJson("{type:'array',items:{type:'string'}}", x.getSchema());
+		assertJson("{items:{type:'string'},type:'array'}", x.getSchema());
 
 		x = s.getParameterInfo("/d","delete","body",null);
 		assertJson("{type:'string'}", x.getSchema());

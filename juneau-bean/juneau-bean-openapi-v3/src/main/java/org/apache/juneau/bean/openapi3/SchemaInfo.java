@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -22,39 +23,75 @@ import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
- * The Schema Object allows the definition of input and output data types.
+ * Allows the definition of input and output data types.
  *
  * <p>
- * These types can be objects, but also primitives and arrays.
- * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it.
- * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
+ * The Schema Object allows the definition of input and output data types, including objects, primitives, and arrays.
+ * This object is an extended subset of the JSON Schema Specification Draft 4, with additional extensions provided
+ * by the OpenAPI Specification to allow for more complete documentation.
  *
+ * <h5 class='section'>OpenAPI Specification:</h5>
  * <p>
- * Further information about the properties can be found in JSON Schema Core and JSON Schema Validation.
- * Unless stated otherwise, the property definitions follow the JSON Schema specification as referenced here.
+ * The Schema Object supports all properties from JSON Schema Draft 4, including but not limited to:
+ * <ul class='spaced-list'>
+ * 	<li><c>type</c> (string) - The data type. Values: <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, <js>"array"</js>, <js>"object"</js>
+ * 	<li><c>format</c> (string) - The format modifier (e.g., <js>"int32"</js>, <js>"int64"</js>, <js>"float"</js>, <js>"double"</js>, <js>"date"</js>, <js>"date-time"</js>)
+ * 	<li><c>title</c> (string) - A short title for the schema
+ * 	<li><c>description</c> (string) - A description of the schema (CommonMark syntax may be used)
+ * 	<li><c>default</c> (any) - The default value
+ * 	<li><c>multipleOf</c> (number) - Must be a multiple of this value
+ * 	<li><c>maximum</c> (number) - Maximum value (inclusive by default)
+ * 	<li><c>exclusiveMaximum</c> (boolean) - If true, maximum is exclusive
+ * 	<li><c>minimum</c> (number) - Minimum value (inclusive by default)
+ * 	<li><c>exclusiveMinimum</c> (boolean) - If true, minimum is exclusive
+ * 	<li><c>maxLength</c> (integer) - Maximum string length
+ * 	<li><c>minLength</c> (integer) - Minimum string length
+ * 	<li><c>pattern</c> (string) - Regular expression pattern the string must match
+ * 	<li><c>maxItems</c> (integer) - Maximum array length
+ * 	<li><c>minItems</c> (integer) - Minimum array length
+ * 	<li><c>uniqueItems</c> (boolean) - If true, array items must be unique
+ * 	<li><c>maxProperties</c> (integer) - Maximum number of object properties
+ * 	<li><c>minProperties</c> (integer) - Minimum number of object properties
+ * 	<li><c>required</c> (array of string) - Required property names
+ * 	<li><c>enum</c> (array) - Possible values for this schema
+ * 	<li><c>properties</c> (map of {@link SchemaInfo}) - Object property definitions
+ * 	<li><c>items</c> ({@link Items}) - Schema for array items
+ * 	<li><c>allOf</c> (array of {@link SchemaInfo}) - Must validate against all schemas
+ * 	<li><c>oneOf</c> (array of {@link SchemaInfo}) - Must validate against exactly one schema
+ * 	<li><c>anyOf</c> (array of {@link SchemaInfo}) - Must validate against any schema
+ * 	<li><c>not</c> ({@link SchemaInfo}) - Must not validate against this schema
+ * 	<li><c>nullable</c> (boolean) - Allows the value to be null (OpenAPI 3.0 extension)
+ * 	<li><c>discriminator</c> ({@link Discriminator}) - Discriminator for polymorphism (OpenAPI extension)
+ * 	<li><c>readOnly</c> (boolean) - Relevant only for Schema properties (OpenAPI extension)
+ * 	<li><c>writeOnly</c> (boolean) - Relevant only for Schema properties (OpenAPI extension)
+ * 	<li><c>xml</c> ({@link Xml}) - XML representation details (OpenAPI extension)
+ * 	<li><c>externalDocs</c> ({@link ExternalDocumentation}) - Additional external documentation (OpenAPI extension)
+ * 	<li><c>example</c> (any) - Example value (OpenAPI extension)
+ * 	<li><c>deprecated</c> (boolean) - Specifies that the schema is deprecated (OpenAPI extension)
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
- * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	SchemaInfo x = <jsm>schemaInfo</jsm>()
- * 		.type("string")
- * 		.title("foo")
- *
- * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
- *
- * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * <p class='bjava'>
+ * 	<jc>// Create a schema for a Pet object</jc>
+ * 	SchemaInfo <jv>schema</jv> = <jk>new</jk> SchemaInfo()
+ * 		.setType(<js>"object"</js>)
+ * 		.setRequired(<js>"id"</js>, <js>"name"</js>)
+ * 		.setProperties(
+ * 			JsonMap.<jsm>of</jsm>(
+ * 				<js>"id"</js>, <jk>new</jk> SchemaInfo().setType(<js>"integer"</js>).setFormat(<js>"int64"</js>),
+ * 				<js>"name"</js>, <jk>new</jk> SchemaInfo().setType(<js>"string"</js>),
+ * 				<js>"tag"</js>, <jk>new</jk> SchemaInfo().setType(<js>"string"</js>)
+ * 			)
+ * 		);
  * </p>
- * <p class='bcode'>
- * 	<jc>// Output</jc>
- * 	{
- * 		<js>"type"</js>: <js>"string"</js>,
- * 		<js>"title"</js>: <js>"foo"</js>
- * 	}
- * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#schema-object">OpenAPI Specification &gt; Schema Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/data-models/">OpenAPI Data Models</a>
+ * 	<li class='link'><a class="doclink" href="https://json-schema.org/">JSON Schema Specification</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,anyOf,oneOf,properties,additionalProperties,not,discriminator,readOnly,writeOnly,nullable,deprecated,xml,externalDocs,example,$ref,*")
 @FluentSetters
 public class SchemaInfo extends OpenApiElement {
 
@@ -788,7 +825,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addAllOf(Object...values) {
-		allOf = listBuilder(allOf).sparse().addAny(values).build();
+		allOf = listBuilder(allOf).elementType(Object.class).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -838,7 +875,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addAnyOf(Object...values) {
-		anyOf = listBuilder(anyOf).sparse().addAny(values).build();
+		anyOf = listBuilder(anyOf).elementType(Object.class).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -888,7 +925,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addOneOf(Object...values) {
-		oneOf = listBuilder(oneOf).sparse().addAny(values).build();
+		oneOf = listBuilder(oneOf).elementType(Object.class).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -1142,8 +1179,7 @@ public class SchemaInfo extends OpenApiElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {  // NOSONAR
 			case "format" -> toType(getFormat(), type);
 			case "title" -> toType(getTitle(), type);
@@ -1187,45 +1223,44 @@ public class SchemaInfo extends OpenApiElement {
 
 	@Override /* SwaggerElement */
 	public SchemaInfo set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {  // NOSONAR
-			case "format" -> setFormat(Utils.s(value));
-			case "title" -> setTitle(Utils.s(value));
-			case "description" -> setDescription(Utils.s(value));
-			case "default" -> setDefault(value);
-			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "maximum" -> setMaximum(toNumber(value));
-			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
-			case "minimum" -> setMinimum(toNumber(value));
-			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
-			case "maxLength" -> setMaxLength(toInteger(value));
-			case "minLength" -> setMinLength(toInteger(value));
-			case "pattern" -> setPattern(Utils.s(value));
-			case "maxItems" -> setMaxItems(toInteger(value));
-			case "minItems" -> setMinItems(toInteger(value));
-			case "uniqueItems" -> setUniqueItems(toBoolean(value));
-			case "maxProperties" -> setMaxProperties(toInteger(value));
-			case "minProperties" -> setMinProperties(toInteger(value));
-			case "required" -> addRequired(Utils.s(value));
-			case "enum" -> addEnum(value);
-			case "type" -> setType(Utils.s(value));
-			case "items" -> setItems(toType(value, Items.class));
-			case "allOf" -> addAllOf(value);
-			case "anyOf" -> addAnyOf(value);
-			case "oneOf" -> addOneOf(value);
-			case "properties" -> setProperties(mapBuilder(String.class,SchemaInfo.class).sparse().addAny(value).build());
+			case "$ref" -> setRef(value);
 			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
+			case "allOf" -> setAllOf(listBuilder(Object.class).sparse().addAny(value).build());
+			case "anyOf" -> setAnyOf(listBuilder(Object.class).sparse().addAny(value).build());
+			case "default" -> setDefault(value);
+			case "deprecated" -> setDeprecated(toBoolean(value));
+			case "description" -> setDescription(Utils.s(value));
+			case "discriminator" -> setDiscriminator(toType(value, Discriminator.class));
+			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
+			case "example" -> setExample(value);
+			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
+			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "format" -> setFormat(Utils.s(value));
+			case "items" -> setItems(toType(value, Items.class));
+			case "maxItems" -> setMaxItems(toInteger(value));
+			case "maxLength" -> setMaxLength(toInteger(value));
+			case "maxProperties" -> setMaxProperties(toInteger(value));
+			case "maximum" -> setMaximum(toNumber(value));
+			case "minItems" -> setMinItems(toInteger(value));
+			case "minLength" -> setMinLength(toInteger(value));
+			case "minProperties" -> setMinProperties(toInteger(value));
+			case "minimum" -> setMinimum(toNumber(value));
+			case "multipleOf" -> setMultipleOf(toNumber(value));
 			case "not" -> setNot(toType(value, SchemaInfo.class));
 			case "nullable" -> setNullable(toBoolean(value));
-			case "deprecated" -> setDeprecated(toBoolean(value));
-			case "discriminator" -> setDiscriminator(toType(value, Discriminator.class));
+			case "oneOf" -> setOneOf(listBuilder(Object.class).sparse().addAny(value).build());
+			case "pattern" -> setPattern(Utils.s(value));
+			case "properties" -> setProperties(mapBuilder(String.class, SchemaInfo.class).sparse().addAny(value).build());
 			case "readOnly" -> setReadOnly(toBoolean(value));
+			case "required" -> setRequired(listBuilder(String.class).sparse().addAny(value).build());
+			case "title" -> setTitle(Utils.s(value));
+			case "type" -> setType(Utils.s(value));
+			case "uniqueItems" -> setUniqueItems(toBoolean(value));
 			case "writeOnly" -> setWriteOnly(toBoolean(value));
 			case "xml" -> setXml(toType(value, Xml.class));
-			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "example" -> setExample(value);
-			case "$ref" -> setRef(value);
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -1236,42 +1271,42 @@ public class SchemaInfo extends OpenApiElement {
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
-			.addIf(format != null, "format")
-			.addIf(title != null, "title")
-			.addIf(description != null, "description")
-			.addIf(_default != null, "default")
-			.addIf(multipleOf != null, "multipleOf")
-			.addIf(maximum != null, "maximum")
-			.addIf(exclusiveMaximum != null, "exclusiveMaximum")
-			.addIf(minimum != null, "minimum")
-			.addIf(exclusiveMinimum != null, "exclusiveMinimum")
-			.addIf(maxLength != null, "maxLength")
-			.addIf(minLength != null, "minLength")
-			.addIf(pattern != null, "pattern")
-			.addIf(maxItems != null, "maxItems")
-			.addIf(minItems != null, "minItems")
-			.addIf(uniqueItems != null, "uniqueItems")
-			.addIf(maxProperties != null, "maxProperties")
-			.addIf(minProperties != null, "minProperties")
-			.addIf(required != null, "required")
-			.addIf(_enum != null, "enum")
-			.addIf(type != null, "type")
-			.addIf(items != null, "items")
+			.addIf(ref != null, "$ref")
+			.addIf(additionalProperties != null, "additionalProperties")
 			.addIf(allOf != null, "allOf")
 			.addIf(anyOf != null, "anyOf")
-			.addIf(oneOf != null, "oneOf")
-			.addIf(properties != null, "properties")
-			.addIf(additionalProperties != null, "additionalProperties")
-			.addIf(nullable != null, "nullable")
+			.addIf(_default != null, "default")
 			.addIf(deprecated != null, "deprecated")
-			.addIf(not != null, "not")
+			.addIf(description != null, "description")
 			.addIf(discriminator != null, "discriminator")
+			.addIf(_enum != null, "enum")
+			.addIf(example != null, "example")
+			.addIf(exclusiveMaximum != null, "exclusiveMaximum")
+			.addIf(exclusiveMinimum != null, "exclusiveMinimum")
+			.addIf(externalDocs != null, "externalDocs")
+			.addIf(format != null, "format")
+			.addIf(items != null, "items")
+			.addIf(maximum != null, "maximum")
+			.addIf(maxItems != null, "maxItems")
+			.addIf(maxLength != null, "maxLength")
+			.addIf(maxProperties != null, "maxProperties")
+			.addIf(minimum != null, "minimum")
+			.addIf(minItems != null, "minItems")
+			.addIf(minLength != null, "minLength")
+			.addIf(minProperties != null, "minProperties")
+			.addIf(multipleOf != null, "multipleOf")
+			.addIf(not != null, "not")
+			.addIf(nullable != null, "nullable")
+			.addIf(oneOf != null, "oneOf")
+			.addIf(pattern != null, "pattern")
+			.addIf(properties != null, "properties")
 			.addIf(readOnly != null, "readOnly")
+			.addIf(required != null, "required")
+			.addIf(title != null, "title")
+			.addIf(type != null, "type")
+			.addIf(uniqueItems != null, "uniqueItems")
 			.addIf(writeOnly != null, "writeOnly")
 			.addIf(xml != null, "xml")
-			.addIf(externalDocs != null, "externalDocs")
-			.addIf(example != null, "example")
-			.addIf(ref != null, "$ref")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
@@ -1315,4 +1350,20 @@ public class SchemaInfo extends OpenApiElement {
 
 		return this;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public SchemaInfo strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public SchemaInfo strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

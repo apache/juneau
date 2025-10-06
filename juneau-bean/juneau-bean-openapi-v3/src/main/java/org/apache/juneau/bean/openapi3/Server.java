@@ -13,6 +13,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -20,14 +21,52 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
- * TODO
+ * An object representing a Server.
+ *
+ * <p>
+ * The Server Object represents a server that provides connectivity information to a target server. This can be used 
+ * to specify different servers for different environments (e.g., development, staging, production) or to provide 
+ * server-specific configuration such as variables for templating.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Server Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>url</c> (string, REQUIRED) - A URL to the target host. This URL supports Server Variables and may be relative
+ * 	<li><c>description</c> (string) - An optional string describing the host designated by the URL (CommonMark syntax may be used)
+ * 	<li><c>variables</c> (map of {@link ServerVariable}) - A map between a variable name and its value
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create a server with variables</jc>
+ * 	Server <jv>server</jv> = <jk>new</jk> Server()
+ * 		.setUrl(<js>"https://{username}.gigantic-server.com:{port}/{basePath}"</js>)
+ * 		.setDescription(<js>"The production API server"</js>)
+ * 		.setVariables(
+ * 			JsonMap.<jsm>of</jsm>(
+ * 				<js>"username"</js>, <jk>new</jk> ServerVariable()
+ * 					.setDefault(<js>"demo"</js>)
+ * 					.setDescription(<js>"this value is assigned by the service provider"</js>),
+ * 				<js>"port"</js>, <jk>new</jk> ServerVariable()
+ * 					.setDefault(<js>"8443"</js>)
+ * 					.setEnum(<js>"8443"</js>, <js>"443"</js>),
+ * 				<js>"basePath"</js>, <jk>new</jk> ServerVariable()
+ * 					.setDefault(<js>"v2"</js>)
+ * 			)
+ * 		);
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#server-object">OpenAPI Specification &gt; Server Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/api-host-and-base-path/">OpenAPI API Host and Base Path</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="url,description,variables,*")
 @FluentSetters
 public class Server extends OpenApiElement{
 	private URI url;
@@ -64,6 +103,12 @@ public class Server extends OpenApiElement{
 	@Override /* OpenApiElement */
 	protected Server strict() {
 		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public Server strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 
@@ -113,6 +158,7 @@ public class Server extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public Server setDescription(String value) {
@@ -134,6 +180,7 @@ public class Server extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public Server setVariables(Map<String, ServerVariable> value) {
@@ -144,13 +191,16 @@ public class Server extends OpenApiElement{
 	/**
 	 * Adds one or more values to the <property>variables</property> property.
 	 *
-	 * @param key The mapping key.
+	 * @param key The mapping key.  Must not be <jk>null</jk>.
 	 * @param value
 	 * 	The values to add to this property.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object
 	 */
 	public Server addVariable(String key, ServerVariable value) {
+		assertArgNotNull("key", key);
+		assertArgNotNull("value", value);
 		variables = mapBuilder(variables).sparse().add(key, value).build();
 		return this;
 	}
@@ -161,8 +211,7 @@ public class Server extends OpenApiElement{
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "url" -> toType(getUrl(), type);
 			case "description" -> toType(getDescription(), type);
@@ -173,11 +222,10 @@ public class Server extends OpenApiElement{
 
 	@Override /* OpenApiElement */
 	public Server set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
-			case "url" -> setUrl(toURI(value));
 			case "description" -> setDescription(Utils.s(value));
+			case "url" -> setUrl(toURI(value));
 			case "variables" -> setVariables(mapBuilder(String.class,ServerVariable.class).sparse().addAny(value).build());
 			default -> {
 				super.set(property, value);
@@ -189,8 +237,8 @@ public class Server extends OpenApiElement{
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
-			.addIf(url != null, "url")
 			.addIf(description != null, "description")
+			.addIf(url != null, "url")
 			.addIf(variables != null, "variables")
 			.build();
 		return new MultiSet<>(s, super.keySet());

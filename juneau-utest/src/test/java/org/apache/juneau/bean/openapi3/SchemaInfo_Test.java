@@ -1,0 +1,346 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.bean.openapi3;
+
+import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.bean.openapi3.OpenApiBuilder.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.net.*;
+import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
+import org.junit.jupiter.api.*;
+
+/**
+ * Testcase for {@link SchemaInfo}.
+ */
+class SchemaInfo_Test extends TestBase {
+
+	@Nested class A_basicTests extends TestBase {
+
+		private static final BeanTester<SchemaInfo> TESTER =
+			testBean(
+				bean()
+					.setDefault("a")
+					.setDeprecated(true)
+					.setDescription("b")
+					.setEnum(list("c1", "c2"))
+					.setExample("d")
+					.setExclusiveMaximum(true)
+					.setExclusiveMinimum(true)
+					.setFormat("e")
+					.setItems(items("f"))
+					.setMaxItems(1)
+					.setMaxLength(2)
+					.setMaxProperties(3)
+					.setMaximum(4)
+					.setMinItems(5)
+					.setMinLength(6)
+					.setMinProperties(7)
+					.setMinimum(8)
+					.setMultipleOf(9)
+					.setNullable(true)
+					.setPattern("g")
+					.setReadOnly(true)
+					.setRef("h")
+					.setRequired(list("i"))
+					.setTitle("j")
+					.setType("k")
+					.setUniqueItems(true)
+					.setWriteOnly(true)
+			)
+			.props("default,deprecated,description,enum,example,exclusiveMaximum,exclusiveMinimum,format,items{type},maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,nullable,pattern,readOnly,ref,required,title,type,uniqueItems,writeOnly")
+			.vals("a,true,b,[c1,c2],d,true,true,e,{f},1,2,3,4,5,6,7,8,9,true,g,true,h,[i],j,k,true,true")
+			.json("{'$ref':'h','default':'a',deprecated:true,description:'b','enum':['c1','c2'],example:'d',exclusiveMaximum:true,exclusiveMinimum:true,format:'e',items:{type:'f'},maxItems:1,maxLength:2,maxProperties:3,maximum:4,minItems:5,minLength:6,minProperties:7,minimum:8,multipleOf:9,nullable:true,pattern:'g',readOnly:true,required:['i'],title:'j',type:'k',uniqueItems:true,writeOnly:true}")
+			.string("{'$ref':'h','default':'a','deprecated':true,'description':'b','enum':['c1','c2'],'example':'d','exclusiveMaximum':true,'exclusiveMinimum':true,'format':'e','items':{'type':'f'},'maxItems':1,'maxLength':2,'maxProperties':3,'maximum':4,'minItems':5,'minLength':6,'minProperties':7,'minimum':8,'multipleOf':9,'nullable':true,'pattern':'g','readOnly':true,'required':['i'],'title':'j','type':'k','uniqueItems':true,'writeOnly':true}".replace('\'','"'))
+		;
+
+		@Test void a01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void a02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void a03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void a04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void a05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void a06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void a07_keySet() {
+			assertList(TESTER.bean().keySet(), "$ref", "default", "deprecated", "description", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "format", "items", "maxItems", "maxLength", "maxProperties", "maximum", "minItems", "minLength", "minProperties", "minimum", "multipleOf", "nullable", "pattern", "readOnly", "required", "title", "type", "uniqueItems", "writeOnly");
+		}
+	}
+
+	@Nested class B_emptyTests extends TestBase {
+
+		private static final BeanTester<SchemaInfo> TESTER =
+			testBean(bean())
+			.props("type,format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,items,example,nullable,readOnly,writeOnly,deprecated,ref")
+			.vals("<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>")
+			.json("{}")
+			.string("{}")
+		;
+
+		@Test void b01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void b02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void b03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void b04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void b05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void b06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void b07_keySet() {
+			assertEmpty(TESTER.bean().keySet());
+		}
+	}
+
+	@Nested class C_extraProperties extends TestBase {
+		private static final BeanTester<SchemaInfo> TESTER =
+			testBean(
+				bean()
+					.set("additionalItems", schemaInfo("a"))
+					.set("additionalProperties", schemaInfo("b"))
+					.set("allOf", list(schemaInfo("c1"), schemaInfo("c2")))
+					.set("anyOf", list(schemaInfo("d1"), schemaInfo("d2")))
+					.set("default", "e")
+					.set("description", "f")
+					.set("discriminator", discriminator("g"))
+					.set("enum", list("h1", "h2"))
+					.set("example", "i")
+					.set("exclusiveMaximum", true)
+					.set("exclusiveMinimum", true)
+					.set("externalDocs", externalDocumentation().setUrl(URI.create("j")))
+					.set("format", "k")
+					.set("items", schemaInfo("l"))
+					.set("maxItems", 1)
+					.set("maxLength", 2)
+					.set("maxProperties", 3)
+					.set("maximum", 4)
+					.set("minItems", 5)
+					.set("minLength", 6)
+					.set("minProperties", 7)
+					.set("minimum", 8)
+					.set("multipleOf", 9)
+					.set("not", schemaInfo("m"))
+					.set("nullable", true)
+					.set("oneOf", list(schemaInfo("n1"), schemaInfo("n2")))
+					.set("pattern", "o")
+					.set("properties", map("p1", schemaInfo("p2")))
+					.set("readOnly", true)
+					.set("required", list("q1", "q2"))
+					.set("title", "r")
+					.set("type", "s")
+					.set("uniqueItems", true)
+					.set("writeOnly", true)
+					.set("xml", xml().setName("t"))
+					.set("x1", "x1a")
+					.set("x2", null)
+			)
+			.props("additionalItems{type},additionalProperties{type},allOf{#{type}},anyOf{#{type}},default,description,discriminator{propertyName},enum{#{toString}},example,exclusiveMaximum,exclusiveMinimum,externalDocs{url},format,items{type},maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,not{type},nullable,oneOf{#{type}},pattern,properties{p1{type}},readOnly,required{#{toString}},title,type,uniqueItems,writeOnly,xml{name},x1,x2")
+			.vals("{a},{b},{[{c1},{c2}]},{[{d1},{d2}]},e,f,{g},{[{h1},{h2}]},i,true,true,{j},k,{l},1,2,3,4,5,6,7,8,9,{m},true,{[{n1},{n2}]},o,{{p2}},true,{[{q1},{q2}]},r,s,true,true,{t},x1a,<null>")
+			.json("{additionalItems:{type:'a'},additionalProperties:{type:'b'},allOf:[{type:'c1'},{type:'c2'}],anyOf:[{type:'d1'},{type:'d2'}],'default':'e',description:'f',discriminator:{propertyName:'g'},'enum':['h1','h2'],example:'i',exclusiveMaximum:true,exclusiveMinimum:true,externalDocs:{url:'j'},format:'k',items:{type:'l'},maxItems:1,maxLength:2,maxProperties:3,maximum:4,minItems:5,minLength:6,minProperties:7,minimum:8,multipleOf:9,not:{type:'m'},nullable:true,oneOf:[{type:'n1'},{type:'n2'}],pattern:'o',properties:{p1:{type:'p2'}},readOnly:true,required:['q1','q2'],title:'r',type:'s',uniqueItems:true,writeOnly:true,x1:'x1a',xml:{name:'t'}}")
+			.string("{'additionalItems':{'type':'a'},'additionalProperties':{'type':'b'},'allOf':[{'type':'c1'},{'type':'c2'}],'anyOf':[{'type':'d1'},{'type':'d2'}],'default':'e','description':'f','discriminator':{'propertyName':'g'},'enum':['h1','h2'],'example':'i','exclusiveMaximum':true,'exclusiveMinimum':true,'externalDocs':{'url':'j'},'format':'k','items':{'type':'l'},'maxItems':1,'maxLength':2,'maxProperties':3,'maximum':4,'minItems':5,'minLength':6,'minProperties':7,'minimum':8,'multipleOf':9,'not':{'type':'m'},'nullable':true,'oneOf':[{'type':'n1'},{'type':'n2'}],'pattern':'o','properties':{'p1':{'type':'p2'}},'readOnly':true,'required':['q1','q2'],'title':'r','type':'s','uniqueItems':true,'writeOnly':true,'x1':'x1a','xml':{'name':'t'}}".replace('\'', '"'))
+		;
+
+		@Test void c01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void c02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void c03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void c04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void c05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void c06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void c07_keySet() {
+			assertList(TESTER.bean().keySet(), "additionalItems", "additionalProperties", "allOf", "anyOf", "default", "description", "discriminator", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "externalDocs", "format", "items", "maxItems", "maxLength", "maxProperties", "maximum", "minItems", "minLength", "minProperties", "minimum", "multipleOf", "not", "nullable", "oneOf", "pattern", "properties", "readOnly", "required", "title", "type", "uniqueItems", "writeOnly", "x1", "x2", "xml");
+		}
+
+		@Test void c08_get() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> obj.get(prop, Object.class),
+				"additionalItems{type},additionalProperties{type},allOf{#{type}},anyOf{#{type}},default,description,discriminator{propertyName},enum{#{toString}},example,exclusiveMaximum,exclusiveMinimum,externalDocs{url},format,items{type},maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,not{type},nullable,oneOf{#{type}},pattern,properties{p1{type}},readOnly,required{#{toString}},title,type,uniqueItems,writeOnly,xml{name},x1,x2",
+				"{a},{b},{[{c1},{c2}]},{[{d1},{d2}]},e,f,{g},{[{h1},{h2}]},i,true,true,{j},k,{l},1,2,3,4,5,6,7,8,9,{m},true,{[{n1},{n2}]},o,{{p2}},true,{[{q1},{q2}]},r,s,true,true,{t},x1a,<null>"
+			);
+		}
+
+		@Test void c09_getTypes() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				"additionalItems,additionalProperties,allOf,anyOf,default,description,discriminator,enum,example,exclusiveMaximum,exclusiveMinimum,externalDocs,format,items,maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,not,nullable,oneOf,pattern,properties,readOnly,required,title,type,uniqueItems,writeOnly,xml,x1,x2",
+				"SchemaInfo,SchemaInfo,ArrayList,ArrayList,String,String,Discriminator,ArrayList,String,Boolean,Boolean,ExternalDocumentation,String,Items,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,SchemaInfo,Boolean,ArrayList,String,LinkedHashMap,Boolean,ArrayList,String,String,Boolean,Boolean,Xml,String,<null>"
+			);
+		}
+
+		@Test void c10_nullPropertyValue() {
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+		}
+	}
+
+	@Nested class D_additionalMethods extends TestBase {
+
+		@Test void d01_addMethods() {
+			assertBean(
+				bean()
+					.addEnum("a1", "a2")
+					.addRequired("b1", "b2"),
+				"enum,required",
+				"[a1,a2],[b1,b2]"
+			);
+		}
+
+		@Test void d02_asMap() {
+			assertBean(
+				bean()
+					.setType("a")
+					.set("x1", "x1a")
+					.asMap(),
+				"type,x1",
+				"a,x1a"
+			);
+		}
+
+		@Test void d03_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+	}
+
+	@Nested class E_strictMode extends TestBase {
+
+		@Test void e01_strictModeSetThrowsException() {
+			var x = bean().strict();
+			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
+		}
+
+		@Test void e02_nonStrictModeAllowsSet() {
+			var x = bean(); // not strict
+			assertDoesNotThrow(() -> x.set("foo", "bar"));
+		}
+
+		@Test void e03_strictModeToggle() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+			x.strict(false);
+			assertFalse(x.isStrict());
+		}
+	}
+
+	@Nested class F_refs extends TestBase {
+
+		@Test void f01_resolveRefs_basic() {
+			var openApi = openApi()
+				.setComponents(components().setSchemas(Map.of(
+					"Pet", schemaInfo().setType("object").setTitle("Pet")
+				)));
+
+			var x = schemaInfo().setRef("#/components/schemas/Pet");
+			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
+			assertBean(y, "type,title", "object,Pet");
+		}
+
+		@Test void f02_resolveRefs_nested() {
+			var openApi = openApi()
+				.setComponents(components().setSchemas(Map.of(
+					"Pet", schemaInfo().setType("object").setTitle("Pet"),
+					"Pets", schemaInfo().setType("array").setItems(items().setRef("#/components/schemas/Pet"))
+				)));
+
+			var x = schemaInfo().setRef("#/components/schemas/Pets");
+			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
+			assertBean(y, "type,items{type,title}", "array,{object,Pet}");
+		}
+
+		@Test void f03_resolveRefs_maxDepth() {
+			var openApi = openApi()
+				.setComponents(components().setSchemas(Map.of(
+					"Pet", schemaInfo().setType("object").setTitle("Pet"),
+					"Pets", schemaInfo().setType("array").setItems(items().setRef("#/components/schemas/Pet"))
+				)));
+
+			var x = schemaInfo().setRef("#/components/schemas/Pets");
+			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 1);
+			assertBean(y, "type,items{ref}", "array,{#/components/schemas/Pet}");
+		}
+
+		@Test void f04_resolveRefs_circular() {
+			var openApi = openApi()
+				.setComponents(components().setSchemas(Map.of(
+					"A", schemaInfo().setType("object").setTitle("A").setProperties(Map.of("b", schemaInfo().setRef("#/components/schemas/B"))),
+					"B", schemaInfo().setType("object").setTitle("B").setProperties(Map.of("a", schemaInfo().setRef("#/components/schemas/A")))
+				)));
+
+			var x = schemaInfo().setRef("#/components/schemas/A");
+			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
+			assertBean(y, "type,title,properties{b{type,title,properties{a{ref}}}}", "object,A,{{object,B,{{#/components/schemas/A}}}}");
+		}
+	}
+
+	//---------------------------------------------------------------------------------------------
+	// Helper methods
+	//---------------------------------------------------------------------------------------------
+
+	private static SchemaInfo bean() {
+		return schemaInfo();
+	}
+}

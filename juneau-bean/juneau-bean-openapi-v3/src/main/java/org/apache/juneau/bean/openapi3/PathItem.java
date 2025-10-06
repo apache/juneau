@@ -12,21 +12,70 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Describes the operations available on a single path.
  *
+ * <p>
+ * The PathItem Object describes the operations available on a single path. A Path Item may be empty, due to ACL 
+ * constraints. The path itself is still exposed to the documentation viewer but they will not know which operations 
+ * and parameters are available.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The PathItem Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>summary</c> (string) - An optional, string summary, intended to apply to all operations in this path
+ * 	<li><c>description</c> (string) - An optional, string description, intended to apply to all operations in this path
+ * 	<li><c>get</c> ({@link Operation}) - A definition of a GET operation on this path
+ * 	<li><c>put</c> ({@link Operation}) - A definition of a PUT operation on this path
+ * 	<li><c>post</c> ({@link Operation}) - A definition of a POST operation on this path
+ * 	<li><c>delete</c> ({@link Operation}) - A definition of a DELETE operation on this path
+ * 	<li><c>options</c> ({@link Operation}) - A definition of an OPTIONS operation on this path
+ * 	<li><c>head</c> ({@link Operation}) - A definition of a HEAD operation on this path
+ * 	<li><c>patch</c> ({@link Operation}) - A definition of a PATCH operation on this path
+ * 	<li><c>trace</c> ({@link Operation}) - A definition of a TRACE operation on this path
+ * 	<li><c>servers</c> (array of {@link Server}) - An alternative server array to service all operations in this path
+ * 	<li><c>parameters</c> (array of {@link Parameter}) - A list of parameters that are applicable for all the operations described under this path
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	PathItem <jv>x</jv> = <jsm>pathItem</jsm>()
+ * 		.setSummary(<js>"User management"</js>)
+ * 		.setGet(<jsm>operation</jsm>().setSummary(<js>"Get users"</js>))
+ * 		.setPost(<jsm>operation</jsm>().setSummary(<js>"Create user"</js>));
+ *
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
+ *
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	<jv>json</jv> = <jv>x</jv>.toString();
+ * </p>
+ * <p class='bcode'>
+ * 	<jc>// Output</jc>
+ * 	{
+ * 		<js>"summary"</js>: <js>"User management"</js>,
+ * 		<js>"get"</js>: { <js>"summary"</js>: <js>"Get users"</js> },
+ * 		<js>"post"</js>: { <js>"summary"</js>: <js>"Create user"</js> }
+ * 	}
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.OpenApi">Overview &gt; juneau-rest-server &gt; OpenAPI</a>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#path-item-object">OpenAPI Specification &gt; Path Item Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/paths-and-operations/">OpenAPI Paths and Operations</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
  * </ul>
  */
-@Bean(properties="summary,description,get,put,post,delete,options,head,patch,trace,servers,parameters,*")
 @FluentSetters
 public class PathItem extends OpenApiElement {
 
@@ -300,4 +349,91 @@ public class PathItem extends OpenApiElement {
 		this.parameters = value;
 		return this;
 	}
+
+	/**
+	 * Creates a copy of this object.
+	 *
+	 * @return A copy of this object.
+	 */
+	public PathItem copy() {
+		return new PathItem(this);
+	}
+
+	@Override /* OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "summary" -> toType(getSummary(), type);
+			case "description" -> toType(getDescription(), type);
+			case "get" -> toType(getGet(), type);
+			case "put" -> toType(getPut(), type);
+			case "post" -> toType(getPost(), type);
+			case "delete" -> toType(getDelete(), type);
+			case "options" -> toType(getOptions(), type);
+			case "head" -> toType(getHead(), type);
+			case "patch" -> toType(getPatch(), type);
+			case "trace" -> toType(getTrace(), type);
+			case "servers" -> toType(getServers(), type);
+			case "parameters" -> toType(getParameters(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	@Override /* OpenApiElement */
+	public PathItem set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "delete" -> setDelete(toType(value, Operation.class));
+			case "description" -> setDescription(Utils.s(value));
+			case "get" -> setGet(toType(value, Operation.class));
+			case "head" -> setHead(toType(value, Operation.class));
+			case "options" -> setOptions(toType(value, Operation.class));
+			case "patch" -> setPatch(toType(value, Operation.class));
+			case "parameters" -> setParameters(listBuilder(Parameter.class).sparse().addAny(value).build());
+			case "post" -> setPost(toType(value, Operation.class));
+			case "put" -> setPut(toType(value, Operation.class));
+			case "servers" -> setServers(listBuilder(Server.class).sparse().addAny(value).build());
+			case "summary" -> setSummary(Utils.s(value));
+			case "trace" -> setTrace(toType(value, Operation.class));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	@Override /* OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(delete != null, "delete")
+			.addIf(description != null, "description")
+			.addIf(get != null, "get")
+			.addIf(head != null, "head")
+			.addIf(options != null, "options")
+			.addIf(patch != null, "patch")
+			.addIf(parameters != null, "parameters")
+			.addIf(post != null, "post")
+			.addIf(put != null, "put")
+			.addIf(servers != null, "servers")
+			.addIf(summary != null, "summary")
+			.addIf(trace != null, "trace")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public PathItem strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public PathItem strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

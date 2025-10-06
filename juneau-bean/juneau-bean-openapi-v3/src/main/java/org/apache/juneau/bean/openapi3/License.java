@@ -13,6 +13,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -20,23 +21,34 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
  * License information for the exposed API.
  *
+ * <p>
+ * The License Object provides license information for the exposed API. This information helps clients understand 
+ * the terms under which the API can be used, including any restrictions or requirements.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The License Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>name</c> (string, REQUIRED) - The license name used for the API
+ * 	<li><c>url</c> (string) - A URL to the license used for the API
+ * </ul>
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	License x = <jsm>license</jsm>(<js>"Apache 2.0"</js>, <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>);
+ * 	License <jv>x</jv> = <jsm>license</jsm>(<js>"Apache 2.0"</js>, <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
- * 	String json = x.toString();
+ * 	String <jv>json</jv> = <jv>x</jv>.toString();
  * </p>
  * <p class='bcode'>
  * 	<jc>// Output</jc>
@@ -45,8 +57,13 @@ import org.apache.juneau.internal.*;
  * 		<js>"url"</js>: <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
  * 	}
  * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#license-object">OpenAPI Specification &gt; License Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/api-general-info/">OpenAPI API General Info</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="name,url,*")
 @FluentSetters
 public class License extends OpenApiElement {
 
@@ -100,6 +117,7 @@ public class License extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public License setName(String value) {
@@ -142,8 +160,7 @@ public class License extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "name" -> toType(getName(), type);
 			case "url" -> toType(getUrl(), type);
@@ -153,8 +170,7 @@ public class License extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public License set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "name" -> setName(Utils.s(value));
 			case "url" -> setUrl(toURI(value));
@@ -173,4 +189,20 @@ public class License extends OpenApiElement {
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public License strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public License strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

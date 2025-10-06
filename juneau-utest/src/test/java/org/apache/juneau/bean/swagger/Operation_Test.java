@@ -16,197 +16,313 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
+import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link Operation}.
  */
-class Operation_Test extends SimpleTestBase {
+class Operation_Test extends TestBase {
 
-	/**
-	 * Test method for getters and setters.
-	 */
-	@Test void a01_gettersAndSetters() {
-		var t = new Operation();
+	@Nested class A_basicTests extends TestBase {
 
-		// Basic property setters
-		assertBean(
-			t.setConsumes(set(MediaType.of("text/a"))).setDeprecated(true).setDescription("b").setExternalDocs(externalDocumentation("c"))
-			.setOperationId("d").setParameters(set(parameterInfo("e1","e2"))).setProduces(set(MediaType.of("text/f")))
-			.setResponses(map("1",responseInfo("g"))).setSchemes(set("h")).setSecurity(alist(map("i",alist("j")))).setSummary("k").setTags(set("l1","l2")),
-			"consumes,deprecated,description,externalDocs{url},operationId,parameters{0{in,name}},produces,responses{1{description}},schemes,security,summary,tags",
-			"[text/a],true,b,{c},d,{{e1,e2}},[text/f],{{g}},[h],[{i=[j]}],k,[l1,l2]"
-		);
+		private static final BeanTester<Operation> TESTER =
+			testBean(
+				bean()
+					.setConsumes(MediaType.of("a"))
+					.setDeprecated(true)
+					.setDescription("b")
+					.setExternalDocs(externalDocumentation().setUrl(URI.create("c")))
+					.setOperationId("d")
+					.setParameters(parameterInfo().setName("e"))
+					.setProduces(MediaType.of("f"))
+					.setResponses(map("x1", responseInfo().setDescription("x2")))
+					.setSchemes("g")
+					.setSecurity(map("h", list("i")))
+					.setSummary("j")
+					.setTags("k")
+			)
+			.props("consumes,deprecated,description,externalDocs{url},operationId,parameters{#{name}},produces,responses{x1{description}},schemes,security{#{h}},summary,tags")
+			.vals("[a],true,b,{c},d,{[{e}]},[f],{{x2}},[g],{[{[i]}]},j,[k]")
+			.json("{consumes:['a'],deprecated:true,description:'b',externalDocs:{url:'c'},operationId:'d',parameters:[{name:'e'}],produces:['f'],responses:{x1:{description:'x2'}},schemes:['g'],security:[{h:['i']}],summary:'j',tags:['k']}")
+			.string("{'consumes':['a'],'deprecated':true,'description':'b','externalDocs':{'url':'c'},'operationId':'d','parameters':[{'name':'e'}],'produces':['f'],'responses':{'x1':{'description':'x2'}},'schemes':['g'],'security':[{'h':['i']}],'summary':'j','tags':['k']}".replace('\'', '"'))
+		;
 
-		// Null values
-		assertBean(
-			t.setConsumes((Collection<MediaType>)null).setParameters((Collection<ParameterInfo>)null).setProduces((Collection<MediaType>)null)
-			.setResponses((Map<String,ResponseInfo>)null).setSchemes((Set<String>)null).setSecurity((List<Map<String,List<String>>>)null).setTags((Collection<String>)null),
-			"consumes,parameters,produces,responses,schemes,security,tags",
-			"<null>,<null>,<null>,<null>,<null>,<null>,<null>"
-		);
+		@Test void b01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
 
-		// Other methods - empty collections
-		assertBean(
-			t.setConsumes(set()).setParameters(set()).setProduces(set()).setResponses(map()).setSchemes(set()).setSecurity(alist()).setTags(set()),
-			"consumes,parameters,produces,responses,schemes,security,tags",
-			"[],[],[],{},[],[],[]"
-		);
+		@Test void b02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void b03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void b04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void b05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void b06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void b07_keySet() {
+			assertList(TESTER.bean().keySet(), "consumes", "deprecated", "description", "externalDocs", "operationId", "parameters", "produces", "responses", "schemes", "security", "summary", "tags");
+		}
+
+		@Test void a08_otherGettersAndSetters() {
+			// Test Collection variants of setters
+			var x = bean()
+				.setParameters(list(
+					parameterInfo("a1", "a2"),
+					parameterInfo("a3", "a4")
+				))
+				.setConsumes(list(
+					MediaType.of("b1"),
+					MediaType.of("b2")
+				))
+				.setProduces(list(
+					MediaType.of("c1"),
+					MediaType.of("c2")
+				))
+				.setSchemes(list("d1", "d2"))
+				.setSecurity(list(
+					map("e1", list("e2")),
+					map("e3", list("e4"))
+				));
+
+			assertBean(x,
+				"parameters{#{in,name}},consumes,produces,schemes,security{0{e1},1{e3}}",
+				"{[{a1,a2},{a3,a4}]},[b1,b2],[c1,c2],[d1,d2],{{[e2]},{[e4]}}"
+			);
+
+			// Test special getters
+			x = bean()
+				.setParameters(parameterInfo("a1", "a2"))
+				.setResponses(map("b1", responseInfo("b2"), "200", responseInfo("b3")));
+
+			assertBean(x.getParameter("a1", "a2"), "in,name", "a1,a2");
+			assertBean(x.getResponse("b1"), "description", "b2");
+			assertBean(x.getResponse(200), "description", "b3");
+		}
+
+		@Test void a09_nullParameters() {
+			var x = bean();
+
+			assertThrows(IllegalArgumentException.class, ()->x.getParameter(null, "a"));
+			assertThrows(IllegalArgumentException.class, ()->x.getResponse(null));
+		}
 	}
 
-	/**
-	 * Test method for {@link Operation#set(java.lang.String, java.lang.Object)}.
-	 */
-	@Test void a01_set() {
-		var t = new Operation();
+	@Nested class B_emptyTests extends TestBase {
 
-		t
-			.set("consumes", set(MediaType.of("text/a")))
-			.set("deprecated", true)
-			.set("description", "b")
-			.set("externalDocs", externalDocumentation("c"))
-			.set("operationId", "d")
-			.set("parameters", set(parameterInfo("e1","e2")))
-			.set("produces", set(MediaType.of("text/f")))
-			.set("responses", map(1,responseInfo("g")))
-			.set("schemes", set("h"))
-			.set("security", set(map("i1",alist("i2"))))
-			.set("summary", "j")
-			.set("tags", set("k"))
-			.set("$ref", "l");  // Not a bean property but accessed through get(String) and set(String,Object).
+		private static final BeanTester<Operation> TESTER =
+			testBean(bean())
+			.props("description,operationId,summary,tags,externalDocs,consumes,produces,parameters,responses,schemes,deprecated,security")
+			.vals("<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,false,<null>")
+			.json("{}")
+			.string("{}")
+		;
 
-		assertBean(
-			t,
-			"consumes,deprecated,description,externalDocs{url},operationId,parameters{0{in,name}},produces,responses{1{description}},schemes,security,summary,tags,$ref",
-			"[text/a],true,b,{c},d,{{e1,e2}},[text/f],{{g}},[h],[{i1=[i2]}],j,[k],l"
-		);
+		@Test void b01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
 
-		t
-			.set("consumes", "['text/a']")
-			.set("deprecated", "true")
-			.set("description", "b")
-			.set("externalDocs", "{url:'c'}")
-			.set("operationId", "d")
-			.set("parameters", "[{'in':'e1',name:'e2'}]")
-			.set("produces", "['text/f']")
-			.set("responses", "{'1':{description:'g'}}")
-			.set("schemes", "['h']")
-			.set("security", "[{i1:['i2']}]")
-			.set("summary", "j")
-			.set("tags", "['k']")
-			.set("$ref", "l");
+		@Test void b02_copy() {
+			TESTER.assertCopy();
+		}
 
-		assertBean(
-			t,
-			"consumes,deprecated,description,externalDocs{url},operationId,parameters{0{in,name}},produces,responses{1{description}},schemes,security,summary,tags,$ref",
-			"[text/a],true,b,{c},d,{{e1,e2}},[text/f],{{g}},[h],[{i1=[i2]}],j,[k],l"
-		);
+		@Test void b03_toJson() {
+			TESTER.assertToJson();
+		}
 
-		t
-			.set("consumes", Utils.sb("['text/a']"))
-			.set("deprecated", Utils.sb("true"))
-			.set("description", Utils.sb("b"))
-			.set("externalDocs", Utils.sb("{url:'c'}"))
-			.set("operationId", Utils.sb("d"))
-			.set("parameters", Utils.sb("[{'in':'e1',name:'e2'}]"))
-			.set("produces", Utils.sb("['text/f']"))
-			.set("responses", Utils.sb("{'1':{description:'g'}}"))
-			.set("schemes", Utils.sb("['h']"))
-			.set("security", Utils.sb("[{i1:['i2']}]"))
-			.set("summary", Utils.sb("j"))
-			.set("tags", Utils.sb("['k']"))
-			.set("$ref", Utils.sb("l"));
+		@Test void b04_fromJson() {
+			TESTER.assertFromJson();
+		}
 
-		assertBean(
-			t,
-			"consumes,deprecated,description,externalDocs{url},operationId,parameters{0{in,name}},produces,responses{1{description}},schemes,security,summary,tags,$ref",
-			"[text/a],true,b,{c},d,{{e1,e2}},[text/f],{{g}},[h],[{i1=[i2]}],j,[k],l"
-		);
+		@Test void b05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
 
-		assertMapped(t,
-			(obj,prop) -> obj.get(prop, String.class),
-			"consumes,deprecated,description,externalDocs,operationId,parameters,produces,responses,schemes,security,summary,tags,$ref",
-			"['text/a'],true,b,{url:'c'},d,[{'in':'e1',name:'e2'}],['text/f'],{'1':{description:'g'}},['h'],[{i1:['i2']}],j,['k'],l"
-		);
+		@Test void b06_toString() {
+			TESTER.assertToString();
+		}
 
-		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
-			"consumes,deprecated,description,externalDocs,operationId,parameters,produces,responses,schemes,security,summary,tags,$ref",
-			"LinkedHashSet,Boolean,String,ExternalDocumentation,String,ArrayList,LinkedHashSet,LinkedHashMap,LinkedHashSet,ArrayList,String,LinkedHashSet,StringBuilder");
-
-		assertMapped(t, (o,k) -> o.get(k, List.class).get(0).getClass().getSimpleName(), "consumes,parameters,produces", "MediaType,ParameterInfo,MediaType");
-		assertMapped(t, (o,k) -> {
-			Map<?,?> map = o.get(k, Map.class);
-			return map.keySet().iterator().next().getClass().getSimpleName() + "," + map.values().iterator().next().getClass().getSimpleName();
-		}, "responses", "String,ResponseInfo");
-
-		t.set("null", null).set(null, "null");
-		assertNull(t.get("null", Object.class));
-		assertNull(t.get(null, Object.class));
-		assertNull(t.get("foo", Object.class));
+		@Test void b07_keySet() {
+			assertEmpty(TESTER.bean().keySet());
+		}
 	}
 
-	@Test void b02_roundTripJson() {
-		var s = "{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}";
-		assertJson(s, JsonParser.DEFAULT.parse(s, Operation.class));
+	@Nested class C_extraProperties extends TestBase {
+
+		private static final BeanTester<Operation> TESTER =
+			testBean(
+				bean()
+					.set("consumes", set(MediaType.of("a")))
+					.set("deprecated", true)
+					.set("description", "b")
+					.set("externalDocs", externalDocumentation().setUrl(URI.create("c")))
+					.set("operationId", "d")
+					.set("parameters", list(parameterInfo().setName("e")))
+					.set("produces", set(MediaType.of("f")))
+					.set("responses", map("x1", responseInfo().setDescription("x2")))
+					.set("schemes", set("g"))
+					.set("security", list(map("h", list("i"))))
+					.set("summary", "j")
+					.set("tags", set("k"))
+					.set("x3", "x3a")
+					.set("x4", null)
+			)
+			.props("consumes,deprecated,description,externalDocs{url},operationId,parameters{#{name}},produces,responses{x1{description}},schemes,security{#{h}},summary,tags,x3,x4")
+			.vals("[a],true,b,{c},d,{[{e}]},[f],{{x2}},[g],{[{[i]}]},j,[k],x3a,<null>")
+			.json("{consumes:['a'],deprecated:true,description:'b',externalDocs:{url:'c'},operationId:'d',parameters:[{name:'e'}],produces:['f'],responses:{x1:{description:'x2'}},schemes:['g'],security:[{h:['i']}],summary:'j',tags:['k'],x3:'x3a'}")
+			.string("{'consumes':['a'],'deprecated':true,'description':'b','externalDocs':{'url':'c'},'operationId':'d','parameters':[{'name':'e'}],'produces':['f'],'responses':{'x1':{'description':'x2'}},'schemes':['g'],'security':[{'h':['i']}],'summary':'j','tags':['k'],'x3':'x3a'}".replace('\'', '"'))
+		;
+
+		@Test void c01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void c02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void c03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void c04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void c05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void c06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void c07_keySet() {
+			assertList(TESTER.bean().keySet(), "consumes", "deprecated", "description", "externalDocs", "operationId", "parameters", "produces", "responses", "schemes", "security", "summary", "tags", "x3", "x4");
+		}
+
+		@Test void c08_get() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> obj.get(prop, Object.class),
+				"consumes,deprecated,description,externalDocs{url},operationId,parameters{#{name}},produces,responses{x1{description}},schemes,security{#{h}},summary,tags,x3,x4",
+				"[a],true,b,{c},d,{[{e}]},[f],{{x2}},[g],{[{[i]}]},j,[k],x3a,<null>"
+			);
+		}
+
+		@Test void c09_getTypes() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				"consumes,deprecated,description,externalDocs,operationId,parameters,produces,responses,schemes,security,summary,tags,x3,x4",
+				"LinkedHashSet,Boolean,String,ExternalDocumentation,String,ArrayList,LinkedHashSet,LinkedHashMap,LinkedHashSet,ArrayList,String,LinkedHashSet,String,<null>"
+			);
+		}
+
+		@Test void c10_nullPropertyValue() {
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+		}
 	}
 
-	@Test void b03_copy() {
-		var t = new Operation();
+	@Nested class D_additionalMethods extends TestBase {
 
-		t = t.copy();
+		@Test void d01_addMethods() {
+			var x = bean()
+				.addConsumes(MediaType.of("a1"))
+				.addParameters(parameterInfo().setName("a2"))
+				.addProduces(MediaType.of("a3"))
+				.addResponse("200", responseInfo().setDescription("a4"))
+				.addSchemes("a5")
+				.addSecurity("a6", "a7")
+				.addTags("a8");
 
-		assertBean(t,
-			"consumes,deprecated,description,externalDocs,operationId,parameters,produces,responses,schemes,security,summary,tags",
-			"<null>,false,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
+			// Verify add methods don't throw exceptions and bean is not null
+			assertNotNull(x);
+			assertNotNull(x.getConsumes());
+			assertNotNull(x.getParameters());
+			assertNotNull(x.getProduces());
+			assertNotNull(x.getResponses());
+			assertNotNull(x.getSchemes());
+			assertNotNull(x.getSecurity());
+			assertNotNull(x.getTags());
+		}
 
-		t
-			.set("consumes", set(MediaType.of("text/a")))
-			.set("deprecated", true)
-			.set("description", "b")
-			.set("externalDocs", externalDocumentation("c"))
-			.set("operationId", "d")
-			.set("parameters", set(parameterInfo("e1","e2")))
-			.set("produces", set(MediaType.of("text/f")))
-			.set("responses", map(1,responseInfo("g")))
-			.set("schemes", set("h"))
-			.set("security", set(map("i1",alist("i2"))))
-			.set("summary", "j")
-			.set("tags", set("k"))
-			.set("$ref", "l")
-			.copy();
+		@Test void d02_asMap() {
+			assertBean(
+				bean()
+					.setDescription("a")
+					.setOperationId("b")
+					.set("x1", "x1a")
+					.asMap(),
+				"description,operationId,x1",
+				"a,b,x1a"
+			);
+		}
 
-		assertBean(
-			t,
-			"consumes,deprecated,description,externalDocs{url},operationId,parameters{0{in,name}},produces,responses{1{description}},schemes,security,summary,tags,$ref",
-			"[text/a],true,b,{c},d,{{e1,e2}},[text/f],{{g}},[h],[{i1=[i2]}],j,[k],l"
-		);
+		@Test void d03_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void d04_addMethodsWithNullParameters() {
+			var x = bean();
+			assertThrows(IllegalArgumentException.class, ()->x.addResponse(null, responseInfo()));
+			assertThrows(IllegalArgumentException.class, ()->x.addResponse("200", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addSecurity(null, "a"));
+			assertThrows(IllegalArgumentException.class, ()->x.addSecurity(null));
+		}
+
+		@Test void d04_strict() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+		}
 	}
 
-	@Test void b04_keySet() {
-		var t = new Operation();
+	@Nested class E_strictMode extends TestBase {
 
-		assertEmpty(t.keySet());
+		@Test void e01_strictModeSetThrowsException() {
+			var x = bean().strict();
+			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
+		}
 
-		t
-			.set("consumes", set(MediaType.of("text/a")))
-			.set("deprecated", true)
-			.set("description", "b")
-			.set("externalDocs", externalDocumentation("c"))
-			.set("operationId", "d")
-			.set("parameters", set(parameterInfo("e1","e2")))
-			.set("produces", set(MediaType.of("text/f")))
-			.set("responses", map(1,responseInfo("g")))
-			.set("schemes", set("h"))
-			.set("security", set(map("i1",alist("i2"))))
-			.set("summary", "j")
-			.set("tags", set("k"))
-			.set("$ref", "l");
+		@Test void e02_nonStrictModeAllowsSet() {
+			var x = bean(); // not strict
+			assertDoesNotThrow(() -> x.set("foo", "bar"));
+		}
 
-		assertList(t.keySet(), "$ref", "consumes", "deprecated", "description", "externalDocs", "operationId", "parameters", "produces", "responses", "schemes", "security", "summary", "tags");
+		@Test void e03_strictModeToggle() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+			x.strict(false);
+			assertFalse(x.isStrict());
+		}
 	}
+
+	//---------------------------------------------------------------------------------------------
+	// Helper methods
+	//---------------------------------------------------------------------------------------------
+
+	private static Operation bean() {
+		return operation();
+	}
+
 }

@@ -13,18 +13,31 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Contact information for the exposed API.
+ *
+ * <p>
+ * The Contact Object provides contact information for the exposed API in Swagger 2.0. This information can be used 
+ * by clients to get in touch with the API maintainers for support, questions, or other inquiries.
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The Contact Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>name</c> (string) - The identifying name of the contact person/organization
+ * 	<li><c>url</c> (string) - The URL pointing to the contact information
+ * 	<li><c>email</c> (string) - The email address of the contact person/organization
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -32,7 +45,7 @@ import org.apache.juneau.internal.*;
  * 	Contact <jv>contact</jv> = <jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>contact</jv>);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>contact</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>contact</jv>.toString();
@@ -47,10 +60,11 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#contact-object">Swagger 2.0 Specification &gt; Contact Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/api-general-info/">Swagger API General Info</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
-@Bean(properties="name,url,email,*")
 @FluentSetters
 public class Contact extends SwaggerElement {
 
@@ -180,8 +194,7 @@ public class Contact extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "email" -> toType(getEmail(), type);
 			case "name" -> toType(getName(), type);
@@ -192,8 +205,7 @@ public class Contact extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Contact set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "email" -> setEmail(Utils.s(value));
 			case "name" -> setName(Utils.s(value));
@@ -213,5 +225,31 @@ public class Contact extends SwaggerElement {
 			.addIf(url != null, "url")
 			.build();
 		return new MultiSet<>(s, super.keySet());
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @return This object.
+	 */
+	@Override
+	public Contact strict() {
+		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public Contact strict(Object value) {
+		super.strict(value);
+		return this;
 	}
 }

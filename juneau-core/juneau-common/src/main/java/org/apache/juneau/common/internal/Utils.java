@@ -30,7 +30,7 @@ import org.apache.juneau.common.utils.*;
 
 /**
  * Common utility methods.
- * 
+ *
  * <p>This class contains various static utility methods for working with collections, strings, objects, and other common operations.
  */
 public class Utils {
@@ -46,7 +46,7 @@ public class Utils {
 
 	/**
 	 * Creates an array of objects.
-	 * 
+	 *
 	 * @param <T> The component type of the array.
 	 * @param x The objects to place in the array.
 	 * @return A new array containing the specified objects.
@@ -71,7 +71,7 @@ public class Utils {
 
 	/**
 	 * Shortcut for creating an unmodifiable list out of an array of values.
-	 * 
+	 *
 	 * @param <T> The element type.
 	 * @param values The values to add to the list.
 	 * @return An unmodifiable list containing the specified values, or <jk>null</jk> if the input is <jk>null</jk>.
@@ -216,6 +216,36 @@ public class Utils {
 	}
 
 	/**
+	 * Throws an {@link IllegalArgumentException} if the specified string is <jk>null</jk> or blank.
+	 *
+	 * @param name The argument name.
+	 * @param o The object to check.
+	 * @return The same object.
+	 * @throws IllegalArgumentException Thrown if the specified string is <jk>null</jk> or blank.
+	 */
+	public static final String assertArgNotNullOrBlank(String name, String o) throws IllegalArgumentException {
+		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
+		assertArg(! o.isBlank(), "Argument ''{0}'' cannot be blank.", name);
+		return o;
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified varargs array or any of its elements are <jk>null</jk>.
+	 *
+	 * @param <T> The element type.
+	 * @param name The argument name.
+	 * @param o The object to check.
+	 * @return The same object.
+	 * @throws IllegalArgumentException Thrown if the specified varargs array or any of its elements are <jk>null</jk>.
+	 */
+	public static final <T> T[] assertVarargsNotNull(String name, T[] o) throws IllegalArgumentException {
+		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
+		for (int i = 0; i < o.length; i++)
+			assertArg(o[i] != null, "Argument ''{0}'' parameter {1} cannot be null.", name, i);
+		return o;
+	}
+
+	/**
 	 * Throws an {@link IllegalArgumentException} if the specified value doesn't have all subclasses of the specified type.
 	 *
 	 * @param <E> The element type.
@@ -288,7 +318,7 @@ public class Utils {
 
 	/**
 	 * Null-safe {@link String#contains(CharSequence)} operation.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @param values The characters to check for.
 	 * @return <jk>true</jk> if the string contains any of the specified characters.
@@ -305,7 +335,7 @@ public class Utils {
 
 	/**
 	 * Null-safe {@link String#contains(CharSequence)} operation.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @param values The substrings to check for.
 	 * @return <jk>true</jk> if the string contains any of the specified substrings.
@@ -326,7 +356,7 @@ public class Utils {
 
 	/**
 	 * Shortcut for creating an empty list of the specified type.
-	 * 
+	 *
 	 * @param <T> The element type.
 	 * @param type The element type class.
 	 * @return An empty list.
@@ -351,7 +381,7 @@ public class Utils {
 
 	/**
 	 * Returns the specified string, or blank if that string is null.
-	 * 
+	 *
 	 * @param value The value to convert to a string.
 	 * @return The string representation of the value, or an empty string if <jk>null</jk>.
 	 */
@@ -472,7 +502,7 @@ public class Utils {
 
 	/**
 	 * Same as MessageFormat.format().
-	 * 
+	 *
 	 * @param pattern The message pattern.
 	 * @param args The arguments to substitute into the pattern.
 	 * @return The formatted string.
@@ -561,7 +591,7 @@ public class Utils {
 
 	/**
 	 * Shortcut for calling {@link Objects#hash(Object...)}.
-	 * 
+	 *
 	 * @param values The values to hash.
 	 * @return A hash code value for the given values.
 	 */
@@ -571,7 +601,7 @@ public class Utils {
 
 	/**
 	 * Creates an {@link IllegalArgumentException}.
-	 * 
+	 *
 	 * @param msg The exception message.
 	 * @param args The arguments to substitute into the message.
 	 * @return A new IllegalArgumentException with the formatted message.
@@ -615,7 +645,7 @@ public class Utils {
 
 	/**
 	 * Returns <jk>true</jk> if string is <jk>null</jk> or empty.
-	 * 
+	 *
 	 * @param o The string to check.
 	 * @return <jk>true</jk> if string is <jk>null</jk> or empty.
 	 */
@@ -653,7 +683,7 @@ public class Utils {
 
 	/**
 	 * Returns <jk>true</jk> if string is not <jk>null</jk> and not empty.
-	 * 
+	 *
 	 * @param o The string to check.
 	 * @return <jk>true</jk> if string is not <jk>null</jk> and not empty.
 	 */
@@ -879,7 +909,7 @@ public class Utils {
 
 	/**
 	 * Shortcut for creating a modifiable list out of an array of values.
-	 * 
+	 *
 	 * @param <T> The element type.
 	 * @param values The values to add to the list.
 	 * @return A modifiable list containing the specified values.
@@ -902,7 +932,7 @@ public class Utils {
 
 	/**
 	 * Shortcut for creating a modifiable map out of an array of key-value pairs.
-	 * 
+	 *
 	 * @param <K> The key type.
 	 * @param <V> The value type.
 	 * @param values The key-value pairs (alternating keys and values).
@@ -927,7 +957,7 @@ public class Utils {
 
 	/**
 	 * Null-safe not-equals check.
-	 * 
+	 *
 	 * @param <T> The object type.
 	 * @param s1 Object 1.
 	 * @param s2 Object 2.
@@ -970,7 +1000,7 @@ public class Utils {
 
 	/**
 	 * Returns a null list.
-	 * 
+	 *
 	 * @param <T> The element type.
 	 * @param type The element type class.
 	 * @return <jk>null</jk>.
@@ -981,7 +1011,7 @@ public class Utils {
 
 	/**
 	 * Returns a null map.
-	 * 
+	 *
 	 * @param <K> The key type.
 	 * @param <V> The value type.
 	 * @param keyType The key type class.
@@ -994,7 +1024,7 @@ public class Utils {
 
 	/**
 	 * Null-safe string not-contains operation.
-	 * 
+	 *
 	 * @param s The string to check.
 	 * @param values The characters to check for.
 	 * @return <jk>true</jk> if the string does not contain any of the specified characters.
@@ -1005,7 +1035,7 @@ public class Utils {
 
 	/**
 	 * Returns the specified string, or <jk>null</jk> if that string is <jk>null</jk> or empty.
-	 * 
+	 *
 	 * @param value The string value to check.
 	 * @return The string value, or <jk>null</jk> if the string is <jk>null</jk> or empty.
 	 */
@@ -1027,7 +1057,7 @@ public class Utils {
 
 	/**
 	 * Returns an obfuscated version of the specified string.
-	 * 
+	 *
 	 * @param s The string to obfuscate.
 	 * @return The obfuscated string with most characters replaced by asterisks.
 	 */
@@ -1039,7 +1069,7 @@ public class Utils {
 
 	/**
 	 * Shortcut for calling {@link Optional#ofNullable(Object)}.
-	 * 
+	 *
 	 * @param <T> The object type.
 	 * @param t The object to wrap in an Optional.
 	 * @return An Optional containing the specified object, or empty if <jk>null</jk>.
@@ -1050,7 +1080,7 @@ public class Utils {
 
 	/**
 	 * Returns an empty Optional.
-	 * 
+	 *
 	 * @param <T> The object type.
 	 * @return An empty Optional.
 	 */
@@ -1060,7 +1090,7 @@ public class Utils {
 
 	/**
 	 * Prints all the specified lines to System.out.
-	 * 
+	 *
 	 * @param lines The lines to print.
 	 */
 	public static final void printLines(String[] lines) {
@@ -1188,7 +1218,7 @@ public class Utils {
 
 	/**
 	 * Creates a {@link RuntimeException}.
-	 * 
+	 *
 	 * @param msg The exception message.
 	 * @param args The arguments to substitute into the message.
 	 * @return A new RuntimeException with the formatted message.
@@ -1199,7 +1229,7 @@ public class Utils {
 
 	/**
 	 * Shortcut for converting an object to a string.
-	 * 
+	 *
 	 * @param val The object to convert.
 	 * @return The string representation of the object, or <jk>null</jk> if the object is <jk>null</jk>.
 	 */
@@ -1226,7 +1256,7 @@ public class Utils {
 	 * Used to wrap code that returns a value but throws an exception.
 	 * Useful in cases where you're trying to execute code in a fluent method call
 	 * or are trying to eliminate untestable catch blocks in code.
-	 * 
+	 *
 	 * @param <T> The return type.
 	 * @param s The supplier that may throw an exception.
 	 * @return The result of the supplier execution.
@@ -1261,7 +1291,7 @@ public class Utils {
 
 	/**
 	 * Shortcut for creating a modifiable set out of an array of values.
-	 * 
+	 *
 	 * @param <T> The element type.
 	 * @param values The values to add to the set.
 	 * @return A modifiable LinkedHashSet containing the specified values.
@@ -1273,7 +1303,7 @@ public class Utils {
 
 	/**
 	 * Splits a comma-delimited list into a list of strings.
-	 * 
+	 *
 	 * @param s The string to split.
 	 * @return A list of split strings, or an empty list if the input is <jk>null</jk>.
 	 */
@@ -1401,7 +1431,7 @@ public class Utils {
 
 	/**
 	 * Splits a comma-delimited list into an array of strings.
-	 * 
+	 *
 	 * @param s The string to split.
 	 * @return An array of split strings.
 	 */

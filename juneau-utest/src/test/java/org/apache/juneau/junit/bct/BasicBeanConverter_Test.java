@@ -21,6 +21,7 @@ import java.time.format.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -35,7 +36,7 @@ class BasicBeanConverter_Test extends TestBase {
 
 	@Nested
 	@DisplayName("Builder")
-	class a_BuilderTest {
+	class A_builderTest extends TestBase {
 
 		@Test
 		@DisplayName("a01_builder() creates new Builder instance")
@@ -146,7 +147,7 @@ class BasicBeanConverter_Test extends TestBase {
 
 	@Nested
 	@DisplayName("Core Functionality")
-	class b_CoreFunctionalityTest {
+	class B_coreFunctionalityTest extends TestBase {
 
 		private BasicBeanConverter converter;
 
@@ -263,7 +264,7 @@ class BasicBeanConverter_Test extends TestBase {
 
 	@Nested
 	@DisplayName("Property Access")
-	class c_PropertyAccessTest {
+	class C_propertyAccessTest extends TestBase {
 
 		private BasicBeanConverter converter;
 
@@ -303,7 +304,7 @@ class BasicBeanConverter_Test extends TestBase {
 
 	@Nested
 	@DisplayName("Settings")
-	class d_SettingsTest {
+	class D_settingsTest extends TestBase {
 
 		@Test
 		@DisplayName("d01_nullValue setting changes null representation")
@@ -387,7 +388,7 @@ class BasicBeanConverter_Test extends TestBase {
 
 	@Nested
 	@DisplayName("Error Handling")
-	class e_ErrorHandlingTest {
+	class E_errorHandlingTest extends TestBase {
 
 		private BasicBeanConverter converter;
 
@@ -446,7 +447,7 @@ class BasicBeanConverter_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class h_EnhancedEdgeCases {
+	class H_enhancedEdgeCases extends TestBase {
 
 		@Test
 		void h01_listifyWithMixedArrayTypes() {

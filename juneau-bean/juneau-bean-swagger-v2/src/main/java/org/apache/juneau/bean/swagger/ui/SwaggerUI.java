@@ -30,7 +30,7 @@ import org.apache.juneau.swap.*;
  * Generates a Swagger-UI interface from a Swagger document.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../../index.html#jd.SwaggerUi">Overview &gt; juneau-dto &gt; Swagger UI</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
 public class SwaggerUI extends ObjectSwap<Swagger,Div> {

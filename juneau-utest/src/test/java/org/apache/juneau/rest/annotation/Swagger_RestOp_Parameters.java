@@ -162,7 +162,7 @@ class Swagger_RestOp_Parameters extends SimpleTestBase {
 		assertJson("{'in':'header',name:'Connection',type:'string'}", x);
 
 		x = s.getParameterInfo("/contentLength","get","header","Content-Length");
-		assertJson("{'in':'header',name:'Content-Length',type:'integer',format:'int64'}", x);
+		assertJson("{format:'int64','in':'header',name:'Content-Length',type:'integer'}", x);
 
 		x = s.getParameterInfo("/contentType","get","header","Content-Type");
 		assertJson("{'in':'header',name:'Content-Type',type:'string'}", x);
@@ -195,7 +195,7 @@ class Swagger_RestOp_Parameters extends SimpleTestBase {
 		assertJson("{'in':'header',name:'If-Unmodified-Since',type:'string'}", x);
 
 		x = s.getParameterInfo("/maxForwards","get","header","Max-Forwards");
-		assertJson("{'in':'header',name:'Max-Forwards',type:'integer',format:'int32'}", x);
+		assertJson("{format:'int32','in':'header',name:'Max-Forwards',type:'integer'}", x);
 
 		x = s.getParameterInfo("/pragma","get","header","Pragma");
 		assertJson("{'in':'header',name:'Pragma',type:'string'}", x);

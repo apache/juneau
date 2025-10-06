@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.swagger;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -19,7 +20,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
@@ -28,7 +28,25 @@ import org.apache.juneau.marshaller.*;
  * A limited subset of JSON-Schema's items object.
  *
  * <p>
- * It is used by parameter definitions that are not located in "body".
+ * The Items Object is a limited subset of JSON-Schema's items object for Swagger 2.0. It is used by parameter 
+ * definitions that are not located in "body" to describe the type of items in an array. This is particularly useful 
+ * for query parameters, path parameters, and header parameters that accept arrays.
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The Items Object supports the following fields from JSON Schema:
+ * <ul class='spaced-list'>
+ * 	<li><c>type</c> (string, REQUIRED) - The data type. Values: <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, <js>"array"</js>
+ * 	<li><c>format</c> (string) - The format modifier (e.g., <js>"int32"</js>, <js>"int64"</js>, <js>"float"</js>, <js>"double"</js>, <js>"date"</js>, <js>"date-time"</js>)
+ * 	<li><c>items</c> ({@link Items}) - Required if type is <js>"array"</js>. Describes the type of items in the array
+ * 	<li><c>collectionFormat</c> (string) - How multiple values are formatted. Values: <js>"csv"</js>, <js>"ssv"</js>, <js>"tsv"</js>, <js>"pipes"</js>, <js>"multi"</js>
+ * 	<li><c>default</c> (any) - The default value
+ * 	<li><c>maximum</c> (number), <c>exclusiveMaximum</c> (boolean), <c>minimum</c> (number), <c>exclusiveMinimum</c> (boolean) - Numeric constraints
+ * 	<li><c>maxLength</c> (integer), <c>minLength</c> (integer), <c>pattern</c> (string) - String constraints
+ * 	<li><c>maxItems</c> (integer), <c>minItems</c> (integer), <c>uniqueItems</c> (boolean) - Array constraints
+ * 	<li><c>enum</c> (array) - Possible values for this item
+ * 	<li><c>multipleOf</c> (number) - Must be a multiple of this value
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -36,7 +54,7 @@ import org.apache.juneau.marshaller.*;
  * 	Items <jv>items</jv> = <jsm>items</jsm>(<js>"string"</js>).minLength(2);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>items</jv>);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>items</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>items</jv>.toString();
@@ -50,10 +68,11 @@ import org.apache.juneau.marshaller.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#items-object">Swagger 2.0 Specification &gt; Items Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/describing-parameters/">Swagger Describing Parameters</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
-@Bean(properties="type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,*")
 @FluentSetters
 public class Items extends SwaggerElement {
 
@@ -127,8 +146,23 @@ public class Items extends SwaggerElement {
 
 
 	@Override /* SwaggerElement */
-	protected Items strict() {
+	public Items strict() {
 		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public Items strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 
@@ -245,6 +279,7 @@ public class Items extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Items setEnum(Object...value) {
@@ -599,6 +634,7 @@ public class Items extends SwaggerElement {
 	 * 		<li><js>"array"</js>
 	 * 	</ul>
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Items setType(String value) {
@@ -636,8 +672,7 @@ public class Items extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "collectionFormat" -> toType(getCollectionFormat(), type);
 			case "default" -> toType(getDefault(), type);
@@ -663,8 +698,7 @@ public class Items extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Items set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
 			case "default" -> setDefault(value);
@@ -740,35 +774,9 @@ public class Items extends SwaggerElement {
 			return r;
 		}
 
-		set("properties", resolveRefs(get("properties"), swagger, refStack, maxDepth));
-
 		if (items != null)
 			items = items.resolveRefs(swagger, refStack, maxDepth);
 
-		set("example", null);
-
 		return this;
-	}
-
-	/* Resolve references in extra attributes */
-	private Object resolveRefs(Object o, Swagger swagger, Deque<String> refStack, int maxDepth) {
-		if (o instanceof JsonMap om) {
-			var ref2 = om.get("$ref");
-			if (ref2 instanceof CharSequence) {
-				var sref = ref2.toString();
-				if (refStack.contains(sref) || refStack.size() >= maxDepth)
-					return o;
-				refStack.addLast(sref);
-				var o2 = swagger.findRef(sref, Object.class);
-				o2 = resolveRefs(o2, swagger, refStack, maxDepth);
-				refStack.removeLast();
-				return o2;
-			}
-			om.entrySet().forEach(x -> x.setValue(resolveRefs(x.getValue(), swagger, refStack, maxDepth)));
-		}
-		if (o instanceof JsonList x)
-			for (var li = x.listIterator(); li.hasNext();)
-				li.set(resolveRefs(li.next(), swagger, refStack, maxDepth));
-		return o;
 	}
 }

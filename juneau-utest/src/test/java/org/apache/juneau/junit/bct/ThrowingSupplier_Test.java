@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -31,7 +32,7 @@ class ThrowingSupplier_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class a_FunctionalInterfaceCompliance {
+	class A_functionalInterfaceCompliance extends TestBase {
 
 		@SuppressWarnings("cast")
 		@Test
@@ -78,7 +79,7 @@ class ThrowingSupplier_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class b_ExceptionHandling {
+	class B_exceptionHandling extends TestBase {
 
 		@Test
 		void b01_checkedExceptionHandling() {
@@ -126,7 +127,7 @@ class ThrowingSupplier_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class c_UtilsSafeIntegration {
+	class C_utilsSafeIntegration extends TestBase {
 
 		@Test
 		void c01_safeExecutionWithoutException() {
@@ -174,7 +175,7 @@ class ThrowingSupplier_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class d_ComplexScenarios {
+	class D_complexScenarios extends TestBase {
 
 		@Test
 		void d01_fileOperationSimulation() {
@@ -236,7 +237,7 @@ class ThrowingSupplier_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class e_PerformanceAndResources {
+	class E_performanceAndResources extends TestBase {
 
 		@Test
 		void e01_quickExecution() {
@@ -308,7 +309,7 @@ class ThrowingSupplier_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class f_Concurrency {
+	class F_concurrency extends TestBase {
 
 		@Test
 		void f01_threadSafeExecution() {
@@ -359,7 +360,7 @@ class ThrowingSupplier_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class g_GenericTypes {
+	class G_genericTypes extends TestBase {
 
 		@Test
 		void g01_stringTypeSupplier() throws Exception {

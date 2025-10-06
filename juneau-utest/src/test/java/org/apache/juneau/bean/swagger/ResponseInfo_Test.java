@@ -19,144 +19,299 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link ResponseInfo}.
  */
-class ResponseInfo_Test extends SimpleTestBase {
+class ResponseInfo_Test extends TestBase {
 
-	/**
-	 * Test method for getters and setters.
-	 */
-	@Test void a01_gettersAndSetters() {
-		var t = new ResponseInfo();
+	@Nested class A_basicTests extends TestBase {
 
-		// Basic property setters
-		assertBean(
-			t.setDescription("a")
-				.setExamples(map("b1","b2","b3",alist("b4")))
-				.setHeaders(map("c1",headerInfo("c2")))
-				.setSchema(schemaInfo().setTitle("d")),
-			"description,examples,headers{c1{type}},schema{title}",
-			"a,{b1=b2,b3=[b4]},{{c2}},{d}"
-		);
+		private static final BeanTester<ResponseInfo> TESTER =
+			testBean(
+				bean()
+					.setDescription("a")
+					.setExamples(map("x1", "x2"))
+					.setHeaders(map("x3", headerInfo().setType("x4")))
+					.setSchema(schemaInfo().setType("b"))
+			)
+			.props("description,examples{x1},headers{x3{type}},schema{type}")
+			.vals("a,{x2},{{x4}},{b}")
+			.json("{description:'a',examples:{x1:'x2'},headers:{x3:{type:'x4'}},schema:{type:'b'}}")
+			.string("{'description':'a','examples':{'x1':'x2'},'headers':{'x3':{'type':'x4'}},'schema':{'type':'b'}}".replace('\'', '"'))
+		;
 
-		// Null values
-		assertBean(
-			t.setDescription(null).setExamples((Map<String,Object>)null).setHeaders((Map<String,HeaderInfo>)null),
-			"description,examples,headers",
-			"<null>,<null>,<null>"
-		);
+		@Test void b01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
 
-		// Other methods - empty collections
-		assertBean(
-			t.setExamples(map()).setHeaders(map()),
-			"examples,headers",
-			"{},{}"
-		);
-		assertMap(
-			t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples(),
-			"text/a,text/b,<null>",
-			"a,<null>,c"
-		);
+		@Test void b02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void b03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void b04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void b05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void b06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void b07_keySet() {
+			assertList(TESTER.bean().keySet(), "description", "examples", "headers", "schema");
+		}
+
+	@Test void a08_otherGettersAndSetters() {
+		// No Collection variants for ResponseInfo setters
+
+		// Test special getter
+		var x = bean().setHeaders(map(
+			"a1", headerInfo().setType("a2"),
+			"a3", headerInfo().setType("a4")
+		));
+
+		assertBean(x.getHeader("a1"), "type", "a2");
+		assertBean(x.getHeader("a3"), "type", "a4");
 	}
 
-	/**
-	 * Test method for {@link ResponseInfo#set(java.lang.String, java.lang.Object)}.
-	 */
-	@Test void b01_set() {
-		var t = new ResponseInfo();
+		@Test void a09_nullParameters() {
+			var x = bean();
 
-		t
-			.set("description", "a")
-			.set("examples", map("b1","b2","b3",alist("b4")))
-			.set("headers", map("c1", headerInfo("c2")))
-			.set("schema", schemaInfo().setType("d"))
-			.set("$ref", "e");
-
-		// Comprehensive object state validation
-		assertBean(t,
-			"description,schema{type},headers{c1{type}},examples,$ref",
-			"a,{d},{{c2}},{b1=b2,b3=[b4]},e");
-
-		t
-			.set("description", "a")
-			.set("examples", "{b1:'b2',b3:['b4']}")
-			.set("headers", "{c1:{type:'c2'}}")
-			.set("schema", "{type:'d'}")
-			.set("$ref", "e");
-
-		assertBean(t,
-			"description,examples,headers{c1{type}},schema{type},$ref",
-			"a,{b1=b2,b3=[b4]},{{c2}},{d},e");
-
-		t
-			.set("description", Utils.sb("a"))
-			.set("examples", Utils.sb("{b1:'b2',b3:['b4']}"))
-			.set("headers", Utils.sb("{c1:{type:'c2'}}"))
-			.set("schema", Utils.sb("{type:'d'}"))
-			.set("$ref", Utils.sb("e"));
-
-		assertBean(t,
-			"description,examples,headers{c1{type}},schema{type},$ref",
-			"a,{b1=b2,b3=[b4]},{{c2}},{d},e");
-
-		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
-			"description,examples,headers,schema,$ref",
-			"a,{b1:'b2',b3:['b4']},{c1:{type:'c2'}},{type:'d'},e");
-
-		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
-			"description,examples,headers,schema,$ref",
-			"String,LinkedHashMap,LinkedHashMap,SchemaInfo,StringBuilder");
-
-		assertInstanceOf(HeaderInfo.class, t.get("headers", Map.class).values().iterator().next());
-
-		t.set("null", null).set(null, "null");
-		assertNull(t.get("null", Object.class));
-		assertNull(t.get(null, Object.class));
-		assertNull(t.get("foo", Object.class));
+			assertThrows(IllegalArgumentException.class, ()->x.getHeader(null));
+		}
 	}
 
-	@Test void b02_roundTripJson() {
-		var s = "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}";  // Order is determined by @Bean annotation.
-		assertJson(s, JsonParser.DEFAULT.parse(s, ResponseInfo.class));
+	@Nested class B_emptyTests extends TestBase {
+
+		private static final BeanTester<ResponseInfo> TESTER =
+			testBean(bean())
+			.props("description,schema,headers,examples")
+			.vals("<null>,<null>,<null>,<null>")
+			.json("{}")
+			.string("{}")
+		;
+
+		@Test void b01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void b02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void b03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void b04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void b05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void b06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void b07_keySet() {
+			assertEmpty(TESTER.bean().keySet());
+		}
 	}
 
-	@Test void b03_copy() {
-		var t = new ResponseInfo();
+	@Nested class C_extraProperties extends TestBase {
 
-		t = t.copy();
+		private static final BeanTester<ResponseInfo> TESTER =
+			testBean(
+				bean()
+					.set("description", "a")
+					.set("examples", map("x1", "x2"))
+					.set("headers", map("x3", headerInfo().setType("x4")))
+					.set("schema", schemaInfo().setType("b"))
+					.set("x5", "x5a")
+					.set("x6", null)
+			)
+			.props("description,examples{x1},headers{x3{type}},schema{type},x5,x6")
+			.vals("a,{x2},{{x4}},{b},x5a,<null>")
+			.json("{description:'a',examples:{x1:'x2'},headers:{x3:{type:'x4'}},schema:{type:'b'},x5:'x5a'}")
+			.string("{'description':'a','examples':{'x1':'x2'},'headers':{'x3':{'type':'x4'}},'schema':{'type':'b'},'x5':'x5a'}".replace('\'', '"'))
+		;
 
-		assertBean(t, "description,examples,headers,schema", "<null>,<null>,<null>,<null>");
+		@Test void c01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
 
-		t
-			.set("description", "a")
-			.set("examples", map("b1","b2","b3",alist("b4")))
-			.set("headers", map("c1", headerInfo("c2")))
-			.set("schema", schemaInfo().setType("d"))
-			.set("$ref", "e")
-			.copy();
+		@Test void c02_copy() {
+			TESTER.assertCopy();
+		}
 
-		assertBean(t,
-			"description,examples,headers{c1{type}},schema{type},$ref",
-			"a,{b1=b2,b3=[b4]},{{c2}},{d},e");
+		@Test void c03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void c04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void c05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void c06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void c07_keySet() {
+			assertList(TESTER.bean().keySet(), "description", "examples", "headers", "schema", "x5", "x6");
+		}
+
+		@Test void c08_get() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> obj.get(prop, Object.class),
+				"description,examples{x1},headers{x3{type}},schema{type},x5,x6",
+				"a,{x2},{{x4}},{b},x5a,<null>"
+			);
+		}
+
+		@Test void c09_getTypes() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				"description,examples,headers,schema,x5,x6",
+				"String,LinkedHashMap,LinkedHashMap,SchemaInfo,String,<null>"
+			);
+		}
+
+		@Test void c10_nullPropertyValue() {
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+		}
 	}
 
-	@Test void b04_keySet() {
-		var t = new ResponseInfo();
+	@Nested class D_additionalMethods extends TestBase {
 
-		assertEmpty(t.keySet());
+		@Test void d01_addMethods() {
+			var x = bean().addExample("a1", "a2").addHeader("a3", headerInfo().setDescription("a4"));
+			assertNotNull(x);
+			assertNotNull(x.getExamples());
+			assertNotNull(x.getHeaders());
+		}
 
-		t
-			.set("description", "a")
-			.set("examples", map("b1","b2","b3",alist("b4")))
-			.set("headers", map("c1", headerInfo("c2")))
-			.set("schema", schemaInfo().setType("d"))
-			.set("$ref", "e");
+		@Test void d02_asMap() {
+			assertBean(
+				bean()
+					.setDescription("a")
+					.set("x1", "x1a")
+					.asMap(),
+				"description,x1",
+				"a,x1a"
+			);
+		}
 
-		assertList(t.keySet(), "$ref", "description", "examples", "headers", "schema");
+		@Test void d03_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void d04_strict() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+		}
+
+		@Test void d05_addMethodsWithNullParameters() {
+			var x = bean();
+			assertThrows(IllegalArgumentException.class, ()->x.addExample(null, "a"));
+			assertThrows(IllegalArgumentException.class, ()->x.addExample("a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addHeader(null, headerInfo()));
+			assertThrows(IllegalArgumentException.class, ()->x.addHeader("a", null));
+		}
+
+		@Test void d05_copyFrom() {
+			var x = bean().setDescription("a").setSchema(schemaInfo().setTitle("b"));
+			var y = bean().copyFrom(x);
+			assertBean(y, "description,schema{title}", "a,{b}");
+			
+			y = bean().setDescription("c").copyFrom(x);
+			assertBean(y, "description,schema{title}", "a,{b}");
+			
+			y = bean().setDescription("c").copyFrom(null);
+			assertBean(y, "description", "c");
+		}
 	}
+
+	@Nested class E_strictMode extends TestBase {
+
+		@Test void e01_strictModeSetThrowsException() {
+			var x = bean().strict();
+			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
+		}
+
+		@Test void e02_nonStrictModeAllowsSet() {
+			var x = bean(); // not strict
+			assertDoesNotThrow(() -> x.set("foo", "bar"));
+		}
+
+		@Test void e03_strictModeToggle() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+			x.strict(false);
+			assertFalse(x.isStrict());
+		}
+	}
+
+	@Nested class F_refs extends TestBase {
+
+		@Test void f01_resolveRefs_schema() {
+			var swagger = swagger()
+				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"));
+
+			var x = responseInfo().setDescription("Success").setSchema(schemaInfo().setRef("#/definitions/Pet"));
+			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
+			assertBean(y, "description,schema{type,title}", "Success,{object,Pet}");
+		}
+
+		@Test void f02_resolveRefs_headers() {
+			var swagger = swagger()
+				.addDefinition("MyHeader", JsonMap.of("type", "string", "description", "My Header"));
+
+			var x = responseInfo().setDescription("Success").addHeader("X-Custom", headerInfo().setRef("#/definitions/MyHeader"));
+			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
+			assertBean(y, "description,headers{X-Custom{type,description}}", "Success,{{string,My Header}}");
+		}
+
+		@Test void f03_resolveRefs_maxDepth() {
+			var swagger = swagger()
+				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"));
+
+			var x = responseInfo().setDescription("Success").setSchema(schemaInfo().setRef("#/definitions/Pet"));
+			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 0);
+			assertBean(y, "description,schema{ref}", "Success,{#/definitions/Pet}");
+		}
+	}
+
+
+	//---------------------------------------------------------------------------------------------
+	// Helper methods
+	//---------------------------------------------------------------------------------------------
+
+	private static ResponseInfo bean() {
+		return responseInfo();
+	}
+
 }

@@ -13,13 +13,14 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 import java.util.TreeMap;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -28,11 +29,50 @@ import org.apache.juneau.objecttools.*;
 /**
  * This is the root document object for the OpenAPI specification.
  *
+ * <p>
+ * The OpenAPI Object is the root document that describes an entire API. It contains metadata about the API,
+ * available paths and operations, parameters, responses, authentication methods, and other information.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The OpenAPI Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>openapi</c> (string, REQUIRED) - The OpenAPI Specification version (e.g., "3.0.0")
+ * 	<li><c>info</c> ({@link Info}, REQUIRED) - Provides metadata about the API
+ * 	<li><c>servers</c> (array of {@link Server}) - An array of Server Objects providing connectivity information
+ * 	<li><c>paths</c> (map of {@link PathItem}) - The available paths and operations for the API
+ * 	<li><c>components</c> ({@link Components}) - An element to hold various schemas for reuse
+ * 	<li><c>security</c> (array of {@link SecurityRequirement}) - Security mechanisms applied to all operations
+ * 	<li><c>tags</c> (array of {@link Tag}) - A list of tags for API documentation control
+ * 	<li><c>externalDocs</c> ({@link ExternalDocumentation}) - Additional external documentation
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create an OpenAPI document</jc>
+ * 	OpenApi <jv>doc</jv> = <jk>new</jk> OpenApi()
+ * 		.setOpenapi(<js>"3.0.0"</js>)
+ * 		.setInfo(
+ * 			<jk>new</jk> Info()
+ * 				.setTitle(<js>"My API"</js>)
+ * 				.setVersion(<js>"1.0.0"</js>)
+ * 		)
+ * 		.setPaths(
+ * 			JsonMap.<jsm>of</jsm>(
+ * 				<js>"/pets"</js>, <jk>new</jk> PathItem()
+ * 					.setGet(<jk>new</jk> Operation()
+ * 						.setSummary(<js>"List all pets"</js>)
+ * 					)
+ * 			)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.OpenApi">Overview &gt; juneau-rest-server &gt; OpenAPI</a>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#openapi-object">OpenAPI Specification &gt; OpenAPI Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/basic-structure/">OpenAPI Basic Structure</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
  * </ul>
  */
-@Bean(properties="openapi,info,servers,paths,components,security,tags,externalDocs,*")
 @FluentSetters
 public class OpenApi extends OpenApiElement {
 
@@ -164,11 +204,13 @@ public class OpenApi extends OpenApiElement {
 	/**
 	 * Adds a path to this OpenAPI document.
 	 *
-	 * @param path The path string.
-	 * @param pathItem The path item.
+	 * @param path The path string.  Must not be <jk>null</jk>.
+	 * @param pathItem The path item.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public OpenApi addPath(String path, PathItem pathItem) {
+		assertArgNotNull("path", path);
+		assertArgNotNull("pathItem", pathItem);
 		if (paths == null)
 			paths = new TreeMap<>(PATH_COMPARATOR);
 		getPaths().put(path, pathItem);
@@ -258,13 +300,13 @@ public class OpenApi extends OpenApiElement {
 	/**
 	 * Finds a reference within this OpenAPI document.
 	 *
-	 * @param ref The reference string (e.g., <js>"#/components/schemas/User"</js>).
-	 * @param c The expected class type.
-	 * @return The referenced node, or <jk>null</jk> if the ref was <jk>null</jk> or empty or not found.
+	 * @param ref The reference string (e.g., <js>"#/components/schemas/User"</js>).  Must not be <jk>null</jk> or blank.
+	 * @param c The expected class type.  Must not be <jk>null</jk>.
+	 * @return The referenced node, or <jk>null</jk> if not found.
 	 */
 	public <T> T findRef(String ref, Class<T> c) {
-		if (Utils.isEmpty(ref))
-			return null;
+		assertArgNotNullOrBlank("ref", ref);
+		assertArgNotNull("c", c);
 		if (! ref.startsWith("#/"))
 			throw new BasicRuntimeException("Unsupported reference:  ''{0}''", ref);
 		try {
@@ -276,6 +318,72 @@ public class OpenApi extends OpenApiElement {
 
 	@Override
 	public String toString() {
-		return JsonSerializer.DEFAULT_READABLE.toString(this);
+		return JsonSerializer.DEFAULT.toString(this);
 	}
+
+	@Override /* OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "openapi" -> toType(getOpenapi(), type);
+			case "info" -> toType(getInfo(), type);
+			case "servers" -> toType(getServers(), type);
+			case "paths" -> toType(getPaths(), type);
+			case "components" -> toType(getComponents(), type);
+			case "security" -> toType(getSecurity(), type);
+			case "tags" -> toType(getTags(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	@Override /* OpenApiElement */
+	public OpenApi set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "components" -> setComponents(toType(value, Components.class));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "info" -> setInfo(toType(value, Info.class));
+			case "openapi" -> setOpenapi(Utils.s(value));
+			case "paths" -> setPaths(mapBuilder(String.class, PathItem.class).sparse().addAny(value).build());
+			case "security" -> setSecurity(listBuilder(SecurityRequirement.class).sparse().addAny(value).build());
+			case "servers" -> setServers(listBuilder(Server.class).sparse().addAny(value).build());
+			case "tags" -> setTags(listBuilder(Tag.class).sparse().addAny(value).build());
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	@Override /* OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(components != null, "components")
+			.addIf(externalDocs != null, "externalDocs")
+			.addIf(info != null, "info")
+			.addIf(openapi != null, "openapi")
+			.addIf(paths != null, "paths")
+			.addIf(security != null, "security")
+			.addIf(servers != null, "servers")
+			.addIf(tags != null, "tags")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public OpenApi strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public OpenApi strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

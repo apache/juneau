@@ -112,6 +112,9 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	/** Default serializer, all default settings.*/
 	public static final JsonSerializer DEFAULT = new JsonSerializer(create());
 
+	/** Default serializer, single quotes, {@link JsonSerializer.Builder#simpleAttrs() simple mode}, sorted bean properties. */
+	public static final JsonSerializer DEFAULT_SORTED = new JsonSerializer(create().sortProperties());
+
 	/** Default serializer, all default settings.*/
 	public static final JsonSerializer DEFAULT_READABLE = new Readable(create());
 

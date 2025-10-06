@@ -12,17 +12,31 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.swagger;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Describes a single response from an API Operation.
+ * Describes a single response from an API operation.
+ *
+ * <p>
+ * The Response Object describes a single response from a Swagger 2.0 API operation, including a description, 
+ * schema, headers, and examples. Responses are associated with HTTP status codes (e.g., 200, 404, 500).
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The Response Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>description</c> (string, REQUIRED) - A short description of the response
+ * 	<li><c>schema</c> ({@link SchemaInfo}) - A definition of the response structure
+ * 	<li><c>headers</c> (map of {@link HeaderInfo}) - Maps a header name to its definition
+ * 	<li><c>examples</c> (map of any) - An example of the response message (keys are media types)
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -38,7 +52,7 @@ import org.apache.juneau.internal.*;
  * 		);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>info</jv>);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>info</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>info</jv>.toString();
@@ -57,10 +71,11 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#response-object">Swagger 2.0 Specification &gt; Response Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/describing-responses/">Swagger Describing Responses</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
-@Bean(properties="description,schema,headers,examples,*")
 @FluentSetters
 public class ResponseInfo extends SwaggerElement {
 
@@ -145,6 +160,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ResponseInfo setDescription(String value) {
@@ -187,11 +203,13 @@ public class ResponseInfo extends SwaggerElement {
 	 * <p>
 	 * Adds a single value to the <property>examples</property> property.
 	 *
-	 * @param mimeType The mime-type string.
-	 * @param example The example.
+	 * @param mimeType The mime-type string.  Must not be <jk>null</jk>.
+	 * @param example The example.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public ResponseInfo addExample(String mimeType, Object example) {
+		assertArgNotNull("mimeType", mimeType);
+		assertArgNotNull("example", example);
 		examples =  mapBuilder(examples).sparse().add(mimeType, example).build();
 		return this;
 	}
@@ -227,11 +245,13 @@ public class ResponseInfo extends SwaggerElement {
 	/**
 	 * Bean property appender:  <property>headers</property>.
 	 *
-	 * @param name The header name.
-	 * @param header The header descriptions
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @param header The header descriptions  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public ResponseInfo addHeader(String name, HeaderInfo header) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("header", header);
 		headers = mapBuilder(headers).add(name, header).build();
 		return this;
 	}
@@ -239,11 +259,12 @@ public class ResponseInfo extends SwaggerElement {
 	/**
 	 * Returns the header information with the specified name.
 	 *
-	 * @param name The header name.
+	 * @param name The header name.  Must not be <jk>null</jk>.
 	 * @return The header info, or <jk>null</jk> if not found.
 	 */
 	public HeaderInfo getHeader(String name) {
-		return getHeaders().get(name);
+		assertArgNotNull("name", name);
+		return headers == null ? null : headers.get(name);
 	}
 
 	/**
@@ -281,8 +302,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> toType(getDescription(), type);
 			case "examples" -> toType(getExamples(), type);
@@ -294,8 +314,7 @@ public class ResponseInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public ResponseInfo set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> setDescription(Utils.s(value));
 			case "examples" -> setExamples(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
@@ -342,4 +361,31 @@ public class ResponseInfo extends SwaggerElement {
 
 		return this;
 	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @return This object.
+	 */
+	@Override
+	public ResponseInfo strict() {
+		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public ResponseInfo strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
 }

@@ -12,19 +12,61 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
  * TODO
+ *
+ * <p>
+ * The ServerVariable Object represents a server variable for server URL template substitution. Server variables can be 
+ * used to define different server environments (e.g., development, staging, production) with different base URLs, 
+ * ports, or other variable parts of the server URL.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The ServerVariable Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>enum</c> (array of any) - An enumeration of string values to be used if the substitution options are from a limited set
+ * 	<li><c>default</c> (string, REQUIRED) - The default value to use for substitution, which SHALL be sent if an alternate value is not supplied
+ * 	<li><c>description</c> (string) - An optional description for the server variable. CommonMark syntax MAY be used for rich text representation
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	ServerVariable <jv>x</jv> = <jsm>serverVariable</jsm>()
+ * 		.setDefault(<js>"api"</js>)
+ * 		.setEnum(<js>"api"</js>, <js>"staging"</js>, <js>"dev"</js>)
+ * 		.setDescription(<js>"Environment to use"</js>);
+ *
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>x</jv>);
+ *
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	<jv>json</jv> = <jv>x</jv>.toString();
+ * </p>
+ * <p class='bcode'>
+ * 	<jc>// Output</jc>
+ * 	{
+ * 		<js>"default"</js>: <js>"api"</js>,
+ * 		<js>"enum"</js>: [<js>"api"</js>, <js>"staging"</js>, <js>"dev"</js>],
+ * 		<js>"description"</js>: <js>"Environment to use"</js>
+ * 	}
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#server-variable-object">OpenAPI Specification &gt; Server Variable Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/api-host-and-base-path/">OpenAPI API Host and Base Path</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="enum,default,description,*")
 @FluentSetters
 public class ServerVariable extends OpenApiElement {
 
@@ -61,6 +103,12 @@ public class ServerVariable extends OpenApiElement {
 	@Override /* OpenApiElement */
 	protected ServerVariable strict() {
 		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public ServerVariable strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 
@@ -110,7 +158,7 @@ public class ServerVariable extends OpenApiElement {
 	 * @return This object
 	 */
 	public ServerVariable addEnum(Object...values) {
-		_enum = listBuilder(_enum).sparse().addAny(values).build();
+		_enum = listBuilder(_enum).elementType(Object.class).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -194,6 +242,7 @@ public class ServerVariable extends OpenApiElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public ServerVariable setDescription(String value) {
@@ -207,8 +256,7 @@ public class ServerVariable extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "enum" -> toType(getEnum(), type);
 			case "default" -> toType(getDefault(), type);
@@ -219,12 +267,11 @@ public class ServerVariable extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public ServerVariable set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "default" -> setDefault(Utils.s(value));
-			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
 			case "description" -> setDescription(Utils.s(value));
+			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -235,9 +282,9 @@ public class ServerVariable extends OpenApiElement {
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
-			.addIf(_enum != null, "enum")
 			.addIf(_default != null,"default" )
 			.addIf(description != null, "description")
+			.addIf(_enum != null, "enum")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

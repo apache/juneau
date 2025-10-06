@@ -439,6 +439,38 @@ public class TestUtils extends Utils2 {
 	}
 
 	/**
+	 * Asserts that a Map contains the expected key/value pairs using flexible comparison logic.
+	 *
+	 * <p>This is a passthrough method to {@link BctAssertions#assertMap(Map, Object...)}.
+	 * Map entries are serialized to strings as key/value pairs in the format <js>"key=value"</js>.
+	 * Nested maps and collections are supported with appropriate formatting.</p>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test simple map entries</jc>
+	 *    Map&lt;String,String&gt; <jv>simpleMap</jv> = Map.<jsm>of</jsm>(<js>"a"</js>, <js>"1"</js>, <js>"b"</js>, <js>"2"</js>);
+	 *    <jsm>assertMap</jsm>(<jv>simpleMap</jv>, <js>"a=1"</js>, <js>"b=2"</js>);
+	 *
+	 *    <jc>// Test nested maps</jc>
+	 *    Map&lt;String,Map&lt;String,Integer&gt;&gt; <jv>nestedMap</jv> = Map.<jsm>of</jsm>(<js>"a"</js>, Map.<jsm>of</jsm>(<js>"b"</js>, 1));
+	 *    <jsm>assertMap</jsm>(<jv>nestedMap</jv>, <js>"a={b=1}"</js>);
+	 *
+	 *    <jc>// Test maps with arrays/collections</jc>
+	 *    Map&lt;String,Map&lt;String,Integer[]&gt;&gt; <jv>mapWithArrays</jv> = Map.<jsm>of</jsm>(<js>"a"</js>, Map.<jsm>of</jsm>(<js>"b"</js>, <jk>new</jk> Integer[]{1,2}));
+	 *    <jsm>assertMap</jsm>(<jv>mapWithArrays</jv>, <js>"a={b=[1,2]}"</js>);
+	 * </p>
+	 *
+	 * @param actual The Map to test. Must not be null.
+	 * @param expected Multiple arguments of expected map entries.
+	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
+	 * @throws AssertionError if the Map size or contents don't match expected values
+	 * @see BctAssertions#assertMap(Map, Object...)
+	 */
+	public static void assertMap(Map<?,?> actual, Object...expected) {
+		BctAssertions.assertMap(actual, expected);
+	}
+
+	/**
 	 * Asserts an object matches the expected string after it's been made {@link Utils#r readable}.
 	 */
 	public static void assertContains(String expected, Object actual) {
@@ -472,7 +504,7 @@ public class TestUtils extends Utils2 {
 	 * Asserts the JSON5 representation of the specified object.
 	 */
 	public static void assertJson(String expected, Object value) {
-		assertEquals(expected, Json5.DEFAULT.write(value));
+		assertEquals(expected, Json5.DEFAULT_SORTED.write(value));
 	}
 
 	/**
@@ -807,7 +839,15 @@ public class TestUtils extends Utils2 {
 	}
 
 	public static String json(Object o) {
-		return Json5.DEFAULT.write(o);
+		return Json5.DEFAULT_SORTED.write(o);
+	}
+
+	public static <T> T json(String o, Class<T> c) {
+		return safe(()->Json5.DEFAULT_SORTED.read(o, c));
+	}
+
+	public static <T> T jsonRoundTrip(T o, Class<T> c) {
+		return json(json(o), c);
 	}
 
 	/**
@@ -871,5 +911,116 @@ public class TestUtils extends Utils2 {
 		s = s.copy().ws().ns().addNamespaceUrisToRoot().build();
 		var xml = s.serialize(o);
 		checkXmlWhitespace(xml);
+	}
+
+	public static final <T> BeanTester<T> testBean(T bean) {
+		return (BeanTester<T>) new BeanTester<>().bean(bean);
+	}
+
+	/**
+	 * Extracts HTML/XML elements from a string based on element name and attributes.
+	 *
+	 * <p>Uses a depth-tracking parser to handle nested elements correctly, even with malformed HTML.</p>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <pre>
+	 * // Extract all div elements with class='tag-block'
+	 * List&lt;String&gt; blocks = extractXml(html, "div", Map.of("class", "tag-block"));
+	 *
+	 * // Extract all span elements (no attribute filtering)
+	 * List&lt;String&gt; spans = extractXml(html, "span", null);
+	 *
+	 * // Extract divs with multiple attributes
+	 * List&lt;String&gt; divs = extractXml(html, "div", Map.of("class", "header", "id", "main"));
+	 * </pre>
+	 *
+	 * @param html The HTML/XML content to parse
+	 * @param elementName The element name to extract (e.g., "div", "span")
+	 * @param withAttributes Optional map of attribute name/value pairs that must match.
+	 *                       Pass null or empty map to match all elements of the given name.
+	 * @return List of HTML content strings (inner content of matching elements)
+	 */
+	public static List<String> extractXml(String html, String elementName, Map<String,String> withAttributes) {
+		List<String> results = new ArrayList<>();
+
+		if (html == null || elementName == null) {
+			return results;
+		}
+
+		// Find all opening tags of the specified element
+		String openTag = "<" + elementName;
+		int searchPos = 0;
+
+		while ((searchPos = html.indexOf(openTag, searchPos)) != -1) {
+			// Find the end of the opening tag
+			int tagEnd = html.indexOf('>', searchPos);
+			if (tagEnd == -1) break;
+
+			String fullOpenTag = html.substring(searchPos, tagEnd + 1);
+
+			// Check if attributes match
+			boolean matches = true;
+			if (withAttributes != null && !withAttributes.isEmpty()) {
+				for (Map.Entry<String, String> entry : withAttributes.entrySet()) {
+					String attrName = entry.getKey();
+					String attrValue = entry.getValue();
+
+					// Look for attribute in the tag (handle both single and double quotes)
+					String pattern1 = attrName + "=\"" + attrValue + "\"";
+					String pattern2 = attrName + "='" + attrValue + "'";
+
+
+					if (!fullOpenTag.contains(pattern1) && !fullOpenTag.contains(pattern2)) {
+						matches = false;
+						break;
+					}
+				}
+			}
+
+			if (matches) {
+				// Find matching closing tag by tracking depth
+				int contentStart = tagEnd + 1;
+				int depth = 1;
+				int pos = contentStart;
+
+				while (pos < html.length() && depth > 0) {
+					// Look for next opening or closing tag of same element
+					int nextOpen = html.indexOf("<" + elementName, pos);
+					int nextClose = html.indexOf("</" + elementName + ">", pos);
+
+					// Validate that nextOpen is actually an opening tag
+					if (nextOpen != -1 && (nextOpen < nextClose || nextClose == -1)) {
+						if (nextOpen + elementName.length() + 1 < html.length()) {
+							char nextChar = html.charAt(nextOpen + elementName.length() + 1);
+							if (nextChar == ' ' || nextChar == '>' || nextChar == '/') {
+								depth++;
+								pos = nextOpen + elementName.length() + 1;
+								continue;
+							}
+						}
+						// Not a valid opening tag, skip it
+						pos = nextOpen + 1;
+						continue;
+					}
+
+					if (nextClose != -1) {
+						depth--;
+						if (depth == 0) {
+							// Found matching close tag
+							results.add(html.substring(contentStart, nextClose));
+							break;
+						}
+						pos = nextClose + elementName.length() + 3;
+					} else {
+						// No more closing tags
+						break;
+					}
+				}
+			}
+
+			searchPos = tagEnd + 1;
+		}
+
+		return results;
 	}
 }

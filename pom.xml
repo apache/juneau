@@ -275,25 +275,7 @@
 					<aggregate>true</aggregate>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${jacoco.plugin.version}</version>
-				<configuration>
-					<excludes>
-						<exclude>**/doc/**/*</exclude>
-						<exclude>**/examples/**/*</exclude>
-					</excludes>
-					<fileSets>
-						<fileSet implementation="org.apache.maven.shared.model.fileset.FileSet">
-							<directory>${project.parent.build.directory}</directory>
-							<includes>
-								<include>**/*.exec</include>
-							</includes>
-						</fileSet>
-					</fileSets>
-				</configuration>
-			</plugin>
+			<!-- JaCoCo aggregate report is generated in juneau-utest module -->
 		</plugins>
 	</reporting>
 

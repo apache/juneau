@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -19,14 +20,47 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
- * TODO
+ * Describes a single request body.
+ *
+ * <p>
+ * The Request Body Object describes a single request body that can be sent to an API operation. It includes 
+ * a description, whether the request body is required, and the content (media types) that the request body can contain.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Request Body Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>description</c> (string) - A brief description of the request body (CommonMark syntax may be used)
+ * 	<li><c>content</c> (map of {@link MediaType}, REQUIRED) - The content of the request body (keys are media types)
+ * 	<li><c>required</c> (boolean) - Determines if the request body is required in the request (default is <jk>false</jk>)
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create a request body for JSON content</jc>
+ * 	RequestBodyInfo <jv>requestBody</jv> = <jk>new</jk> RequestBodyInfo()
+ * 		.setDescription(<js>"Pet object that needs to be added to the store"</js>)
+ * 		.setRequired(<jk>true</jk>)
+ * 		.setContent(
+ * 			JsonMap.<jsm>of</jsm>(
+ * 				<js>"application/json"</js>, <jk>new</jk> MediaType()
+ * 					.setSchema(
+ * 						<jk>new</jk> SchemaInfo().setRef(<js>"#/components/schemas/Pet"</js>)
+ * 					)
+ * 			)
+ * 		);
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#request-body-object">OpenAPI Specification &gt; Request Body Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/describing-request-body/">OpenAPI Describing Request Body</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="description,content,required,*")
 @FluentSetters
 public class RequestBodyInfo extends OpenApiElement{
 
@@ -64,6 +98,12 @@ public class RequestBodyInfo extends OpenApiElement{
 	@Override /* OpenApiElement */
 	protected RequestBodyInfo strict() {
 		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public RequestBodyInfo strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 
@@ -113,6 +153,7 @@ public class RequestBodyInfo extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public RequestBodyInfo setContent(Map<String, MediaType> value) {
@@ -123,13 +164,16 @@ public class RequestBodyInfo extends OpenApiElement{
 	/**
 	 * Adds one or more values to the <property>content</property> property.
 	 *
-	 * @param key The mapping key.
+	 * @param key The mapping key.  Must not be <jk>null</jk>.
 	 * @param value
 	 * 	The values to add to this property.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object
 	 */
 	public RequestBodyInfo addContent(String key, MediaType value) {
+		assertArgNotNull("key", key);
+		assertArgNotNull("value", value);
 		content = mapBuilder(content).sparse().add(key, value).build();
 		return this;
 	}
@@ -155,7 +199,7 @@ public class RequestBodyInfo extends OpenApiElement{
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public RequestBodyInfo setRequired(Boolean value) {
@@ -169,8 +213,7 @@ public class RequestBodyInfo extends OpenApiElement{
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> toType(getDescription(), type);
 			case "content" -> toType(getContent(), type);
@@ -181,11 +224,10 @@ public class RequestBodyInfo extends OpenApiElement{
 
 	@Override /* OpenApiElement */
 	public RequestBodyInfo set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
-			case "description" -> setDescription(Utils.s(value));
 			case "content" -> setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
+			case "description" -> setDescription(Utils.s(value));
 			case "required" -> setRequired(toBoolean(value));
 			default -> {
 				super.set(property, value);
@@ -197,8 +239,8 @@ public class RequestBodyInfo extends OpenApiElement{
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
-			.addIf(description != null, "description")
 			.addIf(content != null, "content")
+			.addIf(description != null, "description")
 			.addIf(required != null, "required")
 			.build();
 		return new MultiSet<>(s, super.keySet());

@@ -12,21 +12,34 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.swagger;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
- * The object provides metadata about the API.
+ * Provides metadata about the API.
  *
  * <p>
- * The metadata can be used by the clients if needed, and can be presented
- * in the Swagger-UI for convenience.
+ * The Info Object provides metadata about the API for Swagger 2.0. The metadata can be used by the clients if needed, 
+ * and can be presented in the Swagger-UI for convenience. This includes the title, version, description, terms of service, 
+ * contact information, and license.
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The Info Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>title</c> (string, REQUIRED) - The title of the API
+ * 	<li><c>version</c> (string, REQUIRED) - The version of the OpenAPI document (not the API itself)
+ * 	<li><c>description</c> (string) - A short description of the API
+ * 	<li><c>termsOfService</c> (string) - A URL to the Terms of Service for the API
+ * 	<li><c>contact</c> ({@link Contact}) - Contact information for the exposed API
+ * 	<li><c>license</c> ({@link License}) - License information for the exposed API
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -42,7 +55,7 @@ import org.apache.juneau.internal.*;
  * 		);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>info</jv>);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>info</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>info</jv>.toString();
@@ -67,10 +80,11 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#info-object">Swagger 2.0 Specification &gt; Info Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/api-general-info/">Swagger API General Info</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
-@Bean(properties="siteName,title,description,version,contact,license,termsOfService,*")
 @FluentSetters
 public class Info extends SwaggerElement {
 
@@ -223,6 +237,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Info setSiteName(String value) {
@@ -278,6 +293,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Info setTitle(String value) {
@@ -306,6 +322,7 @@ public class Info extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public Info setVersion(String value) {
@@ -319,8 +336,7 @@ public class Info extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "contact" -> toType(getContact(), type);
 			case "description" -> toType(getDescription(), type);
@@ -335,8 +351,7 @@ public class Info extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Info set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "contact" -> setContact(toType(value, Contact.class));
 			case "description" -> setDescription(Utils.s(value));
@@ -365,4 +380,31 @@ public class Info extends SwaggerElement {
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @return This object.
+	 */
+	@Override
+	public Info strict() {
+		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public Info strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
 }

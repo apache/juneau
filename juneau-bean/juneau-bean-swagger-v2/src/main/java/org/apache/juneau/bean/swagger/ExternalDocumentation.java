@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.swagger;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -19,12 +20,24 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Allows referencing an external resource for extended documentation.
+ *
+ * <p>
+ * The External Documentation Object allows referencing an external resource for extended documentation in Swagger 2.0. 
+ * This can be used to provide additional documentation that is not part of the main Swagger specification, such as 
+ * detailed guides, tutorials, or API documentation hosted elsewhere.
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The External Documentation Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>description</c> (string) - A short description of the target documentation
+ * 	<li><c>url</c> (string, REQUIRED) - The URL for the target documentation
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -32,7 +45,7 @@ import org.apache.juneau.internal.*;
  * 	ExternalDocumentation <jv>extDoc</jv> = <jsm>externalDocumentation</jsm>(<js>"https://swagger.io"</js>, <js>"Find more info here"</js>);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>extDoc</jv>);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>extDoc</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>extDoc</jv>.toString();
@@ -46,10 +59,11 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#external-documentation-object">Swagger 2.0 Specification &gt; External Documentation Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/external-documentation/">Swagger External Documentation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
-@Bean(properties="description,url,*")
 @FluentSetters
 public class ExternalDocumentation extends SwaggerElement {
 
@@ -137,6 +151,7 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ExternalDocumentation setUrl(URI value) {
@@ -150,8 +165,7 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> toType(getDescription(), type);
 			case "url" -> toType(getUrl(), type);
@@ -161,8 +175,7 @@ public class ExternalDocumentation extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public ExternalDocumentation set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> setDescription(Utils.s(value));
 			case "url" -> setUrl(StringUtils.toURI(value));
@@ -181,4 +194,31 @@ public class ExternalDocumentation extends SwaggerElement {
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @return This object.
+	 */
+	@Override
+	public ExternalDocumentation strict() {
+		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public ExternalDocumentation strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
 }

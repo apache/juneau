@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.swagger;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.contains;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.copyOf;
@@ -20,7 +21,6 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
@@ -29,10 +29,34 @@ import org.apache.juneau.marshaller.*;
  * Describes a single operation parameter.
  *
  * <p>
- * A unique parameter is defined by a combination of a name and location.
+ * The Parameter Object describes a single parameter used in a Swagger 2.0 API operation. A unique parameter is 
+ * defined by a combination of a name and location (in). Parameters can be passed in various locations including 
+ * the path, query string, headers, body, or form data.
+ *
+ * <h5 class='section'>Swagger Specification:</h5>
+ * <p>
+ * The Parameter Object supports the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>name</c> (string, REQUIRED) - The name of the parameter
+ * 	<li><c>in</c> (string, REQUIRED) - The location of the parameter. Possible values: <js>"path"</js>, <js>"query"</js>, <js>"header"</js>, <js>"body"</js>, or <js>"formData"</js>
+ * 	<li><c>description</c> (string) - A brief description of the parameter
+ * 	<li><c>required</c> (boolean) - Determines whether this parameter is mandatory (must be <jk>true</jk> if <c>in</c> is <js>"path"</js>)
+ * 	<li><c>schema</c> ({@link SchemaInfo}) - The schema defining the type used for the body parameter (only if <c>in</c> is <js>"body"</js>)
+ * 	<li><c>type</c> (string) - The type of the parameter (for non-body parameters). Values: <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, <js>"array"</js>, <js>"file"</js>
+ * 	<li><c>format</c> (string) - The format modifier (e.g., <js>"int32"</js>, <js>"int64"</js>, <js>"float"</js>, <js>"double"</js>, <js>"date"</js>, <js>"date-time"</js>)
+ * 	<li><c>allowEmptyValue</c> (boolean) - Sets the ability to pass empty-valued parameters (valid only for <js>"query"</js> or <js>"formData"</js> parameters)
+ * 	<li><c>items</c> ({@link Items}) - Required if type is <js>"array"</js>. Describes the type of items in the array
+ * 	<li><c>collectionFormat</c> (string) - How multiple values are formatted. Values: <js>"csv"</js>, <js>"ssv"</js>, <js>"tsv"</js>, <js>"pipes"</js>, <js>"multi"</js>
+ * 	<li><c>default</c> (any) - The default value
+ * 	<li><c>maximum</c> (number), <c>exclusiveMaximum</c> (boolean), <c>minimum</c> (number), <c>exclusiveMinimum</c> (boolean) - Numeric constraints
+ * 	<li><c>maxLength</c> (integer), <c>minLength</c> (integer), <c>pattern</c> (string) - String constraints
+ * 	<li><c>maxItems</c> (integer), <c>minItems</c> (integer), <c>uniqueItems</c> (boolean) - Array constraints
+ * 	<li><c>enum</c> (array) - Possible values for this parameter
+ * 	<li><c>multipleOf</c> (number) - Must be a multiple of this value
+ * </ul>
  *
  * <p>
- * There are five possible parameter types.
+ * There are five possible parameter types (determined by the <c>in</c> field):
  * <ul class='spaced-list'>
  * 	<li><js>"path"</js> - Used together with Path Templating, where the parameter value is actually part of the
  * 		operation's URL.
@@ -75,7 +99,7 @@ import org.apache.juneau.marshaller.*;
  * 	ParameterInfo <jv>info</jv> = <jsm>parameterInfo</jsm>(<js>"query"</js>, <js>"foo"</js>);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>info</jv>);
+ * 	String <jv>json</jv> = Json.<jsm>from</jsm>(<jv>info</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>info</jv>.toString();
@@ -89,10 +113,11 @@ import org.apache.juneau.marshaller.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameter-object">Swagger 2.0 Specification &gt; Parameter Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/describing-parameters/">Swagger Describing Parameters</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
  * </ul>
  */
-@Bean(properties="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,*")
 @FluentSetters
 public class ParameterInfo extends SwaggerElement {
 
@@ -181,8 +206,23 @@ public class ParameterInfo extends SwaggerElement {
 	}
 
 	@Override /* SwaggerElement */
-	protected ParameterInfo strict() {
+	public ParameterInfo strict() {
 		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public ParameterInfo strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 
@@ -356,6 +396,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
 	 *
 	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setDefault(Object value) {
@@ -453,6 +494,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
 	 *
 	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setExclusiveMaximum(Boolean value) {
@@ -473,6 +515,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
 	 *
 	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setExclusiveMinimum(Boolean value) {
@@ -499,6 +542,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * The extending format for the previously mentioned type.
 	 *
 	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setFormat(String value) {
@@ -535,6 +579,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		<li><js>"body"</js>
 	 * 	</ul>
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setIn(String value) {
@@ -591,6 +636,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>maximum</property>.
 	 *
 	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setMaximum(Number value) {
@@ -611,6 +657,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>maxItems</property>.
 	 *
 	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setMaxItems(Integer value) {
@@ -632,6 +679,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>maxLength</property>.
 	 *
 	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setMaxLength(Integer value) {
@@ -652,6 +700,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>minimum</property>.
 	 *
 	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setMinimum(Number value) {
@@ -672,6 +721,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>minItems</property>.
 	 *
 	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setMinItems(Integer value) {
@@ -692,6 +742,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>minLength</property>.
 	 *
 	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setMinLength(Integer value) {
@@ -752,6 +803,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setName(String value) {
@@ -775,6 +827,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>This string SHOULD be a valid regular expression.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setPattern(String value) {
@@ -833,6 +886,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setSchema(SchemaInfo value) {
@@ -872,6 +926,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>If type is <js>"file"</js>, the <c>consumes</c> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
 	 * 		or both and the parameter MUST be <c>in</c> <js>"formData"</js>.
 	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
 	public ParameterInfo setType(String value) {
@@ -887,6 +942,7 @@ public class ParameterInfo extends SwaggerElement {
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getUniqueItems() {
@@ -910,8 +966,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "allowEmptyValue" -> toType(getAllowEmptyValue(), type);
 			case "collectionFormat" -> toType(getCollectionFormat(), type);
@@ -942,8 +997,7 @@ public class ParameterInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public ParameterInfo set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
 			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
@@ -1030,4 +1084,5 @@ public class ParameterInfo extends SwaggerElement {
 
 		return this;
 	}
+
 }

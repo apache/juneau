@@ -13,103 +13,222 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link ExternalDocumentation}.
  */
-class ExternalDocumentation_Test extends SimpleTestBase {
+class ExternalDocumentation_Test extends TestBase {
 
-	/**
-	 * Test method for getters and setters.
-	 */
-	@Test void a01_gettersAndSetters() {
-		var t = new ExternalDocumentation();
+	@Nested class A_basicTests extends TestBase {
 
-		// General - Combined assertBean test
-		assertBean(
-			t.setDescription("a").setUrl(URI.create("http://b")),
-			"description,url",
-			"a,http://b"
-		);
+		private static final BeanTester<ExternalDocumentation> TESTER =
+			testBean(
+				bean()
+					.setDescription("a")
+					.setUrl(URI.create("b"))
+			)
+			.props("description,url")
+			.vals("a,b")
+			.json("{description:'a',url:'b'}")
+			.string("{'description':'a','url':'b'}".replace('\'', '"'))
+		;
 
-		// Null cases
-		assertBean(
-			t.setDescription(null),
-			"description",
-			"<null>"
-		);
+		@Test void a01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void a02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void a03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void a04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void a05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void a06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void a07_keySet() {
+			assertList(TESTER.bean().keySet(), "description", "url");
+		}
 	}
 
-	/**
-	 * Test method for {@link ExternalDocumentation#set(java.lang.String, java.lang.Object)}.
-	 */
-	@Test void b01_set() {
-		var t = new ExternalDocumentation();
+	@Nested class B_emptyTests extends TestBase {
 
-		t
-			.set("description", "a")
-			.set("url", "b")
-			.set("$ref", "c");
+		private static final BeanTester<ExternalDocumentation> TESTER =
+			testBean(bean())
+			.props("description,url")
+			.vals("<null>,<null>")
+			.json("{}")
+			.string("{}")
+		;
 
-		assertBean(t, "description,url,$ref", "a,b,c");
+		@Test void b01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
 
-		t
-			.set("description", Utils.sb("a2"))
-			.set("url", Utils.sb("b2"))
-			.set("$ref", Utils.sb("c2"));
+		@Test void b02_copy() {
+			TESTER.assertCopy();
+		}
 
-		assertBean(t, "description,url,$ref", "a2,b2,c2");
+		@Test void b03_toJson() {
+			TESTER.assertToJson();
+		}
 
-		assertMapped(
-			t, (obj,prop) -> obj.get(prop, String.class),
-			"description,url,$ref",
-			"a2,b2,c2"
-		);
+		@Test void b04_fromJson() {
+			TESTER.assertFromJson();
+		}
 
-		t.set("null", null).set(null, "null");
-		assertNull(t.get("null", Object.class));
-		assertNull(t.get(null, Object.class));
-		assertNull(t.get("foo", Object.class));
+		@Test void b05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void b06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void b07_keySet() {
+			assertEmpty(TESTER.bean().keySet());
+		}
 	}
 
-	@Test void b02_roundTripJson() {
-		assertBean(JsonParser.DEFAULT.parse("{description:'a',url:'b','$ref':'c'}", ExternalDocumentation.class), "description,url,$ref", "a,b,c");
+	@Nested class C_extraProperties extends TestBase {
+
+		private static final BeanTester<ExternalDocumentation> TESTER =
+			testBean(
+				bean()
+					.set("description", "a")
+					.set("url", URI.create("b"))
+					.set("x1", "x1a")
+					.set("x2", null)
+			)
+			.props("description,url,x1,x2")
+			.vals("a,b,x1a,<null>")
+			.json("{description:'a',url:'b',x1:'x1a'}")
+			.string("{'description':'a','url':'b','x1':'x1a'}".replace('\'', '"'))
+		;
+
+		@Test void c01_gettersAndSetters() {
+			TESTER.assertGettersAndSetters();
+		}
+
+		@Test void c02_copy() {
+			TESTER.assertCopy();
+		}
+
+		@Test void c03_toJson() {
+			TESTER.assertToJson();
+		}
+
+		@Test void c04_fromJson() {
+			TESTER.assertFromJson();
+		}
+
+		@Test void c05_roundTrip() {
+			TESTER.assertRoundTrip();
+		}
+
+		@Test void c06_toString() {
+			TESTER.assertToString();
+		}
+
+		@Test void c07_keySet() {
+			assertList(TESTER.bean().keySet(), "description", "url", "x1", "x2");
+		}
+
+		@Test void c08_get() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> obj.get(prop, Object.class),
+				"description,url,x1,x2",
+				"a,b,x1a,<null>"
+			);
+		}
+
+		@Test void c09_getTypes() {
+			assertMapped(
+				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				"description,url,x1,x2",
+				"String,URI,String,<null>"
+			);
+		}
+
+		@Test void c10_nullPropertyValue() {
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
+			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
+		}
 	}
 
-	@Test void b03_copy() {
-		var t = new ExternalDocumentation();
+	@Nested class D_additionalMethods extends TestBase {
 
-		t = t.copy();
+		@Test void d01_asMap() {
+			assertBean(
+				bean()
+					.setDescription("a")
+					.setUrl(URI.create("b"))
+					.set("x1", "x1a")
+					.asMap(),
+				"description,url,x1",
+				"a,b,x1a"
+			);
+		}
 
-		assertBean(t, "description,url", "<null>,<null>");
+		@Test void d02_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
 
-		t
-			.set("description", "a")
-			.set("url", "b")
-			.set("$ref", "c")
-			.copy();
-
-		assertBean(t, "description,url,$ref", "a,b,c");
+		@Test void d03_strict() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+		}
 	}
 
-	@Test void b04_keySet() {
-		var t = new ExternalDocumentation();
+	@Nested class E_strictMode extends TestBase {
 
-		assertEmpty(t.keySet());
+		@Test void e01_strictModeSetThrowsException() {
+			var x = bean().strict();
+			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
+		}
 
-		t
-			.set("description", "foo")
-			.set("url", "bar")
-			.set("$ref", "baz");
+		@Test void e02_nonStrictModeAllowsSet() {
+			var x = bean(); // not strict
+			assertDoesNotThrow(() -> x.set("foo", "bar"));
+		}
 
-		assertList(t.keySet(), "$ref", "description", "url");
+		@Test void e03_strictModeToggle() {
+			var x = bean();
+			assertFalse(x.isStrict());
+			x.strict();
+			assertTrue(x.isStrict());
+			x.strict(false);
+			assertFalse(x.isStrict());
+		}
+	}
+
+	//---------------------------------------------------------------------------------------------
+	// Helper methods
+	//---------------------------------------------------------------------------------------------
+
+	private static ExternalDocumentation bean() {
+		return externalDocumentation();
 	}
 }

@@ -46,6 +46,9 @@ public class Json5Serializer extends JsonSerializer {
 	/** Default serializer, single quotes, {@link JsonSerializer.Builder#simpleAttrs() simple mode}. */
 	public static final Json5Serializer DEFAULT = new Json5Serializer(create());
 
+	/** Default serializer, single quotes, {@link JsonSerializer.Builder#simpleAttrs() simple mode}, sorted bean properties. */
+	public static final Json5Serializer DEFAULT_SORTED = new Json5Serializer(create().sortProperties());
+
 	/** Default serializer, single quotes, simple mode, with whitespace. */
 	public static final Json5Serializer DEFAULT_READABLE = new Readable(create());
 

@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -27,7 +28,7 @@ import org.junit.jupiter.api.*;
 class Swappers_Test extends TestBase {
 
 	@Nested
-	class a_OptionalSwapper {
+	class A_optionalSwapper extends TestBase {
 
 		@Test
 		void a01_swapPresentOptional() {
@@ -68,7 +69,7 @@ class Swappers_Test extends TestBase {
 	}
 
 	@Nested
-	class b_SupplierSwapper {
+	class B_supplierSwapper extends TestBase {
 
 		@Test
 		void b01_swapSupplierWithValue() {
@@ -115,7 +116,7 @@ class Swappers_Test extends TestBase {
 	}
 
 	@Nested
-	class c_FutureSwapper {
+	class C_futureSwapper extends TestBase {
 
 		@Test
 		void c01_swapCompletedFuture() {
@@ -190,7 +191,7 @@ class Swappers_Test extends TestBase {
 	}
 
 	@Nested
-	class d_Integration {
+	class D_integration extends TestBase {
 
 		@Test
 		void d01_useInBasicBeanConverter() {

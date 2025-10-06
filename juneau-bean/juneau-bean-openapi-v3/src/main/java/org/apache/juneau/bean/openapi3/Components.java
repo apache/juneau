@@ -12,21 +12,71 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Holds a set of reusable objects for different aspects of the OAS.
+ * Holds a set of reusable objects for different aspects of the OpenAPI Specification.
+ *
+ * <p>
+ * The Components Object holds a set of reusable objects that can be referenced from other parts of the API specification.
+ * This promotes reusability and reduces duplication by allowing common schemas, responses, parameters, and other objects
+ * to be defined once and referenced multiple times using the <c>$ref</c> syntax.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The Components Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>schemas</c> (map of {@link SchemaInfo}) - Reusable schema definitions
+ * 	<li><c>responses</c> (map of {@link Response}) - Reusable response definitions
+ * 	<li><c>parameters</c> (map of {@link Parameter}) - Reusable parameter definitions
+ * 	<li><c>examples</c> (map of {@link Example}) - Reusable example definitions
+ * 	<li><c>requestBodies</c> (map of {@link RequestBodyInfo}) - Reusable request body definitions
+ * 	<li><c>headers</c> (map of {@link HeaderInfo}) - Reusable header definitions
+ * 	<li><c>securitySchemes</c> (map of {@link SecuritySchemeInfo}) - Reusable security scheme definitions
+ * 	<li><c>links</c> (map of {@link Link}) - Reusable link definitions
+ * 	<li><c>callbacks</c> (map of {@link Callback}) - Reusable callback definitions
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create a Components object with reusable schemas</jc>
+ * 	Components <jv>components</jv> = <jk>new</jk> Components()
+ * 		.setSchemas(
+ * 			JsonMap.<jsm>of</jsm>(
+ * 				<js>"Pet"</js>, <jk>new</jk> SchemaInfo()
+ * 					.setType(<js>"object"</js>)
+ * 					.setRequired(<js>"id"</js>, <js>"name"</js>)
+ * 					.setProperties(
+ * 						JsonMap.<jsm>of</jsm>(
+ * 							<js>"id"</js>, <jk>new</jk> SchemaInfo().setType(<js>"integer"</js>),
+ * 							<js>"name"</js>, <jk>new</jk> SchemaInfo().setType(<js>"string"</js>)
+ * 						)
+ * 					),
+ * 				<js>"Error"</js>, <jk>new</jk> SchemaInfo()
+ * 					.setType(<js>"object"</js>)
+ * 					.setProperties(
+ * 						JsonMap.<jsm>of</jsm>(
+ * 							<js>"code"</js>, <jk>new</jk> SchemaInfo().setType(<js>"integer"</js>),
+ * 							<js>"message"</js>, <jk>new</jk> SchemaInfo().setType(<js>"string"</js>)
+ * 						)
+ * 					)
+ * 			)
+ * 		);
+ * 	<jc>// These schemas can then be referenced: "#/components/schemas/Pet"</jc>
+ * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.OpenApi">Overview &gt; juneau-rest-server &gt; OpenAPI</a>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#components-object">OpenAPI Specification &gt; Components Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/components/">OpenAPI Components</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
  * </ul>
  */
-@Bean(properties="schemas,responses,parameters,examples,requestBodies,headers,securitySchemes,links,callbacks,*")
 @FluentSetters
 public class Components extends OpenApiElement {
 
@@ -242,4 +292,82 @@ public class Components extends OpenApiElement {
 		this.callbacks = value;
 		return this;
 	}
+
+	/**
+	 * Creates a copy of this object.
+	 *
+	 * @return A copy of this object.
+	 */
+	public Components copy() {
+		return new Components(this);
+	}
+
+	@Override /* OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "schemas" -> toType(getSchemas(), type);
+			case "responses" -> toType(getResponses(), type);
+			case "parameters" -> toType(getParameters(), type);
+			case "examples" -> toType(getExamples(), type);
+			case "requestBodies" -> toType(getRequestBodies(), type);
+			case "headers" -> toType(getHeaders(), type);
+			case "securitySchemes" -> toType(getSecuritySchemes(), type);
+			case "links" -> toType(getLinks(), type);
+			case "callbacks" -> toType(getCallbacks(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	@Override /* OpenApiElement */
+	public Components set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "callbacks" -> setCallbacks(mapBuilder(String.class, Callback.class).sparse().addAny(value).build());
+			case "examples" -> setExamples(mapBuilder(String.class, Example.class).sparse().addAny(value).build());
+			case "headers" -> setHeaders(mapBuilder(String.class, HeaderInfo.class).sparse().addAny(value).build());
+			case "links" -> setLinks(mapBuilder(String.class, Link.class).sparse().addAny(value).build());
+			case "parameters" -> setParameters(mapBuilder(String.class, Parameter.class).sparse().addAny(value).build());
+			case "requestBodies" -> setRequestBodies(mapBuilder(String.class, RequestBodyInfo.class).sparse().addAny(value).build());
+			case "responses" -> setResponses(mapBuilder(String.class, Response.class).sparse().addAny(value).build());
+			case "schemas" -> setSchemas(mapBuilder(String.class, SchemaInfo.class).sparse().addAny(value).build());
+			case "securitySchemes" -> setSecuritySchemes(mapBuilder(String.class, SecuritySchemeInfo.class).sparse().addAny(value).build());
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	@Override /* OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(callbacks != null, "callbacks")
+			.addIf(examples != null, "examples")
+			.addIf(headers != null, "headers")
+			.addIf(links != null, "links")
+			.addIf(parameters != null, "parameters")
+			.addIf(requestBodies != null, "requestBodies")
+			.addIf(responses != null, "responses")
+			.addIf(schemas != null, "schemas")
+			.addIf(securitySchemes != null, "securitySchemes")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public Components strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public Components strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

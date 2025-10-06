@@ -18,6 +18,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -33,7 +34,7 @@ class Swapper_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class a_FunctionalInterfaceCompliance {
+	class A_functionalInterfaceCompliance extends TestBase {
 
 		@SuppressWarnings("cast")
 		@Test
@@ -85,7 +86,7 @@ class Swapper_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class b_LambdaComposition {
+	class B_lambdaComposition extends TestBase {
 
 		@Test
 		void b01_andThenComposition() {
@@ -121,7 +122,7 @@ class Swapper_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class c_EdgeCases {
+	class C_edgeCases extends TestBase {
 
 		@Test
 		void c01_nullInputHandling() {
@@ -189,7 +190,7 @@ class Swapper_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class d_TypeSpecific {
+	class D_typeSpecific extends TestBase {
 
 		@Test
 		void d01_optionalSwapping() {
@@ -280,7 +281,7 @@ class Swapper_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class e_Integration {
+	class E_integration extends TestBase {
 
 		@Test
 		void e01_converterIntegration() {
@@ -382,7 +383,7 @@ class Swapper_Test extends TestBase {
 	// ====================================================================================================
 
 	@Nested
-	class f_Performance {
+	class F_performance extends TestBase {
 
 		@Test
 		void f01_simpleSwapperPerformance() {

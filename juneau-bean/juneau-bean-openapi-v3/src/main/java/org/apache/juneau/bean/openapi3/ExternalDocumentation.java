@@ -13,6 +13,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -20,14 +21,39 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Allows referencing an external resource for extended documentation.
+ *
+ * <p>
+ * The External Documentation Object allows referencing an external resource for extended documentation. This can be 
+ * used to provide additional documentation that is not part of the main OpenAPI specification, such as detailed 
+ * guides, tutorials, or API documentation hosted elsewhere.
+ *
+ * <h5 class='section'>OpenAPI Specification:</h5>
+ * <p>
+ * The External Documentation Object is composed of the following fields:
+ * <ul class='spaced-list'>
+ * 	<li><c>description</c> (string) - A short description of the target documentation (CommonMark syntax may be used)
+ * 	<li><c>url</c> (string, REQUIRED) - The URL for the target documentation
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create external documentation reference</jc>
+ * 	ExternalDocumentation <jv>docs</jv> = <jk>new</jk> ExternalDocumentation()
+ * 		.setDescription(<js>"Find more info here"</js>)
+ * 		.setUrl(<js>"https://example.com"</js>);
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#external-documentation-object">OpenAPI Specification &gt; External Documentation Object</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/external-documentation/">OpenAPI External Documentation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * </ul>
  */
-@Bean(properties="description,url,*")
 @FluentSetters
 public class ExternalDocumentation extends OpenApiElement {
 
@@ -110,6 +136,7 @@ public class ExternalDocumentation extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
 	public ExternalDocumentation setUrl(URI value) {
@@ -123,8 +150,7 @@ public class ExternalDocumentation extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
-		if (property == null)
-			return null;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> toType(getDescription(), type);
 			case "url" -> toType(getUrl(), type);
@@ -134,8 +160,7 @@ public class ExternalDocumentation extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public ExternalDocumentation set(String property, Object value) {
-		if (property == null)
-			return this;
+		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> setDescription(Utils.s(value));
 			case "url" -> setUrl(toURI(value));
@@ -154,4 +179,20 @@ public class ExternalDocumentation extends OpenApiElement {
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - do not modify */
+	public ExternalDocumentation strict() {
+		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - do not modify */
+	public ExternalDocumentation strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }
