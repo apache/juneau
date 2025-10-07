@@ -25,14 +25,16 @@ on:
       - 'juneau-bean/**'
       - 'juneau-examples/**'
       - '.github/workflows/deploy-docs.yml'
+  workflow_dispatch: 
 
 permissions:
   contents: write  # Need write access to push to asf-staging
 
 jobs:
-  deploy:
+  build-docs:
     runs-on: ubuntu-latest
-    
+    if: github.ref == 'refs/heads/master'
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -80,3 +82,22 @@ jobs:
         user_name: 'github-actions[bot]'
         user_email: 'github-actions[bot]@users.noreply.github.com'
         commit_message: 'Deploy documentation staging from ${{ github.sha }}'
+
+  promote-docs:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Promote staging → site
+        run: |
+          git fetch origin asf-staging
+          git switch --detach origin/asf-staging
+          git push origin HEAD:asf-site
