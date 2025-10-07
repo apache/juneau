@@ -48,386 +48,386 @@ public class Nav extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Nav _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Nav accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Nav contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav dir(String dir) {
-		super.dir(dir);
+	public Nav dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav hidden(Object hidden) {
-		super.hidden(hidden);
+	public Nav hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav id(String id) {
-		super.id(id);
+	public Nav id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav lang(String lang) {
-		super.lang(lang);
+	public Nav lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onabort(String onabort) {
-		super.onabort(onabort);
+	public Nav onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onblur(String onblur) {
-		super.onblur(onblur);
+	public Nav onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Nav oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Nav oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Nav oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onchange(String onchange) {
-		super.onchange(onchange);
+	public Nav onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onclick(String onclick) {
-		super.onclick(onclick);
+	public Nav onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Nav oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Nav ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Nav ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Nav onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onended(String onended) {
-		super.onended(onended);
+	public Nav onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onerror(String onerror) {
-		super.onerror(onerror);
+	public Nav onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Nav onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav oninput(String oninput) {
-		super.oninput(oninput);
+	public Nav oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Nav oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Nav onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Nav onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Nav onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onload(String onload) {
-		super.onload(onload);
+	public Nav onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Nav onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Nav onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Nav onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Nav onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Nav onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Nav onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Nav onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Nav onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Nav onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Nav onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Nav onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onpause(String onpause) {
-		super.onpause(onpause);
+	public Nav onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onplay(String onplay) {
-		super.onplay(onplay);
+	public Nav onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Nav onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Nav onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Nav onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onreset(String onreset) {
-		super.onreset(onreset);
+	public Nav onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onresize(String onresize) {
-		super.onresize(onresize);
+	public Nav onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Nav onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Nav onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Nav onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onselect(String onselect) {
-		super.onselect(onselect);
+	public Nav onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onshow(String onshow) {
-		super.onshow(onshow);
+	public Nav onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Nav onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Nav onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Nav onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Nav ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Nav ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Nav onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Nav onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Nav spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav style(String style) {
-		super.style(style);
+	public Nav style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Nav tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav title(String title) {
-		super.title(title);
+	public Nav title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Nav translate(Object translate) {
-		super.translate(translate);
+	public Nav translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Nav child(Object child) {
-		super.child(child);
+	public Nav child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Nav children(Object...children) {
-		super.children(children);
+	public Nav children(Object...value) {
+		super.children(value);
 		return this;
 	}
 

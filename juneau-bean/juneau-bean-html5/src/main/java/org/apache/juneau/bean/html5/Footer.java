@@ -48,386 +48,386 @@ public class Footer extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Footer _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Footer accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Footer contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer dir(String dir) {
-		super.dir(dir);
+	public Footer dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer hidden(Object hidden) {
-		super.hidden(hidden);
+	public Footer hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer id(String id) {
-		super.id(id);
+	public Footer id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer lang(String lang) {
-		super.lang(lang);
+	public Footer lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onabort(String onabort) {
-		super.onabort(onabort);
+	public Footer onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onblur(String onblur) {
-		super.onblur(onblur);
+	public Footer onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Footer oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Footer oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Footer oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onchange(String onchange) {
-		super.onchange(onchange);
+	public Footer onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onclick(String onclick) {
-		super.onclick(onclick);
+	public Footer onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Footer oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Footer ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Footer ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Footer onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onended(String onended) {
-		super.onended(onended);
+	public Footer onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onerror(String onerror) {
-		super.onerror(onerror);
+	public Footer onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Footer onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer oninput(String oninput) {
-		super.oninput(oninput);
+	public Footer oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Footer oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Footer onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Footer onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Footer onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onload(String onload) {
-		super.onload(onload);
+	public Footer onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Footer onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Footer onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Footer onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Footer onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Footer onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Footer onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Footer onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Footer onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Footer onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Footer onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Footer onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onpause(String onpause) {
-		super.onpause(onpause);
+	public Footer onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onplay(String onplay) {
-		super.onplay(onplay);
+	public Footer onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Footer onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Footer onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Footer onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onreset(String onreset) {
-		super.onreset(onreset);
+	public Footer onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onresize(String onresize) {
-		super.onresize(onresize);
+	public Footer onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Footer onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Footer onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Footer onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onselect(String onselect) {
-		super.onselect(onselect);
+	public Footer onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onshow(String onshow) {
-		super.onshow(onshow);
+	public Footer onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Footer onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Footer onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Footer onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Footer ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Footer ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Footer onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Footer onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Footer spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer style(String style) {
-		super.style(style);
+	public Footer style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Footer tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer title(String title) {
-		super.title(title);
+	public Footer title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Footer translate(Object translate) {
-		super.translate(translate);
+	public Footer translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Footer child(Object child) {
-		super.child(child);
+	public Footer child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Footer children(Object...children) {
-		super.children(children);
+	public Footer children(Object...value) {
+		super.children(value);
 		return this;
 	}
 

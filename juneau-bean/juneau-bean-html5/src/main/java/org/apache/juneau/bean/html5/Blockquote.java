@@ -51,8 +51,8 @@ public class Blockquote extends HtmlElementMixed {
 	 * @param cite The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Blockquote cite(String cite) {
-		attr("cite", cite);
+	public Blockquote cite(String value) {
+		attr("cite", value);
 		return this;
 	}
 
@@ -63,386 +63,386 @@ public class Blockquote extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Blockquote _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Blockquote accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Blockquote contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote dir(String dir) {
-		super.dir(dir);
+	public Blockquote dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote hidden(Object hidden) {
-		super.hidden(hidden);
+	public Blockquote hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote id(String id) {
-		super.id(id);
+	public Blockquote id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote lang(String lang) {
-		super.lang(lang);
+	public Blockquote lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onabort(String onabort) {
-		super.onabort(onabort);
+	public Blockquote onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onblur(String onblur) {
-		super.onblur(onblur);
+	public Blockquote onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Blockquote oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Blockquote oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Blockquote oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onchange(String onchange) {
-		super.onchange(onchange);
+	public Blockquote onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onclick(String onclick) {
-		super.onclick(onclick);
+	public Blockquote onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Blockquote oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Blockquote ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Blockquote ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Blockquote onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onended(String onended) {
-		super.onended(onended);
+	public Blockquote onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onerror(String onerror) {
-		super.onerror(onerror);
+	public Blockquote onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Blockquote onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote oninput(String oninput) {
-		super.oninput(oninput);
+	public Blockquote oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Blockquote oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Blockquote onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Blockquote onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Blockquote onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onload(String onload) {
-		super.onload(onload);
+	public Blockquote onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Blockquote onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Blockquote onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Blockquote onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Blockquote onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Blockquote onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Blockquote onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Blockquote onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Blockquote onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Blockquote onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Blockquote onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Blockquote onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onpause(String onpause) {
-		super.onpause(onpause);
+	public Blockquote onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onplay(String onplay) {
-		super.onplay(onplay);
+	public Blockquote onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Blockquote onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Blockquote onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Blockquote onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onreset(String onreset) {
-		super.onreset(onreset);
+	public Blockquote onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onresize(String onresize) {
-		super.onresize(onresize);
+	public Blockquote onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Blockquote onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Blockquote onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Blockquote onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onselect(String onselect) {
-		super.onselect(onselect);
+	public Blockquote onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onshow(String onshow) {
-		super.onshow(onshow);
+	public Blockquote onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Blockquote onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Blockquote onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Blockquote onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Blockquote ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Blockquote ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Blockquote onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Blockquote onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Blockquote spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote style(String style) {
-		super.style(style);
+	public Blockquote style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Blockquote tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote title(String title) {
-		super.title(title);
+	public Blockquote title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Blockquote translate(Object translate) {
-		super.translate(translate);
+	public Blockquote translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Blockquote child(Object child) {
-		super.child(child);
+	public Blockquote child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Blockquote children(Object...children) {
-		super.children(children);
+	public Blockquote children(Object...value) {
+		super.children(value);
 		return this;
 	}
 

@@ -52,8 +52,8 @@ public class Fieldset extends HtmlElementMixed {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Fieldset disabled(Boolean disabled) {
-		attr("disabled", deminimize(disabled, "disabled"));
+	public Fieldset disabled(Boolean value) {
+		attr("value", deminimize(value, "value"));
 		return this;
 	}
 
@@ -66,8 +66,8 @@ public class Fieldset extends HtmlElementMixed {
 	 * @param form The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Fieldset form(String form) {
-		attr("form", form);
+	public Fieldset form(String value) {
+		attr("form", value);
 		return this;
 	}
 
@@ -80,8 +80,8 @@ public class Fieldset extends HtmlElementMixed {
 	 * @param name The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Fieldset name(String name) {
-		attr("name", name);
+	public Fieldset name(String value) {
+		attr("name", value);
 		return this;
 	}
 
@@ -92,386 +92,386 @@ public class Fieldset extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Fieldset _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Fieldset accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Fieldset contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset dir(String dir) {
-		super.dir(dir);
+	public Fieldset dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset hidden(Object hidden) {
-		super.hidden(hidden);
+	public Fieldset hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset id(String id) {
-		super.id(id);
+	public Fieldset id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset lang(String lang) {
-		super.lang(lang);
+	public Fieldset lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onabort(String onabort) {
-		super.onabort(onabort);
+	public Fieldset onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onblur(String onblur) {
-		super.onblur(onblur);
+	public Fieldset onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Fieldset oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Fieldset oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Fieldset oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onchange(String onchange) {
-		super.onchange(onchange);
+	public Fieldset onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onclick(String onclick) {
-		super.onclick(onclick);
+	public Fieldset onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Fieldset oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Fieldset ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Fieldset ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Fieldset onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onended(String onended) {
-		super.onended(onended);
+	public Fieldset onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onerror(String onerror) {
-		super.onerror(onerror);
+	public Fieldset onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Fieldset onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset oninput(String oninput) {
-		super.oninput(oninput);
+	public Fieldset oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Fieldset oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Fieldset onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Fieldset onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Fieldset onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onload(String onload) {
-		super.onload(onload);
+	public Fieldset onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Fieldset onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Fieldset onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Fieldset onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Fieldset onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Fieldset onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Fieldset onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Fieldset onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Fieldset onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Fieldset onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Fieldset onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Fieldset onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onpause(String onpause) {
-		super.onpause(onpause);
+	public Fieldset onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onplay(String onplay) {
-		super.onplay(onplay);
+	public Fieldset onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Fieldset onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Fieldset onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Fieldset onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onreset(String onreset) {
-		super.onreset(onreset);
+	public Fieldset onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onresize(String onresize) {
-		super.onresize(onresize);
+	public Fieldset onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Fieldset onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Fieldset onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Fieldset onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onselect(String onselect) {
-		super.onselect(onselect);
+	public Fieldset onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onshow(String onshow) {
-		super.onshow(onshow);
+	public Fieldset onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Fieldset onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Fieldset onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Fieldset onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Fieldset ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Fieldset ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Fieldset onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Fieldset onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Fieldset spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset style(String style) {
-		super.style(style);
+	public Fieldset style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Fieldset tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset title(String title) {
-		super.title(title);
+	public Fieldset title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Fieldset translate(Object translate) {
-		super.translate(translate);
+	public Fieldset translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Fieldset child(Object child) {
-		super.child(child);
+	public Fieldset child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Fieldset children(Object...children) {
-		super.children(children);
+	public Fieldset children(Object...value) {
+		super.children(value);
 		return this;
 	}
 

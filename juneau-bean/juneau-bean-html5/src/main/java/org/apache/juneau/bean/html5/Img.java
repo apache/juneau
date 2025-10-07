@@ -23,7 +23,8 @@ import org.apache.juneau.internal.*;
  * element.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
+
  * </ul>
  */
 @Bean(typeName="img")
@@ -53,8 +54,8 @@ public class Img extends HtmlElementVoid {
 	 * @param alt The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Img alt(String alt) {
-		attr("alt", alt);
+	public Img alt(String value) {
+		attr("alt", value);
 		return this;
 	}
 
@@ -68,8 +69,8 @@ public class Img extends HtmlElementVoid {
 	 * @param crossorigin The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Img crossorigin(String crossorigin) {
-		attr("crossorigin", crossorigin);
+	public Img crossorigin(String value) {
+		attr("crossorigin", value);
 		return this;
 	}
 
@@ -85,8 +86,8 @@ public class Img extends HtmlElementVoid {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Img height(Object height) {
-		attr("height", height);
+	public Img height(Object value) {
+		attr("height", value);
 		return this;
 	}
 
@@ -101,8 +102,8 @@ public class Img extends HtmlElementVoid {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Img ismap(Object ismap) {
-		attr("ismap", deminimize(ismap, "ismap"));
+	public Img ismap(Object value) {
+		attr("value", deminimize(value, "value"));
 		return this;
 	}
 
@@ -124,8 +125,8 @@ public class Img extends HtmlElementVoid {
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object.
 	 */
-	public final Img src(Object src) {
-		attrUri("src", src);
+	public Img src(Object value) {
+		attrUri("src", value);
 		return this;
 	}
 
@@ -139,8 +140,8 @@ public class Img extends HtmlElementVoid {
 	 * @param usemap The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Img usemap(String usemap) {
-		attr("usemap", usemap);
+	public Img usemap(String value) {
+		attr("usemap", value);
 		return this;
 	}
 
@@ -155,8 +156,8 @@ public class Img extends HtmlElementVoid {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Img width(Object width) {
-		attr("width", width);
+	public Img width(Object value) {
+		attr("width", value);
 		return this;
 	}
 
@@ -167,374 +168,374 @@ public class Img extends HtmlElementVoid {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Img _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Img accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Img contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img dir(String dir) {
-		super.dir(dir);
+	public Img dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img hidden(Object hidden) {
-		super.hidden(hidden);
+	public Img hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img id(String id) {
-		super.id(id);
+	public Img id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img lang(String lang) {
-		super.lang(lang);
+	public Img lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onabort(String onabort) {
-		super.onabort(onabort);
+	public Img onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onblur(String onblur) {
-		super.onblur(onblur);
+	public Img onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Img oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Img oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Img oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onchange(String onchange) {
-		super.onchange(onchange);
+	public Img onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onclick(String onclick) {
-		super.onclick(onclick);
+	public Img onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Img oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Img ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Img ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Img onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onended(String onended) {
-		super.onended(onended);
+	public Img onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onerror(String onerror) {
-		super.onerror(onerror);
+	public Img onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Img onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img oninput(String oninput) {
-		super.oninput(oninput);
+	public Img oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Img oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Img onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Img onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Img onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onload(String onload) {
-		super.onload(onload);
+	public Img onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Img onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Img onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Img onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Img onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Img onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Img onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Img onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Img onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Img onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Img onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Img onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onpause(String onpause) {
-		super.onpause(onpause);
+	public Img onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onplay(String onplay) {
-		super.onplay(onplay);
+	public Img onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Img onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Img onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Img onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onreset(String onreset) {
-		super.onreset(onreset);
+	public Img onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onresize(String onresize) {
-		super.onresize(onresize);
+	public Img onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Img onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Img onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Img onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onselect(String onselect) {
-		super.onselect(onselect);
+	public Img onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onshow(String onshow) {
-		super.onshow(onshow);
+	public Img onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Img onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Img onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Img onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Img ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Img ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Img onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Img onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Img spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img style(String style) {
-		super.style(style);
+	public Img style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Img tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img title(String title) {
-		super.title(title);
+	public Img title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Img translate(Object translate) {
-		super.translate(translate);
+	public Img translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 

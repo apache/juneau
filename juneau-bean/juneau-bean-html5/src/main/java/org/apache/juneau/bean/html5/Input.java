@@ -52,8 +52,8 @@ public class Input extends HtmlElementVoid {
 	 * @param accept The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input accept(String accept) {
-		attr("accept", accept);
+	public Input accept(String value) {
+		attr("accept", value);
 		return this;
 	}
 
@@ -66,8 +66,8 @@ public class Input extends HtmlElementVoid {
 	 * @param alt The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input alt(String alt) {
-		attr("alt", alt);
+	public Input alt(String value) {
+		attr("alt", value);
 		return this;
 	}
 
@@ -80,8 +80,8 @@ public class Input extends HtmlElementVoid {
 	 * @param autocomplete The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input autocomplete(String autocomplete) {
-		attr("autocomplete", autocomplete);
+	public Input autocomplete(String value) {
+		attr("autocomplete", value);
 		return this;
 	}
 
@@ -94,8 +94,8 @@ public class Input extends HtmlElementVoid {
 	 * @param autofocus The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input autofocus(String autofocus) {
-		attr("autofocus", autofocus);
+	public Input autofocus(String value) {
+		attr("autofocus", value);
 		return this;
 	}
 
@@ -110,8 +110,8 @@ public class Input extends HtmlElementVoid {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input checked(Object checked) {
-		attr("checked", deminimize(checked, "checked"));
+	public Input checked(Object value) {
+		attr("value", deminimize(value, "value"));
 		return this;
 	}
 
@@ -124,8 +124,8 @@ public class Input extends HtmlElementVoid {
 	 * @param dirname The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input dirname(String dirname) {
-		attr("dirname", dirname);
+	public Input dirname(String value) {
+		attr("dirname", value);
 		return this;
 	}
 
@@ -140,8 +140,8 @@ public class Input extends HtmlElementVoid {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input disabled(Object disabled) {
-		attr("disabled", deminimize(disabled, "disabled"));
+	public Input disabled(Object value) {
+		attr("value", deminimize(value, "value"));
 		return this;
 	}
 
@@ -154,8 +154,8 @@ public class Input extends HtmlElementVoid {
 	 * @param form The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input form(String form) {
-		attr("form", form);
+	public Input form(String value) {
+		attr("form", value);
 		return this;
 	}
 
@@ -168,8 +168,8 @@ public class Input extends HtmlElementVoid {
 	 * @param formaction The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input formaction(String formaction) {
-		attr("formaction", formaction);
+	public Input formaction(String value) {
+		attr("formaction", value);
 		return this;
 	}
 
@@ -182,8 +182,8 @@ public class Input extends HtmlElementVoid {
 	 * @param formenctype The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input formenctype(String formenctype) {
-		attr("formenctype", formenctype);
+	public Input formenctype(String value) {
+		attr("formenctype", value);
 		return this;
 	}
 
@@ -196,8 +196,8 @@ public class Input extends HtmlElementVoid {
 	 * @param formmethod The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input formmethod(String formmethod) {
-		attr("formmethod", formmethod);
+	public Input formmethod(String value) {
+		attr("formmethod", value);
 		return this;
 	}
 
@@ -211,8 +211,8 @@ public class Input extends HtmlElementVoid {
 	 * @param formnovalidate The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input formnovalidate(String formnovalidate) {
-		attr("formnovalidate", formnovalidate);
+	public Input formnovalidate(String value) {
+		attr("formnovalidate", value);
 		return this;
 	}
 
@@ -225,8 +225,8 @@ public class Input extends HtmlElementVoid {
 	 * @param formtarget The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input formtarget(String formtarget) {
-		attr("formtarget", formtarget);
+	public Input formtarget(String value) {
+		attr("formtarget", value);
 		return this;
 	}
 
@@ -242,8 +242,8 @@ public class Input extends HtmlElementVoid {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input height(Object height) {
-		attr("height", height);
+	public Input height(Object value) {
+		attr("height", value);
 		return this;
 	}
 
@@ -255,8 +255,8 @@ public class Input extends HtmlElementVoid {
 	 * @param inputmode The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input inputmode(String inputmode) {
-		attr("inputmode", inputmode);
+	public Input inputmode(String value) {
+		attr("inputmode", value);
 		return this;
 	}
 
@@ -269,8 +269,8 @@ public class Input extends HtmlElementVoid {
 	 * @param list The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input list(String list) {
-		attr("list", list);
+	public Input list(String value) {
+		attr("list", value);
 		return this;
 	}
 
@@ -285,8 +285,8 @@ public class Input extends HtmlElementVoid {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input max(Object max) {
-		attr("max", max);
+	public Input max(Object value) {
+		attr("max", value);
 		return this;
 	}
 
@@ -298,8 +298,8 @@ public class Input extends HtmlElementVoid {
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input maxlength(Object maxlength) {
-		attr("maxlength", maxlength);
+	public Input maxlength(Object value) {
+		attr("maxlength", value);
 		return this;
 	}
 
@@ -314,8 +314,8 @@ public class Input extends HtmlElementVoid {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input min(Object min) {
-		attr("min", min);
+	public Input min(Object value) {
+		attr("min", value);
 		return this;
 	}
 
@@ -330,8 +330,8 @@ public class Input extends HtmlElementVoid {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input minlength(Object minlength) {
-		attr("minlength", minlength);
+	public Input minlength(Object value) {
+		attr("minlength", value);
 		return this;
 	}
 
@@ -346,8 +346,8 @@ public class Input extends HtmlElementVoid {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input multiple(Object multiple) {
-		attr("multiple", deminimize(multiple, "multiple"));
+	public Input multiple(Object value) {
+		attr("value", deminimize(value, "value"));
 		return this;
 	}
 
@@ -360,8 +360,8 @@ public class Input extends HtmlElementVoid {
 	 * @param name The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input name(String name) {
-		attr("name", name);
+	public Input name(String value) {
+		attr("name", value);
 		return this;
 	}
 
@@ -374,8 +374,8 @@ public class Input extends HtmlElementVoid {
 	 * @param pattern The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input pattern(String pattern) {
-		attr("pattern", pattern);
+	public Input pattern(String value) {
+		attr("pattern", value);
 		return this;
 	}
 
@@ -388,8 +388,8 @@ public class Input extends HtmlElementVoid {
 	 * @param placeholder The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input placeholder(String placeholder) {
-		attr("placeholder", placeholder);
+	public Input placeholder(String value) {
+		attr("placeholder", value);
 		return this;
 	}
 
@@ -404,8 +404,8 @@ public class Input extends HtmlElementVoid {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input readonly(Object readonly) {
-		attr("readonly", readonly);
+	public Input readonly(Object value) {
+		attr("readonly", value);
 		return this;
 	}
 
@@ -416,12 +416,12 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Whether to allow the value to be edited by the user.
 	 *
-	 * @param readonly If <jk>true</jk>, adds <c>readonly="readonly"</c>.
+	 * @param value If <jk>true</jk>, adds <c>readonly="readonly"</c>.
 	 * @return This object.
 	 */
-	public final Input readonly(boolean readonly) {
-		if (readonly)
-			readonly("readonly");
+	public Input readonly(boolean value) {
+		if (value)
+			value("value");
 		return this;
 	}
 
@@ -436,8 +436,8 @@ public class Input extends HtmlElementVoid {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input required(Object required) {
-		attr("required", required);
+	public Input required(Object value) {
+		attr("required", value);
 		return this;
 	}
 
@@ -452,8 +452,8 @@ public class Input extends HtmlElementVoid {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input size(Object size) {
-		attr("size", size);
+	public Input size(Object value) {
+		attr("size", value);
 		return this;
 	}
 
@@ -468,8 +468,8 @@ public class Input extends HtmlElementVoid {
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input src(Object src) {
-		attr("src", src);
+	public Input src(Object value) {
+		attr("src", value);
 		return this;
 	}
 
@@ -482,8 +482,8 @@ public class Input extends HtmlElementVoid {
 	 * @param step The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input step(String step) {
-		attr("step", step);
+	public Input step(String value) {
+		attr("step", value);
 		return this;
 	}
 
@@ -496,8 +496,8 @@ public class Input extends HtmlElementVoid {
 	 * @param type The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Input type(String type) {
-		attr("type", type);
+	public Input type(String value) {
+		attr("type", value);
 		return this;
 	}
 
@@ -512,7 +512,7 @@ public class Input extends HtmlElementVoid {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input value(Object value) {
+	public Input value(Object value) {
 		attr("value", value);
 		return this;
 	}
@@ -528,8 +528,8 @@ public class Input extends HtmlElementVoid {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Input width(Object width) {
-		attr("width", width);
+	public Input width(Object value) {
+		attr("width", value);
 		return this;
 	}
 
@@ -540,374 +540,374 @@ public class Input extends HtmlElementVoid {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Input _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Input accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Input contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input dir(String dir) {
-		super.dir(dir);
+	public Input dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input hidden(Object hidden) {
-		super.hidden(hidden);
+	public Input hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input id(String id) {
-		super.id(id);
+	public Input id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input lang(String lang) {
-		super.lang(lang);
+	public Input lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onabort(String onabort) {
-		super.onabort(onabort);
+	public Input onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onblur(String onblur) {
-		super.onblur(onblur);
+	public Input onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Input oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Input oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Input oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onchange(String onchange) {
-		super.onchange(onchange);
+	public Input onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onclick(String onclick) {
-		super.onclick(onclick);
+	public Input onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Input oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Input ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Input ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Input onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onended(String onended) {
-		super.onended(onended);
+	public Input onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onerror(String onerror) {
-		super.onerror(onerror);
+	public Input onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Input onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input oninput(String oninput) {
-		super.oninput(oninput);
+	public Input oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Input oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Input onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Input onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Input onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onload(String onload) {
-		super.onload(onload);
+	public Input onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Input onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Input onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Input onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Input onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Input onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Input onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Input onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Input onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Input onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Input onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Input onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onpause(String onpause) {
-		super.onpause(onpause);
+	public Input onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onplay(String onplay) {
-		super.onplay(onplay);
+	public Input onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Input onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Input onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Input onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onreset(String onreset) {
-		super.onreset(onreset);
+	public Input onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onresize(String onresize) {
-		super.onresize(onresize);
+	public Input onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Input onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Input onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Input onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onselect(String onselect) {
-		super.onselect(onselect);
+	public Input onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onshow(String onshow) {
-		super.onshow(onshow);
+	public Input onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Input onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Input onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Input onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Input ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Input ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Input onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Input onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Input spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input style(String style) {
-		super.style(style);
+	public Input style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Input tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input title(String title) {
-		super.title(title);
+	public Input title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Input translate(Object translate) {
-		super.translate(translate);
+	public Input translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 

@@ -48,386 +48,386 @@ public class Ruby extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Ruby _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Ruby accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Ruby contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby dir(String dir) {
-		super.dir(dir);
+	public Ruby dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby hidden(Object hidden) {
-		super.hidden(hidden);
+	public Ruby hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby id(String id) {
-		super.id(id);
+	public Ruby id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby lang(String lang) {
-		super.lang(lang);
+	public Ruby lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onabort(String onabort) {
-		super.onabort(onabort);
+	public Ruby onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onblur(String onblur) {
-		super.onblur(onblur);
+	public Ruby onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Ruby oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Ruby oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Ruby oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onchange(String onchange) {
-		super.onchange(onchange);
+	public Ruby onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onclick(String onclick) {
-		super.onclick(onclick);
+	public Ruby onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Ruby oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Ruby ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Ruby ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Ruby onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onended(String onended) {
-		super.onended(onended);
+	public Ruby onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onerror(String onerror) {
-		super.onerror(onerror);
+	public Ruby onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Ruby onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby oninput(String oninput) {
-		super.oninput(oninput);
+	public Ruby oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Ruby oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Ruby onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Ruby onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Ruby onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onload(String onload) {
-		super.onload(onload);
+	public Ruby onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Ruby onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Ruby onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Ruby onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Ruby onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Ruby onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Ruby onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Ruby onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Ruby onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Ruby onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Ruby onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Ruby onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onpause(String onpause) {
-		super.onpause(onpause);
+	public Ruby onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onplay(String onplay) {
-		super.onplay(onplay);
+	public Ruby onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Ruby onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Ruby onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Ruby onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onreset(String onreset) {
-		super.onreset(onreset);
+	public Ruby onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onresize(String onresize) {
-		super.onresize(onresize);
+	public Ruby onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Ruby onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Ruby onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Ruby onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onselect(String onselect) {
-		super.onselect(onselect);
+	public Ruby onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onshow(String onshow) {
-		super.onshow(onshow);
+	public Ruby onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Ruby onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Ruby onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Ruby onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Ruby ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Ruby ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Ruby onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Ruby onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Ruby spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby style(String style) {
-		super.style(style);
+	public Ruby style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Ruby tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby title(String title) {
-		super.title(title);
+	public Ruby title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Ruby translate(Object translate) {
-		super.translate(translate);
+	public Ruby translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Ruby child(Object child) {
-		super.child(child);
+	public Ruby child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Ruby children(Object...children) {
-		super.children(children);
+	public Ruby children(Object...value) {
+		super.children(value);
 		return this;
 	}
 

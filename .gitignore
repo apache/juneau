@@ -9,9 +9,6 @@ derby.log
 # Temporary cursor assistant scripts
 cursor-*
 
-# AI context files (not meant for public consumption)
-ai-contexts/
-
 # Note: Maven site generation creates target/site/ (already ignored by **/target/ above)
 /juneau.code-workspace
 /create-mvn-site.log

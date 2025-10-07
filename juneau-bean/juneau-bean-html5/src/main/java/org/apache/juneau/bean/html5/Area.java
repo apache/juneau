@@ -56,8 +56,8 @@ public class Area extends HtmlElementVoid {
 	 * @param alt The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Area alt(String alt) {
-		attr("alt", alt);
+	public Area alt(String value) {
+		attr("alt", value);
 		return this;
 	}
 
@@ -71,8 +71,8 @@ public class Area extends HtmlElementVoid {
 	 * @param coords The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Area coords(String coords) {
-		attr("coords", coords);
+	public Area coords(String value) {
+		attr("coords", value);
 		return this;
 	}
 
@@ -87,8 +87,8 @@ public class Area extends HtmlElementVoid {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Area download(Object download) {
-		attr("download", download);
+	public Area download(Object value) {
+		attr("download", value);
 		return this;
 	}
 
@@ -110,8 +110,8 @@ public class Area extends HtmlElementVoid {
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object.
 	 */
-	public final Area href(Object href) {
-		attrUri("href", href);
+	public Area href(Object value) {
+		attrUri("href", value);
 		return this;
 	}
 
@@ -124,8 +124,8 @@ public class Area extends HtmlElementVoid {
 	 * @param hreflang The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Area hreflang(String hreflang) {
-		attr("hreflang", hreflang);
+	public Area hreflang(String value) {
+		attr("hreflang", value);
 		return this;
 	}
 
@@ -138,8 +138,8 @@ public class Area extends HtmlElementVoid {
 	 * @param rel The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Area rel(String rel) {
-		attr("rel", rel);
+	public Area rel(String value) {
+		attr("rel", value);
 		return this;
 	}
 
@@ -152,8 +152,8 @@ public class Area extends HtmlElementVoid {
 	 * @param shape The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Area shape(String shape) {
-		attr("shape", shape);
+	public Area shape(String value) {
+		attr("shape", value);
 		return this;
 	}
 
@@ -166,8 +166,8 @@ public class Area extends HtmlElementVoid {
 	 * @param target The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Area target(String target) {
-		attr("target", target);
+	public Area target(String value) {
+		attr("target", value);
 		return this;
 	}
 
@@ -180,8 +180,8 @@ public class Area extends HtmlElementVoid {
 	 * @param type The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Area type(String type) {
-		attr("type", type);
+	public Area type(String value) {
+		attr("type", value);
 		return this;
 	}
 
@@ -192,374 +192,374 @@ public class Area extends HtmlElementVoid {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Area _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Area accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Area contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area dir(String dir) {
-		super.dir(dir);
+	public Area dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area hidden(Object hidden) {
-		super.hidden(hidden);
+	public Area hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area id(String id) {
-		super.id(id);
+	public Area id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area lang(String lang) {
-		super.lang(lang);
+	public Area lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onabort(String onabort) {
-		super.onabort(onabort);
+	public Area onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onblur(String onblur) {
-		super.onblur(onblur);
+	public Area onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Area oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Area oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Area oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onchange(String onchange) {
-		super.onchange(onchange);
+	public Area onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onclick(String onclick) {
-		super.onclick(onclick);
+	public Area onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Area oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Area ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Area ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Area onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onended(String onended) {
-		super.onended(onended);
+	public Area onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onerror(String onerror) {
-		super.onerror(onerror);
+	public Area onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Area onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area oninput(String oninput) {
-		super.oninput(oninput);
+	public Area oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Area oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Area onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Area onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Area onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onload(String onload) {
-		super.onload(onload);
+	public Area onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Area onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Area onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Area onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Area onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Area onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Area onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Area onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Area onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Area onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Area onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Area onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onpause(String onpause) {
-		super.onpause(onpause);
+	public Area onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onplay(String onplay) {
-		super.onplay(onplay);
+	public Area onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Area onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Area onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Area onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onreset(String onreset) {
-		super.onreset(onreset);
+	public Area onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onresize(String onresize) {
-		super.onresize(onresize);
+	public Area onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Area onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Area onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Area onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onselect(String onselect) {
-		super.onselect(onselect);
+	public Area onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onshow(String onshow) {
-		super.onshow(onshow);
+	public Area onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Area onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Area onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Area onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Area ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Area ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Area onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Area onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Area spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area style(String style) {
-		super.style(style);
+	public Area style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Area tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area title(String title) {
-		super.title(title);
+	public Area title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Area translate(Object translate) {
-		super.translate(translate);
+	public Area translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 

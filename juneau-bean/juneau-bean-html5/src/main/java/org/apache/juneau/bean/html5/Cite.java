@@ -48,386 +48,386 @@ public class Cite extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Cite _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Cite accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Cite contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite dir(String dir) {
-		super.dir(dir);
+	public Cite dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite hidden(Object hidden) {
-		super.hidden(hidden);
+	public Cite hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite id(String id) {
-		super.id(id);
+	public Cite id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite lang(String lang) {
-		super.lang(lang);
+	public Cite lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onabort(String onabort) {
-		super.onabort(onabort);
+	public Cite onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onblur(String onblur) {
-		super.onblur(onblur);
+	public Cite onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Cite oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Cite oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Cite oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onchange(String onchange) {
-		super.onchange(onchange);
+	public Cite onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onclick(String onclick) {
-		super.onclick(onclick);
+	public Cite onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Cite oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Cite ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Cite ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Cite onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onended(String onended) {
-		super.onended(onended);
+	public Cite onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onerror(String onerror) {
-		super.onerror(onerror);
+	public Cite onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Cite onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite oninput(String oninput) {
-		super.oninput(oninput);
+	public Cite oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Cite oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Cite onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Cite onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Cite onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onload(String onload) {
-		super.onload(onload);
+	public Cite onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Cite onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Cite onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Cite onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Cite onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Cite onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Cite onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Cite onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Cite onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Cite onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Cite onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Cite onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onpause(String onpause) {
-		super.onpause(onpause);
+	public Cite onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onplay(String onplay) {
-		super.onplay(onplay);
+	public Cite onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Cite onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Cite onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Cite onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onreset(String onreset) {
-		super.onreset(onreset);
+	public Cite onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onresize(String onresize) {
-		super.onresize(onresize);
+	public Cite onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Cite onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Cite onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Cite onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onselect(String onselect) {
-		super.onselect(onselect);
+	public Cite onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onshow(String onshow) {
-		super.onshow(onshow);
+	public Cite onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Cite onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Cite onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Cite onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Cite ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Cite ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Cite onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Cite onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Cite spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite style(String style) {
-		super.style(style);
+	public Cite style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Cite tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite title(String title) {
-		super.title(title);
+	public Cite title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Cite translate(Object translate) {
-		super.translate(translate);
+	public Cite translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Cite child(Object child) {
-		super.child(child);
+	public Cite child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Cite children(Object...children) {
-		super.children(children);
+	public Cite children(Object...value) {
+		super.children(value);
 		return this;
 	}
 

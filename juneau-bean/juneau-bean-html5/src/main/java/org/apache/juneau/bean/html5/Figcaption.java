@@ -48,386 +48,386 @@ public class Figcaption extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Figcaption _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Figcaption accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Figcaption contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption dir(String dir) {
-		super.dir(dir);
+	public Figcaption dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption hidden(Object hidden) {
-		super.hidden(hidden);
+	public Figcaption hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption id(String id) {
-		super.id(id);
+	public Figcaption id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption lang(String lang) {
-		super.lang(lang);
+	public Figcaption lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onabort(String onabort) {
-		super.onabort(onabort);
+	public Figcaption onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onblur(String onblur) {
-		super.onblur(onblur);
+	public Figcaption onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Figcaption oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Figcaption oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Figcaption oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onchange(String onchange) {
-		super.onchange(onchange);
+	public Figcaption onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onclick(String onclick) {
-		super.onclick(onclick);
+	public Figcaption onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Figcaption oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Figcaption ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Figcaption ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Figcaption onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onended(String onended) {
-		super.onended(onended);
+	public Figcaption onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onerror(String onerror) {
-		super.onerror(onerror);
+	public Figcaption onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Figcaption onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption oninput(String oninput) {
-		super.oninput(oninput);
+	public Figcaption oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Figcaption oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Figcaption onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Figcaption onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Figcaption onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onload(String onload) {
-		super.onload(onload);
+	public Figcaption onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Figcaption onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Figcaption onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Figcaption onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Figcaption onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Figcaption onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Figcaption onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Figcaption onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Figcaption onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Figcaption onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Figcaption onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Figcaption onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onpause(String onpause) {
-		super.onpause(onpause);
+	public Figcaption onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onplay(String onplay) {
-		super.onplay(onplay);
+	public Figcaption onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Figcaption onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Figcaption onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Figcaption onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onreset(String onreset) {
-		super.onreset(onreset);
+	public Figcaption onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onresize(String onresize) {
-		super.onresize(onresize);
+	public Figcaption onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Figcaption onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Figcaption onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Figcaption onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onselect(String onselect) {
-		super.onselect(onselect);
+	public Figcaption onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onshow(String onshow) {
-		super.onshow(onshow);
+	public Figcaption onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Figcaption onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Figcaption onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Figcaption onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Figcaption ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Figcaption ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Figcaption onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Figcaption onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Figcaption spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption style(String style) {
-		super.style(style);
+	public Figcaption style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Figcaption tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption title(String title) {
-		super.title(title);
+	public Figcaption title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Figcaption translate(Object translate) {
-		super.translate(translate);
+	public Figcaption translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Figcaption child(Object child) {
-		super.child(child);
+	public Figcaption child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Figcaption children(Object...children) {
-		super.children(children);
+	public Figcaption children(Object...value) {
+		super.children(value);
 		return this;
 	}
 

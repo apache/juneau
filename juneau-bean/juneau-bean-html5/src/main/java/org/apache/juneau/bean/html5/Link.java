@@ -54,8 +54,8 @@ public class Link extends HtmlElementVoid {
 	 * @param crossorigin The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Link crossorigin(String crossorigin) {
-		attr("crossorigin", crossorigin);
+	public Link crossorigin(String value) {
+		attr("crossorigin", value);
 		return this;
 	}
 
@@ -77,8 +77,8 @@ public class Link extends HtmlElementVoid {
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object.
 	 */
-	public final Link href(Object href) {
-		attrUri("href", href);
+	public Link href(Object value) {
+		attrUri("href", value);
 		return this;
 	}
 
@@ -92,8 +92,8 @@ public class Link extends HtmlElementVoid {
 	 * @param hreflang The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Link hreflang(String hreflang) {
-		attr("hreflang", hreflang);
+	public Link hreflang(String value) {
+		attr("hreflang", value);
 		return this;
 	}
 
@@ -106,8 +106,8 @@ public class Link extends HtmlElementVoid {
 	 * @param media The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Link media(String media) {
-		attr("media", media);
+	public Link media(String value) {
+		attr("media", value);
 		return this;
 	}
 
@@ -120,8 +120,8 @@ public class Link extends HtmlElementVoid {
 	 * @param rel The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Link rel(String rel) {
-		attr("rel", rel);
+	public Link rel(String value) {
+		attr("rel", value);
 		return this;
 	}
 
@@ -134,8 +134,8 @@ public class Link extends HtmlElementVoid {
 	 * @param sizes The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Link sizes(String sizes) {
-		attr("sizes", sizes);
+	public Link sizes(String value) {
+		attr("sizes", value);
 		return this;
 	}
 
@@ -148,8 +148,8 @@ public class Link extends HtmlElementVoid {
 	 * @param type The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Link type(String type) {
-		attr("type", type);
+	public Link type(String value) {
+		attr("type", value);
 		return this;
 	}
 
@@ -160,374 +160,374 @@ public class Link extends HtmlElementVoid {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Link _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Link accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Link contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link dir(String dir) {
-		super.dir(dir);
+	public Link dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link hidden(Object hidden) {
-		super.hidden(hidden);
+	public Link hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link id(String id) {
-		super.id(id);
+	public Link id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link lang(String lang) {
-		super.lang(lang);
+	public Link lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onabort(String onabort) {
-		super.onabort(onabort);
+	public Link onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onblur(String onblur) {
-		super.onblur(onblur);
+	public Link onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Link oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Link oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Link oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onchange(String onchange) {
-		super.onchange(onchange);
+	public Link onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onclick(String onclick) {
-		super.onclick(onclick);
+	public Link onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Link oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Link ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Link ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Link onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onended(String onended) {
-		super.onended(onended);
+	public Link onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onerror(String onerror) {
-		super.onerror(onerror);
+	public Link onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Link onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link oninput(String oninput) {
-		super.oninput(oninput);
+	public Link oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Link oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Link onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Link onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Link onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onload(String onload) {
-		super.onload(onload);
+	public Link onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Link onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Link onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Link onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Link onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Link onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Link onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Link onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Link onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Link onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Link onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Link onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onpause(String onpause) {
-		super.onpause(onpause);
+	public Link onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onplay(String onplay) {
-		super.onplay(onplay);
+	public Link onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Link onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Link onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Link onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onreset(String onreset) {
-		super.onreset(onreset);
+	public Link onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onresize(String onresize) {
-		super.onresize(onresize);
+	public Link onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Link onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Link onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Link onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onselect(String onselect) {
-		super.onselect(onselect);
+	public Link onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onshow(String onshow) {
-		super.onshow(onshow);
+	public Link onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Link onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Link onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Link onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Link ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Link ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Link onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Link onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Link spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link style(String style) {
-		super.style(style);
+	public Link style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Link tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link title(String title) {
-		super.title(title);
+	public Link title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Link translate(Object translate) {
-		super.translate(translate);
+	public Link translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 

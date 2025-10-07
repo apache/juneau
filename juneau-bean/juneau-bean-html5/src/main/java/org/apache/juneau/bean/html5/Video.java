@@ -56,8 +56,8 @@ public class Video extends HtmlElementContainer {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Video autoplay(Object autoplay) {
-		attr("autoplay", deminimize(autoplay, "autoplay"));
+	public Video autoplay(Object value) {
+		attr("autoplay", deminimize(value, "autoplay"));
 		return this;
 	}
 
@@ -73,8 +73,8 @@ public class Video extends HtmlElementContainer {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Video controls(Object controls) {
-		attr("controls", deminimize(controls, "controls"));
+	public Video controls(Object value) {
+		attr("controls", deminimize(value, "controls"));
 		return this;
 	}
 
@@ -88,8 +88,8 @@ public class Video extends HtmlElementContainer {
 	 * @param crossorigin The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Video crossorigin(String crossorigin) {
-		attr("crossorigin", crossorigin);
+	public Video crossorigin(String value) {
+		attr("crossorigin", value);
 		return this;
 	}
 
@@ -105,8 +105,8 @@ public class Video extends HtmlElementContainer {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Video height(Object height) {
-		attr("height", height);
+	public Video height(Object value) {
+		attr("height", value);
 		return this;
 	}
 
@@ -121,8 +121,8 @@ public class Video extends HtmlElementContainer {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Video loop(Object loop) {
-		attr("loop", loop);
+	public Video loop(Object value) {
+		attr("loop", value);
 		return this;
 	}
 
@@ -136,8 +136,8 @@ public class Video extends HtmlElementContainer {
 	 * @param mediagroup The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Video mediagroup(String mediagroup) {
-		attr("mediagroup", mediagroup);
+	public Video mediagroup(String value) {
+		attr("mediagroup", value);
 		return this;
 	}
 
@@ -153,8 +153,8 @@ public class Video extends HtmlElementContainer {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Video muted(Object muted) {
-		attr("muted", muted);
+	public Video muted(Object value) {
+		attr("muted", value);
 		return this;
 	}
 
@@ -168,8 +168,8 @@ public class Video extends HtmlElementContainer {
 	 * @param poster The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Video poster(String poster) {
-		attr("poster", poster);
+	public Video poster(String value) {
+		attr("poster", value);
 		return this;
 	}
 
@@ -183,8 +183,8 @@ public class Video extends HtmlElementContainer {
 	 * @param preload The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Video preload(String preload) {
-		attr("preload", preload);
+	public Video preload(String value) {
+		attr("preload", value);
 		return this;
 	}
 
@@ -206,8 +206,8 @@ public class Video extends HtmlElementContainer {
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object.
 	 */
-	public final Video src(Object src) {
-		attrUri("src", src);
+	public Video src(Object value) {
+		attrUri("src", value);
 		return this;
 	}
 
@@ -222,8 +222,8 @@ public class Video extends HtmlElementContainer {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Video width(Object width) {
-		attr("width", width);
+	public Video width(Object value) {
+		attr("width", value);
 		return this;
 	}
 
@@ -234,386 +234,386 @@ public class Video extends HtmlElementContainer {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Video _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Video accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Video contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video dir(String dir) {
-		super.dir(dir);
+	public Video dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video hidden(Object hidden) {
-		super.hidden(hidden);
+	public Video hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video id(String id) {
-		super.id(id);
+	public Video id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video lang(String lang) {
-		super.lang(lang);
+	public Video lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onabort(String onabort) {
-		super.onabort(onabort);
+	public Video onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onblur(String onblur) {
-		super.onblur(onblur);
+	public Video onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Video oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Video oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Video oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onchange(String onchange) {
-		super.onchange(onchange);
+	public Video onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onclick(String onclick) {
-		super.onclick(onclick);
+	public Video onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Video oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Video ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Video ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Video onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onended(String onended) {
-		super.onended(onended);
+	public Video onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onerror(String onerror) {
-		super.onerror(onerror);
+	public Video onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Video onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video oninput(String oninput) {
-		super.oninput(oninput);
+	public Video oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Video oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Video onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Video onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Video onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onload(String onload) {
-		super.onload(onload);
+	public Video onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Video onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Video onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Video onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Video onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Video onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Video onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Video onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Video onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Video onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Video onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Video onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onpause(String onpause) {
-		super.onpause(onpause);
+	public Video onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onplay(String onplay) {
-		super.onplay(onplay);
+	public Video onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Video onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Video onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Video onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onreset(String onreset) {
-		super.onreset(onreset);
+	public Video onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onresize(String onresize) {
-		super.onresize(onresize);
+	public Video onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Video onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Video onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Video onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onselect(String onselect) {
-		super.onselect(onselect);
+	public Video onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onshow(String onshow) {
-		super.onshow(onshow);
+	public Video onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Video onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Video onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Video onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Video ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Video ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Video onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Video onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Video spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video style(String style) {
-		super.style(style);
+	public Video style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Video tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video title(String title) {
-		super.title(title);
+	public Video title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Video translate(Object translate) {
-		super.translate(translate);
+	public Video translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementContainer */
-	public Video child(Object child) {
-		super.child(child);
+	public Video child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementContainer */
-	public Video children(Object...children) {
-		super.children(children);
+	public Video children(Object...value) {
+		super.children(value);
 		return this;
 	}
 

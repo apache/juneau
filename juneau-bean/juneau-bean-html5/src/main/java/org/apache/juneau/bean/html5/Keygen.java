@@ -43,8 +43,8 @@ public class Keygen extends HtmlElementVoid {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Keygen autofocus(Object autofocus) {
-		attr("autofocus", autofocus);
+	public Keygen autofocus(Object value) {
+		attr("autofocus", value);
 		return this;
 	}
 
@@ -57,8 +57,8 @@ public class Keygen extends HtmlElementVoid {
 	 * @param challenge The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Keygen challenge(String challenge) {
-		attr("challenge", challenge);
+	public Keygen challenge(String value) {
+		attr("challenge", value);
 		return this;
 	}
 
@@ -73,8 +73,8 @@ public class Keygen extends HtmlElementVoid {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Keygen disabled(Object disabled) {
-		attr("disabled", deminimize(disabled, "disabled"));
+	public Keygen disabled(Object value) {
+		attr("value", deminimize(value, "value"));
 		return this;
 	}
 
@@ -87,8 +87,8 @@ public class Keygen extends HtmlElementVoid {
 	 * @param form The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Keygen form(String form) {
-		attr("form", form);
+	public Keygen form(String value) {
+		attr("form", value);
 		return this;
 	}
 
@@ -101,8 +101,8 @@ public class Keygen extends HtmlElementVoid {
 	 * @param keytype The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Keygen keytype(String keytype) {
-		attr("keytype", keytype);
+	public Keygen keytype(String value) {
+		attr("keytype", value);
 		return this;
 	}
 
@@ -115,8 +115,8 @@ public class Keygen extends HtmlElementVoid {
 	 * @param name The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Keygen name(String name) {
-		attr("name", name);
+	public Keygen name(String value) {
+		attr("name", value);
 		return this;
 	}
 
@@ -127,374 +127,374 @@ public class Keygen extends HtmlElementVoid {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Keygen _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Keygen accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Keygen contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen dir(String dir) {
-		super.dir(dir);
+	public Keygen dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen hidden(Object hidden) {
-		super.hidden(hidden);
+	public Keygen hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen id(String id) {
-		super.id(id);
+	public Keygen id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen lang(String lang) {
-		super.lang(lang);
+	public Keygen lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onabort(String onabort) {
-		super.onabort(onabort);
+	public Keygen onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onblur(String onblur) {
-		super.onblur(onblur);
+	public Keygen onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Keygen oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Keygen oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Keygen oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onchange(String onchange) {
-		super.onchange(onchange);
+	public Keygen onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onclick(String onclick) {
-		super.onclick(onclick);
+	public Keygen onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Keygen oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Keygen ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Keygen ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Keygen onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onended(String onended) {
-		super.onended(onended);
+	public Keygen onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onerror(String onerror) {
-		super.onerror(onerror);
+	public Keygen onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Keygen onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen oninput(String oninput) {
-		super.oninput(oninput);
+	public Keygen oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Keygen oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Keygen onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Keygen onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Keygen onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onload(String onload) {
-		super.onload(onload);
+	public Keygen onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Keygen onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Keygen onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Keygen onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Keygen onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Keygen onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Keygen onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Keygen onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Keygen onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Keygen onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Keygen onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Keygen onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onpause(String onpause) {
-		super.onpause(onpause);
+	public Keygen onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onplay(String onplay) {
-		super.onplay(onplay);
+	public Keygen onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Keygen onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Keygen onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Keygen onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onreset(String onreset) {
-		super.onreset(onreset);
+	public Keygen onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onresize(String onresize) {
-		super.onresize(onresize);
+	public Keygen onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Keygen onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Keygen onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Keygen onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onselect(String onselect) {
-		super.onselect(onselect);
+	public Keygen onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onshow(String onshow) {
-		super.onshow(onshow);
+	public Keygen onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Keygen onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Keygen onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Keygen onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Keygen ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Keygen ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Keygen onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Keygen onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Keygen spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen style(String style) {
-		super.style(style);
+	public Keygen style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Keygen tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen title(String title) {
-		super.title(title);
+	public Keygen title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Keygen translate(Object translate) {
-		super.translate(translate);
+	public Keygen translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 

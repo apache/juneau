@@ -56,8 +56,8 @@ public class Audio extends HtmlElementContainer {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Audio autoplay(Object autoplay) {
-		attr("autoplay", deminimize(autoplay, "autoplay"));
+	public Audio autoplay(Object value) {
+		attr("autoplay", deminimize(value, "autoplay"));
 		return this;
 	}
 
@@ -73,8 +73,8 @@ public class Audio extends HtmlElementContainer {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Audio controls(Object controls) {
-		attr("controls", deminimize(controls, "controls"));
+	public Audio controls(Object value) {
+		attr("controls", deminimize(value, "controls"));
 		return this;
 	}
 
@@ -88,8 +88,8 @@ public class Audio extends HtmlElementContainer {
 	 * @param crossorigin The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Audio crossorigin(String crossorigin) {
-		attr("crossorigin", crossorigin);
+	public Audio crossorigin(String value) {
+		attr("crossorigin", value);
 		return this;
 	}
 
@@ -104,8 +104,8 @@ public class Audio extends HtmlElementContainer {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Audio loop(Object loop) {
-		attr("loop", loop);
+	public Audio loop(Object value) {
+		attr("loop", value);
 		return this;
 	}
 
@@ -119,8 +119,8 @@ public class Audio extends HtmlElementContainer {
 	 * @param mediagroup The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Audio mediagroup(String mediagroup) {
-		attr("mediagroup", mediagroup);
+	public Audio mediagroup(String value) {
+		attr("mediagroup", value);
 		return this;
 	}
 
@@ -136,8 +136,8 @@ public class Audio extends HtmlElementContainer {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Audio muted(Object muted) {
-		attr("muted", muted);
+	public Audio muted(Object value) {
+		attr("muted", value);
 		return this;
 	}
 
@@ -151,8 +151,8 @@ public class Audio extends HtmlElementContainer {
 	 * @param preload The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Audio preload(Object preload) {
-		attr("preload", preload);
+	public Audio preload(Object value) {
+		attr("preload", value);
 		return this;
 	}
 
@@ -174,8 +174,8 @@ public class Audio extends HtmlElementContainer {
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object.
 	 */
-	public final Audio src(Object src) {
-		attrUri("src", src);
+	public Audio src(Object value) {
+		attrUri("src", value);
 		return this;
 	}
 
@@ -186,386 +186,386 @@ public class Audio extends HtmlElementContainer {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Audio _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Audio accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Audio contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio dir(String dir) {
-		super.dir(dir);
+	public Audio dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio hidden(Object hidden) {
-		super.hidden(hidden);
+	public Audio hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio id(String id) {
-		super.id(id);
+	public Audio id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio lang(String lang) {
-		super.lang(lang);
+	public Audio lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onabort(String onabort) {
-		super.onabort(onabort);
+	public Audio onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onblur(String onblur) {
-		super.onblur(onblur);
+	public Audio onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Audio oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Audio oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Audio oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onchange(String onchange) {
-		super.onchange(onchange);
+	public Audio onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onclick(String onclick) {
-		super.onclick(onclick);
+	public Audio onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Audio oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Audio ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Audio ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Audio onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onended(String onended) {
-		super.onended(onended);
+	public Audio onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onerror(String onerror) {
-		super.onerror(onerror);
+	public Audio onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Audio onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio oninput(String oninput) {
-		super.oninput(oninput);
+	public Audio oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Audio oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Audio onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Audio onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Audio onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onload(String onload) {
-		super.onload(onload);
+	public Audio onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Audio onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Audio onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Audio onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Audio onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Audio onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Audio onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Audio onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Audio onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Audio onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Audio onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Audio onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onpause(String onpause) {
-		super.onpause(onpause);
+	public Audio onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onplay(String onplay) {
-		super.onplay(onplay);
+	public Audio onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Audio onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Audio onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Audio onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onreset(String onreset) {
-		super.onreset(onreset);
+	public Audio onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onresize(String onresize) {
-		super.onresize(onresize);
+	public Audio onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Audio onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Audio onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Audio onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onselect(String onselect) {
-		super.onselect(onselect);
+	public Audio onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onshow(String onshow) {
-		super.onshow(onshow);
+	public Audio onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Audio onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Audio onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Audio onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Audio ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Audio ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Audio onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Audio onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Audio spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio style(String style) {
-		super.style(style);
+	public Audio style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Audio tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio title(String title) {
-		super.title(title);
+	public Audio title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Audio translate(Object translate) {
-		super.translate(translate);
+	public Audio translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementContainer */
-	public Audio child(Object child) {
-		super.child(child);
+	public Audio child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementContainer */
-	public Audio children(Object...children) {
-		super.children(children);
+	public Audio children(Object...value) {
+		super.children(value);
 		return this;
 	}
 

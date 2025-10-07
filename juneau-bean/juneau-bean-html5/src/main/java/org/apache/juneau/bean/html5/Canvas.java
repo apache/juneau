@@ -54,8 +54,8 @@ public class Canvas extends HtmlElementContainer {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Canvas height(Object height) {
-		attr("height", height);
+	public Canvas height(Object value) {
+		attr("height", value);
 		return this;
 	}
 
@@ -70,8 +70,8 @@ public class Canvas extends HtmlElementContainer {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Canvas width(Object width) {
-		attr("width", width);
+	public Canvas width(Object value) {
+		attr("width", value);
 		return this;
 	}
 
@@ -82,386 +82,386 @@ public class Canvas extends HtmlElementContainer {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Canvas _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Canvas accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Canvas contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas dir(String dir) {
-		super.dir(dir);
+	public Canvas dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas hidden(Object hidden) {
-		super.hidden(hidden);
+	public Canvas hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas id(String id) {
-		super.id(id);
+	public Canvas id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas lang(String lang) {
-		super.lang(lang);
+	public Canvas lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onabort(String onabort) {
-		super.onabort(onabort);
+	public Canvas onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onblur(String onblur) {
-		super.onblur(onblur);
+	public Canvas onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Canvas oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Canvas oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Canvas oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onchange(String onchange) {
-		super.onchange(onchange);
+	public Canvas onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onclick(String onclick) {
-		super.onclick(onclick);
+	public Canvas onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Canvas oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Canvas ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Canvas ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Canvas onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onended(String onended) {
-		super.onended(onended);
+	public Canvas onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onerror(String onerror) {
-		super.onerror(onerror);
+	public Canvas onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Canvas onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas oninput(String oninput) {
-		super.oninput(oninput);
+	public Canvas oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Canvas oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Canvas onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Canvas onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Canvas onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onload(String onload) {
-		super.onload(onload);
+	public Canvas onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Canvas onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Canvas onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Canvas onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Canvas onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Canvas onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Canvas onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Canvas onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Canvas onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Canvas onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Canvas onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Canvas onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onpause(String onpause) {
-		super.onpause(onpause);
+	public Canvas onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onplay(String onplay) {
-		super.onplay(onplay);
+	public Canvas onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Canvas onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Canvas onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Canvas onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onreset(String onreset) {
-		super.onreset(onreset);
+	public Canvas onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onresize(String onresize) {
-		super.onresize(onresize);
+	public Canvas onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Canvas onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Canvas onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Canvas onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onselect(String onselect) {
-		super.onselect(onselect);
+	public Canvas onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onshow(String onshow) {
-		super.onshow(onshow);
+	public Canvas onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Canvas onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Canvas onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Canvas onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Canvas ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Canvas ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Canvas onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Canvas onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Canvas spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas style(String style) {
-		super.style(style);
+	public Canvas style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Canvas tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas title(String title) {
-		super.title(title);
+	public Canvas title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Canvas translate(Object translate) {
-		super.translate(translate);
+	public Canvas translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementContainer */
-	public Canvas child(Object child) {
-		super.child(child);
+	public Canvas child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementContainer */
-	public Canvas children(Object...children) {
-		super.children(children);
+	public Canvas children(Object...value) {
+		super.children(value);
 		return this;
 	}
 

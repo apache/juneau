@@ -66,8 +66,8 @@ public class Button extends HtmlElementMixed {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Button autofocus(Object autofocus) {
-		attr("autofocus", autofocus);
+	public Button autofocus(Object value) {
+		attr("autofocus", value);
 		return this;
 	}
 
@@ -82,8 +82,8 @@ public class Button extends HtmlElementMixed {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public final Button disabled(Object disabled) {
-		attr("disabled", deminimize(disabled, "disabled"));
+	public Button disabled(Object value) {
+		attr("value", deminimize(value, "value"));
 		return this;
 	}
 
@@ -96,8 +96,8 @@ public class Button extends HtmlElementMixed {
 	 * @param form The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Button form(String form) {
-		attr("form", form);
+	public Button form(String value) {
+		attr("form", value);
 		return this;
 	}
 
@@ -117,8 +117,8 @@ public class Button extends HtmlElementMixed {
 	 * @param formaction The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Button formaction(String formaction) {
-		attrUri("formaction", formaction);
+	public Button formaction(String value) {
+		attrUri("formaction", value);
 		return this;
 	}
 
@@ -131,8 +131,8 @@ public class Button extends HtmlElementMixed {
 	 * @param formenctype The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Button formenctype(String formenctype) {
-		attr("formenctype", formenctype);
+	public Button formenctype(String value) {
+		attr("formenctype", value);
 		return this;
 	}
 
@@ -145,8 +145,8 @@ public class Button extends HtmlElementMixed {
 	 * @param formmethod The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Button formmethod(String formmethod) {
-		attr("formmethod", formmethod);
+	public Button formmethod(String value) {
+		attr("formmethod", value);
 		return this;
 	}
 
@@ -160,8 +160,8 @@ public class Button extends HtmlElementMixed {
 	 * @param formnovalidate The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Button formnovalidate(String formnovalidate) {
-		attr("formnovalidate", formnovalidate);
+	public Button formnovalidate(String value) {
+		attr("formnovalidate", value);
 		return this;
 	}
 
@@ -174,8 +174,8 @@ public class Button extends HtmlElementMixed {
 	 * @param formtarget The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Button formtarget(String formtarget) {
-		attr("formtarget", formtarget);
+	public Button formtarget(String value) {
+		attr("formtarget", value);
 		return this;
 	}
 
@@ -188,8 +188,8 @@ public class Button extends HtmlElementMixed {
 	 * @param menu The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Button menu(String menu) {
-		attr("menu", menu);
+	public Button menu(String value) {
+		attr("menu", value);
 		return this;
 	}
 
@@ -202,8 +202,8 @@ public class Button extends HtmlElementMixed {
 	 * @param name The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Button name(String name) {
-		attr("name", name);
+	public Button name(String value) {
+		attr("name", value);
 		return this;
 	}
 
@@ -216,8 +216,8 @@ public class Button extends HtmlElementMixed {
 	 * @param type The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Button type(String type) {
-		attr("type", type);
+	public Button type(String value) {
+		attr("type", value);
 		return this;
 	}
 
@@ -232,7 +232,7 @@ public class Button extends HtmlElementMixed {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Button value(Object value) {
+	public Button value(Object value) {
 		attr("value", value);
 		return this;
 	}
@@ -244,386 +244,386 @@ public class Button extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Button _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Button accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Button contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button dir(String dir) {
-		super.dir(dir);
+	public Button dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button hidden(Object hidden) {
-		super.hidden(hidden);
+	public Button hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button id(String id) {
-		super.id(id);
+	public Button id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button lang(String lang) {
-		super.lang(lang);
+	public Button lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onabort(String onabort) {
-		super.onabort(onabort);
+	public Button onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onblur(String onblur) {
-		super.onblur(onblur);
+	public Button onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Button oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Button oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Button oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onchange(String onchange) {
-		super.onchange(onchange);
+	public Button onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onclick(String onclick) {
-		super.onclick(onclick);
+	public Button onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Button oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Button ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Button ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Button onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onended(String onended) {
-		super.onended(onended);
+	public Button onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onerror(String onerror) {
-		super.onerror(onerror);
+	public Button onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Button onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button oninput(String oninput) {
-		super.oninput(oninput);
+	public Button oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Button oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Button onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Button onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Button onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onload(String onload) {
-		super.onload(onload);
+	public Button onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Button onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Button onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Button onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Button onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Button onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Button onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Button onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Button onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Button onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Button onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Button onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onpause(String onpause) {
-		super.onpause(onpause);
+	public Button onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onplay(String onplay) {
-		super.onplay(onplay);
+	public Button onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Button onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Button onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Button onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onreset(String onreset) {
-		super.onreset(onreset);
+	public Button onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onresize(String onresize) {
-		super.onresize(onresize);
+	public Button onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Button onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Button onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Button onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onselect(String onselect) {
-		super.onselect(onselect);
+	public Button onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onshow(String onshow) {
-		super.onshow(onshow);
+	public Button onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Button onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Button onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Button onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Button ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Button ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Button onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Button onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Button spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button style(String style) {
-		super.style(style);
+	public Button style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Button tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button title(String title) {
-		super.title(title);
+	public Button title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Button translate(Object translate) {
-		super.translate(translate);
+	public Button translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Button child(Object child) {
-		super.child(child);
+	public Button child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Button children(Object...children) {
-		super.children(children);
+	public Button children(Object...value) {
+		super.children(value);
 		return this;
 	}
 

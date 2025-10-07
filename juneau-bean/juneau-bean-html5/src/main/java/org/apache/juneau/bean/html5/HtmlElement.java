@@ -32,7 +32,8 @@ import org.apache.juneau.xml.annotation.*;
  * These are beans that when serialized using {@link HtmlSerializer} generate valid HTML5 elements.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
+
  * </ul>
  */
 @org.apache.juneau.html.annotation.Html(format=XML)
@@ -148,8 +149,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement accesskey(String accesskey) {
-		attr("accesskey", accesskey);
+	public HtmlElement accesskey(String value) {
+		attr("accesskey", value);
 		return this;
 	}
 
@@ -160,8 +161,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement _class(String _class) {  // NOSONAR - Intentional naming.
-		attr("class", _class);
+	public HtmlElement _class(String value) {  // NOSONAR - Intentional naming.
+		attr("class", value);
 		return this;
 	}
 
@@ -174,8 +175,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement contenteditable(Object contenteditable) {
-		attr("contenteditable", contenteditable);
+	public HtmlElement contenteditable(Object value) {
+		attr("contenteditable", value);
 		return this;
 	}
 
@@ -186,8 +187,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement dir(String dir) {
-		attr("dir", dir);
+	public HtmlElement dir(String value) {
+		attr("dir", value);
 		return this;
 	}
 
@@ -200,8 +201,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement hidden(Object hidden) {
-		attr("hidden", deminimize(hidden, "hidden"));
+	public HtmlElement hidden(Object value) {
+		attr("value", deminimize(value, "value"));
 		return this;
 	}
 
@@ -212,8 +213,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement id(String id) {
-		attr("id", id);
+	public HtmlElement id(String value) {
+		attr("id", value);
 		return this;
 	}
 
@@ -224,8 +225,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement lang(String lang) {
-		attr("lang", lang);
+	public HtmlElement lang(String value) {
+		attr("lang", value);
 		return this;
 	}
 
@@ -236,8 +237,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onabort(String onabort) {
-		attr("onabort", onabort);
+	public HtmlElement onabort(String value) {
+		attr("onabort", value);
 		return this;
 	}
 
@@ -248,8 +249,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onblur(String onblur) {
-		attr("onblur", onblur);
+	public HtmlElement onblur(String value) {
+		attr("onblur", value);
 		return this;
 	}
 
@@ -260,8 +261,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement oncancel(String oncancel) {
-		attr("oncancel", oncancel);
+	public HtmlElement oncancel(String value) {
+		attr("oncancel", value);
 		return this;
 	}
 
@@ -272,8 +273,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement oncanplay(String oncanplay) {
-		attr("oncanplay", oncanplay);
+	public HtmlElement oncanplay(String value) {
+		attr("oncanplay", value);
 		return this;
 	}
 
@@ -285,8 +286,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement oncanplaythrough(String oncanplaythrough) {
-		attr("oncanplaythrough", oncanplaythrough);
+	public HtmlElement oncanplaythrough(String value) {
+		attr("oncanplaythrough", value);
 		return this;
 	}
 
@@ -297,8 +298,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onchange(String onchange) {
-		attr("onchange", onchange);
+	public HtmlElement onchange(String value) {
+		attr("onchange", value);
 		return this;
 	}
 
@@ -309,8 +310,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onclick(String onclick) {
-		attr("onclick", onclick);
+	public HtmlElement onclick(String value) {
+		attr("onclick", value);
 		return this;
 	}
 
@@ -322,8 +323,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement oncuechange(String oncuechange) {
-		attr("oncuechange", oncuechange);
+	public HtmlElement oncuechange(String value) {
+		attr("oncuechange", value);
 		return this;
 	}
 
@@ -334,8 +335,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement ondblclick(String ondblclick) {
-		attr("ondblclick", ondblclick);
+	public HtmlElement ondblclick(String value) {
+		attr("ondblclick", value);
 		return this;
 	}
 
@@ -347,8 +348,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement ondurationchange(String ondurationchange) {
-		attr("ondurationchange", ondurationchange);
+	public HtmlElement ondurationchange(String value) {
+		attr("ondurationchange", value);
 		return this;
 	}
 
@@ -359,8 +360,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onemptied(String onemptied) {
-		attr("onemptied", onemptied);
+	public HtmlElement onemptied(String value) {
+		attr("onemptied", value);
 		return this;
 	}
 
@@ -371,8 +372,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onended(String onended) {
-		attr("onended", onended);
+	public HtmlElement onended(String value) {
+		attr("onended", value);
 		return this;
 	}
 
@@ -383,8 +384,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onerror(String onerror) {
-		attr("onerror", onerror);
+	public HtmlElement onerror(String value) {
+		attr("onerror", value);
 		return this;
 	}
 
@@ -395,8 +396,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onfocus(String onfocus) {
-		attr("onfocus", onfocus);
+	public HtmlElement onfocus(String value) {
+		attr("onfocus", value);
 		return this;
 	}
 
@@ -407,8 +408,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement oninput(String oninput) {
-		attr("oninput", oninput);
+	public HtmlElement oninput(String value) {
+		attr("oninput", value);
 		return this;
 	}
 
@@ -419,8 +420,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement oninvalid(String oninvalid) {
-		attr("oninvalid", oninvalid);
+	public HtmlElement oninvalid(String value) {
+		attr("oninvalid", value);
 		return this;
 	}
 
@@ -431,8 +432,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onkeydown(String onkeydown) {
-		attr("onkeydown", onkeydown);
+	public HtmlElement onkeydown(String value) {
+		attr("onkeydown", value);
 		return this;
 	}
 
@@ -443,8 +444,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onkeypress(String onkeypress) {
-		attr("onkeypress", onkeypress);
+	public HtmlElement onkeypress(String value) {
+		attr("onkeypress", value);
 		return this;
 	}
 
@@ -455,8 +456,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onkeyup(String onkeyup) {
-		attr("onkeyup", onkeyup);
+	public HtmlElement onkeyup(String value) {
+		attr("onkeyup", value);
 		return this;
 	}
 
@@ -467,8 +468,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onload(String onload) {
-		attr("onload", onload);
+	public HtmlElement onload(String value) {
+		attr("onload", value);
 		return this;
 	}
 
@@ -480,8 +481,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onloadeddata(String onloadeddata) {
-		attr("onloadeddata", onloadeddata);
+	public HtmlElement onloadeddata(String value) {
+		attr("onloadeddata", value);
 		return this;
 	}
 
@@ -493,8 +494,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onloadedmetadata(String onloadedmetadata) {
-		attr("onloadedmetadata", onloadedmetadata);
+	public HtmlElement onloadedmetadata(String value) {
+		attr("onloadedmetadata", value);
 		return this;
 	}
 
@@ -506,8 +507,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onloadstart(String onloadstart) {
-		attr("onloadstart", onloadstart);
+	public HtmlElement onloadstart(String value) {
+		attr("onloadstart", value);
 		return this;
 	}
 
@@ -519,8 +520,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onmousedown(String onmousedown) {
-		attr("onmousedown", onmousedown);
+	public HtmlElement onmousedown(String value) {
+		attr("onmousedown", value);
 		return this;
 	}
 
@@ -531,8 +532,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onmouseenter(String onmouseenter) {
-		attr("onmouseenter", onmouseenter);
+	public HtmlElement onmouseenter(String value) {
+		attr("onmouseenter", value);
 		return this;
 	}
 
@@ -544,8 +545,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onmouseleave(String onmouseleave) {
-		attr("onmouseleave", onmouseleave);
+	public HtmlElement onmouseleave(String value) {
+		attr("onmouseleave", value);
 		return this;
 	}
 
@@ -557,8 +558,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onmousemove(String onmousemove) {
-		attr("onmousemove", onmousemove);
+	public HtmlElement onmousemove(String value) {
+		attr("onmousemove", value);
 		return this;
 	}
 
@@ -569,8 +570,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onmouseout(String onmouseout) {
-		attr("onmouseout", onmouseout);
+	public HtmlElement onmouseout(String value) {
+		attr("onmouseout", value);
 		return this;
 	}
 
@@ -582,8 +583,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onmouseover(String onmouseover) {
-		attr("onmouseover", onmouseover);
+	public HtmlElement onmouseover(String value) {
+		attr("onmouseover", value);
 		return this;
 	}
 
@@ -594,8 +595,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onmouseup(String onmouseup) {
-		attr("onmouseup", onmouseup);
+	public HtmlElement onmouseup(String value) {
+		attr("onmouseup", value);
 		return this;
 	}
 
@@ -607,8 +608,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onmousewheel(String onmousewheel) {
-		attr("onmousewheel", onmousewheel);
+	public HtmlElement onmousewheel(String value) {
+		attr("onmousewheel", value);
 		return this;
 	}
 
@@ -619,8 +620,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onpause(String onpause) {
-		attr("onpause", onpause);
+	public HtmlElement onpause(String value) {
+		attr("onpause", value);
 		return this;
 	}
 
@@ -631,8 +632,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onplay(String onplay) {
-		attr("onplay", onplay);
+	public HtmlElement onplay(String value) {
+		attr("onplay", value);
 		return this;
 	}
 
@@ -643,8 +644,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onplaying(String onplaying) {
-		attr("onplaying", onplaying);
+	public HtmlElement onplaying(String value) {
+		attr("onplaying", value);
 		return this;
 	}
 
@@ -655,8 +656,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onprogress(String onprogress) {
-		attr("onprogress", onprogress);
+	public HtmlElement onprogress(String value) {
+		attr("onprogress", value);
 		return this;
 	}
 
@@ -668,8 +669,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onratechange(String onratechange) {
-		attr("onratechange", onratechange);
+	public HtmlElement onratechange(String value) {
+		attr("onratechange", value);
 		return this;
 	}
 
@@ -680,8 +681,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onreset(String onreset) {
-		attr("onreset", onreset);
+	public HtmlElement onreset(String value) {
+		attr("onreset", value);
 		return this;
 	}
 
@@ -692,8 +693,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onresize(String onresize) {
-		attr("onresize", onresize);
+	public HtmlElement onresize(String value) {
+		attr("onresize", value);
 		return this;
 	}
 
@@ -704,8 +705,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onscroll(String onscroll) {
-		attr("onscroll", onscroll);
+	public HtmlElement onscroll(String value) {
+		attr("onscroll", value);
 		return this;
 	}
 
@@ -716,8 +717,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onseeked(String onseeked) {
-		attr("onseeked", onseeked);
+	public HtmlElement onseeked(String value) {
+		attr("onseeked", value);
 		return this;
 	}
 
@@ -728,8 +729,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onseeking(String onseeking) {
-		attr("onseeking", onseeking);
+	public HtmlElement onseeking(String value) {
+		attr("onseeking", value);
 		return this;
 	}
 
@@ -740,8 +741,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onselect(String onselect) {
-		attr("onselect", onselect);
+	public HtmlElement onselect(String value) {
+		attr("onselect", value);
 		return this;
 	}
 
@@ -752,8 +753,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onshow(String onshow) {
-		attr("onshow", onshow);
+	public HtmlElement onshow(String value) {
+		attr("onshow", value);
 		return this;
 	}
 
@@ -764,8 +765,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onstalled(String onstalled) {
-		attr("onstalled", onstalled);
+	public HtmlElement onstalled(String value) {
+		attr("onstalled", value);
 		return this;
 	}
 
@@ -776,8 +777,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onsubmit(String onsubmit) {
-		attr("onsubmit", onsubmit);
+	public HtmlElement onsubmit(String value) {
+		attr("onsubmit", value);
 		return this;
 	}
 
@@ -788,8 +789,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onsuspend(String onsuspend) {
-		attr("onsuspend", onsuspend);
+	public HtmlElement onsuspend(String value) {
+		attr("onsuspend", value);
 		return this;
 	}
 
@@ -801,8 +802,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement ontimeupdate(String ontimeupdate) {
-		attr("ontimeupdate", ontimeupdate);
+	public HtmlElement ontimeupdate(String value) {
+		attr("ontimeupdate", value);
 		return this;
 	}
 
@@ -813,8 +814,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement ontoggle(String ontoggle) {
-		attr("ontoggle", ontoggle);
+	public HtmlElement ontoggle(String value) {
+		attr("ontoggle", value);
 		return this;
 	}
 
@@ -826,8 +827,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onvolumechange(String onvolumechange) {
-		attr("onvolumechange", onvolumechange);
+	public HtmlElement onvolumechange(String value) {
+		attr("onvolumechange", value);
 		return this;
 	}
 
@@ -838,8 +839,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement onwaiting(String onwaiting) {
-		attr("onwaiting", onwaiting);
+	public HtmlElement onwaiting(String value) {
+		attr("onwaiting", value);
 		return this;
 	}
 
@@ -852,8 +853,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement spellcheck(Object spellcheck) {
-		attr("spellcheck", spellcheck);
+	public HtmlElement spellcheck(Object value) {
+		attr("spellcheck", value);
 		return this;
 	}
 
@@ -864,8 +865,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement style(String style) {
-		attr("style", style);
+	public HtmlElement style(String value) {
+		attr("style", value);
 		return this;
 	}
 
@@ -878,8 +879,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement tabindex(Object tabindex) {
-		attr("tabindex", tabindex);
+	public HtmlElement tabindex(Object value) {
+		attr("tabindex", value);
 		return this;
 	}
 
@@ -890,8 +891,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement title(String title) {
-		attr("title", title);
+	public HtmlElement title(String value) {
+		attr("title", value);
 		return this;
 	}
 
@@ -904,8 +905,8 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement translate(Object translate) {
-		attr("translate", translate);
+	public HtmlElement translate(Object value) {
+		attr("translate", value);
 		return this;
 	}
 

@@ -50,8 +50,8 @@ public class Map extends HtmlElementContainer {
 	 * @param name The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Map name(String name) {
-		attr("name", name);
+	public Map name(String value) {
+		attr("name", value);
 		return this;
 	}
 
@@ -62,386 +62,386 @@ public class Map extends HtmlElementContainer {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Map _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Map accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Map contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map dir(String dir) {
-		super.dir(dir);
+	public Map dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map hidden(Object hidden) {
-		super.hidden(hidden);
+	public Map hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map id(String id) {
-		super.id(id);
+	public Map id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map lang(String lang) {
-		super.lang(lang);
+	public Map lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onabort(String onabort) {
-		super.onabort(onabort);
+	public Map onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onblur(String onblur) {
-		super.onblur(onblur);
+	public Map onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Map oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Map oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Map oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onchange(String onchange) {
-		super.onchange(onchange);
+	public Map onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onclick(String onclick) {
-		super.onclick(onclick);
+	public Map onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Map oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Map ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Map ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Map onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onended(String onended) {
-		super.onended(onended);
+	public Map onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onerror(String onerror) {
-		super.onerror(onerror);
+	public Map onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Map onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map oninput(String oninput) {
-		super.oninput(oninput);
+	public Map oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Map oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Map onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Map onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Map onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onload(String onload) {
-		super.onload(onload);
+	public Map onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Map onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Map onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Map onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Map onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Map onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Map onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Map onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Map onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Map onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Map onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Map onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onpause(String onpause) {
-		super.onpause(onpause);
+	public Map onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onplay(String onplay) {
-		super.onplay(onplay);
+	public Map onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Map onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Map onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Map onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onreset(String onreset) {
-		super.onreset(onreset);
+	public Map onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onresize(String onresize) {
-		super.onresize(onresize);
+	public Map onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Map onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Map onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Map onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onselect(String onselect) {
-		super.onselect(onselect);
+	public Map onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onshow(String onshow) {
-		super.onshow(onshow);
+	public Map onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Map onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Map onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Map onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Map ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Map ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Map onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Map onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Map spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map style(String style) {
-		super.style(style);
+	public Map style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Map tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map title(String title) {
-		super.title(title);
+	public Map title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Map translate(Object translate) {
-		super.translate(translate);
+	public Map translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementContainer */
-	public Map child(Object child) {
-		super.child(child);
+	public Map child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementContainer */
-	public Map children(Object...children) {
-		super.children(children);
+	public Map children(Object...value) {
+		super.children(value);
 		return this;
 	}
 

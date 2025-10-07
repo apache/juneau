@@ -56,8 +56,8 @@ public class Iframe extends HtmlElementMixed {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Iframe height(Object height) {
-		attr("height", height);
+	public Iframe height(Object value) {
+		attr("height", value);
 		return this;
 	}
 
@@ -70,8 +70,8 @@ public class Iframe extends HtmlElementMixed {
 	 * @param name The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Iframe name(String name) {
-		attr("name", name);
+	public Iframe name(String value) {
+		attr("name", value);
 		return this;
 	}
 
@@ -85,8 +85,8 @@ public class Iframe extends HtmlElementMixed {
 	 * @param sandbox The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Iframe sandbox(String sandbox) {
-		attr("sandbox", sandbox);
+	public Iframe sandbox(String value) {
+		attr("sandbox", value);
 		return this;
 	}
 
@@ -108,8 +108,8 @@ public class Iframe extends HtmlElementMixed {
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object.
 	 */
-	public final Iframe src(Object src) {
-		attrUri("src", src);
+	public Iframe src(Object value) {
+		attrUri("src", value);
 		return this;
 	}
 
@@ -123,8 +123,8 @@ public class Iframe extends HtmlElementMixed {
 	 * @param srcdoc The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Iframe srcdoc(String srcdoc) {
-		attr("srcdoc", srcdoc);
+	public Iframe srcdoc(String value) {
+		attr("srcdoc", value);
 		return this;
 	}
 
@@ -139,8 +139,8 @@ public class Iframe extends HtmlElementMixed {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Iframe width(Object width) {
-		attr("width", width);
+	public Iframe width(Object value) {
+		attr("width", value);
 		return this;
 	}
 
@@ -151,386 +151,386 @@ public class Iframe extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Iframe _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Iframe accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Iframe contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe dir(String dir) {
-		super.dir(dir);
+	public Iframe dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe hidden(Object hidden) {
-		super.hidden(hidden);
+	public Iframe hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe id(String id) {
-		super.id(id);
+	public Iframe id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe lang(String lang) {
-		super.lang(lang);
+	public Iframe lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onabort(String onabort) {
-		super.onabort(onabort);
+	public Iframe onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onblur(String onblur) {
-		super.onblur(onblur);
+	public Iframe onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Iframe oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Iframe oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Iframe oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onchange(String onchange) {
-		super.onchange(onchange);
+	public Iframe onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onclick(String onclick) {
-		super.onclick(onclick);
+	public Iframe onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Iframe oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Iframe ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Iframe ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Iframe onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onended(String onended) {
-		super.onended(onended);
+	public Iframe onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onerror(String onerror) {
-		super.onerror(onerror);
+	public Iframe onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Iframe onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe oninput(String oninput) {
-		super.oninput(oninput);
+	public Iframe oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Iframe oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Iframe onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Iframe onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Iframe onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onload(String onload) {
-		super.onload(onload);
+	public Iframe onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Iframe onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Iframe onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Iframe onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Iframe onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Iframe onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Iframe onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Iframe onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Iframe onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Iframe onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Iframe onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Iframe onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onpause(String onpause) {
-		super.onpause(onpause);
+	public Iframe onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onplay(String onplay) {
-		super.onplay(onplay);
+	public Iframe onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Iframe onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Iframe onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Iframe onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onreset(String onreset) {
-		super.onreset(onreset);
+	public Iframe onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onresize(String onresize) {
-		super.onresize(onresize);
+	public Iframe onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Iframe onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Iframe onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Iframe onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onselect(String onselect) {
-		super.onselect(onselect);
+	public Iframe onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onshow(String onshow) {
-		super.onshow(onshow);
+	public Iframe onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Iframe onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Iframe onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Iframe onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Iframe ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Iframe ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Iframe onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Iframe onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Iframe spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe style(String style) {
-		super.style(style);
+	public Iframe style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Iframe tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe title(String title) {
-		super.title(title);
+	public Iframe title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Iframe translate(Object translate) {
-		super.translate(translate);
+	public Iframe translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Iframe child(Object child) {
-		super.child(child);
+	public Iframe child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Iframe children(Object...children) {
-		super.children(children);
+	public Iframe children(Object...value) {
+		super.children(value);
 		return this;
 	}
 

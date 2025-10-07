@@ -52,8 +52,8 @@ public class Meter extends HtmlElementMixed {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Meter high(Object high) {
-		attr("high", high);
+	public Meter high(Object value) {
+		attr("high", value);
 		return this;
 	}
 
@@ -68,8 +68,8 @@ public class Meter extends HtmlElementMixed {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Meter low(Object low) {
-		attr("low", low);
+	public Meter low(Object value) {
+		attr("low", value);
 		return this;
 	}
 
@@ -84,8 +84,8 @@ public class Meter extends HtmlElementMixed {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Meter max(Object max) {
-		attr("max", max);
+	public Meter max(Object value) {
+		attr("max", value);
 		return this;
 	}
 
@@ -100,8 +100,8 @@ public class Meter extends HtmlElementMixed {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Meter min(Object min) {
-		attr("min", min);
+	public Meter min(Object value) {
+		attr("min", value);
 		return this;
 	}
 
@@ -116,8 +116,8 @@ public class Meter extends HtmlElementMixed {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Meter optimum(Object optimum) {
-		attr("optimum", optimum);
+	public Meter optimum(Object value) {
+		attr("optimum", value);
 		return this;
 	}
 
@@ -132,7 +132,7 @@ public class Meter extends HtmlElementMixed {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
-	public final Meter value(Object value) {
+	public Meter value(Object value) {
 		attr("value", value);
 		return this;
 	}
@@ -144,386 +144,386 @@ public class Meter extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter _class(String _class) {  // NOSONAR - Intentional naming.
-		super._class(_class);
+	public Meter _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter accesskey(String accesskey) {
-		super.accesskey(accesskey);
+	public Meter accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter contenteditable(Object contenteditable) {
-		super.contenteditable(contenteditable);
+	public Meter contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter dir(String dir) {
-		super.dir(dir);
+	public Meter dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter hidden(Object hidden) {
-		super.hidden(hidden);
+	public Meter hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter id(String id) {
-		super.id(id);
+	public Meter id(String value) {
+		super.id(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter lang(String lang) {
-		super.lang(lang);
+	public Meter lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onabort(String onabort) {
-		super.onabort(onabort);
+	public Meter onabort(String value) {
+		super.onabort(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onblur(String onblur) {
-		super.onblur(onblur);
+	public Meter onblur(String value) {
+		super.onblur(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter oncancel(String oncancel) {
-		super.oncancel(oncancel);
+	public Meter oncancel(String value) {
+		super.oncancel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter oncanplay(String oncanplay) {
-		super.oncanplay(oncanplay);
+	public Meter oncanplay(String value) {
+		super.oncanplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter oncanplaythrough(String oncanplaythrough) {
-		super.oncanplaythrough(oncanplaythrough);
+	public Meter oncanplaythrough(String value) {
+		super.oncanplaythrough(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onchange(String onchange) {
-		super.onchange(onchange);
+	public Meter onchange(String value) {
+		super.onchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onclick(String onclick) {
-		super.onclick(onclick);
+	public Meter onclick(String value) {
+		super.onclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter oncuechange(String oncuechange) {
-		super.oncuechange(oncuechange);
+	public Meter oncuechange(String value) {
+		super.oncuechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter ondblclick(String ondblclick) {
-		super.ondblclick(ondblclick);
+	public Meter ondblclick(String value) {
+		super.ondblclick(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter ondurationchange(String ondurationchange) {
-		super.ondurationchange(ondurationchange);
+	public Meter ondurationchange(String value) {
+		super.ondurationchange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onemptied(String onemptied) {
-		super.onemptied(onemptied);
+	public Meter onemptied(String value) {
+		super.onemptied(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onended(String onended) {
-		super.onended(onended);
+	public Meter onended(String value) {
+		super.onended(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onerror(String onerror) {
-		super.onerror(onerror);
+	public Meter onerror(String value) {
+		super.onerror(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onfocus(String onfocus) {
-		super.onfocus(onfocus);
+	public Meter onfocus(String value) {
+		super.onfocus(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter oninput(String oninput) {
-		super.oninput(oninput);
+	public Meter oninput(String value) {
+		super.oninput(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter oninvalid(String oninvalid) {
-		super.oninvalid(oninvalid);
+	public Meter oninvalid(String value) {
+		super.oninvalid(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onkeydown(String onkeydown) {
-		super.onkeydown(onkeydown);
+	public Meter onkeydown(String value) {
+		super.onkeydown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onkeypress(String onkeypress) {
-		super.onkeypress(onkeypress);
+	public Meter onkeypress(String value) {
+		super.onkeypress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onkeyup(String onkeyup) {
-		super.onkeyup(onkeyup);
+	public Meter onkeyup(String value) {
+		super.onkeyup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onload(String onload) {
-		super.onload(onload);
+	public Meter onload(String value) {
+		super.onload(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onloadeddata(String onloadeddata) {
-		super.onloadeddata(onloadeddata);
+	public Meter onloadeddata(String value) {
+		super.onloadeddata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onloadedmetadata(String onloadedmetadata) {
-		super.onloadedmetadata(onloadedmetadata);
+	public Meter onloadedmetadata(String value) {
+		super.onloadedmetadata(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onloadstart(String onloadstart) {
-		super.onloadstart(onloadstart);
+	public Meter onloadstart(String value) {
+		super.onloadstart(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onmousedown(String onmousedown) {
-		super.onmousedown(onmousedown);
+	public Meter onmousedown(String value) {
+		super.onmousedown(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onmouseenter(String onmouseenter) {
-		super.onmouseenter(onmouseenter);
+	public Meter onmouseenter(String value) {
+		super.onmouseenter(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onmouseleave(String onmouseleave) {
-		super.onmouseleave(onmouseleave);
+	public Meter onmouseleave(String value) {
+		super.onmouseleave(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onmousemove(String onmousemove) {
-		super.onmousemove(onmousemove);
+	public Meter onmousemove(String value) {
+		super.onmousemove(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onmouseout(String onmouseout) {
-		super.onmouseout(onmouseout);
+	public Meter onmouseout(String value) {
+		super.onmouseout(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onmouseover(String onmouseover) {
-		super.onmouseover(onmouseover);
+	public Meter onmouseover(String value) {
+		super.onmouseover(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onmouseup(String onmouseup) {
-		super.onmouseup(onmouseup);
+	public Meter onmouseup(String value) {
+		super.onmouseup(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onmousewheel(String onmousewheel) {
-		super.onmousewheel(onmousewheel);
+	public Meter onmousewheel(String value) {
+		super.onmousewheel(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onpause(String onpause) {
-		super.onpause(onpause);
+	public Meter onpause(String value) {
+		super.onpause(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onplay(String onplay) {
-		super.onplay(onplay);
+	public Meter onplay(String value) {
+		super.onplay(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onplaying(String onplaying) {
-		super.onplaying(onplaying);
+	public Meter onplaying(String value) {
+		super.onplaying(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onprogress(String onprogress) {
-		super.onprogress(onprogress);
+	public Meter onprogress(String value) {
+		super.onprogress(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onratechange(String onratechange) {
-		super.onratechange(onratechange);
+	public Meter onratechange(String value) {
+		super.onratechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onreset(String onreset) {
-		super.onreset(onreset);
+	public Meter onreset(String value) {
+		super.onreset(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onresize(String onresize) {
-		super.onresize(onresize);
+	public Meter onresize(String value) {
+		super.onresize(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onscroll(String onscroll) {
-		super.onscroll(onscroll);
+	public Meter onscroll(String value) {
+		super.onscroll(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onseeked(String onseeked) {
-		super.onseeked(onseeked);
+	public Meter onseeked(String value) {
+		super.onseeked(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onseeking(String onseeking) {
-		super.onseeking(onseeking);
+	public Meter onseeking(String value) {
+		super.onseeking(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onselect(String onselect) {
-		super.onselect(onselect);
+	public Meter onselect(String value) {
+		super.onselect(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onshow(String onshow) {
-		super.onshow(onshow);
+	public Meter onshow(String value) {
+		super.onshow(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onstalled(String onstalled) {
-		super.onstalled(onstalled);
+	public Meter onstalled(String value) {
+		super.onstalled(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onsubmit(String onsubmit) {
-		super.onsubmit(onsubmit);
+	public Meter onsubmit(String value) {
+		super.onsubmit(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onsuspend(String onsuspend) {
-		super.onsuspend(onsuspend);
+	public Meter onsuspend(String value) {
+		super.onsuspend(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter ontimeupdate(String ontimeupdate) {
-		super.ontimeupdate(ontimeupdate);
+	public Meter ontimeupdate(String value) {
+		super.ontimeupdate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter ontoggle(String ontoggle) {
-		super.ontoggle(ontoggle);
+	public Meter ontoggle(String value) {
+		super.ontoggle(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onvolumechange(String onvolumechange) {
-		super.onvolumechange(onvolumechange);
+	public Meter onvolumechange(String value) {
+		super.onvolumechange(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter onwaiting(String onwaiting) {
-		super.onwaiting(onwaiting);
+	public Meter onwaiting(String value) {
+		super.onwaiting(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter spellcheck(Object spellcheck) {
-		super.spellcheck(spellcheck);
+	public Meter spellcheck(Object value) {
+		super.spellcheck(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter style(String style) {
-		super.style(style);
+	public Meter style(String value) {
+		super.style(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter tabindex(Object tabindex) {
-		super.tabindex(tabindex);
+	public Meter tabindex(Object value) {
+		super.tabindex(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter title(String title) {
-		super.title(title);
+	public Meter title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */
-	public Meter translate(Object translate) {
-		super.translate(translate);
+	public Meter translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Meter child(Object child) {
-		super.child(child);
+	public Meter child(Object value) {
+		super.child(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */
-	public Meter children(Object...children) {
-		super.children(children);
+	public Meter children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
