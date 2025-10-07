@@ -24,7 +24,7 @@ import org.apache.http.protocol.*;
  * Can be subclasses and specified via {@link RestClient.Builder#callHandler()}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
 public class BasicRestCallHandler implements RestCallHandler {

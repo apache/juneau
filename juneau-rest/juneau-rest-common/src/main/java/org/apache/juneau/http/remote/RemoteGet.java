@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * Note that this annotation is optional if you do not need to override any of the values.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxies</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxy Basics</a>
  * </ul>
  */
 @Documented
@@ -121,4 +121,4 @@ public @interface RemoteGet {
 	 * @return The annotation value.
 	 */
 	String value() default "";
-}
+}

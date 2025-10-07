@@ -22,7 +22,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
  * This is not intended to be used as strong encryption.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ModdedEntries">Overview &gt; juneau-config &gt; Modded/Encoded Entries</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ModdedEntries">Modded/Encoded Entries</a>
  * </ul>
  */
 public class XorEncodeMod extends Mod {
@@ -66,4 +66,4 @@ public class XorEncodeMod extends Mod {
 	public boolean isApplied(String value) {
 		return startsWith(value, '{') && endsWith(value, '}');
 	}
-}
+}

@@ -37,8 +37,9 @@ import java.lang.annotation.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>
- * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#contactObject">Swagger Contact Object</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
+ * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#contactObject">Swagger Contact Object</a>
+
  * </ul>
  */
 @Documented
@@ -63,7 +64,7 @@ public @interface Contact {
 	 * 	<li class='note'>
 	 * 		The format is an email string.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -80,7 +81,7 @@ public @interface Contact {
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -97,11 +98,11 @@ public @interface Contact {
 	 * 	<li class='note'>
 	 * 		The format is a URL string.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
 	String url() default "";
-}
+}

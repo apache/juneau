@@ -38,8 +38,9 @@ import org.apache.juneau.rest.stats.*;
  * Implements the basic REST endpoints defined in {@link BasicRestOperations}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Classes</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Class Basics</a>
+ * </ul>
  *
  * @serial exclude
  */
@@ -74,4 +75,4 @@ public abstract class BasicSpringRestServlet extends SpringRestServlet implement
 	public RestContextStats getStats(RestRequest req) {
 		return req.getContext().getStats();
 	}
-}
+}

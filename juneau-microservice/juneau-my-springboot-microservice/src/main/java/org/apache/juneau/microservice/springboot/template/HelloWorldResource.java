@@ -23,7 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Sample REST resource that prints out a simple "Hello world!" message.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MySpringBootMicroserviceBasics">my-springboot-microservice</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MySpringBootMicroserviceBasics">My SpringBoot Microservice Basics</a>
+
  * </ul>
  */
 @Rest(
@@ -79,4 +80,4 @@ public class HelloWorldResource extends BasicRestObject {
 			message = messageProvider.get().get();
 		return message;
 	}
-}
+}

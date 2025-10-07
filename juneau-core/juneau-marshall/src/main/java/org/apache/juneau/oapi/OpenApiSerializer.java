@@ -32,7 +32,8 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenAPI Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
+
  * </ul>
  */
 public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvider {
@@ -1006,4 +1007,4 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	protected final HttpPartCollectionFormat getCollectionFormat() {
 		return collectionFormat;
 	}
-}
+}

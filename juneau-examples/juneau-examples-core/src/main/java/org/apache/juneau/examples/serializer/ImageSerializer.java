@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
  * Example serializer that converts {@link BufferedImage} objects to byte streams.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">REST Marshalling</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
  * </ul>
  */
 @SuppressWarnings("javadoc")

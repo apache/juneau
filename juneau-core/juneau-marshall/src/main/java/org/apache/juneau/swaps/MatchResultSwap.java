@@ -26,7 +26,8 @@ import org.apache.juneau.swap.*;
  * Entries in the list represent matched groups in a regular expression.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
+
  * </ul>
  */
 public class MatchResultSwap extends ObjectSwap<MatchResult,List<String>> {
@@ -41,4 +42,4 @@ public class MatchResultSwap extends ObjectSwap<MatchResult,List<String>> {
 			l.add(o.group(i));
 		return l;
 	}
-}
+}

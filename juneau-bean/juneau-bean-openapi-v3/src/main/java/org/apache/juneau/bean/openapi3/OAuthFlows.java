@@ -65,7 +65,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#oauth-flows-object">OpenAPI Specification &gt; OAuth Flows Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/authentication/oauth2/">OpenAPI OAuth2 Authentication</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi3</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
 @FluentSetters

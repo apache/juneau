@@ -61,7 +61,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#external-documentation-object">Swagger 2.0 Specification &gt; External Documentation Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/external-documentation/">Swagger External Documentation</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
 @FluentSetters

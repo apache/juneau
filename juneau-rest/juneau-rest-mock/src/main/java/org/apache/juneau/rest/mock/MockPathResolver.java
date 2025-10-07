@@ -26,7 +26,7 @@ import org.apache.juneau.rest.util.*;
  * Used to resolve incoming URLS to the various URL artifacts of <l>HttpServletRequest</l>.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
  * </ul>
  */
 class MockPathResolver {

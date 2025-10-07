@@ -37,7 +37,8 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics">UON Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics">UON Basics</a>
+
  * </ul>
  */
 public class UonSerializerSession extends WriterSerializerSession implements HttpPartSerializerSession {
@@ -515,4 +516,4 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	protected final char getQuoteChar() {
 		return ctx.getQuoteChar();
 	}
-}
+}

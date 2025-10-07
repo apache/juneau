@@ -31,7 +31,8 @@ import org.apache.juneau.uon.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics">UON Details</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics">UON Basics</a>
+ * </ul>
  */
 @Documented
 @Target({TYPE,FIELD,METHOD})
@@ -149,4 +150,4 @@ public @interface Uon {
 	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
-}
+}

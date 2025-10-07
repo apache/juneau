@@ -85,7 +85,7 @@ import org.apache.juneau.annotation.*;
  *
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
@@ -95,7 +95,8 @@ import org.apache.juneau.annotation.*;
  * </ul>
  *
  * <p>
- * <h5 class='section'>See Also:</h5><ul>
+ * <h5 class='section'>See Also:</h5><ul>
+
  * </ul>
  */
 @Documented

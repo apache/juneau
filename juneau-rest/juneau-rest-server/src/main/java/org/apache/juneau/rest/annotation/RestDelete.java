@@ -35,7 +35,8 @@ import org.apache.juneau.encoders.*;
  * This is a specialized subtype of <c><ja>{@link RestOp @RestOp}(method=<jsf>DELETE</jsf>)</c>.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Methods</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Method Basics</a>
+
  * </ul>
  */
 @Target(METHOD)
@@ -129,7 +130,7 @@ public @interface RestDelete {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -162,7 +163,7 @@ public @interface RestDelete {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -197,7 +198,7 @@ public @interface RestDelete {
 	 * 	<li class='note'>
 	 * 		Key and value is trimmed of whitespace.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -233,7 +234,7 @@ public @interface RestDelete {
 	 * </ul>
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -261,7 +262,7 @@ public @interface RestDelete {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -288,7 +289,7 @@ public @interface RestDelete {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -318,7 +319,7 @@ public @interface RestDelete {
 	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/description</c>.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -366,7 +367,7 @@ public @interface RestDelete {
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Encoders">Encoders</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -487,7 +488,7 @@ public @interface RestDelete {
 	 * 	<li class='note'>
 	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		When defined on parent/child classes and methods, ALL guards within the hierarchy must pass.
@@ -550,7 +551,7 @@ public @interface RestDelete {
 	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -589,14 +590,14 @@ public @interface RestDelete {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		The format is <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>.
+	 * 		The format is <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li class='note'>
 	 * 		The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
 	 * 	<li class='note'>
 	 * 		These values are superimposed on top of any Swagger JSON file present for the resource in the classpath.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -628,4 +629,4 @@ public @interface RestDelete {
 	 * @return The annotation value.
 	 */
 	String value() default "";
-}
+}

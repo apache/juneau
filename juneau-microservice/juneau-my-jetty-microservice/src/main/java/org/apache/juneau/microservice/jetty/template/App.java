@@ -22,7 +22,7 @@ import org.apache.juneau.microservice.jetty.JettyMicroservice;
  * the resources and commands defined in that file.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MyJettyMicroserviceBasics">my-jetty-microservice</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MyJettyMicroserviceBasics">My Jetty Microservice Basics</a>
  * </ul>
  */
 public class App {

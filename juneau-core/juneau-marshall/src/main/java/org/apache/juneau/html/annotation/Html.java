@@ -32,7 +32,8 @@ import org.apache.juneau.html.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlAnnotation">@Html Annotation</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Details</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+ * </ul>
  */
 @Documented
 @Target({TYPE,FIELD,METHOD})
@@ -241,4 +242,4 @@ public @interface Html {
 	 */
 	@SuppressWarnings("rawtypes")
 	Class<? extends HtmlRender> render() default HtmlRender.class;
-}
+}

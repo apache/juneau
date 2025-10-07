@@ -20,7 +20,8 @@ import org.apache.juneau.msgpack.annotation.*;
  * annotation on the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Basics</a>
+
  * </ul>
  */
 public final class MsgPackBeanPropertyMeta extends ExtendedBeanPropertyMeta {
@@ -43,4 +44,4 @@ public final class MsgPackBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	private MsgPackBeanPropertyMeta() {
 		super(null);
 	}
-}
+}

@@ -21,7 +21,8 @@ import org.apache.juneau.html.annotation.*;
  * annotation on the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+
  * </ul>
  */
 @SuppressWarnings("rawtypes")
@@ -206,4 +207,4 @@ public final class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	public String getAnchorText() {
 		return anchorText;
 	}
-}
+}

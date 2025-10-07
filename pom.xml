@@ -159,6 +159,30 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- Topic Link Checker Plugin -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>check-topic-links</id>
+						<phase>site</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>python3</executable>
+							<arguments>
+								<argument>${project.parent.basedir}/juneau-check-topic-links.py</argument>
+							</arguments>
+							<workingDirectory>${project.parent.basedir}</workingDirectory>
+							<failOnError>true</failOnError>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 		<pluginManagement>

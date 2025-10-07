@@ -113,7 +113,8 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestContext">RestContext</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestContext">RestContext</a>
+
  * </ul>
  */
 public class RestContext extends Context {
@@ -730,7 +731,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 		 * </ul>
 		 *
 		 * @return The variable resolver sub-builder.
@@ -749,7 +750,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 		 * 	<li class='jm'>{@link #varResolver()}
 		 * </ul>
 		 *
@@ -772,7 +773,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 		 * 	<li class='jm'>{@link #varResolver()}
 		 * </ul>
 		 *
@@ -788,7 +789,7 @@ public class RestContext extends Context {
 		 * Creates the variable resolver sub-builder.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -989,7 +990,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LoggingAndDebugging">Logging / Debugging</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
 		 * </ul>
 		 *
 		 * @return The logger for this resource.
@@ -1004,7 +1005,7 @@ public class RestContext extends Context {
 		 * Sets the logger for this resource.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LoggingAndDebugging">Logging / Debugging</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
 		 * 	<li class='jm'>{@link #logger()}
 		 * </ul>
 		 *
@@ -1020,7 +1021,7 @@ public class RestContext extends Context {
 		 * Instantiates the logger for this resource.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LoggingAndDebugging">Logging / Debugging</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
 		 * 	<li class='jm'>{@link #logger()}
 		 * </ul>
 		 *
@@ -1205,7 +1206,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Encoders">Encoders</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>
 		 * </ul>
 		 *
 		 * @return The builder for the {@link EncoderSet} object in the REST context.
@@ -1226,7 +1227,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Encoders">Encoders</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>
 		 * 	<li class='jm'>{@link #encoders()}
 		 * </ul>
 		 *
@@ -1249,7 +1250,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Encoders">Encoders</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>
 		 * 	<li class='jm'>{@link #encoders()}
 		 * </ul>
 		 *
@@ -1265,7 +1266,7 @@ public class RestContext extends Context {
 		 * Instantiates the encoder group sub-builder.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Encoders">Encoders</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>
 		 * 	<li class='jm'>{@link #encoders()}
 		 * </ul>
 		 *
@@ -2114,7 +2115,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LoggingAndDebugging">Logging / Debugging</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
 		 * </ul>
 		 *
 		 * @return The call logger sub-builder.
@@ -2136,7 +2137,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LoggingAndDebugging">Logging / Debugging</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
 		 * 	<li class='jm'>{@link #callLogger()}
 		 * </ul>
 		 *
@@ -2158,7 +2159,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LoggingAndDebugging">Logging / Debugging</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
 		 * 	<li class='jm'>{@link #callLogger()}
 		 * </ul>
 		 *
@@ -2174,7 +2175,7 @@ public class RestContext extends Context {
 		 * Instantiates the call logger sub-builder.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LoggingAndDebugging">Logging / Debugging</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -2542,7 +2543,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
 		 * </ul>
 		 *
 		 * @return The JSON schema generator sub-builder.
@@ -2563,7 +2564,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
 		 * 	<li class='jm'>{@link #jsonSchemaGenerator()}
 		 * </ul>
 		 *
@@ -2586,7 +2587,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
 		 * </ul>
 		 *
 		 * @param value The new value.
@@ -2601,7 +2602,7 @@ public class RestContext extends Context {
 		 * Instantiates the JSON schema generator sub-builder.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -3893,7 +3894,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">injected beans</a>.
+		 * 			<li>Any <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a default {@link BasicSwaggerProvider}.
@@ -4715,7 +4716,7 @@ public class RestContext extends Context {
 		 * from parent-to-child order with child entries given priority over parent entries.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Encoders">Encoders</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>
 		 * </ul>
 		 *
 		 * @return The encoder group builder for this context builder.
@@ -5682,7 +5683,7 @@ public class RestContext extends Context {
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * </ul>
 	 *
 	 * @return The var resolver in use by this resource.
@@ -6760,4 +6761,4 @@ public class RestContext extends Context {
 			.append("uriRelativity", uriRelativity)
 			.append("uriResolution", uriResolution);
 	}
-}
+}

@@ -20,7 +20,8 @@ import org.apache.juneau.json.annotation.*;
  * annotation on the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
+
  * </ul>
  */
 public final class JsonBeanPropertyMeta extends ExtendedBeanPropertyMeta {
@@ -43,4 +44,4 @@ public final class JsonBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	private JsonBeanPropertyMeta() {
 		super(null);
 	}
-}
+}

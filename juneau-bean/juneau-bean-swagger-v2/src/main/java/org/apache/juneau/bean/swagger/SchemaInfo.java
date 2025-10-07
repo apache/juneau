@@ -89,7 +89,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#schema-object">Swagger 2.0 Specification &gt; Schema Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/data-models/">Swagger Data Models</a>
  * 	<li class='link'><a class="doclink" href="https://json-schema.org/">JSON Schema Specification</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
 @FluentSetters

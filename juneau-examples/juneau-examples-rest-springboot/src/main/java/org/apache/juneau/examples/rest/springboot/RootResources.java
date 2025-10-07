@@ -25,7 +25,8 @@ import org.apache.juneau.serializer.annotation.*;
  * Sample REST resource showing how to implement a "router" resource page.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot &gt; Overview</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>
+
  * </ul>
  *
  * @serial exclude
@@ -73,4 +74,4 @@ import org.apache.juneau.serializer.annotation.*;
 )
 public class RootResources extends BasicSpringRestServletGroup {
 	private static final long serialVersionUID = 1L;
-}
+}

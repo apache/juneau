@@ -274,7 +274,7 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of the following
 
 * **juneau-marshall**	- A universal toolkit for marshalling POJOs to a variety of content types using a common framework with no external library dependencies.
 * **juneau-marshall-rdf**	- Additional support for various RDF languages.
-* **juneau-bean-atom, juneau-bean-common, juneau-bean-html5, juneau-bean-jsonschema, juneau-bean-openapi3**	- A variety of predefined serializable beans such as HTML5, Swagger and ATOM.
+* **juneau-bean-atom, juneau-bean-common, juneau-bean-html5, juneau-bean-jsonschema, juneau-bean-openapi-v3**	- A variety of predefined serializable beans such as HTML5, Swagger and ATOM.
 * **juneau-config**	- A sophisticated configuration file API.
 * **juneau-assertions** - Fluent-style assertions API.
 * **juneau-bct** - Bean-Centric Testing framework that extends JUnit with streamlined assertion methods for Java objects.
@@ -306,7 +306,7 @@ Juneau is packed with features that may not be obvious at first. Users are encou
 * Exhaustively tested
 * Lots of up-to-date documentation and examples
 * Minimal library dependencies:
-   * juneau-marshall, juneau-bean-atom, juneau-bean-common, juneau-bean-html5, juneau-bean-jsonschema, juneau-bean-openapi3, juneau-svl, juneau-config - No external dependencies. Entirely self-contained.
+   * juneau-marshall, juneau-bean-atom, juneau-bean-common, juneau-bean-html5, juneau-bean-jsonschema, juneau-bean-openapi-v3, juneau-svl, juneau-config - No external dependencies. Entirely self-contained.
    * juneau-marshall-rdf - Optional RDF support. Requires Apache Jena 2.7.1+.
    * juneau-rest-server - Any Servlet 3.1.0+ container.
    * juneau-rest-client - Apache HttpClient 4.5+.

@@ -165,7 +165,8 @@ import org.apache.juneau.uon.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h5 class='section'>See Also:</h5><ul>
+
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })
@@ -1146,7 +1147,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(Class)}
 	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
 	 * </ul>
 	 *
 	 * @return
@@ -1388,7 +1389,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * </ul>
 	 *
 	 * @return The variable resolver for this request.

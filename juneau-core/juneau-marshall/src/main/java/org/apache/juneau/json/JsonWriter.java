@@ -28,7 +28,8 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
+
  * </ul>
  */
 public final class JsonWriter extends SerializerWriter {
@@ -318,4 +319,4 @@ public final class JsonWriter extends SerializerWriter {
 	}
 
 	// </FluentSetters>
-}
+}

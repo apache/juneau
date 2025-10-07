@@ -34,7 +34,8 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Basics</a>
+
  * </ul>
  */
 public final class MsgPackSerializerSession extends OutputStreamSerializerSession {
@@ -395,4 +396,4 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	protected boolean isAddBeanTypes() {
 		return ctx.isAddBeanTypes();
 	}
-}
+}

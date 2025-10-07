@@ -113,7 +113,8 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
+
  * </ul>
  */
 public class JsonParser extends ReaderParser implements JsonMetaProvider {
@@ -835,4 +836,4 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	protected final boolean isValidateEnd() {
 		return validateEnd;
 	}
-}
+}

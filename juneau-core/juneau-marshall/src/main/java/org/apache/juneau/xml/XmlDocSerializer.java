@@ -31,7 +31,7 @@ package org.apache.juneau.xml;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
  * </ul>
  */
 public class XmlDocSerializer extends XmlSerializer {
@@ -93,4 +93,4 @@ public class XmlDocSerializer extends XmlSerializer {
 	public XmlDocSerializerSession getSession() {
 		return createSession().build();
 	}
-}
+}

@@ -89,7 +89,8 @@ import org.apache.juneau.serializer.*;
  * The normal object representation of an object.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
+
  * </ul>
  *
  * @param <T> The normal form of the class.
@@ -410,4 +411,4 @@ public abstract class ObjectSwap<T,S> {
 	public String toString() {
 		return getClass().getSimpleName() + '<' + getNormalClass().getSimpleName() + "," + getSwapClass().getSimpleName() + '>';
 	}
-}
+}

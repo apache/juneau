@@ -32,7 +32,8 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenAPI Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
+
  * </ul>
  */
 public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
@@ -838,4 +839,4 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 	protected final HttpPartCollectionFormat getCollectionFormat() {
 		return collectionFormat;
 	}
-}
+}

@@ -50,7 +50,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
  * </ul>
  */
 public class TemporalSwap extends StringSwap<Temporal> {

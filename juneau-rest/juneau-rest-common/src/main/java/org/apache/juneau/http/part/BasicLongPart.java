@@ -23,7 +23,7 @@ import org.apache.juneau.common.internal.*;
  * A {@link NameValuePair} that consists of a single long value.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
 public class BasicLongPart extends BasicPart {

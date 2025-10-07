@@ -43,7 +43,8 @@ import org.apache.juneau.common.internal.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
+
  * </ul>
  */
 public abstract class Var {
@@ -173,4 +174,4 @@ public abstract class Var {
 	 * @throws Exception Any exception can be thrown.
 	 */
 	public abstract void resolveTo(VarResolverSession session, Writer w, String arg) throws Exception;
-}
+}

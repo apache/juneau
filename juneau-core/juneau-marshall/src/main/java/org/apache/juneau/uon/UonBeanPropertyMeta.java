@@ -20,7 +20,8 @@ import org.apache.juneau.uon.annotation.*;
  * annotation on the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics">UON Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics">UON Basics</a>
+
  * </ul>
  */
 public final class UonBeanPropertyMeta extends ExtendedBeanPropertyMeta {
@@ -43,4 +44,4 @@ public final class UonBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	private UonBeanPropertyMeta() {
 		super(null);
 	}
-}
+}

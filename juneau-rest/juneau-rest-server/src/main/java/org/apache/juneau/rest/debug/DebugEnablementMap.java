@@ -19,7 +19,7 @@ import org.apache.juneau.utils.*;
  * A reflection map for the {@link Enablement} setting.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LoggingAndDebugging">Logging / Debugging</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  */
 public class DebugEnablementMap extends ReflectionMap<Enablement> {

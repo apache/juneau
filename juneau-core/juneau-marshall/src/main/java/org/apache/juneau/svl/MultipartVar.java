@@ -23,7 +23,7 @@ import static org.apache.juneau.common.internal.Utils.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
  * </ul>
  */
 public abstract class MultipartVar extends SimpleVar {
@@ -51,4 +51,4 @@ public abstract class MultipartVar extends SimpleVar {
 		String[] s2 = s.indexOf(',') == -1 ? new String[]{s.trim()} : splita(s);
 		return resolve(session, s2);
 	}
-}
+}

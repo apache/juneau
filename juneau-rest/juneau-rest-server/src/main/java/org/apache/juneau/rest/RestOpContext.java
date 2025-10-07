@@ -1058,7 +1058,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 			<li>{@link Method} - The Java method this context belongs to.
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">injected beans</a>.
+		 * 			<li>Any <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a <c>RestGuard[0]</c>.
@@ -1207,7 +1207,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">injected beans</a>.
+		 * 			<li>Any <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a <c>RestMatcher[0]</c>.
@@ -2069,7 +2069,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	<li class='note'>
 		 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link RestOpContext.Builder#rolesDeclared(String...)}.
 		 * 	<li class='note'>
-		 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+		 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 		 * </ul>
 		 *

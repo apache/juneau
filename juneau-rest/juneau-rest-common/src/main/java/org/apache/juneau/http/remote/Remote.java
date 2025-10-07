@@ -23,7 +23,8 @@ import org.apache.juneau.http.header.*;
  * Identifies a proxy against a REST interface.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxies</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxy Basics</a>
+ * </ul>
  */
 @Documented
 @Target({TYPE})
@@ -133,4 +134,4 @@ public @interface Remote {
 	 * @return The annotation value.
 	 */
 	String versionHeader() default "";
-}
+}

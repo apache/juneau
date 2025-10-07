@@ -55,7 +55,7 @@ import org.apache.juneau.http.response.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Classes</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Class Basics</a>
  * </ul>
  *
  * @serial exclude
@@ -254,4 +254,4 @@ public abstract class RestServlet extends HttpServlet {
 	public synchronized RestResponse getResponse() {
 		return getContext().getLocalSession().getOpSession().getResponse();
 	}
-}
+}

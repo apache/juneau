@@ -20,7 +20,8 @@ import org.apache.juneau.common.internal.*;
  * A subclass of {@link DefaultingVar} that simply pulls values from a {@link Map}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
+
  * </ul>
  */
 @SuppressWarnings("rawtypes")
@@ -44,4 +45,4 @@ public abstract class MapVar extends DefaultingVar {
 	public String resolve(VarResolverSession session, String varVal) {
 		return Utils.s(m.get(varVal));
 	}
-}
+}

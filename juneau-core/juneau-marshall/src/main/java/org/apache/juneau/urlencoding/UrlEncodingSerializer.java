@@ -125,7 +125,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
 public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingMetaProvider {
@@ -1093,4 +1093,4 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	protected JsonMap properties() {
 		return filteredMap("expandedParams", expandedParams);
 	}
-}
+}

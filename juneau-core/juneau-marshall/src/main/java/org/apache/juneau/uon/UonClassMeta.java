@@ -20,7 +20,8 @@ import org.apache.juneau.uon.annotation.*;
  * the class.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics">UON Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics">UON Basics</a>
+
  * </ul>
  */
 public class UonClassMeta extends ExtendedClassMeta {
@@ -34,4 +35,4 @@ public class UonClassMeta extends ExtendedClassMeta {
 	public UonClassMeta(ClassMeta<?> cm, UonMetaProvider mp) {
 		super(cm);
 	}
-}
+}

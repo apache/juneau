@@ -18,7 +18,8 @@ import jakarta.servlet.http.*;
  * Predefined matcher for matching requests with content type <js>"multipart/form-data"</js>.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Methods</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Method Basics</a>
+ * </ul>
  */
 public class MultipartFormDataMatcher extends RestMatcher {
 
@@ -27,4 +28,4 @@ public class MultipartFormDataMatcher extends RestMatcher {
 		String contentType = req.getContentType();
 		return contentType != null && contentType.startsWith("multipart/form-data");
 	}
-}
+}

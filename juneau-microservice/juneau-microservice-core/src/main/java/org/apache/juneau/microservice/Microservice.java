@@ -89,7 +89,8 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceCoreBasics">juneau-microservice-core</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceCoreBasics">juneau-microservice-core Basics</a>
+
  * </ul>
  */
 public class Microservice implements ConfigEventListener {
@@ -1222,4 +1223,4 @@ public class Microservice implements ConfigEventListener {
 	public void onConfigChange(ConfigEvents events) {
 		listener.onConfigChange(this, events);
 	}
-}
+}

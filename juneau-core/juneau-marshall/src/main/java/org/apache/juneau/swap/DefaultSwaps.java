@@ -28,7 +28,7 @@ import org.apache.juneau.swaps.*;
  * Maintain the list of default swaps used by all serializers and parsers.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
  * </ul>
  */
 public class DefaultSwaps {

@@ -389,7 +389,7 @@ public @interface BeanConfig {
 	 * 	<li class='ja'>{@link Beanp#dictionary()}
 	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanDictionaryBasics">Bean Names and Dictionaries</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanDictionaryBasics">Bean Dictionary Basics</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -855,7 +855,7 @@ public @interface BeanConfig {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/PerMediaTypeSwaps">Per-media-type Swaps</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OneWaySwaps">One-way Swaps</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapAnnotation">@Swap Annotation</a>

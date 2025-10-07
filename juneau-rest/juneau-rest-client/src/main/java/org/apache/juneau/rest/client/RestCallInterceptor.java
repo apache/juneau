@@ -42,7 +42,7 @@ package org.apache.juneau.rest.client;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jm'>{@link RestClient.Builder#interceptors(Object...)}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
 public interface RestCallInterceptor {
@@ -80,4 +80,4 @@ public interface RestCallInterceptor {
 	 * 	<br>If not a {@link RestCallException} or {@link RuntimeException}, will be wrapped in a {@link RestCallException}.
 	 */
 	void onClose(RestRequest req, RestResponse res) throws Exception;
-}
+}

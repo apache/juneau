@@ -16,7 +16,7 @@ package org.apache.juneau.objecttools;
  * Represents possible values for number and date comparisons.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ObjectTools">Object Tools</a>
  * </ul>
  */
 @SuppressWarnings("javadoc")

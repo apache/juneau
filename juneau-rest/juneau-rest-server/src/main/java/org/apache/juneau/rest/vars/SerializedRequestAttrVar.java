@@ -35,7 +35,7 @@ import org.apache.juneau.svl.*;
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SvlVariables">SVL Variables</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
  * </ul>
  */
 public class SerializedRequestAttrVar extends StreamedVar {

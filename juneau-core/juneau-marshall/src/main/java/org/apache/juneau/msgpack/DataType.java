@@ -16,7 +16,7 @@ package org.apache.juneau.msgpack;
  * Constants for the MessagePack format.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Basics</a>
  * </ul>
  */
 enum DataType {

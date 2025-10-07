@@ -35,7 +35,8 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Details</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
+ * </ul>
  */
 public class JsonSerializerSession extends WriterSerializerSession {
 
@@ -476,4 +477,4 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	protected JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
 		return ctx.getJsonClassMeta(cm);
 	}
-}
+}

@@ -33,7 +33,7 @@ import org.apache.juneau.internal.*;
  * <br>The user might not have the necessary permissions for a resource, or may need an account of some sort.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  *
  * @serial exclude

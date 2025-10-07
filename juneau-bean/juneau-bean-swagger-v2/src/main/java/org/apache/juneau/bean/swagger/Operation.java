@@ -149,7 +149,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#operation-object">Swagger 2.0 Specification &gt; Operation Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/paths-and-operations/">Swagger Paths and Operations</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
 @FluentSetters

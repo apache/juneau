@@ -24,7 +24,8 @@ import org.apache.juneau.rest.widget.ThemeMenuItem;
  * Root microservice page.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MyJettyMicroserviceBasics">my-jetty-microservice</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MyJettyMicroserviceBasics">My Jetty Microservice Basics</a>
+ * </ul>
  *
  * @serial exclude
  */
@@ -50,4 +51,4 @@ import org.apache.juneau.rest.widget.ThemeMenuItem;
 )
 public class RootResources extends BasicRestServletGroup {
 	private static final long serialVersionUID = 1L;
-}
+}

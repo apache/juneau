@@ -36,7 +36,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -455,4 +455,4 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	protected UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
 		return ctx.getUrlEncodingClassMeta(cm);
 	}
-}
+}

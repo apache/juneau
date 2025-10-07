@@ -29,7 +29,8 @@ import org.apache.juneau.xml.annotation.*;
  * XML utility methods.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
+
  * </ul>
  */
 public final class XmlUtils {
@@ -587,4 +588,4 @@ public final class XmlUtils {
 			return "ENTITY_DECLARATION";
 		return "UNKNOWN";
 	}
-}
+}

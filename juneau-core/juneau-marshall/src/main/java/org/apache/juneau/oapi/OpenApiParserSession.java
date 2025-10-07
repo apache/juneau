@@ -41,7 +41,8 @@ import org.apache.juneau.uon.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenAPI Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
+
  * </ul>
  */
 public class OpenApiParserSession extends UonParserSession {
@@ -510,4 +511,4 @@ public class OpenApiParserSession extends UonParserSession {
 			throw new ParseException(e.getMessage());
 		}
 	}
-}
+}

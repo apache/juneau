@@ -27,7 +27,8 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics">UON Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics">UON Basics</a>
+
  * </ul>
  */
 public final class UonWriter extends SerializerWriter {
@@ -265,4 +266,4 @@ public final class UonWriter extends SerializerWriter {
 	}
 
 	// </FluentSetters>
-}
+}

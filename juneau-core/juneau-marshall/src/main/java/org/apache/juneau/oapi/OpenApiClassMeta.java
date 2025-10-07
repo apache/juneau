@@ -20,7 +20,8 @@ import org.apache.juneau.oapi.annotation.*;
  * the class.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenAPI Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
+
  * </ul>
  */
 public class OpenApiClassMeta extends ExtendedClassMeta {
@@ -34,4 +35,4 @@ public class OpenApiClassMeta extends ExtendedClassMeta {
 	public OpenApiClassMeta(ClassMeta<?> cm, OpenApiMetaProvider mp) {
 		super(cm);
 	}
-}
+}

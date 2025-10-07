@@ -102,7 +102,8 @@ import org.apache.juneau.serializer.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h5 class='section'>See Also:</h5><ul>
+
  * </ul>
  */
 public final class RestResponse extends HttpServletResponseWrapper {
@@ -218,7 +219,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#responseProcessors()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Methods</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Method Basics</a>
 	 * </ul>
 	 *
 	 * @param output The output to serialize to the connection.

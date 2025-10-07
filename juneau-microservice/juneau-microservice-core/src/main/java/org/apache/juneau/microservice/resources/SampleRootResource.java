@@ -19,7 +19,7 @@ import org.apache.juneau.rest.servlet.*;
  * Sample root REST resource.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceCoreBasics">juneau-microservice-core</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceCoreBasics">juneau-microservice-core Basics</a>
  * </ul>
  *
  * @serial exclude
@@ -32,4 +32,4 @@ import org.apache.juneau.rest.servlet.*;
 )
 public class SampleRootResource extends BasicRestServletGroup {
 	private static final long serialVersionUID = 1L;
-}
+}

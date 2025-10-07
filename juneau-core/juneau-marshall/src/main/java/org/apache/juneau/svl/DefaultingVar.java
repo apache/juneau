@@ -26,7 +26,8 @@ package org.apache.juneau.svl;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
+
  * </ul>
  */
 public abstract class DefaultingVar extends SimpleVar {
@@ -52,4 +53,4 @@ public abstract class DefaultingVar extends SimpleVar {
 			v = s2;
 		return v;
 	}
-}
+}

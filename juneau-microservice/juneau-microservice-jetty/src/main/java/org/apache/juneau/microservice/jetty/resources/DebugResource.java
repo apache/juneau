@@ -26,7 +26,8 @@ import org.apache.juneau.rest.servlet.BasicRestServlet;
  * Microservice debug utilities.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJettyBasics">juneau-microservice-jetty</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJettyBasics">juneau-microservice-jetty Basics</a>
+
  * </ul>
  *
  * @serial exclude
@@ -90,4 +91,4 @@ public class DebugResource extends BasicRestServlet {
 		}
 		return Ok.OK;
 	}
-}
+}

@@ -27,7 +27,7 @@ import org.apache.juneau.common.internal.*;
  * A {@link NameValuePair} that consist of a single HTTP-date.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
 public class BasicDatePart extends BasicPart {

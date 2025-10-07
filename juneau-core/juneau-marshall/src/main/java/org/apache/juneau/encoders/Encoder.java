@@ -29,7 +29,8 @@ import java.io.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Encoders">Encoders</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>
+
  * </ul>
  */
 public abstract class Encoder {
@@ -59,4 +60,4 @@ public abstract class Encoder {
 	 * @return The codings that this encoder handles.
 	 */
 	public abstract String[] getCodings();
-}
+}

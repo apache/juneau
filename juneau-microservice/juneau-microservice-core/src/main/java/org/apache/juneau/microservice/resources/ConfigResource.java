@@ -31,7 +31,7 @@ import org.apache.juneau.rest.servlet.*;
  * Shows contents of the microservice configuration file.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceCoreBasics">juneau-microservice-core</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceCoreBasics">juneau-microservice-core Basics</a>
  * </ul>
  *
  * @serial exclude
@@ -217,4 +217,4 @@ public class ConfigResource extends BasicRestServlet {
 	private JsonMap getSection(String name) throws SectionNotFound {
 		return getContext().getConfig().getSection(name).asMap().orElseThrow(SectionNotFound::new);
 	}
-}
+}

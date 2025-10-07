@@ -127,7 +127,8 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
+
  * </ul>
  */
 public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
@@ -1330,4 +1331,4 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			.append("namespaces", namespaces)
 			.append("addBeanTypes", addBeanTypes);
 	}
-}
+}

@@ -28,7 +28,8 @@ import org.apache.juneau.parser.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Basics</a>
+
  * </ul>
  */
 public final class MsgPackInputStream extends ParserInputStream {
@@ -476,4 +477,4 @@ public final class MsgPackInputStream extends ParserInputStream {
 		long l = read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read();
 		return l;
 	}
-}
+}

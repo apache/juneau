@@ -46,8 +46,8 @@ import org.apache.juneau.svl.*;
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Overview &gt; juneau-marshall &gt; Simple Variable Language</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/VariableBasics">Overview &gt; juneau-config &gt; Variables</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/VariableBasics">Variable Basics</a>
  * </ul>
  */
 public class ConfigVar extends DefaultingVar {

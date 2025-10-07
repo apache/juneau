@@ -197,7 +197,7 @@
 									<destFileName>org.apache.juneau.bean.jsonschema_${project.version}.jar</destFileName>
 								</artifactItem>
 
-								<!-- juneau-bean-openapi3 -->
+								<!-- juneau-bean-openapi-v3 -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>

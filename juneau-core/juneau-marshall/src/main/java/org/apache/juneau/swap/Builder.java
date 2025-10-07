@@ -21,7 +21,7 @@ package org.apache.juneau.swap;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/PojoBuilders">POJO Builders</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
  * </ul>
  *
  * @param <T> The type of objects that this builder creates.

@@ -31,7 +31,8 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenAPI Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
+
  * </ul>
  */
 @Documented
@@ -150,4 +151,4 @@ public @interface OpenApi {
 	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
-}
+}

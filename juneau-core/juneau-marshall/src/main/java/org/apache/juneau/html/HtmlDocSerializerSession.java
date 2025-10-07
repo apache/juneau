@@ -38,7 +38,8 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+
  * </ul>
  */
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
@@ -442,4 +443,4 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	protected JsonMap properties() {
 		return filteredMap("ctx", ctx, "varResolver", getVarResolver());
 	}
-}
+}

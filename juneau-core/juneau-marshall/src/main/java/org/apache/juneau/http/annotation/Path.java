@@ -55,7 +55,7 @@ import org.apache.juneau.oapi.*;
  * The special name <js>"/*"</js> is used to retrieve the path remainder after the path match (i.e. the part that matches <js>"/*"</js>).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * 	<li class='extlink'><a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>
  * </ul>
  *
@@ -73,7 +73,8 @@ import org.apache.juneau.oapi.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Request">@Request</a>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h5 class='section'>See Also:</h5><ul>
+
  * </ul>
  */
 @Documented
@@ -258,4 +259,4 @@ public @interface Path {
 	 * @return The annotation value.
 	 */
 	String value() default "";
-}
+}

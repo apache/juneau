@@ -31,7 +31,8 @@ import org.apache.juneau.msgpack.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">Overview &gt; juneau-marshall &gt; MessagePack Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Basics</a>
+
  * </ul>
  */
 @Documented
@@ -150,4 +151,4 @@ public @interface MsgPack {
 	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
-}
+}

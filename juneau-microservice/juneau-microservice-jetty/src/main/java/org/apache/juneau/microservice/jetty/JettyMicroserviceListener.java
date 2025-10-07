@@ -18,7 +18,7 @@ import org.apache.juneau.microservice.*;
  * Listener class for Jetty microservice lifecycle events.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJettyBasics">juneau-microservice-jetty</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJettyBasics">juneau-microservice-jetty Basics</a>
  * </ul>
  */
 public interface JettyMicroserviceListener extends MicroserviceListener {

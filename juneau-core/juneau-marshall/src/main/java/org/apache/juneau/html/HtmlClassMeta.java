@@ -24,7 +24,8 @@ import org.apache.juneau.html.annotation.*;
  * the class.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+
  * </ul>
  */
 public class HtmlClassMeta extends ExtendedClassMeta {
@@ -149,4 +150,4 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 	public HtmlRender<?> getRender() {
 		return render;
 	}
-}
+}

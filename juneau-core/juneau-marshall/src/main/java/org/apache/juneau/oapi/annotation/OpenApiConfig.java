@@ -28,7 +28,7 @@ import org.apache.juneau.msgpack.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenAPI Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
  * </ul>
  */
 @Target({TYPE,METHOD})

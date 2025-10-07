@@ -21,7 +21,8 @@ import org.apache.juneau.swap.*;
  * Transforms <code><jk>byte</jk>[]</code> arrays to Strings.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
+
  * </ul>
  */
 public abstract class ByteArraySwap extends StringSwap<byte[]> {
@@ -88,4 +89,4 @@ public abstract class ByteArraySwap extends StringSwap<byte[]> {
 			return fromSpacedHex(s);
 		}
 	}
-}
+}

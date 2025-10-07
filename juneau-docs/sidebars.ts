@@ -643,12 +643,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'doc',
           id: 'topics/04.05.00.JuneauBeanOpenApi3',
-          label: '4.5. juneau-bean-openapi3',
+          label: '4.5. juneau-bean-openapi-v3',
         },
         {
           type: 'doc',
           id: 'topics/04.06.00.JuneauBeanCommon',
           label: '4.6. juneau-bean-common',
+        },
+        {
+          type: 'doc',
+          id: 'topics/04.07.00.JuneauBeanSwagger2',
+          label: '4.7. juneau-bean-swagger-v2',
         },
       ],
     },

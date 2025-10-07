@@ -33,7 +33,7 @@ import org.apache.juneau.internal.*;
  * <br>For example, if the client asked for a part of the file that lies beyond the end of the file.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  *
  * @serial exclude

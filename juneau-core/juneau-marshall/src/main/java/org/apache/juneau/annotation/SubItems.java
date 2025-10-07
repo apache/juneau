@@ -27,8 +27,9 @@ import java.lang.annotation.*;
  * <br>If you want to nest items further, you have to define them free-form using {@link #items()} as free-form JSON.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a>
- * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
+ * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>
+
  * </ul>
  */
 @Documented
@@ -176,7 +177,7 @@ public @interface SubItems {
 	 * Describes the type of items in the array.
 	 *
 	 * <p>
-	 * This is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">Swagger</a> object.
+	 * This is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
 	 * <br>It must be declared free-form because it's not possible to nest annotations in Java.
 	 *
 	 * @return The annotation value.
@@ -372,4 +373,4 @@ public @interface SubItems {
 	 * @return The annotation value.
 	 */
 	boolean uniqueItems() default false;
-}
+}

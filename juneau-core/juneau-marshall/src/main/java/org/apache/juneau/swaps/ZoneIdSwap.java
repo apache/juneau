@@ -21,7 +21,7 @@ import org.apache.juneau.swap.*;
  * Transforms {@link ZoneId} objects to and from {@link String Strings}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
  * </ul>
  */
 public class ZoneIdSwap extends StringSwap<ZoneId> {

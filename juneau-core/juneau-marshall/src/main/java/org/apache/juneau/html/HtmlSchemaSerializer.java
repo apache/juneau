@@ -52,7 +52,8 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+
  * </ul>
  */
 public class HtmlSchemaSerializer extends HtmlSerializer {
@@ -1139,4 +1140,4 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	protected JsonMap properties() {
 		return filteredMap("generator", generator);
 	}
-}
+}

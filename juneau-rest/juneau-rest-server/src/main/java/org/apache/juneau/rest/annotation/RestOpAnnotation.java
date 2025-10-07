@@ -36,7 +36,7 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link RestOp @RestOp} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Methods</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Method Basics</a>
  * </ul>
  */
 public class RestOpAnnotation {

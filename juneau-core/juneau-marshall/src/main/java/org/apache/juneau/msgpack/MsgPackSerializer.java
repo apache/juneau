@@ -39,7 +39,8 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Basics</a>
+
  * </ul>
  */
 public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackMetaProvider {
@@ -865,4 +866,4 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	protected JsonMap properties() {
 		return filteredMap("addBeanTypesMsgPack", addBeanTypesMsgPack);
 	}
-}
+}

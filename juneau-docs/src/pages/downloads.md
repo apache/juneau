@@ -19,7 +19,8 @@
   - `juneau-bean-common.jar` - Common Data Transfer Object Beans
   - `juneau-bean-html5.jar` - HTML5 Data Transfer Object Beans
   - `juneau-bean-jsonschema.jar` - JSON Schema Data Transfer Object Beans
-  - `juneau-bean-openapi3.jar` - OpenAPI 3 Data Transfer Object Beans
+  - `juneau-bean-openapi-v3.jar` - OpenAPI 3 Data Transfer Object Beans
+  - `juneau-bean-swagger-v2.jar` - Swagger 2 Data Transfer Object Beans
   - `juneau-svl.jar` - Simple Variable Language
   - `juneau-config.jar` - Config File
   - `juneau-rest-server.jar` - REST Servlet
@@ -69,7 +70,8 @@
 <artifactId>juneau-bean-common</artifactId>
 <artifactId>juneau-bean-html5</artifactId>
 <artifactId>juneau-bean-jsonschema</artifactId>
-<artifactId>juneau-bean-openapi3</artifactId>
+<artifactId>juneau-bean-openapi-v3</artifactId>
+<artifactId>juneau-bean-swagger-v2</artifactId>
 <artifactId>juneau-svl</artifactId>
 <artifactId>juneau-config</artifactId>
 <artifactId>juneau-rest-server</artifactId>
