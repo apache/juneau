@@ -24,9 +24,9 @@ import org.apache.juneau.internal.*;
  * A map of possible out-of-band callbacks related to the parent operation.
  *
  * <p>
- * The Callback Object is a map of possible out-of-band callbacks related to the parent operation. Each value in the 
- * map is a Path Item Object that describes a set of requests that may be initiated by the API provider and the expected 
- * responses. The key value used to identify the callback object is an expression, evaluated at runtime, that identifies 
+ * The Callback Object is a map of possible out-of-band callbacks related to the parent operation. Each value in the
+ * map is a Path Item Object that describes a set of requests that may be initiated by the API provider and the expected
+ * responses. The key value used to identify the callback object is an expression, evaluated at runtime, that identifies
  * a URL to use for the callback operation.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>

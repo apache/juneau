@@ -17,8 +17,8 @@ import static org.apache.juneau.bean.openapi3.OpenApiBuilder.*;
 
 import java.net.*;
 
-import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.TestBase;
 
 /**
  * Testcase for {@link OpenApiBuilder}.

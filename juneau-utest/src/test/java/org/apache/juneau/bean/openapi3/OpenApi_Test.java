@@ -20,6 +20,7 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.TestBase;
 
 /**
  * Testcase for {@link OpenApi}.
@@ -72,6 +73,12 @@ class OpenApi_Test extends TestBase {
 
 		@Test void a07_keySet() {
 			assertList(TESTER.bean().keySet(), "components", "externalDocs", "info", "openapi", "paths", "security", "servers", "tags");
+		}
+
+		@Test void a08_nullParameters() {
+			var x = bean();
+			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
 		}
 	}
 

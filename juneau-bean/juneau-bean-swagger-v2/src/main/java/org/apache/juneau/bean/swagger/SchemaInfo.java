@@ -26,8 +26,8 @@ import org.apache.juneau.internal.*;
  * Allows the definition of input and output data types.
  *
  * <p>
- * The Schema Object allows the definition of input and output data types for Swagger 2.0, including objects, 
- * primitives, and arrays. This object is an extended subset of the JSON Schema Specification Draft 4, with 
+ * The Schema Object allows the definition of input and output data types for Swagger 2.0, including objects,
+ * primitives, and arrays. This object is an extended subset of the JSON Schema Specification Draft 4, with
  * additional extensions provided by the Swagger Specification to allow for more complete documentation.
  *
  * <h5 class='section'>Swagger Specification:</h5>
@@ -259,7 +259,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setAllOf(SchemaInfo...value) {
-		setAllOf(setBuilder(SchemaInfo.class).elementType(SchemaInfo.class).sparse().addAny(value).build());
+		setAllOf(setBuilder(SchemaInfo.class).elementType(SchemaInfo.class).sparse().addAny((Object[])value).build());
 		return this;
 	}
 

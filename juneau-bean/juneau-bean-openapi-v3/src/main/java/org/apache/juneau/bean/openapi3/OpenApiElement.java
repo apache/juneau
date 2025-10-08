@@ -101,9 +101,7 @@ public abstract class OpenApiElement {
 	@Beanp("*")
 	public Object get(String property) {
 		assertArgNotNull("property", property);
-		if (extra == null)
-			return null;
-		return extra.get(property);
+		return opt(extra).map(x -> x.get(property)).orElse(null);
 	}
 
 	/**

@@ -15,9 +15,9 @@ package org.apache.juneau.bean.swagger;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.TestBase;
 
 /**
  * Testcase for {@link SwaggerElement}.

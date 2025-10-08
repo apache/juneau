@@ -17,6 +17,7 @@ import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.TestBase;
 
 /**
  * Testcase for {@link SwaggerBuilder}.

@@ -65,6 +65,12 @@ class License_Test extends TestBase {
 		@Test void a07_keySet() {
 			assertList(TESTER.bean().keySet(), "name", "url");
 		}
+
+		@Test void a08_nullParameters() {
+			var x = bean();
+			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

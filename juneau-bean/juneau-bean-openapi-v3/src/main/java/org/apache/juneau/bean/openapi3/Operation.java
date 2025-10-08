@@ -157,6 +157,38 @@ public class Operation extends OpenApiElement {
 	}
 
 	/**
+	 * Bean property appender:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags for API documentation control.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addTags(String...values) {
+		tags = listBuilder(tags).sparse().add(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags for API documentation control.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addTags(Collection<String> values) {
+		tags = listBuilder(tags).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
 	 * Returns the summary.
 	 *
 	 * @return The summary.

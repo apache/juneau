@@ -89,6 +89,12 @@ class ParameterInfo_Test extends TestBase {
 		@Test void b07_keySet() {
 			assertList(TESTER.bean().keySet(), "allowEmptyValue", "collectionFormat", "default", "description", "enum", "exclusiveMaximum", "exclusiveMinimum", "format", "in", "items", "maxItems", "maxLength", "maximum", "minItems", "minLength", "minimum", "multipleOf", "name", "pattern", "required", "schema", "type", "uniqueItems");
 		}
+
+		@Test void b08_nullParameters() {
+			var x = bean();
+			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

@@ -197,7 +197,7 @@ public class Operation extends SwaggerElement {
 		if (copyFrom.parameters == null) {
 			this.parameters = null;
 		} else {
-			this.parameters = Utils.list();
+			this.parameters = list();
 			copyFrom.parameters.forEach(x -> this.parameters.add(x.copy()));
 		}
 
@@ -211,7 +211,7 @@ public class Operation extends SwaggerElement {
 		if (copyFrom.security == null) {
 			this.security = null;
 		} else {
-			this.security = Utils.list();
+			this.security = list();
 			copyFrom.security.forEach(x -> {
 				Map<String,List<String>> m2 = map();
 				x.forEach((k,v) -> m2.put(k, copyOf(v)));
@@ -289,7 +289,23 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addConsumes(MediaType...value) {
-		setConsumes(setBuilder(MediaType.class).sparse().add(value).build());
+		consumes = setBuilder(consumes).sparse().add(value).build();
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can consume.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addConsumes(Collection<MediaType> values) {
+		consumes = setBuilder(consumes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -570,7 +586,23 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addProduces(MediaType...value) {
-		setProduces(setBuilder(MediaType.class).sparse().add(value).build());
+		produces = setBuilder(produces).sparse().add(value).build();
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can produce.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addProduces(Collection<MediaType> values) {
+		produces = setBuilder(produces).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -701,7 +733,23 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addSchemes(String...value) {
-		setSchemes(setBuilder(String.class).sparse().addJson(value).build());
+		schemes = setBuilder(schemes).sparse().add(value).build();
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol for the operation.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addSchemes(Collection<String> values) {
+		schemes = setBuilder(schemes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -873,7 +921,23 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addTags(String...value) {
-		setTags(setBuilder(tags).sparse().add(value).build());
+		tags = setBuilder(tags).sparse().add(value).build();
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags for API documentation control.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addTags(Collection<String> values) {
+		tags = setBuilder(tags).sparse().addAll(values).build();
 		return this;
 	}
 

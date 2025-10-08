@@ -20,7 +20,6 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -93,6 +92,12 @@ class SchemaInfo_Test extends TestBase {
 
 		@Test void a07_keySet() {
 			assertList(TESTER.bean().keySet(), "$ref", "default", "deprecated", "description", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "format", "items", "maxItems", "maxLength", "maxProperties", "maximum", "minItems", "minLength", "minProperties", "minimum", "multipleOf", "nullable", "pattern", "readOnly", "required", "title", "type", "uniqueItems", "writeOnly");
+		}
+
+		@Test void a08_nullParameters() {
+			var x = bean();
+			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
 		}
 	}
 

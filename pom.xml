@@ -175,9 +175,9 @@
 						<configuration>
 							<executable>python3</executable>
 							<arguments>
-								<argument>${project.parent.basedir}/juneau-check-topic-links.py</argument>
+								<argument>${maven.multiModuleProjectDirectory}/juneau-check-topic-links.py</argument>
 							</arguments>
-							<workingDirectory>${project.parent.basedir}</workingDirectory>
+							<workingDirectory>${maven.multiModuleProjectDirectory}</workingDirectory>
 							<failOnError>true</failOnError>
 						</configuration>
 					</execution>

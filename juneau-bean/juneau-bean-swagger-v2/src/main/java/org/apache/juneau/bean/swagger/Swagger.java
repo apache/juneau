@@ -31,7 +31,7 @@ import org.apache.juneau.objecttools.*;
  *
  * <p>
  * The Swagger Object is the root document that describes an entire API. It contains metadata about the API,
- * available paths and operations, parameters, responses, security definitions, and other information. This is 
+ * available paths and operations, parameters, responses, security definitions, and other information. This is
  * the Swagger 2.0 specification (predecessor to OpenAPI 3.0).
  *
  * <h5 class='section'>Swagger Specification:</h5>
@@ -68,7 +68,7 @@ import org.apache.juneau.objecttools.*;
  * 		.setHost(<js>"petstore.swagger.io"</js>)
  * 		.setBasePath(<js>"/v2"</js>)
  * 		.setSchemes(<js>"https"</js>)
- * 		.addPath(<js>"/pets"</js>, <js>"get"</js>, 
+ * 		.addPath(<js>"/pets"</js>, <js>"get"</js>,
  * 			<jk>new</jk> Operation()
  * 				.setSummary(<js>"List all pets"</js>)
  * 				.addResponse(<js>"200"</js>, <jk>new</jk> ResponseInfo(<js>"Success"</js>))
@@ -238,6 +238,22 @@ public class Swagger extends SwaggerElement {
 	 */
 	public Swagger addConsumes(MediaType...values) {
 		consumes = setBuilder(consumes).sparse().add(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the APIs can consume.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Swagger addConsumes(Collection<MediaType> values) {
+		consumes = setBuilder(consumes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -532,6 +548,23 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
+	 * Bean property appender:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the APIs can produce.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Value MUST be as described under <a class="doclink" href="https://swagger.io/specification#mimeTypes">Swagger Mime Types</a>.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Swagger addProduces(Collection<MediaType> values) {
+		produces = setBuilder(produces).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
 	 * Bean property fluent setter:  <property>produces</property>.
 	 *
 	 * <p>
@@ -646,6 +679,29 @@ public class Swagger extends SwaggerElement {
 	 */
 	public Swagger addSchemes(String...values) {
 		schemes = setBuilder(schemes).sparse().add(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol of the API.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"http"</js>
+	 * 		<li><js>"https"</js>
+	 * 		<li><js>"ws"</js>
+	 * 		<li><js>"wss"</js>
+	 * 	</ul>
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Swagger addSchemes(Collection<String> values) {
+		schemes = setBuilder(schemes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -819,6 +875,26 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
+	 * Bean property setter:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags used by the specification with additional metadata.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
+	 * 	<br>Not all tags that are used by the <a class="doclink" href="https://swagger.io/specification/v2#operationObject">Operation Object</a> must be declared.
+	 * 	<br>The tags that are not declared may be organized randomly or based on the tools' logic.
+	 * 	<br>Each tag name in the list MUST be unique.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Swagger setTags(Tag...value) {
+		setTags(setBuilder(Tag.class).sparse().add(value).build());
+		return this;
+	}
+
+	/**
 	 * Bean property appender:  <property>tags</property>.
 	 *
 	 * <p>
@@ -838,6 +914,26 @@ public class Swagger extends SwaggerElement {
 		return this;
 	}
 
+	/**
+	 * Bean property appender:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags used by the specification with additional metadata.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
+	 * 	<br>Not all tags that are used by the <a class="doclink" href="https://swagger.io/specification/v2#operationObject">Operation Object</a> must be declared.
+	 * 	<br>The tags that are not declared may be organized randomly or based on the tools' logic.
+	 * 	<br>Each tag name in the list MUST be unique.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Swagger addTags(Collection<Tag> values) {
+		tags = setBuilder(tags).sparse().addAll(values).build();
+		return this;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Convenience methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -850,7 +946,7 @@ public class Swagger extends SwaggerElement {
 	 */
 	public OperationMap getPath(String path) {
 		assertArgNotNull("path", path);
-		return getPaths().get(path);
+		return opt(getPaths()).map(x -> x.get(path)).orElse(null);
 	}
 
 	/**
@@ -863,10 +959,7 @@ public class Swagger extends SwaggerElement {
 	public Operation getOperation(String path, String operation) {
 		assertArgNotNull("path", path);
 		assertArgNotNull("operation", operation);
-		var om = getPath(path);
-		if (om == null)
-			return null;
-		return om.get(operation);
+		return opt(getPath(path)).map(x -> x.get(operation)).orElse(null);
 	}
 
 	/**
@@ -881,13 +974,7 @@ public class Swagger extends SwaggerElement {
 		assertArgNotNull("path", path);
 		assertArgNotNull("operation", operation);
 		assertArgNotNull("status", status);
-		var om = getPath(path);
-		if (om == null)
-			return null;
-		var op = om.get(operation);
-		if (op == null)
-			return null;
-		return op.getResponse(status);
+		return opt(getPath(path)).map(x -> x.get(operation)).map(x -> x.getResponse(status)).orElse(null);
 	}
 
 	/**
@@ -915,14 +1002,7 @@ public class Swagger extends SwaggerElement {
 		assertArgNotNull("path", path);
 		assertArgNotNull("method", method);
 		assertArgNotNull("in", in);
-		var om = getPath(path);
-		if (om != null) {
-			var o = om.get(method);
-			if (o != null) {
-				return o.getParameter(in, name);
-			}
-		}
-		return null;
+		return opt(getPath(path)).map(x -> x.get(method)).map(x -> x.getParameter(in, name)).orElse(null);
 	}
 
 	// <FluentSetters>

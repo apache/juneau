@@ -278,6 +278,54 @@ public class OpenApi extends OpenApiElement {
 	}
 
 	/**
+	 * Bean property setter:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags used by the specification with additional metadata.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public OpenApi setTags(Tag...value) {
+		setTags(listBuilder(Tag.class).sparse().add(value).build());
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags used by the specification with additional metadata.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public OpenApi addTags(Tag...values) {
+		tags = listBuilder(tags).sparse().add(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags used by the specification with additional metadata.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public OpenApi addTags(Collection<Tag> values) {
+		tags = listBuilder(tags).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
 	 * Returns the external documentation.
 	 *
 	 * @return The external documentation.

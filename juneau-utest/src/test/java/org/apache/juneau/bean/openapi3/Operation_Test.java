@@ -75,25 +75,8 @@ class Operation_Test extends TestBase {
 		}
 
 		@Test void a08_otherGettersAndSetters() {
-			// Test Collection variants of setters
-			var x = bean()
-				.setParameters(list(
-					parameter().setIn("a1").setName("a2"),
-					parameter().setIn("a3").setName("a4")
-				))
-				.setSecurity(list(
-					securityRequirement().setRequirements(map("b1", list("b2"))),
-					securityRequirement().setRequirements(map("b3", list("b4")))
-				))
-				.setTags(list("c1", "c2"));
-
-			assertBean(x,
-				"parameters{#{in,name}},security{0{requirements{b1}},1{requirements{b3}}},tags",
-				"{[{a1,a2},{a3,a4}]},{{{[b2]}},{{[b4]}}},[c1,c2]"
-			);
-
 			// Test special getters
-			x = bean()
+			var x = bean()
 				.setParameters(parameter().setIn("a1").setName("a2"))
 				.setResponses(map("b1", response().setDescription("b2"), "200", response().setDescription("b3")));
 
@@ -108,6 +91,8 @@ class Operation_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->x.getParameter(null, "a"));
 			assertThrows(IllegalArgumentException.class, ()->x.getParameter("a", null));
 			assertThrows(IllegalArgumentException.class, ()->x.getResponse(null));
+			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
 		}
 	}
 
@@ -228,7 +213,26 @@ class Operation_Test extends TestBase {
 
 	@Nested class D_additionalMethods extends TestBase {
 
-		@Test void d01_asMap() {
+		@Test void d01_collectionSetters() {
+			// Test Collection variants of setters
+			var x = bean()
+				.setParameters(list(
+					parameter().setIn("a1").setName("a2"),
+					parameter().setIn("a3").setName("a4")
+				))
+				.setSecurity(list(
+					securityRequirement().setRequirements(map("b1", list("b2"))),
+					securityRequirement().setRequirements(map("b3", list("b4")))
+				))
+				.setTags(list("c1", "c2"));
+
+			assertBean(x,
+				"parameters{#{in,name}},security{0{requirements{b1}},1{requirements{b3}}},tags",
+				"{[{a1,a2},{a3,a4}]},{{{[b2]}},{{[b4]}}},[c1,c2]"
+			);
+		}
+
+		@Test void d02_asMap() {
 			assertBean(
 				bean()
 					.setSummary("a")
@@ -239,7 +243,7 @@ class Operation_Test extends TestBase {
 			);
 		}
 
-		@Test void d02_extraKeys() {
+		@Test void d03_extraKeys() {
 			var x = bean().set("x1", "x1a").set("x2", "x2a");
 			assertList(x.extraKeys(), "x1", "x2");
 			assertEmpty(bean().extraKeys());
@@ -267,6 +271,7 @@ class Operation_Test extends TestBase {
 			assertFalse(x.isStrict());
 		}
 	}
+
 
 	//---------------------------------------------------------------------------------------------
 	// Helper methods

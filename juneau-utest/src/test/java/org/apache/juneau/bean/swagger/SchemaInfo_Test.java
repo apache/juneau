@@ -59,7 +59,7 @@ class SchemaInfo_Test extends TestBase {
 					.setReadOnly(true)
 					.setRef("l")
 					.setRequired(true)
-					.setRequiredProperties(set("m"))
+					.setRequiredProperties("m")
 					.setTitle("n")
 					.setType("o")
 					.setUniqueItems(true)
@@ -136,6 +136,12 @@ class SchemaInfo_Test extends TestBase {
 
 		@Test void b07_keySet() {
 			assertEmpty(TESTER.bean().keySet());
+		}
+
+		@Test void b08_nullParameters() {
+			var x = bean();
+			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
 		}
 	}
 
@@ -240,7 +246,9 @@ class SchemaInfo_Test extends TestBase {
 		@Test void d01_addMethods() {
 			var x = bean()
 				.addEnum("a1")
-				.addAllOf(schemaInfo().setTitle("a4"));
+				.setAllOf(schemaInfo().setTitle("a1"))
+				.addAllOf(schemaInfo().setTitle("a2"))
+			;
 
 			assertNotNull(x);
 			assertNotNull(x.getEnum());

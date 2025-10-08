@@ -97,6 +97,8 @@ class Response_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->x.getHeader(null));
 			assertThrows(IllegalArgumentException.class, ()->x.getContent(null));
 			assertThrows(IllegalArgumentException.class, ()->x.getLink(null));
+			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
 		}
 	}
 

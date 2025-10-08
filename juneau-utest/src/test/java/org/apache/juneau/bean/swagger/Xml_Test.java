@@ -106,6 +106,12 @@ class Xml_Test extends TestBase {
 		@Test void b07_keySet() {
 			assertEmpty(TESTER.bean().keySet());
 		}
+
+		@Test void b08_nullParameters() {
+			var x = bean();
+			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
+		}
 	}
 
 	@Nested class C_extraProperties extends TestBase {
