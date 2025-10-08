@@ -39,8 +39,8 @@
 <span class="source-line-no">026</span><span id="line-26"> * Allows the definition of input and output data types.</span>
 <span class="source-line-no">027</span><span id="line-27"> *</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> * The Schema Object allows the definition of input and output data types for Swagger 2.0, including objects, </span>
-<span class="source-line-no">030</span><span id="line-30"> * primitives, and arrays. This object is an extended subset of the JSON Schema Specification Draft 4, with </span>
+<span class="source-line-no">029</span><span id="line-29"> * The Schema Object allows the definition of input and output data types for Swagger 2.0, including objects,</span>
+<span class="source-line-no">030</span><span id="line-30"> * primitives, and arrays. This object is an extended subset of the JSON Schema Specification Draft 4, with</span>
 <span class="source-line-no">031</span><span id="line-31"> * additional extensions provided by the Swagger Specification to allow for more complete documentation.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Swagger Specification:&lt;/h5&gt;</span>
@@ -102,7 +102,7 @@
 <span class="source-line-no">089</span><span id="line-89"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://swagger.io/specification/v2/#schema-object"&gt;Swagger 2.0 Specification &amp;gt; Schema Object&lt;/a&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://swagger.io/docs/specification/2-0/data-models/"&gt;Swagger Data Models&lt;/a&gt;</span>
 <span class="source-line-no">091</span><span id="line-91"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://json-schema.org/"&gt;JSON Schema Specification&lt;/a&gt;</span>
-<span class="source-line-no">092</span><span id="line-92"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2"&gt;juneau-bean-swagger2&lt;/a&gt;</span>
+<span class="source-line-no">092</span><span id="line-92"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2"&gt;juneau-bean-swagger-v2&lt;/a&gt;</span>
 <span class="source-line-no">093</span><span id="line-93"> * &lt;/ul&gt;</span>
 <span class="source-line-no">094</span><span id="line-94"> */</span>
 <span class="source-line-no">095</span><span id="line-95">@FluentSetters</span>
@@ -272,7 +272,7 @@
 <span class="source-line-no">259</span><span id="line-259">    * @return This object.</span>
 <span class="source-line-no">260</span><span id="line-260">    */</span>
 <span class="source-line-no">261</span><span id="line-261">   public SchemaInfo setAllOf(SchemaInfo...value) {</span>
-<span class="source-line-no">262</span><span id="line-262">      setAllOf(setBuilder(SchemaInfo.class).elementType(SchemaInfo.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">262</span><span id="line-262">      setAllOf(setBuilder(SchemaInfo.class).elementType(SchemaInfo.class).sparse().addAny((Object[])value).build());</span>
 <span class="source-line-no">263</span><span id="line-263">      return this;</span>
 <span class="source-line-no">264</span><span id="line-264">   }</span>
 <span class="source-line-no">265</span><span id="line-265"></span>

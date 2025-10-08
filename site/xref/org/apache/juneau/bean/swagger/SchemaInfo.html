@@ -34,8 +34,8 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * Allows the definition of input and output data types.</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * The Schema Object allows the definition of input and output data types for Swagger 2.0, including objects, </em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * primitives, and arrays. This object is an extended subset of the JSON Schema Specification Draft 4, with </em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * The Schema Object allows the definition of input and output data types for Swagger 2.0, including objects,</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * primitives, and arrays. This object is an extended subset of the JSON Schema Specification Draft 4, with</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * additional extensions provided by the Swagger Specification to allow for more complete documentation.</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Swagger Specification:&lt;/h5&gt;</em>
@@ -97,7 +97,7 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://swagger.io/specification/v2/" target="alexandria_uri">https://swagger.io/specification/v2/</a>#schema-object"&gt;Swagger 2.0 Specification &amp;gt; Schema Object&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://swagger.io/docs/specification/2-0/data-models/" target="alexandria_uri">https://swagger.io/docs/specification/2-0/data-models/</a>"&gt;Swagger Data Models&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://json-schema.org/" target="alexandria_uri">https://json-schema.org/</a>"&gt;JSON Schema Specification&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2" target="alexandria_uri">https://juneau.apache.org/docs/topics/JuneauBeanSwagger2</a>"&gt;juneau-bean-swagger2&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2" target="alexandria_uri">https://juneau.apache.org/docs/topics/JuneauBeanSwagger2</a>"&gt;juneau-bean-swagger-v2&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  @FluentSetters
@@ -267,7 +267,7 @@
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/swagger/SchemaInfo.html#SchemaInfo">SchemaInfo</a> setAllOf(SchemaInfo...value) {
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		setAllOf(setBuilder(SchemaInfo.<strong class="jxr_keyword">class</strong>).elementType(SchemaInfo.<strong class="jxr_keyword">class</strong>).sparse().addAny(value).build());
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		setAllOf(setBuilder(SchemaInfo.<strong class="jxr_keyword">class</strong>).elementType(SchemaInfo.<strong class="jxr_keyword">class</strong>).sparse().addAny((Object[])value).build());
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 	}
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 

@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 
  <p>
  The Swagger Object is the root document that describes an entire API. It contains metadata about the API,
- available paths and operations, parameters, responses, security definitions, and other information. This is 
+ available paths and operations, parameters, responses, security definitions, and other information. This is
  the Swagger 2.0 specification (predecessor to OpenAPI 3.0).
 
  <h5 class='section'>Swagger Specification:</h5>
@@ -123,7 +123,7 @@ loadScripts(document, 'script');</script>
       .setHost(<js>"petstore.swagger.io"</js>)
       .setBasePath(<js>"/v2"</js>)
       .setSchemes(<js>"https"</js>)
-      .addPath(<js>"/pets"</js>, <js>"get"</js>, 
+      .addPath(<js>"/pets"</js>, <js>"get"</js>,
          <jk>new</jk> Operation()
             .setSummary(<js>"List all pets"</js>)
             .addResponse(<js>"200"</js>, <jk>new</jk> ResponseInfo(<js>"Success"</js>))
@@ -133,7 +133,7 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://swagger.io/specification/v2/">Swagger 2.0 Specification</a>
    <li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/basic-structure/">Swagger Basic Structure</a>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger2</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  </ul></div>
 </section>
 <section class="summary">
@@ -186,28 +186,38 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addConsumes(org.apache.juneau.MediaType...)" class="member-name-link">addConsumes</a><wbr>(<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>...&nbsp;values)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addConsumes(java.util.Collection)" class="member-name-link">addConsumes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>&gt;&nbsp;values)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Bean property appender:  <property>consumes</property>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addDefinition(java.lang.String,org.apache.juneau.collections.JsonMap)" class="member-name-link">addDefinition</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="../../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a>&nbsp;schema)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addConsumes(org.apache.juneau.MediaType...)" class="member-name-link">addConsumes</a><wbr>(<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>...&nbsp;values)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Bean property appender:  <property>definitions</property>.</div>
+<div class="block">Bean property appender:  <property>consumes</property>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addParameter(java.lang.String,org.apache.juneau.bean.swagger.ParameterInfo)" class="member-name-link">addParameter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a>&nbsp;parameter)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addDefinition(java.lang.String,org.apache.juneau.collections.JsonMap)" class="member-name-link">addDefinition</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a>&nbsp;schema)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Bean property appender:  <property>parameters</property>.</div>
+<div class="block">Bean property appender:  <property>definitions</property>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addPath(java.lang.String,java.lang.String,org.apache.juneau.bean.swagger.Operation)" class="member-name-link">addPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addParameter(java.lang.String,org.apache.juneau.bean.swagger.ParameterInfo)" class="member-name-link">addParameter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a>&nbsp;parameter)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Bean property appender:  <property>parameters</property>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addPath(java.lang.String,java.lang.String,org.apache.juneau.bean.swagger.Operation)" class="member-name-link">addPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName,
  <a href="Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a>&nbsp;operation)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Bean property appender:  <property>paths</property>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addProduces(java.util.Collection)" class="member-name-link">addProduces</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>&gt;&nbsp;values)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Bean property appender:  <property>produces</property>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addProduces(org.apache.juneau.MediaType...)" class="member-name-link">addProduces</a><wbr>(<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>...&nbsp;values)</code></div>
@@ -226,16 +236,26 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property appender:  <property>schemes</property>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addSecurity(java.lang.String,java.lang.String...)" class="member-name-link">addSecurity</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;alternatives)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addSchemes(java.util.Collection)" class="member-name-link">addSchemes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;values)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Bean property appender:  <property>security</property>.</div>
+<div class="block">Bean property appender:  <property>schemes</property>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addSecurityDefinition(java.lang.String,org.apache.juneau.bean.swagger.SecurityScheme)" class="member-name-link">addSecurityDefinition</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a>&nbsp;securityScheme)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addSecurity(java.lang.String,java.lang.String...)" class="member-name-link">addSecurity</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;alternatives)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Bean property appender:  <property>security</property>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addSecurityDefinition(java.lang.String,org.apache.juneau.bean.swagger.SecurityScheme)" class="member-name-link">addSecurityDefinition</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a>&nbsp;securityScheme)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Bean property appender:  <property>securityDefinitions</property>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addTags(java.util.Collection)" class="member-name-link">addTags</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a>&gt;&nbsp;values)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Bean property appender:  <property>tags</property>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addTags(org.apache.juneau.bean.swagger.Tag...)" class="member-name-link">addTags</a><wbr>(<a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a>...&nbsp;values)</code></div>
@@ -474,18 +494,23 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property setter:  <property>tags</property>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#strict()" class="member-name-link">strict</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTags(org.apache.juneau.bean.swagger.Tag...)" class="member-name-link">setTags</a><wbr>(<a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a>...&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets strict mode on this bean.</div>
+<div class="block">Bean property setter:  <property>tags</property>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#strict(java.lang.Object)" class="member-name-link">strict</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#strict()" class="member-name-link">strict</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets strict mode on this bean.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#strict(java.lang.Object)" class="member-name-link">strict</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets strict mode on this bean.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -643,9 +668,26 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="addConsumes(java.util.Collection)">
+<h3>addConsumes</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-255">addConsumes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>&gt;&nbsp;values)</span></div>
+<div class="block">Bean property appender:  <property>consumes</property>.
+
+ <p>
+ A list of MIME types the APIs can consume.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>values</code> - The values to add to this property.
+   <br>Ignored if <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="setConsumes(org.apache.juneau.MediaType...)">
 <h3>setConsumes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-254">setConsumes</a></span><wbr><span class="parameters">(<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-270">setConsumes</a></span><wbr><span class="parameters">(<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>...&nbsp;value)</span></div>
 <div class="block">Bean property fluent setter:  <property>consumes</property>.
 
  <p>
@@ -661,7 +703,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDefinitions()">
 <h3>getDefinitions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-267">getDefinitions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-283">getDefinitions</a></span>()</div>
 <div class="block">Bean property getter:  <property>definitions</property>.
 
  <p>
@@ -675,7 +717,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setDefinitions(java.util.Map)">
 <h3>setDefinitions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-282">setDefinitions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-298">setDefinitions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a>&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>definitions</property>.
 
  <p>
@@ -692,7 +734,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addDefinition(java.lang.String,org.apache.juneau.collections.JsonMap)">
 <h3>addDefinition</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-297">addDefinition</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-313">addDefinition</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="../../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a>&nbsp;schema)</span></div>
 <div class="block">Bean property appender:  <property>definitions</property>.
 
@@ -710,7 +752,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getExternalDocs()">
 <h3>getExternalDocs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.swagger">ExternalDocumentation</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-312">getExternalDocs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.swagger">ExternalDocumentation</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-328">getExternalDocs</a></span>()</div>
 <div class="block">Bean property getter:  <property>externalDocs</property>.
 
  <p>
@@ -724,7 +766,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setExternalDocs(org.apache.juneau.bean.swagger.ExternalDocumentation)">
 <h3>setExternalDocs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-327">setExternalDocs</a></span><wbr><span class="parameters">(<a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.swagger">ExternalDocumentation</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-343">setExternalDocs</a></span><wbr><span class="parameters">(<a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.swagger">ExternalDocumentation</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>externalDocs</property>.
 
  <p>
@@ -741,7 +783,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getHost()">
 <h3>getHost</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-340">getHost</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-356">getHost</a></span>()</div>
 <div class="block">Bean property getter:  <property>host</property>.
 
  <p>
@@ -755,7 +797,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setHost(java.lang.String)">
 <h3>setHost</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-359">setHost</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-375">setHost</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>host</property>.
 
  <p>
@@ -776,7 +818,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getInfo()">
 <h3>getInfo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Info.html" title="class in org.apache.juneau.bean.swagger">Info</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-372">getInfo</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Info.html" title="class in org.apache.juneau.bean.swagger">Info</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-388">getInfo</a></span>()</div>
 <div class="block">Bean property getter:  <property>info</property>.
 
  <p>
@@ -790,7 +832,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setInfo(org.apache.juneau.bean.swagger.Info)">
 <h3>setInfo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-388">setInfo</a></span><wbr><span class="parameters">(<a href="Info.html" title="class in org.apache.juneau.bean.swagger">Info</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-404">setInfo</a></span><wbr><span class="parameters">(<a href="Info.html" title="class in org.apache.juneau.bean.swagger">Info</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>info</property>.
 
  <p>
@@ -808,7 +850,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParameters()">
 <h3>getParameters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-401">getParameters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-417">getParameters</a></span>()</div>
 <div class="block">Bean property getter:  <property>parameters</property>.
 
  <p>
@@ -822,7 +864,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setParameters(java.util.Map)">
 <h3>setParameters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-416">setParameters</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-432">setParameters</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a>&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>parameters</property>.
 
  <p>
@@ -839,7 +881,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addParameter(java.lang.String,org.apache.juneau.bean.swagger.ParameterInfo)">
 <h3>addParameter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-431">addParameter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-447">addParameter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a>&nbsp;parameter)</span></div>
 <div class="block">Bean property appender:  <property>parameters</property>.
 
@@ -857,7 +899,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPaths()">
 <h3>getPaths</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="OperationMap.html" title="class in org.apache.juneau.bean.swagger">OperationMap</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-446">getPaths</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="OperationMap.html" title="class in org.apache.juneau.bean.swagger">OperationMap</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-462">getPaths</a></span>()</div>
 <div class="block">Bean property getter:  <property>paths</property>.
 
  <p>
@@ -871,7 +913,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setPaths(java.util.Map)">
 <h3>setPaths</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-462">setPaths</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="OperationMap.html" title="class in org.apache.juneau.bean.swagger">OperationMap</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-478">setPaths</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="OperationMap.html" title="class in org.apache.juneau.bean.swagger">OperationMap</a>&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>paths</property>.
 
  <p>
@@ -889,7 +931,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addPath(java.lang.String,java.lang.String,org.apache.juneau.bean.swagger.Operation)">
 <h3>addPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-478">addPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-494">addPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName,
  <a href="Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a>&nbsp;operation)</span></div>
 <div class="block">Bean property appender:  <property>paths</property>.
@@ -909,7 +951,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getProduces()">
 <h3>getProduces</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-496">getProduces</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-512">getProduces</a></span>()</div>
 <div class="block">Bean property getter:  <property>produces</property>.
 
  <p>
@@ -923,7 +965,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setProduces(java.util.Collection)">
 <h3>setProduces</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-512">setProduces</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-528">setProduces</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>produces</property>.
 
  <p>
@@ -941,7 +983,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addProduces(org.apache.juneau.MediaType...)">
 <h3>addProduces</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-529">addProduces</a></span><wbr><span class="parameters">(<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-545">addProduces</a></span><wbr><span class="parameters">(<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>...&nbsp;values)</span></div>
 <div class="block">Adds one or more values to the <property>produces</property> property.
 
  <p>
@@ -957,9 +999,27 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="addProduces(java.util.Collection)">
+<h3>addProduces</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-562">addProduces</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>&gt;&nbsp;values)</span></div>
+<div class="block">Bean property appender:  <property>produces</property>.
+
+ <p>
+ A list of MIME types the APIs can produce.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>values</code> - The values to add to this property.
+   <br>Value MUST be as described under <a class="doclink" href="https://swagger.io/specification#mimeTypes">Swagger Mime Types</a>.
+   <br>Ignored if <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="setProduces(org.apache.juneau.MediaType...)">
 <h3>setProduces</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-544">setProduces</a></span><wbr><span class="parameters">(<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-577">setProduces</a></span><wbr><span class="parameters">(<a href="../../MediaType.html" title="class in org.apache.juneau">MediaType</a>...&nbsp;value)</span></div>
 <div class="block">Bean property fluent setter:  <property>produces</property>.
 
  <p>
@@ -975,7 +1035,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getResponses()">
 <h3>getResponses</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-557">getResponses</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-590">getResponses</a></span>()</div>
 <div class="block">Bean property getter:  <property>responses</property>.
 
  <p>
@@ -989,7 +1049,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setResponses(java.util.Map)">
 <h3>setResponses</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-572">setResponses</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-605">setResponses</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a>&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>responses</property>.
 
  <p>
@@ -1006,7 +1066,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addResponse(java.lang.String,org.apache.juneau.bean.swagger.ResponseInfo)">
 <h3>addResponse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-587">addResponse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-620">addResponse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a>&nbsp;response)</span></div>
 <div class="block">Bean property appender:  <property>responses</property>.
 
@@ -1024,7 +1084,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSchemes()">
 <h3>getSchemes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-602">getSchemes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-635">getSchemes</a></span>()</div>
 <div class="block">Bean property getter:  <property>schemes</property>.
 
  <p>
@@ -1038,7 +1098,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setSchemes(java.util.Collection)">
 <h3>setSchemes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-624">setSchemes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-657">setSchemes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>schemes</property>.
 
  <p>
@@ -1062,7 +1122,31 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addSchemes(java.lang.String...)">
 <h3>addSchemes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-647">addSchemes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-680">addSchemes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="block">Bean property appender:  <property>schemes</property>.
+
+ <p>
+ The transfer protocol of the API.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>values</code> - The values to add to this property.
+   <br>Valid values:
+   <ul>
+      <li><js>"http"</js>
+      <li><js>"https"</js>
+      <li><js>"ws"</js>
+      <li><js>"wss"</js>
+   </ul>
+   <br>Ignored if <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addSchemes(java.util.Collection)">
+<h3>addSchemes</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-703">addSchemes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;values)</span></div>
 <div class="block">Bean property appender:  <property>schemes</property>.
 
  <p>
@@ -1086,7 +1170,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setSchemes(java.lang.String...)">
 <h3>setSchemes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-663">setSchemes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-719">setSchemes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
 <div class="block">Bean property fluent setter:  <property>schemes</property>.
 
  <p>
@@ -1103,7 +1187,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSecurity()">
 <h3>getSecurity</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-676">getSecurity</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-732">getSecurity</a></span>()</div>
 <div class="block">Bean property getter:  <property>security</property>.
 
  <p>
@@ -1117,7 +1201,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setSecurity(java.util.Collection)">
 <h3>setSecurity</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-691">setSecurity</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-747">setSecurity</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>security</property>.
 
  <p>
@@ -1134,7 +1218,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addSecurity(java.lang.String,java.lang.String...)">
 <h3>addSecurity</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-707">addSecurity</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-763">addSecurity</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;alternatives)</span></div>
 <div class="block">Bean property appender:  <property>security</property>.
 
@@ -1152,7 +1236,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSecurityDefinitions()">
 <h3>getSecurityDefinitions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-723">getSecurityDefinitions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-779">getSecurityDefinitions</a></span>()</div>
 <div class="block">Bean property getter:  <property>securityDefinitions</property>.
 
  <p>
@@ -1166,7 +1250,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setSecurityDefinitions(java.util.Map)">
 <h3>setSecurityDefinitions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-738">setSecurityDefinitions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-794">setSecurityDefinitions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a>&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>securityDefinitions</property>.
 
  <p>
@@ -1183,7 +1267,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addSecurityDefinition(java.lang.String,org.apache.juneau.bean.swagger.SecurityScheme)">
 <h3>addSecurityDefinition</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-753">addSecurityDefinition</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-809">addSecurityDefinition</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="SecurityScheme.html" title="class in org.apache.juneau.bean.swagger">SecurityScheme</a>&nbsp;securityScheme)</span></div>
 <div class="block">Bean property appender:  <property>securityDefinitions</property>.
 
@@ -1201,7 +1285,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSwagger()">
 <h3>getSwagger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-768">getSwagger</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-824">getSwagger</a></span>()</div>
 <div class="block">Bean property getter:  <property>swagger</property>.
 
  <p>
@@ -1215,7 +1299,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setSwagger(java.lang.String)">
 <h3>setSwagger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-784">setSwagger</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-840">setSwagger</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>swagger</property>.
 
  <p>
@@ -1233,7 +1317,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTags()">
 <h3>getTags</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-797">getTags</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-853">getTags</a></span>()</div>
 <div class="block">Bean property getter:  <property>tags</property>.
 
  <p>
@@ -1247,7 +1331,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setTags(java.util.Collection)">
 <h3>setTags</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-816">setTags</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-872">setTags</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a>&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>tags</property>.
 
  <p>
@@ -1266,9 +1350,51 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="setTags(org.apache.juneau.bean.swagger.Tag...)">
+<h3>setTags</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-892">setTags</a></span><wbr><span class="parameters">(<a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a>...&nbsp;value)</span></div>
+<div class="block">Bean property setter:  <property>tags</property>.
+
+ <p>
+ A list of tags used by the specification with additional metadata.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new value for this property.
+   <br>The order of the tags can be used to reflect on their order by the parsing tools.
+   <br>Not all tags that are used by the <a class="doclink" href="https://swagger.io/specification/v2#operationObject">Operation Object</a> must be declared.
+   <br>The tags that are not declared may be organized randomly or based on the tools' logic.
+   <br>Each tag name in the list MUST be unique.
+   <br>Ignored if <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="addTags(org.apache.juneau.bean.swagger.Tag...)">
 <h3>addTags</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-836">addTags</a></span><wbr><span class="parameters">(<a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-912">addTags</a></span><wbr><span class="parameters">(<a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a>...&nbsp;values)</span></div>
+<div class="block">Bean property appender:  <property>tags</property>.
+
+ <p>
+ A list of tags used by the specification with additional metadata.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>values</code> - The values to add to this property.
+   <br>The order of the tags can be used to reflect on their order by the parsing tools.
+   <br>Not all tags that are used by the <a class="doclink" href="https://swagger.io/specification/v2#operationObject">Operation Object</a> must be declared.
+   <br>The tags that are not declared may be organized randomly or based on the tools' logic.
+   <br>Each tag name in the list MUST be unique.
+   <br>Ignored if <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addTags(java.util.Collection)">
+<h3>addTags</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-932">addTags</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Tag.html" title="class in org.apache.juneau.bean.swagger">Tag</a>&gt;&nbsp;values)</span></div>
 <div class="block">Bean property appender:  <property>tags</property>.
 
  <p>
@@ -1289,7 +1415,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPath(java.lang.String)">
 <h3>getPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OperationMap.html" title="class in org.apache.juneau.bean.swagger">OperationMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-851">getPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OperationMap.html" title="class in org.apache.juneau.bean.swagger">OperationMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-947">getPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Shortcut for calling <c>getPaths().get(path);</c></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1302,7 +1428,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getOperation(java.lang.String,java.lang.String)">
 <h3>getOperation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-863">getOperation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Operation.html" title="class in org.apache.juneau.bean.swagger">Operation</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-959">getOperation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation)</span></div>
 <div class="block">Shortcut for calling <c>getPaths().get(path).get(operation);</c></div>
 <dl class="notes">
@@ -1317,7 +1443,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getResponseInfo(java.lang.String,java.lang.String,java.lang.String)">
 <h3>getResponseInfo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-880">getResponseInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-973">getResponseInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;status)</span></div>
 <div class="block">Shortcut for calling <c>getPaths().get(path).get(operation).getResponse(status);</c></div>
@@ -1334,7 +1460,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getResponseInfo(java.lang.String,java.lang.String,int)">
 <h3>getResponseInfo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-901">getResponseInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseInfo.html" title="class in org.apache.juneau.bean.swagger">ResponseInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-988">getResponseInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation,
  int&nbsp;status)</span></div>
 <div class="block">Shortcut for calling <c>getPaths().get(path).get(operation).getResponse(status);</c></div>
@@ -1351,7 +1477,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParameterInfo(java.lang.String,java.lang.String,java.lang.String,java.lang.String)">
 <h3>getParameterInfo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-914">getParameterInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParameterInfo.html" title="class in org.apache.juneau.bean.swagger">ParameterInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1001">getParameterInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
@@ -1370,7 +1496,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.String,java.lang.Class)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-932">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1012">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SwaggerElement.html#get(java.lang.String,java.lang.Class)">SwaggerElement</a></code></span></div>
 <div class="block">Generic property getter.
@@ -1393,7 +1519,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-955">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1035">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SwaggerElement.html#set(java.lang.String,java.lang.Object)">SwaggerElement</a></code></span></div>
 <div class="block">Generic property setter.
@@ -1414,7 +1540,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="keySet()">
 <h3>keySet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-982">keySet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1062">keySet</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SwaggerElement.html#keySet()">SwaggerElement</a></code></span></div>
 <div class="block">Returns all the keys on this element.</div>
 <dl class="notes">
@@ -1429,7 +1555,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asJson()">
 <h3>asJson</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1008">asJson</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1088">asJson</a></span>()</div>
 <div class="block">A synonym of <a href="#toString()"><code>toString()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1440,7 +1566,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1012">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1092">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="SwaggerElement.html#toString()">toString</a></code>&nbsp;in class&nbsp;<code><a href="SwaggerElement.html" title="class in org.apache.juneau.bean.swagger">SwaggerElement</a></code></dd>
@@ -1450,7 +1576,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="findRef(java.lang.String,java.lang.Class)">
 <h3>findRef</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1025">findRef</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ref,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1105">findRef</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ref,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
 <div class="block">Resolves a <js>"$ref"</js> tags to nodes in this swagger document.</div>
 <dl class="notes">
@@ -1467,7 +1593,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="strict()">
 <h3>strict</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1042">strict</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1122">strict</a></span>()</div>
 <div class="block">Sets strict mode on this bean.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
@@ -1480,7 +1606,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="strict(java.lang.Object)">
 <h3>strict</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1057">strict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/swagger/Swagger.html#line-1137">strict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Sets strict mode on this bean.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
