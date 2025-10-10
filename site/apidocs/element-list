@@ -5,8 +5,8 @@ org.apache.juneau.bean
 org.apache.juneau.bean.atom
 org.apache.juneau.bean.html5
 org.apache.juneau.bean.jsonschema
-org.apache.juneau.bean.openapi.ui
 org.apache.juneau.bean.openapi3
+org.apache.juneau.bean.openapi3.ui
 org.apache.juneau.bean.swagger
 org.apache.juneau.bean.swagger.ui
 org.apache.juneau.collections

@@ -5,7 +5,7 @@
 <title>OpenApiUI (Apache Juneau 9.2.0-SNAPSHOT)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description" content="declaration: package: org.apache.juneau.bean.openapi.ui, class: OpenApiUI">
+<meta name="description" content="declaration: package: org.apache.juneau.bean.openapi3.ui, class: OpenApiUI">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -70,18 +70,18 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.apache.juneau.bean.openapi.ui</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.apache.juneau.bean.openapi3.ui</a></div>
 <h1 title="Class OpenApiUI" class="title">Class OpenApiUI</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../../../swap/ObjectSwap.html" title="class in org.apache.juneau.swap">org.apache.juneau.swap.ObjectSwap</a>&lt;<a href="../../openapi3/OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;
-<div class="inheritance">org.apache.juneau.bean.openapi.ui.OpenApiUI</div>
+<div class="inheritance"><a href="../../../swap/ObjectSwap.html" title="class in org.apache.juneau.swap">org.apache.juneau.swap.ObjectSwap</a>&lt;<a href="../OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;
+<div class="inheritance">org.apache.juneau.bean.openapi3.ui.OpenApiUI</div>
 </div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/openapi/ui/OpenApiUI.html#line-37">OpenApiUI</a></span>
-<span class="extends-implements">extends <a href="../../../swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;<a href="../../openapi3/OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;</span></div>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/openapi3/ui/OpenApiUI.html#line-37">OpenApiUI</a></span>
+<span class="extends-implements">extends <a href="../../../swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;<a href="../OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;</span></div>
 <div class="block">Generates an OpenAPI-UI interface from an OpenAPI document.
 
  <h5 class='section'>See Also:</h5><ul>
@@ -130,7 +130,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swap(org.apache.juneau.BeanSession,org.apache.juneau.bean.openapi3.OpenApi)" class="member-name-link">swap</a><wbr>(<a href="../../../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;beanSession,
- <a href="../../openapi3/OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>&nbsp;openApi)</code></div>
+ <a href="../OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>&nbsp;openApi)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">If this transform is to be used to serialize non-serializable objects, it must implement this method.</div>
 </div>
@@ -157,7 +157,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>OpenApiUI</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/openapi/ui/OpenApiUI.html#line-37">OpenApiUI</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/openapi3/ui/OpenApiUI.html#line-37">OpenApiUI</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -171,11 +171,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forMediaTypes()">
 <h3>forMediaTypes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../MediaType.html" title="class in org.apache.juneau">MediaType</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/openapi/ui/OpenApiUI.html#line-51">forMediaTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../MediaType.html" title="class in org.apache.juneau">MediaType</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/openapi3/ui/OpenApiUI.html#line-51">forMediaTypes</a></span>()</div>
 <div class="block">This UI applies to HTML requests only.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../../../swap/ObjectSwap.html#forMediaTypes()">forMediaTypes</a></code>&nbsp;in class&nbsp;<code><a href="../../../swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;<a href="../../openapi3/OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;</code></dd>
+<dd><code><a href="../../../swap/ObjectSwap.html#forMediaTypes()">forMediaTypes</a></code>&nbsp;in class&nbsp;<code><a href="../../../swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;<a href="../OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>The media types that this swap is applicable to, or <jk>null</jk> if it's applicable for all media types.</dd>
 </dl>
@@ -184,8 +184,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="swap(org.apache.juneau.BeanSession,org.apache.juneau.bean.openapi3.OpenApi)">
 <h3>swap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/openapi/ui/OpenApiUI.html#line-66">swap</a></span><wbr><span class="parameters">(<a href="../../../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;beanSession,
- <a href="../../openapi3/OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>&nbsp;openApi)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/openapi3/ui/OpenApiUI.html#line-66">swap</a></span><wbr><span class="parameters">(<a href="../../../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;beanSession,
+ <a href="../OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>&nbsp;openApi)</span>
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../swap/ObjectSwap.html#swap(org.apache.juneau.BeanSession,T)">ObjectSwap</a></code></span></div>
 <div class="block">If this transform is to be used to serialize non-serializable objects, it must implement this method.
@@ -210,7 +210,7 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../../../swap/ObjectSwap.html#swap(org.apache.juneau.BeanSession,T)">swap</a></code>&nbsp;in class&nbsp;<code><a href="../../../swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;<a href="../../openapi3/OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;</code></dd>
+<dd><code><a href="../../../swap/ObjectSwap.html#swap(org.apache.juneau.BeanSession,T)">swap</a></code>&nbsp;in class&nbsp;<code><a href="../../../swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;<a href="../OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>beanSession</code> - The bean session to use to get the class meta.
    This is always going to be the same bean context that created this swap.</dd>

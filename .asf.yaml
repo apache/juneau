@@ -10,7 +10,10 @@ notifications:
 staging:
   profile: ~
   whoami: asf-staging
-  
+
+publish:
+  whoami: asf-site  
+
 github:
   description: "Apache Juneau"
   homepage: https://juneau.apache.org/
