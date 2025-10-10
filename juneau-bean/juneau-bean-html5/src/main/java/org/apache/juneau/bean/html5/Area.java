@@ -22,6 +22,25 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-area-element">&lt;area&gt;</a>
  * element.
  *
+ * <p>
+ * The area element defines a clickable region within an image map. It is used in conjunction with
+ * the map element to create interactive images with multiple clickable areas, each linking to
+ * different destinations.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Rectangular clickable area
+ * 	Area area1 = new Area("rect", "0,0,100,50", "https://example.com/page1");
+ * 
+ * 	// Circular clickable area
+ * 	Area area2 = new Area("circle", "150,75,50", "https://example.com/page2");
+ * 
+ * 	// Area with alternative text and target
+ * 	Area area3 = new Area("rect", "200,0,300,100", "https://example.com/page3")
+ * 		.alt("Click here for more info")
+ * 		.target("_blank");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -51,9 +70,13 @@ public class Area extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-alt">alt</a> attribute.
 	 *
 	 * <p>
-	 * Replacement text for use when images are not available.
+	 * Specifies alternative text for the area. This text is displayed when the image map cannot be loaded
+	 * and is used by screen readers for accessibility.
 	 *
-	 * @param alt The new value for this attribute.
+	 * <p>
+	 * The alt text should be descriptive and convey the same information as the clickable area.
+	 *
+	 * @param alt Alternative text for the area.
 	 * @return This object.
 	 */
 	public Area alt(String value) {
@@ -66,9 +89,18 @@ public class Area extends HtmlElementVoid {
 	 * attribute.
 	 *
 	 * <p>
-	 * Coordinates for the shape to be created in an image map.
+	 * Specifies the coordinates of the clickable area within the image map. The format depends on the shape:
 	 *
-	 * @param coords The new value for this attribute.
+	 * <p>
+	 * Coordinate formats:
+	 * <ul>
+	 * 	<li><js>"rect"</js> - x1,y1,x2,y2 (top-left and bottom-right corners)</li>
+	 * 	<li><js>"circle"</js> - x,y,radius (center point and radius)</li>
+	 * 	<li><js>"poly"</js> - x1,y1,x2,y2,x3,y3,... (polygon vertices)</li>
+	 * 	<li><js>"default"</js> - No coordinates needed</li>
+	 * </ul>
+	 *
+	 * @param coords The coordinates defining the clickable area.
 	 * @return This object.
 	 */
 	public Area coords(String value) {
@@ -119,9 +151,20 @@ public class Area extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-hreflang">hreflang</a> attribute.
 	 *
 	 * <p>
-	 * Language of the linked resource.
+	 * Specifies the language of the linked resource. Used for SEO and accessibility purposes.
 	 *
-	 * @param hreflang The new value for this attribute.
+	 * <p>
+	 * Examples:
+	 * <ul>
+	 * 	<li><js>"en"</js> - English</li>
+	 * 	<li><js>"es"</js> - Spanish</li>
+	 * 	<li><js>"fr"</js> - French</li>
+	 * 	<li><js>"de"</js> - German</li>
+	 * 	<li><js>"zh"</js> - Chinese</li>
+	 * 	<li><js>"ja"</js> - Japanese</li>
+	 * </ul>
+	 *
+	 * @param hreflang The language code of the linked resource.
 	 * @return This object.
 	 */
 	public Area hreflang(String value) {
@@ -133,9 +176,26 @@ public class Area extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
 	 *
 	 * <p>
-	 * Relationship between the document containing the hyperlink and the destination resource.
+	 * Specifies the relationship between the current document and the linked resource.
 	 *
-	 * @param rel The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 *  	<li><js>"alternate"</js> - Alternative version of the page</li>
+	 *  	<li><js>"author"</js> - Link to the author of the page</li>
+	 *  	<li><js>"bookmark"</js> - Permalink for bookmarking</li>
+	 *  	<li><js>"external"</js> - External link</li>
+	 *  	<li><js>"help"</js> - Link to help documentation</li>
+	 *  	<li><js>"license"</js> - Link to license information</li>
+	 *  	<li><js>"next"</js> - Next page in a sequence</li>
+	 *  	<li><js>"nofollow"</js> - Don't follow this link for SEO</li>
+	 *  	<li><js>"noreferrer"</js> - Don't send referrer information</li>
+	 *  	<li><js>"prev"</js> - Previous page in a sequence</li>
+	 *  	<li><js>"search"</js> - Link to search functionality</li>
+	 *  	<li><js>"tag"</js> - Tag for the current page</li>
+	 * </ul>
+	 *
+	 * @param rel The relationship between the document and linked resource.
 	 * @return This object.
 	 */
 	public Area rel(String value) {
@@ -147,9 +207,18 @@ public class Area extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-shape">shape</a> attribute.
 	 *
 	 * <p>
-	 * The kind of shape to be created in an image map.
+	 * Specifies the shape of the clickable area in an image map.
 	 *
-	 * @param shape The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 *  	<li><js>"rect"</js> - Rectangular area (default)</li>
+	 *  	<li><js>"circle"</js> - Circular area</li>
+	 *  	<li><js>"poly"</js> - Polygonal area</li>
+	 *  	<li><js>"default"</js> - Entire image area</li>
+	 * </ul>
+	 *
+	 * @param shape The shape of the clickable area.
 	 * @return This object.
 	 */
 	public Area shape(String value) {
@@ -161,9 +230,19 @@ public class Area extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
 	 *
 	 * <p>
-	 * Browsing context for hyperlink navigation.
+	 * Specifies where to open the linked resource when the area is clicked.
 	 *
-	 * @param target The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 *  	<li><js>"_blank"</js> - Open in a new window/tab</li>
+	 *  	<li><js>"_self"</js> - Open in the same frame (default)</li>
+	 *  	<li><js>"_parent"</js> - Open in the parent frame</li>
+	 *  	<li><js>"_top"</js> - Open in the full body of the window</li>
+	 *  	<li><js>"framename"</js> - Open in a named frame</li>
+	 * </ul>
+	 *
+	 * @param target Where to open the linked resource.
 	 * @return This object.
 	 */
 	public Area target(String value) {
@@ -175,9 +254,19 @@ public class Area extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
 	 *
 	 * <p>
-	 * Hint for the type of the referenced resource.
+	 * Specifies the MIME type of the linked resource. Helps browsers determine how to handle the resource.
 	 *
-	 * @param type The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 *  	<li><js>"text/html"</js> - HTML document</li>
+	 *  	<li><js>"text/css"</js> - CSS stylesheet</li>
+	 *  	<li><js>"application/pdf"</js> - PDF document</li>
+	 *  	<li><js>"image/png"</js> - PNG image</li>
+	 *  	<li><js>"application/zip"</js> - ZIP archive</li>
+	 * </ul>
+	 *
+	 * @param type The MIME type of the linked resource.
 	 * @return This object.
 	 */
 	public Area type(String value) {

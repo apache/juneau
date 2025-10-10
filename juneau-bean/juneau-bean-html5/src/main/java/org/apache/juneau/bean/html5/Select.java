@@ -20,6 +20,59 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-select-element">&lt;select&gt;</a>
  * element.
  *
+ * <p>
+ * The select element represents a control that provides a menu of options. It creates a dropdown
+ * list that allows users to select one or more options from a list. The select element contains
+ * option elements that define the available choices, and can be organized into groups using
+ * optgroup elements.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple select dropdown
+ * 	Select select1 = new Select()
+ * 		.name("color")
+ * 		.children(
+ * 			new Option().value("red").text("Red"),
+ * 			new Option().value("green").text("Green"),
+ * 			new Option().value("blue").text("Blue")
+ * 		);
+ * 
+ * 	// Multiple selection
+ * 	Select select2 = new Select()
+ * 		.name="hobbies"
+ * 		.multiple(true)
+ * 		.size(4)
+ * 		.children(
+ * 			new Option().value("reading").text("Reading"),
+ * 			new Option().value="gaming").text("Gaming"),
+ * 			new Option().value="sports").text("Sports")
+ * 		);
+ * 
+ * 	// Select with option groups
+ * 	Select select3 = new Select()
+ * 		.name="food"
+ * 		.children(
+ * 			new Optgroup().label("Fruits")
+ * 				.children(
+ * 					new Option().value="apple").text("Apple"),
+ * 					new Option().value="banana").text("Banana")
+ * 				),
+ * 			new Optgroup().label("Vegetables")
+ * 				.children(
+ * 					new Option().value="carrot").text("Carrot"),
+ * 					new Option().value="broccoli").text("Broccoli")
+ * 				)
+ * 		);
+ * 
+ * 	// Disabled select
+ * 	Select select4 = new Select()
+ * 		.name="disabled"
+ * 		.disabled(true)
+ * 		.children(
+ * 			new Option().value="option1").text("Option 1")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -65,13 +118,21 @@ public class Select extends HtmlElementContainer {
 	 * <p>
 	 * Whether the form control is disabled.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"disabled"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Select disabled(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("disabled", deminimize(value, "disabled"));
 		return this;
 	}
 
@@ -79,9 +140,13 @@ public class Select extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
-	 * Associates the control with a form element.
+	 * Associates the select element with a form element by specifying the form's ID. This allows the select
+	 * to be placed outside the form element while still being part of the form.
 	 *
-	 * @param form The new value for this attribute.
+	 * <p>
+	 * The value should match the ID of a form element in the same document.
+	 *
+	 * @param form The ID of the form element to associate with this select.
 	 * @return This object.
 	 */
 	public Select form(String value) {
@@ -95,13 +160,21 @@ public class Select extends HtmlElementContainer {
 	 * <p>
 	 * Whether to allow multiple values.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"multiple"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param multiple
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Select multiple(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("multiple", deminimize(value, "multiple"));
 		return this;
 	}
 
@@ -109,9 +182,13 @@ public class Select extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 *
 	 * <p>
-	 * Name of form control to use for form submission and in the form.elements API.
+	 * Specifies the name of the select element. This name is used when the form is submitted and
+	 * can be used to access the element via the form.elements API.
 	 *
-	 * @param name The new value for this attribute.
+	 * <p>
+	 * The name should be unique within the form and should not contain spaces or special characters.
+	 *
+	 * @param name The name of the select element for submission and API access.
 	 * @return This object.
 	 */
 	public Select name(String value) {
@@ -139,11 +216,10 @@ public class Select extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-select-size">size</a> attribute.
 	 *
 	 * <p>
-	 * Size of the control.
+	 * Specifies the number of visible options in a select element. If greater than 1,
+	 * the select becomes a scrollable list instead of a dropdown.
 	 *
-	 * @param size
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * @param size The number of visible options (1 for dropdown, >1 for list).
 	 * @return This object.
 	 */
 	public Select size(Object value) {

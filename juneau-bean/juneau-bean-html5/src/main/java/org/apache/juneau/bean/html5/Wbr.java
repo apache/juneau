@@ -19,6 +19,58 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-wbr-element">&lt;wbr&gt;</a>
  * element.
  *
+ * <p>
+ * The wbr element represents a word break opportunity. It is used to indicate where a line
+ * break may occur in text, allowing the browser to break long words or URLs at appropriate
+ * points when necessary. The wbr element is a void element that does not contain any content
+ * and is typically used within long words, URLs, or other text that might overflow their
+ * container. It provides a hint to the browser about where it's acceptable to break the text.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple word break
+ * 	Wbr simple = new Wbr();
+ *
+ * 	// Wbr with styling
+ * 	Wbr styled = new Wbr()
+ * 		._class("word-break");
+ *
+ * 	// Wbr with ID
+ * 	Wbr withId = new Wbr()
+ * 		.id("word-break-1");
+ *
+ * 	// Wbr with styling
+ * 	Wbr styled2 = new Wbr()
+ * 		.style("display: inline;");
+ *
+ * 	// Wbr in long word
+ * 	P longWord = new P()
+ * 		.children(
+ * 			"This is a very long word: ",
+ * 			"supercalifragilisticexpialidocious",
+ * 			new Wbr(),
+ * 			" that might need to break."
+ * 		);
+ *
+ * 	// Wbr in URL
+ * 	P longUrl = new P()
+ * 		.children(
+ * 			"Visit: ",
+ * 			"https://www.example.com/very/long/path/to/resource",
+ * 			new Wbr(),
+ * 			" for more information."
+ * 		);
+ *
+ * 	// Wbr in code
+ * 	P code = new P()
+ * 		.children(
+ * 			"Function: ",
+ * 			"veryLongFunctionName",
+ * 			new Wbr(),
+ * 			"()"
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

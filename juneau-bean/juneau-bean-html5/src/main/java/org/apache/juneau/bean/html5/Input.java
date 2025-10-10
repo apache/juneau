@@ -21,6 +21,50 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-input-element">&lt;input&gt;</a>
  * element.
  *
+ * <p>
+ * The input element represents a form control that allows users to input data. It is a void element
+ * that can take many different forms depending on the type attribute, including text fields, checkboxes,
+ * radio buttons, file uploads, and more. The input element is one of the most versatile and commonly
+ * used form controls in HTML.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Text input field
+ * 	Input input1 = new Input()
+ * 		.type("text")
+ * 		.name("username")
+ * 		.placeholder("Enter your username")
+ * 		.required(true);
+ * 
+ * 	// Email input with validation
+ * 	Input input2 = new Input()
+ * 		.type("email")
+ * 		.name("email")
+ * 		.placeholder("your@email.com")
+ * 		.autocomplete("email");
+ * 
+ * 	// File upload input
+ * 	Input input3 = new Input()
+ * 		.type("file")
+ * 		.name("avatar")
+ * 		.accept("image/*")
+ * 		.multiple(true);
+ * 
+ * 	// Checkbox input
+ * 	Input input4 = new Input()
+ * 		.type("checkbox")
+ * 		.name("subscribe")
+ * 		.value("yes")
+ * 		.checked(true);
+ * 
+ * 	// Password input with pattern
+ * 	Input input5 = new Input()
+ * 		.type("password")
+ * 		.name("password")
+ * 		.pattern(".{8,}")
+ * 		.title("Password must be at least 8 characters");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -47,9 +91,17 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-accept">accept</a> attribute.
 	 *
 	 * <p>
-	 * Hint for expected file type in file upload controls.
+	 * Specifies which file types the file input should accept. Used with <c>type="file"</c>.
 	 *
-	 * @param accept The new value for this attribute.
+	 * <p>
+	 * Examples:
+	 * <ul>
+	 * 	<li><js>"image/*"</js> - Accept all image files</li>
+	 * 	<li><js>".pdf,.doc,.docx"</js> - Accept specific file extensions</li>
+	 * 	<li><js>"image/png,image/jpeg"</js> - Accept specific MIME types</li>
+	 * </ul>
+	 *
+	 * @param accept File type restrictions for file uploads.
 	 * @return This object.
 	 */
 	public Input accept(String value) {
@@ -61,9 +113,10 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-alt">alt</a> attribute.
 	 *
 	 * <p>
-	 * Replacement text for use when images are not available.
+	 * Alternative text for image submit buttons. Used with <c>type="image"</c> to provide
+	 * accessible text when the image cannot be displayed.
 	 *
-	 * @param alt The new value for this attribute.
+	 * @param alt Alternative text for image submit buttons.
 	 * @return This object.
 	 */
 	public Input alt(String value) {
@@ -75,9 +128,26 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a> attribute.
 	 *
 	 * <p>
-	 * Hint for form auto-fill feature.
+	 * Controls whether the browser can automatically complete the input field.
 	 *
-	 * @param autocomplete The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"on"</js> - Allow autocomplete (default)</li>
+	 * 	<li><js>"off"</js> - Disable autocomplete</li>
+	 * 	<li><js>"name"</js> - Full name</li>
+	 * 	<li><js>"email"</js> - Email address</li>
+	 * 	<li><js>"username"</js> - Username or login</li>
+	 * 	<li><js>"current-password"</js> - Current password</li>
+	 * 	<li><js>"new-password"</js> - New password</li>
+	 * 	<li><js>"tel"</js> - Telephone number</li>
+	 * 	<li><js>"url"</js> - URL</li>
+	 * 	<li><js>"address-line1"</js> - Street address</li>
+	 * 	<li><js>"country"</js> - Country name</li>
+	 * 	<li><js>"postal-code"</js> - Postal code</li>
+	 * </ul>
+	 *
+	 * @param autocomplete Autocomplete hint for the input field.
 	 * @return This object.
 	 */
 	public Input autocomplete(String value) {
@@ -89,9 +159,10 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 *
 	 * <p>
-	 * Automatically focus the form control when the page is loaded.
+	 * Automatically focuses the form control when the page loads.
+	 * Only one element per page should have this attribute.
 	 *
-	 * @param autofocus The new value for this attribute.
+	 * @param autofocus If <jk>true</jk>, adds <c>autofocus="autofocus"</c>.
 	 * @return This object.
 	 */
 	public Input autofocus(String value) {
@@ -105,13 +176,21 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Whether the command or control is checked.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"checked"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param checked
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Input checked(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("checked", deminimize(value, "checked"));
 		return this;
 	}
 
@@ -119,9 +198,14 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-dirname">dirname</a> attribute.
 	 *
 	 * <p>
-	 * Name of form field to use for sending the element's directionality in form submission.
+	 * Specifies the name of a hidden form field that will be submitted along with the input value,
+	 * containing the text direction (ltr or rtl) of the input content.
 	 *
-	 * @param dirname The new value for this attribute.
+	 * <p>
+	 * This is useful for forms that need to preserve text direction information when submitted.
+	 * The hidden field will contain either "ltr" or "rtl" based on the input's direction.
+	 *
+	 * @param dirname The name of the hidden field for directionality information.
 	 * @return This object.
 	 */
 	public Input dirname(String value) {
@@ -135,13 +219,21 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Whether the form control is disabled.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"disabled"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Input disabled(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("disabled", deminimize(value, "disabled"));
 		return this;
 	}
 
@@ -149,9 +241,13 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
-	 * Associates the control with a form element.
+	 * Associates the input with a form element by specifying the form's ID. This allows the input
+	 * to be placed outside the form element while still being part of the form.
 	 *
-	 * @param form The new value for this attribute.
+	 * <p>
+	 * The value should match the ID of a form element in the same document.
+	 *
+	 * @param form The ID of the form element to associate with this input.
 	 * @return This object.
 	 */
 	public Input form(String value) {
@@ -250,9 +346,24 @@ public class Input extends HtmlElementVoid {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-input-inputmode">inputmode</a>
 	 * attribute.
-	 * Hint for selecting an input modality.
 	 *
-	 * @param inputmode The new value for this attribute.
+	 * <p>
+	 * Provides a hint to browsers about the type of virtual keyboard to display on mobile devices.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"none"</js> - No virtual keyboard</li>
+	 * 	<li><js>"text"</js> - Standard text keyboard (default)</li>
+	 * 	<li><js>"tel"</js> - Numeric keypad for telephone numbers</li>
+	 * 	<li><js>"url"</js> - Keyboard optimized for URLs</li>
+	 * 	<li><js>"email"</js> - Keyboard optimized for email addresses</li>
+	 * 	<li><js>"numeric"</js> - Numeric keypad</li>
+	 * 	<li><js>"decimal"</js> - Numeric keypad with decimal point</li>
+	 * 	<li><js>"search"</js> - Keyboard optimized for search</li>
+	 * </ul>
+	 *
+	 * @param inputmode The input modality hint for mobile keyboards.
 	 * @return This object.
 	 */
 	public Input inputmode(String value) {
@@ -264,9 +375,10 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-list">list</a> attribute.
 	 *
 	 * <p>
-	 * List of auto-complete options.
+	 * References a <c>&lt;datalist&gt;</c> element that provides predefined options
+	 * for the input field. Creates a dropdown with autocomplete suggestions.
 	 *
-	 * @param list The new value for this attribute.
+	 * @param list The ID of a datalist element (without the # prefix).
 	 * @return This object.
 	 */
 	public Input list(String value) {
@@ -341,13 +453,21 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Whether to allow multiple values.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"multiple"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param multiple
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Input multiple(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("multiple", deminimize(value, "multiple"));
 		return this;
 	}
 
@@ -369,9 +489,10 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-pattern">pattern</a> attribute.
 	 *
 	 * <p>
-	 * Pattern to be matched by the form control's value.
+	 * Specifies a regular expression that the input's value must match for the form to be valid.
+	 * Works with the <c>title</c> attribute to provide user feedback.
 	 *
-	 * @param pattern The new value for this attribute.
+	 * @param pattern A regular expression pattern (e.g., <js>"[0-9]{3}-[0-9]{3}-[0-9]{4}"</js> for phone numbers).
 	 * @return This object.
 	 */
 	public Input pattern(String value) {
@@ -383,9 +504,10 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-placeholder">placeholder</a> attribute.
 	 *
 	 * <p>
-	 * User-visible label to be placed within the form control.
+	 * Provides a hint to the user about what to enter in the input field.
+	 * The placeholder text appears when the field is empty and disappears when the user starts typing.
 	 *
-	 * @param placeholder The new value for this attribute.
+	 * @param placeholder Hint text to display in the empty input field.
 	 * @return This object.
 	 */
 	public Input placeholder(String value) {
@@ -397,11 +519,10 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">readonly</a> attribute.
 	 *
 	 * <p>
-	 * Whether to allow the value to be edited by the user.
+	 * Makes the input field read-only, preventing user modification while still allowing
+	 * the value to be submitted with the form.
 	 *
-	 * @param readonly
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * @param readonly If <jk>true</jk>, makes the input read-only.
 	 * @return This object.
 	 */
 	public Input readonly(Object value) {
@@ -429,11 +550,10 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">required</a> attribute.
 	 *
 	 * <p>
-	 * Whether the control is required for form submission.
+	 * Indicates that the input field must be filled out before the form can be submitted.
+	 * Browsers will show validation messages for empty required fields.
 	 *
-	 * @param required
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * @param required If <jk>true</jk>, makes the input required for form submission.
 	 * @return This object.
 	 */
 	public Input required(Object value) {
@@ -491,9 +611,31 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-type">type</a> attribute.
 	 *
 	 * <p>
-	 * Type of form control.
+	 * Specifies the type of form control to display.
 	 *
-	 * @param type The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"text"</js> - Single-line text input (default)</li>
+	 * 	<li><js>"password"</js> - Password input (characters are masked)</li>
+	 * 	<li><js>"email"</js> - Email address input with validation</li>
+	 * 	<li><js>"number"</js> - Numeric input with spinner controls</li>
+	 * 	<li><js>"tel"</js> - Telephone number input</li>
+	 * 	<li><js>"url"</js> - URL input with validation</li>
+	 * 	<li><js>"search"</js> - Search input field</li>
+	 * 	<li><js>"date"</js> - Date picker</li>
+	 * 	<li><js>"time"</js> - Time picker</li>
+	 * 	<li><js>"datetime-local"</js> - Date and time picker</li>
+	 * 	<li><js>"checkbox"</js> - Checkbox input</li>
+	 * 	<li><js>"radio"</js> - Radio button input</li>
+	 * 	<li><js>"file"</js> - File upload input</li>
+	 * 	<li><js>"submit"</js> - Submit button</li>
+	 * 	<li><js>"button"</js> - Generic button</li>
+	 * 	<li><js>"reset"</js> - Reset form button</li>
+	 * 	<li><js>"hidden"</js> - Hidden input field</li>
+	 * </ul>
+	 *
+	 * @param type The input type for the form control.
 	 * @return This object.
 	 */
 	public Input type(String value) {

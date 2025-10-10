@@ -19,6 +19,105 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-article-element">&lt;article&gt;</a>
  * element.
  *
+ * <p>
+ * The article element represents a self-contained composition in a document, page, application, or site,
+ * which is intended to be independently distributable or reusable. It is used for content that could
+ * stand alone, such as blog posts, news articles, forum posts, or other independent pieces of content.
+ * Each article should have its own heading structure and can contain other semantic elements.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple blog post article
+ * 	Article blogPost = new Article()
+ * 		.children(
+ * 			new Header()
+ * 				.children(
+ * 					new H1().children("How to Use HTML5 Semantic Elements"),
+ * 					new P().children("Published on ", new Time().datetime("2024-01-15").children("January 15, 2024"))
+ * 				),
+ * 			new P().children("HTML5 introduced several semantic elements that help structure content..."),
+ * 			new Footer()
+ * 				.children(
+ * 					new P().children("Author: John Doe"),
+ * 					new Address().children("Contact: john@example.com")
+ * 				)
+ * 		);
+ * 
+ * 	// News article
+ * 	Article newsArticle = new Article()
+ * 		.children(
+ * 			new Header()
+ * 				.children(
+ * 					new H1().children("Breaking: New Technology Released"),
+ * 					new P().children("By Jane Smith, Technology Reporter")
+ * 				),
+ * 			new P().children("A revolutionary new technology was announced today..."),
+ * 			new Section()
+ * 				.children(
+ * 					new H2().children("Technical Details"),
+ * 					new P().children("The technology works by...")
+ * 				)
+ * 		);
+ * 
+ * 	// Forum post
+ * 	Article forumPost = new Article()
+ * 		._class("forum-post")
+ * 		.children(
+ * 			new Header()
+ * 				.children(
+ * 					new H3().children("Question about CSS Grid"),
+ * 					new P().children("Posted by ", new Strong().children("user123"), " on ", new Time().datetime("2024-01-14").children("yesterday"))
+ * 				),
+ * 			new P().children("I'm having trouble with CSS Grid layout..."),
+ * 			new Footer()
+ * 				.children(
+ * 					new P().children("Tags: ", new A().href("/tag/css").children("CSS"), ", ", new A().href("/tag/grid").children("Grid"))
+ * 				)
+ * 		);
+ * 
+ * 	// Product review
+ * 	Article review = new Article()
+ * 		.children(
+ * 			new Header()
+ * 				.children(
+ * 					new H1().children("Review: Amazing Widget Pro"),
+ * 					new P().children("Rating: ", new Strong().children("5/5 stars"))
+ * 				),
+ * 			new P().children("After using the Amazing Widget Pro for a month..."),
+ * 			new Section()
+ * 				.children(
+ * 					new H2().children("Pros"),
+ * 					new Ul().children(
+ * 						new Li().children("Easy to use"),
+ * 						new Li().children("Great performance"),
+ * 						new Li().children("Excellent support")
+ * 					)
+ * 				)
+ * 		);
+ * 
+ * 	// Article with multiple sections
+ * 	Article multiSection = new Article()
+ * 		.children(
+ * 			new Header()
+ * 				.children(new H1().children("Complete Guide to Web Development")),
+ * 			new Section()
+ * 				.children(
+ * 					new H2().children("Introduction"),
+ * 					new P().children("Web development encompasses many technologies...")
+ * 				),
+ * 			new Section()
+ * 				.children(
+ * 					new H2().children("Frontend Development"),
+ * 					new P().children("Frontend development focuses on...")
+ * 				),
+ * 			new Section()
+ * 				.children(
+ * 					new H2().children("Backend Development"),
+ * 					new P().children("Backend development handles...")
+ * 				)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

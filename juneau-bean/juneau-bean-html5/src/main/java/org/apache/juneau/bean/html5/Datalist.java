@@ -19,6 +19,76 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-datalist-element">&lt;datalist&gt;</a>
  * element.
  *
+ * <p>
+ * The datalist element represents a set of option elements that represent predefined options for other
+ * controls. It is used to provide a list of suggested values for input elements, allowing users to
+ * either select from the predefined options or enter their own custom value. The datalist element
+ * is typically associated with an input element through the list attribute, and the options within
+ * the datalist provide autocomplete suggestions.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple datalist
+ * 	Datalist simple = new Datalist()
+ * 		.id("colors")
+ * 		.children(
+ * 			new Option().value("red").children("Red"),
+ * 			new Option().value("green").children("Green"),
+ * 			new Option().value("blue").children("Blue")
+ * 		);
+ *
+ * 	// Datalist with styling
+ * 	Datalist styled = new Datalist()
+ * 		.id("countries")
+ * 		._class("country-list")
+ * 		.children(
+ * 			new Option().value("us").children("United States"),
+ * 			new Option().value("ca").children("Canada"),
+ * 			new Option().value("mx").children("Mexico")
+ * 		);
+ *
+ * 	// Datalist with multiple options
+ * 	Datalist multiple = new Datalist()
+ * 		.id("fruits")
+ * 		.children(
+ * 			new Option().value("apple").children("Apple"),
+ * 			new Option().value("banana").children("Banana"),
+ * 			new Option().value("cherry").children("Cherry"),
+ * 			new Option().value("date").children("Date"),
+ * 			new Option().value("elderberry").children("Elderberry")
+ * 		);
+ *
+ * 	// Datalist with complex options
+ * 	Datalist complex = new Datalist()
+ * 		.id("products")
+ * 		.children(
+ * 			new Option().value("laptop-001").children("Laptop Pro 15\" - $1,299"),
+ * 			new Option().value("laptop-002").children("Laptop Air 13\" - $999"),
+ * 			new Option().value("tablet-001").children("Tablet 10\" - $499")
+ * 		);
+ *
+ * 	// Datalist with ID
+ * 	Datalist withId = new Datalist()
+ * 		.id("cities")
+ * 		.children(
+ * 			new Option().value("new-york").children("New York"),
+ * 			new Option().value("los-angeles").children("Los Angeles"),
+ * 			new Option().value("chicago").children("Chicago")
+ * 		);
+ *
+ * 	// Datalist with styling
+ * 	Datalist styled2 = new Datalist()
+ * 		.id("sizes")
+ * 		.style("display: none;")
+ * 		.children(
+ * 			new Option().value("xs").children("Extra Small"),
+ * 			new Option().value("s").children("Small"),
+ * 			new Option().value("m").children("Medium"),
+ * 			new Option().value("l").children("Large"),
+ * 			new Option().value("xl").children("Extra Large")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

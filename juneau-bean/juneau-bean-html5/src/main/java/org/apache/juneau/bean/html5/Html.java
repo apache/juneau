@@ -19,6 +19,47 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/semantics.html#the-html-element">&lt;html&gt;</a>
  * element.
  *
+ * <p>
+ * The html element represents the root of an HTML document. It contains all other HTML elements
+ * and serves as the top-level container for the entire document. The lang attribute is commonly
+ * used to specify the primary language of the document for accessibility and SEO purposes.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Basic HTML document structure
+ * 	Html html1 = new Html()
+ * 		.lang("en")
+ * 		.children(
+ * 			new Head().children(
+ * 				new Title().text("My Web Page"),
+ * 				new Meta().charset("utf-8")
+ * 			),
+ * 			new Body().text("Hello, World!")
+ * 		);
+ * 
+ * 	// HTML with manifest for offline support
+ * 	Html html2 = new Html()
+ * 		.lang("en")
+ * 		.manifest("app.manifest")
+ * 		.children(
+ * 			new Head().children(
+ * 				new Title().text("Offline App")
+ * 			),
+ * 			new Body().text("This app works offline!")
+ * 		);
+ * 
+ * 	// HTML with custom attributes
+ * 	Html html3 = new Html()
+ * 		.lang("es")
+ * 		._class("no-js")
+ * 		.children(
+ * 			new Head().children(
+ * 				new Title().text("Página en Español")
+ * 			),
+ * 			new Body().text("¡Hola, Mundo!")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -45,9 +86,13 @@ public class Html extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/semantics.html#attr-html-manifest">manifest</a> attribute.
 	 *
 	 * <p>
-	 * Application cache manifest.
+	 * Specifies the URL of the application cache manifest file. This enables offline functionality
+	 * by allowing the browser to cache resources for offline use.
 	 *
-	 * @param manifest The new value for this attribute.
+	 * <p>
+	 * The manifest file should be a text file that lists resources to be cached.
+	 *
+	 * @param manifest The URL of the application cache manifest file.
 	 * @return This object.
 	 */
 	public Html manifest(String value) {

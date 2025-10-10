@@ -19,6 +19,77 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-thead-element">&lt;thead&gt;</a>
  * element.
  *
+ * <p>
+ * The thead element represents a group of rows that consist of the column labels (headers) for
+ * the parent table element. It is used to group header rows of a table, separating them from the
+ * body (tbody) and footer (tfoot) sections. The thead element can contain multiple tr elements
+ * and is typically used to display column headers and other header information.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple table header
+ * 	Thead simple = new Thead()
+ * 		.children(
+ * 			new Tr()
+ * 				.children(
+ * 					new Th().children("Name"),
+ * 					new Th().children("Age"),
+ * 					new Th().children("City")
+ * 				)
+ * 		);
+ * 
+ * 	// Table header with styling
+ * 	Thead styled = new Thead()
+ * 		._class("table-header")
+ * 		.children(
+ * 			new Tr()
+ * 				.children(
+ * 					new Th().children("Product"),
+ * 					new Th().children("Price"),
+ * 					new Th().children("Stock")
+ * 				)
+ * 		);
+ * 
+ * 	// Table header with multiple rows
+ * 	Thead multiple = new Thead()
+ * 		.children(
+ * 			new Tr()
+ * 				.children(
+ * 					new Th().colspan(2).children("Contact Information"),
+ * 					new Th().colspan(2).children("Address")
+ * 				),
+ * 			new Tr()
+ * 				.children(
+ * 					new Th().children("Name"),
+ * 					new Th().children("Phone"),
+ * 					new Th().children("Street"),
+ * 					new Th().children("City")
+ * 				)
+ * 		);
+ * 
+ * 	// Table header with sorting
+ * 	Thead sortable = new Thead()
+ * 		.children(
+ * 			new Tr()
+ * 				.children(
+ * 					new Th().sorted("asc").children("Name"),
+ * 					new Th().sorted("desc").children("Date"),
+ * 					new Th().children("Status")
+ * 				)
+ * 		);
+ * 
+ * 	// Table header with accessibility
+ * 	Thead accessible = new Thead()
+ * 		.children(
+ * 			new Tr()
+ * 				.children(
+ * 					new Th().scope("col").children("ID"),
+ * 					new Th().scope("col").children("Description"),
+ * 					new Th().scope("col").children("Amount")
+ * 				)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

@@ -19,6 +19,59 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-rp-element">&lt;rp&gt;</a>
  * element.
  *
+ * <p>
+ * The rp element represents a fallback parenthesis for browsers that do not support ruby annotations.
+ * It is used within a ruby element to provide fallback text that will be displayed when ruby
+ * annotations are not supported. The rp element is typically used to wrap parentheses around
+ * ruby text (rt elements) to provide a fallback display format. It is part of the ruby annotation
+ * system and helps ensure that ruby annotations are displayed correctly across different browsers.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple ruby parenthesis
+ * 	Rp simple = new Rp()
+ * 		.children("(");
+ *
+ * 	// Rp with styling
+ * 	Rp styled = new Rp()
+ * 		._class("ruby-paren")
+ * 		.children(")");
+ *
+ * 	// Rp with complex content
+ * 	Rp complex = new Rp()
+ * 		.children(
+ * 			"(",
+ * 			new Strong().children("注"),
+ * 			")"
+ * 		);
+ *
+ * 	// Rp with ID
+ * 	Rp withId = new Rp()
+ * 		.id("ruby-paren-1")
+ * 		.children("(");
+ *
+ * 	// Rp with styling
+ * 	Rp styled2 = new Rp()
+ * 		.style("color: #999; font-size: 0.8em;")
+ * 		.children(")");
+ *
+ * 	// Rp with multiple elements
+ * 	Rp multiple = new Rp()
+ * 		.children(
+ * 			"(",
+ * 			new Rp().children("注"),
+ * 			")"
+ * 		);
+ *
+ * 	// Rp with links
+ * 	Rp withLinks = new Rp()
+ * 		.children(
+ * 			"(",
+ * 			new A().href("/help/ruby").children("注"),
+ * 			")"
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

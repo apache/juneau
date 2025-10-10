@@ -20,6 +20,42 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-style-element">&lt;style&gt;</a>
  * element.
  *
+ * <p>
+ * The style element allows authors to embed CSS style information in their documents. It contains
+ * CSS rules that apply to the document. The style element is typically placed in the head section
+ * of the document, but can also be used inline. The CSS contained within the style element is
+ * processed by the browser and applied to the document.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Basic CSS styles
+ * 	Style basic = new Style()
+ * 		.text("body { font-family: Arial, sans-serif; }");
+ * 
+ * 	// CSS with media query
+ * 	Style responsive = new Style()
+ * 		.media("screen and (max-width: 600px)")
+ * 		.text("body { font-size: 14px; }");
+ * 
+ * 	// Multiple CSS rules
+ * 	Style multiple = new Style()
+ * 		.text(
+ * 			"h1 { color: blue; }",
+ * 			"p { margin: 10px; }",
+ * 			".highlight { background-color: yellow; }"
+ * 		);
+ * 
+ * 	// CSS with type specification
+ * 	Style typed = new Style()
+ * 		.type("text/css")
+ * 		.text(".button { padding: 10px; background: #007bff; }");
+ * 
+ * 	// Print-specific styles
+ * 	Style print = new Style()
+ * 		.media("print")
+ * 		.text("body { color: black; background: white; }");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -57,9 +93,21 @@ public class Style extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-media">media</a> attribute.
 	 *
 	 * <p>
-	 * Applicable media.
+	 * Specifies the media types for which the stylesheet applies. This allows you to target
+	 * specific devices or media types.
 	 *
-	 * @param media The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"all"</js> - All media types (default)</li>
+	 * 	<li><js>"screen"</js> - Computer screens</li>
+	 * 	<li><js>"print"</js> - Printers and print preview</li>
+	 * 	<li><js>"handheld"</js> - Handheld devices</li>
+	 * 	<li><js>"projection"</js> - Projectors</li>
+	 * 	<li><js>"tv"</js> - Television</li>
+	 * </ul>
+	 *
+	 * @param media The media types for which the stylesheet applies.
 	 * @return This object.
 	 */
 	public Style media(String value) {

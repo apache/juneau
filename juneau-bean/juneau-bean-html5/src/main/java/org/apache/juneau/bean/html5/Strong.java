@@ -19,6 +19,36 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-strong-element">&lt;strong&gt;</a>
  * element.
  *
+ * <p>
+ * The strong element represents strong importance, seriousness, or urgency for its contents.
+ * It indicates that the content is of strong importance and should be emphasized. The strong
+ * element is typically rendered in bold by browsers, but the visual styling should be controlled
+ * with CSS rather than relying on the default browser styling.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Important warning
+ * 	Strong warning = new Strong()
+ * 		.children("Warning: This action cannot be undone!");
+ * 
+ * 	// Important notice
+ * 	Strong notice = new Strong()
+ * 		.children("Important: Please read the terms and conditions.");
+ * 
+ * 	// Emphasis in text
+ * 	Strong emphasis = new Strong()
+ * 		.children("This is very important information.");
+ * 
+ * 	// Strong text with styling
+ * 	Strong styled = new Strong()
+ * 		._class("alert")
+ * 		.children("Critical system error detected!");
+ * 
+ * 	// Strong text in a sentence
+ * 	Strong sentence = new Strong()
+ * 		.children("The deadline is tomorrow.");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

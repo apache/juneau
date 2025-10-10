@@ -19,6 +19,35 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-body-element">&lt;body&gt;</a>
  * element.
  *
+ * <p>
+ * The body element represents the content of an HTML document. It contains all the visible content
+ * of the page, including text, images, links, forms, and other elements. The body element is
+ * typically the direct child of the html element and contains all the main content of the document.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple body with text content
+ * 	Body body1 = new Body().text("Welcome to our website!");
+ * 
+ * 	// Body with structured content
+ * 	Body body2 = new Body()
+ * 		.children(
+ * 			new Header().children(
+ * 				new H1().text("Page Title")
+ * 			),
+ * 			new Main().children(
+ * 				new P().text("Main content goes here.")
+ * 			),
+ * 			new Footer().text("Copyright 2024")
+ * 		);
+ * 
+ * 	// Body with event handlers
+ * 	Body body3 = new Body()
+ * 		.onload("initializePage()")
+ * 		.onbeforeunload("return confirm('Are you sure you want to leave?')")
+ * 		.text("Page content");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -45,7 +74,10 @@ public class Body extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onafterprint">onafterprint</a>
 	 * attribute.
 	 *
-	 * @param onafterprint The new value for this attribute.
+	 * <p>
+	 * Event handler for when the document has finished printing.
+	 *
+	 * @param onafterprint JavaScript code to execute when the afterprint event occurs.
 	 * @return This object.
 	 */
 	public Body onafterprint(String value) {
@@ -57,7 +89,10 @@ public class Body extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onbeforeunload">onbeforeunload</a>
 	 * attribute.
 	 *
-	 * @param onbeforeunload The new value for this attribute.
+	 * <p>
+	 * Event handler for when the document is about to be unloaded (page refresh, navigation, etc.).
+	 *
+	 * @param onbeforeunload JavaScript code to execute when the beforeunload event occurs.
 	 * @return This object.
 	 */
 	public Body onbeforeunload(String value) {
@@ -69,7 +104,10 @@ public class Body extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onmessage">onmessage</a>
 	 * attribute.
 	 *
-	 * @param onmessage The new value for this attribute.
+	 * <p>
+	 * Event handler for when a message is received from another window or worker.
+	 *
+	 * @param onmessage JavaScript code to execute when the message event occurs.
 	 * @return This object.
 	 */
 	public Body onmessage(String value) {
@@ -81,7 +119,10 @@ public class Body extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-ononline">ononline</a>
 	 * attribute.
 	 *
-	 * @param ononline The new value for this attribute.
+	 * <p>
+	 * Event handler for when the browser has gone online.
+	 *
+	 * @param ononline JavaScript code to execute when the online event occurs.
 	 * @return This object.
 	 */
 	public Body ononline(String value) {
@@ -93,7 +134,10 @@ public class Body extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onpageshow">onpageshow</a>
 	 * attribute.
 	 *
-	 * @param onpageshow The new value for this attribute.
+	 * <p>
+	 * Event handler for when the page is displayed (including when returning from back/forward cache).
+	 *
+	 * @param onpageshow JavaScript code to execute when the pageshow event occurs.
 	 * @return This object.
 	 */
 	public Body onpageshow(String value) {
@@ -105,7 +149,10 @@ public class Body extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onstorage">onstorage</a>
 	 * attribute.
 	 *
-	 * @param onstorage The new value for this attribute.
+	 * <p>
+	 * Event handler for when the storage area (localStorage or sessionStorage) is modified.
+	 *
+	 * @param onstorage JavaScript code to execute when the storage event occurs.
 	 * @return This object.
 	 */
 	public Body onstorage(String value) {

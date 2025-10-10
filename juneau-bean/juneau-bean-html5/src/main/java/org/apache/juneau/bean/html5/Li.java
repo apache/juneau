@@ -19,6 +19,61 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-li-element">&lt;li&gt;</a>
  * element.
  *
+ * <p>
+ * The li element represents a list item. It is used to mark up individual items within a list,
+ * such as items in an unordered list (ul) or ordered list (ol). The li element can contain
+ * any flow content and is typically rendered with a bullet point (for ul) or a number (for ol)
+ * depending on the parent list type. The li element is essential for creating structured lists
+ * in HTML documents.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple list item
+ * 	Li simple = new Li()
+ * 		.children("First item");
+ *
+ * 	// Li with styling
+ * 	Li styled = new Li()
+ * 		._class("list-item")
+ * 		.children("Styled list item");
+ *
+ * 	// Li with complex content
+ * 	Li complex = new Li()
+ * 		.children(
+ * 			"Item with ",
+ * 			new Strong().children("bold text"),
+ * 			" and ",
+ * 			new Em().children("italic text")
+ * 		);
+ *
+ * 	// Li with ID
+ * 	Li withId = new Li()
+ * 		.id("list-item-1")
+ * 		.children("List item with ID");
+ *
+ * 	// Li with styling
+ * 	Li styled2 = new Li()
+ * 		.style("color: #666; margin: 5px 0;")
+ * 		.children("Custom styled list item");
+ *
+ * 	// Li with multiple elements
+ * 	Li multiple = new Li()
+ * 		.children(
+ * 			"Step 1: ",
+ * 			new Span()._class("step-title").children("Complete the form"),
+ * 			" ",
+ * 			new Small().children("(Required)")
+ * 		);
+ *
+ * 	// Li with links
+ * 	Li withLinks = new Li()
+ * 		.children(
+ * 			"Visit ",
+ * 			new A().href("/help").children("help page"),
+ * 			" for assistance"
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

@@ -19,6 +19,60 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-rb-element">&lt;rb&gt;</a>
  * element.
  *
+ * <p>
+ * The rb element represents the base text component of a ruby annotation. It is used within
+ * a ruby element to mark up the base text that is being annotated. The rb element is part of
+ * the ruby annotation system and is used to provide pronunciation or translation information
+ * for text in languages that use complex writing systems, such as Japanese, Chinese, or Korean.
+ * It is typically used with rt (ruby text) elements to provide annotations above or below
+ * the base text.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple ruby base
+ * 	Rb simple = new Rb()
+ * 		.children("漢字");
+ *
+ * 	// Rb with styling
+ * 	Rb styled = new Rb()
+ * 		._class("ruby-base")
+ * 		.children("日本語");
+ *
+ * 	// Rb with complex content
+ * 	Rb complex = new Rb()
+ * 		.children(
+ * 			"複雑な",
+ * 			new Strong().children("漢字"),
+ * 			"の例"
+ * 		);
+ *
+ * 	// Rb with ID
+ * 	Rb withId = new Rb()
+ * 		.id("ruby-base-1")
+ * 		.children("漢字");
+ *
+ * 	// Rb with styling
+ * 	Rb styled2 = new Rb()
+ * 		.style("font-size: 1.2em; color: #333;")
+ * 		.children("漢字");
+ *
+ * 	// Rb with multiple elements
+ * 	Rb multiple = new Rb()
+ * 		.children(
+ * 			"複雑な",
+ * 			new Rb().children("漢字"),
+ * 			"の",
+ * 			new Rb().children("例")
+ * 		);
+ *
+ * 	// Rb with links
+ * 	Rb withLinks = new Rb()
+ * 		.children(
+ * 			"漢字",
+ * 			new A().href("/dictionary/kanji").children("辞書")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

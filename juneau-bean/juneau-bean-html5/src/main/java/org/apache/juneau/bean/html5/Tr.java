@@ -19,6 +19,64 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-tr-element">&lt;tr&gt;</a>
  * element.
  *
+ * <p>
+ * The tr element represents a row of cells in a table. It is used to group table cells (td and th elements)
+ * into horizontal rows. The tr element can contain multiple td (data cell) or th (header cell) elements,
+ * and is typically used within thead, tbody, or tfoot elements to organize table structure.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple table row with data cells
+ * 	Tr simple = new Tr()
+ * 		.children(
+ * 			new Td().children("John"),
+ * 			new Td().children("25"),
+ * 			new Td().children("New York")
+ * 		);
+ * 
+ * 	// Table row with header cells
+ * 	Tr header = new Tr()
+ * 		.children(
+ * 			new Th().children("Name"),
+ * 			new Th().children("Age"),
+ * 			new Th().children("City")
+ * 		);
+ * 
+ * 	// Table row with styling
+ * 	Tr styled = new Tr()
+ * 		._class("highlight-row")
+ * 		.children(
+ * 			new Td().children("Product A"),
+ * 			new Td().children("100"),
+ * 			new Td().children("$10.00")
+ * 		);
+ * 
+ * 	// Table row with click handler
+ * 	Tr clickable = new Tr()
+ * 		.onclick("selectRow(this)")
+ * 		.children(
+ * 			new Td().children("Clickable Row")
+ * 		);
+ * 
+ * 	// Table row with mixed cell types
+ * 	Tr mixed = new Tr()
+ * 		.children(
+ * 			new Th().children("Total"),
+ * 			new Td().children("$1,000"),
+ * 			new Td().children("$2,000")
+ * 		);
+ * 
+ * 	// Table row with complex content
+ * 	Tr complex = new Tr()
+ * 		.children(
+ * 			new Td().children(
+ * 				new Strong().children("Important"),
+ * 				" data"
+ * 			),
+ * 			new Td().children("Value")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

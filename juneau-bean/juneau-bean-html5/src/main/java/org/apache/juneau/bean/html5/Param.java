@@ -19,6 +19,37 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-param-element">&lt;param&gt;</a>
  * element.
  *
+ * <p>
+ * The param element defines parameters for an object element. It provides configuration data
+ * to the embedded content, such as Flash applications or other plugins. The name attribute
+ * specifies the parameter name, and the value attribute provides the parameter value.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple parameter
+ * 	Param param1 = new Param()
+ * 		.name("autoplay")
+ * 		.value("true");
+ * 
+ * 	// Parameter with constructor
+ * 	Param param2 = new Param("quality", "high");
+ * 
+ * 	// Parameters in an object
+ * 	Object_ object1 = new Object_()
+ * 		.data("video.swf")
+ * 		.type("application/x-shockwave-flash")
+ * 		.children(
+ * 			new Param("autoplay", "false"),
+ * 			new Param("loop", "true"),
+ * 			new Param("quality", "high")
+ * 		);
+ * 
+ * 	// Parameter with special characters
+ * 	Param param3 = new Param()
+ * 		.name("config")
+ * 		.value("width=800&height=600&theme=dark");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -47,9 +78,14 @@ public class Param extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-name">name</a> attribute.
 	 *
 	 * <p>
-	 * Name of parameter.
+	 * Specifies the name of the parameter. This name is used by the parent object element
+	 * to identify the parameter and its associated value.
 	 *
-	 * @param name The new value for this attribute.
+	 * <p>
+	 * The name should be meaningful and correspond to the expected parameter name
+	 * for the embedded content.
+	 *
+	 * @param name The name of the parameter.
 	 * @return This object.
 	 */
 	public Param name(String value) {

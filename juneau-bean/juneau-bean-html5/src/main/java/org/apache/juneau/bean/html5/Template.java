@@ -19,6 +19,95 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#the-template-element">&lt;template&gt;</a>
  * element.
  *
+ * <p>
+ * The template element represents a template for a fragment of HTML that can be cloned and
+ * inserted into the document by script. It is used to define reusable HTML content that
+ * can be instantiated multiple times using JavaScript. The template element is not rendered
+ * in the document until its content is cloned and inserted into the DOM. It is commonly
+ * used for creating dynamic content, such as repeating elements in lists or generating
+ * content based on data.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple template
+ * 	Template simple = new Template()
+ * 		.children(
+ * 			new P().children("This is a template paragraph.")
+ * 		);
+ *
+ * 	// Template with styling
+ * 	Template styled = new Template()
+ * 		._class("item-template")
+ * 		.children(
+ * 			new Div()._class("item")
+ * 				.children(
+ * 					new H3().children("Item Title"),
+ * 					new P().children("Item description")
+ * 				)
+ * 		);
+ *
+ * 	// Template with complex content
+ * 	Template complex = new Template()
+ * 		.children(
+ * 			new Article()
+ * 				.children(
+ * 					new Header()
+ * 						.children(
+ * 							new H2().children("Article Title"),
+ * 							new P().children("Article subtitle")
+ * 						),
+ * 					new P().children("Article content goes here."),
+ * 					new Footer().children("Article footer")
+ * 				)
+ * 		);
+ *
+ * 	// Template with ID
+ * 	Template withId = new Template()
+ * 		.id("user-card-template")
+ * 		.children(
+ * 			new Div()._class("user-card")
+ * 				.children(
+ * 					new Img().src("/avatar.jpg").alt("User Avatar"),
+ * 					new H3().children("User Name"),
+ * 					new P().children("User Bio")
+ * 				)
+ * 		);
+ *
+ * 	// Template with styling
+ * 	Template styled2 = new Template()
+ * 		.style("display: none;")
+ * 		.children(
+ * 			new Div()._class("modal")
+ * 				.children(
+ * 					new H2().children("Modal Title"),
+ * 					new P().children("Modal content")
+ * 				)
+ * 		);
+ *
+ * 	// Template with multiple elements
+ * 	Template multiple = new Template()
+ * 		.children(
+ * 			new Div()._class("product-card")
+ * 				.children(
+ * 					new Img().src("/product.jpg").alt("Product Image"),
+ * 					new H3().children("Product Name"),
+ * 					new P().children("Product Description"),
+ * 					new Span()._class("price").children("$99.99"),
+ * 					new Button().children("Add to Cart")
+ * 				)
+ * 		);
+ *
+ * 	// Template with form
+ * 	Template withForm = new Template()
+ * 		.children(
+ * 			new Form()._class("comment-form")
+ * 				.children(
+ * 					new Textarea().placeholder("Enter your comment"),
+ * 					new Button().type("submit").children("Submit Comment")
+ * 				)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

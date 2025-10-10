@@ -19,6 +19,61 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-h1,-h2,-h3,-h4,-h5,-and-h6-elements">&lt;h2&gt;</a>
  * element.
  *
+ * <p>
+ * The h2 element represents a second-level heading in a document or section. It is used to
+ * mark up subsections or secondary headings that are hierarchically below h1 elements. The h2
+ * element is typically used to organize content into major sections and is important for
+ * creating a logical document structure. It is typically rendered in a smaller font size than
+ * h1 but larger than h3 elements.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple section heading
+ * 	H2 simple = new H2()
+ * 		.children("Getting Started");
+ *
+ * 	// H2 with styling
+ * 	H2 styled = new H2()
+ * 		._class("section-title")
+ * 		.children("Product Features");
+ *
+ * 	// H2 with complex content
+ * 	H2 complex = new H2()
+ * 		.children(
+ * 			"Chapter 2: ",
+ * 			new Strong().children("Advanced Topics"),
+ * 			" ",
+ * 			new Em().children("(Expert Level)")
+ * 		);
+ *
+ * 	// H2 with ID
+ * 	H2 withId = new H2()
+ * 		.id("installation")
+ * 		.children("Installation Guide");
+ *
+ * 	// H2 with styling
+ * 	H2 styled2 = new H2()
+ * 		.style("color: #666; border-bottom: 2px solid #ccc; padding-bottom: 10px;")
+ * 		.children("Configuration Options");
+ *
+ * 	// H2 with multiple elements
+ * 	H2 multiple = new H2()
+ * 		.children(
+ * 			"Section 2.1: ",
+ * 			new Span()._class("subsection").children("Basic Setup"),
+ * 			" ",
+ * 			new Small().children("(Required)")
+ * 		);
+ *
+ * 	// H2 with links
+ * 	H2 withLinks = new H2()
+ * 		.children(
+ * 			"API Reference: ",
+ * 			new A().href("/api/users").children("User Management"),
+ * 			" Endpoints"
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

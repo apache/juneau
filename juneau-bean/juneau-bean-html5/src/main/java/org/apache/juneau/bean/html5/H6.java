@@ -19,6 +19,60 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-h1,-h2,-h3,-h4,-h5,-and-h6-elements">&lt;h6&gt;</a>
  * element.
  *
+ * <p>
+ * The h6 element represents the lowest level heading in a document or section. It is used to
+ * mark up subsections that are hierarchically below h5 elements. The h6 element is typically
+ * used to organize content into the smallest subsections and is important for creating a logical
+ * document structure. It is typically rendered in the smallest font size among all heading
+ * elements and is often used for fine-grained content organization.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple lowest-level heading
+ * 	H6 simple = new H6()
+ * 		.children("Connection Timeout");
+ *
+ * 	// H6 with styling
+ * 	H6 styled = new H6()
+ * 		._class("micro-heading")
+ * 		.children("Retry Attempts");
+ *
+ * 	// H6 with complex content
+ * 	H6 complex = new H6()
+ * 		.children(
+ * 			"6.1 ",
+ * 			new Strong().children("Connection Pool Size"),
+ * 			" ",
+ * 			new Em().children("(Default: 5)")
+ * 		);
+ *
+ * 	// H6 with ID
+ * 	H6 withId = new H6()
+ * 		.id("keep-alive")
+ * 		.children("Keep-Alive Settings");
+ *
+ * 	// H6 with styling
+ * 	H6 styled2 = new H6()
+ * 		.style("color: #bbb; font-size: 0.8em; font-weight: normal;")
+ * 		.children("Advanced Options");
+ *
+ * 	// H6 with multiple elements
+ * 	H6 multiple = new H6()
+ * 		.children(
+ * 			"6.1.1 ",
+ * 			new Span()._class("micro-title").children("Max Retries"),
+ * 			" ",
+ * 			new Small().children("(Range: 1-10)")
+ * 		);
+ *
+ * 	// H6 with links
+ * 	H6 withLinks = new H6()
+ * 		.children(
+ * 			"Ref: ",
+ * 			new A().href("/docs/connection").children("Connection Guide")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

@@ -19,6 +19,47 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-bdi-element">&lt;bdi&gt;</a>
  * element.
  *
+ * <p>
+ * The bdi element represents a span of text that is to be isolated from its surroundings for the
+ * purposes of bidirectional text formatting. It is used to handle text that might be in a different
+ * direction than the surrounding text, such as user-generated content in a different language or
+ * script. The bdi element ensures that the text inside it is formatted correctly regardless of the
+ * directionality of the surrounding content.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// User comment in Arabic
+ * 	Bdi arabic = new Bdi()
+ * 		.text("مرحبا بالعالم");
+ * 
+ * 	// Hebrew text in English context
+ * 	Bdi hebrew = new Bdi()
+ * 		.text("שלום עולם");
+ * 
+ * 	// Mixed direction text
+ * 	Bdi mixed = new Bdi()
+ * 		.text("Hello ", new Bdi().text("مرحبا"), " World");
+ * 
+ * 	// User-generated content
+ * 	Bdi userContent = new Bdi()
+ * 		._class("user-comment")
+ * 		.text("This is a comment in Arabic: مرحبا");
+ * 
+ * 	// Names in different scripts
+ * 	Bdi name = new Bdi()
+ * 		.text("محمد أحمد");
+ * 
+ * 	// Numbers in different scripts
+ * 	Bdi numbers = new Bdi()
+ * 		.text("١٢٣٤٥");
+ * 
+ * 	// Styled bidirectional text
+ * 	Bdi styled = new Bdi()
+ * 		._class("bidi-text")
+ * 		.style("direction: rtl;")
+ * 		.text("نص باللغة العربية");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

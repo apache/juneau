@@ -19,6 +19,30 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#the-del-element">&lt;del&gt;</a>
  * element.
  *
+ * <p>
+ * The del element represents text that has been deleted from a document. It is typically rendered
+ * with a strikethrough effect to indicate that the content has been removed. The cite and datetime
+ * attributes can be used to provide information about when and why the deletion occurred.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple deleted text
+ * 	Del del1 = new Del().text("This text has been removed.");
+ * 
+ * 	// Deleted text with citation and timestamp
+ * 	Del del2 = new Del()
+ * 		.cite("https://example.com/revision-log")
+ * 		.datetime("2024-01-15T10:30:00Z")
+ * 		.text("Outdated information removed");
+ * 
+ * 	// Deleted text with reason
+ * 	Del del3 = new Del()
+ * 		.cite("https://example.com/corrections")
+ * 		.datetime("2024-01-15")
+ * 		.text("Incorrect statement")
+ * 		.title("Removed due to factual error");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -45,9 +69,13 @@ public class Del extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#attr-mod-cite">cite</a> attribute.
 	 *
 	 * <p>
-	 * Link to the source of the quotation or more information about the edit.
+	 * Specifies the URL of a document that explains the reason for the deletion.
+	 * This provides context and justification for the edit.
 	 *
-	 * @param cite The new value for this attribute.
+	 * <p>
+	 * The URL should point to a document that explains why the content was deleted.
+	 *
+	 * @param cite The URL explaining the reason for the deletion.
 	 * @return This object.
 	 */
 	public Del cite(String value) {
@@ -59,9 +87,13 @@ public class Del extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#attr-mod-datetime">datetime</a> attribute.
 	 *
 	 * <p>
-	 * Date and (optionally) time of the change.
+	 * Specifies the date and time when the content was deleted. Used for tracking
+	 * the history of document changes.
 	 *
-	 * @param datetime The new value for this attribute.
+	 * <p>
+	 * The value should be a valid date-time string in ISO 8601 format.
+	 *
+	 * @param datetime The date and time when the content was deleted.
 	 * @return This object.
 	 */
 	public Del datetime(String value) {

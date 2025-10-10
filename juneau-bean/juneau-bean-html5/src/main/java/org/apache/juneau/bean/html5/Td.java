@@ -19,6 +19,47 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-td-element">&lt;td&gt;</a>
  * element.
  *
+ * <p>
+ * The td element represents a data cell in a table. It is used to contain the actual data content
+ * of a table row, as opposed to header cells (th) which contain column or row headers. The td
+ * element can contain any flow content and supports attributes for spanning multiple columns or
+ * rows, as well as associating with header cells for accessibility.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple data cell
+ * 	Td simple = new Td()
+ * 		.children("John Doe");
+ * 
+ * 	// Data cell with styling
+ * 	Td styled = new Td()
+ * 		._class("highlight")
+ * 		.children("Important Data");
+ * 
+ * 	// Data cell spanning multiple columns
+ * 	Td colspan = new Td()
+ * 		.colspan(2)
+ * 		.children("Spans 2 columns");
+ * 
+ * 	// Data cell spanning multiple rows
+ * 	Td rowspan = new Td()
+ * 		.rowspan(3)
+ * 		.children("Spans 3 rows");
+ * 
+ * 	// Data cell with headers association
+ * 	Td headers = new Td()
+ * 		.headers("name-header age-header")
+ * 		.children("25");
+ * 
+ * 	// Data cell with complex content
+ * 	Td complex = new Td()
+ * 		.children(
+ * 			new Strong().children("Bold text"),
+ * 			" and ",
+ * 			new Em().children("italic text")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -61,9 +102,13 @@ public class Td extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-headers">headers</a> attribute.
 	 *
 	 * <p>
-	 * The header cells for this cell.
+	 * Specifies the IDs of header cells that apply to this table cell. This creates a programmatic
+	 * relationship between the cell and its headers for accessibility purposes.
 	 *
-	 * @param headers The new value for this attribute.
+	 * <p>
+	 * Multiple IDs can be specified as a space-separated list.
+	 *
+	 * @param headers The IDs of header cells that apply to this cell.
 	 * @return This object.
 	 */
 	public Td headers(String value) {

@@ -19,6 +19,83 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-section-element">&lt;section&gt;</a>
  * element.
  *
+ * <p>
+ * The section element represents a generic section of a document or application. It is used
+ * to group related content together and create a logical structure within a document. The
+ * section element should have a heading (h1-h6) to identify the section's topic and is
+ * typically used to divide content into thematic groups. It is important for creating
+ * accessible document structure and helps screen readers understand the organization of content.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple section
+ * 	Section simple = new Section()
+ * 		.children(
+ * 			new H2().children("Introduction"),
+ * 			new P().children("This is the introduction section.")
+ * 		);
+ *
+ * 	// Section with styling
+ * 	Section styled = new Section()
+ * 		._class("content-section")
+ * 		.children(
+ * 			new H2().children("Features"),
+ * 			new P().children("Here are the key features of our product.")
+ * 		);
+ *
+ * 	// Section with complex content
+ * 	Section complex = new Section()
+ * 		.children(
+ * 			new H2().children("Getting Started"),
+ * 			new P().children("Follow these steps to get started:"),
+ * 			new Ol().children(
+ * 				new Li().children("Step 1: Install the software"),
+ * 				new Li().children("Step 2: Configure settings"),
+ * 				new Li().children("Step 3: Start using the application")
+ * 			)
+ * 		);
+ *
+ * 	// Section with ID
+ * 	Section withId = new Section()
+ * 		.id("main-content")
+ * 		.children(
+ * 			new H2().children("Main Content"),
+ * 			new P().children("This is the main content section.")
+ * 		);
+ *
+ * 	// Section with styling
+ * 	Section styled2 = new Section()
+ * 		.style("background-color: #f9f9f9; padding: 20px; margin: 10px 0;")
+ * 		.children(
+ * 			new H2().children("Styled Section"),
+ * 			new P().children("This section has custom styling.")
+ * 		);
+ *
+ * 	// Section with multiple elements
+ * 	Section multiple = new Section()
+ * 		.children(
+ * 			new H2().children("Documentation"),
+ * 			new P().children("This section contains documentation."),
+ * 			new Ul().children(
+ * 				new Li().children("API Reference"),
+ * 				new Li().children("User Guide"),
+ * 				new Li().children("Examples")
+ * 			),
+ * 			new Footer().children("Last updated: January 2024")
+ * 		);
+ *
+ * 	// Section with article
+ * 	Section withArticle = new Section()
+ * 		.children(
+ * 			new H2().children("Latest News"),
+ * 			new Article()
+ * 				.children(
+ * 					new H3().children("News Article Title"),
+ * 					new P().children("Article content goes here.")
+ * 				)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

@@ -22,6 +22,36 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-embed-element">&lt;embed&gt;</a>
  * element.
  *
+ * <p>
+ * The embed element represents an integration point for an external application or interactive content.
+ * It is used to embed content such as Flash applications, PDF documents, or other multimedia content
+ * that requires a plugin or external application to display.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Embed a PDF document
+ * 	Embed embed1 = new Embed()
+ * 		.src("document.pdf")
+ * 		.type("application/pdf")
+ * 		.width("800")
+ * 		.height("600");
+ * 
+ * 	// Embed a Flash application
+ * 	Embed embed2 = new Embed()
+ * 		.src("game.swf")
+ * 		.type("application/x-shockwave-flash")
+ * 		.width("640")
+ * 		.height("480");
+ * 
+ * 	// Embed with fallback content
+ * 	Embed embed3 = new Embed()
+ * 		.src("interactive-content.swf")
+ * 		.type("application/x-shockwave-flash")
+ * 		.children(
+ * 			new P().text("Your browser does not support embedded content.")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -88,9 +118,19 @@ public class Embed extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-embed-type">type</a> attribute.
 	 *
 	 * <p>
-	 * Type of embedded resource.
+	 * Specifies the MIME type of the embedded resource. Helps browsers determine how to handle the resource.
 	 *
-	 * @param type The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"application/pdf"</js> - PDF document</li>
+	 * 	<li><js>"application/x-shockwave-flash"</js> - Flash content</li>
+	 * 	<li><js>"image/svg+xml"</js> - SVG image</li>
+	 * 	<li><js>"video/mp4"</js> - MP4 video</li>
+	 * 	<li><js>"audio/mp3"</js> - MP3 audio</li>
+	 * </ul>
+	 *
+	 * @param type The MIME type of the embedded resource.
 	 * @return This object.
 	 */
 	public Embed type(String value) {

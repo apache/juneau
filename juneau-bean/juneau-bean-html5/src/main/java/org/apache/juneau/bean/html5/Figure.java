@@ -19,6 +19,81 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-figure-element">&lt;figure&gt;</a>
  * element.
  *
+ * <p>
+ * The figure element represents self-contained content, potentially with a caption, that is
+ * typically referenced as a single unit from the main flow of the document. It is used to
+ * group related content such as images, diagrams, code snippets, or other media that can
+ * be moved away from the main flow of the document without affecting the document's meaning.
+ * The figure element can contain a figcaption element to provide a caption for the content.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple figure with image
+ * 	Figure simple = new Figure()
+ * 		.children(
+ * 			new Img().src("/images/sunset.jpg").alt("Sunset"),
+ * 			new Figcaption().children("A beautiful sunset over the mountains.")
+ * 		);
+ *
+ * 	// Figure with code snippet
+ * 	Figure codeFigure = new Figure()
+ * 		.children(
+ * 			new Pre().children(
+ * 				new Code().children("function hello() {\n  return 'Hello World';\n}")
+ * 			),
+ * 			new Figcaption().children("A simple JavaScript function.")
+ * 		);
+ *
+ * 	// Figure with styling
+ * 	Figure styled = new Figure()
+ * 		._class("chart-figure")
+ * 		.children(
+ * 			new Img().src("/charts/sales.png").alt("Sales Chart"),
+ * 			new Figcaption().children("Monthly sales data for 2024.")
+ * 		);
+ *
+ * 	// Figure with multiple elements
+ * 	Figure complex = new Figure()
+ * 		.children(
+ * 			new Img().src("/images/diagram.png").alt("Process Diagram"),
+ * 			new P().children("This diagram shows the complete workflow."),
+ * 			new Figcaption().children("Figure 1: System Architecture Overview.")
+ * 		);
+ *
+ * 	// Figure with ID
+ * 	Figure withId = new Figure()
+ * 		.id("main-chart")
+ * 		.children(
+ * 			new Img().src("/charts/main.png").alt("Main Chart"),
+ * 			new Figcaption().children("Primary performance metrics.")
+ * 		);
+ *
+ * 	// Figure with styling
+ * 	Figure styled2 = new Figure()
+ * 		.style("border: 1px solid #ccc; padding: 10px; margin: 20px 0;")
+ * 		.children(
+ * 			new Img().src("/images/example.png").alt("Example"),
+ * 			new Figcaption().children("An example of the new feature.")
+ * 		);
+ *
+ * 	// Figure with table
+ * 	Figure tableFigure = new Figure()
+ * 		.children(
+ * 			new Table()
+ * 				.children(
+ * 					new Tr().children(
+ * 						new Th().children("Name"),
+ * 						new Th().children("Value")
+ * 					),
+ * 					new Tr().children(
+ * 						new Td().children("Item 1"),
+ * 						new Td().children("100")
+ * 					)
+ * 				),
+ * 			new Figcaption().children("Data summary table.")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

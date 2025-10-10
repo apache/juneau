@@ -19,6 +19,72 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-br-element">&lt;br&gt;</a>
  * element.
  *
+ * <p>
+ * The br element represents a line break. It is used to create a line break in text content,
+ * forcing the text that follows it to start on a new line. The br element is a void element
+ * that does not contain any content and is typically used within text content to create
+ * line breaks where needed, such as in addresses, poetry, or other formatted text.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple line break
+ * 	Br simple = new Br();
+ * 
+ * 	// Address with line breaks
+ * 	P address = new P()
+ * 		.children(
+ * 			"John Doe",
+ * 			new Br(),
+ * 			"123 Main Street",
+ * 			new Br(),
+ * 			"Anytown, ST 12345"
+ * 		);
+ * 
+ * 	// Poetry with line breaks
+ * 	P poetry = new P()
+ * 		.children(
+ * 			"Roses are red,",
+ * 			new Br(),
+ * 			"Violets are blue,",
+ * 			new Br(),
+ * 			"Sugar is sweet,",
+ * 			new Br(),
+ * 			"And so are you."
+ * 		);
+ * 
+ * 	// Contact information
+ * 	P contact = new P()
+ * 		.children(
+ * 			"Phone: (555) 123-4567",
+ * 			new Br(),
+ * 			"Email: john@example.com",
+ * 			new Br(),
+ * 			"Website: www.example.com"
+ * 		);
+ * 
+ * 	// Styled line break
+ * 	Br styled = new Br()
+ * 		._class("line-break")
+ * 		.style("margin: 10px 0;");
+ * 
+ * 	// Multiple line breaks
+ * 	P multiple = new P()
+ * 		.children(
+ * 			"First line",
+ * 			new Br(),
+ * 			new Br(),
+ * 			"Third line (with extra space)"
+ * 		);
+ * 
+ * 	// Line break in a list
+ * 	Li listItem = new Li()
+ * 		.children(
+ * 			"Item 1",
+ * 			new Br(),
+ * 			"Additional details for item 1"
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

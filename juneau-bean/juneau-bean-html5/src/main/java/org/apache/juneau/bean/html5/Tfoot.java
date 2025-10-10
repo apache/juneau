@@ -19,6 +19,66 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-tfoot-element">&lt;tfoot&gt;</a>
  * element.
  *
+ * <p>
+ * The tfoot element represents a group of rows that consist of the column summaries (footers) for
+ * the parent table element. It is used to group footer rows of a table, separating them from the
+ * header (thead) and body (tbody) sections. The tfoot element can contain multiple tr elements
+ * and is typically used to display summary information, totals, or other footer content.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple table footer with totals
+ * 	Tfoot simple = new Tfoot()
+ * 		.children(
+ * 			new Tr()
+ * 				.children(
+ * 					new Td().children("Total"),
+ * 					new Td().children("$1,000"),
+ * 					new Td().children("$2,000")
+ * 				)
+ * 		);
+ * 
+ * 	// Table footer with styling
+ * 	Tfoot styled = new Tfoot()
+ * 		._class("table-footer")
+ * 		.children(
+ * 			new Tr()
+ * 				.children(
+ * 					new Td().children("Grand Total"),
+ * 					new Td().children("$3,000")
+ * 				)
+ * 		);
+ * 
+ * 	// Table footer with multiple rows
+ * 	Tfoot multiple = new Tfoot()
+ * 		.children(
+ * 			new Tr()
+ * 				.children(
+ * 					new Td().children("Subtotal"),
+ * 					new Td().children("$500")
+ * 				),
+ * 			new Tr()
+ * 				.children(
+ * 					new Td().children("Tax"),
+ * 					new Td().children("$50")
+ * 				),
+ * 			new Tr()
+ * 				.children(
+ * 					new Td().children("Total"),
+ * 					new Td().children("$550")
+ * 				)
+ * 		);
+ * 
+ * 	// Table footer with summary information
+ * 	Tfoot summary = new Tfoot()
+ * 		.children(
+ * 			new Tr()
+ * 				.children(
+ * 					new Td().colspan(3).children("Summary: 10 items, 3 categories")
+ * 				)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

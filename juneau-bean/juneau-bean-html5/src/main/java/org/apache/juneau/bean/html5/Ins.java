@@ -19,6 +19,61 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#the-ins-element">&lt;ins&gt;</a>
  * element.
  *
+ * <p>
+ * The ins element represents a range of text that has been added to a document. It is used to
+ * mark up content that has been inserted or added to the document, typically in the context of
+ * document editing or version control. The ins element can contain any flow content and is
+ * commonly used with the del element to show document changes. It is typically rendered with
+ * an underline or other visual indication to show that the content has been added.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple inserted text
+ * 	Ins simple = new Ins()
+ * 		.children("This text was added");
+ *
+ * 	// Ins with styling
+ * 	Ins styled = new Ins()
+ * 		._class("insertion")
+ * 		.children("Styled inserted text");
+ *
+ * 	// Ins with complex content
+ * 	Ins complex = new Ins()
+ * 		.children(
+ * 			"The ",
+ * 			new Strong().children("new feature"),
+ * 			" has been added to the system."
+ * 		);
+ *
+ * 	// Ins with ID
+ * 	Ins withId = new Ins()
+ * 		.id("inserted-text")
+ * 		.children("Text with ID");
+ *
+ * 	// Ins with styling
+ * 	Ins styled2 = new Ins()
+ * 		.style("background-color: #d4edda; color: #155724; text-decoration: underline;")
+ * 		.children("Custom styled inserted text");
+ *
+ * 	// Ins with multiple elements
+ * 	Ins multiple = new Ins()
+ * 		.children(
+ * 			"The ",
+ * 			new Ins().children("new section"),
+ * 			" has been ",
+ * 			new Ins().children("added"),
+ * 			" to the document."
+ * 		);
+ *
+ * 	// Ins with links
+ * 	Ins withLinks = new Ins()
+ * 		.children(
+ * 			"See ",
+ * 			new A().href("/changes").children("change log"),
+ * 			" for more details."
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

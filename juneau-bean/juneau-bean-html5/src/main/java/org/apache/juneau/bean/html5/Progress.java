@@ -19,6 +19,63 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-progress-element">&lt;progress&gt;</a>
  * element.
  *
+ * <p>
+ * The progress element represents the completion progress of a task. It is used to display
+ * the progress of an operation, such as file uploads, downloads, or any other task that
+ * has a defined completion state. The progress element can show both determinate progress
+ * (when the total amount of work is known) and indeterminate progress (when the total amount
+ * of work is unknown). It is typically rendered as a progress bar that fills up as the task
+ * progresses.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple progress bar
+ * 	Progress simple = new Progress()
+ * 		.value(50)
+ * 		.max(100);
+ *
+ * 	// Progress with styling
+ * 	Progress styled = new Progress()
+ * 		._class("file-upload-progress")
+ * 		.value(75)
+ * 		.max(100);
+ *
+ * 	// Progress with complex content
+ * 	Progress complex = new Progress()
+ * 		.value(60)
+ * 		.max(100)
+ * 		.children("60% complete");
+ *
+ * 	// Progress with ID
+ * 	Progress withId = new Progress()
+ * 		.id("download-progress")
+ * 		.value(30)
+ * 		.max(100);
+ *
+ * 	// Progress with styling
+ * 	Progress styled2 = new Progress()
+ * 		.style("width: 300px; height: 20px;")
+ * 		.value(40)
+ * 		.max(100);
+ *
+ * 	// Progress with multiple attributes
+ * 	Progress multiple = new Progress()
+ * 		.value(85)
+ * 		.max(100)
+ * 		.title("Upload Progress: 85%")
+ * 		.children("85% complete");
+ *
+ * 	// Progress with form
+ * 	Progress withForm = new Progress()
+ * 		.form("upload-form")
+ * 		.value(25)
+ * 		.max(100);
+ *
+ * 	// Indeterminate progress
+ * 	Progress indeterminate = new Progress()
+ * 		.children("Loading...");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

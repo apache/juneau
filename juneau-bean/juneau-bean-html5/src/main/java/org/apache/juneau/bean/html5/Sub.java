@@ -19,6 +19,36 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-sub-and-sup-elements">&lt;sub&gt;</a>
  * element.
  *
+ * <p>
+ * The sub element represents subscript text. It is used to display text that should be rendered
+ * below the baseline, typically in a smaller font size. The sub element is commonly used for
+ * mathematical formulas, chemical formulas, footnotes, and other annotations that need to be
+ * displayed as subscript.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Chemical formula
+ * 	Sub chemical = new Sub()
+ * 		.children("H", new Sub().children("2"), "O");
+ * 
+ * 	// Mathematical formula
+ * 	Sub math = new Sub()
+ * 		.children("x", new Sub().children("2"), " + y", new Sub().children("2"), " = z", new Sub().children("2"));
+ * 
+ * 	// Footnote reference
+ * 	Sub footnote = new Sub()
+ * 		.children("1");
+ * 
+ * 	// Subscript with styling
+ * 	Sub styled = new Sub()
+ * 		._class("subscript")
+ * 		.children("n");
+ * 
+ * 	// Multiple subscripts
+ * 	Sub multiple = new Sub()
+ * 		.children("A", new Sub().children("i,j"), " = B", new Sub().children("k"));
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

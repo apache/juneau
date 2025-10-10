@@ -19,10 +19,43 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-fieldset-element">&lt;fieldset&gt;</a>
  * element.
  *
+ * <p>
+ * The fieldset element groups related form controls together. It provides a visual and semantic
+ * grouping mechanism that helps organize complex forms and improves accessibility. The legend
+ * element is typically used as the first child to provide a caption for the fieldset.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple fieldset with legend
+ * 	Fieldset fieldset1 = new Fieldset()
+ * 		.children(
+ * 			new Legend().text("Personal Information"),
+ * 			new Input().type("text").name("firstName").placeholder("First Name"),
+ * 			new Input().type("text").name("lastName").placeholder("Last Name")
+ * 		);
+ * 
+ * 	// Disabled fieldset
+ * 	Fieldset fieldset2 = new Fieldset()
+ * 		.disabled(true)
+ * 		.children(
+ * 			new Legend().text("Disabled Section"),
+ * 			new Input().type("text").name("disabledField").value("Cannot edit")
+ * 		);
+ * 
+ * 	// Fieldset with custom styling
+ * 	Fieldset fieldset3 = new Fieldset()
+ * 		._class("form-group")
+ * 		.children(
+ * 			new Legend().text("Contact Details"),
+ * 			new Input().type("email").name("email").placeholder("Email"),
+ * 			new Input().type("tel").name("phone").placeholder("Phone")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
-*/
+ */
 @Bean(typeName="fieldset")
 @FluentSetters
 public class Fieldset extends HtmlElementMixed {
@@ -47,13 +80,21 @@ public class Fieldset extends HtmlElementMixed {
 	 * <p>
 	 * Whether the form control is disabled.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"disabled"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Fieldset disabled(Boolean value) {
-		attr("value", deminimize(value, "value"));
+		attr("disabled", deminimize(value, "disabled"));
 		return this;
 	}
 
@@ -61,9 +102,13 @@ public class Fieldset extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
-	 * Associates the control with a form element.
+	 * Associates the fieldset with a form element by specifying the form's ID. This allows the fieldset
+	 * to be placed outside the form element while still being part of the form.
 	 *
-	 * @param form The new value for this attribute.
+	 * <p>
+	 * The value should match the ID of a form element in the same document.
+	 *
+	 * @param form The ID of the form element to associate with this fieldset.
 	 * @return This object.
 	 */
 	public Fieldset form(String value) {
@@ -75,9 +120,13 @@ public class Fieldset extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 *
 	 * <p>
-	 * Name of form control to use for form submission and in the form.elements API.
+	 * Specifies the name of the fieldset. This name can be used to access the fieldset
+	 * via the form.elements API and for form submission.
 	 *
-	 * @param name The new value for this attribute.
+	 * <p>
+	 * The name should be unique within the form and should not contain spaces or special characters.
+	 *
+	 * @param name The name of the fieldset for API access and submission.
 	 * @return This object.
 	 */
 	public Fieldset name(String value) {

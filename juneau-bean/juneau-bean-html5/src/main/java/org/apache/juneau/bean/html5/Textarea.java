@@ -19,6 +19,55 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-textarea-element">&lt;textarea&gt;</a>
  * element.
  *
+ * <p>
+ * The textarea element represents a multiline text input control. It allows users to enter and edit
+ * text over multiple lines, making it suitable for longer text content such as comments, descriptions,
+ * or messages. The textarea element supports various attributes for controlling its size, behavior,
+ * and validation.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Basic textarea
+ * 	Textarea basic = new Textarea()
+ * 		.name("comments")
+ * 		.rows(4)
+ * 		.cols(50);
+ * 
+ * 	// Textarea with placeholder and validation
+ * 	Textarea validated = new Textarea()
+ * 		.name("description")
+ * 		.placeholder("Enter a description...")
+ * 		.required(true)
+ * 		.minlength(10)
+ * 		.maxlength(500);
+ * 
+ * 	// Textarea with initial content
+ * 	Textarea withContent = new Textarea()
+ * 		.name("message")
+ * 		.text("Default message text");
+ * 
+ * 	// Textarea with styling and behavior
+ * 	Textarea styled = new Textarea()
+ * 		.name("feedback")
+ * 		._class("large-textarea")
+ * 		.rows(6)
+ * 		.cols(60)
+ * 		.placeholder("Please provide your feedback...")
+ * 		.wrap("hard");
+ * 
+ * 	// Disabled textarea
+ * 	Textarea disabled = new Textarea()
+ * 		.name="readonly"
+ * 		.disabled(true)
+ * 		.text("This textarea is disabled");
+ * 
+ * 	// Textarea with form association
+ * 	Textarea external = new Textarea()
+ * 		.name="external"
+ * 		.form="myForm"
+ * 		.placeholder="This textarea is outside the form";
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -47,9 +96,21 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a> attribute.
 	 *
 	 * <p>
-	 * Hint for form auto-fill feature.
+	 * Specifies whether the browser should automatically complete the form field based on user's previous input.
 	 *
-	 * @param autocomplete The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"on"</js> - Allow autocomplete (default)</li>
+	 * 	<li><js>"off"</js> - Disable autocomplete</li>
+	 * 	<li><js>"name"</js> - Autocomplete for name fields</li>
+	 * 	<li><js>"email"</js> - Autocomplete for email fields</li>
+	 * 	<li><js>"username"</js> - Autocomplete for username fields</li>
+	 * 	<li><js>"current-password"</js> - Autocomplete for current password</li>
+	 * 	<li><js>"new-password"</js> - Autocomplete for new password</li>
+	 * </ul>
+	 *
+	 * @param autocomplete Autocomplete behavior for the form field.
 	 * @return This object.
 	 */
 	public Textarea autocomplete(String value) {
@@ -77,11 +138,10 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-cols">cols</a> attribute.
 	 *
 	 * <p>
-	 * Maximum number of characters per line.
+	 * Specifies the visible width of the textarea in characters. This is a hint for the browser
+	 * and may not be exactly followed depending on the font and styling.
 	 *
-	 * @param cols
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * @param cols The visible width of the textarea in characters.
 	 * @return This object.
 	 */
 	public Textarea cols(Object value) {
@@ -93,9 +153,14 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-dirname">dirname</a> attribute.
 	 *
 	 * <p>
-	 * Name of form field to use for sending the element's directionality in form submission.
+	 * Specifies the name of a hidden form field that will be submitted along with the textarea value,
+	 * containing the text direction (ltr or rtl) of the textarea content.
 	 *
-	 * @param dirname The new value for this attribute.
+	 * <p>
+	 * This is useful for forms that need to preserve text direction information when submitted.
+	 * The hidden field will contain either "ltr" or "rtl" based on the textarea's direction.
+	 *
+	 * @param dirname The name of the hidden field for directionality information.
 	 * @return This object.
 	 */
 	public Textarea dirname(String value) {
@@ -109,13 +174,21 @@ public class Textarea extends HtmlElementRawText {
 	 * <p>
 	 * Whether the form control is disabled.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"disabled"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Textarea disabled(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("disabled", deminimize(value, "disabled"));
 		return this;
 	}
 
@@ -123,9 +196,13 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
-	 * Associates the control with a form element.
+	 * Associates the textarea with a form element by specifying the form's ID. This allows the textarea
+	 * to be placed outside the form element while still being part of the form submission.
 	 *
-	 * @param form The new value for this attribute.
+	 * <p>
+	 * The value should match the ID of a form element in the same document.
+	 *
+	 * @param form The ID of the form element to associate with this textarea.
 	 * @return This object.
 	 */
 	public Textarea form(String value) {
@@ -137,9 +214,22 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#inputmode">inputmode</a> attribute.
 	 *
 	 * <p>
-	 * Hint for selecting an input modality.
+	 * Provides a hint to browsers about the type of virtual keyboard to display on mobile devices.
 	 *
-	 * @param inputmode The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"none"</js> - No virtual keyboard</li>
+	 * 	<li><js>"text"</js> - Standard text keyboard (default)</li>
+	 * 	<li><js>"tel"</js> - Telephone number keyboard</li>
+	 * 	<li><js>"url"</js> - URL keyboard with .com key</li>
+	 * 	<li><js>"email"</js> - Email keyboard with @ key</li>
+	 * 	<li><js>"numeric"</js> - Numeric keyboard</li>
+	 * 	<li><js>"decimal"</js> - Decimal number keyboard</li>
+	 * 	<li><js>"search"</js> - Search keyboard</li>
+	 * </ul>
+	 *
+	 * @param inputmode The type of virtual keyboard to display.
 	 * @return This object.
 	 */
 	public Textarea inputmode(String value) {
@@ -183,9 +273,13 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 *
 	 * <p>
-	 * Name of form control to use for form submission and in the form.elements API.
+	 * Specifies the name of the form control. This name is used when the form is submitted and
+	 * can be used to access the element via the form.elements API.
 	 *
-	 * @param name The new value for this attribute.
+	 * <p>
+	 * The name should be unique within the form and should not contain spaces or special characters.
+	 *
+	 * @param name The name of the form control for submission and API access.
 	 * @return This object.
 	 */
 	public Textarea name(String value) {
@@ -198,9 +292,13 @@ public class Textarea extends HtmlElementRawText {
 	 * attribute.
 	 *
 	 * <p>
-	 * User-visible label to be placed within the form control.
+	 * Provides a hint to the user about what to enter in the textarea. The placeholder text is displayed
+	 * when the textarea is empty and disappears when the user starts typing.
 	 *
-	 * @param placeholder The new value for this attribute.
+	 * <p>
+	 * The placeholder should be a brief, helpful description of the expected input.
+	 *
+	 * @param placeholder The placeholder text to display when the textarea is empty.
 	 * @return This object.
 	 */
 	public Textarea placeholder(String value) {
@@ -244,11 +342,10 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-rows">rows</a> attribute.
 	 *
 	 * <p>
-	 * Number of lines to show.
+	 * Specifies the visible height of the textarea in lines. This is a hint for the browser
+	 * and may not be exactly followed depending on the font and styling.
 	 *
-	 * @param rows
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * @param rows The visible height of the textarea in lines.
 	 * @return This object.
 	 */
 	public Textarea rows(Number value) {
@@ -260,9 +357,17 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-wrap">wrap</a> attribute.
 	 *
 	 * <p>
-	 * How the value of the form control is to be wrapped for form submission.
+	 * Specifies how the text in the textarea should be wrapped when the form is submitted.
 	 *
-	 * @param wrap The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"soft"</js> - Text is wrapped in the display but not in the submitted value (default)</li>
+	 * 	<li><js>"hard"</js> - Text is wrapped in both display and submitted value</li>
+	 * 	<li><js>"off"</js> - Text is not wrapped</li>
+	 * </ul>
+	 *
+	 * @param wrap How the text should be wrapped for form submission.
 	 * @return This object.
 	 */
 	public Textarea wrap(String value) {

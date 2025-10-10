@@ -19,6 +19,60 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-rt-element">&lt;rt&gt;</a>
  * element.
  *
+ * <p>
+ * The rt element represents the ruby text component of a ruby annotation. It is used within
+ * a ruby element to mark up the annotation text that provides pronunciation or translation
+ * information for the base text. The rt element is part of the ruby annotation system and
+ * is used to provide annotations above or below the base text in languages that use complex
+ * writing systems, such as Japanese, Chinese, or Korean. It is typically used with rb (ruby
+ * base) elements to provide complete ruby annotations.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple ruby text
+ * 	Rt simple = new Rt()
+ * 		.children("かんじ");
+ *
+ * 	// Rt with styling
+ * 	Rt styled = new Rt()
+ * 		._class("ruby-text")
+ * 		.children("にほんご");
+ *
+ * 	// Rt with complex content
+ * 	Rt complex = new Rt()
+ * 		.children(
+ * 			"ふくざつな",
+ * 			new Strong().children("かんじ"),
+ * 			"のれい"
+ * 		);
+ *
+ * 	// Rt with ID
+ * 	Rt withId = new Rt()
+ * 		.id("ruby-text-1")
+ * 		.children("かんじ");
+ *
+ * 	// Rt with styling
+ * 	Rt styled2 = new Rt()
+ * 		.style("font-size: 0.8em; color: #666;")
+ * 		.children("かんじ");
+ *
+ * 	// Rt with multiple elements
+ * 	Rt multiple = new Rt()
+ * 		.children(
+ * 			"ふくざつな",
+ * 			new Rt().children("かんじ"),
+ * 			"の",
+ * 			new Rt().children("れい")
+ * 		);
+ *
+ * 	// Rt with links
+ * 	Rt withLinks = new Rt()
+ * 		.children(
+ * 			"かんじ",
+ * 			new A().href("/dictionary/kanji").children("じしょ")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

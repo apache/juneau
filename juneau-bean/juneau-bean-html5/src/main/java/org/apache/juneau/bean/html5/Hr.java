@@ -19,6 +19,47 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-hr-element">&lt;hr&gt;</a>
  * element.
  *
+ * <p>
+ * The hr element represents a paragraph-level thematic break, such as a scene change in a story,
+ * or a transition to another topic within a section of a reference book. It is used to create
+ * a horizontal rule or line that visually separates content sections. The hr element is a void
+ * element that does not contain any content and is typically rendered as a horizontal line
+ * across the page.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple horizontal rule
+ * 	Hr simple = new Hr();
+ *
+ * 	// HR with styling
+ * 	Hr styled = new Hr()
+ * 		._class("section-divider")
+ * 		.style("border: 2px solid #ccc; margin: 20px 0;");
+ *
+ * 	// HR with ID
+ * 	Hr withId = new Hr()
+ * 		.id("content-break");
+ *
+ * 	// HR with styling
+ * 	Hr styled2 = new Hr()
+ * 		.style("border: none; border-top: 1px dashed #999; margin: 30px 0;");
+ *
+ * 	// HR with multiple attributes
+ * 	Hr complex = new Hr()
+ * 		._class("fancy-divider")
+ * 		.style("border: none; height: 3px; background: linear-gradient(to right, #ff6b6b, #4ecdc4); margin: 40px 0;");
+ *
+ * 	// HR with accessibility
+ * 	Hr accessible = new Hr()
+ * 		.title("Section break")
+ * 		.style("border: 1px solid #ddd; margin: 25px 0;");
+ *
+ * 	// HR with custom styling
+ * 	Hr custom = new Hr()
+ * 		._class("custom-hr")
+ * 		.style("border: none; height: 1px; background-color: #e0e0e0; margin: 15px 0;");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

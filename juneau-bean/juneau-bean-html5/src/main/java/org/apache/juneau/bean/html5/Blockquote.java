@@ -19,6 +19,30 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-blockquote-element">&lt;blockquote&gt;</a>
  * element.
  *
+ * <p>
+ * The blockquote element represents a section that is quoted from another source. It is typically
+ * rendered as an indented block of text to distinguish it from the surrounding content. The cite
+ * attribute can be used to provide a link to the source of the quotation.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple blockquote
+ * 	Blockquote quote1 = new Blockquote().text("The only way to do great work is to love what you do.");
+ * 
+ * 	// Blockquote with citation
+ * 	Blockquote quote2 = new Blockquote()
+ * 		.cite("https://example.com/source")
+ * 		.text("Innovation distinguishes between a leader and a follower.");
+ * 
+ * 	// Blockquote with nested content
+ * 	Blockquote quote3 = new Blockquote()
+ * 		.cite("https://example.com/article")
+ * 		.children(
+ * 			new P().text("This is a longer quotation that spans multiple paragraphs."),
+ * 			new P().text("It can contain various HTML elements.")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -46,9 +70,13 @@ public class Blockquote extends HtmlElementMixed {
 	 * attribute.
 	 *
 	 * <p>
-	 * Link to the source of the quotation.
+	 * Specifies the URL of the source document or message from which the quotation was taken.
+	 * This provides context and attribution for the quoted content.
 	 *
-	 * @param cite The new value for this attribute.
+	 * <p>
+	 * The URL should point to the original source of the quoted material.
+	 *
+	 * @param cite The URL of the source document for the quotation.
 	 * @return This object.
 	 */
 	public Blockquote cite(String value) {

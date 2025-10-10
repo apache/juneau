@@ -19,6 +19,37 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-keygen-element">&lt;keygen&gt;</a>
  * element.
  *
+ * <p>
+ * The keygen element represents a key-pair generator control for forms. It generates a public/private
+ * key pair and submits the public key to the server. This element is deprecated in HTML5 and should
+ * not be used in new projects. Modern web applications should use Web Crypto API instead.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Basic keygen with RSA key type
+ * 	Keygen keygen1 = new Keygen()
+ * 		.name("userkey")
+ * 		.keytype("RSA");
+ * 
+ * 	// Keygen with challenge string
+ * 	Keygen keygen2 = new Keygen()
+ * 		.name("certkey")
+ * 		.keytype("RSA")
+ * 		.challenge("server-challenge-string");
+ * 
+ * 	// Keygen with form association
+ * 	Keygen keygen3 = new Keygen()
+ * 		.name("formkey")
+ * 		.keytype("DSA")
+ * 		.form("myform");
+ * 
+ * 	// Keygen with disabled state
+ * 	Keygen keygen4 = new Keygen()
+ * 		.name("disabledkey")
+ * 		.keytype("RSA")
+ * 		.disabled(true);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -52,9 +83,13 @@ public class Keygen extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-keygen-challenge">challenge</a> attribute.
 	 *
 	 * <p>
-	 * String to package with the generated and signed public key.
+	 * Specifies a challenge string that will be packaged with the generated and signed public key.
+	 * This is used for additional security in key generation processes.
 	 *
-	 * @param challenge The new value for this attribute.
+	 * <p>
+	 * The challenge string is typically provided by the server and used to verify the key generation.
+	 *
+	 * @param challenge The challenge string to package with the generated key.
 	 * @return This object.
 	 */
 	public Keygen challenge(String value) {
@@ -68,13 +103,21 @@ public class Keygen extends HtmlElementVoid {
 	 * <p>
 	 * Whether the form control is disabled.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"disabled"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Keygen disabled(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("disabled", deminimize(value, "disabled"));
 		return this;
 	}
 
@@ -82,9 +125,13 @@ public class Keygen extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
-	 * Associates the control with a form element.
+	 * Associates the keygen element with a form element by specifying the form's ID. This allows the keygen
+	 * to be placed outside the form element while still being part of the form.
 	 *
-	 * @param form The new value for this attribute.
+	 * <p>
+	 * The value should match the ID of a form element in the same document.
+	 *
+	 * @param form The ID of the form element to associate with this keygen.
 	 * @return This object.
 	 */
 	public Keygen form(String value) {
@@ -96,9 +143,17 @@ public class Keygen extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-keygen-keytype">keytype</a> attribute.
 	 *
 	 * <p>
-	 * The type of cryptographic key to generate.
+	 * Specifies the type of cryptographic key to generate.
 	 *
-	 * @param keytype The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 *  	<li><js>"RSA"</js> - RSA key pair (default)</li>
+	 *  	<li><js>"DSA"</js> - DSA key pair</li>
+	 *  	<li><js>"EC"</js> - Elliptic curve key pair</li>
+	 * </ul>
+	 *
+	 * @param keytype The type of cryptographic key to generate.
 	 * @return This object.
 	 */
 	public Keygen keytype(String value) {
@@ -110,9 +165,13 @@ public class Keygen extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 *
 	 * <p>
-	 * Name of form control to use for form submission and in the form.elements API.
+	 * Specifies the name of the keygen element. This name is used when the form is submitted and
+	 * can be used to access the element via the form.elements API.
 	 *
-	 * @param name The new value for this attribute.
+	 * <p>
+	 * The name should be unique within the form and should not contain spaces or special characters.
+	 *
+	 * @param name The name of the keygen element for submission and API access.
 	 * @return This object.
 	 */
 	public Keygen name(String value) {

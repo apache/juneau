@@ -19,6 +19,59 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-em-element">&lt;em&gt;</a>
  * element.
  *
+ * <p>
+ * The em element represents stress emphasis of its contents. It is used to mark up text that should
+ * be emphasized or stressed, typically rendered in italics by browsers. The em element indicates
+ * that the text has semantic importance and should be read with emphasis, making it different from
+ * purely stylistic italic text. It is commonly used to emphasize words or phrases within sentences
+ * to change the meaning or add emphasis to the content.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple emphasis
+ * 	Em simple = new Em()
+ * 		.children("important");
+ *
+ * 	// Emphasis with styling
+ * 	Em styled = new Em()
+ * 		._class("highlight")
+ * 		.children("critical");
+ *
+ * 	// Emphasis in a sentence
+ * 	P sentence = new P()
+ * 		.children(
+ * 			"This is ",
+ * 			new Em().children("very important"),
+ * 			" information."
+ * 		);
+ *
+ * 	// Emphasis with complex content
+ * 	Em complex = new Em()
+ * 		.children(
+ * 			"must",
+ * 			new Span()._class("not").children(" not"),
+ * 			" be ignored"
+ * 		);
+ *
+ * 	// Emphasis with links
+ * 	Em withLinks = new Em()
+ * 		.children(
+ * 			"Please read the ",
+ * 			new A().href("/manual").children("manual"),
+ * 			" carefully."
+ * 		);
+ *
+ * 	// Emphasis with ID
+ * 	Em withId = new Em()
+ * 		.id("warning-text")
+ * 		.children("Warning: This action cannot be undone.");
+ *
+ * 	// Emphasis with styling
+ * 	Em styled2 = new Em()
+ * 		.style("color: red; font-weight: bold;")
+ * 		.children("Error: Invalid input");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

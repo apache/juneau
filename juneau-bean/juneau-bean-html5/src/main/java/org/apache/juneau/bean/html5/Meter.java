@@ -19,6 +19,69 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-meter-element">&lt;meter&gt;</a>
  * element.
  *
+ * <p>
+ * The meter element represents a scalar measurement within a known range, or a fractional value.
+ * It is used to display a gauge or meter showing a value within a defined range, such as disk
+ * usage, memory usage, or progress. The meter element is not suitable for representing a range
+ * of values (use the input element with type="range" for that). It is typically rendered as a
+ * visual gauge or bar that shows the current value relative to the minimum and maximum values.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple meter
+ * 	Meter simple = new Meter()
+ * 		.value(50)
+ * 		.min(0)
+ * 		.max(100);
+ *
+ * 	// Meter with styling
+ * 	Meter styled = new Meter()
+ * 		._class("progress-meter")
+ * 		.value(75)
+ * 		.min(0)
+ * 		.max(100);
+ *
+ * 	// Meter with complex content
+ * 	Meter complex = new Meter()
+ * 		.value(60)
+ * 		.min(0)
+ * 		.max(100)
+ * 		.low(25)
+ * 		.high(75)
+ * 		.optimum(50);
+ *
+ * 	// Meter with ID
+ * 	Meter withId = new Meter()
+ * 		.id("disk-usage")
+ * 		.value(80)
+ * 		.min(0)
+ * 		.max(100);
+ *
+ * 	// Meter with styling
+ * 	Meter styled2 = new Meter()
+ * 		.style("width: 200px; height: 20px;")
+ * 		.value(40)
+ * 		.min(0)
+ * 		.max(100);
+ *
+ * 	// Meter with multiple attributes
+ * 	Meter multiple = new Meter()
+ * 		.value(85)
+ * 		.min(0)
+ * 		.max(100)
+ * 		.low(20)
+ * 		.high(80)
+ * 		.optimum(50)
+ * 		.title("Disk Usage: 85%");
+ *
+ * 	// Meter with form
+ * 	Meter withForm = new Meter()
+ * 		.form("usage-form")
+ * 		.value(30)
+ * 		.min(0)
+ * 		.max(100);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

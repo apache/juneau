@@ -24,6 +24,68 @@ import org.apache.juneau.xml.annotation.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-pre-element">&lt;pre&gt;</a>
  * element.
  *
+ * <p>
+ * The pre element represents a block of preformatted text, in which structure is represented
+ * by typographic conventions rather than by elements. It is used to display text exactly as
+ * it is written, preserving whitespace, line breaks, and formatting. The pre element is
+ * typically rendered in a monospace font and is commonly used for displaying code snippets,
+ * ASCII art, or any text where formatting and spacing are important.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple preformatted text
+ * 	Pre simple = new Pre()
+ * 		.children("This text preserves\n  all formatting\n    and spacing.");
+ *
+ * 	// Pre with styling
+ * 	Pre styled = new Pre()
+ * 		._class("code-block")
+ * 		.children("function hello() {\n  return 'Hello World';\n}");
+ *
+ * 	// Pre with complex content
+ * 	Pre complex = new Pre()
+ * 		.children(
+ * 			"  ",
+ * 			new Strong().children("Bold text"),
+ * 			" in preformatted content\n",
+ * 			"  ",
+ * 			new Em().children("Italic text"),
+ * 			" with preserved formatting"
+ * 		);
+ *
+ * 	// Pre with ID
+ * 	Pre withId = new Pre()
+ * 		.id("code-example")
+ * 		.children("console.log('Hello World');");
+ *
+ * 	// Pre with styling
+ * 	Pre styled2 = new Pre()
+ * 		.style("background-color: #f4f4f4; padding: 10px; border: 1px solid #ddd;")
+ * 		.children("This is styled preformatted text.");
+ *
+ * 	// Pre with multiple elements
+ * 	Pre multiple = new Pre()
+ * 		.children(
+ * 			"Line 1: ",
+ * 			new Span()._class("keyword").children("function"),
+ * 			" ",
+ * 			new Span()._class("function-name").children("example"),
+ * 			"() {\n",
+ * 			"Line 2:   ",
+ * 			new Span()._class("keyword").children("return"),
+ * 			" ",
+ * 			new Span()._class("string").children("'Hello'"),
+ * 			";\n",
+ * 			"Line 3: }"
+ * 		);
+ *
+ * 	// Pre with code
+ * 	Pre withCode = new Pre()
+ * 		.children(
+ * 			new Code().children("const message = 'Hello World';\nconsole.log(message);")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

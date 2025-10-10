@@ -19,6 +19,56 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-dt-element">&lt;dt&gt;</a>
  * element.
  *
+ * <p>
+ * The dt element represents the term, or name, part of a term-description group in a description
+ * list (dl element). It is used to mark up the term that is being defined or described in a
+ * description list. The dt element can contain any flow content and is typically followed by
+ * one or more dd elements that provide the definition or description for the term.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple term
+ * 	Dt simple = new Dt()
+ * 		.children("HTML");
+ *
+ * 	// Term with styling
+ * 	Dt styled = new Dt()
+ * 		._class("term")
+ * 		.children("CSS");
+ *
+ * 	// Term with complex content
+ * 	Dt complex = new Dt()
+ * 		.children(
+ * 			"JavaScript",
+ * 			new Span()._class("abbrev").children(" (JS)")
+ * 		);
+ *
+ * 	// Term with links
+ * 	Dt withLinks = new Dt()
+ * 		.children(
+ * 			"Web Standards",
+ * 			new A().href("/standards").children(" (Learn More)")
+ * 		);
+ *
+ * 	// Term with ID
+ * 	Dt withId = new Dt()
+ * 		.id("html-term")
+ * 		.children("HTML");
+ *
+ * 	// Term with styling
+ * 	Dt styled2 = new Dt()
+ * 		.style("font-weight: bold; color: blue;")
+ * 		.children("API");
+ *
+ * 	// Term with multiple elements
+ * 	Dt multiple = new Dt()
+ * 		.children(
+ * 			"Responsive Design",
+ * 			new Span()._class("new").children(" (New)"),
+ * 			new Span()._class("popular").children(" (Popular)")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

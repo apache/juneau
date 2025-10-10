@@ -19,6 +19,61 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-div-element">&lt;div&gt;</a>
  * element.
  *
+ * <p>
+ * The div element represents a generic container for flow content. It is used to group elements
+ * together for styling purposes or to create layout structures. The div element has no semantic
+ * meaning and is purely presentational, making it a versatile tool for organizing and styling
+ * content. It is commonly used with CSS to create layouts, group related elements, or apply
+ * styling to multiple elements at once.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple div
+ * 	Div simple = new Div()
+ * 		.children("Hello World");
+ *
+ * 	// Div with styling
+ * 	Div styled = new Div()
+ * 		._class("container")
+ * 		.style("padding: 20px; background-color: #f0f0f0;");
+ *
+ * 	// Div with multiple children
+ * 	Div multiple = new Div()
+ * 		.children(
+ * 			new H1().children("Title"),
+ * 			new P().children("Content"),
+ * 			new P().children("More content")
+ * 		);
+ *
+ * 	// Div with complex content
+ * 	Div complex = new Div()
+ * 		._class("card")
+ * 		.children(
+ * 			new Div()._class("card-header").children("Card Title"),
+ * 			new Div()._class("card-body").children("Card content"),
+ * 			new Div()._class("card-footer").children("Card footer")
+ * 		);
+ *
+ * 	// Div with ID
+ * 	Div withId = new Div()
+ * 		.id("main-content")
+ * 		.children("Main content area");
+ *
+ * 	// Div with styling
+ * 	Div styled2 = new Div()
+ * 		.style("display: flex; justify-content: space-between;")
+ * 		.children(
+ * 			new Div()._class("left-column").children("Left content"),
+ * 			new Div()._class("right-column").children("Right content")
+ * 		);
+ *
+ * 	// Div with event handlers
+ * 	Div interactive = new Div()
+ * 		.onclick("handleClick()")
+ * 		.onmouseover("handleMouseOver()")
+ * 		.children("Interactive div");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

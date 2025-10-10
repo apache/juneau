@@ -19,6 +19,62 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-cite-element">&lt;cite&gt;</a>
  * element.
  *
+ * <p>
+ * The cite element represents the title of a work (e.g., a book, a paper, an essay, a poem, a score,
+ * a song, a script, a film, a TV show, a game, a sculpture, a painting, a theatre production, a play,
+ * an opera, a musical, an exhibition, a legal case report, a computer program, a web site, a web page,
+ * a blog post or comment, a forum post or comment, a tweet, a written or oral statement, etc.). It is
+ * used to mark up the title of a referenced work, making it clear to both users and search engines
+ * what is being cited.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple citation
+ * 	Cite simple = new Cite()
+ * 		.children("The Great Gatsby");
+ *
+ * 	// Citation with styling
+ * 	Cite styled = new Cite()
+ * 		._class("book-title")
+ * 		.children("To Kill a Mockingbird");
+ *
+ * 	// Citation in a sentence
+ * 	P sentence = new P()
+ * 		.children(
+ * 			"As mentioned in ",
+ * 			new Cite().children("The Art of War"),
+ * 			", strategy is key to success."
+ * 		);
+ *
+ * 	// Citation with link
+ * 	Cite withLink = new Cite()
+ * 		.children(
+ * 			new A().href("/books/1984").children("1984")
+ * 		);
+ *
+ * 	// Multiple citations
+ * 	P multiple = new P()
+ * 		.children(
+ * 			"Several works discuss this topic: ",
+ * 			new Cite().children("Book A"),
+ * 			", ",
+ * 			new Cite().children("Book B"),
+ * 			", and ",
+ * 			new Cite().children("Book C"),
+ * 			"."
+ * 		);
+ *
+ * 	// Citation with author
+ * 	P withAuthor = new P()
+ * 		.children(
+ * 			"According to ",
+ * 			new Strong().children("John Doe"),
+ * 			" in ",
+ * 			new Cite().children("The Future of Technology"),
+ * 			", we are entering a new era."
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

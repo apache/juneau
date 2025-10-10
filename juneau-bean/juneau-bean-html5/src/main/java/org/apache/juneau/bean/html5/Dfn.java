@@ -19,6 +19,54 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-dfn-element">&lt;dfn&gt;</a>
  * element.
  *
+ * <p>
+ * The dfn element represents the defining instance of a term. It is used to mark up the first occurrence
+ * of a term that is being defined in the document, making it clear to both users and search engines
+ * that this is the definition of the term. The dfn element can contain the term being defined, and
+ * the definition is typically provided in the surrounding context or in a related dd element.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple definition
+ * 	Dfn simple = new Dfn()
+ * 		.children("HTML");
+ *
+ * 	// Definition with styling
+ * 	Dfn styled = new Dfn()
+ * 		._class("term")
+ * 		.children("CSS");
+ *
+ * 	// Definition in a sentence
+ * 	P sentence = new P()
+ * 		.children(
+ * 			"The ",
+ * 			new Dfn().children("DOM"),
+ * 			" represents the structure of a web page."
+ * 		);
+ *
+ * 	// Definition with complex content
+ * 	Dfn complex = new Dfn()
+ * 		.children(
+ * 			"JavaScript",
+ * 			new Span()._class("abbrev").children(" (JS)")
+ * 		);
+ *
+ * 	// Definition with title
+ * 	Dfn withTitle = new Dfn()
+ * 		.title("HyperText Markup Language")
+ * 		.children("HTML");
+ *
+ * 	// Definition with ID
+ * 	Dfn withId = new Dfn()
+ * 		.id("css-term")
+ * 		.children("CSS");
+ *
+ * 	// Definition with styling
+ * 	Dfn styled2 = new Dfn()
+ * 		.style("font-style: italic; color: blue;")
+ * 		.children("API");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

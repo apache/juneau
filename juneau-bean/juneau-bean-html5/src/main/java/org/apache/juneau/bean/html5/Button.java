@@ -22,6 +22,40 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-button-element">&lt;button&gt;</a>
  * element.
  *
+ * <p>
+ * The button element represents a clickable button that can be used to submit forms, trigger actions,
+ * or perform other interactive functions. Unlike input elements, buttons can contain rich content
+ * including text, images, and other HTML elements.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple submit button
+ * 	Button btn1 = new Button().type("submit").text("Submit Form");
+ * 
+ * 	// Button with custom styling and click handler
+ * 	Button btn2 = new Button()
+ * 		.type("button")
+ * 		._class("btn btn-primary")
+ * 		.onclick("handleClick()")
+ * 		.text("Click Me");
+ * 
+ * 	// Button with form override attributes
+ * 	Button btn3 = new Button()
+ * 		.type("submit")
+ * 		.formaction("https://api.example.com/submit")
+ * 		.formmethod("post")
+ * 		.formtarget("_blank")
+ * 		.text("Submit to API");
+ * 
+ * 	// Button with icon and text
+ * 	Button btn4 = new Button()
+ * 		.type("button")
+ * 		.children(
+ * 			new Span()._class("icon").text("📧"),
+ * 			new Span().text("Send Email")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -77,13 +111,21 @@ public class Button extends HtmlElementMixed {
 	 * <p>
 	 * Whether the form control is disabled.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"disabled"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Button disabled(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("disabled", deminimize(value, "disabled"));
 		return this;
 	}
 
@@ -91,9 +133,13 @@ public class Button extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
-	 * Associates the control with a form element.
+	 * Associates the button with a form element by specifying the form's ID. This allows the button
+	 * to be placed outside the form element while still being part of the form submission.
 	 *
-	 * @param form The new value for this attribute.
+	 * <p>
+	 * The value should match the ID of a form element in the same document.
+	 *
+	 * @param form The ID of the form element to associate with this button.
 	 * @return This object.
 	 */
 	public Button form(String value) {
@@ -105,7 +151,8 @@ public class Button extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formaction">formaction</a> attribute.
 	 *
 	 * <p>
-	 * URL to use for form submission.
+	 * Specifies the URL where the form data will be submitted when this button is clicked.
+	 * Overrides the form's action attribute.
 	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
@@ -114,7 +161,7 @@ public class Button extends HtmlElementMixed {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param formaction The new value for this attribute.
+	 * @param formaction The URL where the form data will be submitted.
 	 * @return This object.
 	 */
 	public Button formaction(String value) {
@@ -126,9 +173,17 @@ public class Button extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formenctype">formenctype</a> attribute.
 	 *
 	 * <p>
-	 * Form data set encoding type to use for form submission.
+	 * Specifies how form data should be encoded when submitted. Overrides the form's enctype attribute.
 	 *
-	 * @param formenctype The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 *  	<li><js>"application/x-www-form-urlencoded"</js> - Default encoding (default)</li>
+	 *  	<li><js>"multipart/form-data"</js> - For file uploads</li>
+	 *  	<li><js>"text/plain"</js> - Plain text encoding</li>
+	 * </ul>
+	 *
+	 * @param formenctype The encoding type for form submission.
 	 * @return This object.
 	 */
 	public Button formenctype(String value) {
@@ -140,9 +195,17 @@ public class Button extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formmethod">formmethod</a> attribute.
 	 *
 	 * <p>
-	 * HTTP method to use for form submission.
+	 * Specifies the HTTP method to use for form submission. Overrides the form's method attribute.
 	 *
-	 * @param formmethod The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 *  	<li><js>"get"</js> - Form data is sent as URL parameters</li>
+	 *  	<li><js>"post"</js> - Form data is sent in the request body (default)</li>
+	 *  	<li><js>"dialog"</js> - Used for forms within dialog elements</li>
+	 * </ul>
+	 *
+	 * @param formmethod The HTTP method for form submission.
 	 * @return This object.
 	 */
 	public Button formmethod(String value) {
@@ -155,9 +218,18 @@ public class Button extends HtmlElementMixed {
 	 * attribute.
 	 *
 	 * <p>
-	 * Bypass form control validation for form submission.
+	 * Specifies that form validation should be bypassed when this button submits the form.
+	 * Overrides the form's novalidate attribute.
 	 *
-	 * @param formnovalidate The new value for this attribute.
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 *  	<li><jk>false</jk> - Form validation is performed (default)</li>
+	 *  	<li><jk>true</jk> - Form validation is bypassed</li>
+	 *  	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
+	 * @param formnovalidate Whether to bypass form validation.
 	 * @return This object.
 	 */
 	public Button formnovalidate(String value) {
@@ -169,9 +241,19 @@ public class Button extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formtarget">formtarget</a> attribute.
 	 *
 	 * <p>
-	 * Browsing context for form submission.
+	 * Specifies where to display the form response after submission. Overrides the form's target attribute.
 	 *
-	 * @param formtarget The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 *  	<li><js>"_blank"</js> - Open in a new window/tab</li>
+	 *  	<li><js>"_self"</js> - Open in the same frame (default)</li>
+	 *  	<li><js>"_parent"</js> - Open in the parent frame</li>
+	 *  	<li><js>"_top"</js> - Open in the full body of the window</li>
+	 *  	<li><js>"framename"</js> - Open in a named frame</li>
+	 * </ul>
+	 *
+	 * @param formtarget Where to display the form response.
 	 * @return This object.
 	 */
 	public Button formtarget(String value) {
@@ -183,9 +265,13 @@ public class Button extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-menu">menu</a> attribute.
 	 *
 	 * <p>
-	 * Specifies the element's designated pop-up menu.
+	 * Specifies the ID of a menu element that should be displayed as a pop-up menu
+	 * when the button is activated.
 	 *
-	 * @param menu The new value for this attribute.
+	 * <p>
+	 * The value should match the ID of a menu element in the same document.
+	 *
+	 * @param menu The ID of the menu element to display as a pop-up.
 	 * @return This object.
 	 */
 	public Button menu(String value) {
@@ -197,9 +283,13 @@ public class Button extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 *
 	 * <p>
-	 * Name of form control to use for form submission and in the form.elements API.
+	 * Specifies the name of the button. This name is used when the form is submitted and
+	 * can be used to access the element via the form.elements API.
 	 *
-	 * @param name The new value for this attribute.
+	 * <p>
+	 * The name should be unique within the form and should not contain spaces or special characters.
+	 *
+	 * @param name The name of the button for submission and API access.
 	 * @return This object.
 	 */
 	public Button name(String value) {
@@ -211,9 +301,17 @@ public class Button extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-button-type">type</a> attribute.
 	 *
 	 * <p>
-	 * Type of button.
+	 * Specifies the type of button and its behavior when clicked.
 	 *
-	 * @param type The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"submit"</js> - Submits the form (default)</li>
+	 * 	<li><js>"reset"</js> - Resets the form to its initial state</li>
+	 * 	<li><js>"button"</js> - Generic button with no default behavior</li>
+	 * </ul>
+	 *
+	 * @param type The type of button and its behavior.
 	 * @return This object.
 	 */
 	public Button type(String value) {

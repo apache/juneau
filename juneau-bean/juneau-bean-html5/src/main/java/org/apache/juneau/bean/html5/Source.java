@@ -22,6 +22,46 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-source-element">&lt;source&gt;</a>
  * element.
  *
+ * <p>
+ * The source element specifies multiple media resources for media elements like audio and video.
+ * It allows browsers to choose the most appropriate source based on format support, bandwidth,
+ * and other factors. The source element is used inside audio and video elements to provide
+ * fallback options for different media formats.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Video with multiple sources
+ * 	Video video = new Video()
+ * 		.controls(true)
+ * 		.children(
+ * 			new Source().src("movie.mp4").type("video/mp4"),
+ * 			new Source().src("movie.webm").type("video/webm"),
+ * 			new Source().src("movie.ogg").type("video/ogg")
+ * 		);
+ * 
+ * 	// Audio with multiple sources
+ * 	Audio audio = new Audio()
+ * 		.controls(true)
+ * 		.children(
+ * 			new Source().src("sound.mp3").type("audio/mpeg"),
+ * 			new Source().src("sound.ogg").type("audio/ogg"),
+ * 			new Source().src("sound.wav").type("audio/wav")
+ * 		);
+ * 
+ * 	// Picture with multiple sources
+ * 	Picture picture = new Picture()
+ * 		.children(
+ * 			new Source().src("image.webp").type("image/webp"),
+ * 			new Source().src("image.jpg").type("image/jpeg")
+ * 		);
+ * 
+ * 	// Source with media query
+ * 	Source responsive = new Source()
+ * 		.src("large-image.jpg")
+ * 		.media("(min-width: 800px)")
+ * 		.type("image/jpeg");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -73,9 +113,20 @@ public class Source extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-source-type">type</a> attribute.
 	 *
 	 * <p>
-	 * Type of embedded resource.
+	 * Specifies the MIME type of the media resource. Helps browsers determine if they can play the media
+	 * and which source to use when multiple sources are provided.
 	 *
-	 * @param type The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"video/mp4"</js> - MP4 video</li>
+	 * 	<li><js>"video/webm"</js> - WebM video</li>
+	 * 	<li><js>"audio/mp3"</js> - MP3 audio</li>
+	 * 	<li><js>"audio/ogg"</js> - OGG audio</li>
+	 * 	<li><js>"audio/wav"</js> - WAV audio</li>
+	 * </ul>
+	 *
+	 * @param type The MIME type of the media resource.
 	 * @return This object.
 	 */
 	public Source type(String value) {

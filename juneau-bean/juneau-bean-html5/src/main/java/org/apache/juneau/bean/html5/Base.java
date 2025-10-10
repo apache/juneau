@@ -22,6 +22,23 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-base-element">&lt;base&gt;</a>
  * element.
  *
+ * <p>
+ * The base element specifies the base URL for all relative URLs in a document. It also specifies
+ * the default target for all links and forms in the document. Only one base element is allowed
+ * per document and it must be placed in the head section.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Set base URL for all relative links
+ * 	Base base1 = new Base().href("https://example.com/docs/");
+ * 
+ * 	// Set default target for all links
+ * 	Base base2 = new Base().target("_blank");
+ * 
+ * 	// Set both base URL and default target
+ * 	Base base3 = new Base().href("https://example.com/").target("_self");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -72,9 +89,19 @@ public class Base extends HtmlElementVoid {
 	 * attribute.
 	 *
 	 * <p>
-	 * Default browsing context for hyperlink navigation and form submission.
+	 * Specifies the default target for all links and forms in the document.
 	 *
-	 * @param target The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"_blank"</js> - Open in a new window/tab</li>
+	 * 	<li><js>"_self"</js> - Open in the same frame (default)</li>
+	 * 	<li><js>"_parent"</js> - Open in the parent frame</li>
+	 * 	<li><js>"_top"</js> - Open in the full body of the window</li>
+	 * 	<li><js>"framename"</js> - Open in a named frame</li>
+	 * </ul>
+	 *
+	 * @param target The default target for links and forms.
 	 * @return This object.
 	 */
 	public Base target(String value) {

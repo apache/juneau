@@ -19,6 +19,65 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#the-canvas-element">&lt;canvas&gt;</a>
  * element.
  *
+ * <p>
+ * The canvas element provides a resolution-dependent bitmap canvas that can be used for rendering
+ * graphs, game graphics, or other visual images on the fly. It is used with JavaScript to create
+ * dynamic, scriptable rendering of 2D shapes and bitmap images. The canvas element requires both
+ * width and height attributes to define the canvas size, and the actual drawing is done through
+ * the Canvas API in JavaScript.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Basic canvas
+ * 	Canvas basic = new Canvas()
+ * 		.width(300)
+ * 		.height(200);
+ * 
+ * 	// Canvas with ID for JavaScript access
+ * 	Canvas withId = new Canvas()
+ * 		.id("myCanvas")
+ * 		.width(400)
+ * 		.height(300);
+ * 
+ * 	// Canvas with styling
+ * 	Canvas styled = new Canvas()
+ * 		.id("drawingCanvas")
+ * 		.width(500)
+ * 		.height(400)
+ * 		._class("canvas-element")
+ * 		.style("border: 1px solid #ccc;");
+ * 
+ * 	// Canvas with event handlers
+ * 	Canvas interactive = new Canvas()
+ * 		.id("gameCanvas")
+ * 		.width(800)
+ * 		.height(600)
+ * 		.onclick("handleCanvasClick(event)")
+ * 		.onmousemove("handleMouseMove(event)");
+ * 
+ * 	// Canvas with fallback content
+ * 	Canvas withFallback = new Canvas()
+ * 		.id("chartCanvas")
+ * 		.width(600)
+ * 		.height(400)
+ * 		.children("Your browser does not support the canvas element.");
+ * 
+ * 	// Canvas for data visualization
+ * 	Canvas chart = new Canvas()
+ * 		.id("dataChart")
+ * 		.width(800)
+ * 		.height(500)
+ * 		.title("Interactive Data Chart");
+ * 
+ * 	// Canvas with accessibility
+ * 	Canvas accessible = new Canvas()
+ * 		.id("accessibleCanvas")
+ * 		.width(400)
+ * 		.height(300)
+ * 		.title("Interactive drawing canvas")
+ * 		.children("Use your mouse to draw on this canvas.");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

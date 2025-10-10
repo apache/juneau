@@ -19,6 +19,52 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">&lt;bdo&gt;</a>
  * element.
  *
+ * <p>
+ * The bdo element represents a span of text that is to be formatted in a different direction than
+ * the surrounding text. It is used to override the bidirectional algorithm and explicitly set the
+ * direction of text. The bdo element requires a dir attribute to specify the text direction, which
+ * can be "ltr" (left-to-right) or "rtl" (right-to-left).
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Right-to-left text
+ * 	Bdo rtl = new Bdo()
+ * 		.dir("rtl")
+ * 		.children("مرحبا بالعالم");
+ * 
+ * 	// Left-to-right text
+ * 	Bdo ltr = new Bdo()
+ * 		.dir("ltr")
+ * 		.children("Hello World");
+ * 
+ * 	// Mixed direction text
+ * 	Bdo mixed = new Bdo()
+ * 		.dir("rtl")
+ * 		.children("Hello ", new Bdo().dir("ltr").children("World"), " مرحبا");
+ * 
+ * 	// Hebrew text with explicit direction
+ * 	Bdo hebrew = new Bdo()
+ * 		.dir("rtl")
+ * 		.children("שלום עולם");
+ * 
+ * 	// Arabic text with explicit direction
+ * 	Bdo arabic = new Bdo()
+ * 		.dir("rtl")
+ * 		.children("مرحبا بالعالم");
+ * 
+ * 	// Styled bidirectional text
+ * 	Bdo styled = new Bdo()
+ * 		.dir("rtl")
+ * 		._class("bidi-text")
+ * 		.style("color: blue;")
+ * 		.children("نص باللغة العربية");
+ * 
+ * 	// Numbers with explicit direction
+ * 	Bdo numbers = new Bdo()
+ * 		.dir("rtl")
+ * 		.children("١٢٣٤٥");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

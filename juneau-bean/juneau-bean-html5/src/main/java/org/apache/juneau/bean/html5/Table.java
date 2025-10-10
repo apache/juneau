@@ -19,6 +19,88 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-table-element">&lt;table&gt;</a>
  * element.
  *
+ * <p>
+ * The table element represents data with more than one dimension, in the form of a table. It contains
+ * rows and columns of data, with optional headers and footers. The table element is used to display
+ * tabular data in a structured format, making it easy to read and understand. It can contain
+ * caption, colgroup, thead, tbody, tfoot, and tr elements to organize the table structure.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple table with headers and data
+ * 	Table simple = new Table()
+ * 		.children(
+ * 			new Thead()
+ * 				.children(
+ * 					new Tr()
+ * 						.children(
+ * 							new Th().children("Name"),
+ * 							new Th().children("Age"),
+ * 							new Th().children("City")
+ * 						)
+ * 				),
+ * 			new Tbody()
+ * 				.children(
+ * 					new Tr()
+ * 						.children(
+ * 							new Td().children("John"),
+ * 							new Td().children("25"),
+ * 							new Td().children("New York")
+ * 						)
+ * 				)
+ * 		);
+ * 
+ * 	// Table with caption and styling
+ * 	Table styled = new Table()
+ * 		._class("data-table")
+ * 		.border(1)
+ * 		.children(
+ * 			new Caption().children("Employee Information"),
+ * 			new Thead()
+ * 				.children(
+ * 					new Tr()
+ * 						.children(
+ * 							new Th().children("ID"),
+ * 							new Th().children("Name"),
+ * 							new Th().children("Department")
+ * 						)
+ * 				)
+ * 		);
+ * 
+ * 	// Table with multiple sections
+ * 	Table complex = new Table()
+ * 		.children(
+ * 			new Caption().children("Sales Report"),
+ * 			new Thead()
+ * 				.children(
+ * 					new Tr()
+ * 						.children(
+ * 							new Th().children("Product"),
+ * 							new Th().children("Q1"),
+ * 							new Th().children("Q2")
+ * 						)
+ * 				),
+ * 			new Tbody()
+ * 				.children(
+ * 					new Tr()
+ * 						.children(
+ * 							new Td().children("Widget A"),
+ * 							new Td().children("100"),
+ * 							new Td().children("150")
+ * 						)
+ * 				),
+ * 			new Tfoot()
+ * 				.children(
+ * 					new Tr()
+ * 						.children(
+ * 							new Td().children("Total"),
+ * 							new Td().children("100"),
+ * 							new Td().children("150")
+ * 						)
+ * 				)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

@@ -19,6 +19,36 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-q-element">&lt;q&gt;</a>
  * element.
  *
+ * <p>
+ * The q element represents a short inline quotation. It is used for short quotes that are part
+ * of the surrounding text, as opposed to blockquote which is used for longer, standalone quotations.
+ * The cite attribute can be used to provide a link to the source of the quotation.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple inline quotation
+ * 	Q q1 = new Q().text("To be or not to be, that is the question.");
+ * 
+ * 	// Quotation with citation
+ * 	Q q2 = new Q()
+ * 		.cite("https://example.com/source")
+ * 		.text("The only way to do great work is to love what you do.");
+ * 
+ * 	// Quotation in a paragraph
+ * 	P p1 = new P()
+ * 		.children(
+ * 			new Text("As Shakespeare once said, "),
+ * 			new Q().text("All the world's a stage"),
+ * 			new Text(" and we are merely players.")
+ * 		);
+ * 
+ * 	// Quotation with styling
+ * 	Q q3 = new Q()
+ * 		._class("highlighted-quote")
+ * 		.cite("https://example.com/author")
+ * 		.text("Innovation distinguishes between a leader and a follower.");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -45,9 +75,13 @@ public class Q extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-q-cite">cite</a> attribute.
 	 *
 	 * <p>
-	 * Link to the source of the quotation or more information about the edit.
+	 * Specifies the URL of the source document or message from which the quotation was taken.
+	 * This provides context and attribution for the quoted content.
 	 *
-	 * @param cite The new value for this attribute.
+	 * <p>
+	 * The URL should point to the original source of the quoted material.
+	 *
+	 * @param cite The URL of the source document for the quotation.
 	 * @return This object.
 	 */
 	public Q cite(String value) {

@@ -145,7 +145,12 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#the-accesskey-attribute">accesskey</a>
 	 * attribute.
 	 *
-	 * @param accesskey The new value for this attribute.
+	 * <p>
+	 * Defines a keyboard shortcut to activate or focus an element.
+	 * The value should be a single character that, when pressed with a modifier key (usually Alt),
+	 * activates the element.
+	 *
+	 * @param accesskey The keyboard shortcut character (e.g., <js>"a"</js>, <js>"1"</js>).
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -157,7 +162,11 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#classes">class</a> attribute.
 	 *
-	 * @param _class The new value for this attribute.
+	 * <p>
+	 * Specifies one or more CSS class names for the element, separated by spaces.
+	 * These classes can be used for styling and JavaScript selection.
+	 *
+	 * @param _class Space-separated CSS class names (e.g., <js>"btn btn-primary"</js>).
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -170,8 +179,18 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-contenteditable">contenteditable</a>
 	 * attribute.
 	 *
-	 * @param contenteditable The new value for this attribute.
-	 * Typically a {@link Boolean} or {@link String}.
+	 * <p>
+	 * Indicates whether the element's content is editable by the user.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"true"</js> or empty string - Element content is editable</li>
+	 * 	<li><js>"false"</js> - Element content is not editable</li>
+	 * 	<li><js>"plaintext-only"</js> - Element content is editable, but rich text formatting is disabled</li>
+	 * </ul>
+	 *
+	 * @param contenteditable The editability state of the element.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -183,7 +202,18 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#the-dir-attribute">dir</a> attribute.
 	 *
-	 * @param dir The new value for this attribute.
+	 * <p>
+	 * Specifies the text direction of the element's content.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"ltr"</js> - Left-to-right text direction</li>
+	 * 	<li><js>"rtl"</js> - Right-to-left text direction</li>
+	 * 	<li><js>"auto"</js> - Browser determines direction based on content</li>
+	 * </ul>
+	 *
+	 * @param dir The text direction for the element.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -195,6 +225,14 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#the-hidden-attribute">hidden</a> attribute.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"hidden"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param hidden
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -202,14 +240,18 @@ public abstract class HtmlElement {
 	 */
 	@FluentSetter
 	public HtmlElement hidden(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("hidden", deminimize(value, "hidden"));
 		return this;
 	}
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#the-id-attribute">id</a> attribute.
 	 *
-	 * @param id The new value for this attribute.
+	 * <p>
+	 * Specifies a unique identifier for the element. The ID must be unique within the document
+	 * and can be used for CSS styling, JavaScript selection, and anchor links.
+	 *
+	 * @param id A unique identifier for the element (e.g., <js>"header"</js>, <js>"main-content"</js>).
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -221,7 +263,11 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-lang">lang</a> attribute.
 	 *
-	 * @param lang The new value for this attribute.
+	 * <p>
+	 * Specifies the primary language of the element's content using a language tag.
+	 * This helps with accessibility, search engines, and browser features like spell checking.
+	 *
+	 * @param lang A language tag (e.g., <js>"en"</js>, <js>"en-US"</js>, <js>"es"</js>, <js>"fr-CA"</js>).
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -233,7 +279,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onabort">onabort</a> attribute.
 	 *
-	 * @param onabort The new value for this attribute.
+	 * <p>
+	 * Event handler for when an operation is aborted (e.g., image loading is cancelled).
+	 *
+	 * @param onabort JavaScript code to execute when the abort event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -245,7 +294,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onblur">onblur</a> attribute.
 	 *
-	 * @param onblur The new value for this attribute.
+	 * <p>
+	 * Event handler for when the element loses focus.
+	 *
+	 * @param onblur JavaScript code to execute when the element loses focus.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -257,7 +309,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncancel">oncancel</a> attribute.
 	 *
-	 * @param oncancel The new value for this attribute.
+	 * <p>
+	 * Event handler for when a dialog is cancelled.
+	 *
+	 * @param oncancel JavaScript code to execute when the cancel event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -269,7 +324,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncanplay">oncanplay</a> attribute.
 	 *
-	 * @param oncanplay The new value for this attribute.
+	 * <p>
+	 * Event handler for when the media can start playing (enough data has been buffered).
+	 *
+	 * @param oncanplay JavaScript code to execute when the canplay event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -282,7 +340,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncanplaythrough">oncanplaythrough</a>
 	 * attribute.
 	 *
-	 * @param oncanplaythrough The new value for this attribute.
+	 * <p>
+	 * Event handler for when the media can play through to the end without buffering.
+	 *
+	 * @param oncanplaythrough JavaScript code to execute when the canplaythrough event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -294,7 +355,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onchange">onchange</a> attribute.
 	 *
-	 * @param onchange The new value for this attribute.
+	 * <p>
+	 * Event handler for when the value of a form element changes and loses focus.
+	 *
+	 * @param onchange JavaScript code to execute when the change event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -306,7 +370,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onclick">onclick</a> attribute.
 	 *
-	 * @param onclick The new value for this attribute.
+	 * <p>
+	 * Event handler for when the element is clicked.
+	 *
+	 * @param onclick JavaScript code to execute when the click event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -319,7 +386,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncuechange">oncuechange</a>
 	 * attribute.
 	 *
-	 * @param oncuechange The new value for this attribute.
+	 * <p>
+	 * Event handler for when a text track cue changes.
+	 *
+	 * @param oncuechange JavaScript code to execute when the cuechange event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -331,7 +401,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ondblclick">ondblclick</a> attribute.
 	 *
-	 * @param ondblclick The new value for this attribute.
+	 * <p>
+	 * Event handler for when the element is double-clicked.
+	 *
+	 * @param ondblclick JavaScript code to execute when the dblclick event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -344,7 +417,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ondurationchange">ondurationchange</a>
 	 * attribute.
 	 *
-	 * @param ondurationchange The new value for this attribute.
+	 * <p>
+	 * Event handler for when the duration of the media changes.
+	 *
+	 * @param ondurationchange JavaScript code to execute when the durationchange event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -356,7 +432,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onemptied">onemptied</a> attribute.
 	 *
-	 * @param onemptied The new value for this attribute.
+	 * <p>
+	 * Event handler for when the media element becomes empty (e.g., network error).
+	 *
+	 * @param onemptied JavaScript code to execute when the emptied event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -368,7 +447,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onended">onended</a> attribute.
 	 *
-	 * @param onended The new value for this attribute.
+	 * <p>
+	 * Event handler for when the media playback reaches the end.
+	 *
+	 * @param onended JavaScript code to execute when the ended event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -380,7 +462,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onerror">onerror</a> attribute.
 	 *
-	 * @param onerror The new value for this attribute.
+	 * <p>
+	 * Event handler for when an error occurs (e.g., failed resource loading).
+	 *
+	 * @param onerror JavaScript code to execute when the error event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -392,7 +477,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onfocus">onfocus</a> attribute.
 	 *
-	 * @param onfocus The new value for this attribute.
+	 * <p>
+	 * Event handler for when the element receives focus.
+	 *
+	 * @param onfocus JavaScript code to execute when the focus event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -404,7 +492,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oninput">oninput</a> attribute.
 	 *
-	 * @param oninput The new value for this attribute.
+	 * <p>
+	 * Event handler for when the value of an input element changes (fires on every keystroke).
+	 *
+	 * @param oninput JavaScript code to execute when the input event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -416,7 +507,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oninvalid">oninvalid</a> attribute.
 	 *
-	 * @param oninvalid The new value for this attribute.
+	 * <p>
+	 * Event handler for when form validation fails.
+	 *
+	 * @param oninvalid JavaScript code to execute when the invalid event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -428,7 +522,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onkeydown">onkeydown</a> attribute.
 	 *
-	 * @param onkeydown The new value for this attribute.
+	 * <p>
+	 * Event handler for when a key is pressed down.
+	 *
+	 * @param onkeydown JavaScript code to execute when the keydown event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -440,7 +537,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onkeypress">onkeypress</a> attribute.
 	 *
-	 * @param onkeypress The new value for this attribute.
+	 * <p>
+	 * Event handler for when a key is pressed (deprecated, use onkeydown instead).
+	 *
+	 * @param onkeypress JavaScript code to execute when the keypress event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -452,7 +552,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onkeyup">onkeyup</a> attribute.
 	 *
-	 * @param onkeyup The new value for this attribute.
+	 * <p>
+	 * Event handler for when a key is released.
+	 *
+	 * @param onkeyup JavaScript code to execute when the keyup event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -464,7 +567,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onload">onload</a> attribute.
 	 *
-	 * @param onload The new value for this attribute.
+	 * <p>
+	 * Event handler for when the element and its resources have finished loading.
+	 *
+	 * @param onload JavaScript code to execute when the load event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -477,7 +583,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadeddata">onloadeddata</a>
 	 * attribute.
 	 *
-	 * @param onloadeddata The new value for this attribute.
+	 * <p>
+	 * Event handler for when the first frame of media has finished loading.
+	 *
+	 * @param onloadeddata JavaScript code to execute when the loadeddata event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -490,7 +599,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadedmetadata">onloadedmetadata</a>
 	 * attribute.
 	 *
-	 * @param onloadedmetadata The new value for this attribute.
+	 * <p>
+	 * Event handler for when metadata (duration, dimensions, etc.) has been loaded.
+	 *
+	 * @param onloadedmetadata JavaScript code to execute when the loadedmetadata event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -503,7 +615,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadstart">onloadstart</a>
 	 * attribute.
 	 *
-	 * @param onloadstart The new value for this attribute.
+	 * <p>
+	 * Event handler for when the browser starts loading the media.
+	 *
+	 * @param onloadstart JavaScript code to execute when the loadstart event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -516,7 +631,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmousedown">onmousedown</a>
 	 * attribute.
 	 *
-	 * @param onmousedown The new value for this attribute.
+	 * <p>
+	 * Event handler for when a mouse button is pressed down on the element.
+	 *
+	 * @param onmousedown JavaScript code to execute when the mousedown event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -528,7 +646,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseenter">onmouseenter</a> attribute.
 	 *
-	 * @param onmouseenter The new value for this attribute.
+	 * <p>
+	 * Event handler for when the mouse pointer enters the element (does not bubble).
+	 *
+	 * @param onmouseenter JavaScript code to execute when the mouseenter event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -541,7 +662,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseleave">onmouseleave</a>
 	 * attribute.
 	 *
-	 * @param onmouseleave The new value for this attribute.
+	 * <p>
+	 * Event handler for when the mouse pointer leaves the element (does not bubble).
+	 *
+	 * @param onmouseleave JavaScript code to execute when the mouseleave event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -554,7 +678,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmousemove">onmousemove</a>
 	 * attribute.
 	 *
-	 * @param onmousemove The new value for this attribute.
+	 * <p>
+	 * Event handler for when the mouse pointer moves over the element.
+	 *
+	 * @param onmousemove JavaScript code to execute when the mousemove event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -566,7 +693,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseout">onmouseout</a> attribute.
 	 *
-	 * @param onmouseout The new value for this attribute.
+	 * <p>
+	 * Event handler for when the mouse pointer moves out of the element (bubbles).
+	 *
+	 * @param onmouseout JavaScript code to execute when the mouseout event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -579,7 +709,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseover">onmouseover</a>
 	 * attribute.
 	 *
-	 * @param onmouseover The new value for this attribute.
+	 * <p>
+	 * Event handler for when the mouse pointer moves over the element (bubbles).
+	 *
+	 * @param onmouseover JavaScript code to execute when the mouseover event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -591,7 +724,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseup">onmouseup</a> attribute.
 	 *
-	 * @param onmouseup The new value for this attribute.
+	 * <p>
+	 * Event handler for when a mouse button is released over the element.
+	 *
+	 * @param onmouseup JavaScript code to execute when the mouseup event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -604,7 +740,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmousewheel">onmousewheel</a>
 	 * attribute.
 	 *
-	 * @param onmousewheel The new value for this attribute.
+	 * <p>
+	 * Event handler for when the mouse wheel is rotated over the element (deprecated, use onwheel).
+	 *
+	 * @param onmousewheel JavaScript code to execute when the mousewheel event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -616,7 +755,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onpause">onpause</a> attribute.
 	 *
-	 * @param onpause The new value for this attribute.
+	 * <p>
+	 * Event handler for when media playback is paused.
+	 *
+	 * @param onpause JavaScript code to execute when the pause event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -628,7 +770,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onplay">onplay</a> attribute.
 	 *
-	 * @param onplay The new value for this attribute.
+	 * <p>
+	 * Event handler for when media playback starts.
+	 *
+	 * @param onplay JavaScript code to execute when the play event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -640,7 +785,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onplaying">onplaying</a> attribute.
 	 *
-	 * @param onplaying The new value for this attribute.
+	 * <p>
+	 * Event handler for when media playback starts after being paused or delayed.
+	 *
+	 * @param onplaying JavaScript code to execute when the playing event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -652,7 +800,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onprogress">onprogress</a> attribute.
 	 *
-	 * @param onprogress The new value for this attribute.
+	 * <p>
+	 * Event handler for when the browser is downloading media data.
+	 *
+	 * @param onprogress JavaScript code to execute when the progress event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -665,7 +816,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onratechange">onratechange</a>
 	 * attribute.
 	 *
-	 * @param onratechange The new value for this attribute.
+	 * <p>
+	 * Event handler for when the playback rate of media changes.
+	 *
+	 * @param onratechange JavaScript code to execute when the ratechange event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -677,7 +831,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onreset">onreset</a> attribute.
 	 *
-	 * @param onreset The new value for this attribute.
+	 * <p>
+	 * Event handler for when a form is reset.
+	 *
+	 * @param onreset JavaScript code to execute when the reset event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -689,7 +846,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onresize">onresize</a> attribute.
 	 *
-	 * @param onresize The new value for this attribute.
+	 * <p>
+	 * Event handler for when the element is resized.
+	 *
+	 * @param onresize JavaScript code to execute when the resize event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -701,7 +861,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onscroll">onscroll</a> attribute.
 	 *
-	 * @param onscroll The new value for this attribute.
+	 * <p>
+	 * Event handler for when the element's scrollbar is scrolled.
+	 *
+	 * @param onscroll JavaScript code to execute when the scroll event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -713,7 +876,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onseeked">onseeked</a> attribute.
 	 *
-	 * @param onseeked The new value for this attribute.
+	 * <p>
+	 * Event handler for when a seek operation completes.
+	 *
+	 * @param onseeked JavaScript code to execute when the seeked event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -725,7 +891,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onseeking">onseeking</a> attribute.
 	 *
-	 * @param onseeking The new value for this attribute.
+	 * <p>
+	 * Event handler for when a seek operation begins.
+	 *
+	 * @param onseeking JavaScript code to execute when the seeking event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -737,7 +906,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onselect">onselect</a> attribute.
 	 *
-	 * @param onselect The new value for this attribute.
+	 * <p>
+	 * Event handler for when text is selected in the element.
+	 *
+	 * @param onselect JavaScript code to execute when the select event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -749,7 +921,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onshow">onshow</a> attribute.
 	 *
-	 * @param onshow The new value for this attribute.
+	 * <p>
+	 * Event handler for when a context menu is shown.
+	 *
+	 * @param onshow JavaScript code to execute when the show event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -761,7 +936,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onstalled">onstalled</a> attribute.
 	 *
-	 * @param onstalled The new value for this attribute.
+	 * <p>
+	 * Event handler for when media loading is stalled.
+	 *
+	 * @param onstalled JavaScript code to execute when the stalled event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -773,7 +951,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onsubmit">onsubmit</a> attribute.
 	 *
-	 * @param onsubmit The new value for this attribute.
+	 * <p>
+	 * Event handler for when a form is submitted.
+	 *
+	 * @param onsubmit JavaScript code to execute when the submit event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -785,7 +966,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onsuspend">onsuspend</a> attribute.
 	 *
-	 * @param onsuspend The new value for this attribute.
+	 * <p>
+	 * Event handler for when media loading is suspended.
+	 *
+	 * @param onsuspend JavaScript code to execute when the suspend event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -798,7 +982,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ontimeupdate">ontimeupdate</a>
 	 * attribute.
 	 *
-	 * @param ontimeupdate The new value for this attribute.
+	 * <p>
+	 * Event handler for when the current playback position changes.
+	 *
+	 * @param ontimeupdate JavaScript code to execute when the timeupdate event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -810,7 +997,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ontoggle">ontoggle</a> attribute.
 	 *
-	 * @param ontoggle The new value for this attribute.
+	 * <p>
+	 * Event handler for when a details element is opened or closed.
+	 *
+	 * @param ontoggle JavaScript code to execute when the toggle event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -823,7 +1013,10 @@ public abstract class HtmlElement {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onvolumechange">onvolumechange</a>
 	 * attribute.
 	 *
-	 * @param onvolumechange The new value for this attribute.
+	 * <p>
+	 * Event handler for when the volume of media changes.
+	 *
+	 * @param onvolumechange JavaScript code to execute when the volumechange event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -835,7 +1028,10 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onwaiting">onwaiting</a> attribute.
 	 *
-	 * @param onwaiting The new value for this attribute.
+	 * <p>
+	 * Event handler for when media playback stops to buffer more data.
+	 *
+	 * @param onwaiting JavaScript code to execute when the waiting event occurs.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -847,9 +1043,17 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-spellcheck">spellcheck</a> attribute.
 	 *
-	 * @param spellcheck
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * <p>
+	 * Indicates whether the element should have its spelling and grammar checked.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"true"</js> - Enable spell checking for this element</li>
+	 * 	<li><js>"false"</js> - Disable spell checking for this element</li>
+	 * </ul>
+	 *
+	 * @param spellcheck Whether spell checking should be enabled.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -861,7 +1065,11 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#the-style-attribute">style</a> attribute.
 	 *
-	 * @param style The new value for this attribute.
+	 * <p>
+	 * Specifies inline CSS styles for the element. The value should be valid CSS
+	 * property-value pairs separated by semicolons.
+	 *
+	 * @param style Inline CSS styles (e.g., <js>"color: red; font-size: 14px;"</js>).
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -873,9 +1081,18 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-tabindex">tabindex</a> attribute.
 	 *
-	 * @param tabindex
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * <p>
+	 * Specifies the tab order of the element when navigating with the keyboard.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li>Positive integer - Element is focusable and participates in tab order</li>
+	 * 	<li><js>"0"</js> - Element is focusable but not in tab order</li>
+	 * 	<li>Negative integer - Element is not focusable</li>
+	 * </ul>
+	 *
+	 * @param tabindex The tab order value for keyboard navigation.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -887,7 +1104,11 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-title">title</a> attribute.
 	 *
-	 * @param title The new value for this attribute.
+	 * <p>
+	 * Specifies additional information about the element, typically displayed as a tooltip
+	 * when the user hovers over the element.
+	 *
+	 * @param title Tooltip text to display on hover (e.g., <js>"Click to submit form"</js>).
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -899,9 +1120,17 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-translate">translate</a> attribute.
 	 *
-	 * @param translate
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * <p>
+	 * Specifies whether the element's content should be translated when the page is localized.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"yes"</js> - Content should be translated (default)</li>
+	 * 	<li><js>"no"</js> - Content should not be translated</li>
+	 * </ul>
+	 *
+	 * @param translate Whether the element content should be translated.
 	 * @return This object.
 	 */
 	@FluentSetter

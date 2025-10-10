@@ -19,6 +19,60 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-h1,-h2,-h3,-h4,-h5,-and-h6-elements">&lt;h5&gt;</a>
  * element.
  *
+ * <p>
+ * The h5 element represents a fifth-level heading in a document or section. It is used to
+ * mark up subsections that are hierarchically below h4 elements. The h5 element is typically
+ * used to organize content into smaller subsections and is important for creating a logical
+ * document structure. It is typically rendered in a smaller font size than h4 but larger
+ * than h6 elements.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple sub-sub-subsection heading
+ * 	H5 simple = new H5()
+ * 		.children("Connection Settings");
+ *
+ * 	// H5 with styling
+ * 	H5 styled = new H5()
+ * 		._class("detail-heading")
+ * 		.children("Timeout Configuration");
+ *
+ * 	// H5 with complex content
+ * 	H5 complex = new H5()
+ * 		.children(
+ * 			"5.1 ",
+ * 			new Strong().children("Connection Pool Settings"),
+ * 			" ",
+ * 			new Em().children("(Optional)")
+ * 		);
+ *
+ * 	// H5 with ID
+ * 	H5 withId = new H5()
+ * 		.id("ssl-config")
+ * 		.children("SSL Configuration");
+ *
+ * 	// H5 with styling
+ * 	H5 styled2 = new H5()
+ * 		.style("color: #aaa; font-size: 0.9em;")
+ * 		.children("Additional Parameters");
+ *
+ * 	// H5 with multiple elements
+ * 	H5 multiple = new H5()
+ * 		.children(
+ * 			"5.1.1 ",
+ * 			new Span()._class("param-title").children("Max Connections"),
+ * 			" ",
+ * 			new Small().children("(Default: 10)")
+ * 		);
+ *
+ * 	// H5 with links
+ * 	H5 withLinks = new H5()
+ * 		.children(
+ * 			"See: ",
+ * 			new A().href("/docs/ssl").children("SSL Documentation")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

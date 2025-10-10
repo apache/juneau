@@ -19,6 +19,56 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-colgroup-element">&lt;colgroup&gt;</a>
  * element.
  *
+ * <p>
+ * The colgroup element represents a group of one or more columns in a table. It is used to define
+ * structural columns and can specify attributes that apply to all cells in those columns. The colgroup
+ * element can contain col elements to define individual columns, or it can use the span attribute to
+ * define a group of columns without explicitly listing each one. This element is typically placed
+ * immediately after the opening table tag and before any thead, tbody, or tr elements.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple column group
+ * 	Colgroup simple = new Colgroup();
+ *
+ * 	// Column group with span
+ * 	Colgroup withSpan = new Colgroup()
+ * 		.span(3);
+ *
+ * 	// Column group with individual columns
+ * 	Colgroup withColumns = new Colgroup()
+ * 		.children(
+ * 			new Col().span(2),
+ * 			new Col().span(1)
+ * 		);
+ *
+ * 	// Column group with styling
+ * 	Colgroup styled = new Colgroup()
+ * 		._class("header-columns")
+ * 		.style("background-color: #f0f0f0;");
+ *
+ * 	// Column group with multiple columns
+ * 	Colgroup multiple = new Colgroup()
+ * 		.children(
+ * 			new Col()._class("name-column").style("width: 200px;"),
+ * 			new Col()._class("age-column").style("width: 100px;"),
+ * 			new Col()._class("city-column").style("width: 150px;")
+ * 		);
+ *
+ * 	// Column group with alignment
+ * 	Colgroup aligned = new Colgroup()
+ * 		.children(
+ * 			new Col().style("text-align: left;"),
+ * 			new Col().style("text-align: center;"),
+ * 			new Col().style("text-align: right;")
+ * 		);
+ *
+ * 	// Column group with ID
+ * 	Colgroup withId = new Colgroup()
+ * 		.id("data-columns")
+ * 		.span(4);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

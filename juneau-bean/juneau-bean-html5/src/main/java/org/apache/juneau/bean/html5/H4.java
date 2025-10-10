@@ -19,6 +19,60 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-h1,-h2,-h3,-h4,-h5,-and-h6-elements">&lt;h4&gt;</a>
  * element.
  *
+ * <p>
+ * The h4 element represents a fourth-level heading in a document or section. It is used to
+ * mark up subsections that are hierarchically below h3 elements. The h4 element is typically
+ * used to organize content into smaller subsections and is important for creating a logical
+ * document structure. It is typically rendered in a smaller font size than h3 but larger
+ * than h5 elements.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple sub-subsection heading
+ * 	H4 simple = new H4()
+ * 		.children("Configuration Options");
+ *
+ * 	// H4 with styling
+ * 	H4 styled = new H4()
+ * 		._class("sub-subsection-title")
+ * 		.children("Environment Variables");
+ *
+ * 	// H4 with complex content
+ * 	H4 complex = new H4()
+ * 		.children(
+ * 			"4.1 ",
+ * 			new Strong().children("Database Configuration"),
+ * 			" ",
+ * 			new Em().children("(Required)")
+ * 		);
+ *
+ * 	// H4 with ID
+ * 	H4 withId = new H4()
+ * 		.id("performance-tuning")
+ * 		.children("Performance Tuning");
+ *
+ * 	// H4 with styling
+ * 	H4 styled2 = new H4()
+ * 		.style("color: #999; font-weight: normal;")
+ * 		.children("Additional Notes");
+ *
+ * 	// H4 with multiple elements
+ * 	H4 multiple = new H4()
+ * 		.children(
+ * 			"4.1.1 ",
+ * 			new Span()._class("detail-title").children("Connection Pool"),
+ * 			" ",
+ * 			new Small().children("(Advanced)")
+ * 		);
+ *
+ * 	// H4 with links
+ * 	H4 withLinks = new H4()
+ * 		.children(
+ * 			"Related: ",
+ * 			new A().href("/docs/performance").children("Performance Guide")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

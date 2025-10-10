@@ -22,6 +22,41 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-iframe-element">&lt;iframe&gt;</a>
  * element.
  *
+ * <p>
+ * The iframe element represents a nested browsing context, embedding another HTML page into the
+ * current page. It is commonly used to embed external content such as videos, maps, or other
+ * web applications. The sandbox attribute can be used to restrict the capabilities of the
+ * embedded content for security purposes.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple iframe embedding external content
+ * 	Iframe iframe1 = new Iframe()
+ * 		.src("https://example.com/embed")
+ * 		.width("800")
+ * 		.height("600");
+ * 
+ * 	// Iframe with sandbox restrictions
+ * 	Iframe iframe2 = new Iframe()
+ * 		.src("https://example.com/untrusted")
+ * 		.sandbox("allow-scripts allow-same-origin")
+ * 		.width("400")
+ * 		.height("300");
+ * 
+ * 	// Iframe with inline content
+ * 	Iframe iframe3 = new Iframe()
+ * 		.srcdoc("&lt;h1&gt;Inline Content&lt;/h1&gt;&lt;p&gt;This content is embedded directly.&lt;/p&gt;")
+ * 		.width("500")
+ * 		.height("200");
+ * 
+ * 	// Iframe with name for targeting
+ * 	Iframe iframe4 = new Iframe()
+ * 		.name("contentFrame")
+ * 		.src("https://example.com/content")
+ * 		.width("100%")
+ * 		.height("400");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -65,9 +100,13 @@ public class Iframe extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-name">name</a> attribute.
 	 *
 	 * <p>
-	 * Name of nested browsing context.
+	 * Specifies the name of the iframe. This name can be used as the target for links
+	 * and forms, allowing content to be loaded into the iframe.
 	 *
-	 * @param name The new value for this attribute.
+	 * <p>
+	 * The name should be unique within the document.
+	 *
+	 * @param name The name of the iframe for targeting.
 	 * @return This object.
 	 */
 	public Iframe name(String value) {
@@ -80,9 +119,20 @@ public class Iframe extends HtmlElementMixed {
 	 * attribute.
 	 *
 	 * <p>
-	 * Security rules for nested content.
+	 * Specifies security restrictions for the iframe content. Multiple restrictions can be
+	 * specified as a space-separated list.
 	 *
-	 * @param sandbox The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"allow-scripts"</js> - Allow JavaScript execution</li>
+	 * 	<li><js>"allow-same-origin"</js> - Allow same-origin requests</li>
+	 * 	<li><js>"allow-forms"</js> - Allow form submission</li>
+	 * 	<li><js>"allow-popups"</js> - Allow popup windows</li>
+	 * 	<li><js>"allow-top-navigation"</js> - Allow navigation of top-level browsing context</li>
+	 * </ul>
+	 *
+	 * @param sandbox Security restrictions for the iframe content.
 	 * @return This object.
 	 */
 	public Iframe sandbox(String value) {
@@ -118,9 +168,13 @@ public class Iframe extends HtmlElementMixed {
 	 * attribute.
 	 *
 	 * <p>
-	 * A document to render in the iframe.
+	 * Specifies the HTML content to be displayed in the iframe. This content is rendered
+	 * directly within the iframe without requiring a separate HTTP request.
 	 *
-	 * @param srcdoc The new value for this attribute.
+	 * <p>
+	 * The content should be valid HTML that will be displayed in the iframe.
+	 *
+	 * @param srcdoc The HTML content to display in the iframe.
 	 * @return This object.
 	 */
 	public Iframe srcdoc(String value) {

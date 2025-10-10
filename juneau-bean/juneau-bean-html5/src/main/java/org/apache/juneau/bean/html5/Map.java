@@ -19,6 +19,42 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-map-element">&lt;map&gt;</a>
  * element.
  *
+ * <p>
+ * The map element defines an image map, which is an image with clickable areas. It contains area
+ * elements that define the clickable regions within the image. The map element is referenced by
+ * img elements using the usemap attribute to create interactive images.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple image map with rectangular areas
+ * 	Map map1 = new Map()
+ * 		.name("navigation")
+ * 		.children(
+ * 			new Area("rect", "0,0,100,50", "https://example.com/home"),
+ * 			new Area("rect", "100,0,200,50", "https://example.com/about"),
+ * 			new Area("rect", "200,0,300,50", "https://example.com/contact")
+ * 		);
+ * 
+ * 	// Image map with different area shapes
+ * 	Map map2 = new Map()
+ * 		.name("shapes")
+ * 		.children(
+ * 			new Area("circle", "150,75,50", "https://example.com/circle"),
+ * 			new Area("poly", "0,0,100,0,50,100", "https://example.com/triangle"),
+ * 			new Area("default", null, "https://example.com/default")
+ * 		);
+ * 
+ * 	// Image map with accessibility
+ * 	Map map3 = new Map()
+ * 		.name("accessible")
+ * 		.children(
+ * 			new Area("rect", "0,0,100,100", "https://example.com/region1")
+ * 				.alt("Click here for region 1"),
+ * 			new Area("rect", "100,0,200,100", "https://example.com/region2")
+ * 				.alt("Click here for region 2")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -45,9 +81,13 @@ public class Map extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-map-name">name</a> attribute.
 	 *
 	 * <p>
-	 * Name of image map to reference from the usemap attribute.
+	 * Specifies the name of the image map. This name is used by img elements with the usemap attribute
+	 * to reference this map for defining clickable areas.
 	 *
-	 * @param name The new value for this attribute.
+	 * <p>
+	 * The name should be unique within the document and should not contain spaces or special characters.
+	 *
+	 * @param name The name of the image map for referencing from img elements.
 	 * @return This object.
 	 */
 	public Map name(String value) {

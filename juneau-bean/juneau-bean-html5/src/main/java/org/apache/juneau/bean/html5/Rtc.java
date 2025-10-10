@@ -19,6 +19,75 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-rtc-element">&lt;rtc&gt;</a>
  * element.
  *
+ * <p>
+ * The rtc element represents a ruby text container for a ruby annotation. It is used within
+ * a ruby element to group multiple ruby text (rt) elements together. The rtc element is part
+ * of the ruby annotation system and is used to provide multiple levels of annotations for
+ * the same base text. It is typically used when you need to provide both pronunciation and
+ * translation annotations for the same text, or when you need to group related ruby text
+ * elements together.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple ruby text container
+ * 	Rtc simple = new Rtc()
+ * 		.children(
+ * 			new Rt().children("かんじ"),
+ * 			new Rt().children("Chinese characters")
+ * 		);
+ *
+ * 	// Rtc with styling
+ * 	Rtc styled = new Rtc()
+ * 		._class("ruby-text-container")
+ * 		.children(
+ * 			new Rt().children("にほんご"),
+ * 			new Rt().children("Japanese language")
+ * 		);
+ *
+ * 	// Rtc with complex content
+ * 	Rtc complex = new Rtc()
+ * 		.children(
+ * 			new Rt().children("ふくざつな"),
+ * 			new Rt().children("complex"),
+ * 			new Rt().children("かんじ"),
+ * 			new Rt().children("kanji")
+ * 		);
+ *
+ * 	// Rtc with ID
+ * 	Rtc withId = new Rtc()
+ * 		.id("ruby-text-container-1")
+ * 		.children(
+ * 			new Rt().children("かんじ"),
+ * 			new Rt().children("Chinese characters")
+ * 		);
+ *
+ * 	// Rtc with styling
+ * 	Rtc styled2 = new Rtc()
+ * 		.style("font-size: 0.8em; color: #666;")
+ * 		.children(
+ * 			new Rt().children("かんじ"),
+ * 			new Rt().children("Chinese characters")
+ * 		);
+ *
+ * 	// Rtc with multiple elements
+ * 	Rtc multiple = new Rtc()
+ * 		.children(
+ * 			new Rt().children("ふくざつな"),
+ * 			new Rt().children("complex"),
+ * 			new Rt().children("かんじ"),
+ * 			new Rt().children("kanji")
+ * 		);
+ *
+ * 	// Rtc with links
+ * 	Rtc withLinks = new Rtc()
+ * 		.children(
+ * 			new Rt().children("かんじ"),
+ * 			new Rt().children(
+ * 				new A().href("/dictionary/kanji").children("Chinese characters")
+ * 			)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

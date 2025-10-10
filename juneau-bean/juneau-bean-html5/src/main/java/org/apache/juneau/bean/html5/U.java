@@ -19,6 +19,61 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-u-element">&lt;u&gt;</a>
  * element.
  *
+ * <p>
+ * The u element represents a span of text with an unarticulated, though explicitly rendered,
+ * non-textual annotation. It is used to mark up text that should be underlined, such as
+ * proper names in Chinese text, misspelled words, or text that needs to be distinguished
+ * from the surrounding content. The u element is typically rendered with an underline and
+ * is commonly used for indicating proper names, misspellings, or other annotations.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple underlined text
+ * 	U simple = new U()
+ * 		.children("This text is underlined");
+ *
+ * 	// U with styling
+ * 	U styled = new U()
+ * 		._class("underlined")
+ * 		.children("Styled underlined text");
+ *
+ * 	// U with complex content
+ * 	U complex = new U()
+ * 		.children(
+ * 			"The ",
+ * 			new Strong().children("proper name"),
+ * 			" is underlined."
+ * 		);
+ *
+ * 	// U with ID
+ * 	U withId = new U()
+ * 		.id("underlined-text")
+ * 		.children("Text with ID");
+ *
+ * 	// U with styling
+ * 	U styled2 = new U()
+ * 		.style("color: #666; text-decoration: underline;")
+ * 		.children("Custom styled underlined text");
+ *
+ * 	// U with multiple elements
+ * 	U multiple = new U()
+ * 		.children(
+ * 			"The ",
+ * 			new U().children("proper name"),
+ * 			" is ",
+ * 			new U().children("underlined"),
+ * 			" for emphasis."
+ * 		);
+ *
+ * 	// U with links
+ * 	U withLinks = new U()
+ * 		.children(
+ * 			"See ",
+ * 			new A().href("/help/underline").children("underline guide"),
+ * 			" for more information."
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

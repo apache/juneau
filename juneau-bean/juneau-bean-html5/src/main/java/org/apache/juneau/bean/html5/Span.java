@@ -19,6 +19,47 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-span-element">&lt;span&gt;</a>
  * element.
  *
+ * <p>
+ * The span element is a generic inline container for phrasing content. It has no inherent meaning
+ * and is typically used to group inline elements for styling purposes or to apply attributes to
+ * a portion of text. The span element is commonly used with CSS to apply styles to specific
+ * portions of text or to mark up text for JavaScript manipulation.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Text with highlighted portion
+ * 	Span highlight = new Span()
+ * 		._class("highlight")
+ * 		.children("This is highlighted text");
+ * 
+ * 	// Text with multiple styled portions
+ * 	Span styled = new Span()
+ * 		.children(
+ * 			"Normal text ",
+ * 			new Span()._class("bold").children("bold text"),
+ * 			" and ",
+ * 			new Span()._class("italic").children("italic text")
+ * 		);
+ * 
+ * 	// Text with clickable portion
+ * 	Span clickable = new Span()
+ * 		.children(
+ * 			"Click ",
+ * 			new Span()._class("link").onclick("showDetails()").children("here"),
+ * 			" for more information"
+ * 		);
+ * 
+ * 	// Text with tooltip
+ * 	Span tooltip = new Span()
+ * 		.title("This is a tooltip")
+ * 		.children("Hover over this text");
+ * 
+ * 	// Text with language specification
+ * 	Span lang = new Span()
+ * 		.lang("es")
+ * 		.children("Hola mundo");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

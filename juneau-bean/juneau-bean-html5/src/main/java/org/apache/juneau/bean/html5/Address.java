@@ -19,6 +19,68 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-address-element">&lt;address&gt;</a>
  * element.
  *
+ * <p>
+ * The address element represents the contact information for its nearest article or body element
+ * ancestor. It is used to provide contact details such as physical addresses, email addresses,
+ * phone numbers, or other contact information. The address element should not be used for arbitrary
+ * addresses, but specifically for contact information related to the document or article.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple contact address
+ * 	Address simple = new Address()
+ * 		.children("123 Main Street, Anytown, ST 12345");
+ * 
+ * 	// Contact information with multiple elements
+ * 	Address contact = new Address()
+ * 		.children(
+ * 			"John Doe",
+ * 			new Br(),
+ * 			"123 Main Street",
+ * 			new Br(),
+ * 			"Anytown, ST 12345",
+ * 			new Br(),
+ * 			new A().href("mailto:john@example.com").children("john@example.com")
+ * 		);
+ * 
+ * 	// Company address
+ * 	Address company = new Address()
+ * 		.children(
+ * 			"Acme Corporation",
+ * 			new Br(),
+ * 			"456 Business Ave",
+ * 			new Br(),
+ * 			"Suite 100",
+ * 			new Br(),
+ * 			"Business City, BC 67890",
+ * 			new Br(),
+ * 			"Phone: (555) 123-4567"
+ * 		);
+ * 
+ * 	// Styled address
+ * 	Address styled = new Address()
+ * 		._class("contact-info")
+ * 		.children(
+ * 			"Contact us at:",
+ * 			new Br(),
+ * 			new A().href("mailto:info@company.com").children("info@company.com")
+ * 		);
+ * 
+ * 	// Address with multiple contact methods
+ * 	Address multiple = new Address()
+ * 		.children(
+ * 			"Support Team",
+ * 			new Br(),
+ * 			"Email: ",
+ * 			new A().href("mailto:support@example.com").children("support@example.com"),
+ * 			new Br(),
+ * 			"Phone: ",
+ * 			new A().href("tel:+1-555-123-4567").children("(555) 123-4567"),
+ * 			new Br(),
+ * 			"Address: 789 Support St, Help City, HC 54321"
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

@@ -19,6 +19,98 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-main-element">&lt;main&gt;</a>
  * element.
  *
+ * <p>
+ * The main element represents the main content of the body of a document or application. It is
+ * used to identify the primary content of the page, excluding content that is repeated across
+ * multiple pages such as navigation, headers, footers, and sidebars. The main element should
+ * be used only once per page and contains the central topic or functionality of the page. It
+ * is important for accessibility and helps screen readers identify the main content area.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple main content
+ * 	Main simple = new Main()
+ * 		.children(
+ * 			new H1().children("Welcome to Our Site"),
+ * 			new P().children("This is the main content of our page.")
+ * 		);
+ *
+ * 	// Main with styling
+ * 	Main styled = new Main()
+ * 		._class("main-content")
+ * 		.children(
+ * 			new H1().children("About Us"),
+ * 			new P().children("Learn more about our company and mission.")
+ * 		);
+ *
+ * 	// Main with complex content
+ * 	Main complex = new Main()
+ * 		.children(
+ * 			new H1().children("Product Catalog"),
+ * 			new Section()
+ * 				.children(
+ * 					new H2().children("Featured Products"),
+ * 					new P().children("Check out our latest offerings.")
+ * 				),
+ * 			new Section()
+ * 				.children(
+ * 					new H2().children("Categories"),
+ * 					new Ul().children(
+ * 						new Li().children("Electronics"),
+ * 						new Li().children("Clothing"),
+ * 						new Li().children("Books")
+ * 					)
+ * 				)
+ * 		);
+ *
+ * 	// Main with ID
+ * 	Main withId = new Main()
+ * 		.id("page-main")
+ * 		.children(
+ * 			new H1().children("Main Content"),
+ * 			new P().children("This is the main content area.")
+ * 		);
+ *
+ * 	// Main with styling
+ * 	Main styled2 = new Main()
+ * 		.style("max-width: 800px; margin: 0 auto; padding: 20px;")
+ * 		.children(
+ * 			new H1().children("Centered Content"),
+ * 			new P().children("This content is centered and styled.")
+ * 		);
+ *
+ * 	// Main with multiple sections
+ * 	Main multiSection = new Main()
+ * 		.children(
+ * 			new Section()
+ * 				.children(
+ * 					new H1().children("Page Title"),
+ * 					new P().children("Introduction to the page content.")
+ * 				),
+ * 			new Section()
+ * 				.children(
+ * 					new H2().children("Content Section"),
+ * 					new P().children("Detailed content goes here.")
+ * 				),
+ * 			new Section()
+ * 				.children(
+ * 					new H2().children("Conclusion"),
+ * 					new P().children("Summary and closing thoughts.")
+ * 				)
+ * 		);
+ *
+ * 	// Main with article
+ * 	Main withArticle = new Main()
+ * 		.children(
+ * 			new Article()
+ * 				.children(
+ * 					new H1().children("Article Title"),
+ * 					new P().children("Article content goes here."),
+ * 					new Footer().children("Article footer")
+ * 				)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

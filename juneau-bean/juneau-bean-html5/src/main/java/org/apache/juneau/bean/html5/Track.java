@@ -51,9 +51,18 @@ public class Track extends HtmlElementVoid {
 	 * attribute.
 	 *
 	 * <p>
-	 * Enable the track if no other text track is more suitable.
+	 * Specifies that this track should be enabled by default if no other text track is more suitable.
+	 * This is useful for providing fallback captions or subtitles.
 	 *
-	 * @param _default The new value for this attribute.
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Track is not enabled by default (default)</li>
+	 * 	<li><jk>true</jk> - Track is enabled by default</li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
+	 * @param _default Whether this track should be enabled by default.
 	 * @return This object.
 	 */
 	public Track _default(String value) {  // NOSONAR - Intentional naming.
@@ -65,9 +74,19 @@ public class Track extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind">kind</a> attribute.
 	 *
 	 * <p>
-	 * The type of text track.
+	 * Specifies the type of text track. This determines how the track is used by the media element.
 	 *
-	 * @param kind The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"subtitles"</js> - Subtitles for the deaf and hard-of-hearing</li>
+	 * 	<li><js>"captions"</js> - Captions for the deaf and hard-of-hearing</li>
+	 * 	<li><js>"descriptions"</js> - Text descriptions of the video content</li>
+	 * 	<li><js>"chapters"</js> - Chapter titles for navigation</li>
+	 * 	<li><js>"metadata"</js> - Metadata for the media</li>
+	 * </ul>
+	 *
+	 * @param kind The type of text track.
 	 * @return This object.
 	 */
 	public Track kind(String value) {
@@ -79,9 +98,14 @@ public class Track extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-label">label</a> attribute.
 	 *
 	 * <p>
-	 * User-visible label.
+	 * Specifies a user-visible label for the text track. This label is displayed in the media
+	 * player's track selection menu.
 	 *
-	 * @param label The new value for this attribute.
+	 * <p>
+	 * The label should be descriptive and help users identify the track (e.g., "English Subtitles",
+	 * "Spanish Captions").
+	 *
+	 * @param label The user-visible label for the text track.
 	 * @return This object.
 	 */
 	public Track label(String value) {
@@ -117,9 +141,13 @@ public class Track extends HtmlElementVoid {
 	 * attribute.
 	 *
 	 * <p>
-	 * Language of the text track.
+	 * Specifies the language of the text track. This helps browsers and media players
+	 * determine which track to use based on the user's language preferences.
 	 *
-	 * @param srclang The new value for this attribute.
+	 * <p>
+	 * The value should be a valid language code (e.g., "en", "es", "fr", "de").
+	 *
+	 * @param srclang The language code of the text track.
 	 * @return This object.
 	 */
 	public Track srclang(String value) {

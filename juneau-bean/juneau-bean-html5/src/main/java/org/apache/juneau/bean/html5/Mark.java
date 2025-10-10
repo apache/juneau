@@ -19,6 +19,61 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-mark-element">&lt;mark&gt;</a>
  * element.
  *
+ * <p>
+ * The mark element represents a run of text in one document marked or highlighted for reference
+ * purposes, due to its relevance in another context. It is used to mark up text that should be
+ * highlighted or emphasized, such as search results, important passages, or text that needs
+ * attention. The mark element is typically rendered with a yellow background or other highlighting
+ * to make the marked text stand out from the surrounding content.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple marked text
+ * 	Mark simple = new Mark()
+ * 		.children("This text is highlighted");
+ *
+ * 	// Mark with styling
+ * 	Mark styled = new Mark()
+ * 		._class("highlight")
+ * 		.children("Styled highlighted text");
+ *
+ * 	// Mark with complex content
+ * 	Mark complex = new Mark()
+ * 		.children(
+ * 			"The ",
+ * 			new Strong().children("important"),
+ * 			" information is highlighted."
+ * 		);
+ *
+ * 	// Mark with ID
+ * 	Mark withId = new Mark()
+ * 		.id("highlighted-text")
+ * 		.children("Text with ID");
+ *
+ * 	// Mark with styling
+ * 	Mark styled2 = new Mark()
+ * 		.style("background-color: #ffeb3b; color: #000; padding: 2px 4px;")
+ * 		.children("Custom styled highlighted text");
+ *
+ * 	// Mark with multiple elements
+ * 	Mark multiple = new Mark()
+ * 		.children(
+ * 			"The ",
+ * 			new Mark().children("key points"),
+ * 			" are ",
+ * 			new Mark().children("highlighted"),
+ * 			" for emphasis."
+ * 		);
+ *
+ * 	// Mark with links
+ * 	Mark withLinks = new Mark()
+ * 		.children(
+ * 			"See ",
+ * 			new A().href("/search").children("search results"),
+ * 			" for more information."
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

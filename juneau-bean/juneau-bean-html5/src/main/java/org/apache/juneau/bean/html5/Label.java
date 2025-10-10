@@ -19,6 +19,38 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-label-element">&lt;label&gt;</a>
  * element.
  *
+ * <p>
+ * The label element represents a caption for a form control. It provides a programmatic association
+ * between the label and the form control, improving accessibility and user experience. When a label
+ * is associated with a form control, clicking the label will focus or activate the control.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Label with explicit association
+ * 	Label label1 = new Label()
+ * 		._for("username")
+ * 		.text("Username:");
+ * 
+ * 	// Label wrapping form control
+ * 	Label label2 = new Label()
+ * 		.children(
+ * 			new Input().type("checkbox").name("agree"),
+ * 			new Span().text("I agree to the terms and conditions")
+ * 		);
+ * 
+ * 	// Label with form association
+ * 	Label label3 = new Label()
+ * 		._for("email")
+ * 		.form("contactForm")
+ * 		.text("Email Address:");
+ * 
+ * 	// Label with styling
+ * 	Label label4 = new Label()
+ * 		._for("password")
+ * 		._class("required")
+ * 		.text("Password:");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -45,9 +77,13 @@ public class Label extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-label-for">for</a> attribute.
 	 *
 	 * <p>
-	 * Associate the label with form control.
+	 * Associates the label with a form control by specifying the control's ID. This creates
+	 * a programmatic relationship between the label and the form control for accessibility.
 	 *
-	 * @param _for The new value for this attribute.
+	 * <p>
+	 * The value should match the ID of a form control element in the same document.
+	 *
+	 * @param _for The ID of the form control to associate with this label.
 	 * @return This object.
 	 */
 	public Label _for(String value) {  // NOSONAR - Intentional naming.
@@ -59,9 +95,13 @@ public class Label extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
-	 * Associates the control with a form element.
+	 * Associates the label with a form element by specifying the form's ID. This allows the label
+	 * to be placed outside the form element while still being part of the form.
 	 *
-	 * @param form The new value for this attribute.
+	 * <p>
+	 * The value should match the ID of a form element in the same document.
+	 *
+	 * @param form The ID of the form element to associate with this label.
 	 * @return This object.
 	 */
 	public Label form(String value) {

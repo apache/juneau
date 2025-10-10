@@ -19,6 +19,61 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-s-element">&lt;s&gt;</a>
  * element.
  *
+ * <p>
+ * The s element represents contents that are no longer accurate or no longer relevant. It is
+ * used to mark up text that has been struck through or crossed out, indicating that the content
+ * is outdated, incorrect, or no longer applicable. The s element is typically rendered with
+ * a line through the text (strikethrough) and is commonly used for showing price changes,
+ * outdated information, or content that has been superseded.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple strikethrough text
+ * 	S simple = new S()
+ * 		.children("This text is no longer accurate");
+ *
+ * 	// S with styling
+ * 	S styled = new S()
+ * 		._class("outdated")
+ * 		.children("This information is outdated");
+ *
+ * 	// S with complex content
+ * 	S complex = new S()
+ * 		.children(
+ * 			"The ",
+ * 			new Strong().children("old price"),
+ * 			" was $100."
+ * 		);
+ *
+ * 	// S with ID
+ * 	S withId = new S()
+ * 		.id("strikethrough-text")
+ * 		.children("Text with ID");
+ *
+ * 	// S with styling
+ * 	S styled2 = new S()
+ * 		.style("color: #999; text-decoration: line-through;")
+ * 		.children("Custom styled strikethrough text");
+ *
+ * 	// S with multiple elements
+ * 	S multiple = new S()
+ * 		.children(
+ * 			"The ",
+ * 			new S().children("old version"),
+ * 			" has been ",
+ * 			new S().children("replaced"),
+ * 			" by the new one."
+ * 		);
+ *
+ * 	// S with links
+ * 	S withLinks = new S()
+ * 		.children(
+ * 			"See ",
+ * 			new A().href("/old-version").children("old documentation"),
+ * 			" (no longer maintained)"
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

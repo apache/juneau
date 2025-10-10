@@ -49,9 +49,16 @@ public class Link extends HtmlElementVoid {
 	 * attribute.
 	 *
 	 * <p>
-	 * How the element handles cross-origin requests.
+	 * Specifies how the element handles cross-origin requests for CORS (Cross-Origin Resource Sharing).
 	 *
-	 * @param crossorigin The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"anonymous"</js> - Cross-origin requests are made without credentials</li>
+	 * 	<li><js>"use-credentials"</js> - Cross-origin requests include credentials</li>
+	 * </ul>
+	 *
+	 * @param crossorigin How to handle cross-origin requests.
 	 * @return This object.
 	 */
 	public Link crossorigin(String value) {
@@ -87,9 +94,20 @@ public class Link extends HtmlElementVoid {
 	 * attribute.
 	 *
 	 * <p>
-	 * Language of the linked resource.
+	 * Specifies the language of the linked resource. Used for SEO and accessibility purposes.
 	 *
-	 * @param hreflang The new value for this attribute.
+	 * <p>
+	 * Examples:
+	 * <ul>
+	 * 	<li><js>"en"</js> - English</li>
+	 * 	<li><js>"es"</js> - Spanish</li>
+	 * 	<li><js>"fr"</js> - French</li>
+	 * 	<li><js>"de"</js> - German</li>
+	 * 	<li><js>"zh"</js> - Chinese</li>
+	 * 	<li><js>"ja"</js> - Japanese</li>
+	 * </ul>
+	 *
+	 * @param hreflang The language code of the linked resource.
 	 * @return This object.
 	 */
 	public Link hreflang(String value) {
@@ -101,9 +119,20 @@ public class Link extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-media">media</a> attribute.
 	 *
 	 * <p>
-	 * Applicable media.
+	 * Specifies which media types the linked resource applies to. Used primarily with stylesheets.
 	 *
-	 * @param media The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"all"</js> - All media types (default)</li>
+	 * 	<li><js>"screen"</js> - Computer screens</li>
+	 * 	<li><js>"print"</js> - Printers and print preview</li>
+	 * 	<li><js>"handheld"</js> - Handheld devices</li>
+	 * 	<li><js>"projection"</js> - Projectors</li>
+	 * 	<li><js>"(max-width: 768px)"</js> - Media queries</li>
+	 * </ul>
+	 *
+	 * @param media The media types the linked resource applies to.
 	 * @return This object.
 	 */
 	public Link media(String value) {
@@ -115,9 +144,23 @@ public class Link extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-rel">rel</a> attribute.
 	 *
 	 * <p>
-	 * Relationship between the document containing the hyperlink and the destination resource.
+	 * Specifies the relationship between the current document and the linked resource.
 	 *
-	 * @param rel The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"stylesheet"</js> - External CSS stylesheet</li>
+	 * 	<li><js>"icon"</js> - Favicon or site icon</li>
+	 * 	<li><js>"canonical"</js> - Canonical URL for SEO</li>
+	 * 	<li><js>"alternate"</js> - Alternative version of the page</li>
+	 * 	<li><js>"preload"</js> - Resource to preload</li>
+	 * 	<li><js>"prefetch"</js> - Resource to prefetch</li>
+	 * 	<li><js>"dns-prefetch"</js> - DNS lookup to prefetch</li>
+	 * 	<li><js>"next"</js> - Next page in a sequence</li>
+	 * 	<li><js>"prev"</js> - Previous page in a sequence</li>
+	 * </ul>
+	 *
+	 * @param rel The relationship between the document and linked resource.
 	 * @return This object.
 	 */
 	public Link rel(String value) {
@@ -129,9 +172,20 @@ public class Link extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-link-sizes">sizes</a> attribute.
 	 *
 	 * <p>
-	 * Sizes of the icons (for rel="icon").
+	 * Specifies the sizes of icons for different device contexts. Used with <c>rel="icon"</c> or <c>rel="apple-touch-icon"</c>.
 	 *
-	 * @param sizes The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"16x16"</js> - Small favicon</li>
+	 * 	<li><js>"32x32"</js> - Standard favicon</li>
+	 * 	<li><js>"180x180"</js> - Apple touch icon</li>
+	 * 	<li><js>"192x192"</js> - Android icon</li>
+	 * 	<li><js>"512x512"</js> - Large icon</li>
+	 * 	<li><js>"any"</js> - Any size</li>
+	 * </ul>
+	 *
+	 * @param sizes The sizes of the linked icon resource.
 	 * @return This object.
 	 */
 	public Link sizes(String value) {
@@ -143,9 +197,21 @@ public class Link extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-type">type</a> attribute.
 	 *
 	 * <p>
-	 * Hint for the type of the referenced resource.
+	 * Specifies the MIME type of the linked resource. Helps browsers determine how to handle the resource.
 	 *
-	 * @param type The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"text/css"</js> - CSS stylesheet</li>
+	 * 	<li><js>"text/javascript"</js> - JavaScript file</li>
+	 * 	<li><js>"application/json"</js> - JSON data</li>
+	 * 	<li><js>"image/png"</js> - PNG image</li>
+	 * 	<li><js>"image/jpeg"</js> - JPEG image</li>
+	 * 	<li><js>"image/svg+xml"</js> - SVG image</li>
+	 * 	<li><js>"font/woff2"</js> - Web font</li>
+	 * </ul>
+	 *
+	 * @param type The MIME type of the linked resource.
 	 * @return This object.
 	 */
 	public Link type(String value) {

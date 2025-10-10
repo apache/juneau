@@ -19,6 +19,88 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-header-element">&lt;header&gt;</a>
  * element.
  *
+ * <p>
+ * The header element represents introductory content for its nearest ancestor sectioning content
+ * or sectioning root element. It is used to contain introductory content such as headings,
+ * navigation, logos, or other introductory elements. The header element can contain any flow
+ * content and is typically used at the top of a page, article, or section to provide context
+ * and navigation.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple page header
+ * 	Header simple = new Header()
+ * 		.children(
+ * 			new H1().children("My Website"),
+ * 			new P().children("Welcome to our site")
+ * 		);
+ *
+ * 	// Header with navigation
+ * 	Header withNav = new Header()
+ * 		.children(
+ * 			new H1().children("Company Name"),
+ * 			new Nav().children(
+ * 				new Ul().children(
+ * 					new Li().children(new A().href("/home").children("Home")),
+ * 					new Li().children(new A().href("/about").children("About")),
+ * 					new Li().children(new A().href("/contact").children("Contact"))
+ * 				)
+ * 			)
+ * 		);
+ *
+ * 	// Header with styling
+ * 	Header styled = new Header()
+ * 		._class("page-header")
+ * 		.children(
+ * 			new H1().children("Styled Header"),
+ * 			new P().children("A beautifully styled header")
+ * 		);
+ *
+ * 	// Header with logo and navigation
+ * 	Header withLogo = new Header()
+ * 		.children(
+ * 			new Img().src("/logo.png").alt("Company Logo"),
+ * 			new H1().children("Company Name"),
+ * 			new Nav().children(
+ * 				new Ul().children(
+ * 					new Li().children(new A().href("/products").children("Products")),
+ * 					new Li().children(new A().href("/services").children("Services"))
+ * 				)
+ * 			)
+ * 		);
+ *
+ * 	// Header with ID
+ * 	Header withId = new Header()
+ * 		.id("main-header")
+ * 		.children(
+ * 			new H1().children("Main Header"),
+ * 			new P().children("This is the main header of the page")
+ * 		);
+ *
+ * 	// Header with styling
+ * 	Header styled2 = new Header()
+ * 		.style("background-color: #333; color: white; padding: 20px;")
+ * 		.children(
+ * 			new H1().children("Dark Header"),
+ * 			new P().children("A header with dark styling")
+ * 		);
+ *
+ * 	// Header with multiple sections
+ * 	Header multiSection = new Header()
+ * 		.children(
+ * 			new Div()._class("header-top")
+ * 				.children(
+ * 					new P().children("Call us: (555) 123-4567"),
+ * 					new P().children("Email: info@company.com")
+ * 				),
+ * 			new Div()._class("header-main")
+ * 				.children(
+ * 					new H1().children("Company Name"),
+ * 					new P().children("Your trusted partner")
+ * 				)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

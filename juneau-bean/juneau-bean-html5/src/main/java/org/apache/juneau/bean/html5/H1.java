@@ -19,6 +19,61 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-h1,-h2,-h3,-h4,-h5,-and-h6-elements">&lt;h1&gt;</a>
  * element.
  *
+ * <p>
+ * The h1 element represents the highest level heading in a document or section. It is used to
+ * mark up the main title or most important heading on a page. The h1 element should be used
+ * only once per page and should describe the main topic or purpose of the page. It is typically
+ * rendered in the largest font size among all heading elements and is important for both
+ * accessibility and SEO.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple page title
+ * 	H1 simple = new H1()
+ * 		.children("Welcome to Our Website");
+ *
+ * 	// H1 with styling
+ * 	H1 styled = new H1()
+ * 		._class("page-title")
+ * 		.children("About Our Company");
+ *
+ * 	// H1 with complex content
+ * 	H1 complex = new H1()
+ * 		.children(
+ * 			"Welcome to ",
+ * 			new Strong().children("Our Company"),
+ * 			" - ",
+ * 			new Em().children("Innovation at its finest")
+ * 		);
+ *
+ * 	// H1 with ID
+ * 	H1 withId = new H1()
+ * 		.id("main-title")
+ * 		.children("Product Documentation");
+ *
+ * 	// H1 with styling
+ * 	H1 styled2 = new H1()
+ * 		.style("color: #333; text-align: center; margin-bottom: 30px;")
+ * 		.children("User Guide");
+ *
+ * 	// H1 with multiple elements
+ * 	H1 multiple = new H1()
+ * 		.children(
+ * 			"Chapter 1: ",
+ * 			new Span()._class("chapter-title").children("Getting Started"),
+ * 			" ",
+ * 			new Small().children("(Beginner Level)")
+ * 		);
+ *
+ * 	// H1 with links
+ * 	H1 withLinks = new H1()
+ * 		.children(
+ * 			"Product: ",
+ * 			new A().href("/products/widget").children("Amazing Widget"),
+ * 			" v2.0"
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

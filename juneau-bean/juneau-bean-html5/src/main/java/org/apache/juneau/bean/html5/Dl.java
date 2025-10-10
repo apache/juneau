@@ -19,6 +19,82 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-dl-element">&lt;dl&gt;</a>
  * element.
  *
+ * <p>
+ * The dl element represents a description list (also known as a definition list or association list).
+ * It is used to group terms (dt elements) with their descriptions (dd elements), creating a list
+ * of term-description pairs. The dl element is commonly used for glossaries, metadata lists, or
+ * any other content where you need to associate terms with their definitions or descriptions.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple description list
+ * 	Dl simple = new Dl()
+ * 		.children(
+ * 			new Dt().children("HTML"),
+ * 			new Dd().children("HyperText Markup Language"),
+ * 			new Dt().children("CSS"),
+ * 			new Dd().children("Cascading Style Sheets")
+ * 		);
+ *
+ * 	// Description list with styling
+ * 	Dl styled = new Dl()
+ * 		._class("glossary")
+ * 		.children(
+ * 			new Dt().children("API"),
+ * 			new Dd().children("Application Programming Interface"),
+ * 			new Dt().children("DOM"),
+ * 			new Dd().children("Document Object Model")
+ * 		);
+ *
+ * 	// Description list with multiple descriptions
+ * 	Dl multiple = new Dl()
+ * 		.children(
+ * 			new Dt().children("JavaScript"),
+ * 			new Dd().children("A programming language for web development."),
+ * 			new Dd().children("It runs in web browsers and on servers."),
+ * 			new Dt().children("Python"),
+ * 			new Dd().children("A high-level programming language."),
+ * 			new Dd().children("Known for its simplicity and readability.")
+ * 		);
+ *
+ * 	// Description list with complex content
+ * 	Dl complex = new Dl()
+ * 		.children(
+ * 			new Dt().children("Web Standards"),
+ * 			new Dd().children(
+ * 				"Standards developed by the ",
+ * 				new A().href("https://w3.org").children("W3C"),
+ * 				" to ensure web compatibility."
+ * 			),
+ * 			new Dt().children("Responsive Design"),
+ * 			new Dd().children(
+ * 				"Design approach that adapts to different ",
+ * 				new Strong().children("screen sizes"),
+ * 				" and devices."
+ * 			)
+ * 		);
+ *
+ * 	// Description list with ID
+ * 	Dl withId = new Dl()
+ * 		.id("tech-terms")
+ * 		.children(
+ * 			new Dt().children("Framework"),
+ * 			new Dd().children("A collection of pre-written code for common tasks."),
+ * 			new Dt().children("Library"),
+ * 			new Dd().children("A collection of reusable code modules.")
+ * 		);
+ *
+ * 	// Description list with styling
+ * 	Dl styled2 = new Dl()
+ * 		.style("border: 1px solid #ccc; padding: 10px;")
+ * 		.children(
+ * 			new Dt().children("Frontend"),
+ * 			new Dd().children("The client-side part of a web application."),
+ * 			new Dt().children("Backend"),
+ * 			new Dd().children("The server-side part of a web application.")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

@@ -19,6 +19,48 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-col-element">&lt;col&gt;</a>
  * element.
  *
+ * <p>
+ * The col element represents one or more columns in a column group represented by its parent colgroup
+ * element. It is used to define the structural columns of a table and can specify attributes that apply
+ * to all cells in those columns. The col element is a void element that does not contain any content
+ * and is typically used within a colgroup element to define column properties such as width, alignment,
+ * and styling.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple column
+ * 	Col simple = new Col();
+ *
+ * 	// Column spanning multiple columns
+ * 	Col spanning = new Col()
+ * 		.span(3);
+ *
+ * 	// Column with styling
+ * 	Col styled = new Col()
+ * 		._class("highlight-column")
+ * 		.style("background-color: #f0f0f0;");
+ *
+ * 	// Column with width
+ * 	Col withWidth = new Col()
+ * 		.style("width: 200px;");
+ *
+ * 	// Column with alignment
+ * 	Col aligned = new Col()
+ * 		.style("text-align: center;");
+ *
+ * 	// Column with ID
+ * 	Col withId = new Col()
+ * 		.id("name-column")
+ * 		.span(2);
+ *
+ * 	// Column with multiple attributes
+ * 	Col complex = new Col()
+ * 		.span(2)
+ * 		._class("data-column")
+ * 		.style("width: 150px; text-align: right;")
+ * 		.title("Numeric data column");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

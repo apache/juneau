@@ -19,6 +19,42 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-output-element">&lt;output&gt;</a>
  * element.
  *
+ * <p>
+ * The output element represents the result of a calculation or user action. It is typically used
+ * to display the result of form calculations, such as the sum of two numbers or the result of
+ * a mathematical operation. The for attribute can be used to associate the output with specific
+ * form controls that contribute to the calculation.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple output element
+ * 	Output output1 = new Output()
+ * 		.name("result")
+ * 		.text("0");
+ * 
+ * 	// Output with form association
+ * 	Output output2 = new Output()
+ * 		.name("sum")
+ * 		._for("num1 num2")
+ * 		.text("0");
+ * 
+ * 	// Output in a calculation form
+ * 	Form calcForm = new Form()
+ * 		.children(
+ * 			new Input().type("number").name("num1").id("num1").value("0"),
+ * 			new Span().text(" + "),
+ * 			new Input().type("number").name("num2").id("num2").value("0"),
+ * 			new Span().text(" = "),
+ * 			new Output().name("sum")._for("num1 num2").text("0")
+ * 		);
+ * 
+ * 	// Output with styling
+ * 	Output output3 = new Output()
+ * 		.name("display")
+ * 		._class("result-display")
+ * 		.text("Ready for calculation");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -45,9 +81,13 @@ public class Output extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-output-for">for</a> attribute.
 	 *
 	 * <p>
-	 * Specifies controls from which the output was calculated.
+	 * Specifies the IDs of form controls from which the output value was calculated.
+	 * This creates a programmatic relationship between the output and its source controls.
 	 *
-	 * @param _for The new value for this attribute.
+	 * <p>
+	 * Multiple IDs can be specified as a space-separated list.
+	 *
+	 * @param _for The IDs of the form controls that contribute to this output.
 	 * @return This object.
 	 */
 	public Output _for(String value) {  // NOSONAR - Intentional naming.
@@ -59,9 +99,13 @@ public class Output extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
-	 * Associates the control with a form element.
+	 * Associates the output element with a form element by specifying the form's ID. This allows the output
+	 * to be placed outside the form element while still being part of the form.
 	 *
-	 * @param form The new value for this attribute.
+	 * <p>
+	 * The value should match the ID of a form element in the same document.
+	 *
+	 * @param form The ID of the form element to associate with this output.
 	 * @return This object.
 	 */
 	public Output form(String value) {
@@ -73,9 +117,13 @@ public class Output extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 *
 	 * <p>
-	 * Name of form control to use for form submission and in the form.elements API.
+	 * Specifies the name of the output element. This name is used when the form is submitted and
+	 * can be used to access the element via the form.elements API.
 	 *
-	 * @param name The new value for this attribute.
+	 * <p>
+	 * The name should be unique within the form and should not contain spaces or special characters.
+	 *
+	 * @param name The name of the output element for submission and API access.
 	 * @return This object.
 	 */
 	public Output name(String value) {

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.bean.openapi.ui;
+package org.apache.juneau.bean.openapi3.ui;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;

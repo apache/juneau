@@ -19,6 +19,48 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-optgroup-element">&lt;optgroup&gt;</a>
  * element.
  *
+ * <p>
+ * The optgroup element represents a group of option elements within a select element. It provides
+ * a way to organize related options into logical groups, making it easier for users to find and
+ * select the desired option. The label attribute provides the group heading.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple option group
+ * 	Optgroup optgroup1 = new Optgroup()
+ * 		.label("Fruits")
+ * 		.children(
+ * 			new Option().value("apple").text("Apple"),
+ * 			new Option().value("banana").text("Banana"),
+ * 			new Option().value("orange").text("Orange")
+ * 		);
+ * 
+ * 	// Disabled option group
+ * 	Optgroup optgroup2 = new Optgroup()
+ * 		.label("Vegetables")
+ * 		.disabled(true)
+ * 		.children(
+ * 			new Option().value("carrot").text("Carrot"),
+ * 			new Option().value("broccoli").text("Broccoli")
+ * 		);
+ * 
+ * 	// Multiple option groups in a select
+ * 	Select select1 = new Select()
+ * 		.name("food")
+ * 		.children(
+ * 			new Optgroup().label("Fruits")
+ * 				.children(
+ * 					new Option().value("apple").text("Apple"),
+ * 					new Option().value("banana").text("Banana")
+ * 				),
+ * 			new Optgroup().label("Vegetables")
+ * 				.children(
+ * 					new Option().value("carrot").text("Carrot"),
+ * 					new Option().value("broccoli").text("Broccoli")
+ * 				)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -47,13 +89,21 @@ public class Optgroup extends HtmlElementContainer {
 	 * <p>
 	 * Whether the form control is disabled.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"disabled"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Optgroup disabled(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("disabled", deminimize(value, "disabled"));
 		return this;
 	}
 
@@ -61,9 +111,13 @@ public class Optgroup extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-optgroup-label">label</a> attribute.
 	 *
 	 * <p>
-	 * User-visible label.
+	 * Specifies the user-visible label for the option group. This label is displayed
+	 * in the select element to group related options together.
 	 *
-	 * @param label The new value for this attribute.
+	 * <p>
+	 * The label should be descriptive and help users understand the grouping of options.
+	 *
+	 * @param label The user-visible label for the option group.
 	 * @return This object.
 	 */
 	public Optgroup label(String value) {

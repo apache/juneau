@@ -19,6 +19,54 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-ol-element">&lt;ol&gt;</a>
  * element.
  *
+ * <p>
+ * The ol element represents an ordered list of items. It contains li elements that represent
+ * individual list items. The list items are typically numbered automatically by the browser,
+ * and the numbering can be customized using the type and start attributes.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple ordered list
+ * 	Ol ol1 = new Ol()
+ * 		.children(
+ * 			new Li().text("First item"),
+ * 			new Li().text("Second item"),
+ * 			new Li().text("Third item")
+ * 		);
+ * 
+ * 	// Ordered list with custom numbering
+ * 	Ol ol2 = new Ol()
+ * 		.type("A")
+ * 		.start(1)
+ * 		.children(
+ * 			new Li().text("Item A"),
+ * 			new Li().text("Item B"),
+ * 			new Li().text("Item C")
+ * 		);
+ * 
+ * 	// Reversed ordered list
+ * 	Ol ol3 = new Ol()
+ * 		.reversed(true)
+ * 		.children(
+ * 			new Li().text("Last item"),
+ * 			new Li().text("Middle item"),
+ * 			new Li().text("First item")
+ * 		);
+ * 
+ * 	// Nested ordered list
+ * 	Ol ol4 = new Ol()
+ * 		.children(
+ * 			new Li().text("Main item 1"),
+ * 			new Li().children(
+ * 				new Ol().children(
+ * 					new Li().text("Sub item 1.1"),
+ * 					new Li().text("Sub item 1.2")
+ * 				)
+ * 			),
+ * 			new Li().text("Main item 2")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -48,13 +96,21 @@ public class Ol extends HtmlElementContainer {
 	 * <p>
 	 * Number the list backwards..
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"reversed"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param reversed
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Ol reversed(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("reversed", deminimize(value, "reversed"));
 		return this;
 	}
 
@@ -78,9 +134,19 @@ public class Ol extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-type">type</a> attribute.
 	 *
 	 * <p>
-	 * Kind of list marker.
+	 * Specifies the type of numbering to use for the ordered list items.
 	 *
-	 * @param type The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"1"</js> - Decimal numbers (1, 2, 3, ...) - default</li>
+	 * 	<li><js>"a"</js> - Lowercase letters (a, b, c, ...)</li>
+	 * 	<li><js>"A"</js> - Uppercase letters (A, B, C, ...)</li>
+	 * 	<li><js>"i"</js> - Lowercase Roman numerals (i, ii, iii, ...)</li>
+	 * 	<li><js>"I"</js> - Uppercase Roman numerals (I, II, III, ...)</li>
+	 * </ul>
+	 *
+	 * @param type The type of numbering for the ordered list.
 	 * @return This object.
 	 */
 	public Ol type(String value) {

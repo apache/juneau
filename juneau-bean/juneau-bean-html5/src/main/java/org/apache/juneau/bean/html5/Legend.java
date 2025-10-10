@@ -19,6 +19,60 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-legend-element">&lt;legend&gt;</a>
  * element.
  *
+ * <p>
+ * The legend element represents a caption for the content of its parent fieldset element.
+ * It is used to provide a title or description for a group of form controls that are
+ * contained within a fieldset. The legend element should be placed as the first child
+ * of a fieldset element and is typically rendered above or to the side of the fieldset
+ * content, often with special styling to distinguish it from the form controls.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple legend
+ * 	Legend simple = new Legend()
+ * 		.children("Personal Information");
+ *
+ * 	// Legend with styling
+ * 	Legend styled = new Legend()
+ * 		._class("form-legend")
+ * 		.children("Contact Details");
+ *
+ * 	// Legend with complex content
+ * 	Legend complex = new Legend()
+ * 		.children(
+ * 			"Step 1: ",
+ * 			new Strong().children("Basic Information"),
+ * 			" ",
+ * 			new Em().children("(Required)")
+ * 		);
+ *
+ * 	// Legend with ID
+ * 	Legend withId = new Legend()
+ * 		.id("form-legend")
+ * 		.children("Form Legend");
+ *
+ * 	// Legend with styling
+ * 	Legend styled2 = new Legend()
+ * 		.style("color: #333; font-weight: bold; padding: 0 10px;")
+ * 		.children("Styled Legend");
+ *
+ * 	// Legend with multiple elements
+ * 	Legend multiple = new Legend()
+ * 		.children(
+ * 			"Section 1: ",
+ * 			new Span()._class("section-title").children("User Details"),
+ * 			" ",
+ * 			new Small().children("(All fields required)")
+ * 		);
+ *
+ * 	// Legend with links
+ * 	Legend withLinks = new Legend()
+ * 		.children(
+ * 			"Help: ",
+ * 			new A().href("/help/forms").children("Form Guide")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

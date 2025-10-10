@@ -19,6 +19,61 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-dd-element">&lt;dd&gt;</a>
  * element.
  *
+ * <p>
+ * The dd element represents the description, definition, or value, part of a term-description group
+ * in a description list (dl element). It is used to provide the definition or description for the
+ * term that precedes it in a dt element. The dd element can contain any flow content and is typically
+ * used within a dl element to create definition lists, glossaries, or other term-description pairs.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple definition
+ * 	Dd simple = new Dd()
+ * 		.children("A markup language used to create web pages.");
+ *
+ * 	// Definition with styling
+ * 	Dd styled = new Dd()
+ * 		._class("definition")
+ * 		.children("A programming language for web development.");
+ *
+ * 	// Definition with complex content
+ * 	Dd complex = new Dd()
+ * 		.children(
+ * 			"A ",
+ * 			new Strong().children("hypertext"),
+ * 			" markup language used to create ",
+ * 			new Em().children("web pages"),
+ * 			"."
+ * 		);
+ *
+ * 	// Definition with multiple paragraphs
+ * 	Dd multiple = new Dd()
+ * 		.children(
+ * 			new P().children("A programming language that runs in web browsers."),
+ * 			new P().children("It is commonly used for creating interactive web applications.")
+ * 		);
+ *
+ * 	// Definition with links
+ * 	Dd withLinks = new Dd()
+ * 		.children(
+ * 			"A ",
+ * 			new A().href("/css").children("styling language"),
+ * 			" used to describe the presentation of ",
+ * 			new A().href("/html").children("HTML"),
+ * 			" documents."
+ * 		);
+ *
+ * 	// Definition with ID
+ * 	Dd withId = new Dd()
+ * 		.id("css-definition")
+ * 		.children("Cascading Style Sheets - a language for describing the presentation of web pages.");
+ *
+ * 	// Definition with styling
+ * 	Dd styled2 = new Dd()
+ * 		.style("margin-left: 20px; color: #666;")
+ * 		.children("A server-side scripting language for web development.");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

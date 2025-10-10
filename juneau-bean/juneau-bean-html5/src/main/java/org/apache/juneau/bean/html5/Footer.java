@@ -19,6 +19,81 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-footer-element">&lt;footer&gt;</a>
  * element.
  *
+ * <p>
+ * The footer element represents a footer for its nearest ancestor sectioning content or sectioning
+ * root element. It is used to provide information about the section it belongs to, such as author
+ * information, copyright notices, links to related documents, or other metadata. The footer element
+ * can contain any flow content and is typically used at the bottom of a page, article, or section.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple page footer
+ * 	Footer simple = new Footer()
+ * 		.children("© 2024 My Company. All rights reserved.");
+ *
+ * 	// Footer with multiple elements
+ * 	Footer complex = new Footer()
+ * 		.children(
+ * 			new P().children("© 2024 My Company. All rights reserved."),
+ * 			new P().children(
+ * 				"Contact: ",
+ * 				new A().href("mailto:info@company.com").children("info@company.com")
+ * 			)
+ * 		);
+ *
+ * 	// Footer with styling
+ * 	Footer styled = new Footer()
+ * 		._class("page-footer")
+ * 		.children(
+ * 			new P().children("© 2024 My Company"),
+ * 			new P().children("Privacy Policy | Terms of Service")
+ * 		);
+ *
+ * 	// Footer with navigation
+ * 	Footer withNav = new Footer()
+ * 		.children(
+ * 			new Nav().children(
+ * 				new Ul().children(
+ * 					new Li().children(new A().href("/about").children("About")),
+ * 					new Li().children(new A().href("/contact").children("Contact")),
+ * 					new Li().children(new A().href("/help").children("Help"))
+ * 				)
+ * 			),
+ * 			new P().children("© 2024 My Company")
+ * 		);
+ *
+ * 	// Footer with ID
+ * 	Footer withId = new Footer()
+ * 		.id("main-footer")
+ * 		.children(
+ * 			new P().children("© 2024 My Company. All rights reserved."),
+ * 			new Address().children("123 Main St, City, State 12345")
+ * 		);
+ *
+ * 	// Footer with styling
+ * 	Footer styled2 = new Footer()
+ * 		.style("background-color: #f0f0f0; padding: 20px; text-align: center;")
+ * 		.children(
+ * 			new P().children("© 2024 My Company"),
+ * 			new P().children("Built with ❤️ using modern web technologies")
+ * 		);
+ *
+ * 	// Footer with multiple sections
+ * 	Footer multiSection = new Footer()
+ * 		.children(
+ * 			new Div()._class("footer-content")
+ * 				.children(
+ * 					new P().children("© 2024 My Company"),
+ * 					new P().children("Privacy Policy | Terms of Service")
+ * 				),
+ * 			new Div()._class("footer-links")
+ * 				.children(
+ * 					new A().href("/about").children("About"),
+ * 					new A().href("/contact").children("Contact")
+ * 				)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

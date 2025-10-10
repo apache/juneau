@@ -19,6 +19,60 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-h1,-h2,-h3,-h4,-h5,-and-h6-elements">&lt;h3&gt;</a>
  * element.
  *
+ * <p>
+ * The h3 element represents a third-level heading in a document or section. It is used to
+ * mark up subsections that are hierarchically below h2 elements. The h3 element is typically
+ * used to organize content into smaller subsections and is important for creating a logical
+ * document structure. It is typically rendered in a smaller font size than h2 but larger
+ * than h4 elements.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple subsection heading
+ * 	H3 simple = new H3()
+ * 		.children("Basic Configuration");
+ *
+ * 	// H3 with styling
+ * 	H3 styled = new H3()
+ * 		._class("subsection-title")
+ * 		.children("Advanced Settings");
+ *
+ * 	// H3 with complex content
+ * 	H3 complex = new H3()
+ * 		.children(
+ * 			"Step 3: ",
+ * 			new Strong().children("Database Setup"),
+ * 			" ",
+ * 			new Em().children("(Optional)")
+ * 		);
+ *
+ * 	// H3 with ID
+ * 	H3 withId = new H3()
+ * 		.id("troubleshooting")
+ * 		.children("Troubleshooting");
+ *
+ * 	// H3 with styling
+ * 	H3 styled2 = new H3()
+ * 		.style("color: #888; margin-top: 20px;")
+ * 		.children("Common Issues");
+ *
+ * 	// H3 with multiple elements
+ * 	H3 multiple = new H3()
+ * 		.children(
+ * 			"3.1 ",
+ * 			new Span()._class("step-title").children("Installation"),
+ * 			" ",
+ * 			new Small().children("(5 minutes)")
+ * 		);
+ *
+ * 	// H3 with links
+ * 	H3 withLinks = new H3()
+ * 		.children(
+ * 			"See also: ",
+ * 			new A().href("/docs/faq").children("Frequently Asked Questions")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

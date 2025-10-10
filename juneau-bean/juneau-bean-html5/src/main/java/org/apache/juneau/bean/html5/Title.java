@@ -19,6 +19,40 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-title-element">&lt;title&gt;</a>
  * element.
  *
+ * <p>
+ * The title element represents the document's title or name. It is used to provide a title
+ * for the document that appears in the browser's title bar, bookmarks, and search engine
+ * results. The title element should be placed within the head element and should be descriptive
+ * and unique for each page. It is important for SEO, accessibility, and user experience as
+ * it helps users identify the page content and purpose.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple page title
+ * 	Title simple = new Title()
+ * 		.text("Welcome to My Website");
+ * 
+ * 	// Title with dynamic content
+ * 	Title dynamic = new Title()
+ * 		.text("User Dashboard - " + username);
+ * 
+ * 	// Title with branding
+ * 	Title branded = new Title()
+ * 		.text("About Us | My Company");
+ * 
+ * 	// Title with SEO keywords
+ * 	Title seo = new Title()
+ * 		.text("Best Coffee Shops in Seattle - 2024 Guide");
+ * 
+ * 	// Title with separator
+ * 	Title separated = new Title()
+ * 		.text("Contact Us - Get in Touch");
+ * 
+ * 	// Title with emoji
+ * 	Title emoji = new Title()
+ * 		.text("🎉 Welcome to Our Store!");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

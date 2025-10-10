@@ -19,6 +19,61 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-i-element">&lt;i&gt;</a>
  * element.
  *
+ * <p>
+ * The i element represents a span of text in an alternate voice or mood, or otherwise offset
+ * from the normal prose in a manner indicating a different quality of text, such as a taxonomic
+ * designation, a technical term, an idiomatic phrase from another language, a thought, or a
+ * ship name in Western texts. It is typically rendered in italic text and is used to mark up
+ * text that should be distinguished from the surrounding content.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple italic text
+ * 	I simple = new I()
+ * 		.children("This is italic text");
+ *
+ * 	// I with styling
+ * 	I styled = new I()
+ * 		._class("emphasis")
+ * 		.children("Styled italic text");
+ *
+ * 	// I with complex content
+ * 	I complex = new I()
+ * 		.children(
+ * 			"The ",
+ * 			new Strong().children("HMS Victory"),
+ * 			" was a famous ship."
+ * 		);
+ *
+ * 	// I with ID
+ * 	I withId = new I()
+ * 		.id("italic-text")
+ * 		.children("Text with ID");
+ *
+ * 	// I with styling
+ * 	I styled2 = new I()
+ * 		.style("color: #666; font-style: italic;")
+ * 		.children("Custom styled italic text");
+ *
+ * 	// I with multiple elements
+ * 	I multiple = new I()
+ * 		.children(
+ * 			"The ",
+ * 			new I().children("HMS Victory"),
+ * 			" was a ",
+ * 			new I().children("first-rate"),
+ * 			" ship of the line."
+ * 		);
+ *
+ * 	// I with links
+ * 	I withLinks = new I()
+ * 		.children(
+ * 			"See ",
+ * 			new A().href("/ships").children("ship database"),
+ * 			" for more information."
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

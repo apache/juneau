@@ -19,6 +19,60 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-code-element">&lt;code&gt;</a>
  * element.
  *
+ * <p>
+ * The code element represents a fragment of computer code. It is used to mark up inline code snippets,
+ * variable names, function names, or any other computer code that appears within normal text. The code
+ * element is typically rendered in a monospace font and is commonly used in documentation, tutorials,
+ * and technical writing to distinguish code from regular text.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple code snippet
+ * 	Code simple = new Code()
+ * 		.children("console.log('Hello World');");
+ *
+ * 	// Code with styling
+ * 	Code styled = new Code()
+ * 		._class("inline-code")
+ * 		.children("getElementById");
+ *
+ * 	// Code in a sentence
+ * 	P sentence = new P()
+ * 		.children(
+ * 			"Use the ",
+ * 			new Code().children("print()"),
+ * 			" function to display output."
+ * 		);
+ *
+ * 	// Variable name
+ * 	Code variable = new Code()
+ * 		.children("userName");
+ *
+ * 	// Function call
+ * 	Code function = new Code()
+ * 		.children("calculateTotal(price, tax)");
+ *
+ * 	// Multiple code elements
+ * 	P multiple = new P()
+ * 		.children(
+ * 			"The ",
+ * 			new Code().children("if"),
+ * 			" statement checks the condition, and ",
+ * 			new Code().children("else"),
+ * 			" provides an alternative."
+ * 		);
+ *
+ * 	// Code with complex content
+ * 	Code complex = new Code()
+ * 		.children(
+ * 			"const ",
+ * 			new Strong().children("result"),
+ * 			" = ",
+ * 			new Em().children("calculate"),
+ * 			"();"
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

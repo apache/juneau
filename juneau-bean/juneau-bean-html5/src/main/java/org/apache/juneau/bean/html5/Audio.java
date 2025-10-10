@@ -22,6 +22,27 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-audio-element">&lt;audio&gt;</a>
  * element.
  *
+ * <p>
+ * The audio element embeds sound content in documents. It can contain audio streams, audio files,
+ * or other audio sources. The browser will choose the most appropriate source based on format
+ * support and user preferences.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple audio with single source
+ * 	Audio audio1 = new Audio().src("audio.mp3").controls(true);
+ * 
+ * 	// Audio with multiple sources for browser compatibility
+ * 	Audio audio2 = new Audio().controls(true)
+ * 		.children(
+ * 			new Source().src("audio.mp3").type("audio/mpeg"),
+ * 			new Source().src("audio.ogg").type("audio/ogg")
+ * 		);
+ * 
+ * 	// Autoplay audio with loop
+ * 	Audio audio3 = new Audio().src("background.mp3").autoplay(true).loop(true).muted(true);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -51,6 +72,14 @@ public class Audio extends HtmlElementContainer {
 	 * <p>
 	 * Hint that the media resource can be started automatically when the page is loaded.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"autoplay"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param autoplay
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -68,6 +97,14 @@ public class Audio extends HtmlElementContainer {
 	 * <p>
 	 * Show user agent controls.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"controls"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param controls
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -83,9 +120,16 @@ public class Audio extends HtmlElementContainer {
 	 * attribute.
 	 *
 	 * <p>
-	 * How the element handles cross-origin requests.
+	 * Specifies how the element handles cross-origin requests for CORS (Cross-Origin Resource Sharing).
 	 *
-	 * @param crossorigin The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"anonymous"</js> - Cross-origin requests are made without credentials</li>
+	 * 	<li><js>"use-credentials"</js> - Cross-origin requests include credentials</li>
+	 * </ul>
+	 *
+	 * @param crossorigin How to handle cross-origin requests.
 	 * @return This object.
 	 */
 	public Audio crossorigin(String value) {
@@ -97,11 +141,9 @@ public class Audio extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-loop">loop</a> attribute.
 	 *
 	 * <p>
-	 * Whether to loop the media resource.
+	 * Causes the media to automatically restart from the beginning when it reaches the end.
 	 *
-	 * @param loop
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * @param loop If <jk>true</jk>, the media will loop continuously.
 	 * @return This object.
 	 */
 	public Audio loop(Object value) {
@@ -114,9 +156,13 @@ public class Audio extends HtmlElementContainer {
 	 * attribute.
 	 *
 	 * <p>
-	 * Groups media elements together with an implicit MediaController.
+	 * Groups multiple media elements together so they can be controlled as a single unit. All media elements
+	 * with the same mediagroup value will share the same MediaController, allowing synchronized playback.
 	 *
-	 * @param mediagroup The new value for this attribute.
+	 * <p>
+	 * This is useful for creating synchronized audio/video presentations or multiple audio tracks.
+	 *
+	 * @param mediagroup The name of the media group to join.
 	 * @return This object.
 	 */
 	public Audio mediagroup(String value) {
@@ -129,11 +175,9 @@ public class Audio extends HtmlElementContainer {
 	 * attribute.
 	 *
 	 * <p>
-	 * Whether to mute the media resource by default.
+	 * Mutes the audio output by default. Useful for autoplay videos where audio should be disabled initially.
 	 *
-	 * @param muted
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * @param muted If <jk>true</jk>, the media will be muted by default.
 	 * @return This object.
 	 */
 	public Audio muted(Object value) {
@@ -146,9 +190,17 @@ public class Audio extends HtmlElementContainer {
 	 * attribute.
 	 *
 	 * <p>
-	 * Hints how much buffering the media resource will likely need.
+	 * Specifies how the browser should load the media resource.
 	 *
-	 * @param preload The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"none"</js> - Do not preload the media</li>
+	 * 	<li><js>"metadata"</js> - Preload only metadata (duration, dimensions, etc.)</li>
+	 * 	<li><js>"auto"</js> - Preload the entire media file (default)</li>
+	 * </ul>
+	 *
+	 * @param preload How much of the media to preload.
 	 * @return This object.
 	 */
 	public Audio preload(Object value) {

@@ -23,6 +23,40 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#the-script-element">&lt;script&gt;</a>
  * element.
  *
+ * <p>
+ * The script element is used to embed or reference executable code, typically JavaScript. It can
+ * contain inline script code or reference external script files. The script element is commonly
+ * used to add interactivity and dynamic behavior to web pages.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Inline JavaScript
+ * 	Script script1 = new Script()
+ * 		.text("console.log('Hello, World!');");
+ * 
+ * 	// External JavaScript file
+ * 	Script script2 = new Script()
+ * 		.src("https://example.com/script.js")
+ * 		.type("text/javascript");
+ * 
+ * 	// Async script loading
+ * 	Script script3 = new Script()
+ * 		.src("https://example.com/analytics.js")
+ * 		.async(true)
+ * 		.defer(true);
+ * 
+ * 	// Script with integrity check
+ * 	Script script4 = new Script()
+ * 		.src("https://example.com/library.js")
+ * 		.integrity("sha384-...")
+ * 		.crossorigin("anonymous");
+ * 
+ * 	// Module script
+ * 	Script script5 = new Script()
+ * 		.src("https://example.com/module.js")
+ * 		.type("module");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -53,13 +87,21 @@ public class Script extends HtmlElementRawText {
 	 * <p>
 	 * Execute script asynchronously.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"async"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param async
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Script async(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("async", deminimize(value, "async"));
 		return this;
 	}
 
@@ -67,9 +109,18 @@ public class Script extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-charset">charset</a> attribute.
 	 *
 	 * <p>
-	 * Character encoding of the external script resource.
+	 * Specifies the character encoding of the external script resource. This is used when
+	 * the script is loaded from an external source.
 	 *
-	 * @param charset The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"utf-8"</js> - UTF-8 encoding (default)</li>
+	 * 	<li><js>"iso-8859-1"</js> - Latin-1 encoding</li>
+	 * 	<li><js>"windows-1252"</js> - Windows-1252 encoding</li>
+	 * </ul>
+	 *
+	 * @param charset The character encoding of the external script resource.
 	 * @return This object.
 	 */
 	public Script charset(String value) {
@@ -98,13 +149,21 @@ public class Script extends HtmlElementRawText {
 	 * <p>
 	 * Defer script execution.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"defer"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param defer
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Script defer(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("defer", deminimize(value, "defer"));
 		return this;
 	}
 

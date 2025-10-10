@@ -19,6 +19,62 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-samp-element">&lt;samp&gt;</a>
  * element.
  *
+ * <p>
+ * The samp element represents sample or quoted output from a computer program or system. It is
+ * used to mark up text that represents the output of a program, command, or system, such as
+ * console output, error messages, or program results. The samp element is typically rendered
+ * in a monospace font and is commonly used in documentation, tutorials, and technical writing
+ * to distinguish program output from regular text.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple sample output
+ * 	Samp simple = new Samp()
+ * 		.children("Hello World");
+ *
+ * 	// Samp with styling
+ * 	Samp styled = new Samp()
+ * 		._class("console-output")
+ * 		.children("$ npm install");
+ *
+ * 	// Samp with complex content
+ * 	Samp complex = new Samp()
+ * 		.children(
+ * 			"Error: ",
+ * 			new Strong().children("File not found"),
+ * 			" at line 42"
+ * 		);
+ *
+ * 	// Samp with ID
+ * 	Samp withId = new Samp()
+ * 		.id("sample-output")
+ * 		.children("Sample output with ID");
+ *
+ * 	// Samp with styling
+ * 	Samp styled2 = new Samp()
+ * 		.style("background-color: #f4f4f4; padding: 5px; border: 1px solid #ddd;")
+ * 		.children("Custom styled sample output");
+ *
+ * 	// Samp with multiple elements
+ * 	Samp multiple = new Samp()
+ * 		.children(
+ * 			"$ ",
+ * 			new Samp().children("ls -la"),
+ * 			"\n",
+ * 			new Samp().children("total 24"),
+ * 			"\n",
+ * 			new Samp().children("drwxr-xr-x  5 user  staff  160 Jan 15 10:30 .")
+ * 		);
+ *
+ * 	// Samp with links
+ * 	Samp withLinks = new Samp()
+ * 		.children(
+ * 			"See ",
+ * 			new A().href("/docs/output").children("output documentation"),
+ * 			" for more details."
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

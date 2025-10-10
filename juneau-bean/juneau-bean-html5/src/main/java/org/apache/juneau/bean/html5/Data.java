@@ -19,6 +19,62 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-data-element">&lt;data&gt;</a>
  * element.
  *
+ * <p>
+ * The data element represents its contents, along with a machine-readable form of those contents in
+ * the value attribute. It is used to provide both human-readable and machine-readable versions of
+ * the same data, making it easier for scripts and other automated systems to process the information
+ * while still displaying meaningful content to users. The value attribute should contain the
+ * machine-readable version of the data.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple data element
+ * 	Data simple = new Data()
+ * 		.value("12345")
+ * 		.children("Product #12345");
+ *
+ * 	// Data with styling
+ * 	Data styled = new Data()
+ * 		.value("USD")
+ * 		._class("currency")
+ * 		.children("US Dollar");
+ *
+ * 	// Data in a sentence
+ * 	P sentence = new P()
+ * 		.children(
+ * 			"Price: ",
+ * 			new Data().value("29.99").children("$29.99"),
+ * 			" per item"
+ * 		);
+ *
+ * 	// Data with complex content
+ * 	Data complex = new Data()
+ * 		.value("2024-01-15")
+ * 		.children(
+ * 			"January 15, 2024",
+ * 			new Span()._class("date").children(" (Monday)")
+ * 		);
+ *
+ * 	// Data with multiple attributes
+ * 	Data multiple = new Data()
+ * 		.value("SKU-12345")
+ * 		._class("product-sku")
+ * 		.title("Product SKU")
+ * 		.children("SKU: 12345");
+ *
+ * 	// Data with ID
+ * 	Data withId = new Data()
+ * 		.value("user-123")
+ * 		.id("user-id")
+ * 		.children("User ID: 123");
+ *
+ * 	// Data with styling
+ * 	Data styled2 = new Data()
+ * 		.value("active")
+ * 		.style("color: green; font-weight: bold;")
+ * 		.children("Active");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

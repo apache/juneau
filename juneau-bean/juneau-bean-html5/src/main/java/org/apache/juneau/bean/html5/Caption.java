@@ -19,6 +19,60 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-caption-element">&lt;caption&gt;</a>
  * element.
  *
+ * <p>
+ * The caption element represents the title of a table. It is used to provide a brief description or
+ * title for the table content, making it easier for users to understand what the table contains.
+ * The caption element should be placed as the first child of a table element and is typically
+ * rendered above the table by default.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple table caption
+ * 	Caption simple = new Caption()
+ * 		.children("Monthly Sales Report");
+ *
+ * 	// Table caption with styling
+ * 	Caption styled = new Caption()
+ * 		._class("table-title")
+ * 		.children("Employee Directory");
+ *
+ * 	// Table caption with complex content
+ * 	Caption complex = new Caption()
+ * 		.children(
+ * 			"Sales Data for ",
+ * 			new Strong().children("Q1 2024"),
+ * 			" - ",
+ * 			new Em().children("Preliminary Results")
+ * 		);
+ *
+ * 	// Table caption with links
+ * 	Caption withLinks = new Caption()
+ * 		.children(
+ * 			"Product Inventory - ",
+ * 			new A().href("/help/inventory").children("Help"),
+ * 			" | ",
+ * 			new A().href("/export/inventory").children("Export")
+ * 		);
+ *
+ * 	// Table caption with icons
+ * 	Caption withIcons = new Caption()
+ * 		.children(
+ * 			"📊 ",
+ * 			"Financial Summary",
+ * 			" ",
+ * 			new Span()._class("icon").children("💰")
+ * 		);
+ *
+ * 	// Table caption with multiple lines
+ * 	Caption multiLine = new Caption()
+ * 		.children(
+ * 			"Customer Contact Information",
+ * 			new Br(),
+ * 			"Last Updated: ",
+ * 			new Time().datetime("2024-01-15").children("January 15, 2024")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

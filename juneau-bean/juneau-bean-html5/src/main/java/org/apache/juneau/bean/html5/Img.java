@@ -22,9 +22,43 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-img-element">&lt;img&gt;</a>
  * element.
  *
+ * <p>
+ * The img element represents an image in the document. It is a void element that embeds an image
+ * into the page. The alt attribute is required for accessibility, providing alternative text
+ * for screen readers and when images cannot be displayed.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple image with alt text
+ * 	Img img1 = new Img()
+ * 		.src("photo.jpg")
+ * 		.alt("A beautiful sunset over the mountains");
+ * 
+ * 	// Image with dimensions and styling
+ * 	Img img2 = new Img()
+ * 		.src("logo.png")
+ * 		.alt("Company Logo")
+ * 		.width("200")
+ * 		.height("100")
+ * 		._class("logo");
+ * 
+ * 	// Image with CORS and image map
+ * 	Img img3 = new Img()
+ * 		.src("https://example.com/image.jpg")
+ * 		.alt("Interactive image")
+ * 		.crossorigin("anonymous")
+ * 		.usemap("#imagemap");
+ * 
+ * 	// Responsive image with multiple sources
+ * 	Img img4 = new Img()
+ * 		.src("image-800w.jpg")
+ * 		.alt("Responsive image")
+ * 		.sizes("(max-width: 600px) 100vw, 50vw")
+ * 		.srcset("image-400w.jpg 400w, image-800w.jpg 800w");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
-
  * </ul>
  */
 @Bean(typeName="img")
@@ -49,9 +83,13 @@ public class Img extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-alt">alt</a> attribute.
 	 *
 	 * <p>
-	 * Replacement text for use when images are not available.
+	 * Specifies alternative text for the image. This text is displayed when the image cannot be loaded
+	 * and is used by screen readers for accessibility.
 	 *
-	 * @param alt The new value for this attribute.
+	 * <p>
+	 * The alt text should be descriptive and convey the same information as the image.
+	 *
+	 * @param alt Alternative text for the image.
 	 * @return This object.
 	 */
 	public Img alt(String value) {
@@ -64,9 +102,16 @@ public class Img extends HtmlElementVoid {
 	 * attribute.
 	 *
 	 * <p>
-	 * How the element handles cross-origin requests.
+	 * Specifies how the element handles cross-origin requests for CORS (Cross-Origin Resource Sharing).
 	 *
-	 * @param crossorigin The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"anonymous"</js> - Cross-origin requests are made without credentials</li>
+	 * 	<li><js>"use-credentials"</js> - Cross-origin requests include credentials</li>
+	 * </ul>
+	 *
+	 * @param crossorigin How to handle cross-origin requests.
 	 * @return This object.
 	 */
 	public Img crossorigin(String value) {
@@ -97,13 +142,21 @@ public class Img extends HtmlElementVoid {
 	 * <p>
 	 * Whether the image is a server-side image map.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"ismap"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param ismap
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Img ismap(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("ismap", deminimize(value, "ismap"));
 		return this;
 	}
 
@@ -135,9 +188,13 @@ public class Img extends HtmlElementVoid {
 	 * attribute.
 	 *
 	 * <p>
-	 * Name of image map to use.
+	 * Specifies the name of an image map to use with this image. The value should correspond to
+	 * the name attribute of a map element that defines clickable areas on the image.
 	 *
-	 * @param usemap The new value for this attribute.
+	 * <p>
+	 * The value should start with "#" followed by the name of the map element.
+	 *
+	 * @param usemap The name of the image map to use (e.g., "#mymap").
 	 * @return This object.
 	 */
 	public Img usemap(String value) {

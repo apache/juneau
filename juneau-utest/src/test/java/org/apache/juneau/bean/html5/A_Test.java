@@ -10,8 +10,48 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
+package org.apache.juneau.bean.html5;
 
-/**
- * OpenAPI UI Generator
- */
-package org.apache.juneau.bean.openapi.ui;
+import static org.apache.juneau.bean.html5.HtmlBuilder.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
+
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
+
+class A_Test extends TestBase {
+
+	@Test void a01_basicSetters() {
+		A x = a()
+			._class("a")
+			.accesskey("b")
+			.children("c1", strong("c2"))
+			.contenteditable("d")
+			.dir("e")
+			.download("f")
+			.hidden("g")
+			.href("h")
+			.hreflang("i")
+			.id("j")
+			.lang("k")
+			.onclick("l")
+			.onfocus("m")
+			.onmouseover("n")
+			.rel("o")
+			.spellcheck("p")
+			.style("q")
+			.tabindex("r")
+			.target("s")
+			.title("t")
+			.translate("u")
+			.type("v");
+
+		assertString(
+			"<a class='a' accesskey='b' contenteditable='d' dir='e' download='f' hidden='g' href='h' hreflang='i' id='j' lang='k' onclick='l' onfocus='m' onmouseover='n' rel='o' spellcheck='p' style='q' tabindex='r' target='s' title='t' translate='u' type='v'>c1<strong>c2</strong></a>",
+			x
+		);
+	}
+
+	@Test @Disabled void a02_emptyBean() {
+		assertString("<a></a>", a());
+	}
+}

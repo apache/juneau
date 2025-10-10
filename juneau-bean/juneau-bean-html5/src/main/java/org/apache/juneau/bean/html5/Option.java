@@ -19,6 +19,46 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-option-element">&lt;option&gt;</a>
  * element.
  *
+ * <p>
+ * The option element represents an option in a select element or a suggestion in a datalist element.
+ * It defines a choice that users can select from a dropdown menu or autocomplete list. The value
+ * attribute specifies the value to be submitted, while the text content provides the display text.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple option
+ * 	Option option1 = new Option()
+ * 		.value("red")
+ * 		.text("Red");
+ * 
+ * 	// Selected option
+ * 	Option option2 = new Option()
+ * 		.value("blue")
+ * 		.text("Blue")
+ * 		.selected(true);
+ * 
+ * 	// Disabled option
+ * 	Option option3 = new Option()
+ * 		.value("gray")
+ * 		.text("Gray")
+ * 		.disabled(true);
+ * 
+ * 	// Option with label
+ * 	Option option4 = new Option()
+ * 		.value("green")
+ * 		.text("Green")
+ * 		.label("Green Color");
+ * 
+ * 	// Options in a select
+ * 	Select select1 = new Select()
+ * 		.name("color")
+ * 		.children(
+ * 			new Option().value("red").text("Red"),
+ * 			new Option().value("green").text("Green"),
+ * 			new Option().value("blue").text("Blue")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -58,13 +98,21 @@ public class Option extends HtmlElementText {
 	 * <p>
 	 * Whether the form control is disabled.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"disabled"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param disabled
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Option disabled(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("disabled", deminimize(value, "disabled"));
 		return this;
 	}
 
@@ -72,9 +120,13 @@ public class Option extends HtmlElementText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-label">label</a> attribute.
 	 *
 	 * <p>
-	 * User-visible label.
+	 * Specifies the user-visible label for the option. This label is displayed in the select element
+	 * and can be different from the option's value.
 	 *
-	 * @param label The new value for this attribute.
+	 * <p>
+	 * The label should be user-friendly and descriptive of what the option represents.
+	 *
+	 * @param label The user-visible label for the option.
 	 * @return This object.
 	 */
 	public Option label(String value) {
@@ -88,13 +140,21 @@ public class Option extends HtmlElementText {
 	 * <p>
 	 * Whether the option is selected by default.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"selected"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param selected
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Option selected(Object value) {
-		attr("value", deminimize(value, "value"));
+		attr("selected", deminimize(value, "selected"));
 		return this;
 	}
 

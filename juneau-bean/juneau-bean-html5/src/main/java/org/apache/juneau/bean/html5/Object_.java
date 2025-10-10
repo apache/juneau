@@ -45,9 +45,17 @@ public class Object_ extends HtmlElementMixed {  // NOSONAR - Intentional naming
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-data">data</a> attribute.
 	 *
 	 * <p>
-	 * Address of the resource.
+	 * Specifies the URL of the resource to be embedded. This is the primary source of content
+	 * for the object element.
 	 *
-	 * @param data The new value for this attribute.
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 *
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 *
+	 * @param data The URL of the resource to be embedded.
 	 * @return This object.
 	 */
 	public Object_ data(String value) {

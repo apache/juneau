@@ -19,6 +19,91 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-nav-element">&lt;nav&gt;</a>
  * element.
  *
+ * <p>
+ * The nav element represents a section of a page that links to other pages or to parts within
+ * the same page. It is used to contain navigation links and is typically used for site navigation,
+ * table of contents, or pagination. The nav element should contain a list of links and is important
+ * for accessibility as it helps screen readers identify the main navigation areas of a page.
+ * It is commonly used with ul and li elements to create structured navigation menus.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple navigation
+ * 	Nav simple = new Nav()
+ * 		.children(
+ * 			new Ul().children(
+ * 				new Li().children(new A().href("/home").children("Home")),
+ * 				new Li().children(new A().href("/about").children("About")),
+ * 				new Li().children(new A().href("/contact").children("Contact"))
+ * 			)
+ * 		);
+ *
+ * 	// Nav with styling
+ * 	Nav styled = new Nav()
+ * 		._class("main-navigation")
+ * 		.children(
+ * 			new Ul().children(
+ * 				new Li().children(new A().href("/products").children("Products")),
+ * 				new Li().children(new A().href("/services").children("Services")),
+ * 				new Li().children(new A().href("/support").children("Support"))
+ * 			)
+ * 		);
+ *
+ * 	// Nav with complex content
+ * 	Nav complex = new Nav()
+ * 		.children(
+ * 			new H3().children("Site Navigation"),
+ * 			new Ul().children(
+ * 				new Li().children(new A().href("/home").children("Home")),
+ * 				new Li().children(new A().href("/about").children("About")),
+ * 				new Li().children(new A().href("/contact").children("Contact"))
+ * 			)
+ * 		);
+ *
+ * 	// Nav with ID
+ * 	Nav withId = new Nav()
+ * 		.id("main-nav")
+ * 		.children(
+ * 			new Ul().children(
+ * 				new Li().children(new A().href("/home").children("Home")),
+ * 				new Li().children(new A().href("/about").children("About"))
+ * 			)
+ * 		);
+ *
+ * 	// Nav with styling
+ * 	Nav styled2 = new Nav()
+ * 		.style("background-color: #333; padding: 10px;")
+ * 		.children(
+ * 			new Ul().children(
+ * 				new Li().children(new A().href("/home").children("Home")),
+ * 				new Li().children(new A().href("/about").children("About"))
+ * 			)
+ * 		);
+ *
+ * 	// Nav with multiple elements
+ * 	Nav multiple = new Nav()
+ * 		.children(
+ * 			new H3().children("Navigation"),
+ * 			new Ul().children(
+ * 				new Li().children(new A().href("/home").children("Home")),
+ * 				new Li().children(new A().href("/about").children("About"))
+ * 			),
+ * 			new P().children("Use the links above to navigate the site.")
+ * 		);
+ *
+ * 	// Nav with breadcrumbs
+ * 	Nav breadcrumbs = new Nav()
+ * 		.children(
+ * 			new Ul().children(
+ * 				new Li().children(new A().href("/").children("Home")),
+ * 				new Li().children(" > "),
+ * 				new Li().children(new A().href("/products").children("Products")),
+ * 				new Li().children(" > "),
+ * 				new Li().children("Current Page")
+ * 			)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

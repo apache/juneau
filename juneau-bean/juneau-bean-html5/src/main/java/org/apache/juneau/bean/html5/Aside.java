@@ -19,6 +19,82 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-aside-element">&lt;aside&gt;</a>
  * element.
  *
+ * <p>
+ * The aside element represents a section of a page that consists of content that is tangentially
+ * related to the content around the aside element, and which could be considered separate from
+ * that content. It is commonly used for sidebars, pull quotes, advertisements, navigation links,
+ * or other content that is related but not essential to the main content.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Sidebar with related links
+ * 	Aside sidebar = new Aside()
+ * 		._class("sidebar")
+ * 		.children(
+ * 			new H3().children("Related Articles"),
+ * 			new Ul().children(
+ * 				new Li().children(new A().href("/article1").children("Article 1")),
+ * 				new Li().children(new A().href("/article2").children("Article 2")),
+ * 				new Li().children(new A().href("/article3").children("Article 3"))
+ * 			)
+ * 		);
+ * 
+ * 	// Pull quote
+ * 	Aside pullQuote = new Aside()
+ * 		._class("pull-quote")
+ * 		.children(
+ * 			new Blockquote()
+ * 				.children(
+ * 					"The best way to predict the future is to create it.",
+ * 					new Footer().children("— Peter Drucker")
+ * 				)
+ * 		);
+ * 
+ * 	// Advertisement
+ * 	Aside advertisement = new Aside()
+ * 		._class("advertisement")
+ * 		.children(
+ * 			new H4().children("Sponsored Content"),
+ * 			new P().children("Check out our latest product!"),
+ * 			new A().href("/product").children("Learn More")
+ * 		);
+ * 
+ * 	// Author bio
+ * 	Aside authorBio = new Aside()
+ * 		._class("author-bio")
+ * 		.children(
+ * 			new H3().children("About the Author"),
+ * 			new P().children("John Doe is a web developer with 10 years of experience..."),
+ * 			new A().href("/author/john-doe").children("Read more articles")
+ * 		);
+ * 
+ * 	// Navigation menu
+ * 	Aside navigation = new Aside()
+ * 		._class("navigation")
+ * 		.children(
+ * 			new Nav().children(
+ * 				new Ul().children(
+ * 					new Li().children(new A().href("/home").children("Home")),
+ * 					new Li().children(new A().href("/about").children("About")),
+ * 					new Li().children(new A().href("/contact").children("Contact"))
+ * 				)
+ * 			)
+ * 		);
+ * 
+ * 	// Glossary or definitions
+ * 	Aside glossary = new Aside()
+ * 		._class("glossary")
+ * 		.children(
+ * 			new H3().children("Key Terms"),
+ * 			new Dl().children(
+ * 				new Dt().children("HTML"),
+ * 				new Dd().children("HyperText Markup Language"),
+ * 				new Dt().children("CSS"),
+ * 				new Dd().children("Cascading Style Sheets")
+ * 			)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

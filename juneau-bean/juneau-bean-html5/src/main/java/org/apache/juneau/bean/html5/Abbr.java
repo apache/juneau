@@ -19,6 +19,51 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-abbr-element">&lt;abbr&gt;</a>
  * element.
  *
+ * <p>
+ * The abbr element represents an abbreviation or acronym. It is used to mark up abbreviated text
+ * and provide an optional expansion or explanation via the title attribute. This helps screen
+ * readers and other assistive technologies understand the full meaning of abbreviations, and
+ * provides tooltips for users when they hover over the abbreviated text.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple abbreviation
+ * 	Abbr simple = new Abbr()
+ * 		.title("HyperText Markup Language")
+ * 		.children("HTML");
+ * 
+ * 	// Acronym with expansion
+ * 	Abbr acronym = new Abbr()
+ * 		.title("World Wide Web")
+ * 		.children("WWW");
+ * 
+ * 	// Technical abbreviation
+ * 	Abbr technical = new Abbr()
+ * 		.title("Cascading Style Sheets")
+ * 		.children("CSS");
+ * 
+ * 	// Date abbreviation
+ * 	Abbr date = new Abbr()
+ * 		.title("January")
+ * 		.children("Jan");
+ * 
+ * 	// Abbreviation with styling
+ * 	Abbr styled = new Abbr()
+ * 		.title("JavaScript Object Notation")
+ * 		._class("abbreviation")
+ * 		.children("JSON");
+ * 
+ * 	// Multiple abbreviations in text
+ * 	Abbr multiple = new Abbr()
+ * 		.children(
+ * 			"The ",
+ * 			new Abbr().title("World Wide Web Consortium").children("W3C"),
+ * 			" defines ",
+ * 			new Abbr().title("HyperText Markup Language").children("HTML"),
+ * 			" standards."
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

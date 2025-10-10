@@ -19,6 +19,34 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-small-element">&lt;small&gt;</a>
  * element.
  *
+ * <p>
+ * The small element represents side comments such as small print. It is typically used for
+ * disclaimers, caveats, legal restrictions, or copyrights. The small element does not "de-emphasize"
+ * or lower the importance of text; it represents side comments.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Copyright notice
+ * 	Small copyright = new Small()
+ * 		.children("Copyright 2024 My Company. All rights reserved.");
+ * 
+ * 	// Legal disclaimer
+ * 	Small disclaimer = new Small()
+ * 		.children("This information is provided as-is without warranty.");
+ * 
+ * 	// Terms and conditions
+ * 	Small terms = new Small()
+ * 		.children("By using this service, you agree to our terms and conditions.");
+ * 
+ * 	// Price with small print
+ * 	Small price = new Small()
+ * 		.children("$99.99", new Small().children("*plus tax and shipping"));
+ * 
+ * 	// Form with small print
+ * 	Small formNote = new Small()
+ * 		.children("Required fields are marked with an asterisk (*)");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

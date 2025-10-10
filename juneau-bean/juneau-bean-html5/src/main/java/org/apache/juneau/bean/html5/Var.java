@@ -19,6 +19,61 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-var-element">&lt;var&gt;</a>
  * element.
  *
+ * <p>
+ * The var element represents a variable. It is used to mark up variables in mathematical
+ * expressions, programming code, or other contexts where a variable name needs to be
+ * distinguished from regular text. The var element is typically rendered in italics and
+ * is commonly used in documentation, tutorials, and technical writing to identify
+ * variable names, function parameters, or mathematical variables.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple variable
+ * 	Var simple = new Var()
+ * 		.children("x");
+ *
+ * 	// Var with styling
+ * 	Var styled = new Var()
+ * 		._class("variable")
+ * 		.children("userName");
+ *
+ * 	// Var with complex content
+ * 	Var complex = new Var()
+ * 		.children(
+ * 			"The variable ",
+ * 			new Strong().children("count"),
+ * 			" represents the number of items."
+ * 		);
+ *
+ * 	// Var with ID
+ * 	Var withId = new Var()
+ * 		.id("variable-name")
+ * 		.children("totalCount");
+ *
+ * 	// Var with styling
+ * 	Var styled2 = new Var()
+ * 		.style("color: #0066cc; font-style: italic;")
+ * 		.children("maxValue");
+ *
+ * 	// Var with multiple elements
+ * 	Var multiple = new Var()
+ * 		.children(
+ * 			"The ",
+ * 			new Var().children("x"),
+ * 			" and ",
+ * 			new Var().children("y"),
+ * 			" variables are used in the equation."
+ * 		);
+ *
+ * 	// Var with links
+ * 	Var withLinks = new Var()
+ * 		.children(
+ * 			"See ",
+ * 			new A().href("/docs/variables").children("variable documentation"),
+ * 			" for more information."
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

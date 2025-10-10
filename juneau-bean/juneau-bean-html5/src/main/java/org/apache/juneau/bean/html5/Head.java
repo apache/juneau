@@ -19,6 +19,79 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-head-element">&lt;head&gt;</a>
  * element.
  *
+ * <p>
+ * The head element represents a collection of metadata for the document. It is used to contain
+ * information about the document that is not displayed as part of the document's content, such
+ * as the title, links to stylesheets, scripts, and other metadata. The head element is typically
+ * placed immediately after the opening html tag and before the body element. It can contain
+ * elements like title, meta, link, style, script, and base.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple head with title
+ * 	Head simple = new Head()
+ * 		.children(
+ * 			new Title().children("My Website"),
+ * 			new Meta().charset("UTF-8")
+ * 		);
+ *
+ * 	// Head with styling
+ * 	Head styled = new Head()
+ * 		.children(
+ * 			new Title().children("Styled Page"),
+ * 			new Meta().charset("UTF-8"),
+ * 			new Link().rel("stylesheet").href("/css/style.css")
+ * 		);
+ *
+ * 	// Head with complex content
+ * 	Head complex = new Head()
+ * 		.children(
+ * 			new Title().children("Complete Page"),
+ * 			new Meta().charset("UTF-8"),
+ * 			new Meta().name("viewport").content("width=device-width, initial-scale=1.0"),
+ * 			new Link().rel("stylesheet").href("/css/main.css"),
+ * 			new Link().rel("icon").href("/favicon.ico"),
+ * 			new Script().src("/js/main.js")
+ * 		);
+ *
+ * 	// Head with ID
+ * 	Head withId = new Head()
+ * 		.id("page-head")
+ * 		.children(
+ * 			new Title().children("Page with ID"),
+ * 			new Meta().charset("UTF-8")
+ * 		);
+ *
+ * 	// Head with styling
+ * 	Head styled2 = new Head()
+ * 		.style("background-color: #f0f0f0;")
+ * 		.children(
+ * 			new Title().children("Styled Head"),
+ * 			new Meta().charset("UTF-8")
+ * 		);
+ *
+ * 	// Head with multiple elements
+ * 	Head multiple = new Head()
+ * 		.children(
+ * 			new Title().children("Multi-Element Head"),
+ * 			new Meta().charset("UTF-8"),
+ * 			new Meta().name("description").content("A comprehensive page"),
+ * 			new Link().rel("stylesheet").href("/css/reset.css"),
+ * 			new Link().rel("stylesheet").href("/css/layout.css"),
+ * 			new Script().src("/js/jquery.js"),
+ * 			new Script().src("/js/app.js")
+ * 		);
+ *
+ * 	// Head with base element
+ * 	Head withBase = new Head()
+ * 		.children(
+ * 			new Title().children("Page with Base"),
+ * 			new Meta().charset("UTF-8"),
+ * 			new Base().href("https://example.com/"),
+ * 			new Link().rel("stylesheet").href("css/style.css")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

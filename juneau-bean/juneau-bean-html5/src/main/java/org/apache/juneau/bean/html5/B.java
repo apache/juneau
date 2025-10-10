@@ -19,6 +19,52 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-b-element">&lt;b&gt;</a>
  * element.
  *
+ * <p>
+ * The b element represents a span of text to which attention is being drawn for utilitarian purposes
+ * without conveying any extra importance and with no implication of an alternate voice or mood. It is
+ * used to stylistically offset text from the normal prose without conveying any special importance or
+ * emphasis. The b element is typically rendered in bold by browsers, but the visual styling should be
+ * controlled with CSS rather than relying on the default browser styling.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Product name in a sentence
+ * 	B product = new B()
+ * 		.children("Widget Pro");
+ * 
+ * 	// Keywords in text
+ * 	B keywords = new B()
+ * 		.children("HTML", new B().children("CSS"), " and ", new B().children("JavaScript"));
+ * 
+ * 	// Names or titles
+ * 	B name = new B()
+ * 		.children("Dr. Jane Smith");
+ * 
+ * 	// Stylistic offset without emphasis
+ * 	B offset = new B()
+ * 		._class("highlight")
+ * 		.children("Important note");
+ * 
+ * 	// Text that needs visual distinction
+ * 	B distinct = new B()
+ * 		.children("User ID: 12345");
+ * 
+ * 	// Mixed content with bold text
+ * 	B mixed = new B()
+ * 		.children(
+ * 			"Welcome to ",
+ * 			new B().children("Our Website"),
+ * 			" - the best place for ",
+ * 			new B().children("quality products")
+ * 		);
+ * 
+ * 	// Bold text with styling
+ * 	B styled = new B()
+ * 		._class("product-name")
+ * 		.style("color: blue;")
+ * 		.children("Amazing Widget");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

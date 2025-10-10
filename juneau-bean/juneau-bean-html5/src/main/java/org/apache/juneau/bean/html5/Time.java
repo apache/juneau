@@ -19,6 +19,46 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-time-element">&lt;time&gt;</a>
  * element.
  *
+ * <p>
+ * The time element represents a specific point in time or a duration. It provides a machine-readable
+ * way to mark up dates and times in HTML, making it easier for search engines, screen readers, and
+ * other tools to understand and process temporal information. The element can contain human-readable
+ * text while providing a machine-readable datetime attribute.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple date
+ * 	Time date = new Time()
+ * 		.datetime("2024-01-15")
+ * 		.children("January 15, 2024");
+ * 
+ * 	// Date and time
+ * 	Time datetime = new Time()
+ * 		.datetime("2024-01-15T14:30:00Z")
+ * 		.children("2:30 PM on January 15, 2024");
+ * 
+ * 	// Relative time
+ * 	Time relative = new Time()
+ * 		.datetime("2024-01-15")
+ * 		.children("yesterday");
+ * 
+ * 	// Duration
+ * 	Time duration = new Time()
+ * 		.datetime("PT2H30M")
+ * 		.children("2 hours and 30 minutes");
+ * 
+ * 	// Time with styling
+ * 	Time styled = new Time()
+ * 		.datetime("2024-01-15")
+ * 		._class("event-date")
+ * 		.children("Event Date: January 15, 2024");
+ * 
+ * 	// Time with timezone
+ * 	Time timezone = new Time()
+ * 		.datetime("2024-01-15T14:30:00-05:00")
+ * 		.children("2:30 PM EST on January 15, 2024");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -46,9 +86,13 @@ public class Time extends HtmlElementMixed {
 	 * attribute.
 	 *
 	 * <p>
-	 * Machine-readable value.
+	 * Specifies the machine-readable value of the time element. This provides a standardized
+	 * format for the date and time that can be processed by computers.
 	 *
-	 * @param datetime The new value for this attribute.
+	 * <p>
+	 * The value should be a valid date-time string in ISO 8601 format.
+	 *
+	 * @param datetime The machine-readable date and time value.
 	 * @return This object.
 	 */
 	public Time datetime(String value) {

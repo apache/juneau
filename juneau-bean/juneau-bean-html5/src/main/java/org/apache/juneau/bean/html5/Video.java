@@ -22,6 +22,60 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-video-element">&lt;video&gt;</a>
  * element.
  *
+ * <p>
+ * The video element is used to embed video content in an HTML document. It provides a way to include
+ * video files that can be played by the browser's built-in video player. The video element supports
+ * multiple video formats and provides various attributes for controlling playback, appearance, and
+ * behavior. It can contain source elements to specify multiple video formats for browser compatibility.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple video with controls
+ * 	Video simple = new Video()
+ * 		.src("movie.mp4")
+ * 		.controls(true)
+ * 		.width(640)
+ * 		.height(360);
+ * 
+ * 	// Video with multiple sources
+ * 	Video multiple = new Video()
+ * 		.controls(true)
+ * 		.children(
+ * 			new Source().src("movie.mp4").type("video/mp4"),
+ * 			new Source().src("movie.webm").type("video/webm"),
+ * 			new Source().src("movie.ogg").type("video/ogg")
+ * 		);
+ * 
+ * 	// Autoplay video (muted for browser compatibility)
+ * 	Video autoplay = new Video()
+ * 		.src("intro.mp4")
+ * 		.autoplay(true)
+ * 		.muted(true)
+ * 		.loop(true);
+ * 
+ * 	// Video with poster image
+ * 	Video poster = new Video()
+ * 		.src("trailer.mp4")
+ * 		.poster("trailer-poster.jpg")
+ * 		.controls(true)
+ * 		.width(800)
+ * 		.height(450);
+ * 
+ * 	// Video with custom styling
+ * 	Video styled = new Video()
+ * 		.src("presentation.mp4")
+ * 		.controls(true)
+ * 		._class("video-player")
+ * 		.style("border: 2px solid #ccc; border-radius: 8px;");
+ * 
+ * 	// Video with event handlers
+ * 	Video interactive = new Video()
+ * 		.src("tutorial.mp4")
+ * 		.controls(true)
+ * 		.onplay("trackVideoPlay()")
+ * 		.onended("showNextVideo()");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -51,6 +105,14 @@ public class Video extends HtmlElementContainer {
 	 * <p>
 	 * Hint that the media resource can be started automatically when the page is loaded.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"autoplay"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param autoplay
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -68,6 +130,14 @@ public class Video extends HtmlElementContainer {
 	 * <p>
 	 * Show user agent controls.
 	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"controls"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
 	 * @param controls
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -83,9 +153,16 @@ public class Video extends HtmlElementContainer {
 	 * attribute.
 	 *
 	 * <p>
-	 * How the element handles cross-origin requests.
+	 * Specifies how the element handles cross-origin requests for CORS (Cross-Origin Resource Sharing).
 	 *
-	 * @param crossorigin The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"anonymous"</js> - Cross-origin requests are made without credentials</li>
+	 * 	<li><js>"use-credentials"</js> - Cross-origin requests include credentials</li>
+	 * </ul>
+	 *
+	 * @param crossorigin How to handle cross-origin requests.
 	 * @return This object.
 	 */
 	public Video crossorigin(String value) {
@@ -114,11 +191,9 @@ public class Video extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-loop">loop</a> attribute.
 	 *
 	 * <p>
-	 * Whether to loop the media resource.
+	 * Causes the media to automatically restart from the beginning when it reaches the end.
 	 *
-	 * @param loop
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * @param loop If <jk>true</jk>, the media will loop continuously.
 	 * @return This object.
 	 */
 	public Video loop(Object value) {
@@ -131,9 +206,13 @@ public class Video extends HtmlElementContainer {
 	 * attribute.
 	 *
 	 * <p>
-	 * Groups media elements together with an implicit MediaController.
+	 * Groups multiple media elements together so they can be controlled as a single unit. All media elements
+	 * with the same mediagroup value will share the same MediaController, allowing synchronized playback.
 	 *
-	 * @param mediagroup The new value for this attribute.
+	 * <p>
+	 * This is useful for creating synchronized audio/video presentations or multiple camera angles.
+	 *
+	 * @param mediagroup The name of the media group to join.
 	 * @return This object.
 	 */
 	public Video mediagroup(String value) {
@@ -146,11 +225,9 @@ public class Video extends HtmlElementContainer {
 	 * attribute.
 	 *
 	 * <p>
-	 * Whether to mute the media resource by default.
+	 * Mutes the audio output by default. Useful for autoplay videos where audio should be disabled initially.
 	 *
-	 * @param muted
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * @param muted If <jk>true</jk>, the media will be muted by default.
 	 * @return This object.
 	 */
 	public Video muted(Object value) {
@@ -163,9 +240,13 @@ public class Video extends HtmlElementContainer {
 	 * attribute.
 	 *
 	 * <p>
-	 * Poster frame to show prior to video playback.
+	 * Specifies an image to display as a placeholder before the video starts playing. This image is shown
+	 * while the video is loading or before the user clicks play.
 	 *
-	 * @param poster The new value for this attribute.
+	 * <p>
+	 * The poster image should be representative of the video content and help users understand what the video contains.
+	 *
+	 * @param poster The URL of the poster image to display before video playback.
 	 * @return This object.
 	 */
 	public Video poster(String value) {
@@ -178,9 +259,17 @@ public class Video extends HtmlElementContainer {
 	 * attribute.
 	 *
 	 * <p>
-	 * Hints how much buffering the media resource will likely need.
+	 * Specifies how the browser should load the media resource.
 	 *
-	 * @param preload The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"none"</js> - Do not preload the media</li>
+	 * 	<li><js>"metadata"</js> - Preload only metadata (duration, dimensions, etc.)</li>
+	 * 	<li><js>"auto"</js> - Preload the entire media file (default)</li>
+	 * </ul>
+	 *
+	 * @param preload How much of the media to preload.
 	 * @return This object.
 	 */
 	public Video preload(String value) {

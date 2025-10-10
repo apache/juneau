@@ -19,6 +19,75 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-ruby-element">&lt;ruby&gt;</a>
  * element.
  *
+ * <p>
+ * The ruby element represents a ruby annotation. It is used to provide pronunciation or
+ * translation information for text in languages that use complex writing systems, such as
+ * Japanese, Chinese, or Korean. The ruby element typically contains rb (ruby base) elements
+ * for the base text and rt (ruby text) elements for the annotations. It can also contain
+ * rp (ruby parenthesis) elements for fallback display when ruby annotations are not supported.
+ * Ruby annotations are commonly used to provide furigana (pronunciation guides) for Japanese text.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple ruby annotation
+ * 	Ruby simple = new Ruby()
+ * 		.children(
+ * 			new Rb().children("漢字"),
+ * 			new Rt().children("かんじ")
+ * 		);
+ *
+ * 	// Ruby with styling
+ * 	Ruby styled = new Ruby()
+ * 		._class("ruby-annotation")
+ * 		.children(
+ * 			new Rb().children("日本語"),
+ * 			new Rt().children("にほんご")
+ * 		);
+ *
+ * 	// Ruby with complex content
+ * 	Ruby complex = new Ruby()
+ * 		.children(
+ * 			new Rb().children("複雑な漢字"),
+ * 			new Rt().children("ふくざつなかんじ"),
+ * 			new Rp().children("("),
+ * 			new Rp().children(")")
+ * 		);
+ *
+ * 	// Ruby with ID
+ * 	Ruby withId = new Ruby()
+ * 		.id("ruby-annotation-1")
+ * 		.children(
+ * 			new Rb().children("漢字"),
+ * 			new Rt().children("かんじ")
+ * 		);
+ *
+ * 	// Ruby with styling
+ * 	Ruby styled2 = new Ruby()
+ * 		.style("font-size: 1.2em; line-height: 1.5;")
+ * 		.children(
+ * 			new Rb().children("漢字"),
+ * 			new Rt().children("かんじ")
+ * 		);
+ *
+ * 	// Ruby with multiple elements
+ * 	Ruby multiple = new Ruby()
+ * 		.children(
+ * 			new Rb().children("複雑な"),
+ * 			new Rt().children("ふくざつな"),
+ * 			new Rb().children("漢字"),
+ * 			new Rt().children("かんじ")
+ * 		);
+ *
+ * 	// Ruby with links
+ * 	Ruby withLinks = new Ruby()
+ * 		.children(
+ * 			new Rb().children("漢字"),
+ * 			new Rt().children(
+ * 				new A().href("/dictionary/kanji").children("かんじ")
+ * 			)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

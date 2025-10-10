@@ -22,6 +22,25 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-a-element">&lt;a&gt;</a>
  * element.
  *
+ * <p>
+ * The anchor element creates a hyperlink to other web pages, files, locations within the same page,
+ * email addresses, or any other URL. It is one of the most fundamental elements for web navigation.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple link to another page
+ * 	A a1 = new A().href("https://example.com").text("Visit Example");
+ * 
+ * 	// Link with target to open in new window
+ * 	A a2 = new A().href("https://example.com").target("_blank").text("Open in New Window");
+ * 
+ * 	// Email link
+ * 	A a3 = new A().href("mailto:user@example.com").text("Send Email");
+ * 
+ * 	// Link with relationship and language
+ * 	A a4 = new A().href("https://example.com").rel("nofollow").hreflang("en").text("English Version");
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -89,9 +108,20 @@ public class A extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-hreflang">hreflang</a> attribute.
 	 *
 	 * <p>
-	 * Language of the linked resource.
+	 * Specifies the language of the linked resource. Used for SEO and accessibility purposes.
 	 *
-	 * @param hreflang The new value for this attribute.
+	 * <p>
+	 * Examples:
+	 * <ul>
+	 * 	<li><js>"en"</js> - English</li>
+	 * 	<li><js>"es"</js> - Spanish</li>
+	 * 	<li><js>"fr"</js> - French</li>
+	 * 	<li><js>"de"</js> - German</li>
+	 * 	<li><js>"zh"</js> - Chinese</li>
+	 * 	<li><js>"ja"</js> - Japanese</li>
+	 * </ul>
+	 *
+	 * @param hreflang The language code of the linked resource.
 	 * @return This object.
 	 */
 	public A hreflang(String value) {
@@ -103,9 +133,26 @@ public class A extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
 	 *
 	 * <p>
-	 * Relationship between the document containing the hyperlink and the destination resource.
+	 * Specifies the relationship between the current document and the linked resource.
 	 *
-	 * @param rel The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"alternate"</js> - Alternative version of the page</li>
+	 * 	<li><js>"author"</js> - Link to the author of the page</li>
+	 * 	<li><js>"bookmark"</js> - Permalink for bookmarking</li>
+	 * 	<li><js>"external"</js> - External link</li>
+	 * 	<li><js>"help"</js> - Link to help documentation</li>
+	 * 	<li><js>"license"</js> - Link to license information</li>
+	 * 	<li><js>"next"</js> - Next page in a sequence</li>
+	 * 	<li><js>"nofollow"</js> - Don't follow this link for SEO</li>
+	 * 	<li><js>"noreferrer"</js> - Don't send referrer information</li>
+	 * 	<li><js>"prev"</js> - Previous page in a sequence</li>
+	 * 	<li><js>"search"</js> - Link to search functionality</li>
+	 * 	<li><js>"tag"</js> - Tag for the current page</li>
+	 * </ul>
+	 *
+	 * @param rel The relationship between the document and linked resource.
 	 * @return This object.
 	 */
 	public A rel(String value) {
@@ -117,9 +164,19 @@ public class A extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
 	 *
 	 * <p>
-	 * Default browsing context for hyperlink navigation and form submission.
+	 * Specifies where to open the linked resource when the link is clicked.
 	 *
-	 * @param target The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"_blank"</js> - Open in a new window/tab</li>
+	 * 	<li><js>"_self"</js> - Open in the same frame (default)</li>
+	 * 	<li><js>"_parent"</js> - Open in the parent frame</li>
+	 * 	<li><js>"_top"</js> - Open in the full body of the window</li>
+	 * 	<li><js>"framename"</js> - Open in a named frame</li>
+	 * </ul>
+	 *
+	 * @param target Where to open the linked resource.
 	 * @return This object.
 	 */
 	public A target(String value) {
@@ -131,9 +188,19 @@ public class A extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
 	 *
 	 * <p>
-	 * Hint for the type of the referenced resource.
+	 * Specifies the MIME type of the linked resource. Helps browsers determine how to handle the resource.
 	 *
-	 * @param type The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"text/html"</js> - HTML document</li>
+	 * 	<li><js>"text/css"</js> - CSS stylesheet</li>
+	 * 	<li><js>"application/pdf"</js> - PDF document</li>
+	 * 	<li><js>"image/png"</js> - PNG image</li>
+	 * 	<li><js>"application/zip"</js> - ZIP archive</li>
+	 * </ul>
+	 *
+	 * @param type The MIME type of the linked resource.
 	 * @return This object.
 	 */
 	public A type(String value) {

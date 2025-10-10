@@ -19,6 +19,36 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-sub-and-sup-elements">&lt;sup&gt;</a>
  * element.
  *
+ * <p>
+ * The sup element represents superscript text. It is used to display text that should be rendered
+ * above the baseline, typically in a smaller font size. The sup element is commonly used for
+ * mathematical formulas, footnotes, ordinal numbers, and other annotations that need to be
+ * displayed as superscript.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Mathematical formula
+ * 	Sup math = new Sup()
+ * 		.children("x", new Sup().children("2"), " + y", new Sup().children("2"), " = z", new Sup().children("2"));
+ * 
+ * 	// Ordinal numbers
+ * 	Sup ordinal = new Sup()
+ * 		.children("1st", new Sup().children("st"));
+ * 
+ * 	// Footnote reference
+ * 	Sup footnote = new Sup()
+ * 		.children("1");
+ * 
+ * 	// Superscript with styling
+ * 	Sup styled = new Sup()
+ * 		._class("superscript")
+ * 		.children("n");
+ * 
+ * 	// Multiple superscripts
+ * 	Sup multiple = new Sup()
+ * 		.children("A", new Sup().children("i,j"), " = B", new Sup().children("k"));
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

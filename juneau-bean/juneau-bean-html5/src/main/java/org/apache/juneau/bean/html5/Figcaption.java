@@ -19,6 +19,60 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-figcaption-element">&lt;figcaption&gt;</a>
  * element.
  *
+ * <p>
+ * The figcaption element represents a caption or legend for a figure. It is used to provide a
+ * caption for the content of its parent figure element, such as images, diagrams, code snippets,
+ * or other self-contained content. The figcaption element can be placed either before or after
+ * the figure content and is typically used to provide context, attribution, or explanation for
+ * the figure.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple figure caption
+ * 	Figcaption simple = new Figcaption()
+ * 		.children("A beautiful sunset over the mountains.");
+ *
+ * 	// Figure caption with styling
+ * 	Figcaption styled = new Figcaption()
+ * 		._class("image-caption")
+ * 		.children("Chart showing sales data for Q1 2024.");
+ *
+ * 	// Figure caption with complex content
+ * 	Figcaption complex = new Figcaption()
+ * 		.children(
+ * 			"Figure 1: ",
+ * 			new Strong().children("Web Development Process"),
+ * 			" - A step-by-step guide to building websites."
+ * 		);
+ *
+ * 	// Figure caption with links
+ * 	Figcaption withLinks = new Figcaption()
+ * 		.children(
+ * 			"Source: ",
+ * 			new A().href("/data").children("Company Data"),
+ * 			" | ",
+ * 			new A().href("/methodology").children("Methodology")
+ * 		);
+ *
+ * 	// Figure caption with ID
+ * 	Figcaption withId = new Figcaption()
+ * 		.id("chart-caption")
+ * 		.children("Interactive chart showing user engagement metrics.");
+ *
+ * 	// Figure caption with styling
+ * 	Figcaption styled2 = new Figcaption()
+ * 		.style("text-align: center; font-style: italic; color: #666;")
+ * 		.children("Photograph by John Doe, 2024");
+ *
+ * 	// Figure caption with multiple elements
+ * 	Figcaption multiple = new Figcaption()
+ * 		.children(
+ * 			"Code Example: ",
+ * 			new Code().children("function hello() { return 'Hello World'; }"),
+ * 			" - A simple JavaScript function."
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

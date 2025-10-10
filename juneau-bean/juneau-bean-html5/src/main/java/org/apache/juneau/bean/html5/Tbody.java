@@ -19,6 +19,69 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-tbody-element">&lt;tbody&gt;</a>
  * element.
  *
+ * <p>
+ * The tbody element represents a group of rows that consist of a body of data for the parent table
+ * element. It is used to group the main content rows of a table, separating them from the header
+ * (thead) and footer (tfoot) sections. The tbody element can contain multiple tr elements and is
+ * typically used to organize table data for styling and scripting purposes.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple table body with data rows
+ * 	Tbody simple = new Tbody()
+ * 		.children(
+ * 			new Tr()
+ * 				.children(
+ * 					new Td().children("John"),
+ * 					new Td().children("25"),
+ * 					new Td().children("New York")
+ * 				),
+ * 			new Tr()
+ * 				.children(
+ * 					new Td().children("Jane"),
+ * 					new Td().children("30"),
+ * 					new Td().children("Los Angeles")
+ * 				)
+ * 		);
+ * 
+ * 	// Table body with styling
+ * 	Tbody styled = new Tbody()
+ * 		._class("data-rows")
+ * 		.children(
+ * 			new Tr()
+ * 				.children(
+ * 					new Td().children("Product A"),
+ * 					new Td().children("100"),
+ * 					new Td().children("$10.00")
+ * 				)
+ * 		);
+ * 
+ * 	// Table body with multiple rows
+ * 	Tbody multiple = new Tbody()
+ * 		.children(
+ * 			new Tr()
+ * 				.children(
+ * 					new Td().children("Row 1, Col 1"),
+ * 					new Td().children("Row 1, Col 2")
+ * 				),
+ * 			new Tr()
+ * 				.children(
+ * 					new Td().children("Row 2, Col 1"),
+ * 					new Td().children("Row 2, Col 2")
+ * 				)
+ * 		);
+ * 
+ * 	// Table body with event handlers
+ * 	Tbody interactive = new Tbody()
+ * 		.onclick("handleRowClick(event)")
+ * 		.children(
+ * 			new Tr()
+ * 				.children(
+ * 					new Td().children("Clickable Row")
+ * 				)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

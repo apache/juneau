@@ -19,6 +19,52 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-th-element">&lt;th&gt;</a>
  * element.
  *
+ * <p>
+ * The th element represents a header cell in a table. It is used to contain header information
+ * for a column or row, providing context and meaning to the data cells (td) in the table. The th
+ * element supports various attributes for accessibility, spanning multiple columns or rows, and
+ * defining the relationship between header and data cells.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple header cell
+ * 	Th simple = new Th()
+ * 		.children("Name");
+ * 
+ * 	// Header cell with scope
+ * 	Th scoped = new Th()
+ * 		.scope("col")
+ * 		.children("Age");
+ * 
+ * 	// Header cell spanning multiple columns
+ * 	Th colspan = new Th()
+ * 		.colspan(2)
+ * 		.children("Contact Information");
+ * 
+ * 	// Header cell with abbreviation
+ * 	Th abbreviated = new Th()
+ * 		.abbr("Qty")
+ * 		.children("Quantity");
+ * 
+ * 	// Header cell with sorting
+ * 	Th sorted = new Th()
+ * 		.sorted("asc")
+ * 		.children("Price");
+ * 
+ * 	// Header cell with styling
+ * 	Th styled = new Th()
+ * 		._class("header-cell")
+ * 		.children("Status");
+ * 
+ * 	// Header cell with complex content
+ * 	Th complex = new Th()
+ * 		.children(
+ * 			new Strong().children("Total"),
+ * 			" ",
+ * 			new Small().children("(USD)")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -45,9 +91,13 @@ public class Th extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-abbr">abbr</a> attribute.
 	 *
 	 * <p>
-	 * Alternative label to use for the header cell when referencing the cell in other contexts.
+	 * Specifies an alternative, abbreviated label for the header cell. This is used by screen readers
+	 * and other assistive technologies when referencing the cell in other contexts.
 	 *
-	 * @param abbr The new value for this attribute.
+	 * <p>
+	 * The abbreviation should be shorter than the full header text but still meaningful.
+	 *
+	 * @param abbr The abbreviated label for the header cell.
 	 * @return This object.
 	 */
 	public Th abbr(String value) {
@@ -75,9 +125,13 @@ public class Th extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-headers">headers</a> attribute.
 	 *
 	 * <p>
-	 * The headers for this cell.
+	 * Specifies the IDs of header cells that apply to this table cell. This creates a programmatic
+	 * relationship between the cell and its headers for accessibility purposes.
 	 *
-	 * @param headers The new value for this attribute.
+	 * <p>
+	 * Multiple IDs can be specified as a space-separated list.
+	 *
+	 * @param headers The IDs of header cells that apply to this cell.
 	 * @return This object.
 	 */
 	public Th headers(String value) {
@@ -105,9 +159,19 @@ public class Th extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-scope">scope</a> attribute.
 	 *
 	 * <p>
-	 * Specifies which cells the header cell applies to.
+	 * Specifies which cells the header cell applies to. This helps define the relationship
+	 * between header and data cells for accessibility.
 	 *
-	 * @param scope The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 *  	<li><js>"row"</js> - Header applies to all cells in the same row</li>
+	 *  	<li><js>"col"</js> - Header applies to all cells in the same column</li>
+	 *  	<li><js>"rowgroup"</js> - Header applies to all cells in the same row group</li>
+	 *  	<li><js>"colgroup"</js> - Header applies to all cells in the same column group</li>
+	 * </ul>
+	 *
+	 * @param scope Which cells the header cell applies to.
 	 * @return This object.
 	 */
 	public Th scope(String value) {
@@ -119,9 +183,19 @@ public class Th extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-sorted">sorted</a> attribute.
 	 *
 	 * <p>
-	 * Column sort direction and ordinality.
+	 * Specifies the sort direction and ordinality of the column. This indicates how the table
+	 * is currently sorted and which column is the primary sort key.
 	 *
-	 * @param sorted The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 *  	<li><js>"asc"</js> - Column is sorted in ascending order</li>
+	 *  	<li><js>"desc"</js> - Column is sorted in descending order</li>
+	 *  	<li><js>"asc 1"</js> - Column is the primary sort key in ascending order</li>
+	 *  	<li><js>"desc 1"</js> - Column is the primary sort key in descending order</li>
+	 * </ul>
+	 *
+	 * @param sorted The sort direction and ordinality of the column.
 	 * @return This object.
 	 */
 	public Th sorted(String value) {

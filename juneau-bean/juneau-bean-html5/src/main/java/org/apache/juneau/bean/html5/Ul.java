@@ -19,6 +19,74 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-ul-element">&lt;ul&gt;</a>
  * element.
  *
+ * <p>
+ * The ul element represents an unordered list of items. It is used to group a collection of items that
+ * do not have a numerical ordering and whose order in the list is not meaningful. The ul element contains
+ * li (list item) elements, and is commonly used for navigation menus, feature lists, and other collections
+ * where the order of items is not important.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple unordered list
+ * 	Ul simple = new Ul()
+ * 		.children(
+ * 			new Li().children("First item"),
+ * 			new Li().children("Second item"),
+ * 			new Li().children("Third item")
+ * 		);
+ * 
+ * 	// Navigation menu
+ * 	Ul navigation = new Ul()
+ * 		._class("nav-menu")
+ * 		.children(
+ * 			new Li().children(new A().href("/home").children("Home")),
+ * 			new Li().children(new A().href("/about").children("About")),
+ * 			new Li().children(new A().href("/contact").children("Contact"))
+ * 		);
+ * 
+ * 	// Feature list
+ * 	Ul features = new Ul()
+ * 		._class("feature-list")
+ * 		.children(
+ * 			new Li().children("Fast performance"),
+ * 			new Li().children("Easy to use"),
+ * 			new Li().children("24/7 support")
+ * 		);
+ * 
+ * 	// List with styling
+ * 	Ul styled = new Ul()
+ * 		._class("custom-list")
+ * 		.style("list-style-type: square;")
+ * 		.children(
+ * 			new Li().children("Styled item 1"),
+ * 			new Li().children("Styled item 2")
+ * 		);
+ * 
+ * 	// Nested list
+ * 	Ul nested = new Ul()
+ * 		.children(
+ * 			new Li().children("Main item 1"),
+ * 			new Li().children(
+ * 				"Main item 2",
+ * 				new Ul().children(
+ * 					new Li().children("Sub item 1"),
+ * 					new Li().children("Sub item 2")
+ * 				)
+ * 			)
+ * 		);
+ * 
+ * 	// List with complex content
+ * 	Ul complex = new Ul()
+ * 		.children(
+ * 			new Li().children(
+ * 				new Strong().children("Important"),
+ * 				" item with ",
+ * 				new Em().children("emphasis")
+ * 			),
+ * 			new Li().children("Simple item")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

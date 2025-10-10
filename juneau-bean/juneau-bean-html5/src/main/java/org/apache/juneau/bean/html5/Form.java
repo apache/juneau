@@ -22,6 +22,46 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-form-element">&lt;form&gt;</a>
  * element.
  *
+ * <p>
+ * The form element represents a document section containing interactive controls for submitting
+ * information to a web server. It groups form controls together and defines how the data should
+ * be submitted, including the target URL, HTTP method, and encoding type.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	// Simple contact form
+ * 	Form form1 = new Form()
+ * 		.action("/contact")
+ * 		.method("post")
+ * 		.children(
+ * 			new Input().type("text").name("name").placeholder("Your Name"),
+ * 			new Input().type("email").name("email").placeholder("Your Email"),
+ * 			new Textarea().name("message").placeholder("Your Message"),
+ * 			new Button().type("submit").text("Send Message")
+ * 		);
+ * 
+ * 	// File upload form
+ * 	Form form2 = new Form()
+ * 		.action("/upload")
+ * 		.method("post")
+ * 		.enctype("multipart/form-data")
+ * 		.children(
+ * 			new Input().type("file").name("file").accept("image/*"),
+ * 			new Button().type("submit").text("Upload")
+ * 		);
+ * 
+ * 	// Form with validation
+ * 	Form form3 = new Form()
+ * 		.action("/register")
+ * 		.method("post")
+ * 		.novalidate(false)
+ * 		.children(
+ * 			new Input().type("email").name("email").required(true),
+ * 			new Input().type("password").name("password").required(true),
+ * 			new Button().type("submit").text("Register")
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
@@ -59,9 +99,18 @@ public class Form extends HtmlElementMixed {
 	 * attribute.
 	 *
 	 * <p>
-	 * Character encodings to use for form submission.
+	 * Specifies the character encodings that are accepted for form submission. Multiple encodings
+	 * can be specified as a space-separated list.
 	 *
-	 * @param acceptcharset The new value for this attribute.
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"UTF-8"</js> - Unicode UTF-8 encoding (default)</li>
+	 * 	<li><js>"ISO-8859-1"</js> - Latin-1 encoding</li>
+	 * 	<li><js>"UTF-8 ISO-8859-1"</js> - Multiple encodings</li>
+	 * </ul>
+	 *
+	 * @param acceptcharset The character encodings accepted for form submission.
 	 * @return This object.
 	 */
 	public Form acceptcharset(String value) {
@@ -95,9 +144,17 @@ public class Form extends HtmlElementMixed {
 	 * attribute.
 	 *
 	 * <p>
-	 * Default setting for auto-fill feature for controls in the form.
+	 * Sets the default autocomplete behavior for all form controls within this form.
+	 * Individual controls can override this setting.
 	 *
-	 * @param autocomplete The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"on"</js> - Allow autocomplete (default)</li>
+	 * 	<li><js>"off"</js> - Disable autocomplete</li>
+	 * </ul>
+	 *
+	 * @param autocomplete The default autocomplete behavior for form controls.
 	 * @return This object.
 	 */
 	public Form autocomplete(String value) {
@@ -109,9 +166,17 @@ public class Form extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-enctype">enctype</a> attribute.
 	 *
 	 * <p>
-	 * Form data set encoding type to use for form submission.
+	 * Specifies how form data should be encoded when submitted to the server.
 	 *
-	 * @param enctype The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"application/x-www-form-urlencoded"</js> - Default encoding (default)</li>
+	 * 	<li><js>"multipart/form-data"</js> - Used for file uploads</li>
+	 * 	<li><js>"text/plain"</js> - Plain text encoding</li>
+	 * </ul>
+	 *
+	 * @param enctype The encoding type for form data submission.
 	 * @return This object.
 	 */
 	public Form enctype(String value) {
@@ -123,9 +188,17 @@ public class Form extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-method">method</a> attribute.
 	 *
 	 * <p>
-	 * HTTP method to use for form submission.
+	 * Specifies the HTTP method to use when submitting the form.
 	 *
-	 * @param method The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"get"</js> - Form data is sent as URL parameters (default)</li>
+	 * 	<li><js>"post"</js> - Form data is sent in the request body</li>
+	 * 	<li><js>"dialog"</js> - Used for forms within dialog elements</li>
+	 * </ul>
+	 *
+	 * @param method The HTTP method for form submission.
 	 * @return This object.
 	 */
 	public Form method(String value) {
@@ -137,9 +210,13 @@ public class Form extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-form-name">name</a> attribute.
 	 *
 	 * <p>
-	 * Name of form to use in the document.forms API.
+	 * Specifies the name of the form. This name can be used to access the form via the
+	 * document.forms API and for form submission.
 	 *
-	 * @param name The new value for this attribute.
+	 * <p>
+	 * The name should be unique within the document and should not contain spaces or special characters.
+	 *
+	 * @param name The name of the form for API access and submission.
 	 * @return This object.
 	 */
 	public Form name(String value) {
@@ -151,10 +228,9 @@ public class Form extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-novalidate">novalidate</a> attribute.
 	 *
 	 * <p>
-	 * Bypass form control validation for form submission.
+	 * Disables form validation, allowing the form to be submitted even if validation fails.
 	 *
-	 * @param novalidate The new value for this attribute.
-	 * Typically a {@link Boolean} or {@link String}.
+	 * @param novalidate If <jk>true</jk>, disables form validation.
 	 * @return This object.
 	 */
 	public Form novalidate(Boolean value) {
@@ -166,9 +242,19 @@ public class Form extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-target">target</a> attribute.
 	 *
 	 * <p>
-	 * Browsing context for form submission.
+	 * Specifies where to display the response after form submission.
 	 *
-	 * @param target The new value for this attribute.
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"_self"</js> - Load in the same frame (default)</li>
+	 * 	<li><js>"_blank"</js> - Load in a new window or tab</li>
+	 * 	<li><js>"_parent"</js> - Load in the parent frame</li>
+	 * 	<li><js>"_top"</js> - Load in the full body of the window</li>
+	 * 	<li>Frame name - Load in the named frame</li>
+	 * </ul>
+	 *
+	 * @param target Where to display the form submission response.
 	 * @return This object.
 	 */
 	public Form target(String value) {
