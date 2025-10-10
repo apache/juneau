@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27"> * @param &lt;K&gt; The key class type.</span>
 <span class="source-line-no">028</span><span id="line-28"> * @param &lt;V&gt; The value class type.</span>
 <span class="source-line-no">029</span><span id="line-29"> */</span>
-<span class="source-line-no">030</span><span id="line-30">public final class FilteredMap&lt;K,V&gt; extends AbstractMap&lt;K,V&gt; implements Delegate&lt;Map&lt;K,V&gt;&gt; {</span>
+<span class="source-line-no">030</span><span id="line-30">public class FilteredMap&lt;K,V&gt; extends AbstractMap&lt;K,V&gt; implements Delegate&lt;Map&lt;K,V&gt;&gt; {</span>
 <span class="source-line-no">031</span><span id="line-31"></span>
 <span class="source-line-no">032</span><span id="line-32">   final Map&lt;K,V&gt; innerMap;</span>
 <span class="source-line-no">033</span><span id="line-33">   final Set&lt;Map.Entry&lt;K,V&gt;&gt; entries;</span>
@@ -95,7 +95,7 @@
 <span class="source-line-no">082</span><span id="line-82">   /**</span>
 <span class="source-line-no">083</span><span id="line-83">    * A set with ordered entries (a List with a Set API).</span>
 <span class="source-line-no">084</span><span id="line-84">    */</span>
-<span class="source-line-no">085</span><span id="line-85">   private static final class ListSet&lt;E&gt; extends AbstractSet&lt;E&gt; {</span>
+<span class="source-line-no">085</span><span id="line-85">   private static class ListSet&lt;E&gt; extends AbstractSet&lt;E&gt; {</span>
 <span class="source-line-no">086</span><span id="line-86"></span>
 <span class="source-line-no">087</span><span id="line-87">      private List&lt;E&gt; entries;</span>
 <span class="source-line-no">088</span><span id="line-88"></span>

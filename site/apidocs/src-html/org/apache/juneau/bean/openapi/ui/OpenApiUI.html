@@ -65,7 +65,7 @@
 <span class="source-line-no">052</span><span id="line-52">      return new org.apache.juneau.MediaType[] {org.apache.juneau.MediaType.HTML};</span>
 <span class="source-line-no">053</span><span id="line-53">   }</span>
 <span class="source-line-no">054</span><span id="line-54"></span>
-<span class="source-line-no">055</span><span id="line-55">   private static final class Session {</span>
+<span class="source-line-no">055</span><span id="line-55">   private static class Session {</span>
 <span class="source-line-no">056</span><span id="line-56">      final int resolveRefsMaxDepth;</span>
 <span class="source-line-no">057</span><span id="line-57">      final OpenApi openApi;</span>
 <span class="source-line-no">058</span><span id="line-58"></span>
@@ -207,7 +207,7 @@
 <span class="source-line-no">194</span><span id="line-194">   }</span>
 <span class="source-line-no">195</span><span id="line-195"></span>
 <span class="source-line-no">196</span><span id="line-196">   private void addOperationIfTagMatches(Div tagBlockContents, Session s, String path, String method, Operation op, Tag t) {</span>
-<span class="source-line-no">197</span><span id="line-197">      if ((t == null &amp;&amp; (op.getTags() == null || op.getTags().isEmpty())) || </span>
+<span class="source-line-no">197</span><span id="line-197">      if ((t == null &amp;&amp; (op.getTags() == null || op.getTags().isEmpty())) ||</span>
 <span class="source-line-no">198</span><span id="line-198">         (t != null &amp;&amp; op.getTags() != null &amp;&amp; op.getTags().contains(t.getName()))) {</span>
 <span class="source-line-no">199</span><span id="line-199">         tagBlockContents.child(opBlock(s, path, method, op));</span>
 <span class="source-line-no">200</span><span id="line-200">      }</span>

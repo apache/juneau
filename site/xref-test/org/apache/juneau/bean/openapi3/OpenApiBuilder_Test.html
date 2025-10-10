@@ -36,10 +36,10 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">	 * Test method for builder methods and marshalling.</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	@Disabled @Test <strong class="jxr_keyword">void</strong> a01_builderMethodsAndMarshalling() {
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	@Test <strong class="jxr_keyword">void</strong> a01_builderMethodsAndMarshalling() {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  		<em class="jxr_comment">// Test contact builder</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  		<strong class="jxr_keyword">var</strong> contact = contact(<span class="jxr_string">"a1"</span>, <span class="jxr_string">"a2"</span>, <span class="jxr_string">"a3"</span>);
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		assertJson(<span class="jxr_string">"{name:'a1',url:'a2',email:'a3'}"</span>, contact);
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		assertJson(<span class="jxr_string">"{email:'a3',name:'a1',url:'a2'}"</span>, contact);
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<em class="jxr_comment">// Test external documentation builder</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  		<strong class="jxr_keyword">var</strong> externalDocs = externalDocumentation(<span class="jxr_string">"a1"</span>, <span class="jxr_string">"a2"</span>);
@@ -63,7 +63,7 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<em class="jxr_comment">// Test parameter builder</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> parameter = parameter(<span class="jxr_string">"a1"</span>, <span class="jxr_string">"a2"</span>);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		assertJson(<span class="jxr_string">"{name:'a2','in':'a1'}"</span>, parameter);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		assertJson(<span class="jxr_string">"{'in':'a1',name:'a2'}"</span>, parameter);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<em class="jxr_comment">// Test path item builder</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">var</strong> pathItem = pathItem().setGet(operation().setSummary(<span class="jxr_string">"a1"</span>));
@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<em class="jxr_comment">// Test openApi builder</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> openApi = openApi().setInfo(info(<span class="jxr_string">"a1"</span>, <span class="jxr_string">"a2"</span>));
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertJson(<span class="jxr_string">"{openapi:'3.0.0',info:{title:'a1',version:'a2'}}"</span>, openApi);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertJson(<span class="jxr_string">"{info:{title:'a1',version:'a2'},openapi:'3.0.0'}"</span>, openApi);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<em class="jxr_comment">// Test components builder</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> components = components().setSchemas(map(<span class="jxr_string">"a1"</span>, schemaInfo(<span class="jxr_string">"a2"</span>)));
@@ -101,7 +101,7 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * Test default values.</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test @Disabled <strong class="jxr_keyword">void</strong> a02_defaultValues() {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test <strong class="jxr_keyword">void</strong> a02_defaultValues() {
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertJson(<span class="jxr_string">"{}"</span>, contact());
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertJson(<span class="jxr_string">"{}"</span>, externalDocumentation());
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertJson(<span class="jxr_string">"{}"</span>, headerInfo());

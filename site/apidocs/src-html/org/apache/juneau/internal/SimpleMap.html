@@ -50,7 +50,7 @@
 <span class="source-line-no">037</span><span id="line-37"> * @param &lt;K&gt; The key type.</span>
 <span class="source-line-no">038</span><span id="line-38"> * @param &lt;V&gt; The value type.</span>
 <span class="source-line-no">039</span><span id="line-39"> */</span>
-<span class="source-line-no">040</span><span id="line-40">public final class SimpleMap&lt;K,V&gt; extends AbstractMap&lt;K,V&gt; {</span>
+<span class="source-line-no">040</span><span id="line-40">public class SimpleMap&lt;K,V&gt; extends AbstractMap&lt;K,V&gt; {</span>
 <span class="source-line-no">041</span><span id="line-41"></span>
 <span class="source-line-no">042</span><span id="line-42">   final K[] keys;</span>
 <span class="source-line-no">043</span><span id="line-43">   final V[] values;</span>
@@ -107,7 +107,7 @@
 <span class="source-line-no">094</span><span id="line-94">      throw new IllegalArgumentException("No key '"+key+"' defined in map");</span>
 <span class="source-line-no">095</span><span id="line-95">   }</span>
 <span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">   final class SimpleMapEntry implements Map.Entry&lt;K,V&gt; {</span>
+<span class="source-line-no">097</span><span id="line-97">   class SimpleMapEntry implements Map.Entry&lt;K,V&gt; {</span>
 <span class="source-line-no">098</span><span id="line-98"></span>
 <span class="source-line-no">099</span><span id="line-99">      private int index;</span>
 <span class="source-line-no">100</span><span id="line-100"></span>

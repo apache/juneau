@@ -184,6 +184,26 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds a path to this OpenAPI document.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addSecurity(java.util.Collection)" class="member-name-link">addSecurity</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="SecurityRequirement.html" title="class in org.apache.juneau.bean.openapi3">SecurityRequirement</a>&gt;&nbsp;values)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Bean property fluent setter:  <property>security</property>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addSecurity(org.apache.juneau.bean.openapi3.SecurityRequirement...)" class="member-name-link">addSecurity</a><wbr>(<a href="SecurityRequirement.html" title="class in org.apache.juneau.bean.openapi3">SecurityRequirement</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Bean property fluent setter:  <property>security</property>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addServers(java.util.Collection)" class="member-name-link">addServers</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Server.html" title="class in org.apache.juneau.bean.openapi3">Server</a>&gt;&nbsp;values)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Bean property fluent setter:  <property>servers</property>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addServers(org.apache.juneau.bean.openapi3.Server...)" class="member-name-link">addServers</a><wbr>(<a href="Server.html" title="class in org.apache.juneau.bean.openapi3">Server</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Bean property fluent setter:  <property>servers</property>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addTags(java.util.Collection)" class="member-name-link">addTags</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Tag.html" title="class in org.apache.juneau.bean.openapi3">Tag</a>&gt;&nbsp;values)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Bean property appender:  <property>tags</property>.</div>
@@ -626,9 +646,77 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="addServers(org.apache.juneau.bean.openapi3.Server...)">
+<h3>addServers</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-339">addServers</a></span><wbr><span class="parameters">(<a href="Server.html" title="class in org.apache.juneau.bean.openapi3">Server</a>...&nbsp;values)</span></div>
+<div class="block">Bean property fluent setter:  <property>servers</property>.
+
+ <p>
+ An array of Server Objects, which provide connectivity information to a target server.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>values</code> - The values to add to this property.
+   <br>Ignored if <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addServers(java.util.Collection)">
+<h3>addServers</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-355">addServers</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Server.html" title="class in org.apache.juneau.bean.openapi3">Server</a>&gt;&nbsp;values)</span></div>
+<div class="block">Bean property fluent setter:  <property>servers</property>.
+
+ <p>
+ An array of Server Objects, which provide connectivity information to a target server.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>values</code> - The values to add to this property.
+   <br>Ignored if <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addSecurity(org.apache.juneau.bean.openapi3.SecurityRequirement...)">
+<h3>addSecurity</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-371">addSecurity</a></span><wbr><span class="parameters">(<a href="SecurityRequirement.html" title="class in org.apache.juneau.bean.openapi3">SecurityRequirement</a>...&nbsp;values)</span></div>
+<div class="block">Bean property fluent setter:  <property>security</property>.
+
+ <p>
+ A declaration of which security mechanisms can be used across the API.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>values</code> - The values to add to this property.
+   <br>Ignored if <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addSecurity(java.util.Collection)">
+<h3>addSecurity</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-387">addSecurity</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="SecurityRequirement.html" title="class in org.apache.juneau.bean.openapi3">SecurityRequirement</a>&gt;&nbsp;values)</span></div>
+<div class="block">Bean property fluent setter:  <property>security</property>.
+
+ <p>
+ A declaration of which security mechanisms can be used across the API.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>values</code> - The values to add to this property.
+   <br>Ignored if <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getExternalDocs()">
 <h3>getExternalDocs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.openapi3">ExternalDocumentation</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-333">getExternalDocs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.openapi3">ExternalDocumentation</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-397">getExternalDocs</a></span>()</div>
 <div class="block">Returns the external documentation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -639,7 +727,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setExternalDocs(org.apache.juneau.bean.openapi3.ExternalDocumentation)">
 <h3>setExternalDocs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-343">setExternalDocs</a></span><wbr><span class="parameters">(<a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.openapi3">ExternalDocumentation</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-407">setExternalDocs</a></span><wbr><span class="parameters">(<a href="ExternalDocumentation.html" title="class in org.apache.juneau.bean.openapi3">ExternalDocumentation</a>&nbsp;value)</span></div>
 <div class="block">Sets the external documentation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -652,7 +740,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="findRef(java.lang.String,java.lang.Class)">
 <h3>findRef</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-355">findRef</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ref,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-419">findRef</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ref,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
 <div class="block">Finds a reference within this OpenAPI document.</div>
 <dl class="notes">
@@ -667,7 +755,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-367">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-431">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="OpenApiElement.html#toString()">toString</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
@@ -677,7 +765,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.String,java.lang.Class)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-372">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-436">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#get(java.lang.String,java.lang.Class)">OpenApiElement</a></code></span></div>
 <div class="block">Generic property getter.
@@ -700,7 +788,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-388">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-452">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#set(java.lang.String,java.lang.Object)">OpenApiElement</a></code></span></div>
 <div class="block">Generic property setter.
@@ -721,7 +809,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="keySet()">
 <h3>keySet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-407">keySet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-471">keySet</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#keySet()">OpenApiElement</a></code></span></div>
 <div class="block">Returns all the keys on this element.</div>
 <dl class="notes">
@@ -736,7 +824,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="strict()">
 <h3>strict</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-424">strict</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-488">strict</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#strict()">OpenApiElement</a></code></span></div>
 <div class="block">Sets strict mode on this bean.</div>
 <dl class="notes">
@@ -750,7 +838,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="strict(java.lang.Object)">
 <h3>strict</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-430">strict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/OpenApi.html#line-494">strict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#strict(java.lang.Object)">OpenApiElement</a></code></span></div>
 <div class="block">Sets strict mode on this bean.</div>
 <dl class="notes">

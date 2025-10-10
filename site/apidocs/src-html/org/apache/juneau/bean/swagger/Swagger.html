@@ -782,378 +782,394 @@
 <span class="source-line-no">769</span><span id="line-769">   }</span>
 <span class="source-line-no">770</span><span id="line-770"></span>
 <span class="source-line-no">771</span><span id="line-771">   /**</span>
-<span class="source-line-no">772</span><span id="line-772">    * Bean property getter:  &lt;property&gt;securityDefinitions&lt;/property&gt;.</span>
+<span class="source-line-no">772</span><span id="line-772">    * Bean property fluent setter:  &lt;property&gt;security&lt;/property&gt;.</span>
 <span class="source-line-no">773</span><span id="line-773">    *</span>
 <span class="source-line-no">774</span><span id="line-774">    * &lt;p&gt;</span>
-<span class="source-line-no">775</span><span id="line-775">    * Security scheme definitions that can be used across the specification.</span>
+<span class="source-line-no">775</span><span id="line-775">    * A declaration of which security schemes are applied for the API as a whole.</span>
 <span class="source-line-no">776</span><span id="line-776">    *</span>
-<span class="source-line-no">777</span><span id="line-777">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">778</span><span id="line-778">    */</span>
-<span class="source-line-no">779</span><span id="line-779">   public Map&lt;String,SecurityScheme&gt; getSecurityDefinitions() {</span>
-<span class="source-line-no">780</span><span id="line-780">      return securityDefinitions;</span>
-<span class="source-line-no">781</span><span id="line-781">   }</span>
-<span class="source-line-no">782</span><span id="line-782"></span>
-<span class="source-line-no">783</span><span id="line-783">   /**</span>
-<span class="source-line-no">784</span><span id="line-784">    * Bean property setter:  &lt;property&gt;securityDefinitions&lt;/property&gt;.</span>
-<span class="source-line-no">785</span><span id="line-785">    *</span>
-<span class="source-line-no">786</span><span id="line-786">    * &lt;p&gt;</span>
-<span class="source-line-no">787</span><span id="line-787">    * Security scheme definitions that can be used across the specification.</span>
-<span class="source-line-no">788</span><span id="line-788">    *</span>
-<span class="source-line-no">789</span><span id="line-789">    * @param value</span>
-<span class="source-line-no">790</span><span id="line-790">    *    The new value for this property.</span>
-<span class="source-line-no">791</span><span id="line-791">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">792</span><span id="line-792">    * @return This object.</span>
-<span class="source-line-no">793</span><span id="line-793">    */</span>
-<span class="source-line-no">794</span><span id="line-794">   public Swagger setSecurityDefinitions(Map&lt;String,SecurityScheme&gt; value) {</span>
-<span class="source-line-no">795</span><span id="line-795">      securityDefinitions = copyOf(value);</span>
-<span class="source-line-no">796</span><span id="line-796">      return this;</span>
+<span class="source-line-no">777</span><span id="line-777">    * @param values</span>
+<span class="source-line-no">778</span><span id="line-778">    *    The values to add to this property.</span>
+<span class="source-line-no">779</span><span id="line-779">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">780</span><span id="line-780">    * @return This object.</span>
+<span class="source-line-no">781</span><span id="line-781">    */</span>
+<span class="source-line-no">782</span><span id="line-782">   public Swagger addSecurity(Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt; values) {</span>
+<span class="source-line-no">783</span><span id="line-783">      security = listBuilder(security).sparse().addAll(values).build();</span>
+<span class="source-line-no">784</span><span id="line-784">      return this;</span>
+<span class="source-line-no">785</span><span id="line-785">   }</span>
+<span class="source-line-no">786</span><span id="line-786"></span>
+<span class="source-line-no">787</span><span id="line-787">   /**</span>
+<span class="source-line-no">788</span><span id="line-788">    * Bean property getter:  &lt;property&gt;securityDefinitions&lt;/property&gt;.</span>
+<span class="source-line-no">789</span><span id="line-789">    *</span>
+<span class="source-line-no">790</span><span id="line-790">    * &lt;p&gt;</span>
+<span class="source-line-no">791</span><span id="line-791">    * Security scheme definitions that can be used across the specification.</span>
+<span class="source-line-no">792</span><span id="line-792">    *</span>
+<span class="source-line-no">793</span><span id="line-793">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">794</span><span id="line-794">    */</span>
+<span class="source-line-no">795</span><span id="line-795">   public Map&lt;String,SecurityScheme&gt; getSecurityDefinitions() {</span>
+<span class="source-line-no">796</span><span id="line-796">      return securityDefinitions;</span>
 <span class="source-line-no">797</span><span id="line-797">   }</span>
 <span class="source-line-no">798</span><span id="line-798"></span>
 <span class="source-line-no">799</span><span id="line-799">   /**</span>
-<span class="source-line-no">800</span><span id="line-800">    * Bean property appender:  &lt;property&gt;securityDefinitions&lt;/property&gt;.</span>
+<span class="source-line-no">800</span><span id="line-800">    * Bean property setter:  &lt;property&gt;securityDefinitions&lt;/property&gt;.</span>
 <span class="source-line-no">801</span><span id="line-801">    *</span>
 <span class="source-line-no">802</span><span id="line-802">    * &lt;p&gt;</span>
-<span class="source-line-no">803</span><span id="line-803">    * Adds a single value to the &lt;property&gt;securityDefinitions&lt;/property&gt; property.</span>
+<span class="source-line-no">803</span><span id="line-803">    * Security scheme definitions that can be used across the specification.</span>
 <span class="source-line-no">804</span><span id="line-804">    *</span>
-<span class="source-line-no">805</span><span id="line-805">    * @param name A security name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">806</span><span id="line-806">    * @param securityScheme A security schema.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">807</span><span id="line-807">    * @return This object.</span>
-<span class="source-line-no">808</span><span id="line-808">    */</span>
-<span class="source-line-no">809</span><span id="line-809">   public Swagger addSecurityDefinition(String name, SecurityScheme securityScheme) {</span>
-<span class="source-line-no">810</span><span id="line-810">      assertArgNotNull("name", name);</span>
-<span class="source-line-no">811</span><span id="line-811">      assertArgNotNull("securityScheme", securityScheme);</span>
-<span class="source-line-no">812</span><span id="line-812">      securityDefinitions = mapBuilder(securityDefinitions).sparse().add(name, securityScheme).build();</span>
-<span class="source-line-no">813</span><span id="line-813">      return this;</span>
-<span class="source-line-no">814</span><span id="line-814">   }</span>
-<span class="source-line-no">815</span><span id="line-815"></span>
-<span class="source-line-no">816</span><span id="line-816">   /**</span>
-<span class="source-line-no">817</span><span id="line-817">    * Bean property getter:  &lt;property&gt;swagger&lt;/property&gt;.</span>
-<span class="source-line-no">818</span><span id="line-818">    *</span>
-<span class="source-line-no">819</span><span id="line-819">    * &lt;p&gt;</span>
-<span class="source-line-no">820</span><span id="line-820">    * Specifies the Swagger Specification version being used.</span>
-<span class="source-line-no">821</span><span id="line-821">    *</span>
-<span class="source-line-no">822</span><span id="line-822">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">823</span><span id="line-823">    */</span>
-<span class="source-line-no">824</span><span id="line-824">   public String getSwagger() {</span>
-<span class="source-line-no">825</span><span id="line-825">      return swagger;</span>
-<span class="source-line-no">826</span><span id="line-826">   }</span>
-<span class="source-line-no">827</span><span id="line-827"></span>
-<span class="source-line-no">828</span><span id="line-828">   /**</span>
-<span class="source-line-no">829</span><span id="line-829">    * Bean property setter:  &lt;property&gt;swagger&lt;/property&gt;.</span>
-<span class="source-line-no">830</span><span id="line-830">    *</span>
-<span class="source-line-no">831</span><span id="line-831">    * &lt;p&gt;</span>
-<span class="source-line-no">832</span><span id="line-832">    * Specifies the Swagger Specification version being used.</span>
-<span class="source-line-no">833</span><span id="line-833">    *</span>
-<span class="source-line-no">834</span><span id="line-834">    * @param value</span>
-<span class="source-line-no">835</span><span id="line-835">    *    The new value for this property.</span>
-<span class="source-line-no">836</span><span id="line-836">    *    &lt;br&gt;Property value is required.</span>
-<span class="source-line-no">837</span><span id="line-837">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">838</span><span id="line-838">    * @return This object.</span>
+<span class="source-line-no">805</span><span id="line-805">    * @param value</span>
+<span class="source-line-no">806</span><span id="line-806">    *    The new value for this property.</span>
+<span class="source-line-no">807</span><span id="line-807">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">808</span><span id="line-808">    * @return This object.</span>
+<span class="source-line-no">809</span><span id="line-809">    */</span>
+<span class="source-line-no">810</span><span id="line-810">   public Swagger setSecurityDefinitions(Map&lt;String,SecurityScheme&gt; value) {</span>
+<span class="source-line-no">811</span><span id="line-811">      securityDefinitions = copyOf(value);</span>
+<span class="source-line-no">812</span><span id="line-812">      return this;</span>
+<span class="source-line-no">813</span><span id="line-813">   }</span>
+<span class="source-line-no">814</span><span id="line-814"></span>
+<span class="source-line-no">815</span><span id="line-815">   /**</span>
+<span class="source-line-no">816</span><span id="line-816">    * Bean property appender:  &lt;property&gt;securityDefinitions&lt;/property&gt;.</span>
+<span class="source-line-no">817</span><span id="line-817">    *</span>
+<span class="source-line-no">818</span><span id="line-818">    * &lt;p&gt;</span>
+<span class="source-line-no">819</span><span id="line-819">    * Adds a single value to the &lt;property&gt;securityDefinitions&lt;/property&gt; property.</span>
+<span class="source-line-no">820</span><span id="line-820">    *</span>
+<span class="source-line-no">821</span><span id="line-821">    * @param name A security name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">822</span><span id="line-822">    * @param securityScheme A security schema.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">823</span><span id="line-823">    * @return This object.</span>
+<span class="source-line-no">824</span><span id="line-824">    */</span>
+<span class="source-line-no">825</span><span id="line-825">   public Swagger addSecurityDefinition(String name, SecurityScheme securityScheme) {</span>
+<span class="source-line-no">826</span><span id="line-826">      assertArgNotNull("name", name);</span>
+<span class="source-line-no">827</span><span id="line-827">      assertArgNotNull("securityScheme", securityScheme);</span>
+<span class="source-line-no">828</span><span id="line-828">      securityDefinitions = mapBuilder(securityDefinitions).sparse().add(name, securityScheme).build();</span>
+<span class="source-line-no">829</span><span id="line-829">      return this;</span>
+<span class="source-line-no">830</span><span id="line-830">   }</span>
+<span class="source-line-no">831</span><span id="line-831"></span>
+<span class="source-line-no">832</span><span id="line-832">   /**</span>
+<span class="source-line-no">833</span><span id="line-833">    * Bean property getter:  &lt;property&gt;swagger&lt;/property&gt;.</span>
+<span class="source-line-no">834</span><span id="line-834">    *</span>
+<span class="source-line-no">835</span><span id="line-835">    * &lt;p&gt;</span>
+<span class="source-line-no">836</span><span id="line-836">    * Specifies the Swagger Specification version being used.</span>
+<span class="source-line-no">837</span><span id="line-837">    *</span>
+<span class="source-line-no">838</span><span id="line-838">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">839</span><span id="line-839">    */</span>
-<span class="source-line-no">840</span><span id="line-840">   public Swagger setSwagger(String value) {</span>
-<span class="source-line-no">841</span><span id="line-841">      swagger = value;</span>
-<span class="source-line-no">842</span><span id="line-842">      return this;</span>
-<span class="source-line-no">843</span><span id="line-843">   }</span>
-<span class="source-line-no">844</span><span id="line-844"></span>
-<span class="source-line-no">845</span><span id="line-845">   /**</span>
-<span class="source-line-no">846</span><span id="line-846">    * Bean property getter:  &lt;property&gt;tags&lt;/property&gt;.</span>
-<span class="source-line-no">847</span><span id="line-847">    *</span>
-<span class="source-line-no">848</span><span id="line-848">    * &lt;p&gt;</span>
-<span class="source-line-no">849</span><span id="line-849">    * A list of tags used by the specification with additional metadata.</span>
-<span class="source-line-no">850</span><span id="line-850">    *</span>
-<span class="source-line-no">851</span><span id="line-851">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">852</span><span id="line-852">    */</span>
-<span class="source-line-no">853</span><span id="line-853">   public Set&lt;Tag&gt; getTags() {</span>
-<span class="source-line-no">854</span><span id="line-854">      return tags;</span>
-<span class="source-line-no">855</span><span id="line-855">   }</span>
-<span class="source-line-no">856</span><span id="line-856"></span>
-<span class="source-line-no">857</span><span id="line-857">   /**</span>
-<span class="source-line-no">858</span><span id="line-858">    * Bean property setter:  &lt;property&gt;tags&lt;/property&gt;.</span>
-<span class="source-line-no">859</span><span id="line-859">    *</span>
-<span class="source-line-no">860</span><span id="line-860">    * &lt;p&gt;</span>
-<span class="source-line-no">861</span><span id="line-861">    * A list of tags used by the specification with additional metadata.</span>
-<span class="source-line-no">862</span><span id="line-862">    *</span>
-<span class="source-line-no">863</span><span id="line-863">    * @param value</span>
-<span class="source-line-no">864</span><span id="line-864">    *    The new value for this property.</span>
-<span class="source-line-no">865</span><span id="line-865">    *    &lt;br&gt;The order of the tags can be used to reflect on their order by the parsing tools.</span>
-<span class="source-line-no">866</span><span id="line-866">    *    &lt;br&gt;Not all tags that are used by the &lt;a class="doclink" href="https://swagger.io/specification/v2#operationObject"&gt;Operation Object&lt;/a&gt; must be declared.</span>
-<span class="source-line-no">867</span><span id="line-867">    *    &lt;br&gt;The tags that are not declared may be organized randomly or based on the tools' logic.</span>
-<span class="source-line-no">868</span><span id="line-868">    *    &lt;br&gt;Each tag name in the list MUST be unique.</span>
-<span class="source-line-no">869</span><span id="line-869">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">870</span><span id="line-870">    * @return This object.</span>
-<span class="source-line-no">871</span><span id="line-871">    */</span>
-<span class="source-line-no">872</span><span id="line-872">   public Swagger setTags(Collection&lt;Tag&gt; value) {</span>
-<span class="source-line-no">873</span><span id="line-873">      tags = setFrom(value);</span>
-<span class="source-line-no">874</span><span id="line-874">      return this;</span>
-<span class="source-line-no">875</span><span id="line-875">   }</span>
-<span class="source-line-no">876</span><span id="line-876"></span>
-<span class="source-line-no">877</span><span id="line-877">   /**</span>
-<span class="source-line-no">878</span><span id="line-878">    * Bean property setter:  &lt;property&gt;tags&lt;/property&gt;.</span>
-<span class="source-line-no">879</span><span id="line-879">    *</span>
-<span class="source-line-no">880</span><span id="line-880">    * &lt;p&gt;</span>
-<span class="source-line-no">881</span><span id="line-881">    * A list of tags used by the specification with additional metadata.</span>
-<span class="source-line-no">882</span><span id="line-882">    *</span>
-<span class="source-line-no">883</span><span id="line-883">    * @param value</span>
-<span class="source-line-no">884</span><span id="line-884">    *    The new value for this property.</span>
-<span class="source-line-no">885</span><span id="line-885">    *    &lt;br&gt;The order of the tags can be used to reflect on their order by the parsing tools.</span>
-<span class="source-line-no">886</span><span id="line-886">    *    &lt;br&gt;Not all tags that are used by the &lt;a class="doclink" href="https://swagger.io/specification/v2#operationObject"&gt;Operation Object&lt;/a&gt; must be declared.</span>
-<span class="source-line-no">887</span><span id="line-887">    *    &lt;br&gt;The tags that are not declared may be organized randomly or based on the tools' logic.</span>
-<span class="source-line-no">888</span><span id="line-888">    *    &lt;br&gt;Each tag name in the list MUST be unique.</span>
-<span class="source-line-no">889</span><span id="line-889">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">890</span><span id="line-890">    * @return This object.</span>
-<span class="source-line-no">891</span><span id="line-891">    */</span>
-<span class="source-line-no">892</span><span id="line-892">   public Swagger setTags(Tag...value) {</span>
-<span class="source-line-no">893</span><span id="line-893">      setTags(setBuilder(Tag.class).sparse().add(value).build());</span>
-<span class="source-line-no">894</span><span id="line-894">      return this;</span>
-<span class="source-line-no">895</span><span id="line-895">   }</span>
-<span class="source-line-no">896</span><span id="line-896"></span>
-<span class="source-line-no">897</span><span id="line-897">   /**</span>
-<span class="source-line-no">898</span><span id="line-898">    * Bean property appender:  &lt;property&gt;tags&lt;/property&gt;.</span>
-<span class="source-line-no">899</span><span id="line-899">    *</span>
-<span class="source-line-no">900</span><span id="line-900">    * &lt;p&gt;</span>
-<span class="source-line-no">901</span><span id="line-901">    * A list of tags used by the specification with additional metadata.</span>
-<span class="source-line-no">902</span><span id="line-902">    *</span>
-<span class="source-line-no">903</span><span id="line-903">    * @param values</span>
-<span class="source-line-no">904</span><span id="line-904">    *    The values to add to this property.</span>
-<span class="source-line-no">905</span><span id="line-905">    *    &lt;br&gt;The order of the tags can be used to reflect on their order by the parsing tools.</span>
-<span class="source-line-no">906</span><span id="line-906">    *    &lt;br&gt;Not all tags that are used by the &lt;a class="doclink" href="https://swagger.io/specification/v2#operationObject"&gt;Operation Object&lt;/a&gt; must be declared.</span>
-<span class="source-line-no">907</span><span id="line-907">    *    &lt;br&gt;The tags that are not declared may be organized randomly or based on the tools' logic.</span>
-<span class="source-line-no">908</span><span id="line-908">    *    &lt;br&gt;Each tag name in the list MUST be unique.</span>
-<span class="source-line-no">909</span><span id="line-909">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">910</span><span id="line-910">    * @return This object.</span>
-<span class="source-line-no">911</span><span id="line-911">    */</span>
-<span class="source-line-no">912</span><span id="line-912">   public Swagger addTags(Tag...values) {</span>
-<span class="source-line-no">913</span><span id="line-913">      tags = setBuilder(tags).sparse().add(values).build();</span>
-<span class="source-line-no">914</span><span id="line-914">      return this;</span>
-<span class="source-line-no">915</span><span id="line-915">   }</span>
-<span class="source-line-no">916</span><span id="line-916"></span>
-<span class="source-line-no">917</span><span id="line-917">   /**</span>
-<span class="source-line-no">918</span><span id="line-918">    * Bean property appender:  &lt;property&gt;tags&lt;/property&gt;.</span>
-<span class="source-line-no">919</span><span id="line-919">    *</span>
-<span class="source-line-no">920</span><span id="line-920">    * &lt;p&gt;</span>
-<span class="source-line-no">921</span><span id="line-921">    * A list of tags used by the specification with additional metadata.</span>
-<span class="source-line-no">922</span><span id="line-922">    *</span>
-<span class="source-line-no">923</span><span id="line-923">    * @param values</span>
-<span class="source-line-no">924</span><span id="line-924">    *    The values to add to this property.</span>
-<span class="source-line-no">925</span><span id="line-925">    *    &lt;br&gt;The order of the tags can be used to reflect on their order by the parsing tools.</span>
-<span class="source-line-no">926</span><span id="line-926">    *    &lt;br&gt;Not all tags that are used by the &lt;a class="doclink" href="https://swagger.io/specification/v2#operationObject"&gt;Operation Object&lt;/a&gt; must be declared.</span>
-<span class="source-line-no">927</span><span id="line-927">    *    &lt;br&gt;The tags that are not declared may be organized randomly or based on the tools' logic.</span>
-<span class="source-line-no">928</span><span id="line-928">    *    &lt;br&gt;Each tag name in the list MUST be unique.</span>
-<span class="source-line-no">929</span><span id="line-929">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">930</span><span id="line-930">    * @return This object.</span>
-<span class="source-line-no">931</span><span id="line-931">    */</span>
-<span class="source-line-no">932</span><span id="line-932">   public Swagger addTags(Collection&lt;Tag&gt; values) {</span>
-<span class="source-line-no">933</span><span id="line-933">      tags = setBuilder(tags).sparse().addAll(values).build();</span>
-<span class="source-line-no">934</span><span id="line-934">      return this;</span>
-<span class="source-line-no">935</span><span id="line-935">   }</span>
-<span class="source-line-no">936</span><span id="line-936"></span>
-<span class="source-line-no">937</span><span id="line-937">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">938</span><span id="line-938">   // Convenience methods</span>
-<span class="source-line-no">939</span><span id="line-939">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">940</span><span id="line-940"></span>
-<span class="source-line-no">941</span><span id="line-941">   /**</span>
-<span class="source-line-no">942</span><span id="line-942">    * Shortcut for calling &lt;c&gt;getPaths().get(path);&lt;/c&gt;</span>
-<span class="source-line-no">943</span><span id="line-943">    *</span>
-<span class="source-line-no">944</span><span id="line-944">    * @param path The path (e.g. &lt;js&gt;"/foo"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">945</span><span id="line-945">    * @return The operation map for the specified path, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</span>
-<span class="source-line-no">946</span><span id="line-946">    */</span>
-<span class="source-line-no">947</span><span id="line-947">   public OperationMap getPath(String path) {</span>
-<span class="source-line-no">948</span><span id="line-948">      assertArgNotNull("path", path);</span>
-<span class="source-line-no">949</span><span id="line-949">      return opt(getPaths()).map(x -&gt; x.get(path)).orElse(null);</span>
-<span class="source-line-no">950</span><span id="line-950">   }</span>
-<span class="source-line-no">951</span><span id="line-951"></span>
-<span class="source-line-no">952</span><span id="line-952">   /**</span>
-<span class="source-line-no">953</span><span id="line-953">    * Shortcut for calling &lt;c&gt;getPaths().get(path).get(operation);&lt;/c&gt;</span>
-<span class="source-line-no">954</span><span id="line-954">    *</span>
-<span class="source-line-no">955</span><span id="line-955">    * @param path The path (e.g. &lt;js&gt;"/foo"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">956</span><span id="line-956">    * @param operation The HTTP operation (e.g. &lt;js&gt;"get"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">957</span><span id="line-957">    * @return The operation for the specified path and operation id, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</span>
-<span class="source-line-no">958</span><span id="line-958">    */</span>
-<span class="source-line-no">959</span><span id="line-959">   public Operation getOperation(String path, String operation) {</span>
-<span class="source-line-no">960</span><span id="line-960">      assertArgNotNull("path", path);</span>
-<span class="source-line-no">961</span><span id="line-961">      assertArgNotNull("operation", operation);</span>
-<span class="source-line-no">962</span><span id="line-962">      return opt(getPath(path)).map(x -&gt; x.get(operation)).orElse(null);</span>
-<span class="source-line-no">963</span><span id="line-963">   }</span>
-<span class="source-line-no">964</span><span id="line-964"></span>
-<span class="source-line-no">965</span><span id="line-965">   /**</span>
-<span class="source-line-no">966</span><span id="line-966">    * Shortcut for calling &lt;c&gt;getPaths().get(path).get(operation).getResponse(status);&lt;/c&gt;</span>
-<span class="source-line-no">967</span><span id="line-967">    *</span>
-<span class="source-line-no">968</span><span id="line-968">    * @param path The path (e.g. &lt;js&gt;"/foo"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">969</span><span id="line-969">    * @param operation The HTTP operation (e.g. &lt;js&gt;"get"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">970</span><span id="line-970">    * @param status The HTTP response status (e.g. &lt;js&gt;"200"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">971</span><span id="line-971">    * @return The operation for the specified path and operation id, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</span>
-<span class="source-line-no">972</span><span id="line-972">    */</span>
-<span class="source-line-no">973</span><span id="line-973">   public ResponseInfo getResponseInfo(String path, String operation, String status) {</span>
-<span class="source-line-no">974</span><span id="line-974">      assertArgNotNull("path", path);</span>
-<span class="source-line-no">975</span><span id="line-975">      assertArgNotNull("operation", operation);</span>
-<span class="source-line-no">976</span><span id="line-976">      assertArgNotNull("status", status);</span>
-<span class="source-line-no">977</span><span id="line-977">      return opt(getPath(path)).map(x -&gt; x.get(operation)).map(x -&gt; x.getResponse(status)).orElse(null);</span>
-<span class="source-line-no">978</span><span id="line-978">   }</span>
-<span class="source-line-no">979</span><span id="line-979"></span>
-<span class="source-line-no">980</span><span id="line-980">   /**</span>
-<span class="source-line-no">981</span><span id="line-981">    * Shortcut for calling &lt;c&gt;getPaths().get(path).get(operation).getResponse(status);&lt;/c&gt;</span>
-<span class="source-line-no">982</span><span id="line-982">    *</span>
-<span class="source-line-no">983</span><span id="line-983">    * @param path The path (e.g. &lt;js&gt;"/foo"&lt;/js&gt;).</span>
-<span class="source-line-no">984</span><span id="line-984">    * @param operation The HTTP operation (e.g. &lt;js&gt;"get"&lt;/js&gt;).</span>
-<span class="source-line-no">985</span><span id="line-985">    * @param status The HTTP response status (e.g. &lt;js&gt;"200"&lt;/js&gt;).</span>
-<span class="source-line-no">986</span><span id="line-986">    * @return The operation for the specified path and operation id, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</span>
-<span class="source-line-no">987</span><span id="line-987">    */</span>
-<span class="source-line-no">988</span><span id="line-988">   public ResponseInfo getResponseInfo(String path, String operation, int status) {</span>
-<span class="source-line-no">989</span><span id="line-989">      return getResponseInfo(path, operation, String.valueOf(status));</span>
-<span class="source-line-no">990</span><span id="line-990">   }</span>
-<span class="source-line-no">991</span><span id="line-991"></span>
-<span class="source-line-no">992</span><span id="line-992">   /**</span>
-<span class="source-line-no">993</span><span id="line-993">    * Convenience method for calling &lt;c&gt;getPath(path).get(method).getParameter(in,name);&lt;/c&gt;</span>
-<span class="source-line-no">994</span><span id="line-994">    *</span>
-<span class="source-line-no">995</span><span id="line-995">    * @param path The HTTP path.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">996</span><span id="line-996">    * @param method The HTTP method.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">997</span><span id="line-997">    * @param in The parameter type.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">998</span><span id="line-998">    * @param name The parameter name.  Can be &lt;jk&gt;null&lt;/jk&gt; for parameter type &lt;c&gt;body&lt;/c&gt;.</span>
-<span class="source-line-no">999</span><span id="line-999">    * @return The parameter information or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
-<span class="source-line-no">1000</span><span id="line-1000">    */</span>
-<span class="source-line-no">1001</span><span id="line-1001">   public ParameterInfo getParameterInfo(String path, String method, String in, String name) {</span>
-<span class="source-line-no">1002</span><span id="line-1002">      assertArgNotNull("path", path);</span>
-<span class="source-line-no">1003</span><span id="line-1003">      assertArgNotNull("method", method);</span>
-<span class="source-line-no">1004</span><span id="line-1004">      assertArgNotNull("in", in);</span>
-<span class="source-line-no">1005</span><span id="line-1005">      return opt(getPath(path)).map(x -&gt; x.get(method)).map(x -&gt; x.getParameter(in, name)).orElse(null);</span>
+<span class="source-line-no">840</span><span id="line-840">   public String getSwagger() {</span>
+<span class="source-line-no">841</span><span id="line-841">      return swagger;</span>
+<span class="source-line-no">842</span><span id="line-842">   }</span>
+<span class="source-line-no">843</span><span id="line-843"></span>
+<span class="source-line-no">844</span><span id="line-844">   /**</span>
+<span class="source-line-no">845</span><span id="line-845">    * Bean property setter:  &lt;property&gt;swagger&lt;/property&gt;.</span>
+<span class="source-line-no">846</span><span id="line-846">    *</span>
+<span class="source-line-no">847</span><span id="line-847">    * &lt;p&gt;</span>
+<span class="source-line-no">848</span><span id="line-848">    * Specifies the Swagger Specification version being used.</span>
+<span class="source-line-no">849</span><span id="line-849">    *</span>
+<span class="source-line-no">850</span><span id="line-850">    * @param value</span>
+<span class="source-line-no">851</span><span id="line-851">    *    The new value for this property.</span>
+<span class="source-line-no">852</span><span id="line-852">    *    &lt;br&gt;Property value is required.</span>
+<span class="source-line-no">853</span><span id="line-853">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">854</span><span id="line-854">    * @return This object.</span>
+<span class="source-line-no">855</span><span id="line-855">    */</span>
+<span class="source-line-no">856</span><span id="line-856">   public Swagger setSwagger(String value) {</span>
+<span class="source-line-no">857</span><span id="line-857">      swagger = value;</span>
+<span class="source-line-no">858</span><span id="line-858">      return this;</span>
+<span class="source-line-no">859</span><span id="line-859">   }</span>
+<span class="source-line-no">860</span><span id="line-860"></span>
+<span class="source-line-no">861</span><span id="line-861">   /**</span>
+<span class="source-line-no">862</span><span id="line-862">    * Bean property getter:  &lt;property&gt;tags&lt;/property&gt;.</span>
+<span class="source-line-no">863</span><span id="line-863">    *</span>
+<span class="source-line-no">864</span><span id="line-864">    * &lt;p&gt;</span>
+<span class="source-line-no">865</span><span id="line-865">    * A list of tags used by the specification with additional metadata.</span>
+<span class="source-line-no">866</span><span id="line-866">    *</span>
+<span class="source-line-no">867</span><span id="line-867">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">868</span><span id="line-868">    */</span>
+<span class="source-line-no">869</span><span id="line-869">   public Set&lt;Tag&gt; getTags() {</span>
+<span class="source-line-no">870</span><span id="line-870">      return tags;</span>
+<span class="source-line-no">871</span><span id="line-871">   }</span>
+<span class="source-line-no">872</span><span id="line-872"></span>
+<span class="source-line-no">873</span><span id="line-873">   /**</span>
+<span class="source-line-no">874</span><span id="line-874">    * Bean property setter:  &lt;property&gt;tags&lt;/property&gt;.</span>
+<span class="source-line-no">875</span><span id="line-875">    *</span>
+<span class="source-line-no">876</span><span id="line-876">    * &lt;p&gt;</span>
+<span class="source-line-no">877</span><span id="line-877">    * A list of tags used by the specification with additional metadata.</span>
+<span class="source-line-no">878</span><span id="line-878">    *</span>
+<span class="source-line-no">879</span><span id="line-879">    * @param value</span>
+<span class="source-line-no">880</span><span id="line-880">    *    The new value for this property.</span>
+<span class="source-line-no">881</span><span id="line-881">    *    &lt;br&gt;The order of the tags can be used to reflect on their order by the parsing tools.</span>
+<span class="source-line-no">882</span><span id="line-882">    *    &lt;br&gt;Not all tags that are used by the &lt;a class="doclink" href="https://swagger.io/specification/v2#operationObject"&gt;Operation Object&lt;/a&gt; must be declared.</span>
+<span class="source-line-no">883</span><span id="line-883">    *    &lt;br&gt;The tags that are not declared may be organized randomly or based on the tools' logic.</span>
+<span class="source-line-no">884</span><span id="line-884">    *    &lt;br&gt;Each tag name in the list MUST be unique.</span>
+<span class="source-line-no">885</span><span id="line-885">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">886</span><span id="line-886">    * @return This object.</span>
+<span class="source-line-no">887</span><span id="line-887">    */</span>
+<span class="source-line-no">888</span><span id="line-888">   public Swagger setTags(Collection&lt;Tag&gt; value) {</span>
+<span class="source-line-no">889</span><span id="line-889">      tags = setFrom(value);</span>
+<span class="source-line-no">890</span><span id="line-890">      return this;</span>
+<span class="source-line-no">891</span><span id="line-891">   }</span>
+<span class="source-line-no">892</span><span id="line-892"></span>
+<span class="source-line-no">893</span><span id="line-893">   /**</span>
+<span class="source-line-no">894</span><span id="line-894">    * Bean property setter:  &lt;property&gt;tags&lt;/property&gt;.</span>
+<span class="source-line-no">895</span><span id="line-895">    *</span>
+<span class="source-line-no">896</span><span id="line-896">    * &lt;p&gt;</span>
+<span class="source-line-no">897</span><span id="line-897">    * A list of tags used by the specification with additional metadata.</span>
+<span class="source-line-no">898</span><span id="line-898">    *</span>
+<span class="source-line-no">899</span><span id="line-899">    * @param value</span>
+<span class="source-line-no">900</span><span id="line-900">    *    The new value for this property.</span>
+<span class="source-line-no">901</span><span id="line-901">    *    &lt;br&gt;The order of the tags can be used to reflect on their order by the parsing tools.</span>
+<span class="source-line-no">902</span><span id="line-902">    *    &lt;br&gt;Not all tags that are used by the &lt;a class="doclink" href="https://swagger.io/specification/v2#operationObject"&gt;Operation Object&lt;/a&gt; must be declared.</span>
+<span class="source-line-no">903</span><span id="line-903">    *    &lt;br&gt;The tags that are not declared may be organized randomly or based on the tools' logic.</span>
+<span class="source-line-no">904</span><span id="line-904">    *    &lt;br&gt;Each tag name in the list MUST be unique.</span>
+<span class="source-line-no">905</span><span id="line-905">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">906</span><span id="line-906">    * @return This object.</span>
+<span class="source-line-no">907</span><span id="line-907">    */</span>
+<span class="source-line-no">908</span><span id="line-908">   public Swagger setTags(Tag...value) {</span>
+<span class="source-line-no">909</span><span id="line-909">      setTags(setBuilder(Tag.class).sparse().add(value).build());</span>
+<span class="source-line-no">910</span><span id="line-910">      return this;</span>
+<span class="source-line-no">911</span><span id="line-911">   }</span>
+<span class="source-line-no">912</span><span id="line-912"></span>
+<span class="source-line-no">913</span><span id="line-913">   /**</span>
+<span class="source-line-no">914</span><span id="line-914">    * Bean property appender:  &lt;property&gt;tags&lt;/property&gt;.</span>
+<span class="source-line-no">915</span><span id="line-915">    *</span>
+<span class="source-line-no">916</span><span id="line-916">    * &lt;p&gt;</span>
+<span class="source-line-no">917</span><span id="line-917">    * A list of tags used by the specification with additional metadata.</span>
+<span class="source-line-no">918</span><span id="line-918">    *</span>
+<span class="source-line-no">919</span><span id="line-919">    * @param values</span>
+<span class="source-line-no">920</span><span id="line-920">    *    The values to add to this property.</span>
+<span class="source-line-no">921</span><span id="line-921">    *    &lt;br&gt;The order of the tags can be used to reflect on their order by the parsing tools.</span>
+<span class="source-line-no">922</span><span id="line-922">    *    &lt;br&gt;Not all tags that are used by the &lt;a class="doclink" href="https://swagger.io/specification/v2#operationObject"&gt;Operation Object&lt;/a&gt; must be declared.</span>
+<span class="source-line-no">923</span><span id="line-923">    *    &lt;br&gt;The tags that are not declared may be organized randomly or based on the tools' logic.</span>
+<span class="source-line-no">924</span><span id="line-924">    *    &lt;br&gt;Each tag name in the list MUST be unique.</span>
+<span class="source-line-no">925</span><span id="line-925">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">926</span><span id="line-926">    * @return This object.</span>
+<span class="source-line-no">927</span><span id="line-927">    */</span>
+<span class="source-line-no">928</span><span id="line-928">   public Swagger addTags(Tag...values) {</span>
+<span class="source-line-no">929</span><span id="line-929">      tags = setBuilder(tags).sparse().add(values).build();</span>
+<span class="source-line-no">930</span><span id="line-930">      return this;</span>
+<span class="source-line-no">931</span><span id="line-931">   }</span>
+<span class="source-line-no">932</span><span id="line-932"></span>
+<span class="source-line-no">933</span><span id="line-933">   /**</span>
+<span class="source-line-no">934</span><span id="line-934">    * Bean property appender:  &lt;property&gt;tags&lt;/property&gt;.</span>
+<span class="source-line-no">935</span><span id="line-935">    *</span>
+<span class="source-line-no">936</span><span id="line-936">    * &lt;p&gt;</span>
+<span class="source-line-no">937</span><span id="line-937">    * A list of tags used by the specification with additional metadata.</span>
+<span class="source-line-no">938</span><span id="line-938">    *</span>
+<span class="source-line-no">939</span><span id="line-939">    * @param values</span>
+<span class="source-line-no">940</span><span id="line-940">    *    The values to add to this property.</span>
+<span class="source-line-no">941</span><span id="line-941">    *    &lt;br&gt;The order of the tags can be used to reflect on their order by the parsing tools.</span>
+<span class="source-line-no">942</span><span id="line-942">    *    &lt;br&gt;Not all tags that are used by the &lt;a class="doclink" href="https://swagger.io/specification/v2#operationObject"&gt;Operation Object&lt;/a&gt; must be declared.</span>
+<span class="source-line-no">943</span><span id="line-943">    *    &lt;br&gt;The tags that are not declared may be organized randomly or based on the tools' logic.</span>
+<span class="source-line-no">944</span><span id="line-944">    *    &lt;br&gt;Each tag name in the list MUST be unique.</span>
+<span class="source-line-no">945</span><span id="line-945">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">946</span><span id="line-946">    * @return This object.</span>
+<span class="source-line-no">947</span><span id="line-947">    */</span>
+<span class="source-line-no">948</span><span id="line-948">   public Swagger addTags(Collection&lt;Tag&gt; values) {</span>
+<span class="source-line-no">949</span><span id="line-949">      tags = setBuilder(tags).sparse().addAll(values).build();</span>
+<span class="source-line-no">950</span><span id="line-950">      return this;</span>
+<span class="source-line-no">951</span><span id="line-951">   }</span>
+<span class="source-line-no">952</span><span id="line-952"></span>
+<span class="source-line-no">953</span><span id="line-953">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">954</span><span id="line-954">   // Convenience methods</span>
+<span class="source-line-no">955</span><span id="line-955">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">956</span><span id="line-956"></span>
+<span class="source-line-no">957</span><span id="line-957">   /**</span>
+<span class="source-line-no">958</span><span id="line-958">    * Shortcut for calling &lt;c&gt;getPaths().get(path);&lt;/c&gt;</span>
+<span class="source-line-no">959</span><span id="line-959">    *</span>
+<span class="source-line-no">960</span><span id="line-960">    * @param path The path (e.g. &lt;js&gt;"/foo"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">961</span><span id="line-961">    * @return The operation map for the specified path, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</span>
+<span class="source-line-no">962</span><span id="line-962">    */</span>
+<span class="source-line-no">963</span><span id="line-963">   public OperationMap getPath(String path) {</span>
+<span class="source-line-no">964</span><span id="line-964">      assertArgNotNull("path", path);</span>
+<span class="source-line-no">965</span><span id="line-965">      return opt(getPaths()).map(x -&gt; x.get(path)).orElse(null);</span>
+<span class="source-line-no">966</span><span id="line-966">   }</span>
+<span class="source-line-no">967</span><span id="line-967"></span>
+<span class="source-line-no">968</span><span id="line-968">   /**</span>
+<span class="source-line-no">969</span><span id="line-969">    * Shortcut for calling &lt;c&gt;getPaths().get(path).get(operation);&lt;/c&gt;</span>
+<span class="source-line-no">970</span><span id="line-970">    *</span>
+<span class="source-line-no">971</span><span id="line-971">    * @param path The path (e.g. &lt;js&gt;"/foo"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">972</span><span id="line-972">    * @param operation The HTTP operation (e.g. &lt;js&gt;"get"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">973</span><span id="line-973">    * @return The operation for the specified path and operation id, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</span>
+<span class="source-line-no">974</span><span id="line-974">    */</span>
+<span class="source-line-no">975</span><span id="line-975">   public Operation getOperation(String path, String operation) {</span>
+<span class="source-line-no">976</span><span id="line-976">      assertArgNotNull("path", path);</span>
+<span class="source-line-no">977</span><span id="line-977">      assertArgNotNull("operation", operation);</span>
+<span class="source-line-no">978</span><span id="line-978">      return opt(getPath(path)).map(x -&gt; x.get(operation)).orElse(null);</span>
+<span class="source-line-no">979</span><span id="line-979">   }</span>
+<span class="source-line-no">980</span><span id="line-980"></span>
+<span class="source-line-no">981</span><span id="line-981">   /**</span>
+<span class="source-line-no">982</span><span id="line-982">    * Shortcut for calling &lt;c&gt;getPaths().get(path).get(operation).getResponse(status);&lt;/c&gt;</span>
+<span class="source-line-no">983</span><span id="line-983">    *</span>
+<span class="source-line-no">984</span><span id="line-984">    * @param path The path (e.g. &lt;js&gt;"/foo"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">985</span><span id="line-985">    * @param operation The HTTP operation (e.g. &lt;js&gt;"get"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">986</span><span id="line-986">    * @param status The HTTP response status (e.g. &lt;js&gt;"200"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">987</span><span id="line-987">    * @return The operation for the specified path and operation id, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</span>
+<span class="source-line-no">988</span><span id="line-988">    */</span>
+<span class="source-line-no">989</span><span id="line-989">   public ResponseInfo getResponseInfo(String path, String operation, String status) {</span>
+<span class="source-line-no">990</span><span id="line-990">      assertArgNotNull("path", path);</span>
+<span class="source-line-no">991</span><span id="line-991">      assertArgNotNull("operation", operation);</span>
+<span class="source-line-no">992</span><span id="line-992">      assertArgNotNull("status", status);</span>
+<span class="source-line-no">993</span><span id="line-993">      return opt(getPath(path)).map(x -&gt; x.get(operation)).map(x -&gt; x.getResponse(status)).orElse(null);</span>
+<span class="source-line-no">994</span><span id="line-994">   }</span>
+<span class="source-line-no">995</span><span id="line-995"></span>
+<span class="source-line-no">996</span><span id="line-996">   /**</span>
+<span class="source-line-no">997</span><span id="line-997">    * Shortcut for calling &lt;c&gt;getPaths().get(path).get(operation).getResponse(status);&lt;/c&gt;</span>
+<span class="source-line-no">998</span><span id="line-998">    *</span>
+<span class="source-line-no">999</span><span id="line-999">    * @param path The path (e.g. &lt;js&gt;"/foo"&lt;/js&gt;).</span>
+<span class="source-line-no">1000</span><span id="line-1000">    * @param operation The HTTP operation (e.g. &lt;js&gt;"get"&lt;/js&gt;).</span>
+<span class="source-line-no">1001</span><span id="line-1001">    * @param status The HTTP response status (e.g. &lt;js&gt;"200"&lt;/js&gt;).</span>
+<span class="source-line-no">1002</span><span id="line-1002">    * @return The operation for the specified path and operation id, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</span>
+<span class="source-line-no">1003</span><span id="line-1003">    */</span>
+<span class="source-line-no">1004</span><span id="line-1004">   public ResponseInfo getResponseInfo(String path, String operation, int status) {</span>
+<span class="source-line-no">1005</span><span id="line-1005">      return getResponseInfo(path, operation, String.valueOf(status));</span>
 <span class="source-line-no">1006</span><span id="line-1006">   }</span>
 <span class="source-line-no">1007</span><span id="line-1007"></span>
-<span class="source-line-no">1008</span><span id="line-1008">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">1009</span><span id="line-1009"></span>
-<span class="source-line-no">1010</span><span id="line-1010">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">1011</span><span id="line-1011"></span>
-<span class="source-line-no">1012</span><span id="line-1012">   @Override /* SwaggerElement */</span>
-<span class="source-line-no">1013</span><span id="line-1013">   public &lt;T&gt; T get(String property, Class&lt;T&gt; type) {</span>
-<span class="source-line-no">1014</span><span id="line-1014">      assertArgNotNull("property", property);</span>
-<span class="source-line-no">1015</span><span id="line-1015">      return switch (property) {</span>
-<span class="source-line-no">1016</span><span id="line-1016">         case "basePath" -&gt; toType(getBasePath(), type);</span>
-<span class="source-line-no">1017</span><span id="line-1017">         case "consumes" -&gt; toType(getConsumes(), type);</span>
-<span class="source-line-no">1018</span><span id="line-1018">         case "definitions" -&gt; toType(getDefinitions(), type);</span>
-<span class="source-line-no">1019</span><span id="line-1019">         case "externalDocs" -&gt; toType(getExternalDocs(), type);</span>
-<span class="source-line-no">1020</span><span id="line-1020">         case "host" -&gt; toType(getHost(), type);</span>
-<span class="source-line-no">1021</span><span id="line-1021">         case "info" -&gt; toType(getInfo(), type);</span>
-<span class="source-line-no">1022</span><span id="line-1022">         case "parameters" -&gt; toType(getParameters(), type);</span>
-<span class="source-line-no">1023</span><span id="line-1023">         case "paths" -&gt; toType(getPaths(), type);</span>
-<span class="source-line-no">1024</span><span id="line-1024">         case "produces" -&gt; toType(getProduces(), type);</span>
-<span class="source-line-no">1025</span><span id="line-1025">         case "responses" -&gt; toType(getResponses(), type);</span>
-<span class="source-line-no">1026</span><span id="line-1026">         case "schemes" -&gt; toType(getSchemes(), type);</span>
-<span class="source-line-no">1027</span><span id="line-1027">         case "security" -&gt; toType(getSecurity(), type);</span>
-<span class="source-line-no">1028</span><span id="line-1028">         case "securityDefinitions" -&gt; toType(getSecurityDefinitions(), type);</span>
-<span class="source-line-no">1029</span><span id="line-1029">         case "swagger" -&gt; toType(getSwagger(), type);</span>
-<span class="source-line-no">1030</span><span id="line-1030">         case "tags" -&gt; toType(getTags(), type);</span>
-<span class="source-line-no">1031</span><span id="line-1031">         default -&gt; super.get(property, type);</span>
-<span class="source-line-no">1032</span><span id="line-1032">      };</span>
-<span class="source-line-no">1033</span><span id="line-1033">   }</span>
-<span class="source-line-no">1034</span><span id="line-1034"></span>
-<span class="source-line-no">1035</span><span id="line-1035">   @SuppressWarnings("rawtypes")</span>
-<span class="source-line-no">1036</span><span id="line-1036">   @Override /* SwaggerElement */</span>
-<span class="source-line-no">1037</span><span id="line-1037">   public Swagger set(String property, Object value) {</span>
-<span class="source-line-no">1038</span><span id="line-1038">      assertArgNotNull("property", property);</span>
-<span class="source-line-no">1039</span><span id="line-1039">      return switch (property) {</span>
-<span class="source-line-no">1040</span><span id="line-1040">         case "basePath" -&gt; setBasePath(Utils.s(value));</span>
-<span class="source-line-no">1041</span><span id="line-1041">         case "consumes" -&gt; setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">1042</span><span id="line-1042">         case "definitions" -&gt; setDefinitions(mapBuilder(String.class,JsonMap.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">1043</span><span id="line-1043">         case "externalDocs" -&gt; setExternalDocs(toType(value, ExternalDocumentation.class));</span>
-<span class="source-line-no">1044</span><span id="line-1044">         case "host" -&gt; setHost(Utils.s(value));</span>
-<span class="source-line-no">1045</span><span id="line-1045">         case "info" -&gt; setInfo(toType(value, Info.class));</span>
-<span class="source-line-no">1046</span><span id="line-1046">         case "parameters" -&gt; setParameters(mapBuilder(String.class,ParameterInfo.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">1047</span><span id="line-1047">         case "paths" -&gt; setPaths(mapBuilder(String.class,OperationMap.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">1048</span><span id="line-1048">         case "produces" -&gt; setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">1049</span><span id="line-1049">         case "responses" -&gt; setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">1050</span><span id="line-1050">         case "schemes" -&gt; setSchemes(listBuilder(String.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">1051</span><span id="line-1051">         case "security" -&gt; setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">1052</span><span id="line-1052">         case "securityDefinitions" -&gt; setSecurityDefinitions(mapBuilder(String.class,SecurityScheme.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">1053</span><span id="line-1053">         case "swagger" -&gt; setSwagger(Utils.s(value));</span>
-<span class="source-line-no">1054</span><span id="line-1054">         case "tags" -&gt; setTags(listBuilder(Tag.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">1055</span><span id="line-1055">         default -&gt; {</span>
-<span class="source-line-no">1056</span><span id="line-1056">            super.set(property, value);</span>
-<span class="source-line-no">1057</span><span id="line-1057">            yield this;</span>
-<span class="source-line-no">1058</span><span id="line-1058">         }</span>
-<span class="source-line-no">1059</span><span id="line-1059">      };</span>
-<span class="source-line-no">1060</span><span id="line-1060">   }</span>
-<span class="source-line-no">1061</span><span id="line-1061"></span>
-<span class="source-line-no">1062</span><span id="line-1062">   @Override /* SwaggerElement */</span>
-<span class="source-line-no">1063</span><span id="line-1063">   public Set&lt;String&gt; keySet() {</span>
-<span class="source-line-no">1064</span><span id="line-1064">      var s = setBuilder(String.class)</span>
-<span class="source-line-no">1065</span><span id="line-1065">         .addIf(basePath != null, "basePath")</span>
-<span class="source-line-no">1066</span><span id="line-1066">         .addIf(consumes != null, "consumes")</span>
-<span class="source-line-no">1067</span><span id="line-1067">         .addIf(definitions != null, "definitions")</span>
-<span class="source-line-no">1068</span><span id="line-1068">         .addIf(externalDocs != null, "externalDocs")</span>
-<span class="source-line-no">1069</span><span id="line-1069">         .addIf(host != null, "host")</span>
-<span class="source-line-no">1070</span><span id="line-1070">         .addIf(info != null, "info")</span>
-<span class="source-line-no">1071</span><span id="line-1071">         .addIf(parameters != null, "parameters")</span>
-<span class="source-line-no">1072</span><span id="line-1072">         .addIf(paths != null, "paths")</span>
-<span class="source-line-no">1073</span><span id="line-1073">         .addIf(produces != null, "produces")</span>
-<span class="source-line-no">1074</span><span id="line-1074">         .addIf(responses != null, "responses")</span>
-<span class="source-line-no">1075</span><span id="line-1075">         .addIf(schemes != null, "schemes")</span>
-<span class="source-line-no">1076</span><span id="line-1076">         .addIf(security != null, "security")</span>
-<span class="source-line-no">1077</span><span id="line-1077">         .addIf(securityDefinitions != null, "securityDefinitions")</span>
-<span class="source-line-no">1078</span><span id="line-1078">         .addIf(swagger != null, "swagger")</span>
-<span class="source-line-no">1079</span><span id="line-1079">         .addIf(tags != null, "tags")</span>
-<span class="source-line-no">1080</span><span id="line-1080">         .build();</span>
-<span class="source-line-no">1081</span><span id="line-1081">      return new MultiSet&lt;&gt;(s, super.keySet());</span>
-<span class="source-line-no">1082</span><span id="line-1082">   }</span>
-<span class="source-line-no">1083</span><span id="line-1083"></span>
-<span class="source-line-no">1084</span><span id="line-1084">   /**</span>
-<span class="source-line-no">1085</span><span id="line-1085">    * A synonym of {@link #toString()}.</span>
-<span class="source-line-no">1086</span><span id="line-1086">    * @return This object serialized as JSON.</span>
-<span class="source-line-no">1087</span><span id="line-1087">    */</span>
-<span class="source-line-no">1088</span><span id="line-1088">   public String asJson() {</span>
-<span class="source-line-no">1089</span><span id="line-1089">      return toString();</span>
-<span class="source-line-no">1090</span><span id="line-1090">   }</span>
-<span class="source-line-no">1091</span><span id="line-1091"></span>
-<span class="source-line-no">1092</span><span id="line-1092">   @Override /* Object */</span>
-<span class="source-line-no">1093</span><span id="line-1093">   public String toString() {</span>
-<span class="source-line-no">1094</span><span id="line-1094">      return JsonSerializer.DEFAULT.toString(this);</span>
-<span class="source-line-no">1095</span><span id="line-1095">   }</span>
-<span class="source-line-no">1096</span><span id="line-1096"></span>
-<span class="source-line-no">1097</span><span id="line-1097">   /**</span>
-<span class="source-line-no">1098</span><span id="line-1098">    * Resolves a &lt;js&gt;"$ref"&lt;/js&gt; tags to nodes in this swagger document.</span>
-<span class="source-line-no">1099</span><span id="line-1099">    *</span>
-<span class="source-line-no">1100</span><span id="line-1100">    * @param &lt;T&gt; The class to convert the reference to.</span>
-<span class="source-line-no">1101</span><span id="line-1101">    * @param ref The ref tag value.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">1102</span><span id="line-1102">    * @param c The class to convert the reference to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1103</span><span id="line-1103">    * @return The referenced node, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
-<span class="source-line-no">1104</span><span id="line-1104">    */</span>
-<span class="source-line-no">1105</span><span id="line-1105">   public &lt;T&gt; T findRef(String ref, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">1106</span><span id="line-1106">      assertArgNotNullOrBlank("ref", ref);</span>
-<span class="source-line-no">1107</span><span id="line-1107">      assertArgNotNull("c", c);</span>
-<span class="source-line-no">1108</span><span id="line-1108">      if (! ref.startsWith("#/"))</span>
-<span class="source-line-no">1109</span><span id="line-1109">         throw new BasicRuntimeException("Unsupported reference:  ''{0}''", ref);</span>
-<span class="source-line-no">1110</span><span id="line-1110">      try {</span>
-<span class="source-line-no">1111</span><span id="line-1111">         return new ObjectRest(this).get(ref.substring(1), c);</span>
-<span class="source-line-no">1112</span><span id="line-1112">      } catch (Exception e) {</span>
-<span class="source-line-no">1113</span><span id="line-1113">         throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, className(c));</span>
-<span class="source-line-no">1114</span><span id="line-1114">      }</span>
-<span class="source-line-no">1115</span><span id="line-1115">   }</span>
-<span class="source-line-no">1116</span><span id="line-1116"></span>
-<span class="source-line-no">1117</span><span id="line-1117">   /**</span>
-<span class="source-line-no">1118</span><span id="line-1118">    * Sets strict mode on this bean.</span>
-<span class="source-line-no">1119</span><span id="line-1119">    *</span>
-<span class="source-line-no">1120</span><span id="line-1120">    * @return This object.</span>
-<span class="source-line-no">1121</span><span id="line-1121">    */</span>
-<span class="source-line-no">1122</span><span id="line-1122">   @Override</span>
-<span class="source-line-no">1123</span><span id="line-1123">   public Swagger strict() {</span>
-<span class="source-line-no">1124</span><span id="line-1124">      super.strict();</span>
-<span class="source-line-no">1125</span><span id="line-1125">      return this;</span>
-<span class="source-line-no">1126</span><span id="line-1126">   }</span>
-<span class="source-line-no">1127</span><span id="line-1127"></span>
-<span class="source-line-no">1128</span><span id="line-1128">   /**</span>
-<span class="source-line-no">1129</span><span id="line-1129">    * Sets strict mode on this bean.</span>
-<span class="source-line-no">1130</span><span id="line-1130">    *</span>
-<span class="source-line-no">1131</span><span id="line-1131">    * @param value</span>
-<span class="source-line-no">1132</span><span id="line-1132">    *    The new value for this property.</span>
-<span class="source-line-no">1133</span><span id="line-1133">    *    &lt;br&gt;Non-boolean values will be converted to boolean using &lt;code&gt;Boolean.&lt;jsm&gt;valueOf&lt;/jsm&gt;(value.toString())&lt;/code&gt;.</span>
-<span class="source-line-no">1134</span><span id="line-1134">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (interpreted as &lt;jk&gt;false&lt;/jk&gt;).</span>
-<span class="source-line-no">1135</span><span id="line-1135">    * @return This object.</span>
-<span class="source-line-no">1136</span><span id="line-1136">    */</span>
-<span class="source-line-no">1137</span><span id="line-1137">   @Override</span>
-<span class="source-line-no">1138</span><span id="line-1138">   public Swagger strict(Object value) {</span>
-<span class="source-line-no">1139</span><span id="line-1139">      super.strict(value);</span>
-<span class="source-line-no">1140</span><span id="line-1140">      return this;</span>
-<span class="source-line-no">1141</span><span id="line-1141">   }</span>
-<span class="source-line-no">1142</span><span id="line-1142"></span>
-<span class="source-line-no">1143</span><span id="line-1143">}</span>
+<span class="source-line-no">1008</span><span id="line-1008">   /**</span>
+<span class="source-line-no">1009</span><span id="line-1009">    * Convenience method for calling &lt;c&gt;getPath(path).get(method).getParameter(in,name);&lt;/c&gt;</span>
+<span class="source-line-no">1010</span><span id="line-1010">    *</span>
+<span class="source-line-no">1011</span><span id="line-1011">    * @param path The HTTP path.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1012</span><span id="line-1012">    * @param method The HTTP method.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1013</span><span id="line-1013">    * @param in The parameter type.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1014</span><span id="line-1014">    * @param name The parameter name.  Can be &lt;jk&gt;null&lt;/jk&gt; for parameter type &lt;c&gt;body&lt;/c&gt;.</span>
+<span class="source-line-no">1015</span><span id="line-1015">    * @return The parameter information or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
+<span class="source-line-no">1016</span><span id="line-1016">    */</span>
+<span class="source-line-no">1017</span><span id="line-1017">   public ParameterInfo getParameterInfo(String path, String method, String in, String name) {</span>
+<span class="source-line-no">1018</span><span id="line-1018">      assertArgNotNull("path", path);</span>
+<span class="source-line-no">1019</span><span id="line-1019">      assertArgNotNull("method", method);</span>
+<span class="source-line-no">1020</span><span id="line-1020">      assertArgNotNull("in", in);</span>
+<span class="source-line-no">1021</span><span id="line-1021">      return opt(getPath(path)).map(x -&gt; x.get(method)).map(x -&gt; x.getParameter(in, name)).orElse(null);</span>
+<span class="source-line-no">1022</span><span id="line-1022">   }</span>
+<span class="source-line-no">1023</span><span id="line-1023"></span>
+<span class="source-line-no">1024</span><span id="line-1024">   // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">1025</span><span id="line-1025"></span>
+<span class="source-line-no">1026</span><span id="line-1026">   // &lt;/FluentSetters&gt;</span>
+<span class="source-line-no">1027</span><span id="line-1027"></span>
+<span class="source-line-no">1028</span><span id="line-1028">   @Override /* SwaggerElement */</span>
+<span class="source-line-no">1029</span><span id="line-1029">   public &lt;T&gt; T get(String property, Class&lt;T&gt; type) {</span>
+<span class="source-line-no">1030</span><span id="line-1030">      assertArgNotNull("property", property);</span>
+<span class="source-line-no">1031</span><span id="line-1031">      return switch (property) {</span>
+<span class="source-line-no">1032</span><span id="line-1032">         case "basePath" -&gt; toType(getBasePath(), type);</span>
+<span class="source-line-no">1033</span><span id="line-1033">         case "consumes" -&gt; toType(getConsumes(), type);</span>
+<span class="source-line-no">1034</span><span id="line-1034">         case "definitions" -&gt; toType(getDefinitions(), type);</span>
+<span class="source-line-no">1035</span><span id="line-1035">         case "externalDocs" -&gt; toType(getExternalDocs(), type);</span>
+<span class="source-line-no">1036</span><span id="line-1036">         case "host" -&gt; toType(getHost(), type);</span>
+<span class="source-line-no">1037</span><span id="line-1037">         case "info" -&gt; toType(getInfo(), type);</span>
+<span class="source-line-no">1038</span><span id="line-1038">         case "parameters" -&gt; toType(getParameters(), type);</span>
+<span class="source-line-no">1039</span><span id="line-1039">         case "paths" -&gt; toType(getPaths(), type);</span>
+<span class="source-line-no">1040</span><span id="line-1040">         case "produces" -&gt; toType(getProduces(), type);</span>
+<span class="source-line-no">1041</span><span id="line-1041">         case "responses" -&gt; toType(getResponses(), type);</span>
+<span class="source-line-no">1042</span><span id="line-1042">         case "schemes" -&gt; toType(getSchemes(), type);</span>
+<span class="source-line-no">1043</span><span id="line-1043">         case "security" -&gt; toType(getSecurity(), type);</span>
+<span class="source-line-no">1044</span><span id="line-1044">         case "securityDefinitions" -&gt; toType(getSecurityDefinitions(), type);</span>
+<span class="source-line-no">1045</span><span id="line-1045">         case "swagger" -&gt; toType(getSwagger(), type);</span>
+<span class="source-line-no">1046</span><span id="line-1046">         case "tags" -&gt; toType(getTags(), type);</span>
+<span class="source-line-no">1047</span><span id="line-1047">         default -&gt; super.get(property, type);</span>
+<span class="source-line-no">1048</span><span id="line-1048">      };</span>
+<span class="source-line-no">1049</span><span id="line-1049">   }</span>
+<span class="source-line-no">1050</span><span id="line-1050"></span>
+<span class="source-line-no">1051</span><span id="line-1051">   @SuppressWarnings("rawtypes")</span>
+<span class="source-line-no">1052</span><span id="line-1052">   @Override /* SwaggerElement */</span>
+<span class="source-line-no">1053</span><span id="line-1053">   public Swagger set(String property, Object value) {</span>
+<span class="source-line-no">1054</span><span id="line-1054">      assertArgNotNull("property", property);</span>
+<span class="source-line-no">1055</span><span id="line-1055">      return switch (property) {</span>
+<span class="source-line-no">1056</span><span id="line-1056">         case "basePath" -&gt; setBasePath(Utils.s(value));</span>
+<span class="source-line-no">1057</span><span id="line-1057">         case "consumes" -&gt; setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">1058</span><span id="line-1058">         case "definitions" -&gt; setDefinitions(mapBuilder(String.class,JsonMap.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">1059</span><span id="line-1059">         case "externalDocs" -&gt; setExternalDocs(toType(value, ExternalDocumentation.class));</span>
+<span class="source-line-no">1060</span><span id="line-1060">         case "host" -&gt; setHost(Utils.s(value));</span>
+<span class="source-line-no">1061</span><span id="line-1061">         case "info" -&gt; setInfo(toType(value, Info.class));</span>
+<span class="source-line-no">1062</span><span id="line-1062">         case "parameters" -&gt; setParameters(mapBuilder(String.class,ParameterInfo.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">1063</span><span id="line-1063">         case "paths" -&gt; setPaths(mapBuilder(String.class,OperationMap.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">1064</span><span id="line-1064">         case "produces" -&gt; setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">1065</span><span id="line-1065">         case "responses" -&gt; setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">1066</span><span id="line-1066">         case "schemes" -&gt; setSchemes(listBuilder(String.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">1067</span><span id="line-1067">         case "security" -&gt; setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">1068</span><span id="line-1068">         case "securityDefinitions" -&gt; setSecurityDefinitions(mapBuilder(String.class,SecurityScheme.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">1069</span><span id="line-1069">         case "swagger" -&gt; setSwagger(Utils.s(value));</span>
+<span class="source-line-no">1070</span><span id="line-1070">         case "tags" -&gt; setTags(listBuilder(Tag.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">1071</span><span id="line-1071">         default -&gt; {</span>
+<span class="source-line-no">1072</span><span id="line-1072">            super.set(property, value);</span>
+<span class="source-line-no">1073</span><span id="line-1073">            yield this;</span>
+<span class="source-line-no">1074</span><span id="line-1074">         }</span>
+<span class="source-line-no">1075</span><span id="line-1075">      };</span>
+<span class="source-line-no">1076</span><span id="line-1076">   }</span>
+<span class="source-line-no">1077</span><span id="line-1077"></span>
+<span class="source-line-no">1078</span><span id="line-1078">   @Override /* SwaggerElement */</span>
+<span class="source-line-no">1079</span><span id="line-1079">   public Set&lt;String&gt; keySet() {</span>
+<span class="source-line-no">1080</span><span id="line-1080">      var s = setBuilder(String.class)</span>
+<span class="source-line-no">1081</span><span id="line-1081">         .addIf(basePath != null, "basePath")</span>
+<span class="source-line-no">1082</span><span id="line-1082">         .addIf(consumes != null, "consumes")</span>
+<span class="source-line-no">1083</span><span id="line-1083">         .addIf(definitions != null, "definitions")</span>
+<span class="source-line-no">1084</span><span id="line-1084">         .addIf(externalDocs != null, "externalDocs")</span>
+<span class="source-line-no">1085</span><span id="line-1085">         .addIf(host != null, "host")</span>
+<span class="source-line-no">1086</span><span id="line-1086">         .addIf(info != null, "info")</span>
+<span class="source-line-no">1087</span><span id="line-1087">         .addIf(parameters != null, "parameters")</span>
+<span class="source-line-no">1088</span><span id="line-1088">         .addIf(paths != null, "paths")</span>
+<span class="source-line-no">1089</span><span id="line-1089">         .addIf(produces != null, "produces")</span>
+<span class="source-line-no">1090</span><span id="line-1090">         .addIf(responses != null, "responses")</span>
+<span class="source-line-no">1091</span><span id="line-1091">         .addIf(schemes != null, "schemes")</span>
+<span class="source-line-no">1092</span><span id="line-1092">         .addIf(security != null, "security")</span>
+<span class="source-line-no">1093</span><span id="line-1093">         .addIf(securityDefinitions != null, "securityDefinitions")</span>
+<span class="source-line-no">1094</span><span id="line-1094">         .addIf(swagger != null, "swagger")</span>
+<span class="source-line-no">1095</span><span id="line-1095">         .addIf(tags != null, "tags")</span>
+<span class="source-line-no">1096</span><span id="line-1096">         .build();</span>
+<span class="source-line-no">1097</span><span id="line-1097">      return new MultiSet&lt;&gt;(s, super.keySet());</span>
+<span class="source-line-no">1098</span><span id="line-1098">   }</span>
+<span class="source-line-no">1099</span><span id="line-1099"></span>
+<span class="source-line-no">1100</span><span id="line-1100">   /**</span>
+<span class="source-line-no">1101</span><span id="line-1101">    * A synonym of {@link #toString()}.</span>
+<span class="source-line-no">1102</span><span id="line-1102">    * @return This object serialized as JSON.</span>
+<span class="source-line-no">1103</span><span id="line-1103">    */</span>
+<span class="source-line-no">1104</span><span id="line-1104">   public String asJson() {</span>
+<span class="source-line-no">1105</span><span id="line-1105">      return toString();</span>
+<span class="source-line-no">1106</span><span id="line-1106">   }</span>
+<span class="source-line-no">1107</span><span id="line-1107"></span>
+<span class="source-line-no">1108</span><span id="line-1108">   @Override /* Object */</span>
+<span class="source-line-no">1109</span><span id="line-1109">   public String toString() {</span>
+<span class="source-line-no">1110</span><span id="line-1110">      return JsonSerializer.DEFAULT.toString(this);</span>
+<span class="source-line-no">1111</span><span id="line-1111">   }</span>
+<span class="source-line-no">1112</span><span id="line-1112"></span>
+<span class="source-line-no">1113</span><span id="line-1113">   /**</span>
+<span class="source-line-no">1114</span><span id="line-1114">    * Resolves a &lt;js&gt;"$ref"&lt;/js&gt; tags to nodes in this swagger document.</span>
+<span class="source-line-no">1115</span><span id="line-1115">    *</span>
+<span class="source-line-no">1116</span><span id="line-1116">    * @param &lt;T&gt; The class to convert the reference to.</span>
+<span class="source-line-no">1117</span><span id="line-1117">    * @param ref The ref tag value.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">1118</span><span id="line-1118">    * @param c The class to convert the reference to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1119</span><span id="line-1119">    * @return The referenced node, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
+<span class="source-line-no">1120</span><span id="line-1120">    */</span>
+<span class="source-line-no">1121</span><span id="line-1121">   public &lt;T&gt; T findRef(String ref, Class&lt;T&gt; c) {</span>
+<span class="source-line-no">1122</span><span id="line-1122">      assertArgNotNullOrBlank("ref", ref);</span>
+<span class="source-line-no">1123</span><span id="line-1123">      assertArgNotNull("c", c);</span>
+<span class="source-line-no">1124</span><span id="line-1124">      if (! ref.startsWith("#/"))</span>
+<span class="source-line-no">1125</span><span id="line-1125">         throw new BasicRuntimeException("Unsupported reference:  ''{0}''", ref);</span>
+<span class="source-line-no">1126</span><span id="line-1126">      try {</span>
+<span class="source-line-no">1127</span><span id="line-1127">         return new ObjectRest(this).get(ref.substring(1), c);</span>
+<span class="source-line-no">1128</span><span id="line-1128">      } catch (Exception e) {</span>
+<span class="source-line-no">1129</span><span id="line-1129">         throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, className(c));</span>
+<span class="source-line-no">1130</span><span id="line-1130">      }</span>
+<span class="source-line-no">1131</span><span id="line-1131">   }</span>
+<span class="source-line-no">1132</span><span id="line-1132"></span>
+<span class="source-line-no">1133</span><span id="line-1133">   /**</span>
+<span class="source-line-no">1134</span><span id="line-1134">    * Sets strict mode on this bean.</span>
+<span class="source-line-no">1135</span><span id="line-1135">    *</span>
+<span class="source-line-no">1136</span><span id="line-1136">    * @return This object.</span>
+<span class="source-line-no">1137</span><span id="line-1137">    */</span>
+<span class="source-line-no">1138</span><span id="line-1138">   @Override</span>
+<span class="source-line-no">1139</span><span id="line-1139">   public Swagger strict() {</span>
+<span class="source-line-no">1140</span><span id="line-1140">      super.strict();</span>
+<span class="source-line-no">1141</span><span id="line-1141">      return this;</span>
+<span class="source-line-no">1142</span><span id="line-1142">   }</span>
+<span class="source-line-no">1143</span><span id="line-1143"></span>
+<span class="source-line-no">1144</span><span id="line-1144">   /**</span>
+<span class="source-line-no">1145</span><span id="line-1145">    * Sets strict mode on this bean.</span>
+<span class="source-line-no">1146</span><span id="line-1146">    *</span>
+<span class="source-line-no">1147</span><span id="line-1147">    * @param value</span>
+<span class="source-line-no">1148</span><span id="line-1148">    *    The new value for this property.</span>
+<span class="source-line-no">1149</span><span id="line-1149">    *    &lt;br&gt;Non-boolean values will be converted to boolean using &lt;code&gt;Boolean.&lt;jsm&gt;valueOf&lt;/jsm&gt;(value.toString())&lt;/code&gt;.</span>
+<span class="source-line-no">1150</span><span id="line-1150">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (interpreted as &lt;jk&gt;false&lt;/jk&gt;).</span>
+<span class="source-line-no">1151</span><span id="line-1151">    * @return This object.</span>
+<span class="source-line-no">1152</span><span id="line-1152">    */</span>
+<span class="source-line-no">1153</span><span id="line-1153">   @Override</span>
+<span class="source-line-no">1154</span><span id="line-1154">   public Swagger strict(Object value) {</span>
+<span class="source-line-no">1155</span><span id="line-1155">      super.strict(value);</span>
+<span class="source-line-no">1156</span><span id="line-1156">      return this;</span>
+<span class="source-line-no">1157</span><span id="line-1157">   }</span>
+<span class="source-line-no">1158</span><span id="line-1158"></span>
+<span class="source-line-no">1159</span><span id="line-1159">}</span>
 
 
 

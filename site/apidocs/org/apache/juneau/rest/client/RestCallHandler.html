@@ -74,10 +74,6 @@ loadScripts(document, 'script');</script>
 <h1 title="Interface RestCallHandler" class="title">Interface RestCallHandler</h1>
 </div>
 <section class="class-description" id="class-description">
-<dl class="notes">
-<dt>All Known Implementing Classes:</dt>
-<dd><code><a href="BasicRestCallHandler.html" title="class in org.apache.juneau.rest.client">BasicRestCallHandler</a></code></dd>
-</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallHandler.html#line-63">RestCallHandler</a></span></div>
 <div class="block">Interface that allows you to override the handling of HTTP requests.
@@ -94,7 +90,7 @@ loadScripts(document, 'script');</script>
  </ul>
 
  <p>
- The <a href="BasicRestCallHandler.html" title="class in org.apache.juneau.rest.client"><code>BasicRestCallHandler</code></a> shows an example of a simple pass-through handler.  Note that you must handle
+ The <code>BasicRestCallHandler</code> shows an example of a simple pass-through handler.  Note that you must handle
  the case where <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpHost.html" title="class or interface in org.apache.http" class="external-link"><code>HttpHost</code></a> is null.
 
  <p class='bjava'>

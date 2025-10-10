@@ -77,7 +77,7 @@
 <span class="source-line-no">064</span><span id="line-64"> * @param &lt;T&gt; The class type of the wrapped class.</span>
 <span class="source-line-no">065</span><span id="line-65"> */</span>
 <span class="source-line-no">066</span><span id="line-66">@Bean(properties="innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")</span>
-<span class="source-line-no">067</span><span id="line-67">public final class ClassMeta&lt;T&gt; implements Type {</span>
+<span class="source-line-no">067</span><span id="line-67">public class ClassMeta&lt;T&gt; implements Type {</span>
 <span class="source-line-no">068</span><span id="line-68"></span>
 <span class="source-line-no">069</span><span id="line-69">   /** Class categories. */</span>
 <span class="source-line-no">070</span><span id="line-70">   enum ClassCategory {</span>
@@ -321,7 +321,7 @@
 <span class="source-line-no">308</span><span id="line-308">   }</span>
 <span class="source-line-no">309</span><span id="line-309"></span>
 <span class="source-line-no">310</span><span id="line-310">   @SuppressWarnings({"unchecked","rawtypes","hiding"})</span>
-<span class="source-line-no">311</span><span id="line-311">   private final class ClassMetaBuilder&lt;T&gt; {</span>
+<span class="source-line-no">311</span><span id="line-311">   private class ClassMetaBuilder&lt;T&gt; {</span>
 <span class="source-line-no">312</span><span id="line-312">      Class&lt;T&gt; innerClass;</span>
 <span class="source-line-no">313</span><span id="line-313">      ClassInfo ci;</span>
 <span class="source-line-no">314</span><span id="line-314">      Class&lt;? extends T&gt; implClass;</span>
@@ -2209,7 +2209,7 @@
 <span class="source-line-no">2196</span><span id="line-2196"></span>
 <span class="source-line-no">2197</span><span id="line-2197">   /**</span>
 <span class="source-line-no">2198</span><span id="line-2198">    * Cast this object to this type.</span>
-<span class="source-line-no">2199</span><span id="line-2199">    * </span>
+<span class="source-line-no">2199</span><span id="line-2199">    *</span>
 <span class="source-line-no">2200</span><span id="line-2200">    * @param o The object to cast.</span>
 <span class="source-line-no">2201</span><span id="line-2201">    * @return The cast object.</span>
 <span class="source-line-no">2202</span><span id="line-2202">    */</span>

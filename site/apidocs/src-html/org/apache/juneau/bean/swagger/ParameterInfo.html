@@ -973,132 +973,192 @@
 <span class="source-line-no">960</span><span id="line-960">      return this;</span>
 <span class="source-line-no">961</span><span id="line-961">   }</span>
 <span class="source-line-no">962</span><span id="line-962"></span>
-<span class="source-line-no">963</span><span id="line-963">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">964</span><span id="line-964"></span>
-<span class="source-line-no">965</span><span id="line-965">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">966</span><span id="line-966"></span>
-<span class="source-line-no">967</span><span id="line-967">   @Override /* SwaggerElement */</span>
-<span class="source-line-no">968</span><span id="line-968">   public &lt;T&gt; T get(String property, Class&lt;T&gt; type) {</span>
-<span class="source-line-no">969</span><span id="line-969">      assertArgNotNull("property", property);</span>
-<span class="source-line-no">970</span><span id="line-970">      return switch (property) {</span>
-<span class="source-line-no">971</span><span id="line-971">         case "allowEmptyValue" -&gt; toType(getAllowEmptyValue(), type);</span>
-<span class="source-line-no">972</span><span id="line-972">         case "collectionFormat" -&gt; toType(getCollectionFormat(), type);</span>
-<span class="source-line-no">973</span><span id="line-973">         case "default" -&gt; toType(getDefault(), type);</span>
-<span class="source-line-no">974</span><span id="line-974">         case "description" -&gt; toType(getDescription(), type);</span>
-<span class="source-line-no">975</span><span id="line-975">         case "enum" -&gt; toType(getEnum(), type);</span>
-<span class="source-line-no">976</span><span id="line-976">         case "exclusiveMaximum" -&gt; toType(getExclusiveMaximum(), type);</span>
-<span class="source-line-no">977</span><span id="line-977">         case "exclusiveMinimum" -&gt; toType(getExclusiveMinimum(), type);</span>
-<span class="source-line-no">978</span><span id="line-978">         case "format" -&gt; toType(getFormat(), type);</span>
-<span class="source-line-no">979</span><span id="line-979">         case "in" -&gt; toType(getIn(), type);</span>
-<span class="source-line-no">980</span><span id="line-980">         case "items" -&gt; toType(getItems(), type);</span>
-<span class="source-line-no">981</span><span id="line-981">         case "maximum" -&gt; toType(getMaximum(), type);</span>
-<span class="source-line-no">982</span><span id="line-982">         case "maxItems" -&gt; toType(getMaxItems(), type);</span>
-<span class="source-line-no">983</span><span id="line-983">         case "maxLength" -&gt; toType(getMaxLength(), type);</span>
-<span class="source-line-no">984</span><span id="line-984">         case "minimum" -&gt; toType(getMinimum(), type);</span>
-<span class="source-line-no">985</span><span id="line-985">         case "minItems" -&gt; toType(getMinItems(), type);</span>
-<span class="source-line-no">986</span><span id="line-986">         case "minLength" -&gt; toType(getMinLength(), type);</span>
-<span class="source-line-no">987</span><span id="line-987">         case "multipleOf" -&gt; toType(getMultipleOf(), type);</span>
-<span class="source-line-no">988</span><span id="line-988">         case "name" -&gt; toType(getName(), type);</span>
-<span class="source-line-no">989</span><span id="line-989">         case "pattern" -&gt; toType(getPattern(), type);</span>
-<span class="source-line-no">990</span><span id="line-990">         case "required" -&gt; toType(getRequired(), type);</span>
-<span class="source-line-no">991</span><span id="line-991">         case "schema" -&gt; toType(getSchema(), type);</span>
-<span class="source-line-no">992</span><span id="line-992">         case "type" -&gt; toType(getType(), type);</span>
-<span class="source-line-no">993</span><span id="line-993">         case "uniqueItems" -&gt; toType(getUniqueItems(), type);</span>
-<span class="source-line-no">994</span><span id="line-994">         default -&gt; super.get(property, type);</span>
-<span class="source-line-no">995</span><span id="line-995">      };</span>
-<span class="source-line-no">996</span><span id="line-996">   }</span>
-<span class="source-line-no">997</span><span id="line-997"></span>
-<span class="source-line-no">998</span><span id="line-998">   @Override /* SwaggerElement */</span>
-<span class="source-line-no">999</span><span id="line-999">   public ParameterInfo set(String property, Object value) {</span>
-<span class="source-line-no">1000</span><span id="line-1000">      assertArgNotNull("property", property);</span>
-<span class="source-line-no">1001</span><span id="line-1001">      return switch (property) {</span>
-<span class="source-line-no">1002</span><span id="line-1002">         case "allowEmptyValue" -&gt; setAllowEmptyValue(toBoolean(value));</span>
-<span class="source-line-no">1003</span><span id="line-1003">         case "collectionFormat" -&gt; setCollectionFormat(Utils.s(value));</span>
-<span class="source-line-no">1004</span><span id="line-1004">         case "default" -&gt; setDefault(value);</span>
-<span class="source-line-no">1005</span><span id="line-1005">         case "description" -&gt; setDescription(Utils.s(value));</span>
-<span class="source-line-no">1006</span><span id="line-1006">         case "enum" -&gt; setEnum(value);</span>
-<span class="source-line-no">1007</span><span id="line-1007">         case "exclusiveMaximum" -&gt; setExclusiveMaximum(toBoolean(value));</span>
-<span class="source-line-no">1008</span><span id="line-1008">         case "exclusiveMinimum" -&gt; setExclusiveMinimum(toBoolean(value));</span>
-<span class="source-line-no">1009</span><span id="line-1009">         case "format" -&gt; setFormat(Utils.s(value));</span>
-<span class="source-line-no">1010</span><span id="line-1010">         case "in" -&gt; setIn(Utils.s(value));</span>
-<span class="source-line-no">1011</span><span id="line-1011">         case "items" -&gt; setItems(toType(value, Items.class));</span>
-<span class="source-line-no">1012</span><span id="line-1012">         case "maximum" -&gt; setMaximum(toNumber(value));</span>
-<span class="source-line-no">1013</span><span id="line-1013">         case "maxItems" -&gt; setMaxItems(toInteger(value));</span>
-<span class="source-line-no">1014</span><span id="line-1014">         case "maxLength" -&gt; setMaxLength(toInteger(value));</span>
-<span class="source-line-no">1015</span><span id="line-1015">         case "minimum" -&gt; setMinimum(toNumber(value));</span>
-<span class="source-line-no">1016</span><span id="line-1016">         case "minItems" -&gt; setMinItems(toInteger(value));</span>
-<span class="source-line-no">1017</span><span id="line-1017">         case "minLength" -&gt; setMinLength(toInteger(value));</span>
-<span class="source-line-no">1018</span><span id="line-1018">         case "multipleOf" -&gt; setMultipleOf(toNumber(value));</span>
-<span class="source-line-no">1019</span><span id="line-1019">         case "name" -&gt; setName(Utils.s(value));</span>
-<span class="source-line-no">1020</span><span id="line-1020">         case "pattern" -&gt; setPattern(Utils.s(value));</span>
-<span class="source-line-no">1021</span><span id="line-1021">         case "required" -&gt; setRequired(toBoolean(value));</span>
-<span class="source-line-no">1022</span><span id="line-1022">         case "schema" -&gt; setSchema(toType(value, SchemaInfo.class));</span>
-<span class="source-line-no">1023</span><span id="line-1023">         case "type" -&gt; setType(Utils.s(value));</span>
-<span class="source-line-no">1024</span><span id="line-1024">         case "uniqueItems" -&gt; setUniqueItems(toBoolean(value));</span>
-<span class="source-line-no">1025</span><span id="line-1025">         default -&gt; {</span>
-<span class="source-line-no">1026</span><span id="line-1026">            super.set(property, value);</span>
-<span class="source-line-no">1027</span><span id="line-1027">            yield this;</span>
-<span class="source-line-no">1028</span><span id="line-1028">         }</span>
-<span class="source-line-no">1029</span><span id="line-1029">      };</span>
-<span class="source-line-no">1030</span><span id="line-1030">   }</span>
-<span class="source-line-no">1031</span><span id="line-1031"></span>
-<span class="source-line-no">1032</span><span id="line-1032">   @Override /* SwaggerElement */</span>
-<span class="source-line-no">1033</span><span id="line-1033">   public Set&lt;String&gt; keySet() {</span>
-<span class="source-line-no">1034</span><span id="line-1034">      var s = setBuilder(String.class)</span>
-<span class="source-line-no">1035</span><span id="line-1035">         .addIf(allowEmptyValue != null, "allowEmptyValue")</span>
-<span class="source-line-no">1036</span><span id="line-1036">         .addIf(collectionFormat != null, "collectionFormat")</span>
-<span class="source-line-no">1037</span><span id="line-1037">         .addIf(_default != null, "default")</span>
-<span class="source-line-no">1038</span><span id="line-1038">         .addIf(description != null, "description")</span>
-<span class="source-line-no">1039</span><span id="line-1039">         .addIf(_enum != null, "enum")</span>
-<span class="source-line-no">1040</span><span id="line-1040">         .addIf(example != null, "example")</span>
-<span class="source-line-no">1041</span><span id="line-1041">         .addIf(examples != null, "examples")</span>
-<span class="source-line-no">1042</span><span id="line-1042">         .addIf(exclusiveMaximum != null, "exclusiveMaximum")</span>
-<span class="source-line-no">1043</span><span id="line-1043">         .addIf(exclusiveMinimum != null, "exclusiveMinimum")</span>
-<span class="source-line-no">1044</span><span id="line-1044">         .addIf(format != null, "format")</span>
-<span class="source-line-no">1045</span><span id="line-1045">         .addIf(in != null, "in")</span>
-<span class="source-line-no">1046</span><span id="line-1046">         .addIf(items != null, "items")</span>
-<span class="source-line-no">1047</span><span id="line-1047">         .addIf(maximum != null, "maximum")</span>
-<span class="source-line-no">1048</span><span id="line-1048">         .addIf(maxItems != null, "maxItems")</span>
-<span class="source-line-no">1049</span><span id="line-1049">         .addIf(maxLength != null, "maxLength")</span>
-<span class="source-line-no">1050</span><span id="line-1050">         .addIf(minimum != null, "minimum")</span>
-<span class="source-line-no">1051</span><span id="line-1051">         .addIf(minItems != null, "minItems")</span>
-<span class="source-line-no">1052</span><span id="line-1052">         .addIf(minLength != null, "minLength")</span>
-<span class="source-line-no">1053</span><span id="line-1053">         .addIf(multipleOf != null, "multipleOf")</span>
-<span class="source-line-no">1054</span><span id="line-1054">         .addIf(name != null, "name")</span>
-<span class="source-line-no">1055</span><span id="line-1055">         .addIf(pattern != null, "pattern")</span>
-<span class="source-line-no">1056</span><span id="line-1056">         .addIf(required != null, "required")</span>
-<span class="source-line-no">1057</span><span id="line-1057">         .addIf(schema != null, "schema")</span>
-<span class="source-line-no">1058</span><span id="line-1058">         .addIf(type != null, "type")</span>
-<span class="source-line-no">1059</span><span id="line-1059">         .addIf(uniqueItems != null, "uniqueItems")</span>
-<span class="source-line-no">1060</span><span id="line-1060">         .build();</span>
-<span class="source-line-no">1061</span><span id="line-1061">      return new MultiSet&lt;&gt;(s, super.keySet());</span>
-<span class="source-line-no">1062</span><span id="line-1062">   }</span>
-<span class="source-line-no">1063</span><span id="line-1063"></span>
-<span class="source-line-no">1064</span><span id="line-1064">   /**</span>
-<span class="source-line-no">1065</span><span id="line-1065">    * Resolves any &lt;js&gt;"$ref"&lt;/js&gt; attributes in this element.</span>
-<span class="source-line-no">1066</span><span id="line-1066">    *</span>
-<span class="source-line-no">1067</span><span id="line-1067">    * @param swagger The swagger document containing the definitions.</span>
-<span class="source-line-no">1068</span><span id="line-1068">    * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.</span>
-<span class="source-line-no">1069</span><span id="line-1069">    * @param maxDepth</span>
-<span class="source-line-no">1070</span><span id="line-1070">    *    The maximum depth to resolve references.</span>
-<span class="source-line-no">1071</span><span id="line-1071">    *    &lt;br&gt;After that level is reached, &lt;c&gt;$ref&lt;/c&gt; references will be left alone.</span>
-<span class="source-line-no">1072</span><span id="line-1072">    *    &lt;br&gt;Useful if you have very complex models and you don't want your swagger page to be overly-complex.</span>
-<span class="source-line-no">1073</span><span id="line-1073">    * @return</span>
-<span class="source-line-no">1074</span><span id="line-1074">    *    This object with references resolved.</span>
-<span class="source-line-no">1075</span><span id="line-1075">    *    &lt;br&gt;May or may not be the same object.</span>
-<span class="source-line-no">1076</span><span id="line-1076">    */</span>
-<span class="source-line-no">1077</span><span id="line-1077">   public ParameterInfo resolveRefs(Swagger swagger, Deque&lt;String&gt; refStack, int maxDepth) {</span>
-<span class="source-line-no">1078</span><span id="line-1078"></span>
-<span class="source-line-no">1079</span><span id="line-1079">      if (schema != null)</span>
-<span class="source-line-no">1080</span><span id="line-1080">         schema = schema.resolveRefs(swagger, refStack, maxDepth);</span>
-<span class="source-line-no">1081</span><span id="line-1081"></span>
-<span class="source-line-no">1082</span><span id="line-1082">      if (items != null)</span>
-<span class="source-line-no">1083</span><span id="line-1083">         items = items.resolveRefs(swagger, refStack, maxDepth);</span>
-<span class="source-line-no">1084</span><span id="line-1084"></span>
-<span class="source-line-no">1085</span><span id="line-1085">      return this;</span>
-<span class="source-line-no">1086</span><span id="line-1086">   }</span>
-<span class="source-line-no">1087</span><span id="line-1087"></span>
-<span class="source-line-no">1088</span><span id="line-1088">}</span>
+<span class="source-line-no">963</span><span id="line-963"></span>
+<span class="source-line-no">964</span><span id="line-964">   /**</span>
+<span class="source-line-no">965</span><span id="line-965">    * Bean property getter:  &lt;property&gt;example&lt;/property&gt;.</span>
+<span class="source-line-no">966</span><span id="line-966">    *</span>
+<span class="source-line-no">967</span><span id="line-967">    * &lt;p&gt;</span>
+<span class="source-line-no">968</span><span id="line-968">    * An example of the parameter. This is useful for documentation purposes.</span>
+<span class="source-line-no">969</span><span id="line-969">    *</span>
+<span class="source-line-no">970</span><span id="line-970">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">971</span><span id="line-971">    */</span>
+<span class="source-line-no">972</span><span id="line-972">   public Object getExample() {</span>
+<span class="source-line-no">973</span><span id="line-973">      return example;</span>
+<span class="source-line-no">974</span><span id="line-974">   }</span>
+<span class="source-line-no">975</span><span id="line-975"></span>
+<span class="source-line-no">976</span><span id="line-976">   /**</span>
+<span class="source-line-no">977</span><span id="line-977">    * Bean property setter:  &lt;property&gt;example&lt;/property&gt;.</span>
+<span class="source-line-no">978</span><span id="line-978">    *</span>
+<span class="source-line-no">979</span><span id="line-979">    * &lt;p&gt;</span>
+<span class="source-line-no">980</span><span id="line-980">    * An example of the parameter. This is useful for documentation purposes.</span>
+<span class="source-line-no">981</span><span id="line-981">    *</span>
+<span class="source-line-no">982</span><span id="line-982">    * @param value</span>
+<span class="source-line-no">983</span><span id="line-983">    *    The new value for this property.</span>
+<span class="source-line-no">984</span><span id="line-984">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">985</span><span id="line-985">    * @return This object.</span>
+<span class="source-line-no">986</span><span id="line-986">    */</span>
+<span class="source-line-no">987</span><span id="line-987">   public ParameterInfo setExample(Object value) {</span>
+<span class="source-line-no">988</span><span id="line-988">      this.example = value;</span>
+<span class="source-line-no">989</span><span id="line-989">      return this;</span>
+<span class="source-line-no">990</span><span id="line-990">   }</span>
+<span class="source-line-no">991</span><span id="line-991"></span>
+<span class="source-line-no">992</span><span id="line-992">   /**</span>
+<span class="source-line-no">993</span><span id="line-993">    * Bean property getter:  &lt;property&gt;examples&lt;/property&gt;.</span>
+<span class="source-line-no">994</span><span id="line-994">    *</span>
+<span class="source-line-no">995</span><span id="line-995">    * &lt;p&gt;</span>
+<span class="source-line-no">996</span><span id="line-996">    * Examples of the parameter. This is useful for documentation purposes.</span>
+<span class="source-line-no">997</span><span id="line-997">    *</span>
+<span class="source-line-no">998</span><span id="line-998">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">999</span><span id="line-999">    */</span>
+<span class="source-line-no">1000</span><span id="line-1000">   public Map&lt;String,String&gt; getExamples() {</span>
+<span class="source-line-no">1001</span><span id="line-1001">      return examples;</span>
+<span class="source-line-no">1002</span><span id="line-1002">   }</span>
+<span class="source-line-no">1003</span><span id="line-1003"></span>
+<span class="source-line-no">1004</span><span id="line-1004">   /**</span>
+<span class="source-line-no">1005</span><span id="line-1005">    * Bean property setter:  &lt;property&gt;examples&lt;/property&gt;.</span>
+<span class="source-line-no">1006</span><span id="line-1006">    *</span>
+<span class="source-line-no">1007</span><span id="line-1007">    * &lt;p&gt;</span>
+<span class="source-line-no">1008</span><span id="line-1008">    * Examples of the parameter. This is useful for documentation purposes.</span>
+<span class="source-line-no">1009</span><span id="line-1009">    *</span>
+<span class="source-line-no">1010</span><span id="line-1010">    * @param value</span>
+<span class="source-line-no">1011</span><span id="line-1011">    *    The new value for this property.</span>
+<span class="source-line-no">1012</span><span id="line-1012">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">1013</span><span id="line-1013">    * @return This object.</span>
+<span class="source-line-no">1014</span><span id="line-1014">    */</span>
+<span class="source-line-no">1015</span><span id="line-1015">   public ParameterInfo setExamples(Map&lt;String,String&gt; value) {</span>
+<span class="source-line-no">1016</span><span id="line-1016">      this.examples = value;</span>
+<span class="source-line-no">1017</span><span id="line-1017">      return this;</span>
+<span class="source-line-no">1018</span><span id="line-1018">   }</span>
+<span class="source-line-no">1019</span><span id="line-1019"></span>
+<span class="source-line-no">1020</span><span id="line-1020">   // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">1021</span><span id="line-1021"></span>
+<span class="source-line-no">1022</span><span id="line-1022">   // &lt;/FluentSetters&gt;</span>
+<span class="source-line-no">1023</span><span id="line-1023"></span>
+<span class="source-line-no">1024</span><span id="line-1024">   @Override /* SwaggerElement */</span>
+<span class="source-line-no">1025</span><span id="line-1025">   public &lt;T&gt; T get(String property, Class&lt;T&gt; type) {</span>
+<span class="source-line-no">1026</span><span id="line-1026">      assertArgNotNull("property", property);</span>
+<span class="source-line-no">1027</span><span id="line-1027">      return switch (property) {</span>
+<span class="source-line-no">1028</span><span id="line-1028">         case "allowEmptyValue" -&gt; toType(getAllowEmptyValue(), type);</span>
+<span class="source-line-no">1029</span><span id="line-1029">         case "collectionFormat" -&gt; toType(getCollectionFormat(), type);</span>
+<span class="source-line-no">1030</span><span id="line-1030">         case "default" -&gt; toType(getDefault(), type);</span>
+<span class="source-line-no">1031</span><span id="line-1031">         case "description" -&gt; toType(getDescription(), type);</span>
+<span class="source-line-no">1032</span><span id="line-1032">         case "enum" -&gt; toType(getEnum(), type);</span>
+<span class="source-line-no">1033</span><span id="line-1033">         case "example" -&gt; toType(getExample(), type);</span>
+<span class="source-line-no">1034</span><span id="line-1034">         case "examples" -&gt; toType(getExamples(), type);</span>
+<span class="source-line-no">1035</span><span id="line-1035">         case "exclusiveMaximum" -&gt; toType(getExclusiveMaximum(), type);</span>
+<span class="source-line-no">1036</span><span id="line-1036">         case "exclusiveMinimum" -&gt; toType(getExclusiveMinimum(), type);</span>
+<span class="source-line-no">1037</span><span id="line-1037">         case "format" -&gt; toType(getFormat(), type);</span>
+<span class="source-line-no">1038</span><span id="line-1038">         case "in" -&gt; toType(getIn(), type);</span>
+<span class="source-line-no">1039</span><span id="line-1039">         case "items" -&gt; toType(getItems(), type);</span>
+<span class="source-line-no">1040</span><span id="line-1040">         case "maximum" -&gt; toType(getMaximum(), type);</span>
+<span class="source-line-no">1041</span><span id="line-1041">         case "maxItems" -&gt; toType(getMaxItems(), type);</span>
+<span class="source-line-no">1042</span><span id="line-1042">         case "maxLength" -&gt; toType(getMaxLength(), type);</span>
+<span class="source-line-no">1043</span><span id="line-1043">         case "minimum" -&gt; toType(getMinimum(), type);</span>
+<span class="source-line-no">1044</span><span id="line-1044">         case "minItems" -&gt; toType(getMinItems(), type);</span>
+<span class="source-line-no">1045</span><span id="line-1045">         case "minLength" -&gt; toType(getMinLength(), type);</span>
+<span class="source-line-no">1046</span><span id="line-1046">         case "multipleOf" -&gt; toType(getMultipleOf(), type);</span>
+<span class="source-line-no">1047</span><span id="line-1047">         case "name" -&gt; toType(getName(), type);</span>
+<span class="source-line-no">1048</span><span id="line-1048">         case "pattern" -&gt; toType(getPattern(), type);</span>
+<span class="source-line-no">1049</span><span id="line-1049">         case "required" -&gt; toType(getRequired(), type);</span>
+<span class="source-line-no">1050</span><span id="line-1050">         case "schema" -&gt; toType(getSchema(), type);</span>
+<span class="source-line-no">1051</span><span id="line-1051">         case "type" -&gt; toType(getType(), type);</span>
+<span class="source-line-no">1052</span><span id="line-1052">         case "uniqueItems" -&gt; toType(getUniqueItems(), type);</span>
+<span class="source-line-no">1053</span><span id="line-1053">         default -&gt; super.get(property, type);</span>
+<span class="source-line-no">1054</span><span id="line-1054">      };</span>
+<span class="source-line-no">1055</span><span id="line-1055">   }</span>
+<span class="source-line-no">1056</span><span id="line-1056"></span>
+<span class="source-line-no">1057</span><span id="line-1057">   @Override /* SwaggerElement */</span>
+<span class="source-line-no">1058</span><span id="line-1058">   public ParameterInfo set(String property, Object value) {</span>
+<span class="source-line-no">1059</span><span id="line-1059">      assertArgNotNull("property", property);</span>
+<span class="source-line-no">1060</span><span id="line-1060">      return switch (property) {</span>
+<span class="source-line-no">1061</span><span id="line-1061">         case "allowEmptyValue" -&gt; setAllowEmptyValue(toBoolean(value));</span>
+<span class="source-line-no">1062</span><span id="line-1062">         case "collectionFormat" -&gt; setCollectionFormat(Utils.s(value));</span>
+<span class="source-line-no">1063</span><span id="line-1063">         case "default" -&gt; setDefault(value);</span>
+<span class="source-line-no">1064</span><span id="line-1064">         case "description" -&gt; setDescription(Utils.s(value));</span>
+<span class="source-line-no">1065</span><span id="line-1065">         case "enum" -&gt; setEnum(value);</span>
+<span class="source-line-no">1066</span><span id="line-1066">         case "example" -&gt; setExample(value);</span>
+<span class="source-line-no">1067</span><span id="line-1067">         case "examples" -&gt; setExamples(toType(value, Map.class));</span>
+<span class="source-line-no">1068</span><span id="line-1068">         case "exclusiveMaximum" -&gt; setExclusiveMaximum(toBoolean(value));</span>
+<span class="source-line-no">1069</span><span id="line-1069">         case "exclusiveMinimum" -&gt; setExclusiveMinimum(toBoolean(value));</span>
+<span class="source-line-no">1070</span><span id="line-1070">         case "format" -&gt; setFormat(Utils.s(value));</span>
+<span class="source-line-no">1071</span><span id="line-1071">         case "in" -&gt; setIn(Utils.s(value));</span>
+<span class="source-line-no">1072</span><span id="line-1072">         case "items" -&gt; setItems(toType(value, Items.class));</span>
+<span class="source-line-no">1073</span><span id="line-1073">         case "maximum" -&gt; setMaximum(toNumber(value));</span>
+<span class="source-line-no">1074</span><span id="line-1074">         case "maxItems" -&gt; setMaxItems(toInteger(value));</span>
+<span class="source-line-no">1075</span><span id="line-1075">         case "maxLength" -&gt; setMaxLength(toInteger(value));</span>
+<span class="source-line-no">1076</span><span id="line-1076">         case "minimum" -&gt; setMinimum(toNumber(value));</span>
+<span class="source-line-no">1077</span><span id="line-1077">         case "minItems" -&gt; setMinItems(toInteger(value));</span>
+<span class="source-line-no">1078</span><span id="line-1078">         case "minLength" -&gt; setMinLength(toInteger(value));</span>
+<span class="source-line-no">1079</span><span id="line-1079">         case "multipleOf" -&gt; setMultipleOf(toNumber(value));</span>
+<span class="source-line-no">1080</span><span id="line-1080">         case "name" -&gt; setName(Utils.s(value));</span>
+<span class="source-line-no">1081</span><span id="line-1081">         case "pattern" -&gt; setPattern(Utils.s(value));</span>
+<span class="source-line-no">1082</span><span id="line-1082">         case "required" -&gt; setRequired(toBoolean(value));</span>
+<span class="source-line-no">1083</span><span id="line-1083">         case "schema" -&gt; setSchema(toType(value, SchemaInfo.class));</span>
+<span class="source-line-no">1084</span><span id="line-1084">         case "type" -&gt; setType(Utils.s(value));</span>
+<span class="source-line-no">1085</span><span id="line-1085">         case "uniqueItems" -&gt; setUniqueItems(toBoolean(value));</span>
+<span class="source-line-no">1086</span><span id="line-1086">         default -&gt; {</span>
+<span class="source-line-no">1087</span><span id="line-1087">            super.set(property, value);</span>
+<span class="source-line-no">1088</span><span id="line-1088">            yield this;</span>
+<span class="source-line-no">1089</span><span id="line-1089">         }</span>
+<span class="source-line-no">1090</span><span id="line-1090">      };</span>
+<span class="source-line-no">1091</span><span id="line-1091">   }</span>
+<span class="source-line-no">1092</span><span id="line-1092"></span>
+<span class="source-line-no">1093</span><span id="line-1093">   @Override /* SwaggerElement */</span>
+<span class="source-line-no">1094</span><span id="line-1094">   public Set&lt;String&gt; keySet() {</span>
+<span class="source-line-no">1095</span><span id="line-1095">      var s = setBuilder(String.class)</span>
+<span class="source-line-no">1096</span><span id="line-1096">         .addIf(allowEmptyValue != null, "allowEmptyValue")</span>
+<span class="source-line-no">1097</span><span id="line-1097">         .addIf(collectionFormat != null, "collectionFormat")</span>
+<span class="source-line-no">1098</span><span id="line-1098">         .addIf(_default != null, "default")</span>
+<span class="source-line-no">1099</span><span id="line-1099">         .addIf(description != null, "description")</span>
+<span class="source-line-no">1100</span><span id="line-1100">         .addIf(_enum != null, "enum")</span>
+<span class="source-line-no">1101</span><span id="line-1101">         .addIf(example != null, "example")</span>
+<span class="source-line-no">1102</span><span id="line-1102">         .addIf(examples != null, "examples")</span>
+<span class="source-line-no">1103</span><span id="line-1103">         .addIf(exclusiveMaximum != null, "exclusiveMaximum")</span>
+<span class="source-line-no">1104</span><span id="line-1104">         .addIf(exclusiveMinimum != null, "exclusiveMinimum")</span>
+<span class="source-line-no">1105</span><span id="line-1105">         .addIf(format != null, "format")</span>
+<span class="source-line-no">1106</span><span id="line-1106">         .addIf(in != null, "in")</span>
+<span class="source-line-no">1107</span><span id="line-1107">         .addIf(items != null, "items")</span>
+<span class="source-line-no">1108</span><span id="line-1108">         .addIf(maximum != null, "maximum")</span>
+<span class="source-line-no">1109</span><span id="line-1109">         .addIf(maxItems != null, "maxItems")</span>
+<span class="source-line-no">1110</span><span id="line-1110">         .addIf(maxLength != null, "maxLength")</span>
+<span class="source-line-no">1111</span><span id="line-1111">         .addIf(minimum != null, "minimum")</span>
+<span class="source-line-no">1112</span><span id="line-1112">         .addIf(minItems != null, "minItems")</span>
+<span class="source-line-no">1113</span><span id="line-1113">         .addIf(minLength != null, "minLength")</span>
+<span class="source-line-no">1114</span><span id="line-1114">         .addIf(multipleOf != null, "multipleOf")</span>
+<span class="source-line-no">1115</span><span id="line-1115">         .addIf(name != null, "name")</span>
+<span class="source-line-no">1116</span><span id="line-1116">         .addIf(pattern != null, "pattern")</span>
+<span class="source-line-no">1117</span><span id="line-1117">         .addIf(required != null, "required")</span>
+<span class="source-line-no">1118</span><span id="line-1118">         .addIf(schema != null, "schema")</span>
+<span class="source-line-no">1119</span><span id="line-1119">         .addIf(type != null, "type")</span>
+<span class="source-line-no">1120</span><span id="line-1120">         .addIf(uniqueItems != null, "uniqueItems")</span>
+<span class="source-line-no">1121</span><span id="line-1121">         .build();</span>
+<span class="source-line-no">1122</span><span id="line-1122">      return new MultiSet&lt;&gt;(s, super.keySet());</span>
+<span class="source-line-no">1123</span><span id="line-1123">   }</span>
+<span class="source-line-no">1124</span><span id="line-1124"></span>
+<span class="source-line-no">1125</span><span id="line-1125">   /**</span>
+<span class="source-line-no">1126</span><span id="line-1126">    * Resolves any &lt;js&gt;"$ref"&lt;/js&gt; attributes in this element.</span>
+<span class="source-line-no">1127</span><span id="line-1127">    *</span>
+<span class="source-line-no">1128</span><span id="line-1128">    * @param swagger The swagger document containing the definitions.</span>
+<span class="source-line-no">1129</span><span id="line-1129">    * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.</span>
+<span class="source-line-no">1130</span><span id="line-1130">    * @param maxDepth</span>
+<span class="source-line-no">1131</span><span id="line-1131">    *    The maximum depth to resolve references.</span>
+<span class="source-line-no">1132</span><span id="line-1132">    *    &lt;br&gt;After that level is reached, &lt;c&gt;$ref&lt;/c&gt; references will be left alone.</span>
+<span class="source-line-no">1133</span><span id="line-1133">    *    &lt;br&gt;Useful if you have very complex models and you don't want your swagger page to be overly-complex.</span>
+<span class="source-line-no">1134</span><span id="line-1134">    * @return</span>
+<span class="source-line-no">1135</span><span id="line-1135">    *    This object with references resolved.</span>
+<span class="source-line-no">1136</span><span id="line-1136">    *    &lt;br&gt;May or may not be the same object.</span>
+<span class="source-line-no">1137</span><span id="line-1137">    */</span>
+<span class="source-line-no">1138</span><span id="line-1138">   public ParameterInfo resolveRefs(Swagger swagger, Deque&lt;String&gt; refStack, int maxDepth) {</span>
+<span class="source-line-no">1139</span><span id="line-1139"></span>
+<span class="source-line-no">1140</span><span id="line-1140">      if (schema != null)</span>
+<span class="source-line-no">1141</span><span id="line-1141">         schema = schema.resolveRefs(swagger, refStack, maxDepth);</span>
+<span class="source-line-no">1142</span><span id="line-1142"></span>
+<span class="source-line-no">1143</span><span id="line-1143">      if (items != null)</span>
+<span class="source-line-no">1144</span><span id="line-1144">         items = items.resolveRefs(swagger, refStack, maxDepth);</span>
+<span class="source-line-no">1145</span><span id="line-1145"></span>
+<span class="source-line-no">1146</span><span id="line-1146">      return this;</span>
+<span class="source-line-no">1147</span><span id="line-1147">   }</span>
+<span class="source-line-no">1148</span><span id="line-1148">}</span>
 
 
 

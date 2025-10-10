@@ -49,7 +49,7 @@
 <span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;/ul&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> */</span>
-<span class="source-line-no">039</span><span id="line-39">public final class DateUtils {</span>
+<span class="source-line-no">039</span><span id="line-39">public class DateUtils {</span>
 <span class="source-line-no">040</span><span id="line-40"></span>
 <span class="source-line-no">041</span><span id="line-41">   /**</span>
 <span class="source-line-no">042</span><span id="line-42">    * Date format pattern used to parse HTTP date headers in RFC 1123 format.</span>
@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line-103">    * The instances are stored in a thread-local way because SimpleDateFormat is not thread-safe as noted in</span>
 <span class="source-line-no">104</span><span id="line-104">    * {@link SimpleDateFormat its javadoc}.</span>
 <span class="source-line-no">105</span><span id="line-105">    */</span>
-<span class="source-line-no">106</span><span id="line-106">   static final class DateFormatHolder {</span>
+<span class="source-line-no">106</span><span id="line-106">   static class DateFormatHolder {</span>
 <span class="source-line-no">107</span><span id="line-107">      private static final ThreadLocal&lt;SoftReference&lt;Map&lt;String,SimpleDateFormat&gt;&gt;&gt; THREADLOCAL_FORMATS =</span>
 <span class="source-line-no">108</span><span id="line-108">            new ThreadLocal&lt;&gt;() {</span>
 <span class="source-line-no">109</span><span id="line-109">         @Override</span>

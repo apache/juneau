@@ -334,115 +334,179 @@
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 	}
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 * Returns the external documentation.</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 * Bean property fluent setter:  &lt;property&gt;servers&lt;/property&gt;.</em>
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 * @return The external documentation.</em>
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	<strong class="jxr_keyword">public</strong> <a name="ExternalDocumentation" href="../../../../../org/apache/juneau/bean/openapi3/ExternalDocumentation.html#ExternalDocumentation">ExternalDocumentation</a> getExternalDocs() {
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">return</strong> externalDocs;
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	}
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * Sets the external documentation.</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * @param value The new value for this property.</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<strong class="jxr_keyword">public</strong> <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> setExternalDocs(<a name="ExternalDocumentation" href="../../../../../org/apache/juneau/bean/openapi3/ExternalDocumentation.html#ExternalDocumentation">ExternalDocumentation</a> value) {
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">this</strong>.externalDocs = value;
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * Finds a reference within this OpenAPI document.</em>
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * @param ref The reference string (e.g., &lt;js&gt;"#/components/schemas/User"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 * @param c The expected class type.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * @return The referenced node, or &lt;jk&gt;null&lt;/jk&gt; if not found.</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">	 * An array of Server Objects, which provide connectivity information to a target server.</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 * @param values</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 * 	The values to add to this property.</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	<strong class="jxr_keyword">public</strong> <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> addServers(Server...values) {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		servers = listBuilder(servers).sparse().add(values).build();
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	}
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">	 * Bean property fluent setter:  &lt;property&gt;servers&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * An array of Server Objects, which provide connectivity information to a target server.</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 * @param values</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * 	The values to add to this property.</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T findRef(String ref, Class&lt;T&gt; c) {
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		assertArgNotNullOrBlank(<span class="jxr_string">"ref"</span>, ref);
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertArgNotNull(<span class="jxr_string">"c"</span>, c);
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">if</strong> (! ref.startsWith(<span class="jxr_string">"#/"</span>))
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Unsupported reference:  ''{0}''"</span>, ref);
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ObjectRest(<strong class="jxr_keyword">this</strong>).get(ref.substring(1), c);
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(e, c, <span class="jxr_string">"Reference ''{0}'' could not be converted to type ''{1}''."</span>, ref, className(c));
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		}
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	}
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	@Override
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">return</strong> JsonSerializer.DEFAULT.toString(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	}
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	@Override <em class="jxr_comment">/* OpenApiElement */</em>
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T get(String property, Class&lt;T&gt; type) {
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"openapi"</span> -&gt; toType(getOpenapi(), type);
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"info"</span> -&gt; toType(getInfo(), type);
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"servers"</span> -&gt; toType(getServers(), type);
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"paths"</span> -&gt; toType(getPaths(), type);
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"components"</span> -&gt; toType(getComponents(), type);
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"security"</span> -&gt; toType(getSecurity(), type);
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"tags"</span> -&gt; toType(getTags(), type);
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"externalDocs"</span> -&gt; toType(getExternalDocs(), type);
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">default</strong> -&gt; <strong class="jxr_keyword">super</strong>.get(property, type);
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		};
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	}
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	@Override <em class="jxr_comment">/* OpenApiElement */</em>
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	<strong class="jxr_keyword">public</strong> <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> set(String property, Object value) {
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"components"</span> -&gt; setComponents(toType(value, Components.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"externalDocs"</span> -&gt; setExternalDocs(toType(value, ExternalDocumentation.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"info"</span> -&gt; setInfo(toType(value, Info.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"openapi"</span> -&gt; setOpenapi(Utils.s(value));
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"paths"</span> -&gt; setPaths(mapBuilder(String.<strong class="jxr_keyword">class</strong>, PathItem.<strong class="jxr_keyword">class</strong>).sparse().addAny(value).build());
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"security"</span> -&gt; setSecurity(listBuilder(SecurityRequirement.<strong class="jxr_keyword">class</strong>).sparse().addAny(value).build());
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"servers"</span> -&gt; setServers(listBuilder(Server.<strong class="jxr_keyword">class</strong>).sparse().addAny(value).build());
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"tags"</span> -&gt; setTags(listBuilder(Tag.<strong class="jxr_keyword">class</strong>).sparse().addAny(value).build());
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<strong class="jxr_keyword">default</strong> -&gt; {
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 				<strong class="jxr_keyword">super</strong>.set(property, value);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 				yield <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			}
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		};
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	}
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	@Override <em class="jxr_comment">/* OpenApiElement */</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">var</strong> s = setBuilder(String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			.addIf(components != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"components"</span>)
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			.addIf(externalDocs != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"externalDocs"</span>)
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			.addIf(info != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"info"</span>)
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			.addIf(openapi != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"openapi"</span>)
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			.addIf(paths != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"paths"</span>)
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			.addIf(security != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"security"</span>)
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			.addIf(servers != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"servers"</span>)
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			.addIf(tags != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"tags"</span>)
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			.build();
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(s, <strong class="jxr_keyword">super</strong>.keySet());
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	}
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<em class="jxr_comment">// &lt;FluentSetters&gt;</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	@Override <em class="jxr_comment">/* GENERATED - do not modify */</em>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	<strong class="jxr_keyword">public</strong> <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> strict() {
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">super</strong>.strict();
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	}
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	@Override <em class="jxr_comment">/* GENERATED - do not modify */</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<strong class="jxr_keyword">public</strong> <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> strict(Object value) {
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">super</strong>.strict(value);
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">public</strong> <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> addServers(Collection&lt;Server&gt; values) {
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		servers = listBuilder(servers).sparse().addAll(values).build();
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * Bean property fluent setter:  &lt;property&gt;security&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * A declaration of which security mechanisms can be used across the API.</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 * @param values</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * 	The values to add to this property.</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	<strong class="jxr_keyword">public</strong> <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> addSecurity(SecurityRequirement...values) {
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		security = listBuilder(security).sparse().add(values).build();
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	}
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 * Bean property fluent setter:  &lt;property&gt;security&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 * A declaration of which security mechanisms can be used across the API.</em>
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * @param values</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 * 	The values to add to this property.</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<strong class="jxr_keyword">public</strong> <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> addSecurity(Collection&lt;SecurityRequirement&gt; values) {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		security = listBuilder(security).sparse().addAll(values).build();
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * Returns the external documentation.</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 * @return The external documentation.</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<strong class="jxr_keyword">public</strong> <a name="ExternalDocumentation" href="../../../../../org/apache/juneau/bean/openapi3/ExternalDocumentation.html#ExternalDocumentation">ExternalDocumentation</a> getExternalDocs() {
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">return</strong> externalDocs;
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	}
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * Sets the external documentation.</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * @param value The new value for this property.</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	<strong class="jxr_keyword">public</strong> <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> setExternalDocs(<a name="ExternalDocumentation" href="../../../../../org/apache/juneau/bean/openapi3/ExternalDocumentation.html#ExternalDocumentation">ExternalDocumentation</a> value) {
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">this</strong>.externalDocs = value;
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	}
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 * Finds a reference within this OpenAPI document.</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 * @param ref The reference string (e.g., &lt;js&gt;"#/components/schemas/User"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 * @param c The expected class type.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * @return The referenced node, or &lt;jk&gt;null&lt;/jk&gt; if not found.</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T findRef(String ref, Class&lt;T&gt; c) {
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		assertArgNotNullOrBlank(<span class="jxr_string">"ref"</span>, ref);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertArgNotNull(<span class="jxr_string">"c"</span>, c);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">if</strong> (! ref.startsWith(<span class="jxr_string">"#/"</span>))
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Unsupported reference:  ''{0}''"</span>, ref);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ObjectRest(<strong class="jxr_keyword">this</strong>).get(ref.substring(1), c);
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(e, c, <span class="jxr_string">"Reference ''{0}'' could not be converted to type ''{1}''."</span>, ref, className(c));
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		}
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	}
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	@Override
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">return</strong> JsonSerializer.DEFAULT.toString(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 	}
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<em class="jxr_comment">// &lt;/FluentSetters&gt;</em>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> }
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	@Override <em class="jxr_comment">/* OpenApiElement */</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T get(String property, Class&lt;T&gt; type) {
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"openapi"</span> -&gt; toType(getOpenapi(), type);
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"info"</span> -&gt; toType(getInfo(), type);
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"servers"</span> -&gt; toType(getServers(), type);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"paths"</span> -&gt; toType(getPaths(), type);
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"components"</span> -&gt; toType(getComponents(), type);
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"security"</span> -&gt; toType(getSecurity(), type);
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"tags"</span> -&gt; toType(getTags(), type);
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"externalDocs"</span> -&gt; toType(getExternalDocs(), type);
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			<strong class="jxr_keyword">default</strong> -&gt; <strong class="jxr_keyword">super</strong>.get(property, type);
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		};
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	}
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	@Override <em class="jxr_comment">/* OpenApiElement */</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	<strong class="jxr_keyword">public</strong> <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> set(String property, Object value) {
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"components"</span> -&gt; setComponents(toType(value, Components.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"externalDocs"</span> -&gt; setExternalDocs(toType(value, ExternalDocumentation.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"info"</span> -&gt; setInfo(toType(value, Info.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"openapi"</span> -&gt; setOpenapi(Utils.s(value));
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"paths"</span> -&gt; setPaths(mapBuilder(String.<strong class="jxr_keyword">class</strong>, PathItem.<strong class="jxr_keyword">class</strong>).sparse().addAny(value).build());
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"security"</span> -&gt; setSecurity(listBuilder(SecurityRequirement.<strong class="jxr_keyword">class</strong>).sparse().addAny(value).build());
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"servers"</span> -&gt; setServers(listBuilder(Server.<strong class="jxr_keyword">class</strong>).sparse().addAny(value).build());
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"tags"</span> -&gt; setTags(listBuilder(Tag.<strong class="jxr_keyword">class</strong>).sparse().addAny(value).build());
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 			<strong class="jxr_keyword">default</strong> -&gt; {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 				<strong class="jxr_keyword">super</strong>.set(property, value);
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 				yield <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			}
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		};
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 	}
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	@Override <em class="jxr_comment">/* OpenApiElement */</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">var</strong> s = setBuilder(String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			.addIf(components != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"components"</span>)
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 			.addIf(externalDocs != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"externalDocs"</span>)
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			.addIf(info != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"info"</span>)
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			.addIf(openapi != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"openapi"</span>)
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			.addIf(paths != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"paths"</span>)
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			.addIf(security != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"security"</span>)
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			.addIf(servers != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"servers"</span>)
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			.addIf(tags != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"tags"</span>)
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			.build();
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(s, <strong class="jxr_keyword">super</strong>.keySet());
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 	}
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	<em class="jxr_comment">// &lt;FluentSetters&gt;</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	@Override <em class="jxr_comment">/* GENERATED - do not modify */</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 	<strong class="jxr_keyword">public</strong> <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> strict() {
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		<strong class="jxr_keyword">super</strong>.strict();
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 	}
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	@Override <em class="jxr_comment">/* GENERATED - do not modify */</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 	<strong class="jxr_keyword">public</strong> <a name="OpenApi" href="../../../../../org/apache/juneau/bean/openapi3/OpenApi.html#OpenApi">OpenApi</a> strict(Object value) {
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<strong class="jxr_keyword">super</strong>.strict(value);
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 	}
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	<em class="jxr_comment">// &lt;/FluentSetters&gt;</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

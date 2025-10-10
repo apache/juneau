@@ -38,7 +38,7 @@
 <span class="source-line-no">025</span><span id="line-25"> * Provides the capability of returning splices of log files based on dates and filtering based on thread and logger</span>
 <span class="source-line-no">026</span><span id="line-26"> * names.</span>
 <span class="source-line-no">027</span><span id="line-27"> */</span>
-<span class="source-line-no">028</span><span id="line-28">public final class LogParser implements Iterable&lt;LogParser.Entry&gt;, Iterator&lt;LogParser.Entry&gt;, Closeable {</span>
+<span class="source-line-no">028</span><span id="line-28">public class LogParser implements Iterable&lt;LogParser.Entry&gt;, Iterator&lt;LogParser.Entry&gt;, Closeable {</span>
 <span class="source-line-no">029</span><span id="line-29">   private BufferedReader br;</span>
 <span class="source-line-no">030</span><span id="line-30">   LogEntryFormatter formatter;</span>
 <span class="source-line-no">031</span><span id="line-31">   Date start, end;</span>
@@ -143,7 +143,7 @@
 <span class="source-line-no">130</span><span id="line-130">    * Represents a single line from the log file.</span>
 <span class="source-line-no">131</span><span id="line-131">    */</span>
 <span class="source-line-no">132</span><span id="line-132">   @SuppressWarnings("javadoc")</span>
-<span class="source-line-no">133</span><span id="line-133">   public final class Entry {</span>
+<span class="source-line-no">133</span><span id="line-133">   public class Entry {</span>
 <span class="source-line-no">134</span><span id="line-134">      public Date date;</span>
 <span class="source-line-no">135</span><span id="line-135">      public String severity, logger;</span>
 <span class="source-line-no">136</span><span id="line-136">      protected String line, text;</span>

@@ -33,7 +33,7 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">class</strong> <a name="SwaggerBuilder_Test" href="../../../../../org/apache/juneau/bean/swagger/SwaggerBuilder_Test.html#SwaggerBuilder_Test">SwaggerBuilder_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	@Test @Disabled <strong class="jxr_keyword">void</strong> a01_contact() {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	@Test <strong class="jxr_keyword">void</strong> a01_contact() {
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  		<strong class="jxr_keyword">var</strong> t = contact();
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  		assertJson(<span class="jxr_string">"{}"</span>, t);
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
@@ -41,7 +41,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  		assertJson(<span class="jxr_string">"{name:'foo'}"</span>, t);
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		t = contact(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>, <span class="jxr_string">"baz"</span>);
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		assertJson(<span class="jxr_string">"{name:'foo',url:'bar',email:'baz'}"</span>, t);
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		assertJson(<span class="jxr_string">"{email:'baz',name:'foo',url:'bar'}"</span>, t);
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  	}
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	@Test <strong class="jxr_keyword">void</strong> a02_externalDocumentation() {
@@ -136,12 +136,12 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertJson(<span class="jxr_string">"{type:'foo'}"</span>, t);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test @Disabled <strong class="jxr_keyword">void</strong> a12_swagger() {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test <strong class="jxr_keyword">void</strong> a12_swagger() {
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> t = swagger();
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertJson(<span class="jxr_string">"{swagger:'2.0'}"</span>, t);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		t = swagger(info());
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertJson(<span class="jxr_string">"{swagger:'2.0',info:{}}"</span>, t);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertJson(<span class="jxr_string">"{info:{},swagger:'2.0'}"</span>, t);
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Test <strong class="jxr_keyword">void</strong> a13_tag() {
@@ -156,7 +156,40 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> t = xml();
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		assertJson(<span class="jxr_string">"{}"</span>, t);
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	}
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> }
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	@Test <strong class="jxr_keyword">void</strong> a15_license() {
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> t = license();
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertJson(<span class="jxr_string">"{}"</span>, t);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		t = license(<span class="jxr_string">"MIT"</span>);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertJson(<span class="jxr_string">"{name:'MIT'}"</span>, t);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		t = license(<span class="jxr_string">"MIT"</span>, java.net.URI.create(<span class="jxr_string">"https://opensource.org/licenses/MIT"</span>));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertJson(<span class="jxr_string">"{name:'MIT',url:'https://opensource.org/licenses/MIT'}"</span>, t);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	}
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	@Test <strong class="jxr_keyword">void</strong> a16_operation() {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">var</strong> t = operation();
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertJson(<span class="jxr_string">"{}"</span>, t);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	@Test <strong class="jxr_keyword">void</strong> a17_operationMap() {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> t = operationMap();
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertJson(<span class="jxr_string">"{}"</span>, t);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	}
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	@Test <strong class="jxr_keyword">void</strong> a18_itemsStrict() {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> t = itemsStrict(<span class="jxr_string">"string"</span>);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertJson(<span class="jxr_string">"{type:'string'}"</span>, t);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']"</span>, ()-&gt;itemsStrict(<span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	}
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	@Test <strong class="jxr_keyword">void</strong> a19_securitySchemeStrict() {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> t = securitySchemeStrict(<span class="jxr_string">"basic"</span>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertJson(<span class="jxr_string">"{type:'basic'}"</span>, t);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setType(String).  Value='foo', valid values=['basic','apiKey','oauth2']"</span>, ()-&gt;securitySchemeStrict(<span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

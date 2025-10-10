@@ -265,956 +265,1004 @@
 <span class="source-line-no">252</span><span id="line-252">   /**</span>
 <span class="source-line-no">253</span><span id="line-253">    * Bean property fluent setter:  &lt;property&gt;allOf&lt;/property&gt;.</span>
 <span class="source-line-no">254</span><span id="line-254">    *</span>
-<span class="source-line-no">255</span><span id="line-255">    * @param value</span>
-<span class="source-line-no">256</span><span id="line-256">    *    The new value for this property.</span>
-<span class="source-line-no">257</span><span id="line-257">    *    &lt;br&gt;Strings can contains JSON arrays.</span>
-<span class="source-line-no">258</span><span id="line-258">    *    &lt;br&gt;Valid types:</span>
-<span class="source-line-no">259</span><span id="line-259">    * @return This object.</span>
-<span class="source-line-no">260</span><span id="line-260">    */</span>
-<span class="source-line-no">261</span><span id="line-261">   public SchemaInfo setAllOf(SchemaInfo...value) {</span>
-<span class="source-line-no">262</span><span id="line-262">      setAllOf(setBuilder(SchemaInfo.class).elementType(SchemaInfo.class).sparse().addAny((Object[])value).build());</span>
-<span class="source-line-no">263</span><span id="line-263">      return this;</span>
-<span class="source-line-no">264</span><span id="line-264">   }</span>
-<span class="source-line-no">265</span><span id="line-265"></span>
-<span class="source-line-no">266</span><span id="line-266">   /**</span>
-<span class="source-line-no">267</span><span id="line-267">    * Bean property getter:  &lt;property&gt;default&lt;/property&gt;.</span>
-<span class="source-line-no">268</span><span id="line-268">    *</span>
-<span class="source-line-no">269</span><span id="line-269">    * &lt;p&gt;</span>
-<span class="source-line-no">270</span><span id="line-270">    * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.</span>
-<span class="source-line-no">271</span><span id="line-271">    *</span>
-<span class="source-line-no">272</span><span id="line-272">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">273</span><span id="line-273">    */</span>
-<span class="source-line-no">274</span><span id="line-274">   public Object getDefault() {</span>
-<span class="source-line-no">275</span><span id="line-275">      return _default;</span>
-<span class="source-line-no">276</span><span id="line-276">   }</span>
-<span class="source-line-no">277</span><span id="line-277"></span>
-<span class="source-line-no">278</span><span id="line-278">   /**</span>
-<span class="source-line-no">279</span><span id="line-279">    * Bean property setter:  &lt;property&gt;default&lt;/property&gt;.</span>
-<span class="source-line-no">280</span><span id="line-280">    *</span>
-<span class="source-line-no">281</span><span id="line-281">    * &lt;p&gt;</span>
-<span class="source-line-no">282</span><span id="line-282">    * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.</span>
-<span class="source-line-no">283</span><span id="line-283">    *</span>
-<span class="source-line-no">284</span><span id="line-284">    * @param value</span>
-<span class="source-line-no">285</span><span id="line-285">    *    The new value for this property.</span>
-<span class="source-line-no">286</span><span id="line-286">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">287</span><span id="line-287">    * @return This object.</span>
-<span class="source-line-no">288</span><span id="line-288">    */</span>
-<span class="source-line-no">289</span><span id="line-289">   public SchemaInfo setDefault(Object value) {</span>
-<span class="source-line-no">290</span><span id="line-290">      _default = value;</span>
-<span class="source-line-no">291</span><span id="line-291">      return this;</span>
+<span class="source-line-no">255</span><span id="line-255">    * &lt;p&gt;</span>
+<span class="source-line-no">256</span><span id="line-256">    * Inline or referenced schema MUST be of a Schema Object and not a standard JSON Schema.</span>
+<span class="source-line-no">257</span><span id="line-257">    *</span>
+<span class="source-line-no">258</span><span id="line-258">    * @param values</span>
+<span class="source-line-no">259</span><span id="line-259">    *    The values to add to this property.</span>
+<span class="source-line-no">260</span><span id="line-260">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">261</span><span id="line-261">    * @return This object.</span>
+<span class="source-line-no">262</span><span id="line-262">    */</span>
+<span class="source-line-no">263</span><span id="line-263">   public SchemaInfo addAllOf(Collection&lt;SchemaInfo&gt; values) {</span>
+<span class="source-line-no">264</span><span id="line-264">      allOf = setBuilder(allOf).elementType(SchemaInfo.class).sparse().addAll(values).build();</span>
+<span class="source-line-no">265</span><span id="line-265">      return this;</span>
+<span class="source-line-no">266</span><span id="line-266">   }</span>
+<span class="source-line-no">267</span><span id="line-267"></span>
+<span class="source-line-no">268</span><span id="line-268">   /**</span>
+<span class="source-line-no">269</span><span id="line-269">    * Bean property fluent setter:  &lt;property&gt;allOf&lt;/property&gt;.</span>
+<span class="source-line-no">270</span><span id="line-270">    *</span>
+<span class="source-line-no">271</span><span id="line-271">    * @param value</span>
+<span class="source-line-no">272</span><span id="line-272">    *    The new value for this property.</span>
+<span class="source-line-no">273</span><span id="line-273">    *    &lt;br&gt;Strings can contains JSON arrays.</span>
+<span class="source-line-no">274</span><span id="line-274">    *    &lt;br&gt;Valid types:</span>
+<span class="source-line-no">275</span><span id="line-275">    * @return This object.</span>
+<span class="source-line-no">276</span><span id="line-276">    */</span>
+<span class="source-line-no">277</span><span id="line-277">   public SchemaInfo setAllOf(SchemaInfo...value) {</span>
+<span class="source-line-no">278</span><span id="line-278">      setAllOf(setBuilder(SchemaInfo.class).elementType(SchemaInfo.class).sparse().addAny((Object[])value).build());</span>
+<span class="source-line-no">279</span><span id="line-279">      return this;</span>
+<span class="source-line-no">280</span><span id="line-280">   }</span>
+<span class="source-line-no">281</span><span id="line-281"></span>
+<span class="source-line-no">282</span><span id="line-282">   /**</span>
+<span class="source-line-no">283</span><span id="line-283">    * Bean property getter:  &lt;property&gt;default&lt;/property&gt;.</span>
+<span class="source-line-no">284</span><span id="line-284">    *</span>
+<span class="source-line-no">285</span><span id="line-285">    * &lt;p&gt;</span>
+<span class="source-line-no">286</span><span id="line-286">    * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.</span>
+<span class="source-line-no">287</span><span id="line-287">    *</span>
+<span class="source-line-no">288</span><span id="line-288">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">289</span><span id="line-289">    */</span>
+<span class="source-line-no">290</span><span id="line-290">   public Object getDefault() {</span>
+<span class="source-line-no">291</span><span id="line-291">      return _default;</span>
 <span class="source-line-no">292</span><span id="line-292">   }</span>
 <span class="source-line-no">293</span><span id="line-293"></span>
 <span class="source-line-no">294</span><span id="line-294">   /**</span>
-<span class="source-line-no">295</span><span id="line-295">    * Bean property getter:  &lt;property&gt;description&lt;/property&gt;.</span>
+<span class="source-line-no">295</span><span id="line-295">    * Bean property setter:  &lt;property&gt;default&lt;/property&gt;.</span>
 <span class="source-line-no">296</span><span id="line-296">    *</span>
-<span class="source-line-no">297</span><span id="line-297">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">298</span><span id="line-298">    */</span>
-<span class="source-line-no">299</span><span id="line-299">   public String getDescription() {</span>
-<span class="source-line-no">300</span><span id="line-300">      return description;</span>
-<span class="source-line-no">301</span><span id="line-301">   }</span>
-<span class="source-line-no">302</span><span id="line-302"></span>
-<span class="source-line-no">303</span><span id="line-303">   /**</span>
-<span class="source-line-no">304</span><span id="line-304">    * Bean property setter:  &lt;property&gt;description&lt;/property&gt;.</span>
-<span class="source-line-no">305</span><span id="line-305">    *</span>
-<span class="source-line-no">306</span><span id="line-306">    * @param value</span>
-<span class="source-line-no">307</span><span id="line-307">    *    The new value for this property.</span>
-<span class="source-line-no">308</span><span id="line-308">    *    &lt;br&gt;&lt;a class="doclink" href="https://help.github.com/articles/github-flavored-markdown"&gt;GFM syntax&lt;/a&gt; can be used for rich text representation.</span>
-<span class="source-line-no">309</span><span id="line-309">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">310</span><span id="line-310">    * @return This object.</span>
-<span class="source-line-no">311</span><span id="line-311">    */</span>
-<span class="source-line-no">312</span><span id="line-312">   public SchemaInfo setDescription(String value) {</span>
-<span class="source-line-no">313</span><span id="line-313">      description = value;</span>
-<span class="source-line-no">314</span><span id="line-314">      return this;</span>
-<span class="source-line-no">315</span><span id="line-315">   }</span>
-<span class="source-line-no">316</span><span id="line-316"></span>
-<span class="source-line-no">317</span><span id="line-317">   /**</span>
-<span class="source-line-no">318</span><span id="line-318">    * Bean property getter:  &lt;property&gt;discriminator&lt;/property&gt;.</span>
-<span class="source-line-no">319</span><span id="line-319">    *</span>
-<span class="source-line-no">320</span><span id="line-320">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">321</span><span id="line-321">    */</span>
-<span class="source-line-no">322</span><span id="line-322">   public String getDiscriminator() {</span>
-<span class="source-line-no">323</span><span id="line-323">      return discriminator;</span>
-<span class="source-line-no">324</span><span id="line-324">   }</span>
-<span class="source-line-no">325</span><span id="line-325"></span>
-<span class="source-line-no">326</span><span id="line-326">   /**</span>
-<span class="source-line-no">327</span><span id="line-327">    * Bean property setter:  &lt;property&gt;discriminator&lt;/property&gt;.</span>
-<span class="source-line-no">328</span><span id="line-328">    *</span>
-<span class="source-line-no">329</span><span id="line-329">    * @param value</span>
-<span class="source-line-no">330</span><span id="line-330">    *    The new value for this property.</span>
-<span class="source-line-no">331</span><span id="line-331">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">332</span><span id="line-332">    * @return This object.</span>
-<span class="source-line-no">333</span><span id="line-333">    */</span>
-<span class="source-line-no">334</span><span id="line-334">   public SchemaInfo setDiscriminator(String value) {</span>
-<span class="source-line-no">335</span><span id="line-335">      discriminator = value;</span>
-<span class="source-line-no">336</span><span id="line-336">      return this;</span>
-<span class="source-line-no">337</span><span id="line-337">   }</span>
-<span class="source-line-no">338</span><span id="line-338"></span>
-<span class="source-line-no">339</span><span id="line-339">   /**</span>
-<span class="source-line-no">340</span><span id="line-340">    * Bean property getter:  &lt;property&gt;enum&lt;/property&gt;.</span>
-<span class="source-line-no">341</span><span id="line-341">    *</span>
-<span class="source-line-no">342</span><span id="line-342">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">343</span><span id="line-343">    */</span>
-<span class="source-line-no">344</span><span id="line-344">   public Set&lt;Object&gt; getEnum() {</span>
-<span class="source-line-no">345</span><span id="line-345">      return _enum;</span>
-<span class="source-line-no">346</span><span id="line-346">   }</span>
-<span class="source-line-no">347</span><span id="line-347"></span>
-<span class="source-line-no">348</span><span id="line-348">   /**</span>
-<span class="source-line-no">349</span><span id="line-349">    * Bean property setter:  &lt;property&gt;enum&lt;/property&gt;.</span>
-<span class="source-line-no">350</span><span id="line-350">    *</span>
-<span class="source-line-no">351</span><span id="line-351">    * @param value</span>
-<span class="source-line-no">352</span><span id="line-352">    *    The new value for this property.</span>
-<span class="source-line-no">353</span><span id="line-353">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">354</span><span id="line-354">    * @return This object.</span>
-<span class="source-line-no">355</span><span id="line-355">    */</span>
-<span class="source-line-no">356</span><span id="line-356">   public SchemaInfo setEnum(Collection&lt;Object&gt; value) {</span>
-<span class="source-line-no">357</span><span id="line-357">      _enum = setFrom(value);</span>
-<span class="source-line-no">358</span><span id="line-358">      return this;</span>
-<span class="source-line-no">359</span><span id="line-359">   }</span>
-<span class="source-line-no">360</span><span id="line-360"></span>
-<span class="source-line-no">361</span><span id="line-361">   /**</span>
-<span class="source-line-no">362</span><span id="line-362">    * Bean property appender:  &lt;property&gt;enum&lt;/property&gt;.</span>
-<span class="source-line-no">363</span><span id="line-363">    *</span>
-<span class="source-line-no">364</span><span id="line-364">    * @param value</span>
-<span class="source-line-no">365</span><span id="line-365">    *    The values to add to this property.</span>
-<span class="source-line-no">366</span><span id="line-366">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">367</span><span id="line-367">    * @return This object.</span>
-<span class="source-line-no">368</span><span id="line-368">    */</span>
-<span class="source-line-no">369</span><span id="line-369">   public SchemaInfo addEnum(Object...value) {</span>
-<span class="source-line-no">370</span><span id="line-370">      _enum = setBuilder(_enum).sparse().add(value).build();</span>
-<span class="source-line-no">371</span><span id="line-371">      return this;</span>
-<span class="source-line-no">372</span><span id="line-372">   }</span>
-<span class="source-line-no">373</span><span id="line-373"></span>
-<span class="source-line-no">374</span><span id="line-374">   /**</span>
-<span class="source-line-no">375</span><span id="line-375">    * Bean property fluent setter:  &lt;property&gt;enum&lt;/property&gt;.</span>
-<span class="source-line-no">376</span><span id="line-376">    *</span>
-<span class="source-line-no">377</span><span id="line-377">    * @param value</span>
-<span class="source-line-no">378</span><span id="line-378">    *    The new value for this property.</span>
-<span class="source-line-no">379</span><span id="line-379">    *    &lt;br&gt;Strings can be JSON arrays.</span>
-<span class="source-line-no">380</span><span id="line-380">    * @return This object.</span>
-<span class="source-line-no">381</span><span id="line-381">    */</span>
-<span class="source-line-no">382</span><span id="line-382">   public SchemaInfo setEnum(Object...value) {</span>
-<span class="source-line-no">383</span><span id="line-383">      setEnum(setBuilder(Object.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">384</span><span id="line-384">      return this;</span>
-<span class="source-line-no">385</span><span id="line-385">   }</span>
-<span class="source-line-no">386</span><span id="line-386"></span>
-<span class="source-line-no">387</span><span id="line-387">   /**</span>
-<span class="source-line-no">388</span><span id="line-388">    * Bean property getter:  &lt;property&gt;example&lt;/property&gt;.</span>
-<span class="source-line-no">389</span><span id="line-389">    *</span>
-<span class="source-line-no">390</span><span id="line-390">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">391</span><span id="line-391">    */</span>
-<span class="source-line-no">392</span><span id="line-392">   public Object getExample() {</span>
-<span class="source-line-no">393</span><span id="line-393">      return example;</span>
-<span class="source-line-no">394</span><span id="line-394">   }</span>
-<span class="source-line-no">395</span><span id="line-395"></span>
-<span class="source-line-no">396</span><span id="line-396">   /**</span>
-<span class="source-line-no">397</span><span id="line-397">    * Bean property setter:  &lt;property&gt;example&lt;/property&gt;.</span>
-<span class="source-line-no">398</span><span id="line-398">    *</span>
-<span class="source-line-no">399</span><span id="line-399">    * @param value</span>
-<span class="source-line-no">400</span><span id="line-400">    *    The new value for this property.</span>
-<span class="source-line-no">401</span><span id="line-401">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">402</span><span id="line-402">    * @return This object.</span>
-<span class="source-line-no">403</span><span id="line-403">    */</span>
-<span class="source-line-no">404</span><span id="line-404">   public SchemaInfo setExample(Object value) {</span>
-<span class="source-line-no">405</span><span id="line-405">      example = value;</span>
-<span class="source-line-no">406</span><span id="line-406">      return this;</span>
-<span class="source-line-no">407</span><span id="line-407">   }</span>
-<span class="source-line-no">408</span><span id="line-408"></span>
-<span class="source-line-no">409</span><span id="line-409">   /**</span>
-<span class="source-line-no">410</span><span id="line-410">    * Bean property getter:  &lt;property&gt;exclusiveMaximum&lt;/property&gt;.</span>
-<span class="source-line-no">411</span><span id="line-411">    *</span>
-<span class="source-line-no">412</span><span id="line-412">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">297</span><span id="line-297">    * &lt;p&gt;</span>
+<span class="source-line-no">298</span><span id="line-298">    * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.</span>
+<span class="source-line-no">299</span><span id="line-299">    *</span>
+<span class="source-line-no">300</span><span id="line-300">    * @param value</span>
+<span class="source-line-no">301</span><span id="line-301">    *    The new value for this property.</span>
+<span class="source-line-no">302</span><span id="line-302">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">303</span><span id="line-303">    * @return This object.</span>
+<span class="source-line-no">304</span><span id="line-304">    */</span>
+<span class="source-line-no">305</span><span id="line-305">   public SchemaInfo setDefault(Object value) {</span>
+<span class="source-line-no">306</span><span id="line-306">      _default = value;</span>
+<span class="source-line-no">307</span><span id="line-307">      return this;</span>
+<span class="source-line-no">308</span><span id="line-308">   }</span>
+<span class="source-line-no">309</span><span id="line-309"></span>
+<span class="source-line-no">310</span><span id="line-310">   /**</span>
+<span class="source-line-no">311</span><span id="line-311">    * Bean property getter:  &lt;property&gt;description&lt;/property&gt;.</span>
+<span class="source-line-no">312</span><span id="line-312">    *</span>
+<span class="source-line-no">313</span><span id="line-313">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">314</span><span id="line-314">    */</span>
+<span class="source-line-no">315</span><span id="line-315">   public String getDescription() {</span>
+<span class="source-line-no">316</span><span id="line-316">      return description;</span>
+<span class="source-line-no">317</span><span id="line-317">   }</span>
+<span class="source-line-no">318</span><span id="line-318"></span>
+<span class="source-line-no">319</span><span id="line-319">   /**</span>
+<span class="source-line-no">320</span><span id="line-320">    * Bean property setter:  &lt;property&gt;description&lt;/property&gt;.</span>
+<span class="source-line-no">321</span><span id="line-321">    *</span>
+<span class="source-line-no">322</span><span id="line-322">    * @param value</span>
+<span class="source-line-no">323</span><span id="line-323">    *    The new value for this property.</span>
+<span class="source-line-no">324</span><span id="line-324">    *    &lt;br&gt;&lt;a class="doclink" href="https://help.github.com/articles/github-flavored-markdown"&gt;GFM syntax&lt;/a&gt; can be used for rich text representation.</span>
+<span class="source-line-no">325</span><span id="line-325">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">326</span><span id="line-326">    * @return This object.</span>
+<span class="source-line-no">327</span><span id="line-327">    */</span>
+<span class="source-line-no">328</span><span id="line-328">   public SchemaInfo setDescription(String value) {</span>
+<span class="source-line-no">329</span><span id="line-329">      description = value;</span>
+<span class="source-line-no">330</span><span id="line-330">      return this;</span>
+<span class="source-line-no">331</span><span id="line-331">   }</span>
+<span class="source-line-no">332</span><span id="line-332"></span>
+<span class="source-line-no">333</span><span id="line-333">   /**</span>
+<span class="source-line-no">334</span><span id="line-334">    * Bean property getter:  &lt;property&gt;discriminator&lt;/property&gt;.</span>
+<span class="source-line-no">335</span><span id="line-335">    *</span>
+<span class="source-line-no">336</span><span id="line-336">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">337</span><span id="line-337">    */</span>
+<span class="source-line-no">338</span><span id="line-338">   public String getDiscriminator() {</span>
+<span class="source-line-no">339</span><span id="line-339">      return discriminator;</span>
+<span class="source-line-no">340</span><span id="line-340">   }</span>
+<span class="source-line-no">341</span><span id="line-341"></span>
+<span class="source-line-no">342</span><span id="line-342">   /**</span>
+<span class="source-line-no">343</span><span id="line-343">    * Bean property setter:  &lt;property&gt;discriminator&lt;/property&gt;.</span>
+<span class="source-line-no">344</span><span id="line-344">    *</span>
+<span class="source-line-no">345</span><span id="line-345">    * @param value</span>
+<span class="source-line-no">346</span><span id="line-346">    *    The new value for this property.</span>
+<span class="source-line-no">347</span><span id="line-347">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">348</span><span id="line-348">    * @return This object.</span>
+<span class="source-line-no">349</span><span id="line-349">    */</span>
+<span class="source-line-no">350</span><span id="line-350">   public SchemaInfo setDiscriminator(String value) {</span>
+<span class="source-line-no">351</span><span id="line-351">      discriminator = value;</span>
+<span class="source-line-no">352</span><span id="line-352">      return this;</span>
+<span class="source-line-no">353</span><span id="line-353">   }</span>
+<span class="source-line-no">354</span><span id="line-354"></span>
+<span class="source-line-no">355</span><span id="line-355">   /**</span>
+<span class="source-line-no">356</span><span id="line-356">    * Bean property getter:  &lt;property&gt;enum&lt;/property&gt;.</span>
+<span class="source-line-no">357</span><span id="line-357">    *</span>
+<span class="source-line-no">358</span><span id="line-358">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">359</span><span id="line-359">    */</span>
+<span class="source-line-no">360</span><span id="line-360">   public Set&lt;Object&gt; getEnum() {</span>
+<span class="source-line-no">361</span><span id="line-361">      return _enum;</span>
+<span class="source-line-no">362</span><span id="line-362">   }</span>
+<span class="source-line-no">363</span><span id="line-363"></span>
+<span class="source-line-no">364</span><span id="line-364">   /**</span>
+<span class="source-line-no">365</span><span id="line-365">    * Bean property setter:  &lt;property&gt;enum&lt;/property&gt;.</span>
+<span class="source-line-no">366</span><span id="line-366">    *</span>
+<span class="source-line-no">367</span><span id="line-367">    * @param value</span>
+<span class="source-line-no">368</span><span id="line-368">    *    The new value for this property.</span>
+<span class="source-line-no">369</span><span id="line-369">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">370</span><span id="line-370">    * @return This object.</span>
+<span class="source-line-no">371</span><span id="line-371">    */</span>
+<span class="source-line-no">372</span><span id="line-372">   public SchemaInfo setEnum(Collection&lt;Object&gt; value) {</span>
+<span class="source-line-no">373</span><span id="line-373">      _enum = setFrom(value);</span>
+<span class="source-line-no">374</span><span id="line-374">      return this;</span>
+<span class="source-line-no">375</span><span id="line-375">   }</span>
+<span class="source-line-no">376</span><span id="line-376"></span>
+<span class="source-line-no">377</span><span id="line-377">   /**</span>
+<span class="source-line-no">378</span><span id="line-378">    * Bean property appender:  &lt;property&gt;enum&lt;/property&gt;.</span>
+<span class="source-line-no">379</span><span id="line-379">    *</span>
+<span class="source-line-no">380</span><span id="line-380">    * @param value</span>
+<span class="source-line-no">381</span><span id="line-381">    *    The values to add to this property.</span>
+<span class="source-line-no">382</span><span id="line-382">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">383</span><span id="line-383">    * @return This object.</span>
+<span class="source-line-no">384</span><span id="line-384">    */</span>
+<span class="source-line-no">385</span><span id="line-385">   public SchemaInfo addEnum(Object...value) {</span>
+<span class="source-line-no">386</span><span id="line-386">      _enum = setBuilder(_enum).sparse().add(value).build();</span>
+<span class="source-line-no">387</span><span id="line-387">      return this;</span>
+<span class="source-line-no">388</span><span id="line-388">   }</span>
+<span class="source-line-no">389</span><span id="line-389"></span>
+<span class="source-line-no">390</span><span id="line-390">   /**</span>
+<span class="source-line-no">391</span><span id="line-391">    * Bean property fluent setter:  &lt;property&gt;enum&lt;/property&gt;.</span>
+<span class="source-line-no">392</span><span id="line-392">    *</span>
+<span class="source-line-no">393</span><span id="line-393">    * &lt;p&gt;</span>
+<span class="source-line-no">394</span><span id="line-394">    * An enumeration of possible values.</span>
+<span class="source-line-no">395</span><span id="line-395">    *</span>
+<span class="source-line-no">396</span><span id="line-396">    * @param values</span>
+<span class="source-line-no">397</span><span id="line-397">    *    The values to add to this property.</span>
+<span class="source-line-no">398</span><span id="line-398">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">399</span><span id="line-399">    * @return This object.</span>
+<span class="source-line-no">400</span><span id="line-400">    */</span>
+<span class="source-line-no">401</span><span id="line-401">   public SchemaInfo addEnum(Collection&lt;Object&gt; values) {</span>
+<span class="source-line-no">402</span><span id="line-402">      _enum = setBuilder(_enum).sparse().addAll(values).build();</span>
+<span class="source-line-no">403</span><span id="line-403">      return this;</span>
+<span class="source-line-no">404</span><span id="line-404">   }</span>
+<span class="source-line-no">405</span><span id="line-405"></span>
+<span class="source-line-no">406</span><span id="line-406">   /**</span>
+<span class="source-line-no">407</span><span id="line-407">    * Bean property fluent setter:  &lt;property&gt;enum&lt;/property&gt;.</span>
+<span class="source-line-no">408</span><span id="line-408">    *</span>
+<span class="source-line-no">409</span><span id="line-409">    * @param value</span>
+<span class="source-line-no">410</span><span id="line-410">    *    The new value for this property.</span>
+<span class="source-line-no">411</span><span id="line-411">    *    &lt;br&gt;Strings can be JSON arrays.</span>
+<span class="source-line-no">412</span><span id="line-412">    * @return This object.</span>
 <span class="source-line-no">413</span><span id="line-413">    */</span>
-<span class="source-line-no">414</span><span id="line-414">   public Boolean getExclusiveMaximum() {</span>
-<span class="source-line-no">415</span><span id="line-415">      return exclusiveMaximum;</span>
-<span class="source-line-no">416</span><span id="line-416">   }</span>
-<span class="source-line-no">417</span><span id="line-417"></span>
-<span class="source-line-no">418</span><span id="line-418">   /**</span>
-<span class="source-line-no">419</span><span id="line-419">    * Bean property setter:  &lt;property&gt;exclusiveMaximum&lt;/property&gt;.</span>
-<span class="source-line-no">420</span><span id="line-420">    *</span>
-<span class="source-line-no">421</span><span id="line-421">    * @param value</span>
-<span class="source-line-no">422</span><span id="line-422">    *    The new value for this property.</span>
-<span class="source-line-no">423</span><span id="line-423">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">424</span><span id="line-424">    * @return This object.</span>
-<span class="source-line-no">425</span><span id="line-425">    */</span>
-<span class="source-line-no">426</span><span id="line-426">   public SchemaInfo setExclusiveMaximum(Boolean value) {</span>
-<span class="source-line-no">427</span><span id="line-427">      exclusiveMaximum = value;</span>
-<span class="source-line-no">428</span><span id="line-428">      return this;</span>
-<span class="source-line-no">429</span><span id="line-429">   }</span>
-<span class="source-line-no">430</span><span id="line-430"></span>
-<span class="source-line-no">431</span><span id="line-431">   /**</span>
-<span class="source-line-no">432</span><span id="line-432">    * Bean property getter:  &lt;property&gt;exclusiveMinimum&lt;/property&gt;.</span>
-<span class="source-line-no">433</span><span id="line-433">    *</span>
-<span class="source-line-no">434</span><span id="line-434">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">414</span><span id="line-414">   public SchemaInfo setEnum(Object...value) {</span>
+<span class="source-line-no">415</span><span id="line-415">      setEnum(setBuilder(Object.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">416</span><span id="line-416">      return this;</span>
+<span class="source-line-no">417</span><span id="line-417">   }</span>
+<span class="source-line-no">418</span><span id="line-418"></span>
+<span class="source-line-no">419</span><span id="line-419">   /**</span>
+<span class="source-line-no">420</span><span id="line-420">    * Bean property getter:  &lt;property&gt;example&lt;/property&gt;.</span>
+<span class="source-line-no">421</span><span id="line-421">    *</span>
+<span class="source-line-no">422</span><span id="line-422">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">423</span><span id="line-423">    */</span>
+<span class="source-line-no">424</span><span id="line-424">   public Object getExample() {</span>
+<span class="source-line-no">425</span><span id="line-425">      return example;</span>
+<span class="source-line-no">426</span><span id="line-426">   }</span>
+<span class="source-line-no">427</span><span id="line-427"></span>
+<span class="source-line-no">428</span><span id="line-428">   /**</span>
+<span class="source-line-no">429</span><span id="line-429">    * Bean property setter:  &lt;property&gt;example&lt;/property&gt;.</span>
+<span class="source-line-no">430</span><span id="line-430">    *</span>
+<span class="source-line-no">431</span><span id="line-431">    * @param value</span>
+<span class="source-line-no">432</span><span id="line-432">    *    The new value for this property.</span>
+<span class="source-line-no">433</span><span id="line-433">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">434</span><span id="line-434">    * @return This object.</span>
 <span class="source-line-no">435</span><span id="line-435">    */</span>
-<span class="source-line-no">436</span><span id="line-436">   public Boolean getExclusiveMinimum() {</span>
-<span class="source-line-no">437</span><span id="line-437">      return exclusiveMinimum;</span>
-<span class="source-line-no">438</span><span id="line-438">   }</span>
-<span class="source-line-no">439</span><span id="line-439"></span>
-<span class="source-line-no">440</span><span id="line-440">   /**</span>
-<span class="source-line-no">441</span><span id="line-441">    * Bean property setter:  &lt;property&gt;exclusiveMinimum&lt;/property&gt;.</span>
-<span class="source-line-no">442</span><span id="line-442">    *</span>
-<span class="source-line-no">443</span><span id="line-443">    * @param value</span>
-<span class="source-line-no">444</span><span id="line-444">    *    The new value for this property.</span>
-<span class="source-line-no">445</span><span id="line-445">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">446</span><span id="line-446">    * @return This object.</span>
-<span class="source-line-no">447</span><span id="line-447">    */</span>
-<span class="source-line-no">448</span><span id="line-448">   public SchemaInfo setExclusiveMinimum(Boolean value) {</span>
-<span class="source-line-no">449</span><span id="line-449">      exclusiveMinimum = value;</span>
-<span class="source-line-no">450</span><span id="line-450">      return this;</span>
-<span class="source-line-no">451</span><span id="line-451">   }</span>
-<span class="source-line-no">452</span><span id="line-452"></span>
-<span class="source-line-no">453</span><span id="line-453">   /**</span>
-<span class="source-line-no">454</span><span id="line-454">    * Bean property getter:  &lt;property&gt;externalDocs&lt;/property&gt;.</span>
-<span class="source-line-no">455</span><span id="line-455">    *</span>
-<span class="source-line-no">456</span><span id="line-456">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">436</span><span id="line-436">   public SchemaInfo setExample(Object value) {</span>
+<span class="source-line-no">437</span><span id="line-437">      example = value;</span>
+<span class="source-line-no">438</span><span id="line-438">      return this;</span>
+<span class="source-line-no">439</span><span id="line-439">   }</span>
+<span class="source-line-no">440</span><span id="line-440"></span>
+<span class="source-line-no">441</span><span id="line-441">   /**</span>
+<span class="source-line-no">442</span><span id="line-442">    * Bean property getter:  &lt;property&gt;exclusiveMaximum&lt;/property&gt;.</span>
+<span class="source-line-no">443</span><span id="line-443">    *</span>
+<span class="source-line-no">444</span><span id="line-444">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">445</span><span id="line-445">    */</span>
+<span class="source-line-no">446</span><span id="line-446">   public Boolean getExclusiveMaximum() {</span>
+<span class="source-line-no">447</span><span id="line-447">      return exclusiveMaximum;</span>
+<span class="source-line-no">448</span><span id="line-448">   }</span>
+<span class="source-line-no">449</span><span id="line-449"></span>
+<span class="source-line-no">450</span><span id="line-450">   /**</span>
+<span class="source-line-no">451</span><span id="line-451">    * Bean property setter:  &lt;property&gt;exclusiveMaximum&lt;/property&gt;.</span>
+<span class="source-line-no">452</span><span id="line-452">    *</span>
+<span class="source-line-no">453</span><span id="line-453">    * @param value</span>
+<span class="source-line-no">454</span><span id="line-454">    *    The new value for this property.</span>
+<span class="source-line-no">455</span><span id="line-455">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">456</span><span id="line-456">    * @return This object.</span>
 <span class="source-line-no">457</span><span id="line-457">    */</span>
-<span class="source-line-no">458</span><span id="line-458">   public ExternalDocumentation getExternalDocs() {</span>
-<span class="source-line-no">459</span><span id="line-459">      return externalDocs;</span>
-<span class="source-line-no">460</span><span id="line-460">   }</span>
-<span class="source-line-no">461</span><span id="line-461"></span>
-<span class="source-line-no">462</span><span id="line-462">   /**</span>
-<span class="source-line-no">463</span><span id="line-463">    * Bean property setter:  &lt;property&gt;externalDocs&lt;/property&gt;.</span>
-<span class="source-line-no">464</span><span id="line-464">    *</span>
-<span class="source-line-no">465</span><span id="line-465">    * @param value</span>
-<span class="source-line-no">466</span><span id="line-466">    *    The new value for this property.</span>
-<span class="source-line-no">467</span><span id="line-467">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">468</span><span id="line-468">    * @return This object.</span>
-<span class="source-line-no">469</span><span id="line-469">    */</span>
-<span class="source-line-no">470</span><span id="line-470">   public SchemaInfo setExternalDocs(ExternalDocumentation value) {</span>
-<span class="source-line-no">471</span><span id="line-471">      externalDocs = value;</span>
-<span class="source-line-no">472</span><span id="line-472">      return this;</span>
-<span class="source-line-no">473</span><span id="line-473">   }</span>
-<span class="source-line-no">474</span><span id="line-474"></span>
-<span class="source-line-no">475</span><span id="line-475">   /**</span>
-<span class="source-line-no">476</span><span id="line-476">    * Bean property getter:  &lt;property&gt;format&lt;/property&gt;.</span>
-<span class="source-line-no">477</span><span id="line-477">    *</span>
-<span class="source-line-no">478</span><span id="line-478">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">458</span><span id="line-458">   public SchemaInfo setExclusiveMaximum(Boolean value) {</span>
+<span class="source-line-no">459</span><span id="line-459">      exclusiveMaximum = value;</span>
+<span class="source-line-no">460</span><span id="line-460">      return this;</span>
+<span class="source-line-no">461</span><span id="line-461">   }</span>
+<span class="source-line-no">462</span><span id="line-462"></span>
+<span class="source-line-no">463</span><span id="line-463">   /**</span>
+<span class="source-line-no">464</span><span id="line-464">    * Bean property getter:  &lt;property&gt;exclusiveMinimum&lt;/property&gt;.</span>
+<span class="source-line-no">465</span><span id="line-465">    *</span>
+<span class="source-line-no">466</span><span id="line-466">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">467</span><span id="line-467">    */</span>
+<span class="source-line-no">468</span><span id="line-468">   public Boolean getExclusiveMinimum() {</span>
+<span class="source-line-no">469</span><span id="line-469">      return exclusiveMinimum;</span>
+<span class="source-line-no">470</span><span id="line-470">   }</span>
+<span class="source-line-no">471</span><span id="line-471"></span>
+<span class="source-line-no">472</span><span id="line-472">   /**</span>
+<span class="source-line-no">473</span><span id="line-473">    * Bean property setter:  &lt;property&gt;exclusiveMinimum&lt;/property&gt;.</span>
+<span class="source-line-no">474</span><span id="line-474">    *</span>
+<span class="source-line-no">475</span><span id="line-475">    * @param value</span>
+<span class="source-line-no">476</span><span id="line-476">    *    The new value for this property.</span>
+<span class="source-line-no">477</span><span id="line-477">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">478</span><span id="line-478">    * @return This object.</span>
 <span class="source-line-no">479</span><span id="line-479">    */</span>
-<span class="source-line-no">480</span><span id="line-480">   public String getFormat() {</span>
-<span class="source-line-no">481</span><span id="line-481">      return format;</span>
-<span class="source-line-no">482</span><span id="line-482">   }</span>
-<span class="source-line-no">483</span><span id="line-483"></span>
-<span class="source-line-no">484</span><span id="line-484">   /**</span>
-<span class="source-line-no">485</span><span id="line-485">    * Bean property setter:  &lt;property&gt;format&lt;/property&gt;.</span>
-<span class="source-line-no">486</span><span id="line-486">    *</span>
-<span class="source-line-no">487</span><span id="line-487">    * @param value</span>
-<span class="source-line-no">488</span><span id="line-488">    *    The new value for this property.</span>
-<span class="source-line-no">489</span><span id="line-489">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">490</span><span id="line-490">    *    &lt;br&gt;Formats defined by the OAS include:</span>
-<span class="source-line-no">491</span><span id="line-491">    *    &lt;ul&gt;</span>
-<span class="source-line-no">492</span><span id="line-492">    *       &lt;li&gt;&lt;js&gt;"int32"&lt;/js&gt;</span>
-<span class="source-line-no">493</span><span id="line-493">    *       &lt;li&gt;&lt;js&gt;"int64"&lt;/js&gt;</span>
-<span class="source-line-no">494</span><span id="line-494">    *       &lt;li&gt;&lt;js&gt;"float"&lt;/js&gt;</span>
-<span class="source-line-no">495</span><span id="line-495">    *       &lt;li&gt;&lt;js&gt;"double"&lt;/js&gt;</span>
-<span class="source-line-no">496</span><span id="line-496">    *       &lt;li&gt;&lt;js&gt;"byte"&lt;/js&gt;</span>
-<span class="source-line-no">497</span><span id="line-497">    *       &lt;li&gt;&lt;js&gt;"binary"&lt;/js&gt;</span>
-<span class="source-line-no">498</span><span id="line-498">    *       &lt;li&gt;&lt;js&gt;"date"&lt;/js&gt;</span>
-<span class="source-line-no">499</span><span id="line-499">    *       &lt;li&gt;&lt;js&gt;"date-time"&lt;/js&gt;</span>
-<span class="source-line-no">500</span><span id="line-500">    *       &lt;li&gt;&lt;js&gt;"password"&lt;/js&gt;</span>
-<span class="source-line-no">501</span><span id="line-501">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">502</span><span id="line-502">    * @return This object.</span>
-<span class="source-line-no">503</span><span id="line-503">    */</span>
-<span class="source-line-no">504</span><span id="line-504">   public SchemaInfo setFormat(String value) {</span>
-<span class="source-line-no">505</span><span id="line-505">      format = value;</span>
-<span class="source-line-no">506</span><span id="line-506">      return this;</span>
-<span class="source-line-no">507</span><span id="line-507">   }</span>
-<span class="source-line-no">508</span><span id="line-508"></span>
-<span class="source-line-no">509</span><span id="line-509">   /**</span>
-<span class="source-line-no">510</span><span id="line-510">    * Bean property getter:  &lt;property&gt;items&lt;/property&gt;.</span>
-<span class="source-line-no">511</span><span id="line-511">    *</span>
-<span class="source-line-no">512</span><span id="line-512">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">513</span><span id="line-513">    */</span>
-<span class="source-line-no">514</span><span id="line-514">   public Items getItems() {</span>
-<span class="source-line-no">515</span><span id="line-515">      return items;</span>
-<span class="source-line-no">516</span><span id="line-516">   }</span>
-<span class="source-line-no">517</span><span id="line-517"></span>
-<span class="source-line-no">518</span><span id="line-518">   /**</span>
-<span class="source-line-no">519</span><span id="line-519">    * Bean property setter:  &lt;property&gt;items&lt;/property&gt;.</span>
-<span class="source-line-no">520</span><span id="line-520">    *</span>
-<span class="source-line-no">521</span><span id="line-521">    * @param value</span>
-<span class="source-line-no">522</span><span id="line-522">    *    The new value for this property.</span>
-<span class="source-line-no">523</span><span id="line-523">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">524</span><span id="line-524">    * @return This object.</span>
-<span class="source-line-no">525</span><span id="line-525">    */</span>
-<span class="source-line-no">526</span><span id="line-526">   public SchemaInfo setItems(Items value) {</span>
-<span class="source-line-no">527</span><span id="line-527">      items = value;</span>
-<span class="source-line-no">528</span><span id="line-528">      return this;</span>
-<span class="source-line-no">529</span><span id="line-529">   }</span>
-<span class="source-line-no">530</span><span id="line-530"></span>
-<span class="source-line-no">531</span><span id="line-531">   /**</span>
-<span class="source-line-no">532</span><span id="line-532">    * Bean property getter:  &lt;property&gt;maximum&lt;/property&gt;.</span>
-<span class="source-line-no">533</span><span id="line-533">    *</span>
-<span class="source-line-no">534</span><span id="line-534">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">480</span><span id="line-480">   public SchemaInfo setExclusiveMinimum(Boolean value) {</span>
+<span class="source-line-no">481</span><span id="line-481">      exclusiveMinimum = value;</span>
+<span class="source-line-no">482</span><span id="line-482">      return this;</span>
+<span class="source-line-no">483</span><span id="line-483">   }</span>
+<span class="source-line-no">484</span><span id="line-484"></span>
+<span class="source-line-no">485</span><span id="line-485">   /**</span>
+<span class="source-line-no">486</span><span id="line-486">    * Bean property getter:  &lt;property&gt;externalDocs&lt;/property&gt;.</span>
+<span class="source-line-no">487</span><span id="line-487">    *</span>
+<span class="source-line-no">488</span><span id="line-488">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">489</span><span id="line-489">    */</span>
+<span class="source-line-no">490</span><span id="line-490">   public ExternalDocumentation getExternalDocs() {</span>
+<span class="source-line-no">491</span><span id="line-491">      return externalDocs;</span>
+<span class="source-line-no">492</span><span id="line-492">   }</span>
+<span class="source-line-no">493</span><span id="line-493"></span>
+<span class="source-line-no">494</span><span id="line-494">   /**</span>
+<span class="source-line-no">495</span><span id="line-495">    * Bean property setter:  &lt;property&gt;externalDocs&lt;/property&gt;.</span>
+<span class="source-line-no">496</span><span id="line-496">    *</span>
+<span class="source-line-no">497</span><span id="line-497">    * @param value</span>
+<span class="source-line-no">498</span><span id="line-498">    *    The new value for this property.</span>
+<span class="source-line-no">499</span><span id="line-499">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">500</span><span id="line-500">    * @return This object.</span>
+<span class="source-line-no">501</span><span id="line-501">    */</span>
+<span class="source-line-no">502</span><span id="line-502">   public SchemaInfo setExternalDocs(ExternalDocumentation value) {</span>
+<span class="source-line-no">503</span><span id="line-503">      externalDocs = value;</span>
+<span class="source-line-no">504</span><span id="line-504">      return this;</span>
+<span class="source-line-no">505</span><span id="line-505">   }</span>
+<span class="source-line-no">506</span><span id="line-506"></span>
+<span class="source-line-no">507</span><span id="line-507">   /**</span>
+<span class="source-line-no">508</span><span id="line-508">    * Bean property getter:  &lt;property&gt;format&lt;/property&gt;.</span>
+<span class="source-line-no">509</span><span id="line-509">    *</span>
+<span class="source-line-no">510</span><span id="line-510">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">511</span><span id="line-511">    */</span>
+<span class="source-line-no">512</span><span id="line-512">   public String getFormat() {</span>
+<span class="source-line-no">513</span><span id="line-513">      return format;</span>
+<span class="source-line-no">514</span><span id="line-514">   }</span>
+<span class="source-line-no">515</span><span id="line-515"></span>
+<span class="source-line-no">516</span><span id="line-516">   /**</span>
+<span class="source-line-no">517</span><span id="line-517">    * Bean property setter:  &lt;property&gt;format&lt;/property&gt;.</span>
+<span class="source-line-no">518</span><span id="line-518">    *</span>
+<span class="source-line-no">519</span><span id="line-519">    * @param value</span>
+<span class="source-line-no">520</span><span id="line-520">    *    The new value for this property.</span>
+<span class="source-line-no">521</span><span id="line-521">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">522</span><span id="line-522">    *    &lt;br&gt;Formats defined by the OAS include:</span>
+<span class="source-line-no">523</span><span id="line-523">    *    &lt;ul&gt;</span>
+<span class="source-line-no">524</span><span id="line-524">    *       &lt;li&gt;&lt;js&gt;"int32"&lt;/js&gt;</span>
+<span class="source-line-no">525</span><span id="line-525">    *       &lt;li&gt;&lt;js&gt;"int64"&lt;/js&gt;</span>
+<span class="source-line-no">526</span><span id="line-526">    *       &lt;li&gt;&lt;js&gt;"float"&lt;/js&gt;</span>
+<span class="source-line-no">527</span><span id="line-527">    *       &lt;li&gt;&lt;js&gt;"double"&lt;/js&gt;</span>
+<span class="source-line-no">528</span><span id="line-528">    *       &lt;li&gt;&lt;js&gt;"byte"&lt;/js&gt;</span>
+<span class="source-line-no">529</span><span id="line-529">    *       &lt;li&gt;&lt;js&gt;"binary"&lt;/js&gt;</span>
+<span class="source-line-no">530</span><span id="line-530">    *       &lt;li&gt;&lt;js&gt;"date"&lt;/js&gt;</span>
+<span class="source-line-no">531</span><span id="line-531">    *       &lt;li&gt;&lt;js&gt;"date-time"&lt;/js&gt;</span>
+<span class="source-line-no">532</span><span id="line-532">    *       &lt;li&gt;&lt;js&gt;"password"&lt;/js&gt;</span>
+<span class="source-line-no">533</span><span id="line-533">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">534</span><span id="line-534">    * @return This object.</span>
 <span class="source-line-no">535</span><span id="line-535">    */</span>
-<span class="source-line-no">536</span><span id="line-536">   public Number getMaximum() {</span>
-<span class="source-line-no">537</span><span id="line-537">      return maximum;</span>
-<span class="source-line-no">538</span><span id="line-538">   }</span>
-<span class="source-line-no">539</span><span id="line-539"></span>
-<span class="source-line-no">540</span><span id="line-540">   /**</span>
-<span class="source-line-no">541</span><span id="line-541">    * Bean property setter:  &lt;property&gt;maximum&lt;/property&gt;.</span>
-<span class="source-line-no">542</span><span id="line-542">    *</span>
-<span class="source-line-no">543</span><span id="line-543">    * @param value</span>
-<span class="source-line-no">544</span><span id="line-544">    *    The new value for this property.</span>
-<span class="source-line-no">545</span><span id="line-545">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">546</span><span id="line-546">    * @return This object.</span>
-<span class="source-line-no">547</span><span id="line-547">    */</span>
-<span class="source-line-no">548</span><span id="line-548">   public SchemaInfo setMaximum(Number value) {</span>
-<span class="source-line-no">549</span><span id="line-549">      maximum = value;</span>
-<span class="source-line-no">550</span><span id="line-550">      return this;</span>
-<span class="source-line-no">551</span><span id="line-551">   }</span>
-<span class="source-line-no">552</span><span id="line-552"></span>
-<span class="source-line-no">553</span><span id="line-553">   /**</span>
-<span class="source-line-no">554</span><span id="line-554">    * Bean property getter:  &lt;property&gt;maxItems&lt;/property&gt;.</span>
-<span class="source-line-no">555</span><span id="line-555">    *</span>
-<span class="source-line-no">556</span><span id="line-556">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">536</span><span id="line-536">   public SchemaInfo setFormat(String value) {</span>
+<span class="source-line-no">537</span><span id="line-537">      format = value;</span>
+<span class="source-line-no">538</span><span id="line-538">      return this;</span>
+<span class="source-line-no">539</span><span id="line-539">   }</span>
+<span class="source-line-no">540</span><span id="line-540"></span>
+<span class="source-line-no">541</span><span id="line-541">   /**</span>
+<span class="source-line-no">542</span><span id="line-542">    * Bean property getter:  &lt;property&gt;items&lt;/property&gt;.</span>
+<span class="source-line-no">543</span><span id="line-543">    *</span>
+<span class="source-line-no">544</span><span id="line-544">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">545</span><span id="line-545">    */</span>
+<span class="source-line-no">546</span><span id="line-546">   public Items getItems() {</span>
+<span class="source-line-no">547</span><span id="line-547">      return items;</span>
+<span class="source-line-no">548</span><span id="line-548">   }</span>
+<span class="source-line-no">549</span><span id="line-549"></span>
+<span class="source-line-no">550</span><span id="line-550">   /**</span>
+<span class="source-line-no">551</span><span id="line-551">    * Bean property setter:  &lt;property&gt;items&lt;/property&gt;.</span>
+<span class="source-line-no">552</span><span id="line-552">    *</span>
+<span class="source-line-no">553</span><span id="line-553">    * @param value</span>
+<span class="source-line-no">554</span><span id="line-554">    *    The new value for this property.</span>
+<span class="source-line-no">555</span><span id="line-555">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">556</span><span id="line-556">    * @return This object.</span>
 <span class="source-line-no">557</span><span id="line-557">    */</span>
-<span class="source-line-no">558</span><span id="line-558">   public Integer getMaxItems() {</span>
-<span class="source-line-no">559</span><span id="line-559">      return maxItems;</span>
-<span class="source-line-no">560</span><span id="line-560">   }</span>
-<span class="source-line-no">561</span><span id="line-561"></span>
-<span class="source-line-no">562</span><span id="line-562">   /**</span>
-<span class="source-line-no">563</span><span id="line-563">    * Bean property setter:  &lt;property&gt;maxItems&lt;/property&gt;.</span>
-<span class="source-line-no">564</span><span id="line-564">    *</span>
-<span class="source-line-no">565</span><span id="line-565">    * @param value</span>
-<span class="source-line-no">566</span><span id="line-566">    *    The new value for this property.</span>
-<span class="source-line-no">567</span><span id="line-567">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">568</span><span id="line-568">    * @return This object.</span>
-<span class="source-line-no">569</span><span id="line-569">    */</span>
-<span class="source-line-no">570</span><span id="line-570">   public SchemaInfo setMaxItems(Integer value) {</span>
-<span class="source-line-no">571</span><span id="line-571">      maxItems = value;</span>
-<span class="source-line-no">572</span><span id="line-572">      return this;</span>
-<span class="source-line-no">573</span><span id="line-573">   }</span>
-<span class="source-line-no">574</span><span id="line-574"></span>
-<span class="source-line-no">575</span><span id="line-575">   /**</span>
-<span class="source-line-no">576</span><span id="line-576">    * Bean property getter:  &lt;property&gt;maxLength&lt;/property&gt;.</span>
-<span class="source-line-no">577</span><span id="line-577">    *</span>
-<span class="source-line-no">578</span><span id="line-578">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">558</span><span id="line-558">   public SchemaInfo setItems(Items value) {</span>
+<span class="source-line-no">559</span><span id="line-559">      items = value;</span>
+<span class="source-line-no">560</span><span id="line-560">      return this;</span>
+<span class="source-line-no">561</span><span id="line-561">   }</span>
+<span class="source-line-no">562</span><span id="line-562"></span>
+<span class="source-line-no">563</span><span id="line-563">   /**</span>
+<span class="source-line-no">564</span><span id="line-564">    * Bean property getter:  &lt;property&gt;maximum&lt;/property&gt;.</span>
+<span class="source-line-no">565</span><span id="line-565">    *</span>
+<span class="source-line-no">566</span><span id="line-566">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">567</span><span id="line-567">    */</span>
+<span class="source-line-no">568</span><span id="line-568">   public Number getMaximum() {</span>
+<span class="source-line-no">569</span><span id="line-569">      return maximum;</span>
+<span class="source-line-no">570</span><span id="line-570">   }</span>
+<span class="source-line-no">571</span><span id="line-571"></span>
+<span class="source-line-no">572</span><span id="line-572">   /**</span>
+<span class="source-line-no">573</span><span id="line-573">    * Bean property setter:  &lt;property&gt;maximum&lt;/property&gt;.</span>
+<span class="source-line-no">574</span><span id="line-574">    *</span>
+<span class="source-line-no">575</span><span id="line-575">    * @param value</span>
+<span class="source-line-no">576</span><span id="line-576">    *    The new value for this property.</span>
+<span class="source-line-no">577</span><span id="line-577">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">578</span><span id="line-578">    * @return This object.</span>
 <span class="source-line-no">579</span><span id="line-579">    */</span>
-<span class="source-line-no">580</span><span id="line-580">   public Integer getMaxLength() {</span>
-<span class="source-line-no">581</span><span id="line-581">      return maxLength;</span>
-<span class="source-line-no">582</span><span id="line-582">   }</span>
-<span class="source-line-no">583</span><span id="line-583"></span>
-<span class="source-line-no">584</span><span id="line-584">   /**</span>
-<span class="source-line-no">585</span><span id="line-585">    * Bean property setter:  &lt;property&gt;maxLength&lt;/property&gt;.</span>
-<span class="source-line-no">586</span><span id="line-586">    *</span>
-<span class="source-line-no">587</span><span id="line-587">    * @param value</span>
-<span class="source-line-no">588</span><span id="line-588">    *    The new value for this property.</span>
-<span class="source-line-no">589</span><span id="line-589">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">590</span><span id="line-590">    * @return This object.</span>
-<span class="source-line-no">591</span><span id="line-591">    */</span>
-<span class="source-line-no">592</span><span id="line-592">   public SchemaInfo setMaxLength(Integer value) {</span>
-<span class="source-line-no">593</span><span id="line-593">      maxLength = value;</span>
-<span class="source-line-no">594</span><span id="line-594">      return this;</span>
-<span class="source-line-no">595</span><span id="line-595">   }</span>
-<span class="source-line-no">596</span><span id="line-596"></span>
-<span class="source-line-no">597</span><span id="line-597">   /**</span>
-<span class="source-line-no">598</span><span id="line-598">    * Bean property getter:  &lt;property&gt;maxProperties&lt;/property&gt;.</span>
-<span class="source-line-no">599</span><span id="line-599">    *</span>
-<span class="source-line-no">600</span><span id="line-600">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">580</span><span id="line-580">   public SchemaInfo setMaximum(Number value) {</span>
+<span class="source-line-no">581</span><span id="line-581">      maximum = value;</span>
+<span class="source-line-no">582</span><span id="line-582">      return this;</span>
+<span class="source-line-no">583</span><span id="line-583">   }</span>
+<span class="source-line-no">584</span><span id="line-584"></span>
+<span class="source-line-no">585</span><span id="line-585">   /**</span>
+<span class="source-line-no">586</span><span id="line-586">    * Bean property getter:  &lt;property&gt;maxItems&lt;/property&gt;.</span>
+<span class="source-line-no">587</span><span id="line-587">    *</span>
+<span class="source-line-no">588</span><span id="line-588">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">589</span><span id="line-589">    */</span>
+<span class="source-line-no">590</span><span id="line-590">   public Integer getMaxItems() {</span>
+<span class="source-line-no">591</span><span id="line-591">      return maxItems;</span>
+<span class="source-line-no">592</span><span id="line-592">   }</span>
+<span class="source-line-no">593</span><span id="line-593"></span>
+<span class="source-line-no">594</span><span id="line-594">   /**</span>
+<span class="source-line-no">595</span><span id="line-595">    * Bean property setter:  &lt;property&gt;maxItems&lt;/property&gt;.</span>
+<span class="source-line-no">596</span><span id="line-596">    *</span>
+<span class="source-line-no">597</span><span id="line-597">    * @param value</span>
+<span class="source-line-no">598</span><span id="line-598">    *    The new value for this property.</span>
+<span class="source-line-no">599</span><span id="line-599">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">600</span><span id="line-600">    * @return This object.</span>
 <span class="source-line-no">601</span><span id="line-601">    */</span>
-<span class="source-line-no">602</span><span id="line-602">   public Integer getMaxProperties() {</span>
-<span class="source-line-no">603</span><span id="line-603">      return maxProperties;</span>
-<span class="source-line-no">604</span><span id="line-604">   }</span>
-<span class="source-line-no">605</span><span id="line-605"></span>
-<span class="source-line-no">606</span><span id="line-606">   /**</span>
-<span class="source-line-no">607</span><span id="line-607">    * Bean property setter:  &lt;property&gt;maxProperties&lt;/property&gt;.</span>
-<span class="source-line-no">608</span><span id="line-608">    *</span>
-<span class="source-line-no">609</span><span id="line-609">    * @param value</span>
-<span class="source-line-no">610</span><span id="line-610">    *    The new value for this property.</span>
-<span class="source-line-no">611</span><span id="line-611">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">612</span><span id="line-612">    * @return This object.</span>
-<span class="source-line-no">613</span><span id="line-613">    */</span>
-<span class="source-line-no">614</span><span id="line-614">   public SchemaInfo setMaxProperties(Integer value) {</span>
-<span class="source-line-no">615</span><span id="line-615">      maxProperties = value;</span>
-<span class="source-line-no">616</span><span id="line-616">      return this;</span>
-<span class="source-line-no">617</span><span id="line-617">   }</span>
-<span class="source-line-no">618</span><span id="line-618"></span>
-<span class="source-line-no">619</span><span id="line-619">   /**</span>
-<span class="source-line-no">620</span><span id="line-620">    * Bean property getter:  &lt;property&gt;minimum&lt;/property&gt;.</span>
-<span class="source-line-no">621</span><span id="line-621">    *</span>
-<span class="source-line-no">622</span><span id="line-622">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">602</span><span id="line-602">   public SchemaInfo setMaxItems(Integer value) {</span>
+<span class="source-line-no">603</span><span id="line-603">      maxItems = value;</span>
+<span class="source-line-no">604</span><span id="line-604">      return this;</span>
+<span class="source-line-no">605</span><span id="line-605">   }</span>
+<span class="source-line-no">606</span><span id="line-606"></span>
+<span class="source-line-no">607</span><span id="line-607">   /**</span>
+<span class="source-line-no">608</span><span id="line-608">    * Bean property getter:  &lt;property&gt;maxLength&lt;/property&gt;.</span>
+<span class="source-line-no">609</span><span id="line-609">    *</span>
+<span class="source-line-no">610</span><span id="line-610">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">611</span><span id="line-611">    */</span>
+<span class="source-line-no">612</span><span id="line-612">   public Integer getMaxLength() {</span>
+<span class="source-line-no">613</span><span id="line-613">      return maxLength;</span>
+<span class="source-line-no">614</span><span id="line-614">   }</span>
+<span class="source-line-no">615</span><span id="line-615"></span>
+<span class="source-line-no">616</span><span id="line-616">   /**</span>
+<span class="source-line-no">617</span><span id="line-617">    * Bean property setter:  &lt;property&gt;maxLength&lt;/property&gt;.</span>
+<span class="source-line-no">618</span><span id="line-618">    *</span>
+<span class="source-line-no">619</span><span id="line-619">    * @param value</span>
+<span class="source-line-no">620</span><span id="line-620">    *    The new value for this property.</span>
+<span class="source-line-no">621</span><span id="line-621">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">622</span><span id="line-622">    * @return This object.</span>
 <span class="source-line-no">623</span><span id="line-623">    */</span>
-<span class="source-line-no">624</span><span id="line-624">   public Number getMinimum() {</span>
-<span class="source-line-no">625</span><span id="line-625">      return minimum;</span>
-<span class="source-line-no">626</span><span id="line-626">   }</span>
-<span class="source-line-no">627</span><span id="line-627"></span>
-<span class="source-line-no">628</span><span id="line-628">   /**</span>
-<span class="source-line-no">629</span><span id="line-629">    * Bean property setter:  &lt;property&gt;minimum&lt;/property&gt;.</span>
-<span class="source-line-no">630</span><span id="line-630">    *</span>
-<span class="source-line-no">631</span><span id="line-631">    * @param value</span>
-<span class="source-line-no">632</span><span id="line-632">    *    The new value for this property.</span>
-<span class="source-line-no">633</span><span id="line-633">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">634</span><span id="line-634">    * @return This object.</span>
-<span class="source-line-no">635</span><span id="line-635">    */</span>
-<span class="source-line-no">636</span><span id="line-636">   public SchemaInfo setMinimum(Number value) {</span>
-<span class="source-line-no">637</span><span id="line-637">      minimum = value;</span>
-<span class="source-line-no">638</span><span id="line-638">      return this;</span>
-<span class="source-line-no">639</span><span id="line-639">   }</span>
-<span class="source-line-no">640</span><span id="line-640"></span>
-<span class="source-line-no">641</span><span id="line-641">   /**</span>
-<span class="source-line-no">642</span><span id="line-642">    * Bean property getter:  &lt;property&gt;minItems&lt;/property&gt;.</span>
-<span class="source-line-no">643</span><span id="line-643">    *</span>
-<span class="source-line-no">644</span><span id="line-644">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">624</span><span id="line-624">   public SchemaInfo setMaxLength(Integer value) {</span>
+<span class="source-line-no">625</span><span id="line-625">      maxLength = value;</span>
+<span class="source-line-no">626</span><span id="line-626">      return this;</span>
+<span class="source-line-no">627</span><span id="line-627">   }</span>
+<span class="source-line-no">628</span><span id="line-628"></span>
+<span class="source-line-no">629</span><span id="line-629">   /**</span>
+<span class="source-line-no">630</span><span id="line-630">    * Bean property getter:  &lt;property&gt;maxProperties&lt;/property&gt;.</span>
+<span class="source-line-no">631</span><span id="line-631">    *</span>
+<span class="source-line-no">632</span><span id="line-632">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">633</span><span id="line-633">    */</span>
+<span class="source-line-no">634</span><span id="line-634">   public Integer getMaxProperties() {</span>
+<span class="source-line-no">635</span><span id="line-635">      return maxProperties;</span>
+<span class="source-line-no">636</span><span id="line-636">   }</span>
+<span class="source-line-no">637</span><span id="line-637"></span>
+<span class="source-line-no">638</span><span id="line-638">   /**</span>
+<span class="source-line-no">639</span><span id="line-639">    * Bean property setter:  &lt;property&gt;maxProperties&lt;/property&gt;.</span>
+<span class="source-line-no">640</span><span id="line-640">    *</span>
+<span class="source-line-no">641</span><span id="line-641">    * @param value</span>
+<span class="source-line-no">642</span><span id="line-642">    *    The new value for this property.</span>
+<span class="source-line-no">643</span><span id="line-643">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">644</span><span id="line-644">    * @return This object.</span>
 <span class="source-line-no">645</span><span id="line-645">    */</span>
-<span class="source-line-no">646</span><span id="line-646">   public Integer getMinItems() {</span>
-<span class="source-line-no">647</span><span id="line-647">      return minItems;</span>
-<span class="source-line-no">648</span><span id="line-648">   }</span>
-<span class="source-line-no">649</span><span id="line-649"></span>
-<span class="source-line-no">650</span><span id="line-650">   /**</span>
-<span class="source-line-no">651</span><span id="line-651">    * Bean property setter:  &lt;property&gt;minItems&lt;/property&gt;.</span>
-<span class="source-line-no">652</span><span id="line-652">    *</span>
-<span class="source-line-no">653</span><span id="line-653">    * @param value</span>
-<span class="source-line-no">654</span><span id="line-654">    *    The new value for this property.</span>
-<span class="source-line-no">655</span><span id="line-655">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">656</span><span id="line-656">    * @return This object.</span>
-<span class="source-line-no">657</span><span id="line-657">    */</span>
-<span class="source-line-no">658</span><span id="line-658">   public SchemaInfo setMinItems(Integer value) {</span>
-<span class="source-line-no">659</span><span id="line-659">      minItems = value;</span>
-<span class="source-line-no">660</span><span id="line-660">      return this;</span>
-<span class="source-line-no">661</span><span id="line-661">   }</span>
-<span class="source-line-no">662</span><span id="line-662"></span>
-<span class="source-line-no">663</span><span id="line-663">   /**</span>
-<span class="source-line-no">664</span><span id="line-664">    * Bean property getter:  &lt;property&gt;minLength&lt;/property&gt;.</span>
-<span class="source-line-no">665</span><span id="line-665">    *</span>
-<span class="source-line-no">666</span><span id="line-666">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">646</span><span id="line-646">   public SchemaInfo setMaxProperties(Integer value) {</span>
+<span class="source-line-no">647</span><span id="line-647">      maxProperties = value;</span>
+<span class="source-line-no">648</span><span id="line-648">      return this;</span>
+<span class="source-line-no">649</span><span id="line-649">   }</span>
+<span class="source-line-no">650</span><span id="line-650"></span>
+<span class="source-line-no">651</span><span id="line-651">   /**</span>
+<span class="source-line-no">652</span><span id="line-652">    * Bean property getter:  &lt;property&gt;minimum&lt;/property&gt;.</span>
+<span class="source-line-no">653</span><span id="line-653">    *</span>
+<span class="source-line-no">654</span><span id="line-654">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">655</span><span id="line-655">    */</span>
+<span class="source-line-no">656</span><span id="line-656">   public Number getMinimum() {</span>
+<span class="source-line-no">657</span><span id="line-657">      return minimum;</span>
+<span class="source-line-no">658</span><span id="line-658">   }</span>
+<span class="source-line-no">659</span><span id="line-659"></span>
+<span class="source-line-no">660</span><span id="line-660">   /**</span>
+<span class="source-line-no">661</span><span id="line-661">    * Bean property setter:  &lt;property&gt;minimum&lt;/property&gt;.</span>
+<span class="source-line-no">662</span><span id="line-662">    *</span>
+<span class="source-line-no">663</span><span id="line-663">    * @param value</span>
+<span class="source-line-no">664</span><span id="line-664">    *    The new value for this property.</span>
+<span class="source-line-no">665</span><span id="line-665">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">666</span><span id="line-666">    * @return This object.</span>
 <span class="source-line-no">667</span><span id="line-667">    */</span>
-<span class="source-line-no">668</span><span id="line-668">   public Integer getMinLength() {</span>
-<span class="source-line-no">669</span><span id="line-669">      return minLength;</span>
-<span class="source-line-no">670</span><span id="line-670">   }</span>
-<span class="source-line-no">671</span><span id="line-671"></span>
-<span class="source-line-no">672</span><span id="line-672">   /**</span>
-<span class="source-line-no">673</span><span id="line-673">    * Bean property setter:  &lt;property&gt;minLength&lt;/property&gt;.</span>
-<span class="source-line-no">674</span><span id="line-674">    *</span>
-<span class="source-line-no">675</span><span id="line-675">    * @param value</span>
-<span class="source-line-no">676</span><span id="line-676">    *    The new value for this property.</span>
-<span class="source-line-no">677</span><span id="line-677">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">678</span><span id="line-678">    * @return This object.</span>
-<span class="source-line-no">679</span><span id="line-679">    */</span>
-<span class="source-line-no">680</span><span id="line-680">   public SchemaInfo setMinLength(Integer value) {</span>
-<span class="source-line-no">681</span><span id="line-681">      minLength = value;</span>
-<span class="source-line-no">682</span><span id="line-682">      return this;</span>
-<span class="source-line-no">683</span><span id="line-683">   }</span>
-<span class="source-line-no">684</span><span id="line-684"></span>
-<span class="source-line-no">685</span><span id="line-685">   /**</span>
-<span class="source-line-no">686</span><span id="line-686">    * Bean property getter:  &lt;property&gt;minProperties&lt;/property&gt;.</span>
-<span class="source-line-no">687</span><span id="line-687">    *</span>
-<span class="source-line-no">688</span><span id="line-688">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">668</span><span id="line-668">   public SchemaInfo setMinimum(Number value) {</span>
+<span class="source-line-no">669</span><span id="line-669">      minimum = value;</span>
+<span class="source-line-no">670</span><span id="line-670">      return this;</span>
+<span class="source-line-no">671</span><span id="line-671">   }</span>
+<span class="source-line-no">672</span><span id="line-672"></span>
+<span class="source-line-no">673</span><span id="line-673">   /**</span>
+<span class="source-line-no">674</span><span id="line-674">    * Bean property getter:  &lt;property&gt;minItems&lt;/property&gt;.</span>
+<span class="source-line-no">675</span><span id="line-675">    *</span>
+<span class="source-line-no">676</span><span id="line-676">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">677</span><span id="line-677">    */</span>
+<span class="source-line-no">678</span><span id="line-678">   public Integer getMinItems() {</span>
+<span class="source-line-no">679</span><span id="line-679">      return minItems;</span>
+<span class="source-line-no">680</span><span id="line-680">   }</span>
+<span class="source-line-no">681</span><span id="line-681"></span>
+<span class="source-line-no">682</span><span id="line-682">   /**</span>
+<span class="source-line-no">683</span><span id="line-683">    * Bean property setter:  &lt;property&gt;minItems&lt;/property&gt;.</span>
+<span class="source-line-no">684</span><span id="line-684">    *</span>
+<span class="source-line-no">685</span><span id="line-685">    * @param value</span>
+<span class="source-line-no">686</span><span id="line-686">    *    The new value for this property.</span>
+<span class="source-line-no">687</span><span id="line-687">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">688</span><span id="line-688">    * @return This object.</span>
 <span class="source-line-no">689</span><span id="line-689">    */</span>
-<span class="source-line-no">690</span><span id="line-690">   public Integer getMinProperties() {</span>
-<span class="source-line-no">691</span><span id="line-691">      return minProperties;</span>
-<span class="source-line-no">692</span><span id="line-692">   }</span>
-<span class="source-line-no">693</span><span id="line-693"></span>
-<span class="source-line-no">694</span><span id="line-694">   /**</span>
-<span class="source-line-no">695</span><span id="line-695">    * Bean property setter:  &lt;property&gt;minProperties&lt;/property&gt;.</span>
-<span class="source-line-no">696</span><span id="line-696">    *</span>
-<span class="source-line-no">697</span><span id="line-697">    * @param value</span>
-<span class="source-line-no">698</span><span id="line-698">    *    The new value for this property.</span>
-<span class="source-line-no">699</span><span id="line-699">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">700</span><span id="line-700">    * @return This object.</span>
-<span class="source-line-no">701</span><span id="line-701">    */</span>
-<span class="source-line-no">702</span><span id="line-702">   public SchemaInfo setMinProperties(Integer value) {</span>
-<span class="source-line-no">703</span><span id="line-703">      minProperties = value;</span>
-<span class="source-line-no">704</span><span id="line-704">      return this;</span>
-<span class="source-line-no">705</span><span id="line-705">   }</span>
-<span class="source-line-no">706</span><span id="line-706"></span>
-<span class="source-line-no">707</span><span id="line-707">   /**</span>
-<span class="source-line-no">708</span><span id="line-708">    * Bean property getter:  &lt;property&gt;multipleOf&lt;/property&gt;.</span>
-<span class="source-line-no">709</span><span id="line-709">    *</span>
-<span class="source-line-no">710</span><span id="line-710">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">690</span><span id="line-690">   public SchemaInfo setMinItems(Integer value) {</span>
+<span class="source-line-no">691</span><span id="line-691">      minItems = value;</span>
+<span class="source-line-no">692</span><span id="line-692">      return this;</span>
+<span class="source-line-no">693</span><span id="line-693">   }</span>
+<span class="source-line-no">694</span><span id="line-694"></span>
+<span class="source-line-no">695</span><span id="line-695">   /**</span>
+<span class="source-line-no">696</span><span id="line-696">    * Bean property getter:  &lt;property&gt;minLength&lt;/property&gt;.</span>
+<span class="source-line-no">697</span><span id="line-697">    *</span>
+<span class="source-line-no">698</span><span id="line-698">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">699</span><span id="line-699">    */</span>
+<span class="source-line-no">700</span><span id="line-700">   public Integer getMinLength() {</span>
+<span class="source-line-no">701</span><span id="line-701">      return minLength;</span>
+<span class="source-line-no">702</span><span id="line-702">   }</span>
+<span class="source-line-no">703</span><span id="line-703"></span>
+<span class="source-line-no">704</span><span id="line-704">   /**</span>
+<span class="source-line-no">705</span><span id="line-705">    * Bean property setter:  &lt;property&gt;minLength&lt;/property&gt;.</span>
+<span class="source-line-no">706</span><span id="line-706">    *</span>
+<span class="source-line-no">707</span><span id="line-707">    * @param value</span>
+<span class="source-line-no">708</span><span id="line-708">    *    The new value for this property.</span>
+<span class="source-line-no">709</span><span id="line-709">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">710</span><span id="line-710">    * @return This object.</span>
 <span class="source-line-no">711</span><span id="line-711">    */</span>
-<span class="source-line-no">712</span><span id="line-712">   public Number getMultipleOf() {</span>
-<span class="source-line-no">713</span><span id="line-713">      return multipleOf;</span>
-<span class="source-line-no">714</span><span id="line-714">   }</span>
-<span class="source-line-no">715</span><span id="line-715"></span>
-<span class="source-line-no">716</span><span id="line-716">   /**</span>
-<span class="source-line-no">717</span><span id="line-717">    * Bean property setter:  &lt;property&gt;multipleOf&lt;/property&gt;.</span>
-<span class="source-line-no">718</span><span id="line-718">    *</span>
-<span class="source-line-no">719</span><span id="line-719">    * @param value</span>
-<span class="source-line-no">720</span><span id="line-720">    *    The new value for this property.</span>
-<span class="source-line-no">721</span><span id="line-721">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">722</span><span id="line-722">    * @return This object.</span>
-<span class="source-line-no">723</span><span id="line-723">    */</span>
-<span class="source-line-no">724</span><span id="line-724">   public SchemaInfo setMultipleOf(Number value) {</span>
-<span class="source-line-no">725</span><span id="line-725">      multipleOf = value;</span>
-<span class="source-line-no">726</span><span id="line-726">      return this;</span>
-<span class="source-line-no">727</span><span id="line-727">   }</span>
-<span class="source-line-no">728</span><span id="line-728"></span>
-<span class="source-line-no">729</span><span id="line-729">   /**</span>
-<span class="source-line-no">730</span><span id="line-730">    * Bean property getter:  &lt;property&gt;pattern&lt;/property&gt;.</span>
-<span class="source-line-no">731</span><span id="line-731">    *</span>
-<span class="source-line-no">732</span><span id="line-732">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">712</span><span id="line-712">   public SchemaInfo setMinLength(Integer value) {</span>
+<span class="source-line-no">713</span><span id="line-713">      minLength = value;</span>
+<span class="source-line-no">714</span><span id="line-714">      return this;</span>
+<span class="source-line-no">715</span><span id="line-715">   }</span>
+<span class="source-line-no">716</span><span id="line-716"></span>
+<span class="source-line-no">717</span><span id="line-717">   /**</span>
+<span class="source-line-no">718</span><span id="line-718">    * Bean property getter:  &lt;property&gt;minProperties&lt;/property&gt;.</span>
+<span class="source-line-no">719</span><span id="line-719">    *</span>
+<span class="source-line-no">720</span><span id="line-720">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">721</span><span id="line-721">    */</span>
+<span class="source-line-no">722</span><span id="line-722">   public Integer getMinProperties() {</span>
+<span class="source-line-no">723</span><span id="line-723">      return minProperties;</span>
+<span class="source-line-no">724</span><span id="line-724">   }</span>
+<span class="source-line-no">725</span><span id="line-725"></span>
+<span class="source-line-no">726</span><span id="line-726">   /**</span>
+<span class="source-line-no">727</span><span id="line-727">    * Bean property setter:  &lt;property&gt;minProperties&lt;/property&gt;.</span>
+<span class="source-line-no">728</span><span id="line-728">    *</span>
+<span class="source-line-no">729</span><span id="line-729">    * @param value</span>
+<span class="source-line-no">730</span><span id="line-730">    *    The new value for this property.</span>
+<span class="source-line-no">731</span><span id="line-731">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">732</span><span id="line-732">    * @return This object.</span>
 <span class="source-line-no">733</span><span id="line-733">    */</span>
-<span class="source-line-no">734</span><span id="line-734">   public String getPattern() {</span>
-<span class="source-line-no">735</span><span id="line-735">      return pattern;</span>
-<span class="source-line-no">736</span><span id="line-736">   }</span>
-<span class="source-line-no">737</span><span id="line-737"></span>
-<span class="source-line-no">738</span><span id="line-738">   /**</span>
-<span class="source-line-no">739</span><span id="line-739">    * Bean property setter:  &lt;property&gt;pattern&lt;/property&gt;.</span>
-<span class="source-line-no">740</span><span id="line-740">    *</span>
-<span class="source-line-no">741</span><span id="line-741">    * @param value</span>
-<span class="source-line-no">742</span><span id="line-742">    *    The new value for this property.</span>
-<span class="source-line-no">743</span><span id="line-743">    *    &lt;br&gt;This string SHOULD be a valid regular expression.</span>
-<span class="source-line-no">744</span><span id="line-744">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">745</span><span id="line-745">    * @return This object.</span>
-<span class="source-line-no">746</span><span id="line-746">    */</span>
-<span class="source-line-no">747</span><span id="line-747">   public SchemaInfo setPattern(String value) {</span>
-<span class="source-line-no">748</span><span id="line-748">      pattern = value;</span>
-<span class="source-line-no">749</span><span id="line-749">      return this;</span>
-<span class="source-line-no">750</span><span id="line-750">   }</span>
-<span class="source-line-no">751</span><span id="line-751"></span>
-<span class="source-line-no">752</span><span id="line-752">   /**</span>
-<span class="source-line-no">753</span><span id="line-753">    * Bean property getter:  &lt;property&gt;properties&lt;/property&gt;.</span>
-<span class="source-line-no">754</span><span id="line-754">    *</span>
-<span class="source-line-no">755</span><span id="line-755">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">756</span><span id="line-756">    */</span>
-<span class="source-line-no">757</span><span id="line-757">   public Map&lt;String,SchemaInfo&gt; getProperties() {</span>
-<span class="source-line-no">758</span><span id="line-758">      return properties;</span>
+<span class="source-line-no">734</span><span id="line-734">   public SchemaInfo setMinProperties(Integer value) {</span>
+<span class="source-line-no">735</span><span id="line-735">      minProperties = value;</span>
+<span class="source-line-no">736</span><span id="line-736">      return this;</span>
+<span class="source-line-no">737</span><span id="line-737">   }</span>
+<span class="source-line-no">738</span><span id="line-738"></span>
+<span class="source-line-no">739</span><span id="line-739">   /**</span>
+<span class="source-line-no">740</span><span id="line-740">    * Bean property getter:  &lt;property&gt;multipleOf&lt;/property&gt;.</span>
+<span class="source-line-no">741</span><span id="line-741">    *</span>
+<span class="source-line-no">742</span><span id="line-742">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">743</span><span id="line-743">    */</span>
+<span class="source-line-no">744</span><span id="line-744">   public Number getMultipleOf() {</span>
+<span class="source-line-no">745</span><span id="line-745">      return multipleOf;</span>
+<span class="source-line-no">746</span><span id="line-746">   }</span>
+<span class="source-line-no">747</span><span id="line-747"></span>
+<span class="source-line-no">748</span><span id="line-748">   /**</span>
+<span class="source-line-no">749</span><span id="line-749">    * Bean property setter:  &lt;property&gt;multipleOf&lt;/property&gt;.</span>
+<span class="source-line-no">750</span><span id="line-750">    *</span>
+<span class="source-line-no">751</span><span id="line-751">    * @param value</span>
+<span class="source-line-no">752</span><span id="line-752">    *    The new value for this property.</span>
+<span class="source-line-no">753</span><span id="line-753">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">754</span><span id="line-754">    * @return This object.</span>
+<span class="source-line-no">755</span><span id="line-755">    */</span>
+<span class="source-line-no">756</span><span id="line-756">   public SchemaInfo setMultipleOf(Number value) {</span>
+<span class="source-line-no">757</span><span id="line-757">      multipleOf = value;</span>
+<span class="source-line-no">758</span><span id="line-758">      return this;</span>
 <span class="source-line-no">759</span><span id="line-759">   }</span>
 <span class="source-line-no">760</span><span id="line-760"></span>
 <span class="source-line-no">761</span><span id="line-761">   /**</span>
-<span class="source-line-no">762</span><span id="line-762">    * Bean property setter:  &lt;property&gt;properties&lt;/property&gt;.</span>
+<span class="source-line-no">762</span><span id="line-762">    * Bean property getter:  &lt;property&gt;pattern&lt;/property&gt;.</span>
 <span class="source-line-no">763</span><span id="line-763">    *</span>
-<span class="source-line-no">764</span><span id="line-764">    * @param value</span>
-<span class="source-line-no">765</span><span id="line-765">    *    The new value for this property.</span>
-<span class="source-line-no">766</span><span id="line-766">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">767</span><span id="line-767">    * @return This object.</span>
-<span class="source-line-no">768</span><span id="line-768">    */</span>
-<span class="source-line-no">769</span><span id="line-769">   public SchemaInfo setProperties(Map&lt;String,SchemaInfo&gt; value) {</span>
-<span class="source-line-no">770</span><span id="line-770">      properties = copyOf(value);</span>
-<span class="source-line-no">771</span><span id="line-771">      return this;</span>
-<span class="source-line-no">772</span><span id="line-772">   }</span>
-<span class="source-line-no">773</span><span id="line-773"></span>
-<span class="source-line-no">774</span><span id="line-774">   /**</span>
-<span class="source-line-no">775</span><span id="line-775">    * Bean property appender:  &lt;property&gt;properties&lt;/property&gt;.</span>
-<span class="source-line-no">776</span><span id="line-776">    *</span>
-<span class="source-line-no">777</span><span id="line-777">    * @param key The property key.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">778</span><span id="line-778">    * @param value The property value.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">779</span><span id="line-779">    * @return This object.</span>
-<span class="source-line-no">780</span><span id="line-780">    */</span>
-<span class="source-line-no">781</span><span id="line-781">   public SchemaInfo addProperty(String key, SchemaInfo value) {</span>
-<span class="source-line-no">782</span><span id="line-782">      assertArgNotNull("key", key);</span>
-<span class="source-line-no">783</span><span id="line-783">      assertArgNotNull("value", value);</span>
-<span class="source-line-no">784</span><span id="line-784">      properties = mapBuilder(properties).sparse().add(key, value).build();</span>
-<span class="source-line-no">785</span><span id="line-785">      return this;</span>
-<span class="source-line-no">786</span><span id="line-786">   }</span>
-<span class="source-line-no">787</span><span id="line-787"></span>
-<span class="source-line-no">788</span><span id="line-788">   /**</span>
-<span class="source-line-no">789</span><span id="line-789">    * Bean property getter:  &lt;property&gt;readOnly&lt;/property&gt;.</span>
-<span class="source-line-no">790</span><span id="line-790">    *</span>
-<span class="source-line-no">791</span><span id="line-791">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">792</span><span id="line-792">    */</span>
-<span class="source-line-no">793</span><span id="line-793">   public Boolean getReadOnly() {</span>
-<span class="source-line-no">794</span><span id="line-794">      return readOnly;</span>
-<span class="source-line-no">795</span><span id="line-795">   }</span>
-<span class="source-line-no">796</span><span id="line-796"></span>
-<span class="source-line-no">797</span><span id="line-797">   /**</span>
-<span class="source-line-no">798</span><span id="line-798">    * Bean property setter:  &lt;property&gt;readOnly&lt;/property&gt;.</span>
-<span class="source-line-no">799</span><span id="line-799">    *</span>
-<span class="source-line-no">800</span><span id="line-800">    * @param value</span>
-<span class="source-line-no">801</span><span id="line-801">    *    The new value for this property.</span>
-<span class="source-line-no">802</span><span id="line-802">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">803</span><span id="line-803">    * @return This object.</span>
-<span class="source-line-no">804</span><span id="line-804">    */</span>
-<span class="source-line-no">805</span><span id="line-805">   public SchemaInfo setReadOnly(Boolean value) {</span>
-<span class="source-line-no">806</span><span id="line-806">      readOnly = value;</span>
-<span class="source-line-no">807</span><span id="line-807">      return this;</span>
-<span class="source-line-no">808</span><span id="line-808">   }</span>
-<span class="source-line-no">809</span><span id="line-809"></span>
-<span class="source-line-no">810</span><span id="line-810">   /**</span>
-<span class="source-line-no">811</span><span id="line-811">    * Bean property getter:  &lt;property&gt;$ref&lt;/property&gt;.</span>
-<span class="source-line-no">812</span><span id="line-812">    *</span>
-<span class="source-line-no">813</span><span id="line-813">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">814</span><span id="line-814">    */</span>
-<span class="source-line-no">815</span><span id="line-815">   @Beanp("$ref")</span>
-<span class="source-line-no">816</span><span id="line-816">   public String getRef() {</span>
-<span class="source-line-no">817</span><span id="line-817">      return ref;</span>
+<span class="source-line-no">764</span><span id="line-764">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">765</span><span id="line-765">    */</span>
+<span class="source-line-no">766</span><span id="line-766">   public String getPattern() {</span>
+<span class="source-line-no">767</span><span id="line-767">      return pattern;</span>
+<span class="source-line-no">768</span><span id="line-768">   }</span>
+<span class="source-line-no">769</span><span id="line-769"></span>
+<span class="source-line-no">770</span><span id="line-770">   /**</span>
+<span class="source-line-no">771</span><span id="line-771">    * Bean property setter:  &lt;property&gt;pattern&lt;/property&gt;.</span>
+<span class="source-line-no">772</span><span id="line-772">    *</span>
+<span class="source-line-no">773</span><span id="line-773">    * @param value</span>
+<span class="source-line-no">774</span><span id="line-774">    *    The new value for this property.</span>
+<span class="source-line-no">775</span><span id="line-775">    *    &lt;br&gt;This string SHOULD be a valid regular expression.</span>
+<span class="source-line-no">776</span><span id="line-776">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">777</span><span id="line-777">    * @return This object.</span>
+<span class="source-line-no">778</span><span id="line-778">    */</span>
+<span class="source-line-no">779</span><span id="line-779">   public SchemaInfo setPattern(String value) {</span>
+<span class="source-line-no">780</span><span id="line-780">      pattern = value;</span>
+<span class="source-line-no">781</span><span id="line-781">      return this;</span>
+<span class="source-line-no">782</span><span id="line-782">   }</span>
+<span class="source-line-no">783</span><span id="line-783"></span>
+<span class="source-line-no">784</span><span id="line-784">   /**</span>
+<span class="source-line-no">785</span><span id="line-785">    * Bean property getter:  &lt;property&gt;properties&lt;/property&gt;.</span>
+<span class="source-line-no">786</span><span id="line-786">    *</span>
+<span class="source-line-no">787</span><span id="line-787">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">788</span><span id="line-788">    */</span>
+<span class="source-line-no">789</span><span id="line-789">   public Map&lt;String,SchemaInfo&gt; getProperties() {</span>
+<span class="source-line-no">790</span><span id="line-790">      return properties;</span>
+<span class="source-line-no">791</span><span id="line-791">   }</span>
+<span class="source-line-no">792</span><span id="line-792"></span>
+<span class="source-line-no">793</span><span id="line-793">   /**</span>
+<span class="source-line-no">794</span><span id="line-794">    * Bean property setter:  &lt;property&gt;properties&lt;/property&gt;.</span>
+<span class="source-line-no">795</span><span id="line-795">    *</span>
+<span class="source-line-no">796</span><span id="line-796">    * @param value</span>
+<span class="source-line-no">797</span><span id="line-797">    *    The new value for this property.</span>
+<span class="source-line-no">798</span><span id="line-798">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">799</span><span id="line-799">    * @return This object.</span>
+<span class="source-line-no">800</span><span id="line-800">    */</span>
+<span class="source-line-no">801</span><span id="line-801">   public SchemaInfo setProperties(Map&lt;String,SchemaInfo&gt; value) {</span>
+<span class="source-line-no">802</span><span id="line-802">      properties = copyOf(value);</span>
+<span class="source-line-no">803</span><span id="line-803">      return this;</span>
+<span class="source-line-no">804</span><span id="line-804">   }</span>
+<span class="source-line-no">805</span><span id="line-805"></span>
+<span class="source-line-no">806</span><span id="line-806">   /**</span>
+<span class="source-line-no">807</span><span id="line-807">    * Bean property appender:  &lt;property&gt;properties&lt;/property&gt;.</span>
+<span class="source-line-no">808</span><span id="line-808">    *</span>
+<span class="source-line-no">809</span><span id="line-809">    * @param key The property key.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">810</span><span id="line-810">    * @param value The property value.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">811</span><span id="line-811">    * @return This object.</span>
+<span class="source-line-no">812</span><span id="line-812">    */</span>
+<span class="source-line-no">813</span><span id="line-813">   public SchemaInfo addProperty(String key, SchemaInfo value) {</span>
+<span class="source-line-no">814</span><span id="line-814">      assertArgNotNull("key", key);</span>
+<span class="source-line-no">815</span><span id="line-815">      assertArgNotNull("value", value);</span>
+<span class="source-line-no">816</span><span id="line-816">      properties = mapBuilder(properties).sparse().add(key, value).build();</span>
+<span class="source-line-no">817</span><span id="line-817">      return this;</span>
 <span class="source-line-no">818</span><span id="line-818">   }</span>
 <span class="source-line-no">819</span><span id="line-819"></span>
 <span class="source-line-no">820</span><span id="line-820">   /**</span>
-<span class="source-line-no">821</span><span id="line-821">    * Bean property setter:  &lt;property&gt;$ref&lt;/property&gt;.</span>
+<span class="source-line-no">821</span><span id="line-821">    * Bean property getter:  &lt;property&gt;readOnly&lt;/property&gt;.</span>
 <span class="source-line-no">822</span><span id="line-822">    *</span>
-<span class="source-line-no">823</span><span id="line-823">    * @param value</span>
-<span class="source-line-no">824</span><span id="line-824">    *    The new value for this property.</span>
-<span class="source-line-no">825</span><span id="line-825">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">826</span><span id="line-826">    * @return This object.</span>
-<span class="source-line-no">827</span><span id="line-827">    */</span>
-<span class="source-line-no">828</span><span id="line-828">   @Beanp("$ref")</span>
-<span class="source-line-no">829</span><span id="line-829">   public SchemaInfo setRef(String value) {</span>
-<span class="source-line-no">830</span><span id="line-830">      ref = value;</span>
-<span class="source-line-no">831</span><span id="line-831">      return this;</span>
-<span class="source-line-no">832</span><span id="line-832">   }</span>
-<span class="source-line-no">833</span><span id="line-833"></span>
-<span class="source-line-no">834</span><span id="line-834">   /**</span>
-<span class="source-line-no">835</span><span id="line-835">    * Bean property getter:  &lt;property&gt;required&lt;/property&gt;.</span>
-<span class="source-line-no">836</span><span id="line-836">    *</span>
-<span class="source-line-no">837</span><span id="line-837">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">838</span><span id="line-838">    */</span>
-<span class="source-line-no">839</span><span id="line-839">   public Boolean getRequired() {</span>
-<span class="source-line-no">840</span><span id="line-840">      return required;</span>
-<span class="source-line-no">841</span><span id="line-841">   }</span>
-<span class="source-line-no">842</span><span id="line-842"></span>
-<span class="source-line-no">843</span><span id="line-843">   /**</span>
-<span class="source-line-no">844</span><span id="line-844">    * Bean property setter:  &lt;property&gt;required&lt;/property&gt;.</span>
-<span class="source-line-no">845</span><span id="line-845">    *</span>
-<span class="source-line-no">846</span><span id="line-846">    * @param value</span>
-<span class="source-line-no">847</span><span id="line-847">    *    The new value for this property.</span>
-<span class="source-line-no">848</span><span id="line-848">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">849</span><span id="line-849">    * @return This object.</span>
-<span class="source-line-no">850</span><span id="line-850">    */</span>
-<span class="source-line-no">851</span><span id="line-851">   public SchemaInfo setRequired(Boolean value) {</span>
-<span class="source-line-no">852</span><span id="line-852">      required = value;</span>
-<span class="source-line-no">853</span><span id="line-853">      return this;</span>
-<span class="source-line-no">854</span><span id="line-854">   }</span>
-<span class="source-line-no">855</span><span id="line-855"></span>
-<span class="source-line-no">856</span><span id="line-856">   /**</span>
-<span class="source-line-no">857</span><span id="line-857">    * Bean property getter:  &lt;property&gt;requiredProperties&lt;/property&gt;.</span>
-<span class="source-line-no">858</span><span id="line-858">    *</span>
-<span class="source-line-no">859</span><span id="line-859">    * &lt;p&gt;</span>
-<span class="source-line-no">860</span><span id="line-860">    * The list of required properties.</span>
-<span class="source-line-no">861</span><span id="line-861">    *</span>
-<span class="source-line-no">862</span><span id="line-862">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">863</span><span id="line-863">    */</span>
-<span class="source-line-no">864</span><span id="line-864">   public Set&lt;String&gt; getRequiredProperties() {</span>
-<span class="source-line-no">865</span><span id="line-865">      return requiredProperties;</span>
-<span class="source-line-no">866</span><span id="line-866">   }</span>
-<span class="source-line-no">867</span><span id="line-867"></span>
-<span class="source-line-no">868</span><span id="line-868">   /**</span>
-<span class="source-line-no">869</span><span id="line-869">    * Bean property setter:  &lt;property&gt;requiredProperties&lt;/property&gt;.</span>
-<span class="source-line-no">870</span><span id="line-870">    *</span>
-<span class="source-line-no">871</span><span id="line-871">    * &lt;p&gt;</span>
-<span class="source-line-no">872</span><span id="line-872">    * The list of required properties.</span>
-<span class="source-line-no">873</span><span id="line-873">    *</span>
-<span class="source-line-no">874</span><span id="line-874">    * @param value</span>
-<span class="source-line-no">875</span><span id="line-875">    *    The new value for this property.</span>
-<span class="source-line-no">876</span><span id="line-876">    *    &lt;br&gt;Valid values:</span>
-<span class="source-line-no">877</span><span id="line-877">    *    &lt;ul&gt;</span>
-<span class="source-line-no">878</span><span id="line-878">    *       &lt;li&gt;&lt;js&gt;"http"&lt;/js&gt;</span>
-<span class="source-line-no">879</span><span id="line-879">    *       &lt;li&gt;&lt;js&gt;"https"&lt;/js&gt;</span>
-<span class="source-line-no">880</span><span id="line-880">    *       &lt;li&gt;&lt;js&gt;"ws"&lt;/js&gt;</span>
-<span class="source-line-no">881</span><span id="line-881">    *       &lt;li&gt;&lt;js&gt;"wss"&lt;/js&gt;</span>
-<span class="source-line-no">882</span><span id="line-882">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">883</span><span id="line-883">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">884</span><span id="line-884">    * @return This object.</span>
-<span class="source-line-no">885</span><span id="line-885">    */</span>
-<span class="source-line-no">886</span><span id="line-886">   public SchemaInfo setRequiredProperties(Collection&lt;String&gt; value) {</span>
-<span class="source-line-no">887</span><span id="line-887">      requiredProperties = setFrom(value);</span>
-<span class="source-line-no">888</span><span id="line-888">      return this;</span>
-<span class="source-line-no">889</span><span id="line-889">   }</span>
-<span class="source-line-no">890</span><span id="line-890"></span>
-<span class="source-line-no">891</span><span id="line-891">   /**</span>
-<span class="source-line-no">892</span><span id="line-892">    * Bean property appender:  &lt;property&gt;requiredProperties&lt;/property&gt;.</span>
+<span class="source-line-no">823</span><span id="line-823">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">824</span><span id="line-824">    */</span>
+<span class="source-line-no">825</span><span id="line-825">   public Boolean getReadOnly() {</span>
+<span class="source-line-no">826</span><span id="line-826">      return readOnly;</span>
+<span class="source-line-no">827</span><span id="line-827">   }</span>
+<span class="source-line-no">828</span><span id="line-828"></span>
+<span class="source-line-no">829</span><span id="line-829">   /**</span>
+<span class="source-line-no">830</span><span id="line-830">    * Bean property setter:  &lt;property&gt;readOnly&lt;/property&gt;.</span>
+<span class="source-line-no">831</span><span id="line-831">    *</span>
+<span class="source-line-no">832</span><span id="line-832">    * @param value</span>
+<span class="source-line-no">833</span><span id="line-833">    *    The new value for this property.</span>
+<span class="source-line-no">834</span><span id="line-834">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">835</span><span id="line-835">    * @return This object.</span>
+<span class="source-line-no">836</span><span id="line-836">    */</span>
+<span class="source-line-no">837</span><span id="line-837">   public SchemaInfo setReadOnly(Boolean value) {</span>
+<span class="source-line-no">838</span><span id="line-838">      readOnly = value;</span>
+<span class="source-line-no">839</span><span id="line-839">      return this;</span>
+<span class="source-line-no">840</span><span id="line-840">   }</span>
+<span class="source-line-no">841</span><span id="line-841"></span>
+<span class="source-line-no">842</span><span id="line-842">   /**</span>
+<span class="source-line-no">843</span><span id="line-843">    * Bean property getter:  &lt;property&gt;$ref&lt;/property&gt;.</span>
+<span class="source-line-no">844</span><span id="line-844">    *</span>
+<span class="source-line-no">845</span><span id="line-845">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">846</span><span id="line-846">    */</span>
+<span class="source-line-no">847</span><span id="line-847">   @Beanp("$ref")</span>
+<span class="source-line-no">848</span><span id="line-848">   public String getRef() {</span>
+<span class="source-line-no">849</span><span id="line-849">      return ref;</span>
+<span class="source-line-no">850</span><span id="line-850">   }</span>
+<span class="source-line-no">851</span><span id="line-851"></span>
+<span class="source-line-no">852</span><span id="line-852">   /**</span>
+<span class="source-line-no">853</span><span id="line-853">    * Bean property setter:  &lt;property&gt;$ref&lt;/property&gt;.</span>
+<span class="source-line-no">854</span><span id="line-854">    *</span>
+<span class="source-line-no">855</span><span id="line-855">    * @param value</span>
+<span class="source-line-no">856</span><span id="line-856">    *    The new value for this property.</span>
+<span class="source-line-no">857</span><span id="line-857">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">858</span><span id="line-858">    * @return This object.</span>
+<span class="source-line-no">859</span><span id="line-859">    */</span>
+<span class="source-line-no">860</span><span id="line-860">   @Beanp("$ref")</span>
+<span class="source-line-no">861</span><span id="line-861">   public SchemaInfo setRef(String value) {</span>
+<span class="source-line-no">862</span><span id="line-862">      ref = value;</span>
+<span class="source-line-no">863</span><span id="line-863">      return this;</span>
+<span class="source-line-no">864</span><span id="line-864">   }</span>
+<span class="source-line-no">865</span><span id="line-865"></span>
+<span class="source-line-no">866</span><span id="line-866">   /**</span>
+<span class="source-line-no">867</span><span id="line-867">    * Bean property getter:  &lt;property&gt;required&lt;/property&gt;.</span>
+<span class="source-line-no">868</span><span id="line-868">    *</span>
+<span class="source-line-no">869</span><span id="line-869">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">870</span><span id="line-870">    */</span>
+<span class="source-line-no">871</span><span id="line-871">   public Boolean getRequired() {</span>
+<span class="source-line-no">872</span><span id="line-872">      return required;</span>
+<span class="source-line-no">873</span><span id="line-873">   }</span>
+<span class="source-line-no">874</span><span id="line-874"></span>
+<span class="source-line-no">875</span><span id="line-875">   /**</span>
+<span class="source-line-no">876</span><span id="line-876">    * Bean property setter:  &lt;property&gt;required&lt;/property&gt;.</span>
+<span class="source-line-no">877</span><span id="line-877">    *</span>
+<span class="source-line-no">878</span><span id="line-878">    * @param value</span>
+<span class="source-line-no">879</span><span id="line-879">    *    The new value for this property.</span>
+<span class="source-line-no">880</span><span id="line-880">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">881</span><span id="line-881">    * @return This object.</span>
+<span class="source-line-no">882</span><span id="line-882">    */</span>
+<span class="source-line-no">883</span><span id="line-883">   public SchemaInfo setRequired(Boolean value) {</span>
+<span class="source-line-no">884</span><span id="line-884">      required = value;</span>
+<span class="source-line-no">885</span><span id="line-885">      return this;</span>
+<span class="source-line-no">886</span><span id="line-886">   }</span>
+<span class="source-line-no">887</span><span id="line-887"></span>
+<span class="source-line-no">888</span><span id="line-888">   /**</span>
+<span class="source-line-no">889</span><span id="line-889">    * Bean property getter:  &lt;property&gt;requiredProperties&lt;/property&gt;.</span>
+<span class="source-line-no">890</span><span id="line-890">    *</span>
+<span class="source-line-no">891</span><span id="line-891">    * &lt;p&gt;</span>
+<span class="source-line-no">892</span><span id="line-892">    * The list of required properties.</span>
 <span class="source-line-no">893</span><span id="line-893">    *</span>
-<span class="source-line-no">894</span><span id="line-894">    * &lt;p&gt;</span>
-<span class="source-line-no">895</span><span id="line-895">    * The list of required properties.</span>
-<span class="source-line-no">896</span><span id="line-896">    *</span>
-<span class="source-line-no">897</span><span id="line-897">    * @param value</span>
-<span class="source-line-no">898</span><span id="line-898">    *    The values to add to this property.</span>
-<span class="source-line-no">899</span><span id="line-899">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">900</span><span id="line-900">    * @return This object.</span>
-<span class="source-line-no">901</span><span id="line-901">    */</span>
-<span class="source-line-no">902</span><span id="line-902">   public SchemaInfo addRequiredProperties(String...value) {</span>
-<span class="source-line-no">903</span><span id="line-903">      requiredProperties = setBuilder(requiredProperties).sparse().add(value).build();</span>
-<span class="source-line-no">904</span><span id="line-904">      return this;</span>
-<span class="source-line-no">905</span><span id="line-905">   }</span>
-<span class="source-line-no">906</span><span id="line-906"></span>
-<span class="source-line-no">907</span><span id="line-907">   /**</span>
-<span class="source-line-no">908</span><span id="line-908">    * Bean property fluent setter:  &lt;property&gt;requiredProperties&lt;/property&gt;.</span>
-<span class="source-line-no">909</span><span id="line-909">    *</span>
-<span class="source-line-no">910</span><span id="line-910">    * @param value</span>
-<span class="source-line-no">911</span><span id="line-911">    *    The new value for this property.</span>
-<span class="source-line-no">912</span><span id="line-912">    * @return This object.</span>
-<span class="source-line-no">913</span><span id="line-913">    */</span>
-<span class="source-line-no">914</span><span id="line-914">   public SchemaInfo setRequiredProperties(String...value) {</span>
-<span class="source-line-no">915</span><span id="line-915">      setRequiredProperties(setBuilder(String.class).sparse().addJson(value).build());</span>
-<span class="source-line-no">916</span><span id="line-916">      return this;</span>
-<span class="source-line-no">917</span><span id="line-917">   }</span>
-<span class="source-line-no">918</span><span id="line-918"></span>
-<span class="source-line-no">919</span><span id="line-919">   /**</span>
-<span class="source-line-no">920</span><span id="line-920">    * Bean property getter:  &lt;property&gt;title&lt;/property&gt;.</span>
-<span class="source-line-no">921</span><span id="line-921">    *</span>
-<span class="source-line-no">922</span><span id="line-922">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">923</span><span id="line-923">    */</span>
-<span class="source-line-no">924</span><span id="line-924">   public String getTitle() {</span>
-<span class="source-line-no">925</span><span id="line-925">      return title;</span>
-<span class="source-line-no">926</span><span id="line-926">   }</span>
-<span class="source-line-no">927</span><span id="line-927"></span>
-<span class="source-line-no">928</span><span id="line-928">   /**</span>
-<span class="source-line-no">929</span><span id="line-929">    * Bean property setter:  &lt;property&gt;title&lt;/property&gt;.</span>
-<span class="source-line-no">930</span><span id="line-930">    *</span>
-<span class="source-line-no">931</span><span id="line-931">    * @param value</span>
-<span class="source-line-no">932</span><span id="line-932">    *    The new value for this property.</span>
-<span class="source-line-no">933</span><span id="line-933">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">934</span><span id="line-934">    * @return This object.</span>
-<span class="source-line-no">935</span><span id="line-935">    */</span>
-<span class="source-line-no">936</span><span id="line-936">   public SchemaInfo setTitle(String value) {</span>
-<span class="source-line-no">937</span><span id="line-937">      title = value;</span>
-<span class="source-line-no">938</span><span id="line-938">      return this;</span>
-<span class="source-line-no">939</span><span id="line-939">   }</span>
-<span class="source-line-no">940</span><span id="line-940"></span>
-<span class="source-line-no">941</span><span id="line-941">   /**</span>
-<span class="source-line-no">942</span><span id="line-942">    * Bean property getter:  &lt;property&gt;type&lt;/property&gt;.</span>
-<span class="source-line-no">943</span><span id="line-943">    *</span>
-<span class="source-line-no">944</span><span id="line-944">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">945</span><span id="line-945">    */</span>
-<span class="source-line-no">946</span><span id="line-946">   public String getType() {</span>
-<span class="source-line-no">947</span><span id="line-947">      return type;</span>
-<span class="source-line-no">948</span><span id="line-948">   }</span>
-<span class="source-line-no">949</span><span id="line-949"></span>
-<span class="source-line-no">950</span><span id="line-950">   /**</span>
-<span class="source-line-no">951</span><span id="line-951">    * Bean property setter:  &lt;property&gt;type&lt;/property&gt;.</span>
-<span class="source-line-no">952</span><span id="line-952">    *</span>
-<span class="source-line-no">953</span><span id="line-953">    * @param value</span>
-<span class="source-line-no">954</span><span id="line-954">    *    The new value for this property.</span>
-<span class="source-line-no">955</span><span id="line-955">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">956</span><span id="line-956">    *    &lt;br&gt;Possible values include:</span>
-<span class="source-line-no">957</span><span id="line-957">    *    &lt;ul&gt;</span>
-<span class="source-line-no">958</span><span id="line-958">    *       &lt;li&gt;&lt;js&gt;"object"&lt;/js&gt;</span>
-<span class="source-line-no">959</span><span id="line-959">    *       &lt;li&gt;&lt;js&gt;"string"&lt;/js&gt;</span>
-<span class="source-line-no">960</span><span id="line-960">    *       &lt;li&gt;&lt;js&gt;"number"&lt;/js&gt;</span>
-<span class="source-line-no">961</span><span id="line-961">    *       &lt;li&gt;&lt;js&gt;"integer"&lt;/js&gt;</span>
-<span class="source-line-no">962</span><span id="line-962">    *       &lt;li&gt;&lt;js&gt;"boolean"&lt;/js&gt;</span>
-<span class="source-line-no">963</span><span id="line-963">    *       &lt;li&gt;&lt;js&gt;"array"&lt;/js&gt;</span>
-<span class="source-line-no">964</span><span id="line-964">    *       &lt;li&gt;&lt;js&gt;"file"&lt;/js&gt;</span>
-<span class="source-line-no">965</span><span id="line-965">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">966</span><span id="line-966">    * @return This object.</span>
-<span class="source-line-no">967</span><span id="line-967">    */</span>
-<span class="source-line-no">968</span><span id="line-968">   public SchemaInfo setType(String value) {</span>
-<span class="source-line-no">969</span><span id="line-969">      type = value;</span>
-<span class="source-line-no">970</span><span id="line-970">      return this;</span>
-<span class="source-line-no">971</span><span id="line-971">   }</span>
-<span class="source-line-no">972</span><span id="line-972"></span>
-<span class="source-line-no">973</span><span id="line-973">   /**</span>
-<span class="source-line-no">974</span><span id="line-974">    * Bean property getter:  &lt;property&gt;uniqueItems&lt;/property&gt;.</span>
-<span class="source-line-no">975</span><span id="line-975">    *</span>
-<span class="source-line-no">976</span><span id="line-976">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">977</span><span id="line-977">    */</span>
-<span class="source-line-no">978</span><span id="line-978">   public Boolean getUniqueItems() {</span>
-<span class="source-line-no">979</span><span id="line-979">      return uniqueItems;</span>
-<span class="source-line-no">980</span><span id="line-980">   }</span>
-<span class="source-line-no">981</span><span id="line-981"></span>
-<span class="source-line-no">982</span><span id="line-982">   /**</span>
-<span class="source-line-no">983</span><span id="line-983">    * Bean property setter:  &lt;property&gt;uniqueItems&lt;/property&gt;.</span>
-<span class="source-line-no">984</span><span id="line-984">    *</span>
-<span class="source-line-no">985</span><span id="line-985">    * @param value</span>
-<span class="source-line-no">986</span><span id="line-986">    *    The new value for this property.</span>
-<span class="source-line-no">987</span><span id="line-987">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">988</span><span id="line-988">    * @return This object.</span>
-<span class="source-line-no">989</span><span id="line-989">    */</span>
-<span class="source-line-no">990</span><span id="line-990">   public SchemaInfo setUniqueItems(Boolean value) {</span>
-<span class="source-line-no">991</span><span id="line-991">      uniqueItems = value;</span>
-<span class="source-line-no">992</span><span id="line-992">      return this;</span>
-<span class="source-line-no">993</span><span id="line-993">   }</span>
-<span class="source-line-no">994</span><span id="line-994"></span>
-<span class="source-line-no">995</span><span id="line-995">   /**</span>
-<span class="source-line-no">996</span><span id="line-996">    * Bean property getter:  &lt;property&gt;xml&lt;/property&gt;.</span>
-<span class="source-line-no">997</span><span id="line-997">    *</span>
-<span class="source-line-no">998</span><span id="line-998">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">999</span><span id="line-999">    */</span>
-<span class="source-line-no">1000</span><span id="line-1000">   public Xml getXml() {</span>
-<span class="source-line-no">1001</span><span id="line-1001">      return xml;</span>
-<span class="source-line-no">1002</span><span id="line-1002">   }</span>
-<span class="source-line-no">1003</span><span id="line-1003"></span>
-<span class="source-line-no">1004</span><span id="line-1004">   /**</span>
-<span class="source-line-no">1005</span><span id="line-1005">    * Bean property setter:  &lt;property&gt;xml&lt;/property&gt;.</span>
-<span class="source-line-no">1006</span><span id="line-1006">    *</span>
-<span class="source-line-no">1007</span><span id="line-1007">    * @param value</span>
-<span class="source-line-no">1008</span><span id="line-1008">    *    The new value for this property.</span>
-<span class="source-line-no">1009</span><span id="line-1009">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">1010</span><span id="line-1010">    * @return This object.</span>
-<span class="source-line-no">1011</span><span id="line-1011">    */</span>
-<span class="source-line-no">1012</span><span id="line-1012">   public SchemaInfo setXml(Xml value) {</span>
-<span class="source-line-no">1013</span><span id="line-1013">      xml = value;</span>
-<span class="source-line-no">1014</span><span id="line-1014">      return this;</span>
-<span class="source-line-no">1015</span><span id="line-1015">   }</span>
-<span class="source-line-no">1016</span><span id="line-1016"></span>
-<span class="source-line-no">1017</span><span id="line-1017">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">1018</span><span id="line-1018"></span>
-<span class="source-line-no">1019</span><span id="line-1019">   // &lt;/FluentSetters&gt;</span>
+<span class="source-line-no">894</span><span id="line-894">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">895</span><span id="line-895">    */</span>
+<span class="source-line-no">896</span><span id="line-896">   public Set&lt;String&gt; getRequiredProperties() {</span>
+<span class="source-line-no">897</span><span id="line-897">      return requiredProperties;</span>
+<span class="source-line-no">898</span><span id="line-898">   }</span>
+<span class="source-line-no">899</span><span id="line-899"></span>
+<span class="source-line-no">900</span><span id="line-900">   /**</span>
+<span class="source-line-no">901</span><span id="line-901">    * Bean property setter:  &lt;property&gt;requiredProperties&lt;/property&gt;.</span>
+<span class="source-line-no">902</span><span id="line-902">    *</span>
+<span class="source-line-no">903</span><span id="line-903">    * &lt;p&gt;</span>
+<span class="source-line-no">904</span><span id="line-904">    * The list of required properties.</span>
+<span class="source-line-no">905</span><span id="line-905">    *</span>
+<span class="source-line-no">906</span><span id="line-906">    * @param value</span>
+<span class="source-line-no">907</span><span id="line-907">    *    The new value for this property.</span>
+<span class="source-line-no">908</span><span id="line-908">    *    &lt;br&gt;Valid values:</span>
+<span class="source-line-no">909</span><span id="line-909">    *    &lt;ul&gt;</span>
+<span class="source-line-no">910</span><span id="line-910">    *       &lt;li&gt;&lt;js&gt;"http"&lt;/js&gt;</span>
+<span class="source-line-no">911</span><span id="line-911">    *       &lt;li&gt;&lt;js&gt;"https"&lt;/js&gt;</span>
+<span class="source-line-no">912</span><span id="line-912">    *       &lt;li&gt;&lt;js&gt;"ws"&lt;/js&gt;</span>
+<span class="source-line-no">913</span><span id="line-913">    *       &lt;li&gt;&lt;js&gt;"wss"&lt;/js&gt;</span>
+<span class="source-line-no">914</span><span id="line-914">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">915</span><span id="line-915">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">916</span><span id="line-916">    * @return This object.</span>
+<span class="source-line-no">917</span><span id="line-917">    */</span>
+<span class="source-line-no">918</span><span id="line-918">   public SchemaInfo setRequiredProperties(Collection&lt;String&gt; value) {</span>
+<span class="source-line-no">919</span><span id="line-919">      requiredProperties = setFrom(value);</span>
+<span class="source-line-no">920</span><span id="line-920">      return this;</span>
+<span class="source-line-no">921</span><span id="line-921">   }</span>
+<span class="source-line-no">922</span><span id="line-922"></span>
+<span class="source-line-no">923</span><span id="line-923">   /**</span>
+<span class="source-line-no">924</span><span id="line-924">    * Bean property appender:  &lt;property&gt;requiredProperties&lt;/property&gt;.</span>
+<span class="source-line-no">925</span><span id="line-925">    *</span>
+<span class="source-line-no">926</span><span id="line-926">    * &lt;p&gt;</span>
+<span class="source-line-no">927</span><span id="line-927">    * The list of required properties.</span>
+<span class="source-line-no">928</span><span id="line-928">    *</span>
+<span class="source-line-no">929</span><span id="line-929">    * @param value</span>
+<span class="source-line-no">930</span><span id="line-930">    *    The values to add to this property.</span>
+<span class="source-line-no">931</span><span id="line-931">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">932</span><span id="line-932">    * @return This object.</span>
+<span class="source-line-no">933</span><span id="line-933">    */</span>
+<span class="source-line-no">934</span><span id="line-934">   public SchemaInfo addRequiredProperties(String...value) {</span>
+<span class="source-line-no">935</span><span id="line-935">      requiredProperties = setBuilder(requiredProperties).sparse().add(value).build();</span>
+<span class="source-line-no">936</span><span id="line-936">      return this;</span>
+<span class="source-line-no">937</span><span id="line-937">   }</span>
+<span class="source-line-no">938</span><span id="line-938"></span>
+<span class="source-line-no">939</span><span id="line-939">   /**</span>
+<span class="source-line-no">940</span><span id="line-940">    * Bean property fluent setter:  &lt;property&gt;requiredProperties&lt;/property&gt;.</span>
+<span class="source-line-no">941</span><span id="line-941">    *</span>
+<span class="source-line-no">942</span><span id="line-942">    * &lt;p&gt;</span>
+<span class="source-line-no">943</span><span id="line-943">    * Takes an array of strings that define the required properties.</span>
+<span class="source-line-no">944</span><span id="line-944">    *</span>
+<span class="source-line-no">945</span><span id="line-945">    * @param values</span>
+<span class="source-line-no">946</span><span id="line-946">    *    The values to add to this property.</span>
+<span class="source-line-no">947</span><span id="line-947">    *    &lt;br&gt;Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">948</span><span id="line-948">    * @return This object.</span>
+<span class="source-line-no">949</span><span id="line-949">    */</span>
+<span class="source-line-no">950</span><span id="line-950">   public SchemaInfo addRequiredProperties(Collection&lt;String&gt; values) {</span>
+<span class="source-line-no">951</span><span id="line-951">      requiredProperties = setBuilder(requiredProperties).sparse().addAll(values).build();</span>
+<span class="source-line-no">952</span><span id="line-952">      return this;</span>
+<span class="source-line-no">953</span><span id="line-953">   }</span>
+<span class="source-line-no">954</span><span id="line-954"></span>
+<span class="source-line-no">955</span><span id="line-955">   /**</span>
+<span class="source-line-no">956</span><span id="line-956">    * Bean property fluent setter:  &lt;property&gt;requiredProperties&lt;/property&gt;.</span>
+<span class="source-line-no">957</span><span id="line-957">    *</span>
+<span class="source-line-no">958</span><span id="line-958">    * @param value</span>
+<span class="source-line-no">959</span><span id="line-959">    *    The new value for this property.</span>
+<span class="source-line-no">960</span><span id="line-960">    * @return This object.</span>
+<span class="source-line-no">961</span><span id="line-961">    */</span>
+<span class="source-line-no">962</span><span id="line-962">   public SchemaInfo setRequiredProperties(String...value) {</span>
+<span class="source-line-no">963</span><span id="line-963">      setRequiredProperties(setBuilder(String.class).sparse().addJson(value).build());</span>
+<span class="source-line-no">964</span><span id="line-964">      return this;</span>
+<span class="source-line-no">965</span><span id="line-965">   }</span>
+<span class="source-line-no">966</span><span id="line-966"></span>
+<span class="source-line-no">967</span><span id="line-967">   /**</span>
+<span class="source-line-no">968</span><span id="line-968">    * Bean property getter:  &lt;property&gt;title&lt;/property&gt;.</span>
+<span class="source-line-no">969</span><span id="line-969">    *</span>
+<span class="source-line-no">970</span><span id="line-970">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">971</span><span id="line-971">    */</span>
+<span class="source-line-no">972</span><span id="line-972">   public String getTitle() {</span>
+<span class="source-line-no">973</span><span id="line-973">      return title;</span>
+<span class="source-line-no">974</span><span id="line-974">   }</span>
+<span class="source-line-no">975</span><span id="line-975"></span>
+<span class="source-line-no">976</span><span id="line-976">   /**</span>
+<span class="source-line-no">977</span><span id="line-977">    * Bean property setter:  &lt;property&gt;title&lt;/property&gt;.</span>
+<span class="source-line-no">978</span><span id="line-978">    *</span>
+<span class="source-line-no">979</span><span id="line-979">    * @param value</span>
+<span class="source-line-no">980</span><span id="line-980">    *    The new value for this property.</span>
+<span class="source-line-no">981</span><span id="line-981">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">982</span><span id="line-982">    * @return This object.</span>
+<span class="source-line-no">983</span><span id="line-983">    */</span>
+<span class="source-line-no">984</span><span id="line-984">   public SchemaInfo setTitle(String value) {</span>
+<span class="source-line-no">985</span><span id="line-985">      title = value;</span>
+<span class="source-line-no">986</span><span id="line-986">      return this;</span>
+<span class="source-line-no">987</span><span id="line-987">   }</span>
+<span class="source-line-no">988</span><span id="line-988"></span>
+<span class="source-line-no">989</span><span id="line-989">   /**</span>
+<span class="source-line-no">990</span><span id="line-990">    * Bean property getter:  &lt;property&gt;type&lt;/property&gt;.</span>
+<span class="source-line-no">991</span><span id="line-991">    *</span>
+<span class="source-line-no">992</span><span id="line-992">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">993</span><span id="line-993">    */</span>
+<span class="source-line-no">994</span><span id="line-994">   public String getType() {</span>
+<span class="source-line-no">995</span><span id="line-995">      return type;</span>
+<span class="source-line-no">996</span><span id="line-996">   }</span>
+<span class="source-line-no">997</span><span id="line-997"></span>
+<span class="source-line-no">998</span><span id="line-998">   /**</span>
+<span class="source-line-no">999</span><span id="line-999">    * Bean property setter:  &lt;property&gt;type&lt;/property&gt;.</span>
+<span class="source-line-no">1000</span><span id="line-1000">    *</span>
+<span class="source-line-no">1001</span><span id="line-1001">    * @param value</span>
+<span class="source-line-no">1002</span><span id="line-1002">    *    The new value for this property.</span>
+<span class="source-line-no">1003</span><span id="line-1003">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">1004</span><span id="line-1004">    *    &lt;br&gt;Possible values include:</span>
+<span class="source-line-no">1005</span><span id="line-1005">    *    &lt;ul&gt;</span>
+<span class="source-line-no">1006</span><span id="line-1006">    *       &lt;li&gt;&lt;js&gt;"object"&lt;/js&gt;</span>
+<span class="source-line-no">1007</span><span id="line-1007">    *       &lt;li&gt;&lt;js&gt;"string"&lt;/js&gt;</span>
+<span class="source-line-no">1008</span><span id="line-1008">    *       &lt;li&gt;&lt;js&gt;"number"&lt;/js&gt;</span>
+<span class="source-line-no">1009</span><span id="line-1009">    *       &lt;li&gt;&lt;js&gt;"integer"&lt;/js&gt;</span>
+<span class="source-line-no">1010</span><span id="line-1010">    *       &lt;li&gt;&lt;js&gt;"boolean"&lt;/js&gt;</span>
+<span class="source-line-no">1011</span><span id="line-1011">    *       &lt;li&gt;&lt;js&gt;"array"&lt;/js&gt;</span>
+<span class="source-line-no">1012</span><span id="line-1012">    *       &lt;li&gt;&lt;js&gt;"file"&lt;/js&gt;</span>
+<span class="source-line-no">1013</span><span id="line-1013">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">1014</span><span id="line-1014">    * @return This object.</span>
+<span class="source-line-no">1015</span><span id="line-1015">    */</span>
+<span class="source-line-no">1016</span><span id="line-1016">   public SchemaInfo setType(String value) {</span>
+<span class="source-line-no">1017</span><span id="line-1017">      type = value;</span>
+<span class="source-line-no">1018</span><span id="line-1018">      return this;</span>
+<span class="source-line-no">1019</span><span id="line-1019">   }</span>
 <span class="source-line-no">1020</span><span id="line-1020"></span>
-<span class="source-line-no">1021</span><span id="line-1021">   @Override /* SwaggerElement */</span>
-<span class="source-line-no">1022</span><span id="line-1022">   public &lt;T&gt; T get(String property, Class&lt;T&gt; type) {</span>
-<span class="source-line-no">1023</span><span id="line-1023">      assertArgNotNull("property", property);</span>
-<span class="source-line-no">1024</span><span id="line-1024">      return switch (property) {  // NOSONAR</span>
-<span class="source-line-no">1025</span><span id="line-1025">         case "additionalProperties" -&gt; toType(getAdditionalProperties(), type);</span>
-<span class="source-line-no">1026</span><span id="line-1026">         case "allOf" -&gt; toType(getAllOf(), type);</span>
-<span class="source-line-no">1027</span><span id="line-1027">         case "default" -&gt; toType(getDefault(), type);</span>
-<span class="source-line-no">1028</span><span id="line-1028">         case "description" -&gt; toType(getDescription(), type);</span>
-<span class="source-line-no">1029</span><span id="line-1029">         case "discriminator" -&gt; toType(getDiscriminator(), type);</span>
-<span class="source-line-no">1030</span><span id="line-1030">         case "enum" -&gt; toType(getEnum(), type);</span>
-<span class="source-line-no">1031</span><span id="line-1031">         case "example" -&gt; toType(getExample(), type);</span>
-<span class="source-line-no">1032</span><span id="line-1032">         case "exclusiveMaximum" -&gt; toType(getExclusiveMaximum(), type);</span>
-<span class="source-line-no">1033</span><span id="line-1033">         case "exclusiveMinimum" -&gt; toType(getExclusiveMinimum(), type);</span>
-<span class="source-line-no">1034</span><span id="line-1034">         case "externalDocs" -&gt; toType(getExternalDocs(), type);</span>
-<span class="source-line-no">1035</span><span id="line-1035">         case "format" -&gt; toType(getFormat(), type);</span>
-<span class="source-line-no">1036</span><span id="line-1036">         case "items" -&gt; toType(getItems(), type);</span>
-<span class="source-line-no">1037</span><span id="line-1037">         case "maximum" -&gt; toType(getMaximum(), type);</span>
-<span class="source-line-no">1038</span><span id="line-1038">         case "maxItems" -&gt; toType(getMaxItems(), type);</span>
-<span class="source-line-no">1039</span><span id="line-1039">         case "maxLength" -&gt; toType(getMaxLength(), type);</span>
-<span class="source-line-no">1040</span><span id="line-1040">         case "maxProperties" -&gt; toType(getMaxProperties(), type);</span>
-<span class="source-line-no">1041</span><span id="line-1041">         case "minimum" -&gt; toType(getMinimum(), type);</span>
-<span class="source-line-no">1042</span><span id="line-1042">         case "minItems" -&gt; toType(getMinItems(), type);</span>
-<span class="source-line-no">1043</span><span id="line-1043">         case "minLength" -&gt; toType(getMinLength(), type);</span>
-<span class="source-line-no">1044</span><span id="line-1044">         case "minProperties" -&gt; toType(getMinProperties(), type);</span>
-<span class="source-line-no">1045</span><span id="line-1045">         case "multipleOf" -&gt; toType(getMultipleOf(), type);</span>
-<span class="source-line-no">1046</span><span id="line-1046">         case "pattern" -&gt; toType(getPattern(), type);</span>
-<span class="source-line-no">1047</span><span id="line-1047">         case "properties" -&gt; toType(getProperties(), type);</span>
-<span class="source-line-no">1048</span><span id="line-1048">         case "readOnly" -&gt; toType(getReadOnly(), type);</span>
-<span class="source-line-no">1049</span><span id="line-1049">         case "$ref" -&gt; toType(getRef(), type);</span>
-<span class="source-line-no">1050</span><span id="line-1050">         case "required" -&gt; toType(getRequired(), type);</span>
-<span class="source-line-no">1051</span><span id="line-1051">         case "requiredProperties" -&gt; toType(getRequiredProperties(), type);</span>
-<span class="source-line-no">1052</span><span id="line-1052">         case "title" -&gt; toType(getTitle(), type);</span>
-<span class="source-line-no">1053</span><span id="line-1053">         case "type" -&gt; toType(getType(), type);</span>
-<span class="source-line-no">1054</span><span id="line-1054">         case "uniqueItems" -&gt; toType(getUniqueItems(), type);</span>
-<span class="source-line-no">1055</span><span id="line-1055">         case "xml" -&gt; toType(getXml(), type);</span>
-<span class="source-line-no">1056</span><span id="line-1056">         default -&gt; super.get(property, type);</span>
-<span class="source-line-no">1057</span><span id="line-1057">      };</span>
-<span class="source-line-no">1058</span><span id="line-1058">   }</span>
-<span class="source-line-no">1059</span><span id="line-1059"></span>
-<span class="source-line-no">1060</span><span id="line-1060">   @Override /* SwaggerElement */</span>
-<span class="source-line-no">1061</span><span id="line-1061">   public SchemaInfo set(String property, Object value) {</span>
-<span class="source-line-no">1062</span><span id="line-1062">      assertArgNotNull("property", property);</span>
-<span class="source-line-no">1063</span><span id="line-1063">      return switch (property) {  // NOSONAR</span>
-<span class="source-line-no">1064</span><span id="line-1064">         case "additionalProperties" -&gt; setAdditionalProperties(toType(value, SchemaInfo.class));</span>
-<span class="source-line-no">1065</span><span id="line-1065">         case "allOf" -&gt; setAllOf(setBuilder(SchemaInfo.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">1066</span><span id="line-1066">         case "default" -&gt; setDefault(value);</span>
-<span class="source-line-no">1067</span><span id="line-1067">         case "description" -&gt; setDescription(Utils.s(value));</span>
-<span class="source-line-no">1068</span><span id="line-1068">         case "discriminator" -&gt; setDiscriminator(Utils.s(value));</span>
-<span class="source-line-no">1069</span><span id="line-1069">         case "enum" -&gt; setEnum(value);</span>
-<span class="source-line-no">1070</span><span id="line-1070">         case "example" -&gt; setExample(value);</span>
-<span class="source-line-no">1071</span><span id="line-1071">         case "exclusiveMaximum" -&gt; setExclusiveMaximum(toBoolean(value));</span>
-<span class="source-line-no">1072</span><span id="line-1072">         case "exclusiveMinimum" -&gt; setExclusiveMinimum(toBoolean(value));</span>
-<span class="source-line-no">1073</span><span id="line-1073">         case "externalDocs" -&gt; setExternalDocs(toType(value, ExternalDocumentation.class));</span>
-<span class="source-line-no">1074</span><span id="line-1074">         case "format" -&gt; setFormat(Utils.s(value));</span>
-<span class="source-line-no">1075</span><span id="line-1075">         case "items" -&gt; setItems(toType(value, Items.class));</span>
-<span class="source-line-no">1076</span><span id="line-1076">         case "maximum" -&gt; setMaximum(toNumber(value));</span>
-<span class="source-line-no">1077</span><span id="line-1077">         case "maxItems" -&gt; setMaxItems(toInteger(value));</span>
-<span class="source-line-no">1078</span><span id="line-1078">         case "maxLength" -&gt; setMaxLength(toInteger(value));</span>
-<span class="source-line-no">1079</span><span id="line-1079">         case "maxProperties" -&gt; setMaxProperties(toInteger(value));</span>
-<span class="source-line-no">1080</span><span id="line-1080">         case "minimum" -&gt; setMinimum(toNumber(value));</span>
-<span class="source-line-no">1081</span><span id="line-1081">         case "minItems" -&gt; setMinItems(toInteger(value));</span>
-<span class="source-line-no">1082</span><span id="line-1082">         case "minLength" -&gt; setMinLength(toInteger(value));</span>
-<span class="source-line-no">1083</span><span id="line-1083">         case "minProperties" -&gt; setMinProperties(toInteger(value));</span>
-<span class="source-line-no">1084</span><span id="line-1084">         case "multipleOf" -&gt; setMultipleOf(toNumber(value));</span>
-<span class="source-line-no">1085</span><span id="line-1085">         case "pattern" -&gt; setPattern(Utils.s(value));</span>
-<span class="source-line-no">1086</span><span id="line-1086">         case "properties" -&gt; setProperties(mapBuilder(String.class,SchemaInfo.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">1087</span><span id="line-1087">         case "readOnly" -&gt; setReadOnly(toBoolean(value));</span>
-<span class="source-line-no">1088</span><span id="line-1088">         case "$ref" -&gt; setRef(Utils.s(value));</span>
-<span class="source-line-no">1089</span><span id="line-1089">         case "required" -&gt; setRequired(toBoolean(value));</span>
-<span class="source-line-no">1090</span><span id="line-1090">         case "requiredProperties" -&gt; setRequiredProperties(listBuilder(String.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">1091</span><span id="line-1091">         case "title" -&gt; setTitle(Utils.s(value));</span>
-<span class="source-line-no">1092</span><span id="line-1092">         case "type" -&gt; setType(Utils.s(value));</span>
-<span class="source-line-no">1093</span><span id="line-1093">         case "uniqueItems" -&gt; setUniqueItems(toBoolean(value));</span>
-<span class="source-line-no">1094</span><span id="line-1094">         case "xml" -&gt; setXml(toType(value, Xml.class));</span>
-<span class="source-line-no">1095</span><span id="line-1095">         default -&gt; {</span>
-<span class="source-line-no">1096</span><span id="line-1096">            super.set(property, value);</span>
-<span class="source-line-no">1097</span><span id="line-1097">            yield this;</span>
-<span class="source-line-no">1098</span><span id="line-1098">         }</span>
-<span class="source-line-no">1099</span><span id="line-1099">      };</span>
-<span class="source-line-no">1100</span><span id="line-1100">   }</span>
-<span class="source-line-no">1101</span><span id="line-1101"></span>
-<span class="source-line-no">1102</span><span id="line-1102">   @Override /* SwaggerElement */</span>
-<span class="source-line-no">1103</span><span id="line-1103">   public Set&lt;String&gt; keySet() {</span>
-<span class="source-line-no">1104</span><span id="line-1104">      var s = setBuilder(String.class)</span>
-<span class="source-line-no">1105</span><span id="line-1105">         .addIf(additionalProperties != null, "additionalProperties")</span>
-<span class="source-line-no">1106</span><span id="line-1106">         .addIf(allOf != null, "allOf")</span>
-<span class="source-line-no">1107</span><span id="line-1107">         .addIf(_default != null, "default")</span>
-<span class="source-line-no">1108</span><span id="line-1108">         .addIf(description != null, "description")</span>
-<span class="source-line-no">1109</span><span id="line-1109">         .addIf(discriminator != null, "discriminator")</span>
-<span class="source-line-no">1110</span><span id="line-1110">         .addIf(_enum != null, "enum")</span>
-<span class="source-line-no">1111</span><span id="line-1111">         .addIf(example != null, "example")</span>
-<span class="source-line-no">1112</span><span id="line-1112">         .addIf(exclusiveMaximum != null, "exclusiveMaximum")</span>
-<span class="source-line-no">1113</span><span id="line-1113">         .addIf(exclusiveMinimum != null, "exclusiveMinimum")</span>
-<span class="source-line-no">1114</span><span id="line-1114">         .addIf(externalDocs != null, "externalDocs")</span>
-<span class="source-line-no">1115</span><span id="line-1115">         .addIf(format != null, "format")</span>
-<span class="source-line-no">1116</span><span id="line-1116">         .addIf(items != null, "items")</span>
-<span class="source-line-no">1117</span><span id="line-1117">         .addIf(maximum != null, "maximum")</span>
-<span class="source-line-no">1118</span><span id="line-1118">         .addIf(maxItems != null, "maxItems")</span>
-<span class="source-line-no">1119</span><span id="line-1119">         .addIf(maxLength != null, "maxLength")</span>
-<span class="source-line-no">1120</span><span id="line-1120">         .addIf(maxProperties != null, "maxProperties")</span>
-<span class="source-line-no">1121</span><span id="line-1121">         .addIf(minimum != null, "minimum")</span>
-<span class="source-line-no">1122</span><span id="line-1122">         .addIf(minItems != null, "minItems")</span>
-<span class="source-line-no">1123</span><span id="line-1123">         .addIf(minLength != null, "minLength")</span>
-<span class="source-line-no">1124</span><span id="line-1124">         .addIf(minProperties != null, "minProperties")</span>
-<span class="source-line-no">1125</span><span id="line-1125">         .addIf(multipleOf != null, "multipleOf")</span>
-<span class="source-line-no">1126</span><span id="line-1126">         .addIf(pattern != null, "pattern")</span>
-<span class="source-line-no">1127</span><span id="line-1127">         .addIf(properties != null, "properties")</span>
-<span class="source-line-no">1128</span><span id="line-1128">         .addIf(readOnly != null, "readOnly")</span>
-<span class="source-line-no">1129</span><span id="line-1129">         .addIf(ref != null, "$ref")</span>
-<span class="source-line-no">1130</span><span id="line-1130">         .addIf(required != null, "required")</span>
-<span class="source-line-no">1131</span><span id="line-1131">         .addIf(requiredProperties != null, "requiredProperties")</span>
-<span class="source-line-no">1132</span><span id="line-1132">         .addIf(title != null, "title")</span>
-<span class="source-line-no">1133</span><span id="line-1133">         .addIf(type != null, "type")</span>
-<span class="source-line-no">1134</span><span id="line-1134">         .addIf(uniqueItems != null, "uniqueItems")</span>
-<span class="source-line-no">1135</span><span id="line-1135">         .addIf(xml != null, "xml")</span>
-<span class="source-line-no">1136</span><span id="line-1136">         .build();</span>
-<span class="source-line-no">1137</span><span id="line-1137">      return new MultiSet&lt;&gt;(s, super.keySet());</span>
-<span class="source-line-no">1138</span><span id="line-1138">   }</span>
-<span class="source-line-no">1139</span><span id="line-1139"></span>
-<span class="source-line-no">1140</span><span id="line-1140">   /**</span>
-<span class="source-line-no">1141</span><span id="line-1141">    * Resolves any &lt;js&gt;"$ref"&lt;/js&gt; attributes in this element.</span>
-<span class="source-line-no">1142</span><span id="line-1142">    *</span>
-<span class="source-line-no">1143</span><span id="line-1143">    * @param swagger The swagger document containing the definitions.</span>
-<span class="source-line-no">1144</span><span id="line-1144">    * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.</span>
-<span class="source-line-no">1145</span><span id="line-1145">    * @param maxDepth</span>
-<span class="source-line-no">1146</span><span id="line-1146">    *    The maximum depth to resolve references.</span>
-<span class="source-line-no">1147</span><span id="line-1147">    *    &lt;br&gt;After that level is reached, &lt;c&gt;$ref&lt;/c&gt; references will be left alone.</span>
-<span class="source-line-no">1148</span><span id="line-1148">    *    &lt;br&gt;Useful if you have very complex models and you don't want your swagger page to be overly-complex.</span>
-<span class="source-line-no">1149</span><span id="line-1149">    * @return</span>
-<span class="source-line-no">1150</span><span id="line-1150">    *    This object with references resolved.</span>
-<span class="source-line-no">1151</span><span id="line-1151">    *    &lt;br&gt;May or may not be the same object.</span>
-<span class="source-line-no">1152</span><span id="line-1152">    */</span>
-<span class="source-line-no">1153</span><span id="line-1153">   public SchemaInfo resolveRefs(Swagger swagger, Deque&lt;String&gt; refStack, int maxDepth) {</span>
-<span class="source-line-no">1154</span><span id="line-1154"></span>
-<span class="source-line-no">1155</span><span id="line-1155">      if (ref != null) {</span>
-<span class="source-line-no">1156</span><span id="line-1156">         if (refStack.contains(ref) || refStack.size() &gt;= maxDepth)</span>
-<span class="source-line-no">1157</span><span id="line-1157">            return this;</span>
-<span class="source-line-no">1158</span><span id="line-1158">         refStack.addLast(ref);</span>
-<span class="source-line-no">1159</span><span id="line-1159">         var r = swagger.findRef(ref, SchemaInfo.class).resolveRefs(swagger, refStack, maxDepth);</span>
-<span class="source-line-no">1160</span><span id="line-1160">         refStack.removeLast();</span>
-<span class="source-line-no">1161</span><span id="line-1161">         return r;</span>
-<span class="source-line-no">1162</span><span id="line-1162">      }</span>
-<span class="source-line-no">1163</span><span id="line-1163"></span>
-<span class="source-line-no">1164</span><span id="line-1164">      if (items != null)</span>
-<span class="source-line-no">1165</span><span id="line-1165">         items = items.resolveRefs(swagger, refStack, maxDepth);</span>
-<span class="source-line-no">1166</span><span id="line-1166"></span>
-<span class="source-line-no">1167</span><span id="line-1167">      if (properties != null)</span>
-<span class="source-line-no">1168</span><span id="line-1168">         properties.entrySet().forEach(x -&gt; x.setValue(x.getValue().resolveRefs(swagger, refStack, maxDepth)));</span>
-<span class="source-line-no">1169</span><span id="line-1169"></span>
-<span class="source-line-no">1170</span><span id="line-1170">      if (additionalProperties != null)</span>
-<span class="source-line-no">1171</span><span id="line-1171">         additionalProperties = additionalProperties.resolveRefs(swagger, refStack, maxDepth);</span>
-<span class="source-line-no">1172</span><span id="line-1172"></span>
-<span class="source-line-no">1173</span><span id="line-1173">      this.example = null;</span>
-<span class="source-line-no">1174</span><span id="line-1174"></span>
-<span class="source-line-no">1175</span><span id="line-1175">      return this;</span>
-<span class="source-line-no">1176</span><span id="line-1176">   }</span>
-<span class="source-line-no">1177</span><span id="line-1177"></span>
-<span class="source-line-no">1178</span><span id="line-1178">   /**</span>
-<span class="source-line-no">1179</span><span id="line-1179">    * Sets strict mode on this bean.</span>
-<span class="source-line-no">1180</span><span id="line-1180">    *</span>
-<span class="source-line-no">1181</span><span id="line-1181">    * @return This object.</span>
-<span class="source-line-no">1182</span><span id="line-1182">    */</span>
-<span class="source-line-no">1183</span><span id="line-1183">   @Override</span>
-<span class="source-line-no">1184</span><span id="line-1184">   public SchemaInfo strict() {</span>
-<span class="source-line-no">1185</span><span id="line-1185">      super.strict();</span>
-<span class="source-line-no">1186</span><span id="line-1186">      return this;</span>
-<span class="source-line-no">1187</span><span id="line-1187">   }</span>
-<span class="source-line-no">1188</span><span id="line-1188"></span>
-<span class="source-line-no">1189</span><span id="line-1189">   /**</span>
-<span class="source-line-no">1190</span><span id="line-1190">    * Sets strict mode on this bean.</span>
-<span class="source-line-no">1191</span><span id="line-1191">    *</span>
-<span class="source-line-no">1192</span><span id="line-1192">    * @param value</span>
-<span class="source-line-no">1193</span><span id="line-1193">    *    The new value for this property.</span>
-<span class="source-line-no">1194</span><span id="line-1194">    *    &lt;br&gt;Non-boolean values will be converted to boolean using &lt;code&gt;Boolean.&lt;jsm&gt;valueOf&lt;/jsm&gt;(value.toString())&lt;/code&gt;.</span>
-<span class="source-line-no">1195</span><span id="line-1195">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (interpreted as &lt;jk&gt;false&lt;/jk&gt;).</span>
-<span class="source-line-no">1196</span><span id="line-1196">    * @return This object.</span>
-<span class="source-line-no">1197</span><span id="line-1197">    */</span>
-<span class="source-line-no">1198</span><span id="line-1198">   @Override</span>
-<span class="source-line-no">1199</span><span id="line-1199">   public SchemaInfo strict(Object value) {</span>
-<span class="source-line-no">1200</span><span id="line-1200">      super.strict(value);</span>
-<span class="source-line-no">1201</span><span id="line-1201">      return this;</span>
-<span class="source-line-no">1202</span><span id="line-1202">   }</span>
-<span class="source-line-no">1203</span><span id="line-1203"></span>
-<span class="source-line-no">1204</span><span id="line-1204">}</span>
+<span class="source-line-no">1021</span><span id="line-1021">   /**</span>
+<span class="source-line-no">1022</span><span id="line-1022">    * Bean property getter:  &lt;property&gt;uniqueItems&lt;/property&gt;.</span>
+<span class="source-line-no">1023</span><span id="line-1023">    *</span>
+<span class="source-line-no">1024</span><span id="line-1024">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">1025</span><span id="line-1025">    */</span>
+<span class="source-line-no">1026</span><span id="line-1026">   public Boolean getUniqueItems() {</span>
+<span class="source-line-no">1027</span><span id="line-1027">      return uniqueItems;</span>
+<span class="source-line-no">1028</span><span id="line-1028">   }</span>
+<span class="source-line-no">1029</span><span id="line-1029"></span>
+<span class="source-line-no">1030</span><span id="line-1030">   /**</span>
+<span class="source-line-no">1031</span><span id="line-1031">    * Bean property setter:  &lt;property&gt;uniqueItems&lt;/property&gt;.</span>
+<span class="source-line-no">1032</span><span id="line-1032">    *</span>
+<span class="source-line-no">1033</span><span id="line-1033">    * @param value</span>
+<span class="source-line-no">1034</span><span id="line-1034">    *    The new value for this property.</span>
+<span class="source-line-no">1035</span><span id="line-1035">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">1036</span><span id="line-1036">    * @return This object.</span>
+<span class="source-line-no">1037</span><span id="line-1037">    */</span>
+<span class="source-line-no">1038</span><span id="line-1038">   public SchemaInfo setUniqueItems(Boolean value) {</span>
+<span class="source-line-no">1039</span><span id="line-1039">      uniqueItems = value;</span>
+<span class="source-line-no">1040</span><span id="line-1040">      return this;</span>
+<span class="source-line-no">1041</span><span id="line-1041">   }</span>
+<span class="source-line-no">1042</span><span id="line-1042"></span>
+<span class="source-line-no">1043</span><span id="line-1043">   /**</span>
+<span class="source-line-no">1044</span><span id="line-1044">    * Bean property getter:  &lt;property&gt;xml&lt;/property&gt;.</span>
+<span class="source-line-no">1045</span><span id="line-1045">    *</span>
+<span class="source-line-no">1046</span><span id="line-1046">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">1047</span><span id="line-1047">    */</span>
+<span class="source-line-no">1048</span><span id="line-1048">   public Xml getXml() {</span>
+<span class="source-line-no">1049</span><span id="line-1049">      return xml;</span>
+<span class="source-line-no">1050</span><span id="line-1050">   }</span>
+<span class="source-line-no">1051</span><span id="line-1051"></span>
+<span class="source-line-no">1052</span><span id="line-1052">   /**</span>
+<span class="source-line-no">1053</span><span id="line-1053">    * Bean property setter:  &lt;property&gt;xml&lt;/property&gt;.</span>
+<span class="source-line-no">1054</span><span id="line-1054">    *</span>
+<span class="source-line-no">1055</span><span id="line-1055">    * @param value</span>
+<span class="source-line-no">1056</span><span id="line-1056">    *    The new value for this property.</span>
+<span class="source-line-no">1057</span><span id="line-1057">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">1058</span><span id="line-1058">    * @return This object.</span>
+<span class="source-line-no">1059</span><span id="line-1059">    */</span>
+<span class="source-line-no">1060</span><span id="line-1060">   public SchemaInfo setXml(Xml value) {</span>
+<span class="source-line-no">1061</span><span id="line-1061">      xml = value;</span>
+<span class="source-line-no">1062</span><span id="line-1062">      return this;</span>
+<span class="source-line-no">1063</span><span id="line-1063">   }</span>
+<span class="source-line-no">1064</span><span id="line-1064"></span>
+<span class="source-line-no">1065</span><span id="line-1065">   // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">1066</span><span id="line-1066"></span>
+<span class="source-line-no">1067</span><span id="line-1067">   // &lt;/FluentSetters&gt;</span>
+<span class="source-line-no">1068</span><span id="line-1068"></span>
+<span class="source-line-no">1069</span><span id="line-1069">   @Override /* SwaggerElement */</span>
+<span class="source-line-no">1070</span><span id="line-1070">   public &lt;T&gt; T get(String property, Class&lt;T&gt; type) {</span>
+<span class="source-line-no">1071</span><span id="line-1071">      assertArgNotNull("property", property);</span>
+<span class="source-line-no">1072</span><span id="line-1072">      return switch (property) {  // NOSONAR</span>
+<span class="source-line-no">1073</span><span id="line-1073">         case "additionalProperties" -&gt; toType(getAdditionalProperties(), type);</span>
+<span class="source-line-no">1074</span><span id="line-1074">         case "allOf" -&gt; toType(getAllOf(), type);</span>
+<span class="source-line-no">1075</span><span id="line-1075">         case "default" -&gt; toType(getDefault(), type);</span>
+<span class="source-line-no">1076</span><span id="line-1076">         case "description" -&gt; toType(getDescription(), type);</span>
+<span class="source-line-no">1077</span><span id="line-1077">         case "discriminator" -&gt; toType(getDiscriminator(), type);</span>
+<span class="source-line-no">1078</span><span id="line-1078">         case "enum" -&gt; toType(getEnum(), type);</span>
+<span class="source-line-no">1079</span><span id="line-1079">         case "example" -&gt; toType(getExample(), type);</span>
+<span class="source-line-no">1080</span><span id="line-1080">         case "exclusiveMaximum" -&gt; toType(getExclusiveMaximum(), type);</span>
+<span class="source-line-no">1081</span><span id="line-1081">         case "exclusiveMinimum" -&gt; toType(getExclusiveMinimum(), type);</span>
+<span class="source-line-no">1082</span><span id="line-1082">         case "externalDocs" -&gt; toType(getExternalDocs(), type);</span>
+<span class="source-line-no">1083</span><span id="line-1083">         case "format" -&gt; toType(getFormat(), type);</span>
+<span class="source-line-no">1084</span><span id="line-1084">         case "items" -&gt; toType(getItems(), type);</span>
+<span class="source-line-no">1085</span><span id="line-1085">         case "maximum" -&gt; toType(getMaximum(), type);</span>
+<span class="source-line-no">1086</span><span id="line-1086">         case "maxItems" -&gt; toType(getMaxItems(), type);</span>
+<span class="source-line-no">1087</span><span id="line-1087">         case "maxLength" -&gt; toType(getMaxLength(), type);</span>
+<span class="source-line-no">1088</span><span id="line-1088">         case "maxProperties" -&gt; toType(getMaxProperties(), type);</span>
+<span class="source-line-no">1089</span><span id="line-1089">         case "minimum" -&gt; toType(getMinimum(), type);</span>
+<span class="source-line-no">1090</span><span id="line-1090">         case "minItems" -&gt; toType(getMinItems(), type);</span>
+<span class="source-line-no">1091</span><span id="line-1091">         case "minLength" -&gt; toType(getMinLength(), type);</span>
+<span class="source-line-no">1092</span><span id="line-1092">         case "minProperties" -&gt; toType(getMinProperties(), type);</span>
+<span class="source-line-no">1093</span><span id="line-1093">         case "multipleOf" -&gt; toType(getMultipleOf(), type);</span>
+<span class="source-line-no">1094</span><span id="line-1094">         case "pattern" -&gt; toType(getPattern(), type);</span>
+<span class="source-line-no">1095</span><span id="line-1095">         case "properties" -&gt; toType(getProperties(), type);</span>
+<span class="source-line-no">1096</span><span id="line-1096">         case "readOnly" -&gt; toType(getReadOnly(), type);</span>
+<span class="source-line-no">1097</span><span id="line-1097">         case "$ref" -&gt; toType(getRef(), type);</span>
+<span class="source-line-no">1098</span><span id="line-1098">         case "required" -&gt; toType(getRequired(), type);</span>
+<span class="source-line-no">1099</span><span id="line-1099">         case "requiredProperties" -&gt; toType(getRequiredProperties(), type);</span>
+<span class="source-line-no">1100</span><span id="line-1100">         case "title" -&gt; toType(getTitle(), type);</span>
+<span class="source-line-no">1101</span><span id="line-1101">         case "type" -&gt; toType(getType(), type);</span>
+<span class="source-line-no">1102</span><span id="line-1102">         case "uniqueItems" -&gt; toType(getUniqueItems(), type);</span>
+<span class="source-line-no">1103</span><span id="line-1103">         case "xml" -&gt; toType(getXml(), type);</span>
+<span class="source-line-no">1104</span><span id="line-1104">         default -&gt; super.get(property, type);</span>
+<span class="source-line-no">1105</span><span id="line-1105">      };</span>
+<span class="source-line-no">1106</span><span id="line-1106">   }</span>
+<span class="source-line-no">1107</span><span id="line-1107"></span>
+<span class="source-line-no">1108</span><span id="line-1108">   @Override /* SwaggerElement */</span>
+<span class="source-line-no">1109</span><span id="line-1109">   public SchemaInfo set(String property, Object value) {</span>
+<span class="source-line-no">1110</span><span id="line-1110">      assertArgNotNull("property", property);</span>
+<span class="source-line-no">1111</span><span id="line-1111">      return switch (property) {  // NOSONAR</span>
+<span class="source-line-no">1112</span><span id="line-1112">         case "additionalProperties" -&gt; setAdditionalProperties(toType(value, SchemaInfo.class));</span>
+<span class="source-line-no">1113</span><span id="line-1113">         case "allOf" -&gt; setAllOf(setBuilder(SchemaInfo.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">1114</span><span id="line-1114">         case "default" -&gt; setDefault(value);</span>
+<span class="source-line-no">1115</span><span id="line-1115">         case "description" -&gt; setDescription(Utils.s(value));</span>
+<span class="source-line-no">1116</span><span id="line-1116">         case "discriminator" -&gt; setDiscriminator(Utils.s(value));</span>
+<span class="source-line-no">1117</span><span id="line-1117">         case "enum" -&gt; setEnum(value);</span>
+<span class="source-line-no">1118</span><span id="line-1118">         case "example" -&gt; setExample(value);</span>
+<span class="source-line-no">1119</span><span id="line-1119">         case "exclusiveMaximum" -&gt; setExclusiveMaximum(toBoolean(value));</span>
+<span class="source-line-no">1120</span><span id="line-1120">         case "exclusiveMinimum" -&gt; setExclusiveMinimum(toBoolean(value));</span>
+<span class="source-line-no">1121</span><span id="line-1121">         case "externalDocs" -&gt; setExternalDocs(toType(value, ExternalDocumentation.class));</span>
+<span class="source-line-no">1122</span><span id="line-1122">         case "format" -&gt; setFormat(Utils.s(value));</span>
+<span class="source-line-no">1123</span><span id="line-1123">         case "items" -&gt; setItems(toType(value, Items.class));</span>
+<span class="source-line-no">1124</span><span id="line-1124">         case "maximum" -&gt; setMaximum(toNumber(value));</span>
+<span class="source-line-no">1125</span><span id="line-1125">         case "maxItems" -&gt; setMaxItems(toInteger(value));</span>
+<span class="source-line-no">1126</span><span id="line-1126">         case "maxLength" -&gt; setMaxLength(toInteger(value));</span>
+<span class="source-line-no">1127</span><span id="line-1127">         case "maxProperties" -&gt; setMaxProperties(toInteger(value));</span>
+<span class="source-line-no">1128</span><span id="line-1128">         case "minimum" -&gt; setMinimum(toNumber(value));</span>
+<span class="source-line-no">1129</span><span id="line-1129">         case "minItems" -&gt; setMinItems(toInteger(value));</span>
+<span class="source-line-no">1130</span><span id="line-1130">         case "minLength" -&gt; setMinLength(toInteger(value));</span>
+<span class="source-line-no">1131</span><span id="line-1131">         case "minProperties" -&gt; setMinProperties(toInteger(value));</span>
+<span class="source-line-no">1132</span><span id="line-1132">         case "multipleOf" -&gt; setMultipleOf(toNumber(value));</span>
+<span class="source-line-no">1133</span><span id="line-1133">         case "pattern" -&gt; setPattern(Utils.s(value));</span>
+<span class="source-line-no">1134</span><span id="line-1134">         case "properties" -&gt; setProperties(mapBuilder(String.class,SchemaInfo.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">1135</span><span id="line-1135">         case "readOnly" -&gt; setReadOnly(toBoolean(value));</span>
+<span class="source-line-no">1136</span><span id="line-1136">         case "$ref" -&gt; setRef(Utils.s(value));</span>
+<span class="source-line-no">1137</span><span id="line-1137">         case "required" -&gt; setRequired(toBoolean(value));</span>
+<span class="source-line-no">1138</span><span id="line-1138">         case "requiredProperties" -&gt; setRequiredProperties(listBuilder(String.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">1139</span><span id="line-1139">         case "title" -&gt; setTitle(Utils.s(value));</span>
+<span class="source-line-no">1140</span><span id="line-1140">         case "type" -&gt; setType(Utils.s(value));</span>
+<span class="source-line-no">1141</span><span id="line-1141">         case "uniqueItems" -&gt; setUniqueItems(toBoolean(value));</span>
+<span class="source-line-no">1142</span><span id="line-1142">         case "xml" -&gt; setXml(toType(value, Xml.class));</span>
+<span class="source-line-no">1143</span><span id="line-1143">         default -&gt; {</span>
+<span class="source-line-no">1144</span><span id="line-1144">            super.set(property, value);</span>
+<span class="source-line-no">1145</span><span id="line-1145">            yield this;</span>
+<span class="source-line-no">1146</span><span id="line-1146">         }</span>
+<span class="source-line-no">1147</span><span id="line-1147">      };</span>
+<span class="source-line-no">1148</span><span id="line-1148">   }</span>
+<span class="source-line-no">1149</span><span id="line-1149"></span>
+<span class="source-line-no">1150</span><span id="line-1150">   @Override /* SwaggerElement */</span>
+<span class="source-line-no">1151</span><span id="line-1151">   public Set&lt;String&gt; keySet() {</span>
+<span class="source-line-no">1152</span><span id="line-1152">      var s = setBuilder(String.class)</span>
+<span class="source-line-no">1153</span><span id="line-1153">         .addIf(additionalProperties != null, "additionalProperties")</span>
+<span class="source-line-no">1154</span><span id="line-1154">         .addIf(allOf != null, "allOf")</span>
+<span class="source-line-no">1155</span><span id="line-1155">         .addIf(_default != null, "default")</span>
+<span class="source-line-no">1156</span><span id="line-1156">         .addIf(description != null, "description")</span>
+<span class="source-line-no">1157</span><span id="line-1157">         .addIf(discriminator != null, "discriminator")</span>
+<span class="source-line-no">1158</span><span id="line-1158">         .addIf(_enum != null, "enum")</span>
+<span class="source-line-no">1159</span><span id="line-1159">         .addIf(example != null, "example")</span>
+<span class="source-line-no">1160</span><span id="line-1160">         .addIf(exclusiveMaximum != null, "exclusiveMaximum")</span>
+<span class="source-line-no">1161</span><span id="line-1161">         .addIf(exclusiveMinimum != null, "exclusiveMinimum")</span>
+<span class="source-line-no">1162</span><span id="line-1162">         .addIf(externalDocs != null, "externalDocs")</span>
+<span class="source-line-no">1163</span><span id="line-1163">         .addIf(format != null, "format")</span>
+<span class="source-line-no">1164</span><span id="line-1164">         .addIf(items != null, "items")</span>
+<span class="source-line-no">1165</span><span id="line-1165">         .addIf(maximum != null, "maximum")</span>
+<span class="source-line-no">1166</span><span id="line-1166">         .addIf(maxItems != null, "maxItems")</span>
+<span class="source-line-no">1167</span><span id="line-1167">         .addIf(maxLength != null, "maxLength")</span>
+<span class="source-line-no">1168</span><span id="line-1168">         .addIf(maxProperties != null, "maxProperties")</span>
+<span class="source-line-no">1169</span><span id="line-1169">         .addIf(minimum != null, "minimum")</span>
+<span class="source-line-no">1170</span><span id="line-1170">         .addIf(minItems != null, "minItems")</span>
+<span class="source-line-no">1171</span><span id="line-1171">         .addIf(minLength != null, "minLength")</span>
+<span class="source-line-no">1172</span><span id="line-1172">         .addIf(minProperties != null, "minProperties")</span>
+<span class="source-line-no">1173</span><span id="line-1173">         .addIf(multipleOf != null, "multipleOf")</span>
+<span class="source-line-no">1174</span><span id="line-1174">         .addIf(pattern != null, "pattern")</span>
+<span class="source-line-no">1175</span><span id="line-1175">         .addIf(properties != null, "properties")</span>
+<span class="source-line-no">1176</span><span id="line-1176">         .addIf(readOnly != null, "readOnly")</span>
+<span class="source-line-no">1177</span><span id="line-1177">         .addIf(ref != null, "$ref")</span>
+<span class="source-line-no">1178</span><span id="line-1178">         .addIf(required != null, "required")</span>
+<span class="source-line-no">1179</span><span id="line-1179">         .addIf(requiredProperties != null, "requiredProperties")</span>
+<span class="source-line-no">1180</span><span id="line-1180">         .addIf(title != null, "title")</span>
+<span class="source-line-no">1181</span><span id="line-1181">         .addIf(type != null, "type")</span>
+<span class="source-line-no">1182</span><span id="line-1182">         .addIf(uniqueItems != null, "uniqueItems")</span>
+<span class="source-line-no">1183</span><span id="line-1183">         .addIf(xml != null, "xml")</span>
+<span class="source-line-no">1184</span><span id="line-1184">         .build();</span>
+<span class="source-line-no">1185</span><span id="line-1185">      return new MultiSet&lt;&gt;(s, super.keySet());</span>
+<span class="source-line-no">1186</span><span id="line-1186">   }</span>
+<span class="source-line-no">1187</span><span id="line-1187"></span>
+<span class="source-line-no">1188</span><span id="line-1188">   /**</span>
+<span class="source-line-no">1189</span><span id="line-1189">    * Resolves any &lt;js&gt;"$ref"&lt;/js&gt; attributes in this element.</span>
+<span class="source-line-no">1190</span><span id="line-1190">    *</span>
+<span class="source-line-no">1191</span><span id="line-1191">    * @param swagger The swagger document containing the definitions.</span>
+<span class="source-line-no">1192</span><span id="line-1192">    * @param refStack Keeps track of previously-visited references so that we don't cause recursive loops.</span>
+<span class="source-line-no">1193</span><span id="line-1193">    * @param maxDepth</span>
+<span class="source-line-no">1194</span><span id="line-1194">    *    The maximum depth to resolve references.</span>
+<span class="source-line-no">1195</span><span id="line-1195">    *    &lt;br&gt;After that level is reached, &lt;c&gt;$ref&lt;/c&gt; references will be left alone.</span>
+<span class="source-line-no">1196</span><span id="line-1196">    *    &lt;br&gt;Useful if you have very complex models and you don't want your swagger page to be overly-complex.</span>
+<span class="source-line-no">1197</span><span id="line-1197">    * @return</span>
+<span class="source-line-no">1198</span><span id="line-1198">    *    This object with references resolved.</span>
+<span class="source-line-no">1199</span><span id="line-1199">    *    &lt;br&gt;May or may not be the same object.</span>
+<span class="source-line-no">1200</span><span id="line-1200">    */</span>
+<span class="source-line-no">1201</span><span id="line-1201">   public SchemaInfo resolveRefs(Swagger swagger, Deque&lt;String&gt; refStack, int maxDepth) {</span>
+<span class="source-line-no">1202</span><span id="line-1202"></span>
+<span class="source-line-no">1203</span><span id="line-1203">      if (ref != null) {</span>
+<span class="source-line-no">1204</span><span id="line-1204">         if (refStack.contains(ref) || refStack.size() &gt;= maxDepth)</span>
+<span class="source-line-no">1205</span><span id="line-1205">            return this;</span>
+<span class="source-line-no">1206</span><span id="line-1206">         refStack.addLast(ref);</span>
+<span class="source-line-no">1207</span><span id="line-1207">         var r = swagger.findRef(ref, SchemaInfo.class).resolveRefs(swagger, refStack, maxDepth);</span>
+<span class="source-line-no">1208</span><span id="line-1208">         refStack.removeLast();</span>
+<span class="source-line-no">1209</span><span id="line-1209">         return r;</span>
+<span class="source-line-no">1210</span><span id="line-1210">      }</span>
+<span class="source-line-no">1211</span><span id="line-1211"></span>
+<span class="source-line-no">1212</span><span id="line-1212">      if (items != null)</span>
+<span class="source-line-no">1213</span><span id="line-1213">         items = items.resolveRefs(swagger, refStack, maxDepth);</span>
+<span class="source-line-no">1214</span><span id="line-1214"></span>
+<span class="source-line-no">1215</span><span id="line-1215">      if (properties != null)</span>
+<span class="source-line-no">1216</span><span id="line-1216">         properties.entrySet().forEach(x -&gt; x.setValue(x.getValue().resolveRefs(swagger, refStack, maxDepth)));</span>
+<span class="source-line-no">1217</span><span id="line-1217"></span>
+<span class="source-line-no">1218</span><span id="line-1218">      if (additionalProperties != null)</span>
+<span class="source-line-no">1219</span><span id="line-1219">         additionalProperties = additionalProperties.resolveRefs(swagger, refStack, maxDepth);</span>
+<span class="source-line-no">1220</span><span id="line-1220"></span>
+<span class="source-line-no">1221</span><span id="line-1221">      this.example = null;</span>
+<span class="source-line-no">1222</span><span id="line-1222"></span>
+<span class="source-line-no">1223</span><span id="line-1223">      return this;</span>
+<span class="source-line-no">1224</span><span id="line-1224">   }</span>
+<span class="source-line-no">1225</span><span id="line-1225"></span>
+<span class="source-line-no">1226</span><span id="line-1226">   /**</span>
+<span class="source-line-no">1227</span><span id="line-1227">    * Sets strict mode on this bean.</span>
+<span class="source-line-no">1228</span><span id="line-1228">    *</span>
+<span class="source-line-no">1229</span><span id="line-1229">    * @return This object.</span>
+<span class="source-line-no">1230</span><span id="line-1230">    */</span>
+<span class="source-line-no">1231</span><span id="line-1231">   @Override</span>
+<span class="source-line-no">1232</span><span id="line-1232">   public SchemaInfo strict() {</span>
+<span class="source-line-no">1233</span><span id="line-1233">      super.strict();</span>
+<span class="source-line-no">1234</span><span id="line-1234">      return this;</span>
+<span class="source-line-no">1235</span><span id="line-1235">   }</span>
+<span class="source-line-no">1236</span><span id="line-1236"></span>
+<span class="source-line-no">1237</span><span id="line-1237">   /**</span>
+<span class="source-line-no">1238</span><span id="line-1238">    * Sets strict mode on this bean.</span>
+<span class="source-line-no">1239</span><span id="line-1239">    *</span>
+<span class="source-line-no">1240</span><span id="line-1240">    * @param value</span>
+<span class="source-line-no">1241</span><span id="line-1241">    *    The new value for this property.</span>
+<span class="source-line-no">1242</span><span id="line-1242">    *    &lt;br&gt;Non-boolean values will be converted to boolean using &lt;code&gt;Boolean.&lt;jsm&gt;valueOf&lt;/jsm&gt;(value.toString())&lt;/code&gt;.</span>
+<span class="source-line-no">1243</span><span id="line-1243">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (interpreted as &lt;jk&gt;false&lt;/jk&gt;).</span>
+<span class="source-line-no">1244</span><span id="line-1244">    * @return This object.</span>
+<span class="source-line-no">1245</span><span id="line-1245">    */</span>
+<span class="source-line-no">1246</span><span id="line-1246">   @Override</span>
+<span class="source-line-no">1247</span><span id="line-1247">   public SchemaInfo strict(Object value) {</span>
+<span class="source-line-no">1248</span><span id="line-1248">      super.strict(value);</span>
+<span class="source-line-no">1249</span><span id="line-1249">      return this;</span>
+<span class="source-line-no">1250</span><span id="line-1250">   }</span>
+<span class="source-line-no">1251</span><span id="line-1251"></span>
+<span class="source-line-no">1252</span><span id="line-1252">}</span>
 
 
 

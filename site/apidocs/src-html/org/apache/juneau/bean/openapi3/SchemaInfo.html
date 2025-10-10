@@ -684,7 +684,7 @@
 <span class="source-line-no">671</span><span id="line-671">    * @return This object</span>
 <span class="source-line-no">672</span><span id="line-672">    */</span>
 <span class="source-line-no">673</span><span id="line-673">   public SchemaInfo addRequired(String...values) {</span>
-<span class="source-line-no">674</span><span id="line-674">      required = listBuilder(String.class).sparse().add(values).build();</span>
+<span class="source-line-no">674</span><span id="line-674">      required = listBuilder(required).sparse().add(values).build();</span>
 <span class="source-line-no">675</span><span id="line-675">      return this;</span>
 <span class="source-line-no">676</span><span id="line-676">   }</span>
 <span class="source-line-no">677</span><span id="line-677"></span>
@@ -734,7 +734,7 @@
 <span class="source-line-no">721</span><span id="line-721">    * @return This object</span>
 <span class="source-line-no">722</span><span id="line-722">    */</span>
 <span class="source-line-no">723</span><span id="line-723">   public SchemaInfo addEnum(Object...values) {</span>
-<span class="source-line-no">724</span><span id="line-724">      setEnum(setBuilder(Object.class).sparse().addAny(values).build());</span>
+<span class="source-line-no">724</span><span id="line-724">      _enum = listBuilder(_enum).elementType(Object.class).sparse().addAny(values).build();</span>
 <span class="source-line-no">725</span><span id="line-725">      return this;</span>
 <span class="source-line-no">726</span><span id="line-726">   }</span>
 <span class="source-line-no">727</span><span id="line-727"></span>

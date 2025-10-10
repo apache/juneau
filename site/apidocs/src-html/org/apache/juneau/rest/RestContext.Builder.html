@@ -176,7 +176,7 @@
 <span class="source-line-no">163</span><span id="line-163">    * Builder class.</span>
 <span class="source-line-no">164</span><span id="line-164">    */</span>
 <span class="source-line-no">165</span><span id="line-165">   @FluentSetters(ignore={"set"})</span>
-<span class="source-line-no">166</span><span id="line-166">   public static final class Builder extends Context.Builder implements ServletConfig {</span>
+<span class="source-line-no">166</span><span id="line-166">   public static class Builder extends Context.Builder implements ServletConfig {</span>
 <span class="source-line-no">167</span><span id="line-167"></span>
 <span class="source-line-no">168</span><span id="line-168">      private static final Set&lt;Class&lt;?&gt;&gt; DELAYED_INJECTION = Utils.set(</span>
 <span class="source-line-no">169</span><span id="line-169">         BeanContext.Builder.class,</span>
