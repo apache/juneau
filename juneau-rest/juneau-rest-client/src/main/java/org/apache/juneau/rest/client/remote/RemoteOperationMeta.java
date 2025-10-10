@@ -12,19 +12,19 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.remote.RemoteUtils.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.Utils;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.remote.RemoteOp;
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;

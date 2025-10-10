@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl.vars;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.svl.*;

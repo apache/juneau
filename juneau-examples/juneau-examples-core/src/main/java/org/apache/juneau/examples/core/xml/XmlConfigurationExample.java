@@ -12,12 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.core.xml;
 
-import org.apache.juneau.examples.core.pojo.Pojo;
-import org.apache.juneau.examples.core.pojo.PojoComplex;
-import org.apache.juneau.xml.*;
+import java.util.*;
 
-import java.util.HashMap;
-import java.util.List;
+import org.apache.juneau.examples.core.pojo.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Xml configuration example.

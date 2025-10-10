@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
@@ -20,24 +20,24 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.Utils;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * Represents an HTTP response for a REST resource.

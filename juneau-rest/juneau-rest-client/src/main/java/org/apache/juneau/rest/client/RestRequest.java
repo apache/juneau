@@ -12,15 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
+import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.rest.client.RestOperation.*;
-import static java.util.stream.Collectors.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -43,12 +43,13 @@ import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;

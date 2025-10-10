@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Simple in-memory cache of objects.

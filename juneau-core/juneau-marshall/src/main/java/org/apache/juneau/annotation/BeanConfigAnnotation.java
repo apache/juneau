@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;

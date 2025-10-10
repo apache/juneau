@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import java.util.Iterator;
+import java.util.*;
 
 import org.apache.http.*;
 

@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
+
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Category of headers that consist of a comma-delimited list of string values.

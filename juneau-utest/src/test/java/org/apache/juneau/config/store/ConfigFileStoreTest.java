@@ -13,14 +13,14 @@
 package org.apache.juneau.config.store;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
 

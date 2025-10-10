@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Quick and dirty utilities for working with arrays.

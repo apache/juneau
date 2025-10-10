@@ -14,7 +14,7 @@ package org.apache.juneau.rest.httppart;
 
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 

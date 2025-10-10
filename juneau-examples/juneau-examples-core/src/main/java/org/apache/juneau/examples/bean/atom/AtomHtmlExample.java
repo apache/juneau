@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.bean.atom;
 
-import org.apache.juneau.html.HtmlSerializer;
+import org.apache.juneau.html.*;
 
 /**
  * Atom feed HTML example.

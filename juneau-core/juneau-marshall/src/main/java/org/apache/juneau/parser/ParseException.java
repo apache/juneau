@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.text.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;

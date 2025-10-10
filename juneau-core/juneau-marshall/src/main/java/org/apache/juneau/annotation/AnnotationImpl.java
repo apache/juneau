@@ -12,17 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
-import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.ArrayUtils.copyOf;
 import static java.util.Arrays.*;
+import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.internal.ArrayUtils.copyOf;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 
 /**

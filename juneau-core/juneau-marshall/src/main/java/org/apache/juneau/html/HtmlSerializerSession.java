@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
-import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -25,7 +25,7 @@ import java.util.function.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;

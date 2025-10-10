@@ -10,10 +10,10 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.common.internal;
+package org.apache.juneau.common.utils;
 
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -25,8 +25,6 @@ import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.regex.*;
 import java.util.stream.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Common utility methods.

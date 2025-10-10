@@ -13,6 +13,7 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.internal.ConsumerUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;

@@ -13,7 +13,7 @@
 package org.apache.juneau.transforms;
 
 import static org.apache.juneau.assertions.Verify.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;

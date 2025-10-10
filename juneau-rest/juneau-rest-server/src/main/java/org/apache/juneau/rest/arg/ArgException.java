@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.arg;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.reflect.*;

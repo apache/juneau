@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.logger;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Represents the amount of detail to include in a log entry for HTTP requests and responses.

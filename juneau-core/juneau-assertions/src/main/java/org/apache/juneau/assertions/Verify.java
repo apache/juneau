@@ -14,7 +14,7 @@ package org.apache.juneau.assertions;
 
 import java.util.function.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 
 /**

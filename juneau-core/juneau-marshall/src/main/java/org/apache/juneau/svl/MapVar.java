@@ -14,7 +14,7 @@ package org.apache.juneau.svl;
 
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * A subclass of {@link DefaultingVar} that simply pulls values from a {@link Map}.

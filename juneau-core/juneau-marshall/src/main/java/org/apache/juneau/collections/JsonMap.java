@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.collections;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.io.*;
@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
@@ -1309,7 +1309,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		if (val == null)
 			return false;
 		if (val instanceof CharSequence)
-			return ! Utils.isEmpty((CharSequence)val);
+			return ! Utils.isEmpty(val);
 		return false;
 	}
 

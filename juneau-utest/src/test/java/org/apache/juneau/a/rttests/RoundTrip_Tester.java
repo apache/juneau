@@ -18,7 +18,7 @@ import static org.apache.juneau.TestUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;

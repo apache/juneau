@@ -14,7 +14,7 @@ package org.apache.juneau.svl;
 
 import java.io.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Abstract superclass of all Simple Var Language variables.

@@ -12,14 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.ArrayUtils.copyOf;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
+
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * A {@link NameValuePair} that consists of a comma-delimited list of string values.

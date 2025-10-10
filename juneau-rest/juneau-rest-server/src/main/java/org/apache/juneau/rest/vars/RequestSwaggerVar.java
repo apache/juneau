@@ -12,15 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
 import org.apache.juneau.bean.swagger.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.http.response.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 

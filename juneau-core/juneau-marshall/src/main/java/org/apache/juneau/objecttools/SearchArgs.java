@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.internal.CollectionUtils.map;
 
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Arguments passed to {@link ObjectSearcher}.

@@ -12,57 +12,36 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.jetty;
 
-import static org.apache.juneau.collections.JsonMap.EMPTY_MAP;
-import static org.apache.juneau.common.internal.IOUtils.read;
-import static org.apache.juneau.common.internal.StringUtils.trimTrailingSlashes;
-import static org.apache.juneau.common.internal.ThrowableUtils.asRuntimeException;
-import static org.apache.juneau.internal.ClassUtils.className;
-import static org.apache.juneau.internal.CollectionUtils.copyOf;
-import static org.apache.juneau.internal.CollectionUtils.map;
+import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.UnknownHostException;
-import java.nio.file.Path;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.net.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.logging.*;
 
-import org.apache.juneau.BasicRuntimeException;
-import org.apache.juneau.ExecutableException;
-import org.apache.juneau.collections.Args;
-import org.apache.juneau.collections.JsonMap;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.config.Config;
-import org.apache.juneau.config.store.ConfigStore;
-import org.apache.juneau.cp.Messages;
-import org.apache.juneau.microservice.Microservice;
-import org.apache.juneau.microservice.console.ConsoleCommand;
-import org.apache.juneau.parser.ParseException;
-import org.apache.juneau.reflect.ClassInfo;
-import org.apache.juneau.rest.annotation.Rest;
-import org.apache.juneau.rest.servlet.RestServlet;
-import org.apache.juneau.svl.Var;
-import org.apache.juneau.svl.VarResolver;
-import org.eclipse.jetty.ee9.servlet.ServletContextHandler;
-import org.eclipse.jetty.ee9.servlet.ServletHolder;
-import org.eclipse.jetty.server.ConnectionFactory;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.SslConnectionFactory;
+import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.common.utils.*;
+import org.apache.juneau.config.*;
+import org.apache.juneau.config.store.*;
+import org.apache.juneau.cp.*;
+import org.apache.juneau.microservice.*;
+import org.apache.juneau.microservice.console.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.svl.*;
+import org.eclipse.jetty.ee9.servlet.*;
+import org.eclipse.jetty.server.*;
 
-import jakarta.servlet.Servlet;
+import jakarta.servlet.*;
 
 
 /**

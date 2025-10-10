@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
 
-import java.io.IOException;
+import java.io.*;
 
-import jakarta.servlet.ServletInputStream;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * Wraps an {@link HttpServletRequest} and preloads the content into memory for debugging purposes.

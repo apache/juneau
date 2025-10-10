@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.annotation;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 

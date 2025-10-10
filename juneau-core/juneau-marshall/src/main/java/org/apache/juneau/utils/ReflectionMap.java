@@ -14,7 +14,7 @@ package org.apache.juneau.utils;
 
 import static java.lang.Character.*;
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.reflect.*;
@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Allows arbitrary objects to be mapped to classes and methods base on class/method name keys.

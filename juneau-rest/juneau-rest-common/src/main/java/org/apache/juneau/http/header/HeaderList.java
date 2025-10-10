@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.util.*;
@@ -22,7 +22,7 @@ import java.util.stream.*;
 import org.apache.http.*;
 import org.apache.http.util.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;

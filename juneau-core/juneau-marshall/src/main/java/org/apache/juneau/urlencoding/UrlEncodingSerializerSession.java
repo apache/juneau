@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -20,7 +21,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;

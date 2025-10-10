@@ -12,11 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.WriteListener;
+import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
 /**

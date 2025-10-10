@@ -23,7 +23,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"serial"})
 class Common_Test  extends TestBase{
 
 	//====================================================================================================

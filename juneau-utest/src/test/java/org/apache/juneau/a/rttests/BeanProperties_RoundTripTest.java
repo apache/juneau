@@ -12,12 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.TestUtils.*;
-
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

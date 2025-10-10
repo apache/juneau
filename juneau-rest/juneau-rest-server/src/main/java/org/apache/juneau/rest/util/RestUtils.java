@@ -12,24 +12,25 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.map;
 
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.uon.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Various reusable utility methods.

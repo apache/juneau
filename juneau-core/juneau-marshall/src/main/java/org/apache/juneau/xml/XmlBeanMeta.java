@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.internal.CollectionUtils.map;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;

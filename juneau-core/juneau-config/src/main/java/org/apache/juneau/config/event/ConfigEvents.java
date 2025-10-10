@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.event;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 

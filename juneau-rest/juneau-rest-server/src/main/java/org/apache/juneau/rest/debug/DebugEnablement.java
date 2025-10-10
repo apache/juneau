@@ -14,18 +14,19 @@ package org.apache.juneau.rest.debug;
 
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.collections.JsonMap.*;
+
 import java.lang.reflect.Method;
 import java.util.function.*;
 
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.utils.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Interface used for selectively turning on debug per request.

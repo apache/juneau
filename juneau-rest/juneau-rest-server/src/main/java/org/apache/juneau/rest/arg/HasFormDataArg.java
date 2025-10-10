@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.arg;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.reflect.*;

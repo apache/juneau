@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.rrpc;
 
-import jakarta.servlet.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
+
+import jakarta.servlet.*;
 
 /**
  * A specialized {@link RestOpContext} for handling <js>"RRPC"</js> HTTP methods.

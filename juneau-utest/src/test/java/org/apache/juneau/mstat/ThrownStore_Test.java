@@ -22,7 +22,6 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.stats.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("serial")
 class ThrownStore_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

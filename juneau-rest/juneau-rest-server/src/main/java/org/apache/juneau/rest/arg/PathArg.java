@@ -13,11 +13,12 @@
 package org.apache.juneau.rest.arg;
 
 import static org.apache.juneau.http.annotation.PathAnnotation.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;

@@ -12,15 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.httppart;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Represents the attributes in an HTTP request.

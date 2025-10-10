@@ -12,15 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * A wrapper around an object that a parser reads its input from.

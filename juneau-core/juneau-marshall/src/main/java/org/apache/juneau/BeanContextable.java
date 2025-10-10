@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.collections.JsonMap.*;
+
 import java.beans.*;
 import java.io.*;
 import java.lang.annotation.*;

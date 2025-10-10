@@ -13,8 +13,8 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;

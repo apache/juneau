@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.httppart;
 
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.io.*;
@@ -22,7 +22,7 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 

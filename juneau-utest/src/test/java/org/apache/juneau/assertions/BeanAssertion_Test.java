@@ -14,11 +14,11 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.ne;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 

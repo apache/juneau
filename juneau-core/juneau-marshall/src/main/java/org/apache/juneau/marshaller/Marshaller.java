@@ -18,7 +18,6 @@ import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.serializer.*;
 
 /**

@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.internal;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Represents a single entry in a configuration.

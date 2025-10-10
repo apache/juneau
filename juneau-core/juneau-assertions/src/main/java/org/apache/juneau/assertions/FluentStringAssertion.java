@@ -12,14 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;

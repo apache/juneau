@@ -13,7 +13,7 @@
 package org.apache.juneau.objecttools;
 
 import static java.net.HttpURLConnection.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;

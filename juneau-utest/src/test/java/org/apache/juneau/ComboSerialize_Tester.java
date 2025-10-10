@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;

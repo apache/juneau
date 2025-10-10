@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
 
 import java.sql.*;
 import java.util.*;

@@ -14,16 +14,16 @@ package org.apache.juneau.rest.servlet;
 
 import java.util.*;
 
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.bean.swagger.Swagger;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.resource.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.stats.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.resource.*;
-import org.apache.juneau.http.response.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Identical to {@link BasicRestServlet} but doesn't extend from {@link HttpServlet}.

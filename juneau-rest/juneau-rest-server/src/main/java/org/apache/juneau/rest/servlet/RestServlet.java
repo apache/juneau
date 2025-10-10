@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.servlet;
 
-import static java.util.logging.Level.*;
 import static jakarta.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static java.util.logging.Level.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.io.*;
@@ -24,15 +24,15 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-
+import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.http.response.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * Servlet implementation of a REST resource.

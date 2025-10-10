@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.core.xml;
 
-import org.apache.juneau.examples.core.pojo.Pojo;
-import org.apache.juneau.xml.XmlParser;
-import org.apache.juneau.xml.XmlSerializer;
+import org.apache.juneau.examples.core.pojo.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Sample class which shows the simple usage of XmlSerializer.

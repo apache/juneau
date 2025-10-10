@@ -12,14 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.core.uon;
 
-import org.apache.juneau.examples.core.pojo.Pojo;
-import org.apache.juneau.examples.core.pojo.PojoComplex;
-import org.apache.juneau.uon.UonParser;
-import org.apache.juneau.uon.UonSerializer;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import org.apache.juneau.examples.core.pojo.*;
+import org.apache.juneau.uon.*;
 
 /**
  * UON complex example.

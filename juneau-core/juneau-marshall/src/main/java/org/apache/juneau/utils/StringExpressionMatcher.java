@@ -12,15 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import java.text.ParseException;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.internal.StateMachineState.*;
+
+import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
-
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.StateMachineState.*;
 
 /**
  * Utility class for matching strings against string expressions.

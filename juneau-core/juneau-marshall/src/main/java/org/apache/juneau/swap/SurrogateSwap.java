@@ -13,6 +13,7 @@
 package org.apache.juneau.swap;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 

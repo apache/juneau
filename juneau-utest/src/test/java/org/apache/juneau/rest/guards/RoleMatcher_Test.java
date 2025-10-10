@@ -12,14 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.guards;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.guard.*;
 import org.junit.jupiter.api.*;

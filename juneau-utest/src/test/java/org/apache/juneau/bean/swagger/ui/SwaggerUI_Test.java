@@ -20,7 +20,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.TestBase;
 
 /**
  * Testcase for {@link SwaggerUI}.
@@ -310,7 +309,7 @@ class SwaggerUI_Test extends TestBase {
 	@Test void a12_htmlOutputStructure() throws Exception {
 		var swagger = swagger()
 			.setInfo(info("Test API", "1.0.0"))
-			.setPaths(org.apache.juneau.common.internal.Utils.map("/test", operationMap()
+			.setPaths(org.apache.juneau.common.utils.Utils.map("/test", operationMap()
 				.append("get", operation().setSummary("Test operation"))));
 
 		assertString(

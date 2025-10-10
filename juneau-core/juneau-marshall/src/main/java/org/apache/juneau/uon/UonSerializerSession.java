@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;

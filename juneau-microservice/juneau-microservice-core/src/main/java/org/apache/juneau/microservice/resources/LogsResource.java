@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -22,9 +22,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.http.annotation.Query;
-import org.apache.juneau.http.annotation.Response;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

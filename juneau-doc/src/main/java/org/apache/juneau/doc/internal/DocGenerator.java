@@ -12,14 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.doc.internal;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.doc.internal.Console.*;
-import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.marshaller.*;
 
 /**

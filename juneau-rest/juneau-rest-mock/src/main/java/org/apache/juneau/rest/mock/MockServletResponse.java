@@ -12,17 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.internal.CollectionUtils.map;
 
 import java.io.*;
 import java.util.*;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * An implementation of {@link HttpServletResponse} for mocking purposes.

@@ -14,7 +14,7 @@ package org.apache.juneau.soap;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;

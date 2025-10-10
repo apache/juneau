@@ -13,7 +13,7 @@
 package org.apache.juneau.examples.bean.atom;
 
 import org.apache.juneau.bean.atom.*;
-import org.apache.juneau.xml.XmlSerializer;
+import org.apache.juneau.xml.*;
 
 /**
  * Atom feed XML example.

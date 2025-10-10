@@ -13,7 +13,7 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;

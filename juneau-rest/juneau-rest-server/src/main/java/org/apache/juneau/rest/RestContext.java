@@ -13,17 +13,19 @@
 package org.apache.juneau.rest;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
+import static java.util.Collections.*;
+import static java.util.Optional.*;
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.rest.processor.ResponseProcessor.*;
-import static java.util.Collections.*;
-import static java.util.Optional.*;
+import static org.apache.juneau.internal.CollectionUtils.addAll;
+import static org.apache.juneau.internal.CollectionUtils.map;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
+import static org.apache.juneau.rest.processor.ResponseProcessor.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -37,22 +39,22 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-
 import org.apache.http.Header;
 import org.apache.juneau.*;
+import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.HttpPartSerializer.Creator;
+import org.apache.juneau.httppart.HttpPartSerializer.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.oapi.*;
@@ -70,15 +72,15 @@ import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.stats.*;
 import org.apache.juneau.rest.swagger.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
 import org.apache.juneau.utils.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * Defines the initial configuration of a <c>RestServlet</c> or <c>@Rest</c> annotated object.

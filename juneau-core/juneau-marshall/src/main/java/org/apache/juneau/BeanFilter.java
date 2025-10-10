@@ -12,16 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.copyOf;
+
 import java.beans.*;
 import java.util.*;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
-
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
 

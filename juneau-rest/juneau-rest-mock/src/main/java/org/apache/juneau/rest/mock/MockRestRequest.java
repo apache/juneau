@@ -19,9 +19,6 @@ import java.security.*;
 import java.util.*;
 import java.util.function.*;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-
 import org.apache.http.*;
 import org.apache.http.client.config.*;
 import org.apache.http.concurrent.*;
@@ -31,6 +28,9 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.serializer.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * A subclass of {@link RestRequest} with additional features for mocked testing.

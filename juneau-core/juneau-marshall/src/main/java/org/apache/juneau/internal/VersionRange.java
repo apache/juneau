@@ -13,7 +13,7 @@
 package org.apache.juneau.internal;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Represents an OSGi-style version range like <js>"1.2"</js> or <js>"[1.0,2.0)"</js>.

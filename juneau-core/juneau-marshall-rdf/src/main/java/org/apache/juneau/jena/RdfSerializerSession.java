@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.jena.Constants.*;
 
 import java.io.*;
@@ -22,9 +22,8 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
 
-import com.hp.hpl.jena.rdf.model.*;
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
@@ -33,6 +32,8 @@ import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
+
+import com.hp.hpl.jena.rdf.model.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link RdfSerializer}.

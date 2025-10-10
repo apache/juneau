@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import org.apache.juneau.common.utils.*;
 

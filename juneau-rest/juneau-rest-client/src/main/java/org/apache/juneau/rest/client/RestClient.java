@@ -12,18 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.http.HttpMethod.*;
-import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.http.HttpParts.*;
-import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.http.HttpEntities.*;
-import static org.apache.juneau.rest.client.RestOperation.*;
-import static java.util.logging.Level.*;
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
+import static java.util.logging.Level.*;
+import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.http.HttpEntities.*;
+import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.http.HttpMethod.*;
+import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.internal.StateMachineState.*;
+import static org.apache.juneau.rest.client.RestOperation.*;
 
 import java.io.*;
 import java.lang.annotation.Annotation;
@@ -41,7 +41,6 @@ import java.util.regex.*;
 import javax.net.ssl.*;
 
 import org.apache.http.*;
-import org.apache.http.Header;
 import org.apache.http.auth.*;
 import org.apache.http.client.*;
 import org.apache.http.client.CookieStore;
@@ -62,16 +61,14 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.common.internal.Utils;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.http.remote.RemoteReturn;
-import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
+import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;

@@ -17,11 +17,11 @@ import static org.apache.juneau.collections.JsonMap.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Represents a logging rule used by {@link CallLogger}.

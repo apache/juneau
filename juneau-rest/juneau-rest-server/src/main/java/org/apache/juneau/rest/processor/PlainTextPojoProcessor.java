@@ -14,11 +14,11 @@ package org.apache.juneau.rest.processor;
 
 import java.io.*;
 
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.util.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.util.*;
 
 /**
  * Response handler for plain-old Java objects when a serializer match is not found and they're asking for plain/text or anything.

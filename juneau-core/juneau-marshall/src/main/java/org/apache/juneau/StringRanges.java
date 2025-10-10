@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.ArrayUtils.copyOf;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -21,7 +21,7 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 
 /**

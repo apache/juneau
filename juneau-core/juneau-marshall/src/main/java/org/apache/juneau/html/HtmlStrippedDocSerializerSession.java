@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;

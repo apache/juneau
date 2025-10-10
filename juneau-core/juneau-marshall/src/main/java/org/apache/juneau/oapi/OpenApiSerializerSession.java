@@ -12,22 +12,21 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.time.temporal.*;
 import java.util.*;
-import java.util.Date;
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;

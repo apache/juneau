@@ -13,11 +13,11 @@
 package org.apache.juneau.rest.converter;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.http.response.*;
 
 /**
  * Converter for enablement of {@link ObjectIntrospector} support on response objects returned by a

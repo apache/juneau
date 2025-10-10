@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.matcher;
 
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.rest.annotation.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Class used for defining method-level matchers using the {@link RestOp#matchers() @RestOp(matchers)} annotation.

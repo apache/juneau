@@ -20,7 +20,7 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.JsonMap;
+import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
 /**

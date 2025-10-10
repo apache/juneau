@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.widget;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.io.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;

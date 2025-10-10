@@ -14,11 +14,11 @@ package org.apache.juneau.rest.processor;
 
 import java.io.*;
 
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Defines the interface for processors that convert POJOs to appropriate HTTP responses.

@@ -14,11 +14,12 @@ package org.apache.juneau.httppart.bean;
 
 import java.lang.reflect.*;
 import java.util.*;
+
+import org.apache.juneau.common.utils.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.common.internal.Utils;
-import org.apache.juneau.cp.*;
 
 /**
  * Represents the metadata gathered from a getter method of a class annotated with {@link Response}.

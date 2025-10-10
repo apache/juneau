@@ -14,13 +14,13 @@ package org.apache.juneau;
 
 import static org.apache.juneau.UriRelativity.*;
 import static org.apache.juneau.UriResolution.*;
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.net.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Class used to create absolute and root-relative URIs based on your current URI 'location' and rules about how to

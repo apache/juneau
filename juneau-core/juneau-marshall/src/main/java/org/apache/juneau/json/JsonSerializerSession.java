@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;

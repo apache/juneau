@@ -13,14 +13,15 @@
 package org.apache.juneau.http.header;
 
 import static java.time.format.DateTimeFormatter.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 
 /**

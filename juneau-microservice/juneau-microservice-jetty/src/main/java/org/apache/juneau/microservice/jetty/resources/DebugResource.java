@@ -14,13 +14,13 @@ package org.apache.juneau.microservice.jetty.resources;
 
 import java.io.*;
 
-import org.apache.juneau.html.annotation.HtmlDocConfig;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.servlet.BasicRestServlet;
+import org.apache.juneau.rest.servlet.*;
 
 /**
  * Microservice debug utilities.

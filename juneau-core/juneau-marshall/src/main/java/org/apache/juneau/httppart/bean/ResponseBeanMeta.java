@@ -12,19 +12,19 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart.bean;
 
-import static org.apache.juneau.httppart.bean.Utils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.annotation.InvalidAnnotationException.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.httppart.bean.MethodInfoUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.map;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.Utils;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;

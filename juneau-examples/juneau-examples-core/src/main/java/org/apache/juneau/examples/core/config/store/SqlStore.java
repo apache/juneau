@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.core.config.store;
 
-import static org.apache.juneau.internal.Utils2.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.store.*;
 
 /**

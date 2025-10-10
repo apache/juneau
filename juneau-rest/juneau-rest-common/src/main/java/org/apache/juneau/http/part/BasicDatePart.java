@@ -14,6 +14,7 @@ package org.apache.juneau.http.part;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
+
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
@@ -21,7 +22,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * A {@link NameValuePair} that consist of a single HTTP-date.

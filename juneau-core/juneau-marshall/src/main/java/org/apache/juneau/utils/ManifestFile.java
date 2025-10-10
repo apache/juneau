@@ -12,23 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.common.internal.IOUtils.UTF8;
-import static org.apache.juneau.common.internal.IOUtils.read;
+import static org.apache.juneau.common.utils.IOUtils.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.jar.Manifest;
+import java.io.*;
+import java.net.*;
+import java.nio.file.*;
+import java.util.jar.*;
 
-import org.apache.juneau.collections.JsonMap;
-import org.apache.juneau.common.internal.ThrowableUtils;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Utility class for working with Jar manifest files.

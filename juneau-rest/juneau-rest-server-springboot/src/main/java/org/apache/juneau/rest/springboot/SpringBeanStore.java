@@ -15,7 +15,7 @@ package org.apache.juneau.rest.springboot;
 import java.util.*;
 import java.util.stream.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.springframework.context.*;
 

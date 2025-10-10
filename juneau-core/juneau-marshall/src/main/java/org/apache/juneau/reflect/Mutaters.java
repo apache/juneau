@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import java.util.concurrent.*;
-
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * Cache of object that convert POJOs to and from common types such as strings, readers, and input streams.

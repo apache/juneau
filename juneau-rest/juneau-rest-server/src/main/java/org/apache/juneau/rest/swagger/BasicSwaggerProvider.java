@@ -14,8 +14,8 @@ package org.apache.juneau.rest.swagger;
 
 import java.util.*;
 
-import org.apache.juneau.cp.*;
 import org.apache.juneau.bean.swagger.Swagger;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

@@ -12,15 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.stats;
 
-import static java.util.stream.Collectors.*;
-import static org.apache.juneau.common.internal.Utils.*;
 import static java.util.Comparator.*;
+import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 

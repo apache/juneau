@@ -13,11 +13,11 @@
 package org.apache.juneau.rest.converter;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.swap.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Converter for enabling of {@link ObjectRest} support on response objects returned by a <c>@RestOp</c>-annotated method.

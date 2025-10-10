@@ -10,39 +10,19 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.common.internal;
-
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.*;
+package org.apache.juneau.common.utils;
 
 /**
- * System utilities.
+ * A supplier that throws an exception.
  */
-public class SystemUtils {
-
-	static final List<Supplier<String>> SHUTDOWN_MESSAGES = new CopyOnWriteArrayList<>();
-
-	static {
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				if (Boolean.getBoolean("SystemUtils.verbose"))
-					SHUTDOWN_MESSAGES.forEach(x -> System.out.println(x.get()));  // NOSONAR - System.out.println is acceptable here for shutdown messages.
-			}
-		});
-	}
-	/**
-	 * Adds a console message to display when the JVM shuts down.
-	 *
-	 * @param message The message to display.
-	 */
-	public static void shutdownMessage(Supplier<String> message) {
-		SHUTDOWN_MESSAGES.add(message);
-	}
+@FunctionalInterface
+public interface ThrowingSupplier<T> {
 
 	/**
-	 * Constructor.
+	 * Gets a result.
+	 * 
+	 * @return A result.
+	 * @throws Exception If an error occurs.
 	 */
-	protected SystemUtils() {}
+	T get() throws Exception;
 }

@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.event;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.config.event.ConfigEventType.*;
 
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Represents a change to a config.

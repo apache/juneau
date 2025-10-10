@@ -24,7 +24,7 @@ import org.apache.juneau.reflect.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-class Utils {
+class MethodInfoUtils {
 
 	static void assertNoArgs(MethodInfo m, Class<?> a) throws InvalidAnnotationException {
 		if (m.hasParams())

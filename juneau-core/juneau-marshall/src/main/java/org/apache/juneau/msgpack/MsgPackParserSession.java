@@ -14,14 +14,14 @@ package org.apache.juneau.msgpack;
 
 import static org.apache.juneau.msgpack.DataType.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;

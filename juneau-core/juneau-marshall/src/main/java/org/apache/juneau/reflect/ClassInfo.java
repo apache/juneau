@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.internal.CollectionUtils.map;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
@@ -24,7 +24,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 
 /**

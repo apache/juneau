@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.map;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -24,20 +24,19 @@ import java.nio.charset.*;
 import java.text.*;
 import java.time.*;
 import java.util.*;
-import java.util.Date;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import jakarta.xml.bind.*;
-
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
+
+import jakarta.xml.bind.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link BeanContext}.

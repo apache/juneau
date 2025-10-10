@@ -22,7 +22,6 @@ import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;

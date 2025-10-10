@@ -16,7 +16,7 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 

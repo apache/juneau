@@ -10,13 +10,13 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.common.internal;
+package org.apache.juneau.common.utils;
 
 import static java.lang.Character.*;
 import static java.nio.charset.StandardCharsets.*;
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -122,6 +122,13 @@ public class StringUtils {
 		return in.substring(0, length-3) + "...";
 	}
 
+	/**
+	 * Appends a string to a StringBuilder, creating a new one if null.
+	 *
+	 * @param sb The StringBuilder to append to, or <jk>null</jk> to create a new one.
+	 * @param in The string to append.
+	 * @return The StringBuilder with the string appended.
+	 */
 	private static StringBuilder append(StringBuilder sb, String in) {
 		if (sb == null)
 			return new StringBuilder(in);
@@ -129,6 +136,12 @@ public class StringUtils {
 		return sb;
 	}
 
+	/**
+	 * Converts an array to a List, handling both primitive and object arrays.
+	 *
+	 * @param array The array to convert.
+	 * @return A List containing the array elements.
+	 */
 	private static List<Object> arrayAsList(Object array) {
 		if (array.getClass().getComponentType().isPrimitive()) {
 			var l = new ArrayList<>(Array.getLength(array));
@@ -320,6 +333,12 @@ public class StringUtils {
 		return false;
 	}
 
+	/**
+	 * Converts an object to a readable string representation for formatting.
+	 *
+	 * @param o The object to convert.
+	 * @return A readable string representation of the object.
+	 */
 	private static String convertToReadable(Object o) {
 		if (o == null)
 			return null;
@@ -530,6 +549,12 @@ public class StringUtils {
 		return 0;
 	}
 
+	/**
+	 * Finds the first non-whitespace, non-comment character in a string.
+	 *
+	 * @param s The string to analyze.
+	 * @return The first real character, or <c>-1</c> if none found.
+	 */
 	private static int firstRealCharacter(String s) {
 		try (var r = new StringReader(s)) {
 			var c = 0;
@@ -775,6 +800,12 @@ public class StringUtils {
 		}
 		return l;
 	}
+	/**
+	 * Gets or creates an AsciiSet for escaping the specified character.
+	 *
+	 * @param c The character to create an escape set for.
+	 * @return An AsciiSet containing the character and backslash.
+	 */
 	static AsciiSet getEscapeSet(char c) {
 		return ESCAPE_SETS.computeIfAbsent(c, key -> AsciiSet.create().chars(key, '\\').build());
 	}
@@ -1164,6 +1195,12 @@ public class StringUtils {
 		return 0;
 	}
 
+	/**
+	 * Determines the multiplier value based on the suffix character in a string.
+	 *
+	 * @param s The string to analyze for multiplier suffix.
+	 * @return The multiplier value (1 if no valid suffix found).
+	 */
 	private static int multiplier(String s) {
 		char c = Utils.isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
 		if (c == 'G') return 1024*1024*1024;
@@ -1175,6 +1212,12 @@ public class StringUtils {
 		return 1;
 	}
 
+	/**
+	 * Determines the long multiplier value based on the suffix character in a string.
+	 *
+	 * @param s The string to analyze for multiplier suffix.
+	 * @return The multiplier value (1 if no valid suffix found).
+	 */
 	private static long multiplier2(String s) {
 		char c = Utils.isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
 		if (c == 'P') return 1024*1024*1024*1024*1024l;
@@ -1194,7 +1237,8 @@ public class StringUtils {
 	 * Converts a <c>String</c> to a <c>Character</c>
 	 *
 	 * @param o The string to convert.
-	 * @return The first character of the string if the string is of length 0, or <jk>null</jk> if the string is <jk>null</jk> or empty.
+	 * @return The first character of the string if the string is of length 1, or <jk>null</jk> if the string is <jk>null</jk> or empty.
+	 * @throws IllegalArgumentException If the string length is not 1.
 	 */
 	public static Character parseCharacter(Object o) {
 		if (o == null)
@@ -1547,6 +1591,12 @@ public class StringUtils {
 		return out.toString();
 	}
 
+	/**
+	 * Skips over comment sequences in a StringReader.
+	 *
+	 * @param r The StringReader positioned at the start of a comment.
+	 * @throws IOException If an I/O error occurs.
+	 */
 	private static void skipComments(StringReader r) throws IOException {
 		var c = r.read();
 		//  "/* */" style comments

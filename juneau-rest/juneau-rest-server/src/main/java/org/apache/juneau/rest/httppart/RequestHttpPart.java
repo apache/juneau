@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.httppart;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
+
 import java.lang.reflect.*;
 import java.time.*;
 import java.util.*;
@@ -21,7 +22,7 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.response.*;

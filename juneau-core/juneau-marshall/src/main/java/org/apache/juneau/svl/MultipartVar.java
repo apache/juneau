@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 /**
  * Interface for the resolution of vars that consist of a comma-delimited list.

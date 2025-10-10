@@ -12,27 +12,26 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.ClassMeta.ClassCategory.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ConsumerUtils.*;
 import static java.util.Arrays.*;
+import static org.apache.juneau.ClassMeta.ClassCategory.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.map;
+import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Proxy;
 import java.net.*;
-import java.net.URI;
 import java.time.temporal.*;
 import java.util.*;
-import java.util.Date;
 import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;

@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.jena.Constants.*;
 
 import java.io.*;
@@ -23,16 +23,17 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
-import com.hp.hpl.jena.rdf.model.*;
-import com.hp.hpl.jena.util.iterator.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
+
+import com.hp.hpl.jena.rdf.model.*;
+import com.hp.hpl.jena.util.iterator.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link RdfParser}.

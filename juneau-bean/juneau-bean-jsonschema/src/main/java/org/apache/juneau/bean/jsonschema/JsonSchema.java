@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.jsonschema;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 

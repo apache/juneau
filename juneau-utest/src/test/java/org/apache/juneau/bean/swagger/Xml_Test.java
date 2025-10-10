@@ -15,6 +15,7 @@ package org.apache.juneau.bean.swagger;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 

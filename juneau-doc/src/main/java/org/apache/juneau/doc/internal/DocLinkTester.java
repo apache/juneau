@@ -15,7 +15,7 @@ package org.apache.juneau.doc.internal;
 import static org.apache.juneau.doc.internal.Console.*;
 
 import java.io.*;
-import java.net.URLDecoder;
+import java.net.*;
 import java.util.*;
 import java.util.regex.*;
 

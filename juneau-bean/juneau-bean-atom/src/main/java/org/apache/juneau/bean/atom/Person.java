@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.atom;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.net.*;
 

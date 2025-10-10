@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Request attribute variable resolver.

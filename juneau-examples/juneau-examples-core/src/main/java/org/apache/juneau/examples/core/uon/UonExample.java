@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.core.uon;
 
-import org.apache.juneau.examples.core.pojo.Pojo;
-import org.apache.juneau.uon.UonParser;
-import org.apache.juneau.uon.UonSerializer;
+import org.apache.juneau.examples.core.pojo.*;
+import org.apache.juneau.uon.*;
 
 /**
  *	Sample class which shows the simple usage of UONSerializer.

@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.text.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.internal.StringUtils;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 
 /**

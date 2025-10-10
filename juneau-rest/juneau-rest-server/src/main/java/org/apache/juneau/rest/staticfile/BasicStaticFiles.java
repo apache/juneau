@@ -16,18 +16,19 @@ import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.internal.FileUtils.*;
+
 import java.io.*;
 import java.util.*;
 
-import jakarta.activation.*;
-
 import org.apache.http.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
+
+import jakarta.activation.*;
 
 /**
  * API for retrieving localized static files from either the classpath or file system.

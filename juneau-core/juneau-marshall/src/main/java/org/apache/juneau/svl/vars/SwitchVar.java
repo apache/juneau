@@ -14,7 +14,7 @@ package org.apache.juneau.svl.vars;
 
 import java.util.regex.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.svl.*;
 
 /**

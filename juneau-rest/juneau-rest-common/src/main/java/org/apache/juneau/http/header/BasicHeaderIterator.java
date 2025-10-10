@@ -12,11 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import java.util.NoSuchElementException;
+import java.util.*;
 
-import org.apache.http.Header;
-import org.apache.http.HeaderIterator;
-import org.apache.juneau.common.internal.*;
+import org.apache.http.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Basic implementation of a {@link HeaderIterator}.

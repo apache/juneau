@@ -13,9 +13,11 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.TestUtils.assertBean;
+import static org.apache.juneau.TestUtils.assertList;
 import static org.apache.juneau.TestUtils.assertString;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,7 +30,7 @@ import org.apache.http.conn.*;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;

@@ -14,7 +14,7 @@ package org.apache.juneau;
 
 import java.text.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
 

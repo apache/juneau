@@ -12,13 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.core.json;
 
-import org.apache.juneau.examples.core.pojo.*;
-import org.apache.juneau.json.JsonParser;
-import org.apache.juneau.json.JsonSerializer;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import org.apache.juneau.examples.core.pojo.*;
+import org.apache.juneau.json.*;
 
 /**
  * Sample class which shows the complex usage of JsonSerializer and JsonParser.

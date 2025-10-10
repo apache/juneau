@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * A list of default settings.

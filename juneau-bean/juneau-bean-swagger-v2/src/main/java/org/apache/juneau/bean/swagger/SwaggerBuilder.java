@@ -15,7 +15,7 @@ package org.apache.juneau.bean.swagger;
 import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Various useful static methods for creating Swagger elements.

@@ -14,7 +14,8 @@ package org.apache.juneau.bean.openapi.ui;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
-import static org.apache.juneau.common.internal.Utils.set;
+import static org.apache.juneau.bean.html5.HtmlBuilder.a;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
@@ -22,7 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.bean.openapi3.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
 

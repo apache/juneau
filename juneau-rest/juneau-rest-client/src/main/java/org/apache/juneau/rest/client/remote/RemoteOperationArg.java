@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
-import java.util.*;
-
 import static org.apache.juneau.httppart.HttpPartType.*;
+
+import java.util.*;
 
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;

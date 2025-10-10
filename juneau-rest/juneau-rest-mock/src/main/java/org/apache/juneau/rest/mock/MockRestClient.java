@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
-import static org.apache.juneau.rest.util.RestUtils.*;
-import static org.apache.juneau.Enablement.*;
-import static org.apache.juneau.common.internal.Utils.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.Enablement.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -27,7 +27,6 @@ import java.util.logging.*;
 import java.util.zip.*;
 
 import javax.net.ssl.*;
-import jakarta.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.http.auth.*;
@@ -47,6 +46,7 @@ import org.apache.http.impl.client.*;
 import org.apache.http.message.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
+import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -58,10 +58,11 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.RestRequest;
 import org.apache.juneau.rest.client.RestResponse;
 import org.apache.juneau.rest.logger.*;
-import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Mocked {@link RestClient}.

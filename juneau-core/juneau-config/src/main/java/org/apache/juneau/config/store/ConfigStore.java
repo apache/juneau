@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.store;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
 import java.lang.annotation.*;

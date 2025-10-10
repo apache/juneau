@@ -12,25 +12,24 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.http.HttpHeaders.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.io.*;
 import java.security.*;
 import java.util.*;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-
 import org.apache.http.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.urlencoding.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * A mutable implementation of {@link HttpServletRequest} for mocking purposes.

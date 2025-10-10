@@ -12,12 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.collections;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.util.*;
+
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Utility class to make it easier to work with command-line arguments pass in through a

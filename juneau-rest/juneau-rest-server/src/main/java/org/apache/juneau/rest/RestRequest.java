@@ -12,12 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static java.lang.Integer.*;
 import static java.util.Optional.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -26,8 +25,6 @@ import java.net.*;
 import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
@@ -35,13 +32,14 @@ import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.bean.swagger.Swagger;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.common.internal.Utils;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.cp.Messages;
-import org.apache.juneau.http.annotation.Content;
-import org.apache.juneau.http.annotation.FormData;
+import org.apache.juneau.cp.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.header.Date;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.rest.annotation.*;
@@ -49,15 +47,14 @@ import org.apache.juneau.rest.assertions.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.header.Date;
-import org.apache.juneau.http.response.*;
-import org.apache.juneau.http.response.BasicHttpException;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * Represents an HTTP request for a REST resource.

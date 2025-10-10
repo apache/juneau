@@ -15,23 +15,23 @@ package org.apache.juneau.rest.logger;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
 
 import java.util.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.stats.*;
 import org.apache.juneau.rest.util.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Basic implementation of a {@link CallLogger} for logging HTTP requests.

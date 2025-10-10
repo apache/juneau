@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.swaps;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.swap.*;

@@ -14,9 +14,9 @@ package org.apache.juneau.rest.util;
 
 import java.io.*;
 
-import jakarta.servlet.*;
-
 import org.apache.juneau.encoders.*;
+
+import jakarta.servlet.*;
 
 /**
  * A wrapped {@link ServletOutputStream} with an added <c>finish()</c> method.

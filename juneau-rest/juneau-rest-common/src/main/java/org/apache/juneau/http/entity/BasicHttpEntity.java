@@ -12,27 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.common.internal.IOUtils.UTF8;
-import static org.apache.juneau.common.internal.IOUtils.read;
-import static org.apache.juneau.common.internal.IOUtils.readBytes;
+import static org.apache.juneau.common.utils.IOUtils.*;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UncheckedIOException;
-import java.nio.charset.Charset;
-import java.util.function.Supplier;
+import java.io.*;
+import java.nio.charset.*;
+import java.util.function.*;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.juneau.annotation.BeanIgnore;
-import org.apache.juneau.assertions.FluentByteArrayAssertion;
-import org.apache.juneau.assertions.FluentStringAssertion;
-import org.apache.juneau.common.internal.IOUtils;
-import org.apache.juneau.http.header.ContentEncoding;
-import org.apache.juneau.http.header.ContentType;
-import org.apache.juneau.internal.FluentSetter;
-import org.apache.juneau.internal.FluentSetters;
+import org.apache.http.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.utils.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * A basic {@link org.apache.http.HttpEntity} implementation with additional features.

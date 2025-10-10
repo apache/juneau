@@ -17,8 +17,6 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.io.*;
 import java.util.*;
 
-import jakarta.servlet.http.*;
-
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
@@ -26,6 +24,8 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.util.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Represents a single HTTP request.

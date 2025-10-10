@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
+
 import java.lang.annotation.*;
 import java.nio.charset.*;
 
@@ -20,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.http.HttpHeaders;
+import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;

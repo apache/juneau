@@ -20,9 +20,6 @@ import java.lang.annotation.*;
 import java.util.*;
 import java.util.logging.*;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
@@ -30,6 +27,9 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.httppart.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * Identifies a method that gets called immediately after the <ja>@RestOp</ja> annotated method gets called.

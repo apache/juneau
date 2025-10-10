@@ -12,10 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.core.html;
 
-import org.apache.juneau.examples.core.pojo.Pojo;
-import org.apache.juneau.html.HtmlDocSerializer;
-import org.apache.juneau.html.HtmlParser;
-import org.apache.juneau.html.HtmlSerializer;
+import org.apache.juneau.examples.core.pojo.*;
+import org.apache.juneau.html.*;
 
 /**
  * Sample class which shows the simple usage of HtmlSerializer and HtmlParser.

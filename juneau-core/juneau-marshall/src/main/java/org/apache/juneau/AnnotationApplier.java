@@ -12,15 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 

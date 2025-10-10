@@ -13,10 +13,11 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * An instance of a <c>Map</c> where the keys and values are simple arrays.

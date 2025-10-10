@@ -13,14 +13,13 @@
 package org.apache.juneau.assertions;
 
 import static java.util.regex.Pattern.*;
-import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.AssertionPredicates.contains;
 import static org.apache.juneau.assertions.AssertionPredicates.eq;
 import static org.apache.juneau.assertions.AssertionPredicates.eqic;
 import static org.apache.juneau.assertions.AssertionPredicates.ne;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.assertions.Assertions.assertString;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.regex.*;

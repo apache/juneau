@@ -17,9 +17,9 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import jakarta.servlet.*;
-
 import org.apache.juneau.rest.*;
+
+import jakarta.servlet.*;
 
 /**
  * Identifies a method that gets called during servlet initialization.

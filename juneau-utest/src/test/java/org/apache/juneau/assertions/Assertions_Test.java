@@ -14,9 +14,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.assertions.Assertions.assertArray;
 import static org.apache.juneau.assertions.Assertions.assertBean;
-import static org.apache.juneau.assertions.Assertions.assertCollection;
 import static org.apache.juneau.assertions.Assertions.assertList;
 import static org.apache.juneau.assertions.Assertions.assertMap;
 import static org.apache.juneau.assertions.Assertions.assertThrowable;

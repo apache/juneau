@@ -15,9 +15,9 @@ package org.apache.juneau.rest.swagger;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.cp.*;
 import org.apache.juneau.bean.swagger.Swagger;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.rest.*;

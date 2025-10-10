@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.guard;
 
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.http.response.*;
 
 /**
  * REST method guard.

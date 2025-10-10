@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 
 /**

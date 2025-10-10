@@ -12,9 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.client.assertion.*;
-
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;
@@ -28,11 +25,13 @@ import org.apache.http.params.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.internal.Utils;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.client.assertion.*;
 
 /**
  * Represents a response from a remote REST resource.

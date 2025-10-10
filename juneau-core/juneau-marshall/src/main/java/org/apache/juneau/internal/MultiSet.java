@@ -14,7 +14,7 @@ package org.apache.juneau.internal;
 
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Encapsulates multiple collections so they can be iterated over as if they were all part of the same collection.

@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.servlet;
 
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.config.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Identical to {@link BasicRestServletGroup} but doesn't extend from {@link HttpServlet}.

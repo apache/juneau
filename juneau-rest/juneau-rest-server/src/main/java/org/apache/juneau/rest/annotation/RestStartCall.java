@@ -17,9 +17,9 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.http.response.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Identifies a method that is called immediately after the <c>HttpServlet.service(HttpServletRequest, HttpServletResponse)</c>

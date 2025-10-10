@@ -13,15 +13,15 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.compare;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.compare;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class StringUtils_Test extends TestBase {

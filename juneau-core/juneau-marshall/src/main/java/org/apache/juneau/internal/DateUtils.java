@@ -12,17 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.lang.ref.*;
 import java.text.*;
 import java.time.format.*;
 import java.util.*;
 
-import jakarta.xml.bind.*;
-
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
+
+import jakarta.xml.bind.*;
 
 /**
  * A utility class for parsing and formatting HTTP dates as used in cookies and other headers.

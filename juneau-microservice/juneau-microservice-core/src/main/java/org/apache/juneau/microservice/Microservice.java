@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
+
 import java.io.*;
 import java.io.Console;
 import java.net.*;
@@ -30,7 +31,7 @@ import java.util.logging.Formatter;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;

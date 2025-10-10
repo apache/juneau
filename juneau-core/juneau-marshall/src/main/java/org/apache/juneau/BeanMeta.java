@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ConsumerUtils.*;
 import static org.apache.juneau.BeanMeta.MethodType.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 

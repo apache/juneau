@@ -19,12 +19,10 @@
 
 package org.apache.juneau.examples.core.json;
 
-import org.apache.juneau.examples.core.pojo.Pojo;
-import org.apache.juneau.json.JsonParser;
-import org.apache.juneau.json.JsonSerializer;
-import org.apache.juneau.json.Json5Serializer;
+import java.util.*;
 
-import java.util.Map;
+import org.apache.juneau.examples.core.pojo.*;
+import org.apache.juneau.json.*;
 
 /**
  * Sample class which shows the simple usage of JsonSerializer and JsonParser.

@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Annotation utilities.

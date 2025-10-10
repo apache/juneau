@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.swagger;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.rest.httppart.RestPartType.*;
+import static org.apache.juneau.internal.CollectionUtils.map;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.rest.httppart.RestPartType.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -25,15 +25,17 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.*;
 
-import jakarta.servlet.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.annotation.Items;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Contact;
+import org.apache.juneau.http.annotation.License;
+import org.apache.juneau.http.annotation.Tag;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.marshaller.*;
@@ -45,6 +47,8 @@ import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+
+import jakarta.servlet.*;
 
 /**
  * A single session of generating a Swagger document.

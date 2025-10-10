@@ -13,7 +13,8 @@
 package org.apache.juneau;
 
 import static java.lang.Character.*;
-import org.apache.juneau.common.internal.*;
+
+import org.apache.juneau.common.utils.*;
 
 /**
  * Converts property names to dashed-upper-case-start format.

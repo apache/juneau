@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.jupiter.api.Assertions.*;

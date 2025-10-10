@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -22,7 +22,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.jsonschema.TypeCategory.*;
 
 import java.lang.reflect.*;
@@ -23,10 +23,10 @@ import java.util.regex.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 

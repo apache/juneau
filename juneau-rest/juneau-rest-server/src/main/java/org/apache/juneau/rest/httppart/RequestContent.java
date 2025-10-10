@@ -12,28 +12,28 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.httppart;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import jakarta.servlet.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
+
+import jakarta.servlet.*;
 
 /**
  * Contains the content of the HTTP request.

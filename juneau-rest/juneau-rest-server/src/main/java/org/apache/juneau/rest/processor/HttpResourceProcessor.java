@@ -16,8 +16,8 @@ import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.io.*;
 
-import org.apache.juneau.rest.*;
 import org.apache.juneau.http.resource.*;
+import org.apache.juneau.rest.*;
 
 /**
  * Response handler for {@link HttpResource} objects.

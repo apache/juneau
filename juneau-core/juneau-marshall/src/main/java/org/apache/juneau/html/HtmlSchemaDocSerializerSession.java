@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;

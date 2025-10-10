@@ -19,8 +19,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.reflect.*;
 

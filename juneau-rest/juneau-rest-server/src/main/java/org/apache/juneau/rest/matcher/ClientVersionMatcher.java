@@ -12,15 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.matcher;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Specialized matcher for matching client versions.

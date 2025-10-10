@@ -21,6 +21,7 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 /**
  * Tests {@link PathReaderBuilder}.

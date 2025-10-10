@@ -12,18 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.jetty;
 
-import static java.util.logging.Level.FINE;
-import static java.util.logging.Level.FINEST;
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
-import static org.apache.juneau.common.internal.Utils.*;
+import static java.util.logging.Level.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
+import java.util.logging.*;
 import java.util.logging.Logger;
 
-import org.slf4j.Marker;
-import org.slf4j.spi.LocationAwareLogger;
+import org.slf4j.*;
+import org.slf4j.spi.*;
 
 /**
  * Implementation of Jetty {@link Logger} based on {@link java.util.logging.Logger}.

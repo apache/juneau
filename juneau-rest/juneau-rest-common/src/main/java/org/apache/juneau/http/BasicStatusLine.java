@@ -17,8 +17,7 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.http.impl.*;
 import org.apache.http.message.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.http.BasicStatusLine;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 
 /**

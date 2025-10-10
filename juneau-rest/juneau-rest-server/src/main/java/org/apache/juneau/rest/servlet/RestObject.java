@@ -19,12 +19,12 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * Identical to {@link RestServlet} but doesn't extend from {@link HttpServlet}.

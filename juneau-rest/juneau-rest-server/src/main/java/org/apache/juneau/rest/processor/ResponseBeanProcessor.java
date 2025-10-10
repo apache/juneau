@@ -12,21 +12,22 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.processor;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.rest.*;
 import org.apache.http.*;
 import org.apache.http.Header;
-import org.apache.juneau.common.internal.Utils;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.rest.*;
 
 /**
  * Response handler for {@link Response @Response}-annotated objects.

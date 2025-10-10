@@ -14,7 +14,7 @@ package org.apache.juneau.objecttools;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.ExecutableException;
+import org.apache.juneau.*;
 
 /**
  * POJO merger.

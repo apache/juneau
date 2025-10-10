@@ -16,15 +16,10 @@
  */
 package org.apache.juneau.internal;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import java.io.*;
 import java.nio.*;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CoderResult;
-import java.nio.charset.CodingErrorAction;
-import java.util.Objects;
+import java.nio.charset.*;
+import java.util.*;
 
 /**
  * {@link InputStream} implementation that reads a character stream from a {@link Reader}

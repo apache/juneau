@@ -12,25 +12,25 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.httppart;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-import static java.util.stream.Collectors.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static java.util.stream.Collectors.toList;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.*;
 import java.util.stream.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.common.utils.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.part.*;
 
 /**
  * Represents the path parameters in an HTTP request.

@@ -13,12 +13,13 @@
 package org.apache.juneau.rest.arg;
 
 import java.io.*;
-import jakarta.servlet.*;
 
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.utils.*;
+
+import jakarta.servlet.*;
 
 /**
  * Resolves method parameters on {@link RestOp}-annotated Java methods of types found on the {@link RestResponse} object.

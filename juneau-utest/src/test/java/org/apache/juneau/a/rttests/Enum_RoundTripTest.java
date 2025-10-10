@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;

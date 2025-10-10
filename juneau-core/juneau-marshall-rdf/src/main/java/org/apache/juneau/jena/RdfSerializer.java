@@ -13,8 +13,8 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;
@@ -23,7 +23,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;

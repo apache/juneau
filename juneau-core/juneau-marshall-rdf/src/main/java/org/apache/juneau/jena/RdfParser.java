@@ -13,7 +13,7 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;
@@ -88,7 +88,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		String language;
 		Namespace juneauNs, juneauBpNs;
 		RdfCollectionFormat collectionFormat;
-		Map<String,Object> jenaSettings = new TreeMap<String,Object>();
+		Map<String,Object> jenaSettings = new TreeMap<>();
 
 		/**
 		 * Constructor, default settings.
@@ -1489,7 +1489,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 * @param builder The builder for this object.
 	 */
 	public RdfParser(Builder builder) {
-		super((Builder) builder.consumes(getConsumes(builder)));
+		super(builder.consumes(getConsumes(builder)));
 
 		trimWhitespace = builder.trimWhitespace;
 		looseCollections = builder.looseCollections;

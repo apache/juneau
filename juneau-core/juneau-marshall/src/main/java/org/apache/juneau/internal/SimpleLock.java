@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.*;
 
 /**
  * A simple auto-closeable wrapper around a lock.

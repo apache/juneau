@@ -14,12 +14,13 @@ package org.apache.juneau.http.header;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
+
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Category of headers that consist of a single HTTP-date.

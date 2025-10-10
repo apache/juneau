@@ -12,14 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.nio.charset.*;
@@ -27,15 +28,11 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.common.internal.Utils;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.*;
@@ -43,8 +40,9 @@ import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.HttpPartSerializer.Creator;
+import org.apache.juneau.httppart.HttpPartSerializer.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
@@ -57,13 +55,15 @@ import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
-import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestOp @RestOp}.

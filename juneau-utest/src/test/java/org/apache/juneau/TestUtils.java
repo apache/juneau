@@ -25,7 +25,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.Utils;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.junit.bct.*;
 import org.apache.juneau.marshaller.*;

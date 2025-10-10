@@ -13,8 +13,8 @@
 package org.apache.juneau.httppart;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -12,14 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.core.html;
 
-import org.apache.juneau.examples.core.pojo.Pojo;
-import org.apache.juneau.examples.core.pojo.PojoComplex;
-import org.apache.juneau.html.HtmlSerializer;
-import org.apache.juneau.html.HtmlParser;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import org.apache.juneau.examples.core.pojo.*;
+import org.apache.juneau.html.*;
 
 /**
  * Sample class which shows the complex usage of HtmlSerializer and HtmlParser.

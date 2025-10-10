@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.swaps;
 
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.swap.*;
 
 /**

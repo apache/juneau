@@ -21,6 +21,8 @@ import java.nio.charset.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.encoders.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.guard.*;
@@ -29,8 +31,6 @@ import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.encoders.*;
-import org.apache.juneau.parser.*;
 
 /**
  * Identifies a REST PATH operation Java method on a {@link RestServlet} implementation class.

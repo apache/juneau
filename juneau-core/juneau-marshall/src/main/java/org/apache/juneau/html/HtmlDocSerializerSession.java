@@ -14,7 +14,7 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.collections.JsonMap.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;

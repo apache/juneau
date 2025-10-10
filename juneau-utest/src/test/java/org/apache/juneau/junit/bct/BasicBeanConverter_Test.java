@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.junit.bct;
 
-import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.apache.juneau.junit.bct.BasicBeanConverter.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;

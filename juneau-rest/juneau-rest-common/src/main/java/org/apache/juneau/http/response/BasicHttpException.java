@@ -13,7 +13,7 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
@@ -26,7 +26,7 @@ import org.apache.http.impl.*;
 import org.apache.http.params.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;

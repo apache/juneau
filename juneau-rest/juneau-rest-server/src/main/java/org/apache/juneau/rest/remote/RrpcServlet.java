@@ -13,9 +13,10 @@
 package org.apache.juneau.rest.remote;
 
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpMethod.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -28,13 +29,13 @@ import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.remote.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.remote.*;
-import org.apache.juneau.http.response.*;
 
 /**
  * Abstract class for defining Remote Interface Services.

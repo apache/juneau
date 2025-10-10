@@ -12,13 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.staticfile;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.nio.file.*;
 import java.util.*;
-
-import jakarta.activation.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
@@ -26,6 +24,8 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
+
+import jakarta.activation.*;
 
 /**
  * API for retrieving localized static files from either the classpath or file system.

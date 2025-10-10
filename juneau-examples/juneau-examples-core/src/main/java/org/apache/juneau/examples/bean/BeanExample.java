@@ -12,15 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.bean;
 
-import org.apache.juneau.*;
-import org.apache.juneau.html.HtmlSerializer;
-import org.apache.juneau.json.*;
-
 import static org.apache.juneau.bean.atom.AtomBuilder.*;
+import static org.apache.juneau.bean.atom.AtomBuilder.link;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 
 import java.net.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.html.*;
+import org.apache.juneau.json.*;
 
 /**
  * Sample class which shows the usage of DTO module which is a

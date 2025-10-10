@@ -12,15 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.logger;
 
-import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
-import static org.apache.juneau.Enablement.*;
-import static org.apache.juneau.common.internal.Utils.*;
 import static java.util.logging.Level.*;
-
-import jakarta.servlet.http.*;
+import static org.apache.juneau.Enablement.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
 
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Default implementation of a {@link CallLogger} that only logs REST call errors unless no-log is enabled on the request.

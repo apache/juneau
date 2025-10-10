@@ -13,11 +13,11 @@
 package org.apache.juneau.html;
 
 import static javax.xml.stream.XMLStreamConstants.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.html.HtmlTag.*;
-import static org.apache.juneau.common.internal.Utils.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -27,7 +27,7 @@ import javax.xml.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;

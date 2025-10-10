@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.map;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.lang.reflect.*;

@@ -16,7 +16,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Represents a wrapped {@link Map} where entries in the map can be removed without affecting the underlying map.

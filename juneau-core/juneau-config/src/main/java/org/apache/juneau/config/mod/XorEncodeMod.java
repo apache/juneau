@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.mod;
 
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 /**
  * Simply XOR+Base64 encoder for obscuring passwords and other sensitive data in INI config files.

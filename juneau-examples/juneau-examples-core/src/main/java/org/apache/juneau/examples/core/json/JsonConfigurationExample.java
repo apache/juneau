@@ -19,7 +19,7 @@
 
 package org.apache.juneau.examples.core.json;
 
-import org.apache.juneau.examples.core.pojo.Pojo;
+import org.apache.juneau.examples.core.pojo.*;
 import org.apache.juneau.json.*;
 
 /**
