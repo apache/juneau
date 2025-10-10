@@ -15,7 +15,11 @@
 <script type="text/javascript" src="../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="package-declaration-page">
-<script type="text/javascript">var pathtoroot = "../../../../../";
+<script type="text/javascript">var evenRowColor = "even-row-color";
+var oddRowColor = "odd-row-color";
+var tableTab = "table-tab";
+var activeTableTab = "active-table-tab";
+var pathtoroot = "../../../../../";
 loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -63,25 +67,73 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="package-signature">package <span class="element-name">org.apache.juneau.common.utils</span></div>
 <section class="package-description" id="package-description">
-<div class="block">Common Utility Classes
- 
- <p>
- This package contains common utility classes used throughout the Juneau framework.
- These utilities provide helper methods for common operations such as string manipulation,
- reflection, and other general-purpose functionality.
- </p></div>
+<div class="block">Common internal utilities.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
 <li>
 <div id="class-summary">
-<div class="caption"><span>Interfaces</span></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button></div>
+<div id="class-summary.tabpanel" role="tabpanel" aria-labelledby="class-summary-tab0">
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="Snippet.html" title="interface in org.apache.juneau.common.utils">Snippet</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AsciiMap.html" title="class in org.apache.juneau.common.utils">AsciiMap</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Stores a Map of ASCII characters to Strings in a quick-lookup array.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AsciiSet.html" title="class in org.apache.juneau.common.utils">AsciiSet</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Stores a set of ASCII characters for quick lookup.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AsciiSet.Builder.html" title="class in org.apache.juneau.common.utils">AsciiSet.Builder</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Builder class.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.common.utils">FileReaderBuilder</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Utility class for creating <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/FileReader.html" title="class or interface in java.io" class="external-link"><code>FileReader</code></a> objects.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.common.utils">FileWriterBuilder</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Utility class for creating <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/FileWriter.html" title="class or interface in java.io" class="external-link"><code>FileWriter</code></a> objects.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="IOUtils.html" title="class in org.apache.juneau.common.utils">IOUtils</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Various I/O related utility methods.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Utility class for creating <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link"><code>Path</code></a>-based <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a> objects.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="Snippet.html" title="interface in org.apache.juneau.common.utils">Snippet</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Identical to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link"><code>Runnable</code></a> but the run method can throw stuff.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringUtils.html" title="class in org.apache.juneau.common.utils">StringUtils</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Reusable string utility methods.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SystemUtils.html" title="class in org.apache.juneau.common.utils">SystemUtils</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">System utilities.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ThrowableUtils.html" title="class in org.apache.juneau.common.utils">ThrowableUtils</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Various utility methods for creating and working with throwables.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.common.utils">ThrowableUtils.SupplierWithThrowable</a>&lt;T&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">Interface used with <a href="Utils.html#safeSupplier(org.apache.juneau.common.utils.ThrowableUtils.SupplierWithThrowable)"><code>Utils.safeSupplier(SupplierWithThrowable)</code></a>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ThrowingSupplier.html" title="interface in org.apache.juneau.common.utils">ThrowingSupplier</a>&lt;T&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">A supplier that throws an exception.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="Utils.html" title="class in org.apache.juneau.common.utils">Utils</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Common utility methods.</div>
+</div>
 </div>
 </div>
 </div>

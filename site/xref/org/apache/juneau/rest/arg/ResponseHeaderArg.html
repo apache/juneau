@@ -21,86 +21,87 @@
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.arg;
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.annotation.HeaderAnnotation.*;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.annotation.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.httppart.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Resolves method parameters annotated with {@link Header} of type {@link Value} representing response headers</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * on {@link RestOp}-annotated Java methods.</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * The parameter value must be of type {@link Value} that accepts a value that is then set via:</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * 	&lt;jv&gt;opSession&lt;/jv&gt;</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * 		.{@link RestOpSession#getResponse() getResponse}()</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 		.{@link RestResponse#setHeader(String,String) setOutput}(&lt;jv&gt;name&lt;/jv&gt;,&lt;jv&gt;value&lt;/jv&gt;);</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JavaMethodParameters" target="alexandria_uri">https://juneau.apache.org/docs/topics/JavaMethodParameters</a>"&gt;Java Method Parameters&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ResponseHeaderArg" href="../../../../../org/apache/juneau/rest/arg/ResponseHeaderArg.html#ResponseHeaderArg">ResponseHeaderArg</a> <strong class="jxr_keyword">implements</strong> <a name="RestOpArg" href="../../../../../org/apache/juneau/rest/arg/RestOpArg.html#RestOpArg">RestOpArg</a> {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">final</strong> <a name="ResponsePartMeta" href="../../../../../org/apache/juneau/rest/httppart/ResponsePartMeta.html#ResponsePartMeta">ResponsePartMeta</a> meta;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">final</strong> String name;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Type type;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">	 * Static creator.</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">	 * @param paramInfo The Java method parameter being resolved.</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 * @param annotations The annotations to apply to any new part parsers.</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 * @return A new {@link ResponseHeaderArg}, or &lt;jk&gt;null&lt;/jk&gt; if the parameter is not annotated with {@link Header}.</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ResponseHeaderArg" href="../../../../../org/apache/juneau/rest/arg/ResponseHeaderArg.html#ResponseHeaderArg">ResponseHeaderArg</a> create(<a name="ParamInfo" href="../../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> paramInfo, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">if</strong> (paramInfo.getParameterType().is(Value.<strong class="jxr_keyword">class</strong>) &amp;&amp; (paramInfo.hasAnnotation(Header.<strong class="jxr_keyword">class</strong>) || paramInfo.getParameterType().hasAnnotation(Header.<strong class="jxr_keyword">class</strong>)))
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ResponseHeaderArg" href="../../../../../org/apache/juneau/rest/arg/ResponseHeaderArg.html#ResponseHeaderArg">ResponseHeaderArg</a>(paramInfo, annotations);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	}
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * @param pi The Java method parameter being resolved.</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * @param annotations The annotations to apply to any new part parsers.</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">protected</strong> <a name="ResponseHeaderArg" href="../../../../../org/apache/juneau/rest/arg/ResponseHeaderArg.html#ResponseHeaderArg">ResponseHeaderArg</a>(<a name="ParamInfo" href="../../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> pi, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">this</strong>.name = findName(pi).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(pi, <span class="jxr_string">"@Header used without name or value"</span>));
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">this</strong>.type = pi.getParameterType().innerType();
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		HttpPartSchema schema = HttpPartSchema.create(Header.<strong class="jxr_keyword">class</strong>, pi);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartSerializer&gt; ps = schema.getSerializer();
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">this</strong>.meta = <strong class="jxr_keyword">new</strong> <a name="ResponsePartMeta" href="../../../../../org/apache/juneau/rest/httppart/ResponsePartMeta.html#ResponsePartMeta">ResponsePartMeta</a>(HttpPartType.HEADER, schema, ps != <strong class="jxr_keyword">null</strong> ? HttpPartSerializer.creator().type(ps).apply(annotations).create() : <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		Class&lt;?&gt; c = type instanceof Class ? (Class&lt;?&gt;)type : type instanceof ParameterizedType ? (Class&lt;?&gt;)((ParameterizedType)type).getRawType() : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">if</strong> (c != Value.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(pi, <span class="jxr_string">"Type must be Value&lt;?&gt; on parameter annotated with @Header annotation"</span>);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Override <em class="jxr_comment">/* RestOpArg */</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">public</strong> Object resolve(<strong class="jxr_keyword">final</strong> <a name="RestOpSession" href="../../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> opSession) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		Value&lt;Object&gt; v = <strong class="jxr_keyword">new</strong> <a name="Value" href="../../../../../org/apache/juneau/Value.html#Value">Value</a>();
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		v.listener(o -&gt; {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          	RestRequest req = opSession.getRequest();
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>          	RestResponse res = opSession.getResponse();
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>          	ResponsePartMeta rpm = req.getOpContext().getResponseHeaderMeta(o);
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>          	<strong class="jxr_keyword">if</strong> (rpm == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>          		rpm = ResponseHeaderArg.<strong class="jxr_keyword">this</strong>.meta;
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>          	HttpPartSerializerSession pss = rpm.getSerializer() == <strong class="jxr_keyword">null</strong> ? req.getPartSerializerSession() : rpm.getSerializer().getPartSession();
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>          	res.setHeader(<strong class="jxr_keyword">new</strong> <a name="SerializedHeader" href="../../../../../org/apache/juneau/http/header/SerializedHeader.html#SerializedHeader">SerializedHeader</a>(name, o, pss, rpm.getSchema(), false));
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>          });
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">return</strong> v;
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  }
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.annotation.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.httppart.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Resolves method parameters annotated with {@link Header} of type {@link Value} representing response headers</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * on {@link RestOp}-annotated Java methods.</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * The parameter value must be of type {@link Value} that accepts a value that is then set via:</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * 	&lt;jv&gt;opSession&lt;/jv&gt;</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 		.{@link RestOpSession#getResponse() getResponse}()</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 		.{@link RestResponse#setHeader(String,String) setOutput}(&lt;jv&gt;name&lt;/jv&gt;,&lt;jv&gt;value&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JavaMethodParameters" target="alexandria_uri">https://juneau.apache.org/docs/topics/JavaMethodParameters</a>"&gt;Java Method Parameters&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ResponseHeaderArg" href="../../../../../org/apache/juneau/rest/arg/ResponseHeaderArg.html#ResponseHeaderArg">ResponseHeaderArg</a> <strong class="jxr_keyword">implements</strong> <a name="RestOpArg" href="../../../../../org/apache/juneau/rest/arg/RestOpArg.html#RestOpArg">RestOpArg</a> {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">final</strong> <a name="ResponsePartMeta" href="../../../../../org/apache/juneau/rest/httppart/ResponsePartMeta.html#ResponsePartMeta">ResponsePartMeta</a> meta;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">final</strong> String name;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Type type;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">	 * Static creator.</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 * @param paramInfo The Java method parameter being resolved.</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 * @param annotations The annotations to apply to any new part parsers.</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 * @return A new {@link ResponseHeaderArg}, or &lt;jk&gt;null&lt;/jk&gt; if the parameter is not annotated with {@link Header}.</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ResponseHeaderArg" href="../../../../../org/apache/juneau/rest/arg/ResponseHeaderArg.html#ResponseHeaderArg">ResponseHeaderArg</a> create(<a name="ParamInfo" href="../../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> paramInfo, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">if</strong> (paramInfo.getParameterType().is(Value.<strong class="jxr_keyword">class</strong>) &amp;&amp; (paramInfo.hasAnnotation(Header.<strong class="jxr_keyword">class</strong>) || paramInfo.getParameterType().hasAnnotation(Header.<strong class="jxr_keyword">class</strong>)))
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ResponseHeaderArg" href="../../../../../org/apache/juneau/rest/arg/ResponseHeaderArg.html#ResponseHeaderArg">ResponseHeaderArg</a>(paramInfo, annotations);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	}
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * @param pi The Java method parameter being resolved.</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * @param annotations The annotations to apply to any new part parsers.</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">protected</strong> <a name="ResponseHeaderArg" href="../../../../../org/apache/juneau/rest/arg/ResponseHeaderArg.html#ResponseHeaderArg">ResponseHeaderArg</a>(<a name="ParamInfo" href="../../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> pi, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">this</strong>.name = findName(pi).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(pi, <span class="jxr_string">"@Header used without name or value"</span>));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">this</strong>.type = pi.getParameterType().innerType();
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		HttpPartSchema schema = HttpPartSchema.create(Header.<strong class="jxr_keyword">class</strong>, pi);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartSerializer&gt; ps = schema.getSerializer();
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">this</strong>.meta = <strong class="jxr_keyword">new</strong> <a name="ResponsePartMeta" href="../../../../../org/apache/juneau/rest/httppart/ResponsePartMeta.html#ResponsePartMeta">ResponsePartMeta</a>(HttpPartType.HEADER, schema, ps != <strong class="jxr_keyword">null</strong> ? HttpPartSerializer.creator().type(ps).apply(annotations).create() : <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		Class&lt;?&gt; c = type instanceof Class ? (Class&lt;?&gt;)type : type instanceof ParameterizedType ? (Class&lt;?&gt;)((ParameterizedType)type).getRawType() : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">if</strong> (c != Value.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(pi, <span class="jxr_string">"Type must be Value&lt;?&gt; on parameter annotated with @Header annotation"</span>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Override <em class="jxr_comment">/* RestOpArg */</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">public</strong> Object resolve(<strong class="jxr_keyword">final</strong> <a name="RestOpSession" href="../../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> opSession) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		Value&lt;Object&gt; v = <strong class="jxr_keyword">new</strong> <a name="Value" href="../../../../../org/apache/juneau/Value.html#Value">Value</a>();
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		v.listener(o -&gt; {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>          	RestRequest req = opSession.getRequest();
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          	RestResponse res = opSession.getResponse();
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          	ResponsePartMeta rpm = req.getOpContext().getResponseHeaderMeta(o);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          	<strong class="jxr_keyword">if</strong> (rpm == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>          		rpm = ResponseHeaderArg.<strong class="jxr_keyword">this</strong>.meta;
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          	HttpPartSerializerSession pss = rpm.getSerializer() == <strong class="jxr_keyword">null</strong> ? req.getPartSerializerSession() : rpm.getSerializer().getPartSession();
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          	res.setHeader(<strong class="jxr_keyword">new</strong> <a name="SerializedHeader" href="../../../../../org/apache/juneau/http/header/SerializedHeader.html#SerializedHeader">SerializedHeader</a>(name, o, pss, rpm.getSchema(), false));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          });
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">return</strong> v;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

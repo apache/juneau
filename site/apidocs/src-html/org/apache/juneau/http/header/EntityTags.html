@@ -25,113 +25,115 @@
 <span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
 <span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.http.header;</span>
 <span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.common.internal.Utils.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import static org.apache.juneau.internal.ArrayUtils.copyOf;</span>
-<span class="source-line-no">017</span><span id="line-17">import java.util.*;</span>
-<span class="source-line-no">018</span><span id="line-18">import org.apache.juneau.annotation.*;</span>
-<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.common.internal.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.internal.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">/**</span>
-<span class="source-line-no">023</span><span id="line-23"> * A list of {@link EntityTag} beans.</span>
-<span class="source-line-no">024</span><span id="line-24"> */</span>
-<span class="source-line-no">025</span><span id="line-25">@BeanIgnore</span>
-<span class="source-line-no">026</span><span id="line-26">public class EntityTags {</span>
-<span class="source-line-no">027</span><span id="line-27">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">028</span><span id="line-28">   // Static</span>
+<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.common.utils.Utils.*;</span>
+<span class="source-line-no">016</span><span id="line-16">import static org.apache.juneau.internal.ArrayUtils.*;</span>
+<span class="source-line-no">017</span><span id="line-17"></span>
+<span class="source-line-no">018</span><span id="line-18">import java.util.*;</span>
+<span class="source-line-no">019</span><span id="line-19"></span>
+<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.annotation.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.common.utils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.internal.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">/**</span>
+<span class="source-line-no">025</span><span id="line-25"> * A list of {@link EntityTag} beans.</span>
+<span class="source-line-no">026</span><span id="line-26"> */</span>
+<span class="source-line-no">027</span><span id="line-27">@BeanIgnore</span>
+<span class="source-line-no">028</span><span id="line-28">public class EntityTags {</span>
 <span class="source-line-no">029</span><span id="line-29">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">030</span><span id="line-30"></span>
-<span class="source-line-no">031</span><span id="line-31">   /** Represents an empty entity tags object. */</span>
-<span class="source-line-no">032</span><span id="line-32">   public static final EntityTags EMPTY = new EntityTags("");</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">   private static final Cache&lt;String,EntityTags&gt; CACHE = Cache.of(String.class, EntityTags.class).build();</span>
+<span class="source-line-no">030</span><span id="line-30">   // Static</span>
+<span class="source-line-no">031</span><span id="line-31">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">032</span><span id="line-32"></span>
+<span class="source-line-no">033</span><span id="line-33">   /** Represents an empty entity tags object. */</span>
+<span class="source-line-no">034</span><span id="line-34">   public static final EntityTags EMPTY = new EntityTags("");</span>
 <span class="source-line-no">035</span><span id="line-35"></span>
-<span class="source-line-no">036</span><span id="line-36">   /**</span>
-<span class="source-line-no">037</span><span id="line-37">    * Returns a parsed entity tags header value.</span>
-<span class="source-line-no">038</span><span id="line-38">    *</span>
-<span class="source-line-no">039</span><span id="line-39">    * @param value The raw header value.</span>
-<span class="source-line-no">040</span><span id="line-40">    * @return A parsed header value.</span>
-<span class="source-line-no">041</span><span id="line-41">    */</span>
-<span class="source-line-no">042</span><span id="line-42">   public static EntityTags of(String value) {</span>
-<span class="source-line-no">043</span><span id="line-43">      return Utils.isEmpty(value) ? EMPTY : CACHE.get(value, ()-&gt;new EntityTags(value));</span>
-<span class="source-line-no">044</span><span id="line-44">   }</span>
-<span class="source-line-no">045</span><span id="line-45"></span>
-<span class="source-line-no">046</span><span id="line-46">   /**</span>
-<span class="source-line-no">047</span><span id="line-47">    * Returns a parsed entity tags header value.</span>
-<span class="source-line-no">048</span><span id="line-48">    *</span>
-<span class="source-line-no">049</span><span id="line-49">    * @param value The header value.</span>
-<span class="source-line-no">050</span><span id="line-50">    * @return A parsed header value.</span>
-<span class="source-line-no">051</span><span id="line-51">    */</span>
-<span class="source-line-no">052</span><span id="line-52">   public static EntityTags of(EntityTag...value) {</span>
-<span class="source-line-no">053</span><span id="line-53">      return value == null ? null : new EntityTags(value);</span>
-<span class="source-line-no">054</span><span id="line-54">   }</span>
-<span class="source-line-no">055</span><span id="line-55"></span>
-<span class="source-line-no">056</span><span id="line-56">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">057</span><span id="line-57">   // Instance</span>
+<span class="source-line-no">036</span><span id="line-36">   private static final Cache&lt;String,EntityTags&gt; CACHE = Cache.of(String.class, EntityTags.class).build();</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38">   /**</span>
+<span class="source-line-no">039</span><span id="line-39">    * Returns a parsed entity tags header value.</span>
+<span class="source-line-no">040</span><span id="line-40">    *</span>
+<span class="source-line-no">041</span><span id="line-41">    * @param value The raw header value.</span>
+<span class="source-line-no">042</span><span id="line-42">    * @return A parsed header value.</span>
+<span class="source-line-no">043</span><span id="line-43">    */</span>
+<span class="source-line-no">044</span><span id="line-44">   public static EntityTags of(String value) {</span>
+<span class="source-line-no">045</span><span id="line-45">      return Utils.isEmpty(value) ? EMPTY : CACHE.get(value, ()-&gt;new EntityTags(value));</span>
+<span class="source-line-no">046</span><span id="line-46">   }</span>
+<span class="source-line-no">047</span><span id="line-47"></span>
+<span class="source-line-no">048</span><span id="line-48">   /**</span>
+<span class="source-line-no">049</span><span id="line-49">    * Returns a parsed entity tags header value.</span>
+<span class="source-line-no">050</span><span id="line-50">    *</span>
+<span class="source-line-no">051</span><span id="line-51">    * @param value The header value.</span>
+<span class="source-line-no">052</span><span id="line-52">    * @return A parsed header value.</span>
+<span class="source-line-no">053</span><span id="line-53">    */</span>
+<span class="source-line-no">054</span><span id="line-54">   public static EntityTags of(EntityTag...value) {</span>
+<span class="source-line-no">055</span><span id="line-55">      return value == null ? null : new EntityTags(value);</span>
+<span class="source-line-no">056</span><span id="line-56">   }</span>
+<span class="source-line-no">057</span><span id="line-57"></span>
 <span class="source-line-no">058</span><span id="line-58">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">059</span><span id="line-59"></span>
-<span class="source-line-no">060</span><span id="line-60">   private final EntityTag[] value;</span>
-<span class="source-line-no">061</span><span id="line-61">   private final String string;</span>
-<span class="source-line-no">062</span><span id="line-62"></span>
-<span class="source-line-no">063</span><span id="line-63">   /**</span>
-<span class="source-line-no">064</span><span id="line-64">    * Constructor.</span>
-<span class="source-line-no">065</span><span id="line-65">    *</span>
-<span class="source-line-no">066</span><span id="line-66">    * @param value The header value.</span>
-<span class="source-line-no">067</span><span id="line-67">    */</span>
-<span class="source-line-no">068</span><span id="line-68">   public EntityTags(String value) {</span>
-<span class="source-line-no">069</span><span id="line-69">      this.string = value;</span>
-<span class="source-line-no">070</span><span id="line-70">      this.value = parse(value);</span>
-<span class="source-line-no">071</span><span id="line-71">   }</span>
-<span class="source-line-no">072</span><span id="line-72"></span>
-<span class="source-line-no">073</span><span id="line-73">   /**</span>
-<span class="source-line-no">074</span><span id="line-74">    * Constructor.</span>
-<span class="source-line-no">075</span><span id="line-75">    *</span>
-<span class="source-line-no">076</span><span id="line-76">    * @param value The header value.</span>
-<span class="source-line-no">077</span><span id="line-77">    */</span>
-<span class="source-line-no">078</span><span id="line-78">   public EntityTags(EntityTag...value) {</span>
-<span class="source-line-no">079</span><span id="line-79">      this.string = Utils.join(value, ", ");</span>
-<span class="source-line-no">080</span><span id="line-80">      this.value = copyOf(value);</span>
-<span class="source-line-no">081</span><span id="line-81">   }</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">   private EntityTag[] parse(String value) {</span>
-<span class="source-line-no">084</span><span id="line-84">      if (value == null)</span>
-<span class="source-line-no">085</span><span id="line-85">         return null;</span>
-<span class="source-line-no">086</span><span id="line-86">      String[] s = splita(value);</span>
-<span class="source-line-no">087</span><span id="line-87">      EntityTag[] v = new EntityTag[s.length];</span>
-<span class="source-line-no">088</span><span id="line-88">      for (int i = 0; i &lt; s.length; i++)</span>
-<span class="source-line-no">089</span><span id="line-89">         v[i] = EntityTag.of(s[i]);</span>
-<span class="source-line-no">090</span><span id="line-90">      return v;</span>
-<span class="source-line-no">091</span><span id="line-91">   }</span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   /**</span>
-<span class="source-line-no">094</span><span id="line-94">    * Returns the entity tags in this object as a list.</span>
-<span class="source-line-no">095</span><span id="line-95">    *</span>
-<span class="source-line-no">096</span><span id="line-96">    * &lt;p&gt;</span>
-<span class="source-line-no">097</span><span id="line-97">    * Returns an unmodifiable list.</span>
-<span class="source-line-no">098</span><span id="line-98">    *</span>
-<span class="source-line-no">099</span><span id="line-99">    * @return The entity tags in this object as a list.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">100</span><span id="line-100">    */</span>
-<span class="source-line-no">101</span><span id="line-101">   public List&lt;EntityTag&gt; toList() {</span>
-<span class="source-line-no">102</span><span id="line-102">      return u(alist(value));</span>
-<span class="source-line-no">103</span><span id="line-103">   }</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   /**</span>
-<span class="source-line-no">106</span><span id="line-106">    * Returns the entity tags in this object as an array.</span>
-<span class="source-line-no">107</span><span id="line-107">    *</span>
-<span class="source-line-no">108</span><span id="line-108">    * &lt;p&gt;</span>
-<span class="source-line-no">109</span><span id="line-109">    * Returns a copy of the entity tags.</span>
-<span class="source-line-no">110</span><span id="line-110">    *</span>
-<span class="source-line-no">111</span><span id="line-111">    * @return The entity tags in this object as an array.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">112</span><span id="line-112">    */</span>
-<span class="source-line-no">113</span><span id="line-113">   public EntityTag[] toArray() {</span>
-<span class="source-line-no">114</span><span id="line-114">      return copyOf(value);</span>
-<span class="source-line-no">115</span><span id="line-115">   }</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   @Override /* Object */</span>
-<span class="source-line-no">118</span><span id="line-118">   public String toString() {</span>
-<span class="source-line-no">119</span><span id="line-119">      return string;</span>
-<span class="source-line-no">120</span><span id="line-120">   }</span>
-<span class="source-line-no">121</span><span id="line-121">}</span>
+<span class="source-line-no">059</span><span id="line-59">   // Instance</span>
+<span class="source-line-no">060</span><span id="line-60">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">061</span><span id="line-61"></span>
+<span class="source-line-no">062</span><span id="line-62">   private final EntityTag[] value;</span>
+<span class="source-line-no">063</span><span id="line-63">   private final String string;</span>
+<span class="source-line-no">064</span><span id="line-64"></span>
+<span class="source-line-no">065</span><span id="line-65">   /**</span>
+<span class="source-line-no">066</span><span id="line-66">    * Constructor.</span>
+<span class="source-line-no">067</span><span id="line-67">    *</span>
+<span class="source-line-no">068</span><span id="line-68">    * @param value The header value.</span>
+<span class="source-line-no">069</span><span id="line-69">    */</span>
+<span class="source-line-no">070</span><span id="line-70">   public EntityTags(String value) {</span>
+<span class="source-line-no">071</span><span id="line-71">      this.string = value;</span>
+<span class="source-line-no">072</span><span id="line-72">      this.value = parse(value);</span>
+<span class="source-line-no">073</span><span id="line-73">   }</span>
+<span class="source-line-no">074</span><span id="line-74"></span>
+<span class="source-line-no">075</span><span id="line-75">   /**</span>
+<span class="source-line-no">076</span><span id="line-76">    * Constructor.</span>
+<span class="source-line-no">077</span><span id="line-77">    *</span>
+<span class="source-line-no">078</span><span id="line-78">    * @param value The header value.</span>
+<span class="source-line-no">079</span><span id="line-79">    */</span>
+<span class="source-line-no">080</span><span id="line-80">   public EntityTags(EntityTag...value) {</span>
+<span class="source-line-no">081</span><span id="line-81">      this.string = Utils.join(value, ", ");</span>
+<span class="source-line-no">082</span><span id="line-82">      this.value = copyOf(value);</span>
+<span class="source-line-no">083</span><span id="line-83">   }</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">   private EntityTag[] parse(String value) {</span>
+<span class="source-line-no">086</span><span id="line-86">      if (value == null)</span>
+<span class="source-line-no">087</span><span id="line-87">         return null;</span>
+<span class="source-line-no">088</span><span id="line-88">      String[] s = splita(value);</span>
+<span class="source-line-no">089</span><span id="line-89">      EntityTag[] v = new EntityTag[s.length];</span>
+<span class="source-line-no">090</span><span id="line-90">      for (int i = 0; i &lt; s.length; i++)</span>
+<span class="source-line-no">091</span><span id="line-91">         v[i] = EntityTag.of(s[i]);</span>
+<span class="source-line-no">092</span><span id="line-92">      return v;</span>
+<span class="source-line-no">093</span><span id="line-93">   }</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">   /**</span>
+<span class="source-line-no">096</span><span id="line-96">    * Returns the entity tags in this object as a list.</span>
+<span class="source-line-no">097</span><span id="line-97">    *</span>
+<span class="source-line-no">098</span><span id="line-98">    * &lt;p&gt;</span>
+<span class="source-line-no">099</span><span id="line-99">    * Returns an unmodifiable list.</span>
+<span class="source-line-no">100</span><span id="line-100">    *</span>
+<span class="source-line-no">101</span><span id="line-101">    * @return The entity tags in this object as a list.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">102</span><span id="line-102">    */</span>
+<span class="source-line-no">103</span><span id="line-103">   public List&lt;EntityTag&gt; toList() {</span>
+<span class="source-line-no">104</span><span id="line-104">      return u(alist(value));</span>
+<span class="source-line-no">105</span><span id="line-105">   }</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">   /**</span>
+<span class="source-line-no">108</span><span id="line-108">    * Returns the entity tags in this object as an array.</span>
+<span class="source-line-no">109</span><span id="line-109">    *</span>
+<span class="source-line-no">110</span><span id="line-110">    * &lt;p&gt;</span>
+<span class="source-line-no">111</span><span id="line-111">    * Returns a copy of the entity tags.</span>
+<span class="source-line-no">112</span><span id="line-112">    *</span>
+<span class="source-line-no">113</span><span id="line-113">    * @return The entity tags in this object as an array.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">114</span><span id="line-114">    */</span>
+<span class="source-line-no">115</span><span id="line-115">   public EntityTag[] toArray() {</span>
+<span class="source-line-no">116</span><span id="line-116">      return copyOf(value);</span>
+<span class="source-line-no">117</span><span id="line-117">   }</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">   @Override /* Object */</span>
+<span class="source-line-no">120</span><span id="line-120">   public String toString() {</span>
+<span class="source-line-no">121</span><span id="line-121">      return string;</span>
+<span class="source-line-no">122</span><span id="line-122">   }</span>
+<span class="source-line-no">123</span><span id="line-123">}</span>
 
 
 

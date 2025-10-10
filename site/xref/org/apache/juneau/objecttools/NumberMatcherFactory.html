@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.internal.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.internal.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment">/**</em>
@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> NumberMatcher <strong class="jxr_keyword">extends</strong> <a name="AbstractMatcher" href="../../../../org/apache/juneau/objecttools/AbstractMatcher.html#AbstractMatcher">AbstractMatcher</a> {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		NumberRange[] numberRanges;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		String pattern;
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/common/internal/AsciiSet.html#AsciiSet">AsciiSet</a>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/common/utils/AsciiSet.html#AsciiSet">AsciiSet</a>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			SNUM = AsciiSet.of(<span class="jxr_string">"-0123456789."</span>),
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			NUM = AsciiSet.of(<span class="jxr_string">"0123456789."</span>),
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			WS = AsciiSet.of(<span class="jxr_string">" \t"</span>);

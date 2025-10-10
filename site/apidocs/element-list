@@ -10,7 +10,6 @@ org.apache.juneau.bean.openapi3
 org.apache.juneau.bean.swagger
 org.apache.juneau.bean.swagger.ui
 org.apache.juneau.collections
-org.apache.juneau.common.internal
 org.apache.juneau.common.utils
 org.apache.juneau.config
 org.apache.juneau.config.event

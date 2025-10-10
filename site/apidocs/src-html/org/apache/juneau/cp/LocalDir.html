@@ -25,120 +25,121 @@
 <span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
 <span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.cp;</span>
 <span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.common.internal.StringUtils.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import java.net.*;</span>
-<span class="source-line-no">017</span><span id="line-17">import java.nio.file.*;</span>
-<span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.common.internal.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.internal.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">/**</span>
-<span class="source-line-no">023</span><span id="line-23"> * Identifies a directory located either on the classpath or file system.</span>
-<span class="source-line-no">024</span><span id="line-24"> *</span>
-<span class="source-line-no">025</span><span id="line-25"> * Used to encapsulate basic resolution and retrieval of files regardless of where they are located.</span>
-<span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;/ul&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> */</span>
-<span class="source-line-no">030</span><span id="line-30">public class LocalDir {</span>
-<span class="source-line-no">031</span><span id="line-31"></span>
-<span class="source-line-no">032</span><span id="line-32">   private final Class&lt;?&gt; clazz;</span>
-<span class="source-line-no">033</span><span id="line-33">   private final String clazzPath;</span>
-<span class="source-line-no">034</span><span id="line-34">   private final Path path;</span>
-<span class="source-line-no">035</span><span id="line-35">   private final int hashCode;</span>
-<span class="source-line-no">036</span><span id="line-36"></span>
-<span class="source-line-no">037</span><span id="line-37">   /**</span>
-<span class="source-line-no">038</span><span id="line-38">    * Constructor for classpath directory.</span>
-<span class="source-line-no">039</span><span id="line-39">    *</span>
-<span class="source-line-no">040</span><span id="line-40">    * @param clazz The class used to retrieve resources.</span>
-<span class="source-line-no">041</span><span id="line-41">    * @param clazzPath</span>
-<span class="source-line-no">042</span><span id="line-42">    *    The subpath.  Can be any of the following:</span>
-<span class="source-line-no">043</span><span id="line-43">    *    &lt;ul&gt;</span>
-<span class="source-line-no">044</span><span id="line-44">    *       &lt;li&gt;&lt;jk&gt;null&lt;/jk&gt; or an empty string - Package of the class.</span>
-<span class="source-line-no">045</span><span id="line-45">    *       &lt;li&gt;Absolute path (starts with &lt;js&gt;'/'&lt;/js&gt;) - Relative to root package.</span>
-<span class="source-line-no">046</span><span id="line-46">    *       &lt;li&gt;Relative path (does not start with &lt;js&gt;'/'&lt;/js&gt;) - Relative to class package.</span>
-<span class="source-line-no">047</span><span id="line-47">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">048</span><span id="line-48">    */</span>
-<span class="source-line-no">049</span><span id="line-49">   public LocalDir(Class&lt;?&gt; clazz, String clazzPath) {</span>
-<span class="source-line-no">050</span><span id="line-50">      this.clazz = Utils.assertArgNotNull("clazz", clazz);</span>
-<span class="source-line-no">051</span><span id="line-51">      this.clazzPath = "/".equals(clazzPath) ? "/" : Utils.nullIfEmpty3(trimTrailingSlashes(clazzPath));</span>
-<span class="source-line-no">052</span><span id="line-52">      this.path = null;</span>
-<span class="source-line-no">053</span><span id="line-53">      this.hashCode = HashCode.of(clazz, clazzPath);</span>
-<span class="source-line-no">054</span><span id="line-54">   }</span>
-<span class="source-line-no">055</span><span id="line-55"></span>
-<span class="source-line-no">056</span><span id="line-56">   /**</span>
-<span class="source-line-no">057</span><span id="line-57">    * Constructor for file system directory.</span>
-<span class="source-line-no">058</span><span id="line-58">    *</span>
-<span class="source-line-no">059</span><span id="line-59">    * @param path Filesystem directory location.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">060</span><span id="line-60">    */</span>
-<span class="source-line-no">061</span><span id="line-61">   public LocalDir(Path path) {</span>
-<span class="source-line-no">062</span><span id="line-62">      this.clazz = null;</span>
-<span class="source-line-no">063</span><span id="line-63">      this.clazzPath = null;</span>
-<span class="source-line-no">064</span><span id="line-64">      this.path = Utils.assertArgNotNull("path", path);</span>
-<span class="source-line-no">065</span><span id="line-65">      this.hashCode = path.hashCode();</span>
-<span class="source-line-no">066</span><span id="line-66">   }</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   /**</span>
-<span class="source-line-no">069</span><span id="line-69">    * Resolves the specified path.</span>
-<span class="source-line-no">070</span><span id="line-70">    *</span>
-<span class="source-line-no">071</span><span id="line-71">    * @param path</span>
-<span class="source-line-no">072</span><span id="line-72">    *    The path to the file to resolve.</span>
-<span class="source-line-no">073</span><span id="line-73">    *    &lt;br&gt;Must be a non-null relative path.</span>
-<span class="source-line-no">074</span><span id="line-74">    *    &lt;br&gt;Does no cleanup of the path (e.g. checking for security holes or malformed values).</span>
-<span class="source-line-no">075</span><span id="line-75">    * @return The file if it exists, or &lt;jk&gt;null&lt;/jk&gt; if it does not.</span>
-<span class="source-line-no">076</span><span id="line-76">    */</span>
-<span class="source-line-no">077</span><span id="line-77">   public LocalFile resolve(String path) {</span>
-<span class="source-line-no">078</span><span id="line-78">      if (clazz != null) {</span>
-<span class="source-line-no">079</span><span id="line-79">         String p = clazzPath == null ? path : ("/".equals(clazzPath) ? "" : clazzPath) + '/' + path;</span>
-<span class="source-line-no">080</span><span id="line-80">         if (isClasspathFile(clazz.getResource(p)))</span>
-<span class="source-line-no">081</span><span id="line-81">            return new LocalFile(clazz, p);</span>
-<span class="source-line-no">082</span><span id="line-82">      } else {</span>
-<span class="source-line-no">083</span><span id="line-83">         Path p = this.path.resolve(path);</span>
-<span class="source-line-no">084</span><span id="line-84">         if (Files.isReadable(p) &amp;&amp; ! Files.isDirectory(p))</span>
-<span class="source-line-no">085</span><span id="line-85">            return new LocalFile(p);</span>
-<span class="source-line-no">086</span><span id="line-86">      }</span>
-<span class="source-line-no">087</span><span id="line-87">      return null;</span>
-<span class="source-line-no">088</span><span id="line-88">   }</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">   /**</span>
-<span class="source-line-no">091</span><span id="line-91">    * Validates that the specified classpath resource exists and is a file.</span>
-<span class="source-line-no">092</span><span id="line-92">    * Note that the behavior of Class.getResource(path) is different when pointing to directories on the classpath.</span>
-<span class="source-line-no">093</span><span id="line-93">    * When packaged as a jar, calling Class.getResource(path) on a directory returns null.</span>
-<span class="source-line-no">094</span><span id="line-94">    * When unpackaged, calling Class.getResource(path) on a directory returns a URL starting with "file:".</span>
-<span class="source-line-no">095</span><span id="line-95">    * We perform a test to make the behavior the same regardless of whether we're packaged or not.</span>
-<span class="source-line-no">096</span><span id="line-96">    */</span>
-<span class="source-line-no">097</span><span id="line-97">   private boolean isClasspathFile(URL url) {</span>
-<span class="source-line-no">098</span><span id="line-98">      try {</span>
-<span class="source-line-no">099</span><span id="line-99">         if (url == null)</span>
-<span class="source-line-no">100</span><span id="line-100">            return false;</span>
-<span class="source-line-no">101</span><span id="line-101">         URI uri = url.toURI();</span>
-<span class="source-line-no">102</span><span id="line-102">         if (uri.toString().startsWith("file:"))</span>
-<span class="source-line-no">103</span><span id="line-103">            if (Files.isDirectory(Paths.get(uri)))</span>
-<span class="source-line-no">104</span><span id="line-104">               return false;</span>
-<span class="source-line-no">105</span><span id="line-105">      } catch (URISyntaxException e) {</span>
-<span class="source-line-no">106</span><span id="line-106">         e.printStackTrace();  // Untestable.</span>
-<span class="source-line-no">107</span><span id="line-107">         return false;</span>
-<span class="source-line-no">108</span><span id="line-108">      }</span>
-<span class="source-line-no">109</span><span id="line-109">      return true;</span>
-<span class="source-line-no">110</span><span id="line-110">   }</span>
-<span class="source-line-no">111</span><span id="line-111"></span>
-<span class="source-line-no">112</span><span id="line-112">   @Override /* Object */</span>
-<span class="source-line-no">113</span><span id="line-113">   public boolean equals(Object o) {</span>
-<span class="source-line-no">114</span><span id="line-114">      return o instanceof LocalDir &amp;&amp; Utils.eq(this, (LocalDir)o, (x,y)-&gt;Utils.eq(x.clazz, y.clazz) &amp;&amp; Utils.eq(x.clazzPath, y.clazzPath) &amp;&amp; Utils.eq(x.path, y.path));</span>
-<span class="source-line-no">115</span><span id="line-115">   }</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   @Override /* Object */</span>
-<span class="source-line-no">118</span><span id="line-118">   public int hashCode() {</span>
-<span class="source-line-no">119</span><span id="line-119">      return hashCode;</span>
-<span class="source-line-no">120</span><span id="line-120">   }</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">   @Override /* Object */</span>
-<span class="source-line-no">123</span><span id="line-123">   public String toString() {</span>
-<span class="source-line-no">124</span><span id="line-124">      if (clazz == null)</span>
-<span class="source-line-no">125</span><span id="line-125">         return path.toString();</span>
-<span class="source-line-no">126</span><span id="line-126">      return clazz.getName() + ":" + clazzPath;</span>
-<span class="source-line-no">127</span><span id="line-127">   }</span>
-<span class="source-line-no">128</span><span id="line-128">}</span>
+<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.common.utils.StringUtils.*;</span>
+<span class="source-line-no">016</span><span id="line-16"></span>
+<span class="source-line-no">017</span><span id="line-17">import java.net.*;</span>
+<span class="source-line-no">018</span><span id="line-18">import java.nio.file.*;</span>
+<span class="source-line-no">019</span><span id="line-19"></span>
+<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.common.utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.internal.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">/**</span>
+<span class="source-line-no">024</span><span id="line-24"> * Identifies a directory located either on the classpath or file system.</span>
+<span class="source-line-no">025</span><span id="line-25"> *</span>
+<span class="source-line-no">026</span><span id="line-26"> * Used to encapsulate basic resolution and retrieval of files regardless of where they are located.</span>
+<span class="source-line-no">027</span><span id="line-27"> *</span>
+<span class="source-line-no">028</span><span id="line-28"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;/ul&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> */</span>
+<span class="source-line-no">031</span><span id="line-31">public class LocalDir {</span>
+<span class="source-line-no">032</span><span id="line-32"></span>
+<span class="source-line-no">033</span><span id="line-33">   private final Class&lt;?&gt; clazz;</span>
+<span class="source-line-no">034</span><span id="line-34">   private final String clazzPath;</span>
+<span class="source-line-no">035</span><span id="line-35">   private final Path path;</span>
+<span class="source-line-no">036</span><span id="line-36">   private final int hashCode;</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38">   /**</span>
+<span class="source-line-no">039</span><span id="line-39">    * Constructor for classpath directory.</span>
+<span class="source-line-no">040</span><span id="line-40">    *</span>
+<span class="source-line-no">041</span><span id="line-41">    * @param clazz The class used to retrieve resources.</span>
+<span class="source-line-no">042</span><span id="line-42">    * @param clazzPath</span>
+<span class="source-line-no">043</span><span id="line-43">    *    The subpath.  Can be any of the following:</span>
+<span class="source-line-no">044</span><span id="line-44">    *    &lt;ul&gt;</span>
+<span class="source-line-no">045</span><span id="line-45">    *       &lt;li&gt;&lt;jk&gt;null&lt;/jk&gt; or an empty string - Package of the class.</span>
+<span class="source-line-no">046</span><span id="line-46">    *       &lt;li&gt;Absolute path (starts with &lt;js&gt;'/'&lt;/js&gt;) - Relative to root package.</span>
+<span class="source-line-no">047</span><span id="line-47">    *       &lt;li&gt;Relative path (does not start with &lt;js&gt;'/'&lt;/js&gt;) - Relative to class package.</span>
+<span class="source-line-no">048</span><span id="line-48">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">049</span><span id="line-49">    */</span>
+<span class="source-line-no">050</span><span id="line-50">   public LocalDir(Class&lt;?&gt; clazz, String clazzPath) {</span>
+<span class="source-line-no">051</span><span id="line-51">      this.clazz = Utils.assertArgNotNull("clazz", clazz);</span>
+<span class="source-line-no">052</span><span id="line-52">      this.clazzPath = "/".equals(clazzPath) ? "/" : Utils.nullIfEmpty3(trimTrailingSlashes(clazzPath));</span>
+<span class="source-line-no">053</span><span id="line-53">      this.path = null;</span>
+<span class="source-line-no">054</span><span id="line-54">      this.hashCode = HashCode.of(clazz, clazzPath);</span>
+<span class="source-line-no">055</span><span id="line-55">   }</span>
+<span class="source-line-no">056</span><span id="line-56"></span>
+<span class="source-line-no">057</span><span id="line-57">   /**</span>
+<span class="source-line-no">058</span><span id="line-58">    * Constructor for file system directory.</span>
+<span class="source-line-no">059</span><span id="line-59">    *</span>
+<span class="source-line-no">060</span><span id="line-60">    * @param path Filesystem directory location.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">061</span><span id="line-61">    */</span>
+<span class="source-line-no">062</span><span id="line-62">   public LocalDir(Path path) {</span>
+<span class="source-line-no">063</span><span id="line-63">      this.clazz = null;</span>
+<span class="source-line-no">064</span><span id="line-64">      this.clazzPath = null;</span>
+<span class="source-line-no">065</span><span id="line-65">      this.path = Utils.assertArgNotNull("path", path);</span>
+<span class="source-line-no">066</span><span id="line-66">      this.hashCode = path.hashCode();</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">   /**</span>
+<span class="source-line-no">070</span><span id="line-70">    * Resolves the specified path.</span>
+<span class="source-line-no">071</span><span id="line-71">    *</span>
+<span class="source-line-no">072</span><span id="line-72">    * @param path</span>
+<span class="source-line-no">073</span><span id="line-73">    *    The path to the file to resolve.</span>
+<span class="source-line-no">074</span><span id="line-74">    *    &lt;br&gt;Must be a non-null relative path.</span>
+<span class="source-line-no">075</span><span id="line-75">    *    &lt;br&gt;Does no cleanup of the path (e.g. checking for security holes or malformed values).</span>
+<span class="source-line-no">076</span><span id="line-76">    * @return The file if it exists, or &lt;jk&gt;null&lt;/jk&gt; if it does not.</span>
+<span class="source-line-no">077</span><span id="line-77">    */</span>
+<span class="source-line-no">078</span><span id="line-78">   public LocalFile resolve(String path) {</span>
+<span class="source-line-no">079</span><span id="line-79">      if (clazz != null) {</span>
+<span class="source-line-no">080</span><span id="line-80">         String p = clazzPath == null ? path : ("/".equals(clazzPath) ? "" : clazzPath) + '/' + path;</span>
+<span class="source-line-no">081</span><span id="line-81">         if (isClasspathFile(clazz.getResource(p)))</span>
+<span class="source-line-no">082</span><span id="line-82">            return new LocalFile(clazz, p);</span>
+<span class="source-line-no">083</span><span id="line-83">      } else {</span>
+<span class="source-line-no">084</span><span id="line-84">         Path p = this.path.resolve(path);</span>
+<span class="source-line-no">085</span><span id="line-85">         if (Files.isReadable(p) &amp;&amp; ! Files.isDirectory(p))</span>
+<span class="source-line-no">086</span><span id="line-86">            return new LocalFile(p);</span>
+<span class="source-line-no">087</span><span id="line-87">      }</span>
+<span class="source-line-no">088</span><span id="line-88">      return null;</span>
+<span class="source-line-no">089</span><span id="line-89">   }</span>
+<span class="source-line-no">090</span><span id="line-90"></span>
+<span class="source-line-no">091</span><span id="line-91">   /**</span>
+<span class="source-line-no">092</span><span id="line-92">    * Validates that the specified classpath resource exists and is a file.</span>
+<span class="source-line-no">093</span><span id="line-93">    * Note that the behavior of Class.getResource(path) is different when pointing to directories on the classpath.</span>
+<span class="source-line-no">094</span><span id="line-94">    * When packaged as a jar, calling Class.getResource(path) on a directory returns null.</span>
+<span class="source-line-no">095</span><span id="line-95">    * When unpackaged, calling Class.getResource(path) on a directory returns a URL starting with "file:".</span>
+<span class="source-line-no">096</span><span id="line-96">    * We perform a test to make the behavior the same regardless of whether we're packaged or not.</span>
+<span class="source-line-no">097</span><span id="line-97">    */</span>
+<span class="source-line-no">098</span><span id="line-98">   private boolean isClasspathFile(URL url) {</span>
+<span class="source-line-no">099</span><span id="line-99">      try {</span>
+<span class="source-line-no">100</span><span id="line-100">         if (url == null)</span>
+<span class="source-line-no">101</span><span id="line-101">            return false;</span>
+<span class="source-line-no">102</span><span id="line-102">         URI uri = url.toURI();</span>
+<span class="source-line-no">103</span><span id="line-103">         if (uri.toString().startsWith("file:"))</span>
+<span class="source-line-no">104</span><span id="line-104">            if (Files.isDirectory(Paths.get(uri)))</span>
+<span class="source-line-no">105</span><span id="line-105">               return false;</span>
+<span class="source-line-no">106</span><span id="line-106">      } catch (URISyntaxException e) {</span>
+<span class="source-line-no">107</span><span id="line-107">         e.printStackTrace();  // Untestable.</span>
+<span class="source-line-no">108</span><span id="line-108">         return false;</span>
+<span class="source-line-no">109</span><span id="line-109">      }</span>
+<span class="source-line-no">110</span><span id="line-110">      return true;</span>
+<span class="source-line-no">111</span><span id="line-111">   }</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">   @Override /* Object */</span>
+<span class="source-line-no">114</span><span id="line-114">   public boolean equals(Object o) {</span>
+<span class="source-line-no">115</span><span id="line-115">      return o instanceof LocalDir &amp;&amp; Utils.eq(this, (LocalDir)o, (x,y)-&gt;Utils.eq(x.clazz, y.clazz) &amp;&amp; Utils.eq(x.clazzPath, y.clazzPath) &amp;&amp; Utils.eq(x.path, y.path));</span>
+<span class="source-line-no">116</span><span id="line-116">   }</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">   @Override /* Object */</span>
+<span class="source-line-no">119</span><span id="line-119">   public int hashCode() {</span>
+<span class="source-line-no">120</span><span id="line-120">      return hashCode;</span>
+<span class="source-line-no">121</span><span id="line-121">   }</span>
+<span class="source-line-no">122</span><span id="line-122"></span>
+<span class="source-line-no">123</span><span id="line-123">   @Override /* Object */</span>
+<span class="source-line-no">124</span><span id="line-124">   public String toString() {</span>
+<span class="source-line-no">125</span><span id="line-125">      if (clazz == null)</span>
+<span class="source-line-no">126</span><span id="line-126">         return path.toString();</span>
+<span class="source-line-no">127</span><span id="line-127">      return clazz.getName() + ":" + clazzPath;</span>
+<span class="source-line-no">128</span><span id="line-128">   }</span>
+<span class="source-line-no">129</span><span id="line-129">}</span>
 
 
 

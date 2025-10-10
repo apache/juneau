@@ -25,58 +25,58 @@
 <span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
 <span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.rest;</span>
 <span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.internal.CollectionUtils.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import static org.apache.juneau.collections.JsonMap.*;</span>
-<span class="source-line-no">017</span><span id="line-17">import static org.apache.juneau.common.internal.ThrowableUtils.*;</span>
-<span class="source-line-no">018</span><span id="line-18">import static org.apache.juneau.common.internal.Utils.*;</span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.http.HttpHeaders.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.http.HttpParts.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.httppart.HttpPartType.*;</span>
+<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.collections.JsonMap.*;</span>
+<span class="source-line-no">016</span><span id="line-16">import static org.apache.juneau.common.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">017</span><span id="line-17">import static org.apache.juneau.common.utils.Utils.*;</span>
+<span class="source-line-no">018</span><span id="line-18">import static org.apache.juneau.http.HttpHeaders.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.http.HttpParts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.httppart.HttpPartType.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.internal.CollectionUtils.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.rest.util.RestUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import java.lang.annotation.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import java.lang.reflect.Method;</span>
-<span class="source-line-no">025</span><span id="line-25">import java.nio.charset.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import java.util.*;</span>
-<span class="source-line-no">027</span><span id="line-27">import java.util.concurrent.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import java.util.function.*;</span>
-<span class="source-line-no">029</span><span id="line-29"></span>
-<span class="source-line-no">030</span><span id="line-30">import jakarta.servlet.*;</span>
-<span class="source-line-no">031</span><span id="line-31">import jakarta.servlet.http.*;</span>
-<span class="source-line-no">032</span><span id="line-32"></span>
-<span class="source-line-no">033</span><span id="line-33">import org.apache.http.*;</span>
-<span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.*;</span>
-<span class="source-line-no">035</span><span id="line-35">import org.apache.juneau.annotation.*;</span>
-<span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.collections.*;</span>
-<span class="source-line-no">037</span><span id="line-37">import org.apache.juneau.common.internal.*;</span>
-<span class="source-line-no">038</span><span id="line-38">import org.apache.juneau.common.internal.Utils;</span>
-<span class="source-line-no">039</span><span id="line-39">import org.apache.juneau.cp.*;</span>
-<span class="source-line-no">040</span><span id="line-40">import org.apache.juneau.encoders.*;</span>
-<span class="source-line-no">041</span><span id="line-41">import org.apache.juneau.http.annotation.*;</span>
-<span class="source-line-no">042</span><span id="line-42">import org.apache.juneau.http.annotation.Header;</span>
-<span class="source-line-no">043</span><span id="line-43">import org.apache.juneau.http.header.*;</span>
-<span class="source-line-no">044</span><span id="line-44">import org.apache.juneau.http.part.*;</span>
-<span class="source-line-no">045</span><span id="line-45">import org.apache.juneau.http.remote.*;</span>
-<span class="source-line-no">046</span><span id="line-46">import org.apache.juneau.httppart.*;</span>
-<span class="source-line-no">047</span><span id="line-47">import org.apache.juneau.httppart.HttpPartSerializer.Creator;</span>
-<span class="source-line-no">048</span><span id="line-48">import org.apache.juneau.httppart.bean.*;</span>
-<span class="source-line-no">049</span><span id="line-49">import org.apache.juneau.internal.*;</span>
-<span class="source-line-no">050</span><span id="line-50">import org.apache.juneau.jsonschema.*;</span>
-<span class="source-line-no">051</span><span id="line-51">import org.apache.juneau.parser.*;</span>
-<span class="source-line-no">052</span><span id="line-52">import org.apache.juneau.parser.ParseException;</span>
-<span class="source-line-no">053</span><span id="line-53">import org.apache.juneau.reflect.*;</span>
-<span class="source-line-no">054</span><span id="line-54">import org.apache.juneau.rest.annotation.*;</span>
-<span class="source-line-no">055</span><span id="line-55">import org.apache.juneau.rest.converter.*;</span>
-<span class="source-line-no">056</span><span id="line-56">import org.apache.juneau.rest.debug.*;</span>
-<span class="source-line-no">057</span><span id="line-57">import org.apache.juneau.rest.guard.*;</span>
-<span class="source-line-no">058</span><span id="line-58">import org.apache.juneau.rest.httppart.*;</span>
-<span class="source-line-no">059</span><span id="line-59">import org.apache.juneau.rest.logger.*;</span>
-<span class="source-line-no">060</span><span id="line-60">import org.apache.juneau.http.response.*;</span>
-<span class="source-line-no">061</span><span id="line-61">import org.apache.juneau.rest.matcher.*;</span>
-<span class="source-line-no">062</span><span id="line-62">import org.apache.juneau.rest.swagger.*;</span>
-<span class="source-line-no">063</span><span id="line-63">import org.apache.juneau.rest.util.*;</span>
-<span class="source-line-no">064</span><span id="line-64">import org.apache.juneau.serializer.*;</span>
-<span class="source-line-no">065</span><span id="line-65">import org.apache.juneau.svl.*;</span>
-<span class="source-line-no">066</span><span id="line-66">import org.apache.juneau.utils.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">import java.lang.annotation.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import java.lang.reflect.Method;</span>
+<span class="source-line-no">026</span><span id="line-26">import java.nio.charset.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import java.util.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import java.util.concurrent.*;</span>
+<span class="source-line-no">029</span><span id="line-29">import java.util.function.*;</span>
+<span class="source-line-no">030</span><span id="line-30"></span>
+<span class="source-line-no">031</span><span id="line-31">import org.apache.http.*;</span>
+<span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.*;</span>
+<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.annotation.*;</span>
+<span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.collections.*;</span>
+<span class="source-line-no">035</span><span id="line-35">import org.apache.juneau.common.utils.*;</span>
+<span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.cp.*;</span>
+<span class="source-line-no">037</span><span id="line-37">import org.apache.juneau.encoders.*;</span>
+<span class="source-line-no">038</span><span id="line-38">import org.apache.juneau.http.annotation.*;</span>
+<span class="source-line-no">039</span><span id="line-39">import org.apache.juneau.http.annotation.Header;</span>
+<span class="source-line-no">040</span><span id="line-40">import org.apache.juneau.http.header.*;</span>
+<span class="source-line-no">041</span><span id="line-41">import org.apache.juneau.http.part.*;</span>
+<span class="source-line-no">042</span><span id="line-42">import org.apache.juneau.http.remote.*;</span>
+<span class="source-line-no">043</span><span id="line-43">import org.apache.juneau.http.response.*;</span>
+<span class="source-line-no">044</span><span id="line-44">import org.apache.juneau.httppart.*;</span>
+<span class="source-line-no">045</span><span id="line-45">import org.apache.juneau.httppart.HttpPartSerializer.*;</span>
+<span class="source-line-no">046</span><span id="line-46">import org.apache.juneau.httppart.bean.*;</span>
+<span class="source-line-no">047</span><span id="line-47">import org.apache.juneau.internal.*;</span>
+<span class="source-line-no">048</span><span id="line-48">import org.apache.juneau.jsonschema.*;</span>
+<span class="source-line-no">049</span><span id="line-49">import org.apache.juneau.parser.*;</span>
+<span class="source-line-no">050</span><span id="line-50">import org.apache.juneau.parser.ParseException;</span>
+<span class="source-line-no">051</span><span id="line-51">import org.apache.juneau.reflect.*;</span>
+<span class="source-line-no">052</span><span id="line-52">import org.apache.juneau.rest.annotation.*;</span>
+<span class="source-line-no">053</span><span id="line-53">import org.apache.juneau.rest.converter.*;</span>
+<span class="source-line-no">054</span><span id="line-54">import org.apache.juneau.rest.debug.*;</span>
+<span class="source-line-no">055</span><span id="line-55">import org.apache.juneau.rest.guard.*;</span>
+<span class="source-line-no">056</span><span id="line-56">import org.apache.juneau.rest.httppart.*;</span>
+<span class="source-line-no">057</span><span id="line-57">import org.apache.juneau.rest.logger.*;</span>
+<span class="source-line-no">058</span><span id="line-58">import org.apache.juneau.rest.matcher.*;</span>
+<span class="source-line-no">059</span><span id="line-59">import org.apache.juneau.rest.swagger.*;</span>
+<span class="source-line-no">060</span><span id="line-60">import org.apache.juneau.rest.util.*;</span>
+<span class="source-line-no">061</span><span id="line-61">import org.apache.juneau.serializer.*;</span>
+<span class="source-line-no">062</span><span id="line-62">import org.apache.juneau.svl.*;</span>
+<span class="source-line-no">063</span><span id="line-63">import org.apache.juneau.utils.*;</span>
+<span class="source-line-no">064</span><span id="line-64"></span>
+<span class="source-line-no">065</span><span id="line-65">import jakarta.servlet.*;</span>
+<span class="source-line-no">066</span><span id="line-66">import jakarta.servlet.http.*;</span>
 <span class="source-line-no">067</span><span id="line-67"></span>
 <span class="source-line-no">068</span><span id="line-68">/**</span>
 <span class="source-line-no">069</span><span id="line-69"> * Represents a single Java servlet/resource method annotated with {@link RestOp @RestOp}.</span>

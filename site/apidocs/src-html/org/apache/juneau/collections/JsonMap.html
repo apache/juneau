@@ -25,7 +25,7 @@
 <span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
 <span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.collections;</span>
 <span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.common.internal.Utils.*;</span>
+<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.common.utils.Utils.*;</span>
 <span class="source-line-no">016</span><span id="line-16">import static org.apache.juneau.internal.ConsumerUtils.*;</span>
 <span class="source-line-no">017</span><span id="line-17"></span>
 <span class="source-line-no">018</span><span id="line-18">import java.io.*;</span>
@@ -34,7 +34,7 @@
 <span class="source-line-no">021</span><span id="line-21">import java.util.function.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.common.internal.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.common.utils.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.internal.*;</span>
 <span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.json.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.marshaller.*;</span>
@@ -1322,7 +1322,7 @@
 <span class="source-line-no">1309</span><span id="line-1309">      if (val == null)</span>
 <span class="source-line-no">1310</span><span id="line-1310">         return false;</span>
 <span class="source-line-no">1311</span><span id="line-1311">      if (val instanceof CharSequence)</span>
-<span class="source-line-no">1312</span><span id="line-1312">         return ! Utils.isEmpty((CharSequence)val);</span>
+<span class="source-line-no">1312</span><span id="line-1312">         return ! Utils.isEmpty(val);</span>
 <span class="source-line-no">1313</span><span id="line-1313">      return false;</span>
 <span class="source-line-no">1314</span><span id="line-1314">   }</span>
 <span class="source-line-no">1315</span><span id="line-1315"></span>
