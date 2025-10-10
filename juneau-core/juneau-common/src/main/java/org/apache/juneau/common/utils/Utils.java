@@ -348,6 +348,13 @@ public class Utils {
 		return false;
 	}
 
+	/**
+	 * Creates an empty array of the specified type.
+	 *
+	 * @param <T> The component type of the array.
+	 * @param type The component type class.
+	 * @return An empty array of the specified type.
+	 */
 	public static <T> T[] ea(Class<T> type) {
 		return (T[])Array.newInstance(type, 0);
 	}
@@ -363,6 +370,15 @@ public class Utils {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * Shortcut for creating an empty map of the specified types.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param keyType The key type class.
+	 * @param valueType The value type class.
+	 * @return An empty unmodifiable map.
+	 */
 	public static <K,V> Map<K,V> emap(Class<K> keyType, Class<V> valueType) {
 		return Collections.emptyMap();
 	}
@@ -420,6 +436,12 @@ public class Utils {
 		return env(name).map(x -> toType(x, def)).orElse(def);
 	}
 
+	/**
+	 * Converts a property name to an environment variable name.
+	 *
+	 * @param name The property name to convert.
+	 * @return The environment variable name (uppercase with dots replaced by underscores).
+	 */
 	private static String envName(String name) {
 		return PROPERTY_TO_ENV.computeIfAbsent(name, x->x.toUpperCase().replace(".", "_"));
 	}
@@ -608,6 +630,12 @@ public class Utils {
 		return new IllegalArgumentException(args.length == 0 ? msg : f(msg, args));
 	}
 
+	/**
+	 * Checks if the specified object is an array.
+	 *
+	 * @param o The object to check.
+	 * @return <jk>true</jk> if the object is not <jk>null</jk> and is an array.
+	 */
 	public static boolean isArray(Object o) {
 		return o != null && o.getClass().isArray();
 	}
@@ -655,7 +683,7 @@ public class Utils {
 	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty or consists of only blanks.
 	 *
 	 * @param s The string to check.
-	 * @return <jk>true</jk> if specified string is <jk>null</jk> or emptyor consists of only blanks.
+	 * @return <jk>true</jk> if specified string is <jk>null</jk> or empty or consists of only blanks.
 	 */
 	public static boolean isEmptyOrBlank(String s) {
 		return s == null || s.trim().isEmpty();
@@ -945,10 +973,24 @@ public class Utils {
 		return m;
 	}
 
+	/**
+	 * Returns <jk>null</jk> for the specified type.
+	 *
+	 * @param <T> The type.
+	 * @param type The type class.
+	 * @return <jk>null</jk>.
+	 */
 	public static <T> T n(Class<T> type) {
 		return null;
 	}
 
+	/**
+	 * Returns <jk>null</jk> for the specified array type.
+	 *
+	 * @param <T> The component type.
+	 * @param type The component type class.
+	 * @return <jk>null</jk>.
+	 */
 	public static <T> T[] na(Class<T> type) {
 		return null;
 	}
@@ -1907,6 +1949,15 @@ public class Utils {
 		return IntStream.range(0, length).mapToObj(i -> Array.get(array, i));
 	}
 
+	/**
+	 * Converts a string to the specified type using registered conversion functions.
+	 *
+	 * @param <T> The target type.
+	 * @param s The string to convert.
+	 * @param def The default value (used to determine the target type).
+	 * @return The converted value, or <jk>null</jk> if the string or default is <jk>null</jk>.
+	 * @throws RuntimeException If the type is not supported for conversion.
+	 */
 	@SuppressWarnings("rawtypes")
 	private static <T> T toType(String s, T def) {
 		if (s == null || def == null)
@@ -1995,10 +2046,22 @@ public class Utils {
 		return new StringBuilder(value);
 	}
 
+	/**
+	 * Gets the fully qualified class name of the specified object.
+	 *
+	 * @param o The object to get the class name for.
+	 * @return The fully qualified class name, or <jk>null</jk> if the object is <jk>null</jk>.
+	 */
 	public static String classNameOf(Object o) {
 		return o == null ? null : o.getClass().getName();
 	}
 
+	/**
+	 * Gets the simple class name of the specified object.
+	 *
+	 * @param o The object to get the simple class name for.
+	 * @return The simple class name, or <jk>null</jk> if the object is <jk>null</jk>.
+	 */
 	public static String simpleClassNameOf(Object o) {
 		return o == null ? null : o.getClass().getSimpleName();
 	}
