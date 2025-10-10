@@ -34,7 +34,7 @@ import org.apache.juneau.http.annotation.*;
  */
 @Bean(properties="name,description", findFluentSetters=true)
 @Response(schema=@Schema(ignore=true))
-public final class ResourceDescription implements Comparable<ResourceDescription> {
+public class ResourceDescription implements Comparable<ResourceDescription> {
 
 	private String name, uri, description;
 

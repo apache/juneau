@@ -40,7 +40,7 @@ import org.apache.juneau.parser.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  * </ul>
  */
-public final class Traversable implements RestConverter {
+public class Traversable implements RestConverter {
 
 	@Override /* RestConverter */
 	@SuppressWarnings({"rawtypes", "unchecked"})

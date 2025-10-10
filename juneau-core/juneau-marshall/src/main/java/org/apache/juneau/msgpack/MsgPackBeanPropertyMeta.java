@@ -24,7 +24,7 @@ import org.apache.juneau.msgpack.annotation.*;
 
  * </ul>
  */
-public final class MsgPackBeanPropertyMeta extends ExtendedBeanPropertyMeta {
+public class MsgPackBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.

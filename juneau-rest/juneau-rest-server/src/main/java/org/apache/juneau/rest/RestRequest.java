@@ -170,7 +170,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })
-public final class RestRequest extends HttpServletRequestWrapper {
+public class RestRequest extends HttpServletRequestWrapper {
 
 	// Constructor initialized.
 	private HttpServletRequest inner;

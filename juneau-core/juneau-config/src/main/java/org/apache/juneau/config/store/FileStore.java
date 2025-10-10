@@ -566,7 +566,7 @@ public class FileStore extends ConfigStore {
 	// WatcherThread
 	//---------------------------------------------------------------------------------------------
 
-	final class WatcherThread extends Thread {
+	class WatcherThread extends Thread {
 		private final WatchService watchService;
 
 		WatcherThread(File dir, WatcherSensitivity s) throws Exception {

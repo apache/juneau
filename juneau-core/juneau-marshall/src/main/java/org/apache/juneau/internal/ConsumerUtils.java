@@ -17,7 +17,7 @@ import java.util.function.*;
 /**
  * Utilities when working with {@link Predicate Predicates} and {@link Consumer Consumers}.
  */
-public final class ConsumerUtils {
+public class ConsumerUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.

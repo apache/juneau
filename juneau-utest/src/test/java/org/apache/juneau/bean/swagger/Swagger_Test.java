@@ -117,6 +117,176 @@ class Swagger_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->x.getParameterInfo("a", "a", null, "a"));
 			assertThrows(IllegalArgumentException.class, ()->x.get(null, String.class));
 			assertThrows(IllegalArgumentException.class, ()->x.set(null, "value"));
+			assertThrows(IllegalArgumentException.class, ()->x.addDefinition(null, JsonMap.of("a", "b")));
+			assertThrows(IllegalArgumentException.class, ()->x.addDefinition("a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addParameter(null, parameterInfo("a", "b")));
+			assertThrows(IllegalArgumentException.class, ()->x.addParameter("a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addPath(null, "get", operation()));
+			assertThrows(IllegalArgumentException.class, ()->x.addPath("a", null, operation()));
+			assertThrows(IllegalArgumentException.class, ()->x.addPath("a", "get", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addResponse(null, responseInfo()));
+			assertThrows(IllegalArgumentException.class, ()->x.addResponse("a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addSecurity(null, "a"));
+			assertThrows(IllegalArgumentException.class, ()->x.addSecurityDefinition(null, securityScheme()));
+			assertThrows(IllegalArgumentException.class, ()->x.addSecurityDefinition("a", null));
+		}
+
+		@Test void a10_collectionSetters() {
+			// Test Collection variants of setters
+			var x = bean()
+				.setConsumes(list(
+					MediaType.of("a1"),
+					MediaType.of("a2")
+				))
+				.setProduces(list(
+					MediaType.of("b1"),
+					MediaType.of("b2")
+				))
+				.setSchemes(list("c1", "c2"))
+				.setTags(list(tag().setName("d1"), tag().setName("d2")))
+				.setSecurity(list(
+					map("e1", list("e2")),
+					map("e3", list("e4"))
+				));
+
+			assertBean(x,
+				"consumes,produces,schemes,tags{0{name},1{name}},security{0{e1},1{e3}}",
+				"[a1,a2],[b1,b2],[c1,c2],{{d1},{d2}},{{[e2]},{[e4]}}"
+			);
+		}
+
+		@Test void a11_varargAdders() {
+			// Test varargs addX methods - call each method twice
+			var x = bean()
+				.addConsumes(MediaType.of("a1"))
+				.addConsumes(MediaType.of("a2"))
+				.addProduces(MediaType.of("b1"))
+				.addProduces(MediaType.of("b2"))
+				.addSchemes("c1")
+				.addSchemes("c2")
+				.addTags(tag().setName("d1"))
+				.addTags(tag().setName("d2"));
+
+			assertBean(x,
+				"consumes,produces,schemes,tags{0{name},1{name}}",
+				"[a1,a2],[b1,b2],[c1,c2],{{d1},{d2}}"
+			);
+		}
+
+		@Test void a12_collectionAdders() {
+			// Test Collection addX methods - call each method twice
+			var x = bean()
+				.addConsumes(list(MediaType.of("a1")))
+				.addConsumes(list(MediaType.of("a2")))
+				.addProduces(list(MediaType.of("b1")))
+				.addProduces(list(MediaType.of("b2")))
+				.addSchemes(list("c1"))
+				.addSchemes(list("c2"))
+				.addSecurity(list(map("d1",list("d2"))))
+				.addSecurity(list(map("d3",list("d4"))))
+				.addTags(list(tag().setName("e1")))
+				.addTags(list(tag().setName("e2")));
+
+			assertBean(x,
+				"consumes,produces,schemes,security,tags{0{name},1{name}}",
+				"[a1,a2],[b1,b2],[c1,c2],[{d1=[d2]},{d3=[d4]}],{{e1},{e2}}"
+			);
+		}
+
+		@Test void a13_asMap() {
+			assertBean(
+				bean()
+					.setBasePath("a")
+					.setHost("b")
+					.set("x1", "x1a")
+					.asMap(),
+				"basePath,host,swagger,x1",
+				"a,b,2.0,x1a"
+			);
+		}
+
+		@Test void a14_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void a15_addResponse() {
+			// Test addResponse method
+			var x = bean()
+				.addResponse("200", responseInfo().setDescription("a"))
+				.addResponse("404", responseInfo().setDescription("b"));
+
+			assertBean(x,
+				"responses{200{description},404{description}}",
+				"{{a},{b}}"
+			);
+		}
+
+		@Test void a16_addSecurity() {
+			// Test addSecurity method
+			var x = bean()
+				.addSecurity("scheme1", "a", "b")
+				.addSecurity("scheme2", "c");
+
+			assertBean(x,
+				"security{0{scheme1},1{scheme2}}",
+				"{{[a,b]},{[c]}}"
+			);
+		}
+
+		@Test void a17_addSecurityDefinition() {
+			// Test addSecurityDefinition method
+			var x = bean()
+				.addSecurityDefinition("def1", securityScheme().setType("a"))
+				.addSecurityDefinition("def2", securityScheme().setType("b"));
+
+			assertBean(x,
+				"securityDefinitions{def1{type},def2{type}}",
+				"{{a},{b}}"
+			);
+		}
+
+		@Test void a18_getOperationNullPath() {
+			var a = swagger()
+				.addPath("/existing", "get", operation().setSummary("test"));
+
+			// Test getOperation when path doesn't exist (returns null)
+			assertNull(a.getOperation("/nonexistent", "get"));
+
+			// Test getResponseInfo when path doesn't exist (returns null)
+			assertNull(a.getResponseInfo("/nonexistent", "get", "200"));
+
+			// Test getResponseInfo when operation doesn't exist (returns null)
+			assertNull(a.getResponseInfo("/test", "post", "200"));
+
+			// Test getParameterInfo when path doesn't exist (returns null)
+			assertNull(a.getParameterInfo("/nonexistent", "get", "query", "param"));
+
+			// Test getParameterInfo when operation doesn't exist (returns null)
+			assertNull(a.getParameterInfo("/test", "post", "query", "param"));
+		}
+
+		@Test void a19_getMethodWithInvalidProperty() {
+			var a = swagger();
+
+			// Test get method with invalid property (should call super.get)
+			assertNull(a.get("invalidProperty", String.class));
+		}
+
+		@Test void a20_strictMode() {
+			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			assertDoesNotThrow(() -> bean().set("foo", "bar"));
+
+			assertFalse(bean().isStrict());
+			assertTrue(bean().strict().isStrict());
+			assertFalse(bean().strict(false).isStrict());
+		}
+
+		@Test void a21_asJson() {
+			var x = swagger().setHost("a");
+			var json = x.asJson();
+			assertTrue(json.contains("a"));
 		}
 	}
 
@@ -156,6 +326,7 @@ class Swagger_Test extends TestBase {
 
 		@Test void b07_keySet() {
 			assertList(TESTER.bean().keySet(), "swagger");
+			assertList(TESTER.bean().setSwagger(null).keySet());
 		}
 	}
 
@@ -239,173 +410,10 @@ class Swagger_Test extends TestBase {
 		}
 	}
 
-	@Nested class D_additionalMethods extends TestBase {
+	@Nested class D_refs extends TestBase {
 
-		@Test void d01_collectionSetters() {
-			// Test Collection variants of setters
-			var x = bean()
-				.setConsumes(list(
-					MediaType.of("a1"),
-					MediaType.of("a2")
-				))
-				.setProduces(list(
-					MediaType.of("b1"),
-					MediaType.of("b2")
-				))
-				.setSchemes(list("c1", "c2"))
-				.setTags(list(tag().setName("d1"), tag().setName("d2")))
-				.setSecurity(list(
-					map("e1", list("e2")),
-					map("e3", list("e4"))
-				));
 
-			assertBean(x,
-				"consumes,produces,schemes,tags{0{name},1{name}},security{0{e1},1{e3}}",
-				"[a1,a2],[b1,b2],[c1,c2],{{d1},{d2}},{{[e2]},{[e4]}}"
-			);
-		}
-
-		@Test void d02_varargAdders() {
-			// Test varargs addX methods - call each method twice
-			var x = bean()
-				.addConsumes(MediaType.of("a1"))
-				.addConsumes(MediaType.of("a2"))
-				.addProduces(MediaType.of("b1"))
-				.addProduces(MediaType.of("b2"))
-				.addSchemes("c1")
-				.addSchemes("c2")
-				.addTags(tag().setName("d1"))
-				.addTags(tag().setName("d2"));
-
-			assertBean(x,
-				"consumes,produces,schemes,tags{0{name},1{name}}",
-				"[a1,a2],[b1,b2],[c1,c2],{{d1},{d2}}"
-			);
-		}
-
-		@Test void d03_collectionAdders() {
-			// Test Collection addX methods - call each method twice
-			// Note: Collection versions of addX methods exist but are difficult to test
-			// due to Java method resolution preferring varargs over Collection
-			// For now, we test the basic functionality with varargs versions
-			var x = bean();
-
-			// Test that the addX methods work by calling them multiple times
-			x.addConsumes(MediaType.of("a1"));
-			x.addConsumes(MediaType.of("a2"));
-			x.addProduces(MediaType.of("b1"));
-			x.addProduces(MediaType.of("b2"));
-			x.addSchemes("c1");
-			x.addSchemes("c2");
-			x.addTags(tag().setName("d1"));
-			x.addTags(tag().setName("d2"));
-
-			assertBean(x,
-				"consumes,produces,schemes,tags{0{name},1{name}}",
-				"[a1,a2],[b1,b2],[c1,c2],{{d1},{d2}}"
-			);
-		}
-
-		@Test void d04_asMap() {
-			assertBean(
-				bean()
-					.setBasePath("a")
-					.setHost("b")
-					.set("x1", "x1a")
-					.asMap(),
-				"basePath,host,swagger,x1",
-				"a,b,2.0,x1a"
-			);
-		}
-
-		@Test void d05_extraKeys() {
-			var x = bean().set("x1", "x1a").set("x2", "x2a");
-			assertList(x.extraKeys(), "x1", "x2");
-			assertEmpty(bean().extraKeys());
-		}
-
-		@Test void d06_strict() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-		}
-
-		@Test void d07_addMethodsWithNullParameters() {
-			var x = bean();
-			assertThrows(IllegalArgumentException.class, ()->x.addDefinition(null, JsonMap.of("a", "b")));
-			assertThrows(IllegalArgumentException.class, ()->x.addDefinition("a", null));
-			assertThrows(IllegalArgumentException.class, ()->x.addParameter(null, parameterInfo("a", "b")));
-			assertThrows(IllegalArgumentException.class, ()->x.addParameter("a", null));
-			assertThrows(IllegalArgumentException.class, ()->x.addPath(null, "get", operation()));
-			assertThrows(IllegalArgumentException.class, ()->x.addPath("a", null, operation()));
-			assertThrows(IllegalArgumentException.class, ()->x.addPath("a", "get", null));
-			assertThrows(IllegalArgumentException.class, ()->x.addResponse(null, responseInfo()));
-			assertThrows(IllegalArgumentException.class, ()->x.addResponse("a", null));
-			assertThrows(IllegalArgumentException.class, ()->x.addSecurity(null, "a"));
-			assertThrows(IllegalArgumentException.class, ()->x.addSecurityDefinition(null, securityScheme()));
-			assertThrows(IllegalArgumentException.class, ()->x.addSecurityDefinition("a", null));
-		}
-
-		@Test void d08_getOperationNullPath() {
-			var a = swagger()
-				.addPath("/existing", "get", operation().setSummary("test"));
-
-			// Test getOperation when path doesn't exist (returns null)
-			assertNull(a.getOperation("/nonexistent", "get"));
-
-			// Test getResponseInfo when path doesn't exist (returns null)
-			assertNull(a.getResponseInfo("/nonexistent", "get", "200"));
-
-			// Test getResponseInfo when operation doesn't exist (returns null)
-			assertNull(a.getResponseInfo("/test", "post", "200"));
-
-			// Test getParameterInfo when path doesn't exist (returns null)
-			assertNull(a.getParameterInfo("/nonexistent", "get", "query", "param"));
-
-			// Test getParameterInfo when operation doesn't exist (returns null)
-			assertNull(a.getParameterInfo("/test", "post", "query", "param"));
-		}
-
-		@Test void d09_getMethodWithInvalidProperty() {
-			var a = swagger();
-
-			// Test get method with invalid property (should call super.get)
-			assertNull(a.get("invalidProperty", String.class));
-		}
-	}
-
-	@Nested class E_strictMode extends TestBase {
-
-		@Test void e01_strictModeSetThrowsException() {
-			var x = bean().strict();
-			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
-		}
-
-		@Test void e02_nonStrictModeAllowsSet() {
-			var x = bean(); // not strict
-			assertDoesNotThrow(() -> x.set("foo", "bar"));
-		}
-
-		@Test void e03_strictModeToggle() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-			x.strict(false);
-			assertFalse(x.isStrict());
-		}
-	}
-
-	@Nested class G_utilityMethods extends TestBase {
-
-		@Test void g01_asJson() {
-			var x = swagger().setHost("a");
-			var json = x.asJson();
-			assertTrue(json.contains("a"));
-		}
-
-		@Test void g02_findRef() {
+		@Test void d01_findRef() {
 			var x = swagger().addDefinition("a1", JsonMap.of("type", "a2"));
 			assertBean(
 				x.findRef("#/definitions/a1", JsonMap.class),
@@ -420,6 +428,24 @@ class Swagger_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, () -> x.findRef("", JsonMap.class));
 			assertThrowsWithMessage(BasicRuntimeException.class, "Unsupported reference:  'invalid'", () -> x.findRef("invalid", JsonMap.class));
 		}
+
+		@Test void d02_findRefInvalidType() {
+			// Test findRef with invalid type - should throw exception
+			var x = swagger()
+				.addDefinition("Pet", JsonMap.of("type", "object"))
+				.addResponse("Error", responseInfo().setDescription("Error response"))
+				.addParameter("petId", parameterInfo("path", "id"));
+
+			// Test trying to parse a definition into an invalid type
+			assertThrows(Exception.class, () -> x.findRef("#/definitions/Pet", Integer.class));
+
+			// Test trying to parse a response into an invalid type
+			assertThrows(Exception.class, () -> x.findRef("#/responses/Error", Integer.class));
+
+			// Test trying to parse a parameter into an invalid type
+			assertThrows(Exception.class, () -> x.findRef("#/parameters/petId", Integer.class));
+		}
+
 	}
 
 	//---------------------------------------------------------------------------------------------

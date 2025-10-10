@@ -42,7 +42,7 @@ import org.apache.juneau.*;
  *
  * @serial exclude
  */
-public final class ObjectRestException extends BasicRuntimeException {
+public class ObjectRestException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

@@ -81,7 +81,7 @@ import org.apache.juneau.reflect.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
-public final class ParserSet {
+public class ParserSet {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

@@ -26,7 +26,7 @@ import org.apache.juneau.http.resource.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */
-public final class HttpResourceProcessor implements ResponseProcessor {
+public class HttpResourceProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException {

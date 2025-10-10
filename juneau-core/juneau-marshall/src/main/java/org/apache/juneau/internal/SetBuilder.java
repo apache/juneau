@@ -32,7 +32,7 @@ import org.apache.juneau.parser.*;
  *
  * @param <E> Element type.
  */
-public final class SetBuilder<E> {
+public class SetBuilder<E> {
 
 	private Set<E> set;
 	private boolean unmodifiable, sparse;

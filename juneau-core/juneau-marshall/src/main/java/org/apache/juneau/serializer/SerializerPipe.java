@@ -46,7 +46,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
-public final class SerializerPipe implements Closeable {
+public class SerializerPipe implements Closeable {
 
 	private final Object output;
 	private final boolean autoClose;

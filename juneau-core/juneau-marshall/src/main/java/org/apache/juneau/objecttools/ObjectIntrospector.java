@@ -44,7 +44,7 @@ import org.apache.juneau.reflect.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class ObjectIntrospector {
+public class ObjectIntrospector {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

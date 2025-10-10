@@ -21,7 +21,7 @@ import org.apache.juneau.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
-public final class ParserMatch {
+public class ParserMatch {
 
 	private final MediaType mediaType;
 	private final Parser parser;

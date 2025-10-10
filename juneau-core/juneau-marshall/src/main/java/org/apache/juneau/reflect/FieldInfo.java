@@ -26,7 +26,7 @@ import org.apache.juneau.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class FieldInfo implements Comparable<FieldInfo> {
+public class FieldInfo implements Comparable<FieldInfo> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

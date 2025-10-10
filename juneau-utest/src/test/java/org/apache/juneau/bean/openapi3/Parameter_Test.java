@@ -83,6 +83,51 @@ class Parameter_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
 			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
 		}
+
+		@Test void a09_asMap() {
+			assertBean(
+				bean()
+					.setName("a")
+					.set("x1", "x1a")
+					.asMap(),
+				"name,x1",
+				"a,x1a"
+			);
+		}
+
+		@Test void a10_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void a11_strictMode() {
+			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			assertDoesNotThrow(() -> bean().set("foo", "bar"));
+
+			assertFalse(bean().isStrict());
+			assertTrue(bean().strict().isStrict());
+			assertFalse(bean().strict(false).isStrict());
+
+			var x = bean().strict();
+			var y = bean(); // not strict
+			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setIn(String).  Value='invalid', valid values=['query','header','path','cookie']", () -> x.setIn("invalid"));
+			assertDoesNotThrow(() -> x.setIn("query"));
+			assertDoesNotThrow(() -> x.setIn("header"));
+			assertDoesNotThrow(() -> x.setIn("path"));
+			assertDoesNotThrow(() -> x.setIn("cookie"));
+			assertDoesNotThrow(() -> y.setIn("invalid"));
+
+			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setStyle(String).  Value='invalid', valid values=['matrix','label','form','simple','spaceDelimited','pipeDelimited','deepObject']", () -> x.setStyle("invalid"));
+			assertDoesNotThrow(() -> x.setStyle("matrix"));
+			assertDoesNotThrow(() -> x.setStyle("label"));
+			assertDoesNotThrow(() -> x.setStyle("form"));
+			assertDoesNotThrow(() -> x.setStyle("simple"));
+			assertDoesNotThrow(() -> x.setStyle("spaceDelimited"));
+			assertDoesNotThrow(() -> x.setStyle("pipeDelimited"));
+			assertDoesNotThrow(() -> x.setStyle("deepObject"));
+			assertDoesNotThrow(() -> y.setStyle("invalid"));
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {
@@ -200,74 +245,6 @@ class Parameter_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
 			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
 			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
-		}
-	}
-
-	@Nested class D_additionalMethods extends TestBase {
-
-		@Test void d01_asMap() {
-			assertBean(
-				bean()
-					.setName("a")
-					.set("x1", "x1a")
-					.asMap(),
-				"name,x1",
-				"a,x1a"
-			);
-		}
-
-		@Test void d02_extraKeys() {
-			var x = bean().set("x1", "x1a").set("x2", "x2a");
-			assertList(x.extraKeys(), "x1", "x2");
-			assertEmpty(bean().extraKeys());
-		}
-
-	}
-
-	@Nested class E_strictMode extends TestBase {
-
-		@Test void e01_strictModeSetThrowsException() {
-			var x = bean().strict();
-			assertThrowsWithMessage(RuntimeException.class, "Cannot set property 'foo' in strict mode", () -> x.set("foo", "bar"));
-		}
-
-		@Test void e02_nonStrictModeAllowsSet() {
-			var x = bean(); // not strict
-			assertDoesNotThrow(() -> x.set("foo", "bar"));
-		}
-
-		@Test void e03_strictModeToggle() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-			x.strict(false);
-			assertFalse(x.isStrict());
-		}
-
-		@Test void e04_strictModeSetIn() {
-			var x = bean().strict();
-			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setIn(String).  Value='invalid', valid values=['query','header','path','cookie']", () -> x.setIn("invalid"));
-			assertDoesNotThrow(() -> x.setIn("query"));
-			assertDoesNotThrow(() -> x.setIn("header"));
-			assertDoesNotThrow(() -> x.setIn("path"));
-			assertDoesNotThrow(() -> x.setIn("cookie"));
-			var y = bean(); // not strict
-			assertDoesNotThrow(() -> y.setIn("invalid"));
-		}
-
-		@Test void e05_strictModeSetStyle() {
-			var x = bean().strict();
-			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setStyle(String).  Value='invalid', valid values=['matrix','label','form','simple','spaceDelimited','pipeDelimited','deepObject']", () -> x.setStyle("invalid"));
-			assertDoesNotThrow(() -> x.setStyle("matrix"));
-			assertDoesNotThrow(() -> x.setStyle("label"));
-			assertDoesNotThrow(() -> x.setStyle("form"));
-			assertDoesNotThrow(() -> x.setStyle("simple"));
-			assertDoesNotThrow(() -> x.setStyle("spaceDelimited"));
-			assertDoesNotThrow(() -> x.setStyle("pipeDelimited"));
-			assertDoesNotThrow(() -> x.setStyle("deepObject"));
-			var y = bean(); // not strict
-			assertDoesNotThrow(() -> y.setStyle("invalid"));
 		}
 	}
 

@@ -32,7 +32,7 @@ import org.apache.juneau.utils.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
+public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static

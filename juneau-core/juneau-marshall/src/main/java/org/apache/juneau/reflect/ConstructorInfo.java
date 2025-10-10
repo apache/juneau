@@ -28,7 +28,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @FluentSetters
-public final class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo> {
+public class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

@@ -475,7 +475,7 @@ public class Operation extends SwaggerElement {
 		// Note: name can be null for "body" parameters
 		if (parameters != null)
 			for (var pi : parameters)
-				if (Utils.eq(pi.getIn(), in) && (Utils.eq(pi.getName(), name) || "body".equals(pi.getIn())))
+				if (eq(pi.getIn(), in) && (eq(pi.getName(), name) || "body".equals(pi.getIn())))
 					return pi;
 		return null;
 	}
@@ -522,7 +522,23 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addParameters(ParameterInfo...value) {
-		setParameters(listBuilder(ParameterInfo.class).sparse().add(value).build());
+		parameters = listBuilder(parameters).sparse().add(value).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>parameters</property>.
+	 *
+	 * <p>
+	 * The parameters needed to send a valid API call.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addParameters(Collection<ParameterInfo> values) {
+		parameters = listBuilder(parameters).sparse().addAll(values).build();
 		return this;
 	}
 

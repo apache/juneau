@@ -26,7 +26,7 @@ import org.apache.juneau.common.internal.*;
  * @param <K> The key class type.
  * @param <V> The value class type.
  */
-public final class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K,V>> {
+public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K,V>> {
 
 	final Map<K,V> innerMap;
 	final Set<Map.Entry<K,V>> entries;
@@ -81,7 +81,7 @@ public final class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate
 	/**
 	 * A set with ordered entries (a List with a Set API).
 	 */
-	private static final class ListSet<E> extends AbstractSet<E> {
+	private static class ListSet<E> extends AbstractSet<E> {
 
 		private List<E> entries;
 

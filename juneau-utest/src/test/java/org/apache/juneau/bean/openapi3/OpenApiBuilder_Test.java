@@ -28,10 +28,10 @@ class OpenApiBuilder_Test extends TestBase {
 	/**
 	 * Test method for builder methods and marshalling.
 	 */
-	@Disabled @Test void a01_builderMethodsAndMarshalling() {
+	@Test void a01_builderMethodsAndMarshalling() {
 		// Test contact builder
 		var contact = contact("a1", "a2", "a3");
-		assertJson("{name:'a1',url:'a2',email:'a3'}", contact);
+		assertJson("{email:'a3',name:'a1',url:'a2'}", contact);
 
 		// Test external documentation builder
 		var externalDocs = externalDocumentation("a1", "a2");
@@ -55,7 +55,7 @@ class OpenApiBuilder_Test extends TestBase {
 
 		// Test parameter builder
 		var parameter = parameter("a1", "a2");
-		assertJson("{name:'a2','in':'a1'}", parameter);
+		assertJson("{'in':'a1',name:'a2'}", parameter);
 
 		// Test path item builder
 		var pathItem = pathItem().setGet(operation().setSummary("a1"));
@@ -83,7 +83,7 @@ class OpenApiBuilder_Test extends TestBase {
 
 		// Test openApi builder
 		var openApi = openApi().setInfo(info("a1", "a2"));
-		assertJson("{openapi:'3.0.0',info:{title:'a1',version:'a2'}}", openApi);
+		assertJson("{info:{title:'a1',version:'a2'},openapi:'3.0.0'}", openApi);
 
 		// Test components builder
 		var components = components().setSchemas(map("a1", schemaInfo("a2")));
@@ -93,7 +93,7 @@ class OpenApiBuilder_Test extends TestBase {
 	/**
 	 * Test default values.
 	 */
-	@Test @Disabled void a02_defaultValues() {
+	@Test void a02_defaultValues() {
 		assertJson("{}", contact());
 		assertJson("{}", externalDocumentation());
 		assertJson("{}", headerInfo());

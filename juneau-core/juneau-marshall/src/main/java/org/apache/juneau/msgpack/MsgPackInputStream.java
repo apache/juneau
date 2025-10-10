@@ -32,7 +32,7 @@ import org.apache.juneau.parser.*;
 
  * </ul>
  */
-public final class MsgPackInputStream extends ParserInputStream {
+public class MsgPackInputStream extends ParserInputStream {
 
 	private DataType currentDataType;
 	private long length;

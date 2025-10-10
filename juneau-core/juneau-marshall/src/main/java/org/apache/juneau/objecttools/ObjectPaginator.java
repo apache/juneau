@@ -46,7 +46,7 @@ import org.apache.juneau.*;
 
  * </ul>
  */
-public final class ObjectPaginator implements ObjectTool<PageArgs> {
+public class ObjectPaginator implements ObjectTool<PageArgs> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

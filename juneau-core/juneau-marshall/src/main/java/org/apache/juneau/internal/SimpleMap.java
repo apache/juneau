@@ -36,7 +36,7 @@ import org.apache.juneau.common.internal.*;
  * @param <K> The key type.
  * @param <V> The value type.
  */
-public final class SimpleMap<K,V> extends AbstractMap<K,V> {
+public class SimpleMap<K,V> extends AbstractMap<K,V> {
 
 	final K[] keys;
 	final V[] values;
@@ -93,7 +93,7 @@ public final class SimpleMap<K,V> extends AbstractMap<K,V> {
 		throw new IllegalArgumentException("No key '"+key+"' defined in map");
 	}
 
-	final class SimpleMapEntry implements Map.Entry<K,V> {
+	class SimpleMapEntry implements Map.Entry<K,V> {
 
 		private int index;
 

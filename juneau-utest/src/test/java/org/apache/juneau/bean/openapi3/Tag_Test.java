@@ -74,6 +74,32 @@ class Tag_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
 			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
 		}
+
+		@Test void a09_asMap() {
+			assertBean(
+				bean()
+					.setName("a")
+					.set("x1", "x1a")
+					.asMap(),
+				"name,x1",
+				"a,x1a"
+			);
+		}
+
+		@Test void a10_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void a11_strictMode() {
+			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			assertDoesNotThrow(() -> bean().set("foo", "bar"));
+
+			assertFalse(bean().isStrict());
+			assertTrue(bean().strict().isStrict());
+			assertFalse(bean().strict(false).isStrict());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {
@@ -179,48 +205,6 @@ class Tag_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
 			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
 			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
-		}
-	}
-
-	@Nested class D_additionalMethods extends TestBase {
-
-		@Test void d01_asMap() {
-			assertBean(
-				bean()
-					.setName("a")
-					.set("x1", "x1a")
-					.asMap(),
-				"name,x1",
-				"a,x1a"
-			);
-		}
-
-		@Test void d02_extraKeys() {
-			var x = bean().set("x1", "x1a").set("x2", "x2a");
-			assertList(x.extraKeys(), "x1", "x2");
-			assertEmpty(bean().extraKeys());
-		}
-	}
-
-	@Nested class E_strictMode extends TestBase {
-
-		@Test void e01_strictModeSetThrowsException() {
-			var x = bean().strict();
-			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
-		}
-
-		@Test void e02_nonStrictModeAllowsSet() {
-			var x = bean(); // not strict
-			assertDoesNotThrow(() -> x.set("foo", "bar"));
-		}
-
-		@Test void e03_strictModeToggle() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-			x.strict(false);
-			assertFalse(x.isStrict());
 		}
 	}
 

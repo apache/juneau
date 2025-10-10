@@ -25,7 +25,7 @@ import org.apache.juneau.TestBase;
  */
 class SwaggerBuilder_Test extends TestBase {
 
-	@Test @Disabled void a01_contact() {
+	@Test void a01_contact() {
 		var t = contact();
 		assertJson("{}", t);
 
@@ -33,7 +33,7 @@ class SwaggerBuilder_Test extends TestBase {
 		assertJson("{name:'foo'}", t);
 
 		t = contact("foo", "bar", "baz");
-		assertJson("{name:'foo',url:'bar',email:'baz'}", t);
+		assertJson("{email:'baz',name:'foo',url:'bar'}", t);
 	}
 
 	@Test void a02_externalDocumentation() {
@@ -128,12 +128,12 @@ class SwaggerBuilder_Test extends TestBase {
 		assertJson("{type:'foo'}", t);
 	}
 
-	@Test @Disabled void a12_swagger() {
+	@Test void a12_swagger() {
 		var t = swagger();
 		assertJson("{swagger:'2.0'}", t);
 
 		t = swagger(info());
-		assertJson("{swagger:'2.0',info:{}}", t);
+		assertJson("{info:{},swagger:'2.0'}", t);
 	}
 
 	@Test void a13_tag() {
@@ -147,5 +147,38 @@ class SwaggerBuilder_Test extends TestBase {
 	@Test void a14_xml() {
 		var t = xml();
 		assertJson("{}", t);
+	}
+
+	@Test void a15_license() {
+		var t = license();
+		assertJson("{}", t);
+
+		t = license("MIT");
+		assertJson("{name:'MIT'}", t);
+
+		t = license("MIT", java.net.URI.create("https://opensource.org/licenses/MIT"));
+		assertJson("{name:'MIT',url:'https://opensource.org/licenses/MIT'}", t);
+	}
+
+	@Test void a16_operation() {
+		var t = operation();
+		assertJson("{}", t);
+	}
+
+	@Test void a17_operationMap() {
+		var t = operationMap();
+		assertJson("{}", t);
+	}
+
+	@Test void a18_itemsStrict() {
+		var t = itemsStrict("string");
+		assertJson("{type:'string'}", t);
+		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']", ()->itemsStrict("foo"));
+	}
+
+	@Test void a19_securitySchemeStrict() {
+		var t = securitySchemeStrict("basic");
+		assertJson("{type:'basic'}", t);
+		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['basic','apiKey','oauth2']", ()->securitySchemeStrict("foo"));
 	}
 }

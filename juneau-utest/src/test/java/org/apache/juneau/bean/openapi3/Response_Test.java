@@ -97,8 +97,102 @@ class Response_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->x.getHeader(null));
 			assertThrows(IllegalArgumentException.class, ()->x.getContent(null));
 			assertThrows(IllegalArgumentException.class, ()->x.getLink(null));
-			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
-			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
+			assertThrows(IllegalArgumentException.class, ()->x.get(null, String.class));
+			assertThrows(IllegalArgumentException.class, ()->x.set(null, "value"));
+			assertThrows(IllegalArgumentException.class, ()->x.addHeader(null, headerInfo()));
+			assertThrows(IllegalArgumentException.class, ()->x.addHeader("a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addContent(null, mediaType()));
+			assertThrows(IllegalArgumentException.class, ()->x.addContent("a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addLink(null, link()));
+			assertThrows(IllegalArgumentException.class, ()->x.addLink("a", null));
+		}
+
+		@Test void a10_addMethods() {
+			assertBean(
+				bean()
+					.addHeader("a1", headerInfo(schemaInfo("a2")))
+					.addContent("b1", mediaType().setSchema(schemaInfo("b2")))
+					.addLink("c1", link().setOperationId("c2")),
+				"headers{a1{schema{type}}},content{b1{schema{type}}},links{c1{operationId}}",
+				"{{{a2}}},{{{b2}}},{{c2}}"
+			);
+		}
+
+		@Test void a11_asMap() {
+			assertBean(
+				bean()
+					.setDescription("a")
+					.set("x1", "x1a")
+					.asMap(),
+				"description,x1",
+				"a,x1a"
+			);
+		}
+
+		@Test void a12_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void a13_strictMode() {
+			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			assertDoesNotThrow(() -> bean().set("foo", "bar"));
+
+			assertFalse(bean().isStrict());
+			assertTrue(bean().strict().isStrict());
+			assertFalse(bean().strict(false).isStrict());
+		}
+		
+		@Test void a14_getHeader() {
+			// Test getHeader with null headers map (covers the null check branch)
+			var y = bean();
+			assertNull(y.getHeader("nonexistent"));
+
+			// Test with headers set
+			var x = bean()
+				.setHeaders(map("header1", headerInfo().setDescription("Test header")));
+
+			assertNotNull(x.getHeader("header1"));
+			assertEquals("Test header", x.getHeader("header1").getDescription());
+			assertNull(x.getHeader("nonexistent"));
+
+			// Test null name parameter
+			assertThrows(IllegalArgumentException.class, () -> x.getHeader(null));
+		}
+
+		@Test void a15_getContent() {
+			// Test getContent with null content map (covers the null check branch)
+			var y = bean();
+			assertNull(y.getContent("application/json"));
+
+			// Test with content set
+			var x = bean()
+				.setContent(map("application/json", mediaType().setSchema(schemaInfo().setType("object"))));
+
+			assertNotNull(x.getContent("application/json"));
+			assertEquals("object", x.getContent("application/json").getSchema().getType());
+			assertNull(x.getContent("application/xml"));
+
+			// Test null mediaType parameter
+			assertThrows(IllegalArgumentException.class, () -> x.getContent(null));
+		}
+
+		@Test void a16_getLink() {
+			// Test getLink with null links map (covers the null check branch)
+			var y = bean();
+			assertNull(y.getLink("nonexistent"));
+
+			// Test with links set
+			var x = bean()
+				.setLinks(map("link1", link().setOperationId("getUser")));
+
+			assertNotNull(x.getLink("link1"));
+			assertEquals("getUser", x.getLink("link1").getOperationId());
+			assertNull(x.getLink("nonexistent"));
+
+			// Test null name parameter
+			assertThrows(IllegalArgumentException.class, () -> x.getLink(null));
 		}
 	}
 
@@ -206,69 +300,6 @@ class Response_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
 			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
 			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
-		}
-	}
-
-	@Nested class D_additionalMethods extends TestBase {
-
-		@Test void d01_addMethods() {
-			assertBean(
-				bean()
-					.addHeader("a1", headerInfo(schemaInfo("a2")))
-					.addContent("b1", mediaType().setSchema(schemaInfo("b2")))
-					.addLink("c1", link().setOperationId("c2")),
-				"headers{a1{schema{type}}},content{b1{schema{type}}},links{c1{operationId}}",
-				"{{{a2}}},{{{b2}}},{{c2}}"
-			);
-		}
-
-		@Test void d02_asMap() {
-			assertBean(
-				bean()
-					.setDescription("a")
-					.set("x1", "x1a")
-					.asMap(),
-				"description,x1",
-				"a,x1a"
-			);
-		}
-
-		@Test void d03_extraKeys() {
-			var x = bean().set("x1", "x1a").set("x2", "x2a");
-			assertList(x.extraKeys(), "x1", "x2");
-			assertEmpty(bean().extraKeys());
-		}
-
-		@Test void d04_addMethodsWithNullParameters() {
-			var x = bean();
-			assertThrows(IllegalArgumentException.class, ()->x.addHeader(null, headerInfo()));
-			assertThrows(IllegalArgumentException.class, ()->x.addHeader("a", null));
-			assertThrows(IllegalArgumentException.class, ()->x.addContent(null, mediaType()));
-			assertThrows(IllegalArgumentException.class, ()->x.addContent("a", null));
-			assertThrows(IllegalArgumentException.class, ()->x.addLink(null, link()));
-			assertThrows(IllegalArgumentException.class, ()->x.addLink("a", null));
-		}
-	}
-
-	@Nested class E_strictMode extends TestBase {
-
-		@Test void e01_strictModeSetThrowsException() {
-			var x = bean().strict();
-			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
-		}
-
-		@Test void e02_nonStrictModeAllowsSet() {
-			var x = bean(); // not strict
-			assertDoesNotThrow(() -> x.set("foo", "bar"));
-		}
-
-		@Test void e03_strictModeToggle() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-			x.strict(false);
-			assertFalse(x.isStrict());
 		}
 	}
 

@@ -24,7 +24,7 @@ import org.apache.juneau.oapi.annotation.*;
 
  * </ul>
  */
-public final class OpenApiBeanPropertyMeta extends ExtendedBeanPropertyMeta {
+public class OpenApiBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.

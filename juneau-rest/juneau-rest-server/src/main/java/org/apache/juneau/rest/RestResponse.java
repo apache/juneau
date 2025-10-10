@@ -106,7 +106,7 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-public final class RestResponse extends HttpServletResponseWrapper {
+public class RestResponse extends HttpServletResponseWrapper {
 
 	private HttpServletResponse inner;
 	private final RestRequest request;

@@ -38,7 +38,7 @@ import org.apache.juneau.swap.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class BeanFilter {
+public class BeanFilter {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

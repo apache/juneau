@@ -19,7 +19,7 @@ import org.apache.juneau.common.utils.*;
 /**
  * A simple settable boolean value.
  */
-public final class Flag {
+public class Flag {
 
 	private boolean value;
 

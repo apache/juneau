@@ -146,7 +146,7 @@ public class BeanMeta<T> {
 			Arrays.sort(propertyArray);
 	}
 
-	private static final class Builder<T> {
+	private static class Builder<T> {
 		ClassMeta<T> classMeta;
 		BeanContext ctx;
 		BeanFilter beanFilter;
@@ -583,7 +583,7 @@ public class BeanMeta<T> {
 	/*
 	 * Temporary getter/setter method struct.
 	 */
-	private static final class BeanMethod {
+	private static class BeanMethod {
 		String propertyName;
 		MethodType methodType;
 		Method method;

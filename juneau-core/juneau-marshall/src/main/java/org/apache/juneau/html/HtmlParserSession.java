@@ -48,7 +48,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public final class HtmlParserSession extends XmlParserSession {
+public class HtmlParserSession extends XmlParserSession {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static

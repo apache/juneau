@@ -18,7 +18,7 @@ import java.nio.charset.*;
 /**
  * Utility class for creating {@link FileReader} objects.
  */
-public final class FileReaderBuilder {
+public class FileReaderBuilder {
 
 	private File file;
 	private Charset cs = Charset.defaultCharset();

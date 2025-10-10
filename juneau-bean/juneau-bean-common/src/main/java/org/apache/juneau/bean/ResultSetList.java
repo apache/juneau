@@ -29,7 +29,7 @@ import org.apache.juneau.internal.*;
  *
  * @serial exclude
  */
-public final class ResultSetList extends LinkedList<Map<String,Object>> {
+public class ResultSetList extends LinkedList<Map<String,Object>> {
 
 	private static final long serialVersionUID = 1L;
 

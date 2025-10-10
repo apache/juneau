@@ -53,7 +53,7 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
-public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
+public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

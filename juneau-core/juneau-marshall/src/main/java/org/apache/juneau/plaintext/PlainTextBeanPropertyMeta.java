@@ -22,7 +22,7 @@ import org.apache.juneau.plaintext.annotation.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class PlainTextBeanPropertyMeta extends ExtendedBeanPropertyMeta {
+public class PlainTextBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.

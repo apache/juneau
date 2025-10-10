@@ -25,7 +25,7 @@ import java.util.regex.*;
  * Provides the capability of returning splices of log files based on dates and filtering based on thread and logger
  * names.
  */
-public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.Entry>, Closeable {
+public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.Entry>, Closeable {
 	private BufferedReader br;
 	LogEntryFormatter formatter;
 	Date start, end;
@@ -130,7 +130,7 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 	 * Represents a single line from the log file.
 	 */
 	@SuppressWarnings("javadoc")
-	public final class Entry {
+	public class Entry {
 		public Date date;
 		public String severity, logger;
 		protected String line, text;

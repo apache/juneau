@@ -71,32 +71,117 @@ class SchemaInfo_Test extends TestBase {
 			.string("{'$ref':'l','additionalProperties':{'type':'a'},'allOf':[{'type':'b'}],'default':'c','description':'d','discriminator':'e','enum':['f'],'example':'g','exclusiveMaximum':true,'exclusiveMinimum':true,'externalDocs':{'url':'h'},'format':'i','items':{'type':'j'},'maxItems':2,'maxLength':3,'maxProperties':4,'maximum':1,'minItems':6,'minLength':7,'minProperties':8,'minimum':5,'multipleOf':9,'pattern':'k','properties':{'x1':{'type':'x2'}},'readOnly':true,'required':true,'requiredProperties':['m'],'title':'n','type':'o','uniqueItems':true,'xml':{'name':'p'}}".replace('\'', '"'))
 		;
 
-		@Test void b01_gettersAndSetters() {
+		@Test void a01_gettersAndSetters() {
 			TESTER.assertGettersAndSetters();
 		}
 
-		@Test void b02_copy() {
+		@Test void a02_copy() {
 			TESTER.assertCopy();
 		}
 
-		@Test void b03_toJson() {
+		@Test void a03_toJson() {
 			TESTER.assertToJson();
 		}
 
-		@Test void b04_fromJson() {
+		@Test void a04_fromJson() {
 			TESTER.assertFromJson();
 		}
 
-		@Test void b05_roundTrip() {
+		@Test void a05_roundTrip() {
 			TESTER.assertRoundTrip();
 		}
 
-		@Test void b06_toString() {
+		@Test void a06_toString() {
 			TESTER.assertToString();
 		}
 
-		@Test void b07_keySet() {
+		@Test void a07_keySet() {
 			assertList(TESTER.bean().keySet(), "$ref", "additionalProperties", "allOf", "default", "description", "discriminator", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "externalDocs", "format", "items", "maxItems", "maxLength", "maxProperties", "maximum", "minItems", "minLength", "minProperties", "minimum", "multipleOf", "pattern", "properties", "readOnly", "required", "requiredProperties", "title", "type", "uniqueItems", "xml");
+		}
+
+		@Test void a08_addMethods() {
+			var x = bean()
+				.addEnum("a1")
+				.setAllOf(schemaInfo().setTitle("a1"))
+				.addAllOf(schemaInfo().setTitle("a2"))
+			;
+
+			assertNotNull(x);
+			assertNotNull(x.getEnum());
+			assertNotNull(x.getAllOf());
+		}
+
+		@Test void a09_asMap() {
+			assertBean(
+				bean()
+					.setDescription("a")
+					.setTitle("b")
+					.setType("c")
+					.set("x1", "x1a")
+					.asMap(),
+				"description,title,type,x1",
+				"a,b,c,x1a"
+			);
+		}
+
+		@Test void a10_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void a11_strictMode() {
+			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			assertDoesNotThrow(() -> bean().set("foo", "bar"));
+
+			assertFalse(bean().isStrict());
+			assertTrue(bean().strict().isStrict());
+			assertFalse(bean().strict(false).isStrict());
+		}
+
+		@Test void a12_collectionSetters() {
+			var x = bean()
+				.setAllOf(list(schemaInfo().setType("a"), schemaInfo().setType("b")))
+				.setEnum(list("c", "d"))
+				.setRequiredProperties(list("e", "f"));
+
+			assertBean(x,
+				"allOf{#{type}},enum,requiredProperties",
+				"{[{a},{b}]},[c,d],[e,f]"
+			);
+		}
+
+		@Test void a13_varargAdders() {
+			var x = bean()
+				.addAllOf(schemaInfo().setType("a1"))
+				.addAllOf(schemaInfo().setType("a2"))
+				.addEnum("b1")
+				.addEnum("b2")
+				.addRequiredProperties("c1")
+				.addRequiredProperties("c2");
+
+			assertBean(x,
+				"allOf{#{type}},enum,requiredProperties",
+				"{[{a1},{a2}]},[b1,b2],[c1,c2]"
+			);
+		}
+
+		@Test void a14_collectionAdders() {
+			// Test that Collection versions of addX methods exist
+			// Due to Java method resolution preferring varargs over Collection,
+			// we test the basic functionality with varargs versions
+			var x = bean()
+				.addAllOf(list(schemaInfo().setType("a1")))
+				.addAllOf(list(schemaInfo().setType("a2")))
+				.addEnum(list("b1"))
+				.addEnum(list("b2"))
+				.addRequiredProperties(list("c1"))
+				.addRequiredProperties(list("c2"));
+
+			assertBean(x,
+				"allOf{#{type}},enum,requiredProperties",
+				"{[{a1},{a2}]},[b1,b2],[c1,c2]"
+			);
 		}
 	}
 
@@ -241,127 +326,76 @@ class SchemaInfo_Test extends TestBase {
 		}
 	}
 
-	@Nested class D_additionalMethods extends TestBase {
+	@Nested class D_refs extends TestBase {
 
-		@Test void d01_addMethods() {
-			var x = bean()
-				.addEnum("a1")
-				.setAllOf(schemaInfo().setTitle("a1"))
-				.addAllOf(schemaInfo().setTitle("a2"))
-			;
+		@Test void d01_resolveRefs_basic() {
+			var swagger = swagger()
+				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"))
+				.addDefinition("Pets", JsonMap.of("type", "array", "items", JsonMap.of("$ref", "#/definitions/Pet")));
 
-			assertNotNull(x);
-			assertNotNull(x.getEnum());
-			assertNotNull(x.getAllOf());
-		}
-
-		@Test void d02_asMap() {
 			assertBean(
-				bean()
-					.setDescription("a")
-					.setTitle("b")
-					.setType("c")
-					.set("x1", "x1a")
-					.asMap(),
-				"description,title,type,x1",
-				"a,b,c,x1a"
+				schemaInfo().setRef("#/definitions/Pet").resolveRefs(swagger, new ArrayDeque<>(), 10),
+				"type,title",
+				"object,Pet"
 			);
 		}
 
-		@Test void d03_extraKeys() {
-			var x = bean().set("x1", "x1a").set("x2", "x2a");
-			assertList(x.extraKeys(), "x1", "x2");
-			assertEmpty(bean().extraKeys());
-		}
-
-		@Test void d04_strict() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-		}
-	}
-
-	@Nested class E_strictMode extends TestBase {
-
-		@Test void e01_strictModeSetThrowsException() {
-			var x = bean().strict();
-			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
-		}
-
-		@Test void e02_nonStrictModeAllowsSet() {
-			var x = bean(); // not strict
-			assertDoesNotThrow(() -> x.set("foo", "bar"));
-		}
-
-		@Test void e03_strictModeToggle() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-			x.strict(false);
-			assertFalse(x.isStrict());
-		}
-	}
-
-	@Nested class F_refs extends TestBase {
-
-		@Test void f01_resolveRefs_basic() {
+		@Test void d02_resolveRefs_nested() {
 			var swagger = swagger()
 				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"))
 				.addDefinition("Pets", JsonMap.of("type", "array", "items", JsonMap.of("$ref", "#/definitions/Pet")));
 
-			var x = schemaInfo().setRef("#/definitions/Pet");
-			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
-			assertBean(y, "type,title", "object,Pet");
+			assertBean(
+				schemaInfo().setRef("#/definitions/Pets").resolveRefs(swagger, new ArrayDeque<>(), 10),
+				"type,items{type,title}",
+				"array,{object,Pet}"
+			);
 		}
 
-		@Test void f02_resolveRefs_nested() {
+		@Test void d03_resolveRefs_maxDepth() {
 			var swagger = swagger()
 				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"))
 				.addDefinition("Pets", JsonMap.of("type", "array", "items", JsonMap.of("$ref", "#/definitions/Pet")));
 
-			var x = schemaInfo().setRef("#/definitions/Pets");
-			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
-			assertBean(y, "type,items{type,title}", "array,{object,Pet}");
+			assertBean(
+				schemaInfo().setRef("#/definitions/Pets").resolveRefs(swagger, new ArrayDeque<>(), 1),
+				"type,items{ref}",
+				"array,{#/definitions/Pet}"
+			);
 		}
 
-		@Test void f03_resolveRefs_maxDepth() {
-			var swagger = swagger()
-				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"))
-				.addDefinition("Pets", JsonMap.of("type", "array", "items", JsonMap.of("$ref", "#/definitions/Pet")));
-
-			var x = schemaInfo().setRef("#/definitions/Pets");
-			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 1);
-			assertBean(y, "type,items{ref}", "array,{#/definitions/Pet}");
-		}
-
-		@Test void f04_resolveRefs_circular() {
+		@Test void d04_resolveRefs_circular() {
 			var swagger = swagger()
 				.addDefinition("A", JsonMap.of("type", "object", "title", "A", "properties", JsonMap.of("b", JsonMap.of("$ref", "#/definitions/B"))))
 				.addDefinition("B", JsonMap.of("type", "object", "title", "B", "properties", JsonMap.of("a", JsonMap.of("$ref", "#/definitions/A"))));
 
-			var x = schemaInfo().setRef("#/definitions/A");
-			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
-			assertBean(y, "type,title,properties{b{type,title,properties{a{ref}}}}", "object,A,{{object,B,{{#/definitions/A}}}}");
+			assertBean(
+				schemaInfo().setRef("#/definitions/A").resolveRefs(swagger, new ArrayDeque<>(), 10),
+				"type,title,properties{b{type,title,properties{a{ref}}}}",
+				"object,A,{{object,B,{{#/definitions/A}}}}"
+			);
 		}
 
-		@Test void f05_resolveRefs_properties() {
+		@Test void d05_resolveRefs_properties() {
 			var swagger = swagger()
 				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"));
 
-			var x = schemaInfo().setType("object").addProperty("pet", schemaInfo().setRef("#/definitions/Pet"));
-			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
-			assertBean(y, "type,properties{pet{type,title}}", "object,{{object,Pet}}");
+			assertBean(
+				schemaInfo().setType("object").addProperty("pet", schemaInfo().setRef("#/definitions/Pet")).resolveRefs(swagger, new ArrayDeque<>(), 10),
+				"type,properties{pet{type,title}}",
+				"object,{{object,Pet}}"
+			);
 		}
 
-		@Test void f06_resolveRefs_additionalProperties() {
+		@Test void d06_resolveRefs_additionalProperties() {
 			var swagger = swagger()
 				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"));
 
-			var x = schemaInfo().setType("object").setAdditionalProperties(schemaInfo().setRef("#/definitions/Pet"));
-			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
-			assertBean(y, "type,additionalProperties{type,title}", "object,{object,Pet}");
+			assertBean(
+				schemaInfo().setType("object").setAdditionalProperties(schemaInfo().setRef("#/definitions/Pet")).resolveRefs(swagger, new ArrayDeque<>(), 10),
+				"type,additionalProperties{type,title}",
+				"object,{object,Pet}"
+			);
 		}
 	}
 

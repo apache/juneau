@@ -30,7 +30,7 @@ import org.apache.juneau.common.internal.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class ParamInfo {
+public class ParamInfo {
 
 	private final ExecutableInfo eInfo;
 	private final Parameter p;

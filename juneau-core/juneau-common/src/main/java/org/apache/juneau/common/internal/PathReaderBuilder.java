@@ -23,7 +23,7 @@ import java.nio.file.*;
  *
  * @since 9.1.0
  */
-public final class PathReaderBuilder {
+public class PathReaderBuilder {
 
 	/**
 	 * Creates a new builder.

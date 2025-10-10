@@ -30,7 +30,7 @@ import java.util.function.*;
  *
  * @param <E> The array element type.
  */
-public final class ArrayBuilder<E> {
+public class ArrayBuilder<E> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

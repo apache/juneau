@@ -23,7 +23,7 @@ import org.apache.juneau.common.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics">UON Basics</a>
  * </ul>
  */
-public final class UonUtils {
+public class UonUtils {
 
 	private static final AsciiSet needsQuoteChars = AsciiSet.of("),=\n\t\r\b\f ");
 	private static final AsciiSet maybeNeedsQuotesFirstChar = AsciiSet.of("),=\n\t\r\b\f tfn+-.#0123456789");

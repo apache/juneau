@@ -23,7 +23,7 @@ import org.apache.juneau.httppart.bean.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
-public final class RemoteOperationBeanArg {
+public class RemoteOperationBeanArg {
 
 	private final int index;
 	private final RequestBeanMeta meta;

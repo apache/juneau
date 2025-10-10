@@ -50,7 +50,7 @@ import org.apache.juneau.swaps.*;
  * </ul>
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
+public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	final BeanMeta<?> beanMeta;                               // The bean that this property belongs to.
 	private final BeanContext beanContext;                    // The context that created this meta.
@@ -90,7 +90,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	/**
 	 * BeanPropertyMeta builder class.
 	 */
-	public static final class Builder {
+	public static class Builder {
 		BeanMeta<?> beanMeta;
 		BeanContext beanContext;
 		String name;

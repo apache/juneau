@@ -15,7 +15,7 @@ package org.apache.juneau.common.internal;
 /**
  * Stores a Map of ASCII characters to Strings in a quick-lookup array.
  */
-public final class AsciiMap {
+public class AsciiMap {
 	final String[] store = new String[128];
 
 	/**

@@ -24,7 +24,7 @@ import org.apache.juneau.reflect.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class ClassUtils {
+public class ClassUtils {
 
 	/**
 	 * Predicate check to filter out void classes.

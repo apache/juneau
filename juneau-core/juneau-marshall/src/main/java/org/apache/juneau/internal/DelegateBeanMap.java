@@ -143,7 +143,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		return this;
 	}
 
-	final class BeanMapEntryOverride extends BeanMapEntry {
+	class BeanMapEntryOverride extends BeanMapEntry {
 		Object value;
 
 		BeanMapEntryOverride(BeanMap<?> bm, BeanPropertyMeta bpm, Object value) {

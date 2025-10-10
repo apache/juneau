@@ -29,7 +29,7 @@ import org.apache.juneau.reflect.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
-public final class RemoteOperationArg {
+public class RemoteOperationArg {
 
 	private final int index;
 	private final HttpPartType partType;

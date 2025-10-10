@@ -52,7 +52,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		return new MediaType[] {MediaType.HTML};
 	}
 
-	private static final class Session {
+	private static class Session {
 		final int resolveRefsMaxDepth;
 		final Swagger swagger;
 

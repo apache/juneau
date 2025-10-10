@@ -99,6 +99,53 @@ class SchemaInfo_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
 			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
 		}
+
+		@Test void a09_addMethods() {
+			assertBean(
+				bean()
+					.addEnum("a1", "a2")
+					.addRequired("b1", "b2"),
+				"enum,required",
+				"[a1,a2],[b1,b2]"
+			);
+		}
+
+		@Test void a10_asMap() {
+			assertBean(
+				bean()
+					.setType("a")
+					.set("x1", "x1a")
+					.asMap(),
+				"type,x1",
+				"a,x1a"
+			);
+		}
+
+		@Test void a11_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void a12_strictMode() {
+			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			assertDoesNotThrow(() -> bean().set("foo", "bar"));
+
+			assertFalse(bean().isStrict());
+			assertTrue(bean().strict().isStrict());
+			assertFalse(bean().strict(false).isStrict());
+		}
+		
+		@Test void a13_collectionSetters() {
+			var x = bean()
+				.setEnum(list("a1", "a2"))
+				.setRequired(list("b1", "b2"));
+
+			assertBean(x,
+				"enum,required",
+				"[a1,a2],[b1,b2]"
+			);
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {
@@ -239,105 +286,78 @@ class SchemaInfo_Test extends TestBase {
 		}
 	}
 
-	@Nested class D_additionalMethods extends TestBase {
+	@Nested class D_refs extends TestBase {
 
-		@Test void d01_addMethods() {
-			assertBean(
-				bean()
-					.addEnum("a1", "a2")
-					.addRequired("b1", "b2"),
-				"enum,required",
-				"[a1,a2],[b1,b2]"
-			);
-		}
-
-		@Test void d02_asMap() {
-			assertBean(
-				bean()
-					.setType("a")
-					.set("x1", "x1a")
-					.asMap(),
-				"type,x1",
-				"a,x1a"
-			);
-		}
-
-		@Test void d03_extraKeys() {
-			var x = bean().set("x1", "x1a").set("x2", "x2a");
-			assertList(x.extraKeys(), "x1", "x2");
-			assertEmpty(bean().extraKeys());
-		}
-	}
-
-	@Nested class E_strictMode extends TestBase {
-
-		@Test void e01_strictModeSetThrowsException() {
-			var x = bean().strict();
-			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
-		}
-
-		@Test void e02_nonStrictModeAllowsSet() {
-			var x = bean(); // not strict
-			assertDoesNotThrow(() -> x.set("foo", "bar"));
-		}
-
-		@Test void e03_strictModeToggle() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-			x.strict(false);
-			assertFalse(x.isStrict());
-		}
-	}
-
-	@Nested class F_refs extends TestBase {
-
-		@Test void f01_resolveRefs_basic() {
+		@Test void d01_resolveRefs_basic() {
 			var openApi = openApi()
 				.setComponents(components().setSchemas(Map.of(
 					"Pet", schemaInfo().setType("object").setTitle("Pet")
 				)));
 
-			var x = schemaInfo().setRef("#/components/schemas/Pet");
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
-			assertBean(y, "type,title", "object,Pet");
+			assertBean(
+				schemaInfo().setRef("#/components/schemas/Pet").resolveRefs(openApi, new ArrayDeque<>(), 10),
+				"type,title",
+				"object,Pet"
+			);
 		}
 
-		@Test void f02_resolveRefs_nested() {
+		@Test void d02_resolveRefs_nested() {
 			var openApi = openApi()
 				.setComponents(components().setSchemas(Map.of(
 					"Pet", schemaInfo().setType("object").setTitle("Pet"),
 					"Pets", schemaInfo().setType("array").setItems(items().setRef("#/components/schemas/Pet"))
 				)));
 
-			var x = schemaInfo().setRef("#/components/schemas/Pets");
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
-			assertBean(y, "type,items{type,title}", "array,{object,Pet}");
+			assertBean(
+				schemaInfo().setRef("#/components/schemas/Pets").resolveRefs(openApi, new ArrayDeque<>(), 10),
+				"type,items{type,title}",
+				"array,{object,Pet}"
+			);
 		}
 
-		@Test void f03_resolveRefs_maxDepth() {
+		@Test void d03_resolveRefs_maxDepth() {
 			var openApi = openApi()
 				.setComponents(components().setSchemas(Map.of(
 					"Pet", schemaInfo().setType("object").setTitle("Pet"),
 					"Pets", schemaInfo().setType("array").setItems(items().setRef("#/components/schemas/Pet"))
 				)));
 
-			var x = schemaInfo().setRef("#/components/schemas/Pets");
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 1);
-			assertBean(y, "type,items{ref}", "array,{#/components/schemas/Pet}");
+			assertBean(
+				schemaInfo().setRef("#/components/schemas/Pets").resolveRefs(openApi, new ArrayDeque<>(), 1),
+				"type,items{ref}",
+				"array,{#/components/schemas/Pet}"
+			);
 		}
 
-		@Test void f04_resolveRefs_circular() {
+		@Test void d04_resolveRefs_circular() {
 			var openApi = openApi()
 				.setComponents(components().setSchemas(Map.of(
 					"A", schemaInfo().setType("object").setTitle("A").setProperties(Map.of("b", schemaInfo().setRef("#/components/schemas/B"))),
 					"B", schemaInfo().setType("object").setTitle("B").setProperties(Map.of("a", schemaInfo().setRef("#/components/schemas/A")))
 				)));
 
-			var x = schemaInfo().setRef("#/components/schemas/A");
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
-			assertBean(y, "type,title,properties{b{type,title,properties{a{ref}}}}", "object,A,{{object,B,{{#/components/schemas/A}}}}");
+			assertBean(
+				schemaInfo().setRef("#/components/schemas/A").resolveRefs(openApi, new ArrayDeque<>(), 10),
+				"type,title,properties{b{type,title,properties{a{ref}}}}",
+				"object,A,{{object,B,{{#/components/schemas/A}}}}"
+			);
+		}
+
+		@Test void d05_resolveRefs() {
+			// Test resolveRefs when both ref and allOf are null (covers the missing branch)
+			var openApi = openApi()
+				.setComponents(components().setSchemas(map("MySchema", schemaInfo().setType("object").setTitle("My Schema"))));
+
+			var schema = bean()
+				.setType("string")
+				.setDescription("Test schema");
+
+			var result = schema.resolveRefs(openApi, new ArrayDeque<>(), 10);
+
+			// Should return the same object unchanged
+			assertSame(schema, result);
+			assertEquals("string", result.getType());
+			assertEquals("Test schema", result.getDescription());
 		}
 	}
 

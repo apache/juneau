@@ -32,7 +32,7 @@ import org.apache.juneau.annotation.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class MarshalledFilter {
+public class MarshalledFilter {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

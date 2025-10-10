@@ -29,11 +29,11 @@ import org.apache.juneau.http.header.*;
  *
  * @serial exclude
  */
-public final class RestCallException extends HttpException {
+public class RestCallException extends HttpException {
 
 	private static final long serialVersionUID = 1L;
 
-	private final RestResponse response;
+	private final int statusCode;
 	private final Thrown thrown;
 
 	/**
@@ -45,9 +45,26 @@ public final class RestCallException extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public RestCallException(RestResponse response, Throwable cause, String message, Object...args) {
+		this(
+			(response == null ? 0 : response.getStatusCode()),
+			(response == null ? Thrown.EMPTY : response.getHeader("Thrown").as(Thrown.class).orElse(null)),
+			cause, message, args
+		);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param statusCode The HTTP response status code.  Use <c>0</c> if no connection could be made.
+	 * @param thrown The value of the <js>"Thrown"</js> header on the response.  Can be <jk>null</jk>.
+	 * @param cause The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public RestCallException(int statusCode, Thrown thrown, Throwable cause, String message, Object...args) {
 		super(format(message,args),cause);
-		this.response = response;
-		this.thrown = response == null ? Thrown.EMPTY : response.getHeader("Thrown").asHeader(Thrown.class);
+		this.statusCode = statusCode;
+		this.thrown = thrown;
 	}
 
 	/**
@@ -60,23 +77,12 @@ public final class RestCallException extends HttpException {
 	}
 
 	/**
-	 * Returns the HTTP response object that caused this exception.
-	 *
-	 * @return
-	 * 	The HTTP response object that caused this exception, or <jk>null</jk> if no response was created yet when the
-	 * 	exception was thrown.
-	 */
-	public RestResponse getResponse() {
-		return this.response;
-	}
-
-	/**
 	 * Returns the HTTP response status code.
 	 *
 	 * @return The response status code.  If a connection could not be made at all, returns <c>0</c>.
 	 */
 	public int getResponseCode() {
-		return response == null ? 0 : response.getStatusCode();
+		return statusCode;
 	}
 
 	/**

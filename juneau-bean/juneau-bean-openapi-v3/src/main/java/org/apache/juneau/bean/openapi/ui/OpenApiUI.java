@@ -52,7 +52,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		return new org.apache.juneau.MediaType[] {org.apache.juneau.MediaType.HTML};
 	}
 
-	private static final class Session {
+	private static class Session {
 		final int resolveRefsMaxDepth;
 		final OpenApi openApi;
 
@@ -194,7 +194,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	private void addOperationIfTagMatches(Div tagBlockContents, Session s, String path, String method, Operation op, Tag t) {
-		if ((t == null && (op.getTags() == null || op.getTags().isEmpty())) || 
+		if ((t == null && (op.getTags() == null || op.getTags().isEmpty())) ||
 			(t != null && op.getTags() != null && op.getTags().contains(t.getName()))) {
 			tagBlockContents.child(opBlock(s, path, method, op));
 		}

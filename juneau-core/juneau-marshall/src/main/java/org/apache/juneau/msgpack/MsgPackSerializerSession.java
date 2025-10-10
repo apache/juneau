@@ -38,7 +38,7 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
-public final class MsgPackSerializerSession extends OutputStreamSerializerSession {
+public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -368,7 +368,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 		 return aType == null;
 	}
 
-	private static final class SimpleMapEntry {
+	private static class SimpleMapEntry {
 		final Object key;
 		final Object value;
 

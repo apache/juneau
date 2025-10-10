@@ -50,7 +50,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauConfigBasics">juneau-config Basics</a>
  * </ul>
  */
-public final class Config extends Context implements ConfigEventListener {
+public class Config extends Context implements ConfigEventListener {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

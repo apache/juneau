@@ -43,51 +43,119 @@ class ResponseInfo_Test extends TestBase {
 			.string("{'description':'a','examples':{'x1':'x2'},'headers':{'x3':{'type':'x4'}},'schema':{'type':'b'}}".replace('\'', '"'))
 		;
 
-		@Test void b01_gettersAndSetters() {
+		@Test void a01_gettersAndSetters() {
 			TESTER.assertGettersAndSetters();
 		}
 
-		@Test void b02_copy() {
+		@Test void a02_copy() {
 			TESTER.assertCopy();
 		}
 
-		@Test void b03_toJson() {
+		@Test void a03_toJson() {
 			TESTER.assertToJson();
 		}
 
-		@Test void b04_fromJson() {
+		@Test void a04_fromJson() {
 			TESTER.assertFromJson();
 		}
 
-		@Test void b05_roundTrip() {
+		@Test void a05_roundTrip() {
 			TESTER.assertRoundTrip();
 		}
 
-		@Test void b06_toString() {
+		@Test void a06_toString() {
 			TESTER.assertToString();
 		}
 
-		@Test void b07_keySet() {
+		@Test void a07_keySet() {
 			assertList(TESTER.bean().keySet(), "description", "examples", "headers", "schema");
 		}
 
-	@Test void a08_otherGettersAndSetters() {
-		// No Collection variants for ResponseInfo setters
+		@Test void a08_otherGettersAndSetters() {
+			// No Collection variants for ResponseInfo setters
 
-		// Test special getter
-		var x = bean().setHeaders(map(
-			"a1", headerInfo().setType("a2"),
-			"a3", headerInfo().setType("a4")
-		));
+			// Test special getter
+			var x = bean().setHeaders(map(
+				"a1", headerInfo().setType("a2"),
+				"a3", headerInfo().setType("a4")
+			));
 
-		assertBean(x.getHeader("a1"), "type", "a2");
-		assertBean(x.getHeader("a3"), "type", "a4");
-	}
+			assertBean(x.getHeader("a1"), "type", "a2");
+			assertBean(x.getHeader("a3"), "type", "a4");
+		}
 
 		@Test void a09_nullParameters() {
 			var x = bean();
 
 			assertThrows(IllegalArgumentException.class, ()->x.getHeader(null));
+			assertThrows(IllegalArgumentException.class, ()->x.addExample(null, "a"));
+			assertThrows(IllegalArgumentException.class, ()->x.addExample("a", null));
+			assertThrows(IllegalArgumentException.class, ()->x.addHeader(null, headerInfo()));
+			assertThrows(IllegalArgumentException.class, ()->x.addHeader("a", null));
+		}
+
+		@Test void a10_addMethods() {
+			var x = bean().addExample("a1", "a2").addHeader("a3", headerInfo().setDescription("a4"));
+			assertNotNull(x);
+			assertNotNull(x.getExamples());
+			assertNotNull(x.getHeaders());
+		}
+
+		@Test void a11_asMap() {
+			assertBean(
+				bean()
+					.setDescription("a")
+					.set("x1", "x1a")
+					.asMap(),
+				"description,x1",
+				"a,x1a"
+			);
+		}
+
+		@Test void a12_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void a13_strictMode() {
+			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			assertDoesNotThrow(() -> bean().set("foo", "bar"));
+
+			assertFalse(bean().isStrict());
+			assertTrue(bean().strict().isStrict());
+			assertFalse(bean().strict(false).isStrict());
+		}
+
+		@Test void a14_copyFrom() {
+			var x = bean().setDescription("a").setSchema(schemaInfo().setTitle("b")).addHeader("c1", headerInfo()).addExample("d1", "d2");
+			var y = bean().copyFrom(x);
+			assertBean(y, "description,schema{title}", "a,{b}");
+
+			y = bean().setDescription("c").copyFrom(x);
+			assertBean(y, "description,schema{title}", "a,{b}");
+
+			y = bean().setDescription("c").copyFrom(null);
+			assertBean(y, "description", "c");
+
+			assertJson("{}", bean().copyFrom(bean()));
+		}
+
+		@Test void a15_getHeader() {
+			// Test with null headers (covers the null check branch)
+			var x = bean();
+			assertNull(x.getHeader("nonexistent"));
+
+			// Test with headers set
+			var y = bean()
+				.setHeaders(map("header1", headerInfo().setType("string")));
+
+			assertNotNull(y.getHeader("header1"));
+			assertEquals("string", y.getHeader("header1").getType());
+			assertNull(y.getHeader("nonexistent"));
+
+			// Test null name parameter
+			assertThrows(IllegalArgumentException.class, () -> y.getHeader(null));
 		}
 	}
 
@@ -205,109 +273,39 @@ class ResponseInfo_Test extends TestBase {
 		}
 	}
 
-	@Nested class D_additionalMethods extends TestBase {
+	@Nested class D_refs extends TestBase {
 
-		@Test void d01_addMethods() {
-			var x = bean().addExample("a1", "a2").addHeader("a3", headerInfo().setDescription("a4"));
-			assertNotNull(x);
-			assertNotNull(x.getExamples());
-			assertNotNull(x.getHeaders());
-		}
+		@Test void d01_resolveRefs_schema() {
+			var swagger = swagger()
+				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"));
 
-		@Test void d02_asMap() {
 			assertBean(
-				bean()
-					.setDescription("a")
-					.set("x1", "x1a")
-					.asMap(),
-				"description,x1",
-				"a,x1a"
+				responseInfo().setDescription("Success").setSchema(schemaInfo().setRef("#/definitions/Pet")).resolveRefs(swagger, new ArrayDeque<>(), 10),
+				"description,schema{type,title}",
+				"Success,{object,Pet}"
 			);
 		}
 
-		@Test void d03_extraKeys() {
-			var x = bean().set("x1", "x1a").set("x2", "x2a");
-			assertList(x.extraKeys(), "x1", "x2");
-			assertEmpty(bean().extraKeys());
-		}
-
-		@Test void d04_strict() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-		}
-
-		@Test void d05_addMethodsWithNullParameters() {
-			var x = bean();
-			assertThrows(IllegalArgumentException.class, ()->x.addExample(null, "a"));
-			assertThrows(IllegalArgumentException.class, ()->x.addExample("a", null));
-			assertThrows(IllegalArgumentException.class, ()->x.addHeader(null, headerInfo()));
-			assertThrows(IllegalArgumentException.class, ()->x.addHeader("a", null));
-		}
-
-		@Test void d05_copyFrom() {
-			var x = bean().setDescription("a").setSchema(schemaInfo().setTitle("b"));
-			var y = bean().copyFrom(x);
-			assertBean(y, "description,schema{title}", "a,{b}");
-			
-			y = bean().setDescription("c").copyFrom(x);
-			assertBean(y, "description,schema{title}", "a,{b}");
-			
-			y = bean().setDescription("c").copyFrom(null);
-			assertBean(y, "description", "c");
-		}
-	}
-
-	@Nested class E_strictMode extends TestBase {
-
-		@Test void e01_strictModeSetThrowsException() {
-			var x = bean().strict();
-			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
-		}
-
-		@Test void e02_nonStrictModeAllowsSet() {
-			var x = bean(); // not strict
-			assertDoesNotThrow(() -> x.set("foo", "bar"));
-		}
-
-		@Test void e03_strictModeToggle() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-			x.strict(false);
-			assertFalse(x.isStrict());
-		}
-	}
-
-	@Nested class F_refs extends TestBase {
-
-		@Test void f01_resolveRefs_schema() {
-			var swagger = swagger()
-				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"));
-
-			var x = responseInfo().setDescription("Success").setSchema(schemaInfo().setRef("#/definitions/Pet"));
-			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
-			assertBean(y, "description,schema{type,title}", "Success,{object,Pet}");
-		}
-
-		@Test void f02_resolveRefs_headers() {
+		@Test void d02_resolveRefs_headers() {
 			var swagger = swagger()
 				.addDefinition("MyHeader", JsonMap.of("type", "string", "description", "My Header"));
 
-			var x = responseInfo().setDescription("Success").addHeader("X-Custom", headerInfo().setRef("#/definitions/MyHeader"));
-			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
-			assertBean(y, "description,headers{X-Custom{type,description}}", "Success,{{string,My Header}}");
+			assertBean(
+				responseInfo().setDescription("Success").addHeader("X-Custom", headerInfo().setRef("#/definitions/MyHeader")).resolveRefs(swagger, new ArrayDeque<>(), 10),
+				"description,headers{X-Custom{type,description}}",
+				"Success,{{string,My Header}}"
+			);
 		}
 
-		@Test void f03_resolveRefs_maxDepth() {
+		@Test void d03_resolveRefs_maxDepth() {
 			var swagger = swagger()
 				.addDefinition("Pet", JsonMap.of("type", "object", "title", "Pet"));
 
-			var x = responseInfo().setDescription("Success").setSchema(schemaInfo().setRef("#/definitions/Pet"));
-			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 0);
-			assertBean(y, "description,schema{ref}", "Success,{#/definitions/Pet}");
+			assertBean(
+				responseInfo().setDescription("Success").setSchema(schemaInfo().setRef("#/definitions/Pet")).resolveRefs(swagger, new ArrayDeque<>(), 0),
+				"description,schema{ref}",
+				"Success,{#/definitions/Pet}"
+			);
 		}
 	}
 

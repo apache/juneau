@@ -153,7 +153,7 @@ import org.apache.juneau.swap.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class ConverterUtils {
+public class ConverterUtils {
 
 	// Session objects are usually not thread safe, but we're not using any feature
 	// of bean sessions that would cause thread safety issues.

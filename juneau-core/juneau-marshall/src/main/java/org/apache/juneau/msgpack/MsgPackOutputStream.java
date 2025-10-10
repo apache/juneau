@@ -34,7 +34,7 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-public final class MsgPackOutputStream extends OutputStream {
+public class MsgPackOutputStream extends OutputStream {
 
 	private final OutputStream os;
 

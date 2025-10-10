@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
  *
  * @param <T> The class type that this metadata applies to.
  */
-public final class BeanMetaFiltered<T> extends BeanMeta<T> {
+public class BeanMetaFiltered<T> extends BeanMeta<T> {
 
 	/**
 	 * Wrapper constructor.

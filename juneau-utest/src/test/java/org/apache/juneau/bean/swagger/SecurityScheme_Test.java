@@ -44,32 +44,82 @@ class SecurityScheme_Test extends TestBase {
 			.string("{'authorizationUrl':'a','description':'b','flow':'c','in':'d','name':'e','scopes':{'x1':'x2'},'tokenUrl':'f','type':'g'}".replace('\'', '"'))
 		;
 
-		@Test void b01_gettersAndSetters() {
+		@Test void a01_gettersAndSetters() {
 			TESTER.assertGettersAndSetters();
 		}
 
-		@Test void b02_copy() {
+		@Test void a02_copy() {
 			TESTER.assertCopy();
 		}
 
-		@Test void b03_toJson() {
+		@Test void a03_toJson() {
 			TESTER.assertToJson();
 		}
 
-		@Test void b04_fromJson() {
+		@Test void a04_fromJson() {
 			TESTER.assertFromJson();
 		}
 
-		@Test void b05_roundTrip() {
+		@Test void a05_roundTrip() {
 			TESTER.assertRoundTrip();
 		}
 
-		@Test void b06_toString() {
+		@Test void a06_toString() {
 			TESTER.assertToString();
 		}
 
-		@Test void b07_keySet() {
+		@Test void a07_keySet() {
 			assertList(TESTER.bean().keySet(), "authorizationUrl", "description", "flow", "in", "name", "scopes", "tokenUrl", "type");
+		}
+
+		@Test void a08_addMethods() {
+			var x = bean()
+				.setScopes(map("a1", "a2"))
+				.addScope("b1", "b2");
+
+			assertBean(x, "scopes{a1,b1}", "{a2,b2}");
+		}
+
+		@Test void a09_addMethodsWithNullParameters() {
+			var x = bean();
+			assertThrows(IllegalArgumentException.class, () -> x.addScope(null, "a"));
+			assertThrows(IllegalArgumentException.class, () -> x.addScope("a", null));
+		}
+
+		@Test void a10_asMap() {
+			assertBean(
+				bean()
+					.setDescription("a")
+					.setType("b")
+					.set("x1", "x1a")
+					.asMap(),
+				"description,type,x1",
+				"a,b,x1a"
+			);
+		}
+
+		@Test void a11_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void a12_strictMode() {
+			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			assertDoesNotThrow(() -> bean().set("foo", "bar"));
+
+			assertFalse(bean().isStrict());
+			assertTrue(bean().strict().isStrict());
+			assertFalse(bean().strict(false).isStrict());
+
+			var x = bean().strict();
+			var y = bean(); // not strict
+
+			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setType(String).  Value='invalid', valid values=['basic','apiKey','oauth2']", () -> x.setType("invalid"));
+			assertDoesNotThrow(() -> x.setType("basic"));
+			assertDoesNotThrow(() -> x.setType("apiKey"));
+			assertDoesNotThrow(() -> x.setType("oauth2"));
+			assertDoesNotThrow(() -> y.setType("invalid"));
 		}
 	}
 
@@ -190,81 +240,6 @@ class SecurityScheme_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
 		}
 	}
-
-	@Nested class D_additionalMethods extends TestBase {
-
-		@Test void d01_addMethods() {
-			var x = bean()
-				.setScopes(map("a1", "a2"))
-				.addScope("b1", "b2");
-
-			assertBean(x, "scopes{a1,b1}", "{a2,b2}");
-		}
-
-		@Test void d02_addMethodsWithNullParameters() {
-			var x = bean();
-			assertThrows(IllegalArgumentException.class, () -> x.addScope(null, "a"));
-			assertThrows(IllegalArgumentException.class, () -> x.addScope("a", null));
-		}
-
-		@Test void d03_asMap() {
-			assertBean(
-				bean()
-					.setDescription("a")
-					.setType("b")
-					.set("x1", "x1a")
-					.asMap(),
-				"description,type,x1",
-				"a,b,x1a"
-			);
-		}
-
-		@Test void d04_extraKeys() {
-			var x = bean().set("x1", "x1a").set("x2", "x2a");
-			assertList(x.extraKeys(), "x1", "x2");
-			assertEmpty(bean().extraKeys());
-		}
-
-		@Test void d05_strict() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-		}
-	}
-
-	@Nested class E_strictMode extends TestBase {
-
-		@Test void e01_strictModeSetThrowsException() {
-			var x = bean().strict();
-			assertThrowsWithMessage(RuntimeException.class, "Cannot set property 'foo' in strict mode", () -> x.set("foo", "bar"));
-		}
-
-		@Test void e02_nonStrictModeAllowsSet() {
-			var x = bean(); // not strict
-			assertDoesNotThrow(() -> x.set("foo", "bar"));
-		}
-
-		@Test void e03_strictModeToggle() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-			x.strict(false);
-			assertFalse(x.isStrict());
-		}
-
-		@Test void e04_strictModeSetType() {
-			var x = bean().strict();
-			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setType(String).  Value='invalid', valid values=['basic','apiKey','oauth2']", () -> x.setType("invalid"));
-			assertDoesNotThrow(() -> x.setType("basic"));
-			assertDoesNotThrow(() -> x.setType("apiKey"));
-			assertDoesNotThrow(() -> x.setType("oauth2"));
-			var y = bean(); // not strict
-			assertDoesNotThrow(() -> y.setType("invalid"));
-		}
-	}
-
 
 	//---------------------------------------------------------------------------------------------
 	// Helper methods

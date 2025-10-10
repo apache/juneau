@@ -22,7 +22,7 @@ import java.text.*;
  *
  * @serial exclude
  */
-public final class BeanRuntimeException extends BasicRuntimeException {
+public class BeanRuntimeException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

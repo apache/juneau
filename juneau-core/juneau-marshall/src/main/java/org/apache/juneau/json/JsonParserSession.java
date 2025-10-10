@@ -41,7 +41,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public final class JsonParserSession extends ReaderParserSession {
+public class JsonParserSession extends ReaderParserSession {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static

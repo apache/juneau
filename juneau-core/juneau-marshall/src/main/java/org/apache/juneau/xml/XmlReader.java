@@ -33,7 +33,7 @@ import org.apache.juneau.parser.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
  * </ul>
  */
-public final class XmlReader implements XMLStreamReader, Positionable {
+public class XmlReader implements XMLStreamReader, Positionable {
 
 	private final ParserPipe pipe;
 	private final XMLStreamReader sr;

@@ -15,7 +15,7 @@ package org.apache.juneau.internal;
 /**
  * A simple settable integer value.
  */
-public final class IntValue {
+public class IntValue {
 
 	private int value;
 

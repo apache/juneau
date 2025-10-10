@@ -22,7 +22,7 @@ import jakarta.servlet.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class BoundedServletInputStream extends ServletInputStream {
+public class BoundedServletInputStream extends ServletInputStream {
 
 	private final InputStream is;
 	private final ServletInputStream sis;

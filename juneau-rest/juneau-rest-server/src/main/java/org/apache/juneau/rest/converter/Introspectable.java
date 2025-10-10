@@ -46,7 +46,7 @@ import org.apache.juneau.http.response.*;
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()} - Registering converters with REST resources.
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a> * </ul>
  */
-public final class Introspectable implements RestConverter {
+public class Introspectable implements RestConverter {
 
 	/**
 	 * Swagger parameters for this converter.

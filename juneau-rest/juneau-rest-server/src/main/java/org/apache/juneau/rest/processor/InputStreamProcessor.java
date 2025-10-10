@@ -28,7 +28,7 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */
-public final class InputStreamProcessor implements ResponseProcessor {
+public class InputStreamProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException {

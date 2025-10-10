@@ -54,7 +54,7 @@ import org.apache.juneau.common.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
-public final class ParserPipe implements Closeable {
+public class ParserPipe implements Closeable {
 
 	private final Object input;
 	final boolean debug, strict, autoCloseStreams, unbuffered;

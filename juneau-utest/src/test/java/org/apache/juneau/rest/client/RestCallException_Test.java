@@ -54,7 +54,7 @@ class RestCallException_Test extends TestBase {
 			client().build().get().run();  // NOSONAR
 			fail();
 		} catch (RestCallException e) {
-			assertEquals(404, e.getResponse().getStatusCode());
+			assertEquals(404, e.getResponseCode());
 			assertNull(e.getCause());
 		}
 

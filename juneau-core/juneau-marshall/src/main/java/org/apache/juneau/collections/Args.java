@@ -111,7 +111,7 @@ import org.apache.juneau.common.internal.*;
  *
  * @serial exclude
  */
-public final class Args extends JsonMap {
+public class Args extends JsonMap {
 
 	private static final long serialVersionUID = 1L;
 

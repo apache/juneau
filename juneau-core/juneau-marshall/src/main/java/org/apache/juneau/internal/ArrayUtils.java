@@ -25,7 +25,7 @@ import org.apache.juneau.common.internal.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class ArrayUtils {
+public class ArrayUtils {
 
 	/**
 	 * Appends one or more elements to an array.

@@ -19,7 +19,7 @@ package org.apache.juneau.encoders;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>
  * </ul>
  */
-public final class EncoderMatch {
+public class EncoderMatch {
 
 	private final String encoding;
 	private final Encoder encoder;

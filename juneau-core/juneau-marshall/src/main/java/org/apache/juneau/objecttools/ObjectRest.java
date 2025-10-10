@@ -131,7 +131,7 @@ import org.apache.juneau.parser.*;
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public final class ObjectRest {
+public class ObjectRest {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

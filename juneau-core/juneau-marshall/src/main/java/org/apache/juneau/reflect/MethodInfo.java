@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @FluentSetters
-public final class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo> {
+public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

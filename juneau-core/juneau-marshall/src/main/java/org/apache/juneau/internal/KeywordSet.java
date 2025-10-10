@@ -20,7 +20,7 @@ import java.util.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class KeywordSet {
+public class KeywordSet {
 	final String[] store;
 
 	/**

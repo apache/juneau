@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-public final class UonWriter extends SerializerWriter {
+public class UonWriter extends SerializerWriter {
 
 	private final UonSerializerSession session;
 	private final boolean encodeChars, plainTextParams;

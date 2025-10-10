@@ -671,7 +671,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addRequired(String...values) {
-		required = listBuilder(String.class).sparse().add(values).build();
+		required = listBuilder(required).sparse().add(values).build();
 		return this;
 	}
 
@@ -721,7 +721,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addEnum(Object...values) {
-		setEnum(setBuilder(Object.class).sparse().addAny(values).build());
+		_enum = listBuilder(_enum).elementType(Object.class).sparse().addAny(values).build();
 		return this;
 	}
 

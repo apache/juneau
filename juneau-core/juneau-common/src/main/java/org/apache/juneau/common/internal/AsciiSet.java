@@ -17,7 +17,7 @@ import java.util.*;
 /**
  * Stores a set of ASCII characters for quick lookup.
  */
-public final class AsciiSet {
+public class AsciiSet {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

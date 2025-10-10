@@ -28,7 +28,7 @@ import org.apache.juneau.common.internal.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class PropertyNamerDLC implements PropertyNamer {
+public class PropertyNamerDLC implements PropertyNamer {
 
 	/** Reusable instance. */
 	public static final PropertyNamer INSTANCE = new PropertyNamerDLC();

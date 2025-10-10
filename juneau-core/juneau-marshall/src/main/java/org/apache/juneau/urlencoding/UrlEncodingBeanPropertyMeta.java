@@ -23,7 +23,7 @@ import org.apache.juneau.urlencoding.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
-public final class UrlEncodingBeanPropertyMeta extends ExtendedBeanPropertyMeta {
+public class UrlEncodingBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.

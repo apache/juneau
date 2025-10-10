@@ -23,7 +23,7 @@ import java.io.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class NoCloseWriter extends Writer {
+public class NoCloseWriter extends Writer {
 
 	private final Writer w;
 

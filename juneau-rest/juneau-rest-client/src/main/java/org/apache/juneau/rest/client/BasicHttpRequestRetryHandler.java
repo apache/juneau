@@ -24,7 +24,7 @@ import org.apache.http.protocol.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
-public class BasicHttpRequestRetryHandler extends StandardHttpRequestRetryHandler {
+class BasicHttpRequestRetryHandler extends StandardHttpRequestRetryHandler {
 
 	private final int retryInterval;
 

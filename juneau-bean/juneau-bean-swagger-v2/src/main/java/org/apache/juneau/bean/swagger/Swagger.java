@@ -769,6 +769,22 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
+	 * Bean property fluent setter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for the API as a whole.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Swagger addSecurity(Collection<Map<String,List<String>>> values) {
+		security = listBuilder(security).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
 	 * Bean property getter:  <property>securityDefinitions</property>.
 	 *
 	 * <p>

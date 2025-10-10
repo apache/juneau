@@ -277,7 +277,7 @@ public class DirectoryResource extends BasicRestServlet {
 		}
 	}
 
-	static final class FileResourceComparator implements Comparator<FileResource>, Serializable {
+	static class FileResourceComparator implements Comparator<FileResource>, Serializable {
 		private static final long serialVersionUID = 1L;
 		@Override /* Comparator */
 		public int compare(FileResource o1, FileResource o2) {

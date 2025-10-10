@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.JsonMap;
-import org.apache.juneau.common.internal.Utils;
 import org.junit.jupiter.api.*;
 
 /**
@@ -91,6 +90,64 @@ class Items_Test extends TestBase {
 			var x = bean();
 			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
 			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
+		}
+
+		@Test void a09_addMethods() {
+			assertBean(
+				bean()
+					.addEnum("a1", "a2"),
+				"enum",
+				"[a1,a2]"
+			);
+		}
+
+		@Test void a10_asMap() {
+			assertBean(
+				bean()
+					.setType("a")
+					.set("x1", "x1a")
+					.asMap(),
+				"type,x1",
+				"a,x1a"
+			);
+		}
+
+		@Test void a11_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void a12_getItemsProperty() {
+			var x = bean().setItems(bean().setType("a"));
+			assertBean(x.get("items", Items.class), "type", "a");
+		}
+
+		@Test void a13_strictMode() {
+			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			assertDoesNotThrow(() -> bean().set("foo", "bar"));
+
+			assertFalse(bean().isStrict());
+			assertTrue(bean().strict().isStrict());
+			assertFalse(bean().strict(false).isStrict());
+
+			var x = bean().strict();
+			var y = bean();
+			assertThrowsWithMessage(IllegalArgumentException.class, "Invalid value passed in to setType(String).  Value='invalid', valid values=['string','number','integer','boolean','array']", () -> x.setType("invalid"));
+			assertDoesNotThrow(() -> x.setType("string"));
+			assertDoesNotThrow(() -> x.setType("number"));
+			assertDoesNotThrow(() -> x.setType("integer"));
+			assertDoesNotThrow(() -> x.setType("boolean"));
+			assertDoesNotThrow(() -> x.setType("array"));
+			assertDoesNotThrow(() -> y.setType("invalid"));
+
+			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setCollectionFormat(String).  Value='invalid', valid values=[csv, ssv, tsv, pipes, multi]", () -> x.setCollectionFormat("invalid"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("csv"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("ssv"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("tsv"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("pipes"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("multi"));
+			assertDoesNotThrow(() -> y.setCollectionFormat("invalid"));
 		}
 	}
 
@@ -226,225 +283,136 @@ class Items_Test extends TestBase {
 		}
 	}
 
-	@Nested class D_additionalMethods extends TestBase {
+	@Nested class D_refs extends TestBase {
 
-		@Test void d01_addMethods() {
+		@Test void d01_resolveRefs_basic() {
+			var openApi = openApi()
+				.setComponents(components().setSchemas(Map.of(
+					"MyItem", schemaInfo().setType("string")
+				)));
 			assertBean(
-				bean()
-					.addEnum("a1", "a2"),
-				"enum",
-				"[a1,a2]"
+				items().setRef("#/components/schemas/MyItem").resolveRefs(openApi, new ArrayDeque<>(), 10),
+				"type",
+				"string"
 			);
 		}
 
-		@Test void d02_asMap() {
+		@Test void d02_resolveRefs_nestedItems() {
+			var openApi = openApi()
+				.setComponents(components().setSchemas(Map.of(
+					"MyItem", schemaInfo().setType("string"),
+					"MyArray", schemaInfo().setType("array").setItems(items().setRef("#/components/schemas/MyItem"))
+				)));
+
 			assertBean(
-				bean()
-					.setType("a")
-					.set("x1", "x1a")
-					.asMap(),
-				"type,x1",
-				"a,x1a"
+				items().setRef("#/components/schemas/MyArray").resolveRefs(openApi, new ArrayDeque<>(), 10),
+				"type,items{type}",
+				"array,{string}"
 			);
 		}
 
-		@Test void d03_extraKeys() {
-			var x = bean().set("x1", "x1a").set("x2", "x2a");
-			assertList(x.extraKeys(), "x1", "x2");
-			assertEmpty(bean().extraKeys());
+		@Test void d03_resolveRefs_maxDepth() {
+			var openApi = openApi()
+				.setComponents(components().setSchemas(Map.of(
+					"MyItem", schemaInfo().setType("string"),
+					"MyArray", schemaInfo().setType("array").setItems(items().setRef("#/components/schemas/MyItem"))
+				)));
+			assertBean(
+				items().setRef("#/components/schemas/MyArray").resolveRefs(openApi, new ArrayDeque<>(), 1),
+				"type,items{ref}",
+				"array,{#/components/schemas/MyItem}"
+			);
 		}
 
-		@Test void d04_getItemsProperty() {
-			var x = bean().setItems(bean().setType("a"));
-			assertBean(x.get("items", Items.class), "type", "a");
-		}
-
-		@Test void d05_resolveRefsWithRef() {
+		@Test void d04_resolveRefsWithRef() {
 			var openApi = openApi()
 				.setComponents(components().setSchemas(Map.of(
 					"MyItem", schemaInfo().setType("string")
 				)));
 
-			var x = items().setRef("#/components/schemas/MyItem");
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
-			assertBean(y, "type", "string");
-		}
-
-		@Test void d06_resolveRefsWithRefStackContains() {
-			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
-					"MyItem", schemaInfo().setType("string")
-				)));
+			assertBean(
+				items().setRef("#/components/schemas/MyItem").resolveRefs(openApi, new ArrayDeque<>(), 10),
+				"type",
+				"string"
+			);
 
 			var refStack = new ArrayDeque<String>();
 			refStack.add("#/components/schemas/MyItem");
 
-			var x = items().setRef("#/components/schemas/MyItem");
-			var y = x.resolveRefs(openApi, refStack, 10);
-			assertBean(y, "ref", "#/components/schemas/MyItem");
+			// With ref stack contains.
+			assertBean(
+				items().setRef("#/components/schemas/MyItem").resolveRefs(openApi, refStack, 10),
+				"ref",
+				"#/components/schemas/MyItem"
+			);
+
+			// With max depth.
+			assertBean(
+				items().setRef("#/components/schemas/MyItem").resolveRefs(openApi, new ArrayDeque<>(), 0),
+				"ref",
+				"#/components/schemas/MyItem"
+			);
+
+			// With properties.
+			assertBean(
+				items()
+					.set("properties", JsonMap.of("prop1", JsonMap.of("$ref", "#/components/schemas/MyItem")))
+					.resolveRefs(openApi, new ArrayDeque<>(), 10),
+				"properties{prop1{type}}",
+				"{{string}}"
+			);
+
+			// With items.
+			assertBean(
+				items().setItems(items().setRef("#/components/schemas/MyItem")).resolveRefs(openApi, new ArrayDeque<>(), 10),
+				"items{type}",
+				"{string}"
+			);
+
+			// Examle null.
+			assertBean(
+				items().set("example", "test").resolveRefs(openApi, new ArrayDeque<>(), 10),
+				"example",
+				"<null>"
+			);
+
+			// Without ref.
+			assertBean(
+				items().setType("string").resolveRefs(openApi, new ArrayDeque<>(), 10),
+				"type,example",
+				"string,<null>"
+			);
+
+			// With null items.
+			assertBean(
+				items().setType("string").resolveRefs(openApi, new ArrayDeque<>(), 10), // items is null
+				"type,items,example",
+				"string,<null>,<null>"
+			);
+
+			// With null properties.
+			assertBean(
+				items().setType("string").resolveRefs(openApi, new ArrayDeque<>(), 10), // no properties set
+				"type,example",
+				"string,<null>"
+			);
 		}
 
-		@Test void d07_resolveRefsWithMaxDepth() {
+		@Test void d04_resolveRefs_noRefNoItems() {
+			// Test resolveRefs when both ref and items are null (covers the missing branch)
 			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
-					"MyItem", schemaInfo().setType("string")
-				)));
+				.setComponents(components().setSchemas(map("MyItem", schemaInfo().setType("string"))));
 
-			var x = items().setRef("#/components/schemas/MyItem");
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 0);
-			assertBean(y, "ref", "#/components/schemas/MyItem");
-		}
+			var items = bean()
+				.setType("string")
+				.setFormat("text");
 
-		@Test void d08_resolveRefsWithProperties() {
-			var openApi = openApi()
-				.setComponents(components().setSchemas(Utils.map(
-					"MyItem", schemaInfo().setType("string")
-				)));
+			var result = items.resolveRefs(openApi, new ArrayDeque<>(), 10);
 
-			var x = items()
-				.set("properties", JsonMap.of("prop1", JsonMap.of("$ref", "#/components/schemas/MyItem")));
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
-			assertBean(y, "properties{prop1{type}}", "{{string}}");
-		}
-
-		@Test void d09_resolveRefsWithItems() {
-			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
-					"MyItem", schemaInfo().setType("string")
-				)));
-
-			var x = items().setItems(items().setRef("#/components/schemas/MyItem"));
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
-			assertBean(y, "items{type}", "{string}");
-		}
-
-		@Test void d10_resolveRefsSetsExampleNull() {
-			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
-					"MyItem", schemaInfo().setType("string")
-				)));
-
-			var x = items().set("example", "test");
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
-			assertBean(y, "example", "<null>");
-		}
-
-		@Test void d11_resolveRefsWithoutRef() {
-			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
-					"MyItem", schemaInfo().setType("string")
-				)));
-
-			var x = items().setType("string");
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
-			assertBean(y, "type,example", "string,<null>");
-		}
-
-		@Test void d12_resolveRefsWithNullItems() {
-			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
-					"MyItem", schemaInfo().setType("string")
-				)));
-
-			var x = items().setType("string"); // items is null
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
-			assertBean(y, "type,items,example", "string,<null>,<null>");
-		}
-
-		@Test void d13_resolveRefsWithNullProperties() {
-			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
-					"MyItem", schemaInfo().setType("string")
-				)));
-
-			var x = items().setType("string"); // no properties set
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
-			assertBean(y, "type,example", "string,<null>");
-		}
-
-	}
-
-	@Nested class E_strictMode extends TestBase {
-
-		@Test void e01_strictModeSetThrowsException() {
-			var x = bean().strict();
-			assertThrowsWithMessage(RuntimeException.class, "Cannot set property 'foo' in strict mode", () -> x.set("foo", "bar"));
-		}
-
-		@Test void e02_nonStrictModeAllowsSet() {
-			var x = bean(); // not strict
-			assertDoesNotThrow(() -> x.set("foo", "bar"));
-		}
-
-		@Test void e03_strictModeToggle() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-			x.strict(false);
-			assertFalse(x.isStrict());
-		}
-
-		@Test void e04_strictModeSetType() {
-			var x = bean().strict();
-			assertThrowsWithMessage(IllegalArgumentException.class, "Invalid value passed in to setType(String).  Value='invalid', valid values=['string','number','integer','boolean','array']", () -> x.setType("invalid"));
-			assertDoesNotThrow(() -> x.setType("string"));
-			assertDoesNotThrow(() -> x.setType("number"));
-			assertDoesNotThrow(() -> x.setType("integer"));
-			assertDoesNotThrow(() -> x.setType("boolean"));
-			assertDoesNotThrow(() -> x.setType("array"));
-			var y = bean(); // not strict
-			assertDoesNotThrow(() -> y.setType("invalid"));
-		}
-
-		@Test void e05_strictModeSetCollectionFormat() {
-			var x = bean().strict();
-			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setCollectionFormat(String).  Value='invalid', valid values=[csv, ssv, tsv, pipes, multi]", () -> x.setCollectionFormat("invalid"));
-			assertDoesNotThrow(() -> x.setCollectionFormat("csv"));
-			assertDoesNotThrow(() -> x.setCollectionFormat("ssv"));
-			assertDoesNotThrow(() -> x.setCollectionFormat("tsv"));
-			assertDoesNotThrow(() -> x.setCollectionFormat("pipes"));
-			assertDoesNotThrow(() -> x.setCollectionFormat("multi"));
-			var y = bean(); // not strict
-			assertDoesNotThrow(() -> y.setCollectionFormat("invalid"));
-		}
-	}
-
-	@Nested class F_refs extends TestBase {
-
-		@Test void f01_resolveRefs_basic() {
-			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
-					"MyItem", schemaInfo().setType("string")
-				)));
-
-			var x = items().setRef("#/components/schemas/MyItem");
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
-			assertBean(y, "type", "string");
-		}
-
-		@Test void f02_resolveRefs_nestedItems() {
-			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
-					"MyItem", schemaInfo().setType("string"),
-					"MyArray", schemaInfo().setType("array").setItems(items().setRef("#/components/schemas/MyItem"))
-				)));
-
-			var x = items().setRef("#/components/schemas/MyArray");
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 10);
-			assertBean(y, "type,items{type}", "array,{string}");
-		}
-
-		@Test void f03_resolveRefs_maxDepth() {
-			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
-					"MyItem", schemaInfo().setType("string"),
-					"MyArray", schemaInfo().setType("array").setItems(items().setRef("#/components/schemas/MyItem"))
-				)));
-
-			var x = items().setRef("#/components/schemas/MyArray");
-			var y = x.resolveRefs(openApi, new ArrayDeque<>(), 1);
-			assertBean(y, "type,items{ref}", "array,{#/components/schemas/MyItem}");
+			// Should return the same object unchanged
+			assertSame(items, result);
+			assertEquals("string", result.getType());
+			assertEquals("text", result.getFormat());
 		}
 	}
 

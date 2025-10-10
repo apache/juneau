@@ -16,7 +16,6 @@ import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -69,11 +68,11 @@ public abstract class SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
 	 * @return This object.
 	 */
 	protected SwaggerElement strict(Object value) {
-		strict = value != null && toBoolean(value);
+		assertArgNotNull("value", value);
+		strict = toBoolean(value);
 		return this;
 	}
 
@@ -172,9 +171,6 @@ public abstract class SwaggerElement {
 
 	@Override /* Object */
 	public String toString() {
-		if (Modifier.isAbstract(getClass().getModifiers())) {
-			return JsonSerializer.DEFAULT_SORTED.toString(extra);
-		}
 		return JsonSerializer.DEFAULT_SORTED.toString(this);
 	}
 }

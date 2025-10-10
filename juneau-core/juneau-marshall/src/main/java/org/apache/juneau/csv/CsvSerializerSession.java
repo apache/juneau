@@ -35,7 +35,7 @@ import org.apache.juneau.svl.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class CsvSerializerSession extends WriterSerializerSession {
+public class CsvSerializerSession extends WriterSerializerSession {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

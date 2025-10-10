@@ -22,7 +22,7 @@ import org.apache.juneau.csv.annotation.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class CsvBeanPropertyMeta extends ExtendedBeanPropertyMeta {
+public class CsvBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.

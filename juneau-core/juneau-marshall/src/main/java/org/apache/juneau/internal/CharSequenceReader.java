@@ -20,7 +20,7 @@ import java.io.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class CharSequenceReader extends BufferedReader {
+public class CharSequenceReader extends BufferedReader {
 
 	private final CharSequence cs;
 	private String s;

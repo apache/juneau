@@ -24,7 +24,7 @@ import org.apache.juneau.uon.annotation.*;
 
  * </ul>
  */
-public final class UonBeanPropertyMeta extends ExtendedBeanPropertyMeta {
+public class UonBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.

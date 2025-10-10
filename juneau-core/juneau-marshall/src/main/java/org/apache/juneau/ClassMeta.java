@@ -63,7 +63,7 @@ import org.apache.juneau.swap.*;
  * @param <T> The class type of the wrapped class.
  */
 @Bean(properties="innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
-public final class ClassMeta<T> implements Type {
+public class ClassMeta<T> implements Type {
 
 	/** Class categories. */
 	enum ClassCategory {
@@ -307,7 +307,7 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	@SuppressWarnings({"unchecked","rawtypes","hiding"})
-	private final class ClassMetaBuilder<T> {
+	private class ClassMetaBuilder<T> {
 		Class<T> innerClass;
 		ClassInfo ci;
 		Class<? extends T> implClass;
@@ -2195,7 +2195,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * Cast this object to this type.
-	 * 
+	 *
 	 * @param o The object to cast.
 	 * @return The cast object.
 	 */

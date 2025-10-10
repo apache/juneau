@@ -37,13 +37,14 @@ class Operation_Test extends TestBase {
 					.setRequestBody(requestBodyInfo().setDescription("d"))
 					.setResponses(map("200", response().setDescription("e")))
 					.setSecurity(securityRequirement().setRequirements(map("f1",list("f2"))))
+					.setServers(server().setUrl(java.net.URI.create("http://example.com")))
 					.setSummary("g")
 					.setTags("h")
 			)
-			.props("description,operationId,parameters{0{in,name}},requestBody{description},responses{200{description}},security{0{requirements{f1}}},summary,tags")
-			.vals("a,b,{{c1,c2}},{d},{{e}},{{{[f2]}}},g,[h]")
-			.json("{description:'a',operationId:'b',parameters:[{'in':'c1',name:'c2'}],requestBody:{description:'d'},responses:{'200':{description:'e'}},security:[{requirements:{f1:['f2']}}],summary:'g',tags:['h']}")
-			.string("{'description':'a','operationId':'b','parameters':[{'in':'c1','name':'c2'}],'requestBody':{'description':'d'},'responses':{'200':{'description':'e'}},'security':[{'requirements':{'f1':['f2']}}],'summary':'g','tags':['h']}".replace('\'','"'))
+			.props("description,operationId,parameters{0{in,name}},requestBody{description},responses{200{description}},security{0{requirements{f1}}},servers{0{url}},summary,tags")
+			.vals("a,b,{{c1,c2}},{d},{{e}},{{{[f2]}}},{{http://example.com}},g,[h]")
+			.json("{description:'a',operationId:'b',parameters:[{'in':'c1',name:'c2'}],requestBody:{description:'d'},responses:{'200':{description:'e'}},security:[{requirements:{f1:['f2']}}],servers:[{url:'http://example.com'}],summary:'g',tags:['h']}")
+			.string("{'description':'a','operationId':'b','parameters':[{'in':'c1','name':'c2'}],'requestBody':{'description':'d'},'responses':{'200':{'description':'e'}},'security':[{'requirements':{'f1':['f2']}}],'servers':[{'url':'http://example.com'}],'summary':'g','tags':['h']}".replace('\'','"'))
 		;
 
 		@Test void a01_gettersAndSetters() {
@@ -71,7 +72,7 @@ class Operation_Test extends TestBase {
 		}
 
 		@Test void a07_keySet() {
-			assertList(TESTER.bean().keySet(), "description", "operationId", "parameters", "requestBody", "responses", "security", "summary", "tags");
+			assertList(TESTER.bean().keySet(), "description", "operationId", "parameters", "requestBody", "responses", "security", "servers", "summary", "tags");
 		}
 
 		@Test void a08_otherGettersAndSetters() {
@@ -93,6 +94,112 @@ class Operation_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->x.getResponse(null));
 			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
 			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
+		}
+
+		@Test void a10_collectionSetters() {
+			// Test Collection variants of setters
+			var x = bean()
+				.setParameters(list(
+					parameter().setIn("a1").setName("a2"),
+					parameter().setIn("a3").setName("a4")
+				))
+				.setSecurity(list(
+					securityRequirement().setRequirements(map("b1", list("b2"))),
+					securityRequirement().setRequirements(map("b3", list("b4")))
+				))
+				.setTags(list("c1", "c2"));
+
+			assertBean(x,
+				"parameters{#{in,name}},security{0{requirements{b1}},1{requirements{b3}}},tags",
+				"{[{a1,a2},{a3,a4}]},{{{[b2]}},{{[b4]}}},[c1,c2]"
+			);
+		}
+
+		@Test void a11_asMap() {
+			assertBean(
+				bean()
+					.setSummary("a")
+					.set("x1", "x1a")
+					.asMap(),
+				"summary,x1",
+				"a,x1a"
+			);
+		}
+
+		@Test void a12_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void a13_strictMode() {
+			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			assertDoesNotThrow(() -> bean().set("foo", "bar"));
+
+			assertFalse(bean().isStrict());
+			assertTrue(bean().strict().isStrict());
+			assertFalse(bean().strict(false).isStrict());
+		}
+		
+		@Test void a14_collectionSetters() {
+			var x = bean()
+				.setParameters(list(parameter().setIn("a1").setName("a2"), parameter().setIn("b1").setName("b2")))
+				.setSecurity(list(securityRequirement().setRequirements(map("c1", list("c2"))), securityRequirement().setRequirements(map("d1", list("d2")))))
+				.setServers(list(server().setUrl(java.net.URI.create("http://example1.com")), server().setUrl(java.net.URI.create("http://example2.com"))))
+				.setTags(list("f1", "f2"));
+
+			assertBean(x,
+				"parameters{#{in,name}},security{#{requirements}},servers{#{url}},tags",
+				"{[{a1,a2},{b1,b2}]},{[{{c1=[c2]}},{{d1=[d2]}}]},{[{http://example1.com},{http://example2.com}]},[f1,f2]"
+			);
+		}
+
+		@Test void a15_getParameter() {
+			// Test getParameter with null parameters list (covers the null check branch)
+			var y = bean();
+			assertNull(y.getParameter("query", "param1"));
+
+			// Test with parameters set
+			var x = bean()
+				.setParameters(list(
+					parameter().setIn("query").setName("param1"),
+					parameter().setIn("path").setName("param2")
+				));
+
+			// Test normal parameter lookup
+			var param1 = x.getParameter("query", "param1");
+			assertNotNull(param1);
+			assertEquals("param1", param1.getName());
+			assertEquals("query", param1.getIn());
+
+			var param2 = x.getParameter("path", "param2");
+			assertNotNull(param2);
+			assertEquals("param2", param2.getName());
+			assertEquals("path", param2.getIn());
+
+			// Test non-existent parameter
+			assertNull(x.getParameter("query", "nonexistent"));
+			assertNull(x.getParameter("header", "param1"));
+		}
+
+		@Test void a16_getResponseBranchCoverage() {
+			// Test getResponse with null responses map (covers the null check branch)
+			var y = bean();
+			assertNull(y.getResponse("200"));
+
+			// Test with responses set
+			var x = bean()
+				.setResponses(map("200", response().setDescription("OK"), "404", response().setDescription("Not Found")));
+
+			var response200 = x.getResponse("200");
+			assertNotNull(response200);
+			assertEquals("OK", response200.getDescription());
+
+			var response404 = x.getResponse("404");
+			assertNotNull(response404);
+			assertEquals("Not Found", response404.getDescription());
+
+			assertNull(x.getResponse("500"));
 		}
 	}
 
@@ -210,68 +317,6 @@ class Operation_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
 		}
 	}
-
-	@Nested class D_additionalMethods extends TestBase {
-
-		@Test void d01_collectionSetters() {
-			// Test Collection variants of setters
-			var x = bean()
-				.setParameters(list(
-					parameter().setIn("a1").setName("a2"),
-					parameter().setIn("a3").setName("a4")
-				))
-				.setSecurity(list(
-					securityRequirement().setRequirements(map("b1", list("b2"))),
-					securityRequirement().setRequirements(map("b3", list("b4")))
-				))
-				.setTags(list("c1", "c2"));
-
-			assertBean(x,
-				"parameters{#{in,name}},security{0{requirements{b1}},1{requirements{b3}}},tags",
-				"{[{a1,a2},{a3,a4}]},{{{[b2]}},{{[b4]}}},[c1,c2]"
-			);
-		}
-
-		@Test void d02_asMap() {
-			assertBean(
-				bean()
-					.setSummary("a")
-					.set("x1", "x1a")
-					.asMap(),
-				"summary,x1",
-				"a,x1a"
-			);
-		}
-
-		@Test void d03_extraKeys() {
-			var x = bean().set("x1", "x1a").set("x2", "x2a");
-			assertList(x.extraKeys(), "x1", "x2");
-			assertEmpty(bean().extraKeys());
-		}
-	}
-
-	@Nested class E_strictMode extends TestBase {
-
-		@Test void e01_strictModeSetThrowsException() {
-			var x = bean().strict();
-			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
-		}
-
-		@Test void e02_nonStrictModeAllowsSet() {
-			var x = bean(); // not strict
-			assertDoesNotThrow(() -> x.set("foo", "bar"));
-		}
-
-		@Test void e03_strictModeToggle() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-			x.strict(false);
-			assertFalse(x.isStrict());
-		}
-	}
-
 
 	//---------------------------------------------------------------------------------------------
 	// Helper methods

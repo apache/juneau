@@ -42,4 +42,4 @@ package org.apache.juneau.rest.annotation;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class Inherit {}
+public class Inherit {}

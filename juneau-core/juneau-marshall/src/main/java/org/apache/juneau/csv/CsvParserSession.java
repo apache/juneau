@@ -33,7 +33,7 @@ import org.apache.juneau.parser.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class CsvParserSession extends ReaderParserSession {
+public class CsvParserSession extends ReaderParserSession {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static

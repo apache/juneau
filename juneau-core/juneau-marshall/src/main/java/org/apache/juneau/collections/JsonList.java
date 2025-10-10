@@ -1015,7 +1015,7 @@ public class JsonList extends LinkedList<Object> {
 		return session;
 	}
 
-	private static final class UnmodifiableJsonList extends JsonList {
+	private static class UnmodifiableJsonList extends JsonList {
 		private static final long serialVersionUID = 1L;
 
 		@SuppressWarnings("synthetic-access")

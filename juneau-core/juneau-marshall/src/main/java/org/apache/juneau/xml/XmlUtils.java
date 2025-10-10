@@ -33,7 +33,7 @@ import org.apache.juneau.xml.annotation.*;
 
  * </ul>
  */
-public final class XmlUtils {
+public class XmlUtils {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// XML element names

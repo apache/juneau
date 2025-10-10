@@ -46,7 +46,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public final class RdfSerializerSession extends WriterSerializerSession {
+public class RdfSerializerSession extends WriterSerializerSession {
 
 	/**
 	 * Maps RDF writer names to property prefixes that apply to them.

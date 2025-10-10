@@ -71,7 +71,7 @@ import org.apache.juneau.internal.*;
 
  * </ul>
  */
-public final class EncoderSet {
+public class EncoderSet {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

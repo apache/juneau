@@ -326,6 +326,70 @@ public class OpenApi extends OpenApiElement {
 	}
 
 	/**
+	 * Bean property fluent setter:  <property>servers</property>.
+	 *
+	 * <p>
+	 * An array of Server Objects, which provide connectivity information to a target server.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public OpenApi addServers(Server...values) {
+		servers = listBuilder(servers).sparse().add(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>servers</property>.
+	 *
+	 * <p>
+	 * An array of Server Objects, which provide connectivity information to a target server.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public OpenApi addServers(Collection<Server> values) {
+		servers = listBuilder(servers).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security mechanisms can be used across the API.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public OpenApi addSecurity(SecurityRequirement...values) {
+		security = listBuilder(security).sparse().add(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security mechanisms can be used across the API.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public OpenApi addSecurity(Collection<SecurityRequirement> values) {
+		security = listBuilder(security).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
 	 * Returns the external documentation.
 	 *
 	 * @return The external documentation.

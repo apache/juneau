@@ -27,7 +27,7 @@ import org.apache.juneau.http.response.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */
-public final class PlainTextPojoProcessor implements ResponseProcessor {
+public class PlainTextPojoProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException, NotAcceptable, BasicHttpException {

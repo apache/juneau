@@ -33,7 +33,7 @@ import org.apache.juneau.parser.*;
  * @param <K> Key type.
  * @param <V> Value type.
  */
-public final class MapBuilder<K,V> {
+public class MapBuilder<K,V> {
 
 	private Map<K,V> map;
 	private boolean unmodifiable = false, sparse = false;

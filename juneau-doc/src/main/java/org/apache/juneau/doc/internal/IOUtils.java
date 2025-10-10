@@ -21,7 +21,7 @@ import java.util.regex.*;
  * Various I/O related utility methods.
  */
 @SuppressWarnings("javadoc")
-public final class IOUtils {
+public class IOUtils {
 
 	public static String readFile(String path) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));

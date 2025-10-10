@@ -35,7 +35,7 @@ class HeaderInfo_Test extends TestBase {
 					.setCollectionFormat("a")
 					.setDefault("b")
 					.setDescription("c")
-					.setEnum(set("d"))
+					.setEnum("d")
 					.setExample("e")
 					.setExclusiveMaximum(true)
 					.setExclusiveMinimum(true)
@@ -91,6 +91,58 @@ class HeaderInfo_Test extends TestBase {
 			var x = bean();
 			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
 			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
+		}
+
+		@Test void a09_addMethods() {
+			var x = bean().addEnum("a1");
+			assertNotNull(x);
+			assertNotNull(x.getEnum());
+		}
+
+		@Test void a10_asMap() {
+			assertBean(
+				bean()
+					.setDescription("a")
+					.setType("b")
+					.set("x1", "x1a")
+					.asMap(),
+				"description,type,x1",
+				"a,b,x1a"
+			);
+		}
+
+		@Test void a11_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void a12_strictMode() {
+			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			assertDoesNotThrow(() -> bean().set("foo", "bar"));
+
+			assertFalse(bean().isStrict());
+			assertTrue(bean().strict().isStrict());
+			assertFalse(bean().strict(false).isStrict());
+
+			var x = bean().strict();
+			var y = bean(); // not strict
+
+			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setCollectionFormat(String).  Value='invalid', valid values=['csv','ssv','tsv','pipes','multi']", () -> x.setCollectionFormat("invalid"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("csv"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("ssv"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("tsv"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("pipes"));
+			assertDoesNotThrow(() -> x.setCollectionFormat("multi"));
+			assertDoesNotThrow(() -> y.setCollectionFormat("invalid"));
+
+			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setType(String).  Value='invalid', valid values=['string','number','integer','boolean','array']", () -> x.setType("invalid"));
+			assertDoesNotThrow(() -> x.setType("string"));
+			assertDoesNotThrow(() -> x.setType("number"));
+			assertDoesNotThrow(() -> x.setType("integer"));
+			assertDoesNotThrow(() -> x.setType("boolean"));
+			assertDoesNotThrow(() -> x.setType("array"));
+			assertDoesNotThrow(() -> y.setType("invalid"));
 		}
 	}
 
@@ -218,118 +270,76 @@ class HeaderInfo_Test extends TestBase {
 		}
 	}
 
-	@Nested class D_additionalMethods extends TestBase {
+	@Nested class D_refs extends TestBase {
 
-		@Test void d01_addMethods() {
-			var x = bean().addEnum("a1");
-			assertNotNull(x);
-			assertNotNull(x.getEnum());
-		}
-
-		@Test void d02_asMap() {
-			assertBean(
-				bean()
-					.setDescription("a")
-					.setType("b")
-					.set("x1", "x1a")
-					.asMap(),
-				"description,type,x1",
-				"a,b,x1a"
-			);
-		}
-
-		@Test void d03_extraKeys() {
-			var x = bean().set("x1", "x1a").set("x2", "x2a");
-			assertList(x.extraKeys(), "x1", "x2");
-			assertEmpty(bean().extraKeys());
-		}
-
-		@Test void d04_strict() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-		}
-	}
-
-	@Nested class E_strictMode extends TestBase {
-
-		@Test void e01_strictModeSetThrowsException() {
-			var x = bean().strict();
-			assertThrowsWithMessage(RuntimeException.class, "Cannot set property 'foo' in strict mode", () -> x.set("foo", "bar"));
-		}
-
-		@Test void e02_nonStrictModeAllowsSet() {
-			var x = bean(); // not strict
-			assertDoesNotThrow(() -> x.set("foo", "bar"));
-		}
-
-		@Test void e03_strictModeToggle() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-			x.strict(false);
-			assertFalse(x.isStrict());
-		}
-
-		@Test void e04_strictModeSetCollectionFormat() {
-			var x = bean().strict();
-			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setCollectionFormat(String).  Value='invalid', valid values=['csv','ssv','tsv','pipes','multi']", () -> x.setCollectionFormat("invalid"));
-			assertDoesNotThrow(() -> x.setCollectionFormat("csv"));
-			assertDoesNotThrow(() -> x.setCollectionFormat("ssv"));
-			assertDoesNotThrow(() -> x.setCollectionFormat("tsv"));
-			assertDoesNotThrow(() -> x.setCollectionFormat("pipes"));
-			assertDoesNotThrow(() -> x.setCollectionFormat("multi"));
-			var y = bean(); // not strict
-			assertDoesNotThrow(() -> y.setCollectionFormat("invalid"));
-		}
-
-		@Test void e05_strictModeSetType() {
-			var x = bean().strict();
-			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setType(String).  Value='invalid', valid values=['string','number','integer','boolean','array']", () -> x.setType("invalid"));
-			assertDoesNotThrow(() -> x.setType("string"));
-			assertDoesNotThrow(() -> x.setType("number"));
-			assertDoesNotThrow(() -> x.setType("integer"));
-			assertDoesNotThrow(() -> x.setType("boolean"));
-			assertDoesNotThrow(() -> x.setType("array"));
-			var y = bean(); // not strict
-			assertDoesNotThrow(() -> y.setType("invalid"));
-		}
-	}
-
-	@Nested class F_refs extends TestBase {
-
-		@Test void f01_resolveRefs_basic() {
+		@Test void d01_resolveRefs_basic() {
 			var swagger = swagger()
 				.addDefinition("MyHeader", JsonMap.of("type", "string", "description", "My Header"));
 
-			var x = headerInfo().setRef("#/definitions/MyHeader");
-			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
-			assertBean(y, "type,description", "string,My Header");
+			assertBean(
+				headerInfo().setRef("#/definitions/MyHeader").resolveRefs(swagger, new ArrayDeque<>(), 10),
+				"type,description",
+				"string,My Header"
+			);
 		}
 
-		@Test void f02_resolveRefs_withItems() {
+		@Test void d02_resolveRefs_withItems() {
 			var swagger = swagger()
 				.addDefinition("MyItem", JsonMap.of("type", "string"))
 				.addDefinition("MyHeader", JsonMap.of("type", "array", "items", JsonMap.of("$ref", "#/definitions/MyItem")));
 
-			var x = headerInfo().setRef("#/definitions/MyHeader");
-			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 10);
-			assertBean(y, "type,items{type}", "array,{string}");
+			assertBean(
+				headerInfo().setRef("#/definitions/MyHeader").resolveRefs(swagger, new ArrayDeque<>(), 10),
+				"type,items{type}",
+				"array,{string}"
+			);
 		}
 
-		@Test void f03_resolveRefs_maxDepth() {
+		@Test void d03_resolveRefs_maxDepth() {
 			var swagger = swagger()
 				.addDefinition("MyItem", JsonMap.of("type", "string"))
 				.addDefinition("MyHeader", JsonMap.of("type", "array", "items", JsonMap.of("$ref", "#/definitions/MyItem")));
 
-			var x = headerInfo().setRef("#/definitions/MyHeader");
-			var y = x.resolveRefs(swagger, new ArrayDeque<>(), 1);
-			assertBean(y, "type,items{ref}", "array,{#/definitions/MyItem}");
+			assertBean(headerInfo().setRef("#/definitions/MyHeader").resolveRefs(swagger, new ArrayDeque<>(), 1),
+				"type,items{ref}",
+				"array,{#/definitions/MyItem}"
+			);
+		}
+
+		@Test void d04_resolveRefs_noRefNoItems() {
+			// Test resolveRefs when both ref and items are null (covers the missing branch)
+			var swagger = swagger();
+			var header = headerInfo()
+				.setType("string")
+				.setDescription("Test header");
+
+			var result = header.resolveRefs(swagger, new ArrayDeque<>(), 10);
+
+			// Should return the same object unchanged
+			assertSame(header, result);
+			assertEquals("string", result.getType());
+			assertEquals("Test header", result.getDescription());
+		}
+
+		@Test void d05_resolveRefs_noRefWithItems() {
+			// Test resolveRefs when ref is null but items is not null (covers the missing branch)
+			var swagger = swagger()
+				.addDefinition("MyItem", JsonMap.of("type", "string"));
+
+			var header = headerInfo()
+				.setType("array")
+				.setItems(items().setRef("#/definitions/MyItem"));
+
+			var result = header.resolveRefs(swagger, new ArrayDeque<>(), 10);
+
+			// Should return the same object with resolved items
+			assertSame(header, result);
+			assertEquals("array", result.getType());
+			assertNotNull(result.getItems());
+			assertEquals("string", result.getItems().getType());
+			assertNull(result.getItems().getRef()); // ref should be resolved
 		}
 	}
-
 
 	//---------------------------------------------------------------------------------------------
 	// Helper methods

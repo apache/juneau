@@ -37,7 +37,7 @@ import org.apache.juneau.uon.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class RestUtils {
+public class RestUtils {
 
 	/**
 	 * Returns readable text for an HTTP response code.

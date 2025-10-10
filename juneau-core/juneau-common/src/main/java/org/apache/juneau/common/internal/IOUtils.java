@@ -22,7 +22,7 @@ import java.util.function.*;
 /**
  * Various I/O related utility methods.
  */
-public final class IOUtils {
+public class IOUtils {
 
 	/**
 	 * Constructor.

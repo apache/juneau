@@ -24,7 +24,7 @@ import org.apache.juneau.json.annotation.*;
 
  * </ul>
  */
-public final class JsonBeanPropertyMeta extends ExtendedBeanPropertyMeta {
+public class JsonBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.

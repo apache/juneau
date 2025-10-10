@@ -40,32 +40,59 @@ class Xml_Test extends TestBase {
 			.string("{'attribute':true,'name':'a','namespace':'b','prefix':'c','wrapped':true}".replace('\'', '"'))
 		;
 
-		@Test void b01_gettersAndSetters() {
+		@Test void a01_gettersAndSetters() {
 			TESTER.assertGettersAndSetters();
 		}
 
-		@Test void b02_copy() {
+		@Test void a02_copy() {
 			TESTER.assertCopy();
 		}
 
-		@Test void b03_toJson() {
+		@Test void a03_toJson() {
 			TESTER.assertToJson();
 		}
 
-		@Test void b04_fromJson() {
+		@Test void a04_fromJson() {
 			TESTER.assertFromJson();
 		}
 
-		@Test void b05_roundTrip() {
+		@Test void a05_roundTrip() {
 			TESTER.assertRoundTrip();
 		}
 
-		@Test void b06_toString() {
+		@Test void a06_toString() {
 			TESTER.assertToString();
 		}
 
-		@Test void b07_keySet() {
+		@Test void a07_keySet() {
 			assertList(TESTER.bean().keySet(), "attribute", "name", "namespace", "prefix", "wrapped");
+		}
+
+		@Test void a08_asMap() {
+			assertBean(
+				bean()
+					.setName("a")
+					.setNamespace("b")
+					.set("x1", "x1a")
+					.asMap(),
+				"name,namespace,x1",
+				"a,b,x1a"
+			);
+		}
+
+		@Test void a09_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void a10_strictMode() {
+			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			assertDoesNotThrow(() -> bean().set("foo", "bar"));
+
+			assertFalse(bean().isStrict());
+			assertTrue(bean().strict().isStrict());
+			assertFalse(bean().strict(false).isStrict());
 		}
 	}
 
@@ -181,56 +208,6 @@ class Xml_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->bean().get(null));
 			assertThrows(IllegalArgumentException.class, ()->bean().get(null, String.class));
 			assertThrows(IllegalArgumentException.class, ()->bean().set(null, "a"));
-		}
-	}
-
-	@Nested class D_additionalMethods extends TestBase {
-
-		@Test void d01_asMap() {
-			assertBean(
-				bean()
-					.setName("a")
-					.setNamespace("b")
-					.set("x1", "x1a")
-					.asMap(),
-				"name,namespace,x1",
-				"a,b,x1a"
-			);
-		}
-
-		@Test void d02_extraKeys() {
-			var x = bean().set("x1", "x1a").set("x2", "x2a");
-			assertList(x.extraKeys(), "x1", "x2");
-			assertEmpty(bean().extraKeys());
-		}
-
-		@Test void d03_strict() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-		}
-	}
-
-	@Nested class E_strictMode extends TestBase {
-
-		@Test void e01_strictModeSetThrowsException() {
-			var x = bean().strict();
-			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
-		}
-
-		@Test void e02_nonStrictModeAllowsSet() {
-			var x = bean(); // not strict
-			assertDoesNotThrow(() -> x.set("foo", "bar"));
-		}
-
-		@Test void e03_strictModeToggle() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-			x.strict(false);
-			assertFalse(x.isStrict());
 		}
 	}
 

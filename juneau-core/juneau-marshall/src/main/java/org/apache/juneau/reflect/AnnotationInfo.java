@@ -35,7 +35,7 @@ import org.apache.juneau.svl.*;
  *
  * @param <T> The annotation type.
  */
-public final class AnnotationInfo<T extends Annotation> {
+public class AnnotationInfo<T extends Annotation> {
 
 	private final ClassInfo c;
 	private final MethodInfo m;

@@ -960,6 +960,63 @@ public class ParameterInfo extends SwaggerElement {
 		return this;
 	}
 
+
+	/**
+	 * Bean property getter:  <property>example</property>.
+	 *
+	 * <p>
+	 * An example of the parameter. This is useful for documentation purposes.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Object getExample() {
+		return example;
+	}
+
+	/**
+	 * Bean property setter:  <property>example</property>.
+	 *
+	 * <p>
+	 * An example of the parameter. This is useful for documentation purposes.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setExample(Object value) {
+		this.example = value;
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * Examples of the parameter. This is useful for documentation purposes.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,String> getExamples() {
+		return examples;
+	}
+
+	/**
+	 * Bean property setter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * Examples of the parameter. This is useful for documentation purposes.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setExamples(Map<String,String> value) {
+		this.examples = value;
+		return this;
+	}
+
 	// <FluentSetters>
 
 	// </FluentSetters>
@@ -973,6 +1030,8 @@ public class ParameterInfo extends SwaggerElement {
 			case "default" -> toType(getDefault(), type);
 			case "description" -> toType(getDescription(), type);
 			case "enum" -> toType(getEnum(), type);
+			case "example" -> toType(getExample(), type);
+			case "examples" -> toType(getExamples(), type);
 			case "exclusiveMaximum" -> toType(getExclusiveMaximum(), type);
 			case "exclusiveMinimum" -> toType(getExclusiveMinimum(), type);
 			case "format" -> toType(getFormat(), type);
@@ -1004,6 +1063,8 @@ public class ParameterInfo extends SwaggerElement {
 			case "default" -> setDefault(value);
 			case "description" -> setDescription(Utils.s(value));
 			case "enum" -> setEnum(value);
+			case "example" -> setExample(value);
+			case "examples" -> setExamples(toType(value, Map.class));
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
 			case "format" -> setFormat(Utils.s(value));
@@ -1084,5 +1145,4 @@ public class ParameterInfo extends SwaggerElement {
 
 		return this;
 	}
-
 }

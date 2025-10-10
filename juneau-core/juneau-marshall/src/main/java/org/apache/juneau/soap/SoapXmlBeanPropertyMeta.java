@@ -22,7 +22,7 @@ import org.apache.juneau.soap.annotation.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class SoapXmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
+public class SoapXmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.

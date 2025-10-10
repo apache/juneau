@@ -80,6 +80,68 @@ class OpenApi_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
 			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
 		}
+
+		@Test void a09_addMethods() {
+			assertBean(
+				bean()
+					.addPath("/test", pathItem().setGet(operation().setSummary("a"))),
+				"paths{/test{get{summary}}}",
+				"{{{a}}}"
+			);
+		}
+
+		@Test void a10_asMap() {
+			assertBean(
+				bean()
+					.setInfo(info().setTitle("a1").setVersion("a2"))
+					.set("x1", "x1a")
+					.asMap(),
+				"info{title,version},openapi,x1",
+				"{a1,a2},3.0.0,x1a"
+			);
+		}
+
+		@Test void a11_extraKeys() {
+			var x = bean().set("x1", "x1a").set("x2", "x2a");
+			assertList(x.extraKeys(), "x1", "x2");
+			assertEmpty(bean().extraKeys());
+		}
+
+		@Test void a12_strictMode() {
+			assertThrows(RuntimeException.class, () -> bean().strict().set("foo", "bar"));
+			assertDoesNotThrow(() -> bean().set("foo", "bar"));
+
+			assertFalse(bean().isStrict());
+			assertTrue(bean().strict().isStrict());
+			assertFalse(bean().strict(false).isStrict());
+		}
+
+		@Test void a13_collectionSetters() {
+			var x = bean()
+				.setSecurity(list(securityRequirement().setRequirements(map("a1", list("a2"))), securityRequirement().setRequirements(map("b1", list("b2")))))
+				.setServers(list(server().setUrl(URI.create("http://example1.com")), server().setUrl(URI.create("http://example2.com"))))
+				.setTags(list(tag().setName("c1"), tag().setName("c2")));
+
+			assertBean(x,
+				"security{#{requirements}},servers{#{url}},tags{#{name}}",
+				"{[{{a1=[a2]}},{{b1=[b2]}}]},{[{http://example1.com},{http://example2.com}]},{[{c1},{c2}]}"
+			);
+		}
+		
+		@Test void a14_addPath() {
+			// Test addPath method
+			var x = bean()
+				.addPath("/test", pathItem().setGet(operation().setSummary("Test operation")))
+				.addPath("/test2", pathItem().setPost(operation().setSummary("Test POST operation")));
+
+			assertBean(x,
+				"paths{/test{get{summary}},/test2{post{summary}}}",
+				"{{{Test operation}},{{Test POST operation}}}"
+			);
+
+			// Test addPath with null path (covers the null check branch)
+			assertThrows(IllegalArgumentException.class, () -> x.addPath(null, pathItem()));
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {
@@ -193,66 +255,15 @@ class OpenApi_Test extends TestBase {
 		}
 	}
 
-	@Nested class D_additionalMethods extends TestBase {
+	@Nested class D_utilityMethods extends TestBase {
 
-		@Test void d01_addMethods() {
-			assertBean(
-				bean()
-					.addPath("/test", pathItem().setGet(operation().setSummary("a"))),
-				"paths{/test{get{summary}}}",
-				"{{{a}}}"
-			);
-		}
-
-		@Test void d02_asMap() {
-			assertBean(
-				bean()
-					.setInfo(info().setTitle("a1").setVersion("a2"))
-					.set("x1", "x1a")
-					.asMap(),
-				"info{title,version},openapi,x1",
-				"{a1,a2},3.0.0,x1a"
-			);
-		}
-
-		@Test void d03_extraKeys() {
-			var x = bean().set("x1", "x1a").set("x2", "x2a");
-			assertList(x.extraKeys(), "x1", "x2");
-			assertEmpty(bean().extraKeys());
-		}
-	}
-
-	@Nested class E_strictMode extends TestBase {
-
-		@Test void e01_strictModeSetThrowsException() {
-			var x = bean().strict();
-			assertThrows(RuntimeException.class, () -> x.set("foo", "bar"));
-		}
-
-		@Test void e02_nonStrictModeAllowsSet() {
-			var x = bean(); // not strict
-			assertDoesNotThrow(() -> x.set("foo", "bar"));
-		}
-
-		@Test void e03_strictModeToggle() {
-			var x = bean();
-			assertFalse(x.isStrict());
-			x.strict();
-			assertTrue(x.isStrict());
-			x.strict(false);
-			assertFalse(x.isStrict());
-		}
-	}
-
-	@Nested class G_utilityMethods extends TestBase {
-
-		@Test void g01_findRef() {
+		@Test void d01_findRef() {
 			var x = openApi()
 				.setComponents(components().setSchemas(map("a1", schemaInfo().setType("a2"))));
 
 			assertBean(
-				x.findRef("#/components/schemas/a1", SchemaInfo.class), 
-				"type", 
+				x.findRef("#/components/schemas/a1", SchemaInfo.class),
+				"type",
 				"a2"
 			);
 

@@ -34,7 +34,7 @@ import org.apache.juneau.parser.*;
 
  * </ul>
  */
-public final class UonReader extends ParserReader {
+public class UonReader extends ParserReader {
 
 	private final boolean decodeChars;
 	private final char[] buff;

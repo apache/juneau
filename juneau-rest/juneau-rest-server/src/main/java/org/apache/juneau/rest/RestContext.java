@@ -163,7 +163,7 @@ public class RestContext extends Context {
 	 * Builder class.
 	 */
 	@FluentSetters(ignore={"set"})
-	public static final class Builder extends Context.Builder implements ServletConfig {
+	public static class Builder extends Context.Builder implements ServletConfig {
 
 		private static final Set<Class<?>> DELAYED_INJECTION = Utils.set(
 			BeanContext.Builder.class,

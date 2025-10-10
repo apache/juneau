@@ -40,7 +40,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public final class MsgPackParserSession extends InputStreamParserSession {
+public class MsgPackParserSession extends InputStreamParserSession {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static

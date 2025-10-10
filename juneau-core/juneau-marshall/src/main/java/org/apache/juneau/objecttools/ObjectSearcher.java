@@ -98,7 +98,7 @@ import org.apache.juneau.common.internal.*;
  * </ul>
  */
 @SuppressWarnings({"rawtypes"})
-public final class ObjectSearcher implements ObjectTool<SearchArgs> {
+public class ObjectSearcher implements ObjectTool<SearchArgs> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

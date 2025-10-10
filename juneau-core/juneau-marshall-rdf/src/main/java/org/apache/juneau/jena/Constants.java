@@ -19,7 +19,7 @@ package org.apache.juneau.jena;
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
-public final class Constants {
+public class Constants {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Built-in Jena languages.

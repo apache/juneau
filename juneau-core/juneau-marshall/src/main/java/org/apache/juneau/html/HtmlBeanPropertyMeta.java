@@ -26,7 +26,7 @@ import org.apache.juneau.html.annotation.*;
  * </ul>
  */
 @SuppressWarnings("rawtypes")
-public final class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
+public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.
@@ -73,7 +73,7 @@ public final class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		this.anchorText = null;
 	}
 
-	static final class Builder {
+	static class Builder {
 		boolean noTables, noTableHeaders;
 		HtmlFormat format = HtmlFormat.HTML;
 		BeanCreator<HtmlRender> render = BeanCreator.of(HtmlRender.class);

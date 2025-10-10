@@ -73,7 +73,7 @@ import org.apache.juneau.rest.httppart.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  * </ul>
  */
-public final class Queryable implements RestConverter {
+public class Queryable implements RestConverter {
 
 	/**
 	 * Swagger parameters for this converter.

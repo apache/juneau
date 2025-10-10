@@ -101,7 +101,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * Builder class.
 	 */
 	@FluentSetters
-	public static final class Builder extends Context.Builder {
+	public static class Builder extends Context.Builder {
 
 		RestContext restContext;
 		RestContext.Builder parent;

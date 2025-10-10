@@ -37,7 +37,7 @@ import jakarta.xml.bind.*;
 /**
  * Reusable string utility methods.
  */
-public final class StringUtils {
+public class StringUtils {
 
 	/**
 	 * Predicate check to filter out null and empty strings.
@@ -1692,7 +1692,7 @@ public final class StringUtils {
 
 	/**
 	 * Converts the contents of the specified input stream to a hex string.
-	 * 
+	 *
 	 * @param is The input stream to convert.
 	 * @return The hex string representation of the input stream contents, or <jk>null</jk> if the stream is <jk>null</jk>.
 	 */
@@ -1825,7 +1825,7 @@ public final class StringUtils {
 
 	/**
 	 * Converts the specified byte array to a UTF-8 string.
-	 * 
+	 *
 	 * @param b The byte array to convert.
 	 * @return The UTF-8 string representation, or <jk>null</jk> if the array is <jk>null</jk>.
 	 */
@@ -1835,7 +1835,7 @@ public final class StringUtils {
 
 	/**
 	 * Converts the contents of the specified input stream to a UTF-8 string.
-	 * 
+	 *
 	 * @param is The input stream to convert.
 	 * @return The UTF-8 string representation of the input stream contents, or <jk>null</jk> if the stream is <jk>null</jk>.
 	 */

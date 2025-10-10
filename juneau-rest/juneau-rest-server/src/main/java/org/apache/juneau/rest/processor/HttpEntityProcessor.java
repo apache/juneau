@@ -26,7 +26,7 @@ import org.apache.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */
-public final class HttpEntityProcessor implements ResponseProcessor {
+public class HttpEntityProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException {

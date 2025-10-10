@@ -23,7 +23,7 @@ import java.io.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class NoCloseOutputStream extends OutputStream {
+public class NoCloseOutputStream extends OutputStream {
 
 	private final OutputStream os;
 

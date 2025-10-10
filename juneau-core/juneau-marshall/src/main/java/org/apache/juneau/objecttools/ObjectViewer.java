@@ -48,7 +48,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public final class ObjectViewer implements ObjectTool<ViewArgs> {
+public class ObjectViewer implements ObjectTool<ViewArgs> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

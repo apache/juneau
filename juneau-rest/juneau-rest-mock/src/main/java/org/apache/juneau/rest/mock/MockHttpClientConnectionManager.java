@@ -34,7 +34,7 @@ import org.apache.http.protocol.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
  * </ul>
  */
-final class MockHttpClientConnectionManager implements HttpClientConnectionManager {
+class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 
 	private ConnectionRequest cr;
 

@@ -32,7 +32,7 @@ import org.apache.juneau.parser.*;
  *
  * @param <E> Element type.
  */
-public final class ListBuilder<E> {
+public class ListBuilder<E> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -83,7 +83,7 @@ public final class ListBuilder<E> {
 
 	/**
 	 * Specifies the element type on this list.
-	 * 
+	 *
 	 * @param value The element type.
 	 * @return This object.
 	 */

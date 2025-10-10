@@ -35,7 +35,7 @@ import org.apache.juneau.httppart.bean.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */
-public final class ResponseBeanProcessor implements ResponseProcessor {
+public class ResponseBeanProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException {

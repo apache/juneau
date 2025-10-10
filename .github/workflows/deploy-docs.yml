@@ -12,7 +12,7 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 #
-name: Deploy Documentation
+name: Promote Docs to Live
 
 on:
   push:
@@ -86,6 +86,7 @@ jobs:
   promote-docs:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
+    needs: build-docs
     steps:
       - uses: actions/checkout@v4
         with:
@@ -100,4 +101,4 @@ jobs:
         run: |
           git fetch origin asf-staging
           git switch --detach origin/asf-staging
-          git push origin HEAD:asf-site
+          git push origin HEAD:asf-site --force

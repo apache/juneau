@@ -19,7 +19,7 @@ import java.util.*;
  *
  * @serial exclude
  */
-public final class JsonTypeArray extends LinkedList<JsonType> {
+public class JsonTypeArray extends LinkedList<JsonType> {
 
 	private static final long serialVersionUID = 1L;
 

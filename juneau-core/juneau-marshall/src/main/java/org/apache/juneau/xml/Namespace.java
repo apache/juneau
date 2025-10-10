@@ -32,7 +32,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(sort=true)
-public final class Namespace {
+public class Namespace {
 
 	private static final ConcurrentHashMap<String,Namespace> CACHE = new ConcurrentHashMap<>();
 

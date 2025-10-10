@@ -24,7 +24,7 @@ import java.io.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public final class StringBuilderWriter extends Writer {
+public class StringBuilderWriter extends Writer {
 
 	private StringBuilder sb;
 

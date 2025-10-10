@@ -30,7 +30,7 @@ import org.apache.juneau.reflect.*;
  *
  * @serial exclude
  */
-public final class InvalidDataConversionException extends BasicRuntimeException {
+public class InvalidDataConversionException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

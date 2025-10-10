@@ -329,7 +329,7 @@ public class BeanTraverseSession extends BeanSession {
 		super.addWarning(msg, args);
 	}
 
-	private final class StackElement {
+	private class StackElement {
 		final int depth;
 		final String name;
 		final Object o;

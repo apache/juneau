@@ -189,6 +189,144 @@ public class Operation extends OpenApiElement {
 	}
 
 	/**
+	 * Bean property fluent setter:  <property>parameters</property>.
+	 *
+	 * <p>
+	 * A list of parameters that are applicable for this operation.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addParameters(Parameter...values) {
+		parameters = listBuilder(parameters).sparse().add(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>parameters</property>.
+	 *
+	 * <p>
+	 * A list of parameters that are applicable for this operation.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addParameters(Collection<Parameter> values) {
+		parameters = listBuilder(parameters).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>responses</property>.
+	 *
+	 * <p>
+	 * The list of possible responses as they are returned from executing this operation.
+	 *
+	 * @param statusCode
+	 * 	The status code for the response.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param response
+	 * 	The response object.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addResponse(String statusCode, Response response) {
+		assertArgNotNull("statusCode", statusCode);
+		assertArgNotNull("response", response);
+		responses = mapBuilder(responses).sparse().add(statusCode, response).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>callbacks</property>.
+	 *
+	 * <p>
+	 * A map of possible out-of band callbacks related to the parent operation.
+	 *
+	 * @param name
+	 * 	The name of the callback.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param callback
+	 * 	The callback object.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addCallback(String name, Callback callback) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("callback", callback);
+		callbacks = mapBuilder(callbacks).sparse().add(name, callback).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security mechanisms can be used for this operation.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addSecurity(SecurityRequirement...values) {
+		security = listBuilder(security).sparse().add(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security mechanisms can be used for this operation.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addSecurity(Collection<SecurityRequirement> values) {
+		security = listBuilder(security).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>servers</property>.
+	 *
+	 * <p>
+	 * An alternative server array to service this operation.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addServers(Server...values) {
+		servers = listBuilder(servers).sparse().add(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>servers</property>.
+	 *
+	 * <p>
+	 * An alternative server array to service this operation.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addServers(Collection<Server> values) {
+		servers = listBuilder(servers).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
 	 * Returns the summary.
 	 *
 	 * @return The summary.

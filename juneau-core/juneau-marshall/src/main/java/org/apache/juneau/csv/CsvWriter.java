@@ -25,7 +25,7 @@ import org.apache.juneau.serializer.*;
  * 		This class is not intended for external use.
  * </ul>
  */
-public final class CsvWriter extends SerializerWriter {
+public class CsvWriter extends SerializerWriter {
 
 	/**
 	 * Constructor.

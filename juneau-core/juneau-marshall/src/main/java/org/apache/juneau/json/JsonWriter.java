@@ -32,7 +32,7 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
-public final class JsonWriter extends SerializerWriter {
+public class JsonWriter extends SerializerWriter {
 
 	private final boolean simpleAttrs, escapeSolidus;
 

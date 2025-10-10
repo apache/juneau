@@ -18,7 +18,7 @@ import java.nio.charset.*;
 /**
  * Utility class for creating {@link FileWriter} objects.
  */
-public final class FileWriterBuilder {
+public class FileWriterBuilder {
 
 	private File file;
 	private Charset cs = Charset.defaultCharset();

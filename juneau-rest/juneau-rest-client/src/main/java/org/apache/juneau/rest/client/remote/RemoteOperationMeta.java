@@ -72,7 +72,7 @@ public class RemoteOperationMeta {
 		this.exceptions = m.getExceptionTypes();
 	}
 
-	private static final class Builder {
+	private static class Builder {
 		String httpMethod, fullPath, path;
 		List<RemoteOperationArg>
 			pathArgs = new LinkedList<>(),

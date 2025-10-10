@@ -30,7 +30,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(properties="type,properties")
-public final class BeanDescription {
+public class BeanDescription {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

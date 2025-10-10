@@ -252,6 +252,22 @@ public class SchemaInfo extends SwaggerElement {
 	/**
 	 * Bean property fluent setter:  <property>allOf</property>.
 	 *
+	 * <p>
+	 * Inline or referenced schema MUST be of a Schema Object and not a standard JSON Schema.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public SchemaInfo addAllOf(Collection<SchemaInfo> values) {
+		allOf = setBuilder(allOf).elementType(SchemaInfo.class).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>allOf</property>.
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Strings can contains JSON arrays.
@@ -368,6 +384,22 @@ public class SchemaInfo extends SwaggerElement {
 	 */
 	public SchemaInfo addEnum(Object...value) {
 		_enum = setBuilder(_enum).sparse().add(value).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>enum</property>.
+	 *
+	 * <p>
+	 * An enumeration of possible values.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public SchemaInfo addEnum(Collection<Object> values) {
+		_enum = setBuilder(_enum).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -901,6 +933,22 @@ public class SchemaInfo extends SwaggerElement {
 	 */
 	public SchemaInfo addRequiredProperties(String...value) {
 		requiredProperties = setBuilder(requiredProperties).sparse().add(value).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>requiredProperties</property>.
+	 *
+	 * <p>
+	 * Takes an array of strings that define the required properties.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public SchemaInfo addRequiredProperties(Collection<String> values) {
+		requiredProperties = setBuilder(requiredProperties).sparse().addAll(values).build();
 		return this;
 	}
 

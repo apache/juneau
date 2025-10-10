@@ -53,7 +53,7 @@ import org.apache.juneau.common.internal.*;
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public final class ObjectSorter implements ObjectTool<SortArgs> {
+public class ObjectSorter implements ObjectTool<SortArgs> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

@@ -32,7 +32,7 @@ import org.apache.juneau.marshaller.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */
-public final class SerializedPojoProcessor implements ResponseProcessor {
+public class SerializedPojoProcessor implements ResponseProcessor {
 
 	@Override /* ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException, NotAcceptable, BasicHttpException {
