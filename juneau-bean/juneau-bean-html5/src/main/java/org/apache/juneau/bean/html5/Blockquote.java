@@ -26,21 +26,32 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple blockquote
- * 	Blockquote quote1 = new Blockquote().text("The only way to do great work is to love what you do.");
+ * 	<jc>// Simple blockquote</jc>
+ * 	Blockquote <jv>quote1</jv> = <jsm>blockquote</jsm>().text(<js>"The only way to do great work is to love what you do."</js>);
  * 
- * 	// Blockquote with citation
- * 	Blockquote quote2 = new Blockquote()
- * 		.cite("https://example.com/source")
- * 		.text("Innovation distinguishes between a leader and a follower.");
+ * 	<jc>// Blockquote with citation</jc>
+ * 	Blockquote <jv>quote2</jv> = <jsm>blockquote</jsm>()
+ * 		.cite(<js>"https://example.com/source"</js>)
+ * 		.text(<js>"Innovation distinguishes between a leader and a follower."</js>);
  * 
- * 	// Blockquote with nested content
- * 	Blockquote quote3 = new Blockquote()
- * 		.cite("https://example.com/article")
+ * 	<jc>// Blockquote with nested content</jc>
+ * 	Blockquote <jv>quote3</jv> = <jsm>blockquote</jsm>()
+ * 		.cite(<js>"https://example.com/article"</js>)
  * 		.children(
- * 			new P().text("This is a longer quotation that spans multiple paragraphs."),
- * 			new P().text("It can contain various HTML elements.")
+ * 			<jsm>p</jsm>().text(<js>"This is a longer quotation that spans multiple paragraphs."</js>),
+ * 			<jsm>p</jsm>().text(<js>"It can contain various HTML elements."</js>)
  * 		);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#blockquote() blockquote()}
+ * 		<li class='jm'>{@link HtmlBuilder#blockquote(Object, Object...) blockquote(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

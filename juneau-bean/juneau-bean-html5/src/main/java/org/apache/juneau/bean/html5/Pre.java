@@ -33,41 +33,37 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple preformatted text
- * 	Pre simple = new Pre()
- * 		.children("This text preserves\n  all formatting\n    and spacing.");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Pre with styling
- * 	Pre styled = new Pre()
- * 		._class("code-block")
- * 		.children("function hello() {\n  return 'Hello World';\n}");
+ * 	<jc>// Simple preformatted text</jc>
+ * 	Pre <jv>simple</jv> = <jsm>pre</jsm>(<js>"This text preserves\n  all formatting\n    and spacing."</js>);
  *
- * 	// Pre with complex content
- * 	Pre complex = new Pre()
- * 		.children(
- * 			"  ",
- * 			new Strong().children("Bold text"),
- * 			" in preformatted content\n",
- * 			"  ",
- * 			new Em().children("Italic text"),
- * 			" with preserved formatting"
- * 		);
+ * 	<jc>// Pre with styling</jc>
+ * 	Pre <jv>styled</jv> = <jsm>pre</jsm>(<js>"function hello() {\n  return 'Hello World';\n}"</js>)
+ * 		._class(<js>"code-block"</js>);
  *
- * 	// Pre with ID
- * 	Pre withId = new Pre()
- * 		.id("code-example")
- * 		.children("console.log('Hello World');");
+ * 	<jc>// Pre with complex content</jc>
+ * 	Pre <jv>complex</jv> = <jsm>pre</jsm>(
+ * 		<js>"  "</js>,
+ * 		<jsm>strong</jsm>(<js>"Bold text"</js>),
+ * 		<js>" in preformatted content\n"</js>,
+ * 		<js>"  "</js>,
+ * 		<jsm>em</jsm>(<js>"Italic text"</js>),
+ * 		<js>" with preserved formatting"</js>
+ * 	);
  *
- * 	// Pre with styling
- * 	Pre styled2 = new Pre()
- * 		.style("background-color: #f4f4f4; padding: 10px; border: 1px solid #ddd;")
- * 		.children("This is styled preformatted text.");
+ * 	<jc>// Pre with ID</jc>
+ * 	Pre <jv>withId</jv> = <jsm>pre</jsm>(<js>"console.log('Hello World');"</js>)
+ * 		.id(<js>"code-example"</js>);
  *
- * 	// Pre with multiple elements
- * 	Pre multiple = new Pre()
- * 		.children(
- * 			"Line 1: ",
- * 			new Span()._class("keyword").children("function"),
+ * 	<jc>// Pre with styling</jc>
+ * 	Pre <jv>styled2</jv> = <jsm>pre</jsm>(<js>"This is styled preformatted text."</js>)
+ * 		.style(<js>"background-color: #f4f4f4; padding: 10px; border: 1px solid #ddd;"</js>);
+ *
+ * 	<jc>// Pre with multiple elements</jc>
+ * 	Pre <jv>multiple</jv> = <jsm>pre</jsm>(
+ * 		<js>"Line 1: "</js>,
+ * 		<jsm>span</jsm>(<js>"function"</js>)._class(<js>"keyword"</js>),
  * 			" ",
  * 			new Span()._class("function-name").children("example"),
  * 			"() {\n",
@@ -84,6 +80,17 @@ import org.apache.juneau.xml.annotation.*;
  * 		.children(
  * 			new Code().children("const message = 'Hello World';\nconsole.log(message);")
  * 		);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#pre() pre()}
+ * 		<li class='jm'>{@link HtmlBuilder#pre(Object, Object...) pre(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

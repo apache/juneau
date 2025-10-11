@@ -27,37 +27,33 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple data cell
- * 	Td simple = new Td()
- * 		.children("John Doe");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Data cell with styling
- * 	Td styled = new Td()
- * 		._class("highlight")
- * 		.children("Important Data");
+ * 	<jc>// Simple data cell</jc>
+ * 	Td <jv>simple</jv> = <jsm>td</jsm>(<js>"John Doe"</js>);
  * 
- * 	// Data cell spanning multiple columns
- * 	Td colspan = new Td()
- * 		.colspan(2)
- * 		.children("Spans 2 columns");
+ * 	<jc>// Data cell with styling</jc>
+ * 	Td <jv>styled</jv> = <jsm>td</jsm>(<js>"Important Data"</js>)
+ * 		._class(<js>"highlight"</js>);
  * 
- * 	// Data cell spanning multiple rows
- * 	Td rowspan = new Td()
- * 		.rowspan(3)
- * 		.children("Spans 3 rows");
+ * 	<jc>// Data cell spanning multiple columns</jc>
+ * 	Td <jv>colspan</jv> = <jsm>td</jsm>(<js>"Spans 2 columns"</js>)
+ * 		.colspan(2);
  * 
- * 	// Data cell with headers association
- * 	Td headers = new Td()
- * 		.headers("name-header age-header")
- * 		.children("25");
+ * 	<jc>// Data cell spanning multiple rows</jc>
+ * 	Td <jv>rowspan</jv> = <jsm>td</jsm>(<js>"Spans 3 rows"</js>)
+ * 		.rowspan(3);
  * 
- * 	// Data cell with complex content
- * 	Td complex = new Td()
- * 		.children(
- * 			new Strong().children("Bold text"),
- * 			" and ",
- * 			new Em().children("italic text")
- * 		);
+ * 	<jc>// Data cell with headers association</jc>
+ * 	Td <jv>headers</jv> = <jsm>td</jsm>(<js>"25"</js>)
+ * 		.headers(<js>"name-header age-header"</js>);
+ * 
+ * 	<jc>// Data cell with complex content</jc>
+ * 	Td <jv>complex</jv> = <jsm>td</jsm>(
+ * 		<jsm>strong</jsm>(<js>"Bold text"</js>),
+ * 		<js>" and "</js>,
+ * 		<jsm>em</jsm>(<js>"italic text"</js>)
+ * 	);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

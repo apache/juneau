@@ -27,32 +27,41 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple output element
- * 	Output output1 = new Output()
- * 		.name("result")
- * 		.text("0");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Output with form association
- * 	Output output2 = new Output()
- * 		.name("sum")
- * 		._for("num1 num2")
- * 		.text("0");
+ * 	<jc>// Simple output element</jc>
+ * 	Output <jv>output1</jv> = <jsm>output</jsm>(<js>"0"</js>)
+ * 		.name(<js>"result"</js>);
  * 
- * 	// Output in a calculation form
- * 	Form calcForm = new Form()
- * 		.children(
- * 			new Input().type("number").name("num1").id("num1").value("0"),
- * 			new Span().text(" + "),
- * 			new Input().type("number").name("num2").id("num2").value("0"),
- * 			new Span().text(" = "),
- * 			new Output().name("sum")._for("num1 num2").text("0")
- * 		);
+ * 	<jc>// Output with form association</jc>
+ * 	Output <jv>output2</jv> = <jsm>output</jsm>(<js>"0"</js>)
+ * 		.name(<js>"sum"</js>)
+ * 		._for(<js>"num1 num2"</js>);
  * 
- * 	// Output with styling
- * 	Output output3 = new Output()
- * 		.name("display")
- * 		._class("result-display")
- * 		.text("Ready for calculation");
+ * 	<jc>// Output in a calculation form</jc>
+ * 	Form <jv>calcForm</jv> = <jsm>form</jsm>(
+ * 		<jsm>input</jsm>(<js>"number"</js>).name(<js>"num1"</js>).id(<js>"num1"</js>).value(<js>"0"</js>),
+ * 		<jsm>span</jsm>(<js>" + "</js>),
+ * 		<jsm>input</jsm>(<js>"number"</js>).name(<js>"num2"</js>).id(<js>"num2"</js>).value(<js>"0"</js>),
+ * 		<jsm>span</jsm>(<js>" = "</js>),
+ * 		<jsm>output</jsm>(<js>"0"</js>).name(<js>"sum"</js>)._for(<js>"num1 num2"</js>)
+ * 	);
+ * 
+ * 	<jc>// Output with styling</jc>
+ * 	Output <jv>output3</jv> = <jsm>output</jsm>(<js>"Ready for calculation"</js>)
+ * 		.name(<js>"display"</js>)
+ * 		._class(<js>"result-display"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#output() output()}
+ * 		<li class='jm'>{@link HtmlBuilder#output(Object, Object...) output(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

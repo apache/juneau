@@ -297,6 +297,16 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the element loses focus.
 	 *
+	 * <h5 class='section'>Note:</h5>
+	 * <p>
+	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+	 * For example:
+	 * <ul>
+	 * 	<li>If using single quotes for attributes: <c>onblur(<js>"validate(\"email\")"</js>)</c>
+	 * 	<li>If using double quotes for attributes: <c>onblur(<js>"validate('email')"</js>)</c>
+	 * </ul>
+	 *
 	 * @param onblur JavaScript code to execute when the element loses focus.
 	 * @return This object.
 	 */
@@ -358,6 +368,16 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the value of a form element changes and loses focus.
 	 *
+	 * <h5 class='section'>Note:</h5>
+	 * <p>
+	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+	 * For example:
+	 * <ul>
+	 * 	<li>If using single quotes for attributes: <c>onchange(<js>"validate(\"field\")"</js>)</c>
+	 * 	<li>If using double quotes for attributes: <c>onchange(<js>"validate('field')"</js>)</c>
+	 * </ul>
+	 *
 	 * @param onchange JavaScript code to execute when the change event occurs.
 	 * @return This object.
 	 */
@@ -372,6 +392,16 @@ public abstract class HtmlElement {
 	 *
 	 * <p>
 	 * Event handler for when the element is clicked.
+	 *
+	 * <h5 class='section'>Note:</h5>
+	 * <p>
+	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+	 * For example:
+	 * <ul>
+	 * 	<li>If using single quotes for attributes: <c>onclick(<js>"alert(\"Hello\")"</js>)</c>
+	 * 	<li>If using double quotes for attributes: <c>onclick(<js>"alert('Hello')"</js>)</c>
+	 * </ul>
 	 *
 	 * @param onclick JavaScript code to execute when the click event occurs.
 	 * @return This object.
@@ -480,6 +510,16 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when the element receives focus.
 	 *
+	 * <h5 class='section'>Note:</h5>
+	 * <p>
+	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+	 * For example:
+	 * <ul>
+	 * 	<li>If using single quotes for attributes: <c>onfocus(<js>"highlight(\"field\")"</js>)</c>
+	 * 	<li>If using double quotes for attributes: <c>onfocus(<js>"highlight('field')"</js>)</c>
+	 * </ul>
+	 *
 	 * @param onfocus JavaScript code to execute when the focus event occurs.
 	 * @return This object.
 	 */
@@ -569,6 +609,16 @@ public abstract class HtmlElement {
 	 *
 	 * <p>
 	 * Event handler for when the element and its resources have finished loading.
+	 *
+	 * <h5 class='section'>Note:</h5>
+	 * <p>
+	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+	 * For example:
+	 * <ul>
+	 * 	<li>If using single quotes for attributes: <c>onload(<js>"init(\"config\")"</js>)</c>
+	 * 	<li>If using double quotes for attributes: <c>onload(<js>"init('config')"</js>)</c>
+	 * </ul>
 	 *
 	 * @param onload JavaScript code to execute when the load event occurs.
 	 * @return This object.
@@ -711,6 +761,16 @@ public abstract class HtmlElement {
 	 *
 	 * <p>
 	 * Event handler for when the mouse pointer moves over the element (bubbles).
+	 *
+	 * <h5 class='section'>Note:</h5>
+	 * <p>
+	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+	 * For example:
+	 * <ul>
+	 * 	<li>If using single quotes for attributes: <c>onmouseover(<js>"showTooltip(\"info\")"</js>)</c>
+	 * 	<li>If using double quotes for attributes: <c>onmouseover(<js>"showTooltip('info')"</js>)</c>
+	 * </ul>
 	 *
 	 * @param onmouseover JavaScript code to execute when the mouseover event occurs.
 	 * @return This object.
@@ -954,6 +1014,16 @@ public abstract class HtmlElement {
 	 * <p>
 	 * Event handler for when a form is submitted.
 	 *
+	 * <h5 class='section'>Note:</h5>
+	 * <p>
+	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+	 * For example:
+	 * <ul>
+	 * 	<li>If using single quotes for attributes: <c>onsubmit(<js>"return validate(\"form\")"</js>)</c>
+	 * 	<li>If using double quotes for attributes: <c>onsubmit(<js>"return validate('form')"</js>)</c>
+	 * </ul>
+	 *
 	 * @param onsubmit JavaScript code to execute when the submit event occurs.
 	 * @return This object.
 	 */
@@ -1161,6 +1231,6 @@ public abstract class HtmlElement {
 
 	@Override /* Object */
 	public String toString() {
-		return HtmlSerializer.DEFAULT_SQ.toString(this);
+		return HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(this);
 	}
 }

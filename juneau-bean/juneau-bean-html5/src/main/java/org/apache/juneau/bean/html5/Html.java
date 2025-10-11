@@ -26,38 +26,41 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Basic HTML document structure
- * 	Html html1 = new Html()
- * 		.lang("en")
- * 		.children(
- * 			new Head().children(
- * 				new Title().text("My Web Page"),
- * 				new Meta().charset("utf-8")
- * 			),
- * 			new Body().text("Hello, World!")
- * 		);
+ * 	<jc>// Basic HTML document structure</jc>
+ * 	Html <jv>html1</jv> = <jsm>html</jsm>(
+ * 		<jsm>head</jsm>(
+ * 			<jsm>title</jsm>(<js>"My Web Page"</js>),
+ * 			<jsm>meta</jsm>().charset(<js>"utf-8"</js>)
+ * 		),
+ * 		<jsm>body</jsm>(<js>"Hello, World!"</js>)
+ * 	).lang(<js>"en"</js>);
  * 
- * 	// HTML with manifest for offline support
- * 	Html html2 = new Html()
- * 		.lang("en")
- * 		.manifest("app.manifest")
- * 		.children(
- * 			new Head().children(
- * 				new Title().text("Offline App")
- * 			),
- * 			new Body().text("This app works offline!")
- * 		);
+ * 	<jc>// HTML with manifest for offline support</jc>
+ * 	Html <jv>html2</jv> = <jsm>html</jsm>(
+ * 		<jsm>head</jsm>(
+ * 			<jsm>title</jsm>(<js>"Offline App"</js>)
+ * 		),
+ * 		<jsm>body</jsm>(<js>"This app works offline!"</js>)
+ * 	).lang(<js>"en"</js>).manifest(<js>"app.manifest"</js>);
  * 
- * 	// HTML with custom attributes
- * 	Html html3 = new Html()
- * 		.lang("es")
- * 		._class("no-js")
- * 		.children(
- * 			new Head().children(
- * 				new Title().text("Página en Español")
- * 			),
- * 			new Body().text("¡Hola, Mundo!")
- * 		);
+ * 	<jc>// HTML with custom attributes</jc>
+ * 	Html <jv>html3</jv> = <jsm>html</jsm>(
+ * 		<jsm>head</jsm>(
+ * 			<jsm>title</jsm>(<js>"Página en Español"</js>)
+ * 		),
+ * 		<jsm>body</jsm>(<js>"¡Hola, Mundo!"</js>)
+ * 	).lang(<js>"es"</js>)._class(<js>"no-js"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#html() html()}
+ * 		<li class='jm'>{@link HtmlBuilder#html(Object, Object...) html(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

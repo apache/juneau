@@ -27,72 +27,72 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Sidebar with related links
- * 	Aside sidebar = new Aside()
- * 		._class("sidebar")
- * 		.children(
- * 			new H3().children("Related Articles"),
- * 			new Ul().children(
- * 				new Li().children(new A().href("/article1").children("Article 1")),
- * 				new Li().children(new A().href("/article2").children("Article 2")),
- * 				new Li().children(new A().href("/article3").children("Article 3"))
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Sidebar with related links</jc>
+ * 	Aside <jv>sidebar</jv> = <jsm>aside</jsm>(
+ * 		<jsm>h3</jsm>(<js>"Related Articles"</js>),
+ * 		<jsm>ul</jsm>(
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/article1"</js>, <js>"Article 1"</js>)),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/article2"</js>, <js>"Article 2"</js>)),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/article3"</js>, <js>"Article 3"</js>))
+ * 		)
+ * 	)._class(<js>"sidebar"</js>);
+ * 
+ * 	<jc>// Pull quote</jc>
+ * 	Aside <jv>pullQuote</jv> = <jsm>aside</jsm>(
+ * 		<jsm>blockquote</jsm>(
+ * 			<js>"The best way to predict the future is to create it."</js>,
+ * 			<jsm>footer</jsm>(<js>"— Peter Drucker"</js>)
+ * 		)
+ * 	)._class(<js>"pull-quote"</js>);
+ * 
+ * 	<jc>// Advertisement</jc>
+ * 	Aside <jv>advertisement</jv> = <jsm>aside</jsm>(
+ * 		<jsm>h4</jsm>(<js>"Sponsored Content"</js>),
+ * 		<jsm>p</jsm>(<js>"Check out our latest product!"</js>),
+ * 		<jsm>a</jsm>(<js>"/product"</js>, <js>"Learn More"</js>)
+ * 	)._class(<js>"advertisement"</js>);
+ * 
+ * 	<jc>// Author bio</jc>
+ * 	Aside <jv>authorBio</jv> = <jsm>aside</jsm>(
+ * 		<jsm>h3</jsm>(<js>"About the Author"</js>),
+ * 		<jsm>p</jsm>(<js>"John Doe is a web developer with 10 years of experience..."</js>),
+ * 		<jsm>a</jsm>(<js>"/author/john-doe"</js>, <js>"Read more articles"</js>)
+ * 	)._class(<js>"author-bio"</js>);
+ * 
+ * 	<jc>// Navigation menu</jc>
+ * 	Aside <jv>navigation</jv> = <jsm>aside</jsm>(
+ * 		<jsm>nav</jsm>(
+ * 			<jsm>ul</jsm>(
+ * 				<jsm>li</jsm>(<jsm>a</jsm>(<js>"/home"</js>, <js>"Home"</js>)),
+ * 				<jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>)),
+ * 				<jsm>li</jsm>(<jsm>a</jsm>(<js>"/contact"</js>, <js>"Contact"</js>))
  * 			)
- * 		);
+ * 		)
+ * 	)._class(<js>"navigation"</js>);
  * 
- * 	// Pull quote
- * 	Aside pullQuote = new Aside()
- * 		._class("pull-quote")
- * 		.children(
- * 			new Blockquote()
- * 				.children(
- * 					"The best way to predict the future is to create it.",
- * 					new Footer().children("— Peter Drucker")
- * 				)
- * 		);
- * 
- * 	// Advertisement
- * 	Aside advertisement = new Aside()
- * 		._class("advertisement")
- * 		.children(
- * 			new H4().children("Sponsored Content"),
- * 			new P().children("Check out our latest product!"),
- * 			new A().href("/product").children("Learn More")
- * 		);
- * 
- * 	// Author bio
- * 	Aside authorBio = new Aside()
- * 		._class("author-bio")
- * 		.children(
- * 			new H3().children("About the Author"),
- * 			new P().children("John Doe is a web developer with 10 years of experience..."),
- * 			new A().href("/author/john-doe").children("Read more articles")
- * 		);
- * 
- * 	// Navigation menu
- * 	Aside navigation = new Aside()
- * 		._class("navigation")
- * 		.children(
- * 			new Nav().children(
- * 				new Ul().children(
- * 					new Li().children(new A().href("/home").children("Home")),
- * 					new Li().children(new A().href("/about").children("About")),
- * 					new Li().children(new A().href("/contact").children("Contact"))
- * 				)
- * 			)
- * 		);
- * 
- * 	// Glossary or definitions
- * 	Aside glossary = new Aside()
- * 		._class("glossary")
- * 		.children(
- * 			new H3().children("Key Terms"),
- * 			new Dl().children(
- * 				new Dt().children("HTML"),
- * 				new Dd().children("HyperText Markup Language"),
- * 				new Dt().children("CSS"),
- * 				new Dd().children("Cascading Style Sheets")
- * 			)
- * 		);
+ * 	<jc>// Glossary or definitions</jc>
+ * 	Aside <jv>glossary</jv> = <jsm>aside</jsm>(
+ * 		<jsm>h3</jsm>(<js>"Key Terms"</js>),
+ * 		<jsm>dl</jsm>(
+ * 			<jsm>dt</jsm>(<js>"HTML"</js>),
+ * 			<jsm>dd</jsm>(<js>"HyperText Markup Language"</js>),
+ * 			<jsm>dt</jsm>(<js>"CSS"</js>),
+ * 			<jsm>dd</jsm>(<js>"Cascading Style Sheets"</js>)
+ * 		)
+ * 	)._class(<js>"glossary"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#aside() aside()}
+ * 		<li class='jm'>{@link HtmlBuilder#aside(Object, Object...) aside(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

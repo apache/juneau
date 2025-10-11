@@ -26,37 +26,40 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple option
- * 	Option option1 = new Option()
- * 		.value("red")
- * 		.text("Red");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Selected option
- * 	Option option2 = new Option()
- * 		.value("blue")
- * 		.text("Blue")
- * 		.selected(true);
+ * 	<jc>// Simple option</jc>
+ * 	Option <jv>option1</jv> = <jsm>option</jsm>(<js>"red"</js>, <js>"Red"</js>);
  * 
- * 	// Disabled option
- * 	Option option3 = new Option()
- * 		.value("gray")
- * 		.text("Gray")
- * 		.disabled(true);
+ * 	<jc>// Selected option</jc>
+ * 	Option <jv>option2</jv> = <jsm>option</jsm>(<js>"blue"</js>, <js>"Blue"</js>)
+ * 		.selected(<jk>true</jk>);
  * 
- * 	// Option with label
- * 	Option option4 = new Option()
- * 		.value("green")
- * 		.text("Green")
- * 		.label("Green Color");
+ * 	<jc>// Disabled option</jc>
+ * 	Option <jv>option3</jv> = <jsm>option</jsm>(<js>"gray"</js>, <js>"Gray"</js>)
+ * 		.disabled(<jk>true</jk>);
  * 
- * 	// Options in a select
- * 	Select select1 = new Select()
- * 		.name("color")
- * 		.children(
- * 			new Option().value("red").text("Red"),
- * 			new Option().value("green").text("Green"),
- * 			new Option().value("blue").text("Blue")
- * 		);
+ * 	<jc>// Option with label</jc>
+ * 	Option <jv>option4</jv> = <jsm>option</jsm>(<js>"green"</js>, <js>"Green"</js>)
+ * 		.label(<js>"Green Color"</js>);
+ * 
+ * 	<jc>// Options in a select</jc>
+ * 	Select <jv>select1</jv> = <jsm>select</jsm>(<js>"color"</js>,
+ * 		<jsm>option</jsm>(<js>"red"</js>, <js>"Red"</js>),
+ * 		<jsm>option</jsm>(<js>"green"</js>, <js>"Green"</js>),
+ * 		<jsm>option</jsm>(<js>"blue"</js>, <js>"Blue"</js>)
+ * 	);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#option() option()}
+ * 		<li class='jm'>{@link HtmlBuilder#option(Object, Object...) option(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

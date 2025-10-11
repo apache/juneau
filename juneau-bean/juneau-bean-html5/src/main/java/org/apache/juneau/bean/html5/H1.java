@@ -28,50 +28,56 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple page title
- * 	H1 simple = new H1()
- * 		.children("Welcome to Our Website");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple page title</jc>
+ * 	H1 <jv>simple</jv> = <jsm>h1</jsm>(<js>"Welcome to Our Website"</js>);
+ * 
+ * 	<jc>// H1 with styling</jc>
+ * 	H1 <jv>styled</jv> = <jsm>h1</jsm>(<js>"About Our Company"</js>)
+ * 		._class(<js>"page-title"</js>);
+ * 
+ * 	<jc>// H1 with complex content</jc>
+ * 	H1 <jv>complex</jv> = <jsm>h1</jsm>(
+ * 		<js>"Welcome to "</js>,
+ * 		<jsm>strong</jsm>(<js>"Our Company"</js>),
+ * 		<js>" - "</js>,
+ * 		<jsm>em</jsm>(<js>"Innovation at its finest"</js>)
+ * 	);
+ * 
+ * 	<jc>// H1 with ID</jc>
+ * 	H1 <jv>withId</jv> = <jsm>h1</jsm>(<js>"Product Documentation"</js>)
+ * 		.id(<js>"main-title"</js>);
+ * 
+ * 	<jc>// H1 with styling</jc>
+ * 	H1 <jv>styled2</jv> = <jsm>h1</jsm>(<js>"User Guide"</js>)
+ * 		.style(<js>"color: #333; text-align: center; margin-bottom: 30px;"</js>);
+ * 
+ * 	<jc>// H1 with multiple elements</jc>
+ * 	H1 <jv>multiple</jv> = <jsm>h1</jsm>(
+ * 		<js>"Chapter 1: "</js>,
+ * 		<jsm>span</jsm>()._class(<js>"chapter-title"</js>).children(<js>"Getting Started"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>small</jsm>(<js>"(Beginner Level)"</js>)
+ * 	);
+ * 
+ * 	<jc>// H1 with links</jc>
+ * 	H1 <jv>withLinks</jv> = <jsm>h1</jsm>(
+ * 		<js>"Product: "</js>,
+ * 		<jsm>a</jsm>(<js>"/products/widget"</js>, <js>"Amazing Widget"</js>),
+ * 		<js>" v2.0"</js>
+ * 	);
+ * </p>
  *
- * 	// H1 with styling
- * 	H1 styled = new H1()
- * 		._class("page-title")
- * 		.children("About Our Company");
- *
- * 	// H1 with complex content
- * 	H1 complex = new H1()
- * 		.children(
- * 			"Welcome to ",
- * 			new Strong().children("Our Company"),
- * 			" - ",
- * 			new Em().children("Innovation at its finest")
- * 		);
- *
- * 	// H1 with ID
- * 	H1 withId = new H1()
- * 		.id("main-title")
- * 		.children("Product Documentation");
- *
- * 	// H1 with styling
- * 	H1 styled2 = new H1()
- * 		.style("color: #333; text-align: center; margin-bottom: 30px;")
- * 		.children("User Guide");
- *
- * 	// H1 with multiple elements
- * 	H1 multiple = new H1()
- * 		.children(
- * 			"Chapter 1: ",
- * 			new Span()._class("chapter-title").children("Getting Started"),
- * 			" ",
- * 			new Small().children("(Beginner Level)")
- * 		);
- *
- * 	// H1 with links
- * 	H1 withLinks = new H1()
- * 		.children(
- * 			"Product: ",
- * 			new A().href("/products/widget").children("Amazing Widget"),
- * 			" v2.0"
- * 		);
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#h1() h1()}
+ * 		<li class='jm'>{@link HtmlBuilder#h1(Object, Object...) h1(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

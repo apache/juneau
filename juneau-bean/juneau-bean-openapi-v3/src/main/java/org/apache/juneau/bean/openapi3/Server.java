@@ -67,7 +67,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@FluentSetters
 public class Server extends OpenApiElement{
 	private URI url;
 	private String description;
@@ -100,13 +99,13 @@ public class Server extends OpenApiElement{
 		return new Server(this);
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	protected Server strict() {
 		super.strict();
 		return this;
 	}
 
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public Server strict(Object value) {
 		super.strict(value);
 		return this;
@@ -205,11 +204,7 @@ public class Server extends OpenApiElement{
 		return this;
 	}
 
-	// <FluentSetters>
-
-	// </FluentSetters>
-
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -220,7 +215,7 @@ public class Server extends OpenApiElement{
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public Server set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -234,7 +229,7 @@ public class Server extends OpenApiElement{
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(description != null, "description")

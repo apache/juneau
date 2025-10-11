@@ -26,26 +26,37 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple body with text content
- * 	Body body1 = new Body().text("Welcome to our website!");
+ * 	<jc>// Simple body with text content</jc>
+ * 	Body <jv>body1</jv> = <jsm>body</jsm>().text(<js>"Welcome to our website!"</js>);
  * 
- * 	// Body with structured content
- * 	Body body2 = new Body()
+ * 	<jc>// Body with structured content</jc>
+ * 	Body <jv>body2</jv> = <jsm>body</jsm>()
  * 		.children(
- * 			new Header().children(
- * 				new H1().text("Page Title")
+ * 			<jsm>header</jsm>().children(
+ * 				<jsm>h1</jsm>().text(<js>"Page Title"</js>)
  * 			),
- * 			new Main().children(
- * 				new P().text("Main content goes here.")
+ * 			<jsm>main</jsm>().children(
+ * 				<jsm>p</jsm>().text(<js>"Main content goes here."</js>)
  * 			),
- * 			new Footer().text("Copyright 2024")
+ * 			<jsm>footer</jsm>().text(<js>"Copyright 2024"</js>)
  * 		);
  * 
- * 	// Body with event handlers
- * 	Body body3 = new Body()
- * 		.onload("initializePage()")
- * 		.onbeforeunload("return confirm('Are you sure you want to leave?')")
- * 		.text("Page content");
+ * 	<jc>// Body with event handlers</jc>
+ * 	Body <jv>body3</jv> = <jsm>body</jsm>()
+ * 		.onload(<js>"initializePage()"</js>)
+ * 		.onbeforeunload(<js>"return confirm('Are you sure you want to leave?')"</js>)
+ * 		.text(<js>"Page content"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#body() body()}
+ * 		<li class='jm'>{@link HtmlBuilder#body(Object, Object...) body(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

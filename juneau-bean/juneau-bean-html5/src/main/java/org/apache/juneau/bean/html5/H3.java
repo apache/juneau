@@ -28,49 +28,55 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple subsection heading
- * 	H3 simple = new H3()
- * 		.children("Basic Configuration");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple subsection heading</jc>
+ * 	H3 <jv>simple</jv> = <jsm>h3</jsm>(<js>"Basic Configuration"</js>);
+ * 
+ * 	<jc>// H3 with styling</jc>
+ * 	H3 <jv>styled</jv> = <jsm>h3</jsm>(<js>"Advanced Settings"</js>)
+ * 		._class(<js>"subsection-title"</js>);
+ * 
+ * 	<jc>// H3 with complex content</jc>
+ * 	H3 <jv>complex</jv> = <jsm>h3</jsm>(
+ * 		<js>"Step 3: "</js>,
+ * 		<jsm>strong</jsm>(<js>"Database Setup"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>em</jsm>(<js>"(Optional)"</js>)
+ * 	);
+ * 
+ * 	<jc>// H3 with ID</jc>
+ * 	H3 <jv>withId</jv> = <jsm>h3</jsm>(<js>"Troubleshooting"</js>)
+ * 		.id(<js>"troubleshooting"</js>);
+ * 
+ * 	<jc>// H3 with styling</jc>
+ * 	H3 <jv>styled2</jv> = <jsm>h3</jsm>(<js>"Common Issues"</js>)
+ * 		.style(<js>"color: #888; margin-top: 20px;"</js>);
+ * 
+ * 	<jc>// H3 with multiple elements</jc>
+ * 	H3 <jv>multiple</jv> = <jsm>h3</jsm>(
+ * 		<js>"3.1 "</js>,
+ * 		<jsm>span</jsm>()._class(<js>"step-title"</js>).children(<js>"Installation"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>small</jsm>(<js>"(5 minutes)"</js>)
+ * 	);
+ * 
+ * 	<jc>// H3 with links</jc>
+ * 	H3 <jv>withLinks</jv> = <jsm>h3</jsm>(
+ * 		<js>"See also: "</js>,
+ * 		<jsm>a</jsm>(<js>"/docs/faq"</js>).children(<js>"Frequently Asked Questions"</js>)
+ * 	);
+ * </p>
  *
- * 	// H3 with styling
- * 	H3 styled = new H3()
- * 		._class("subsection-title")
- * 		.children("Advanced Settings");
- *
- * 	// H3 with complex content
- * 	H3 complex = new H3()
- * 		.children(
- * 			"Step 3: ",
- * 			new Strong().children("Database Setup"),
- * 			" ",
- * 			new Em().children("(Optional)")
- * 		);
- *
- * 	// H3 with ID
- * 	H3 withId = new H3()
- * 		.id("troubleshooting")
- * 		.children("Troubleshooting");
- *
- * 	// H3 with styling
- * 	H3 styled2 = new H3()
- * 		.style("color: #888; margin-top: 20px;")
- * 		.children("Common Issues");
- *
- * 	// H3 with multiple elements
- * 	H3 multiple = new H3()
- * 		.children(
- * 			"3.1 ",
- * 			new Span()._class("step-title").children("Installation"),
- * 			" ",
- * 			new Small().children("(5 minutes)")
- * 		);
- *
- * 	// H3 with links
- * 	H3 withLinks = new H3()
- * 		.children(
- * 			"See also: ",
- * 			new A().href("/docs/faq").children("Frequently Asked Questions")
- * 		);
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#h3() h3()}
+ * 		<li class='jm'>{@link HtmlBuilder#h3(Object, Object...) h3(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

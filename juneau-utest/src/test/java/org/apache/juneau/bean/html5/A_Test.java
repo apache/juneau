@@ -33,25 +33,78 @@ class A_Test extends TestBase {
 			.hreflang("i")
 			.id("j")
 			.lang("k")
-			.onclick("l")
-			.onfocus("m")
-			.onmouseover("n")
-			.rel("o")
-			.spellcheck("p")
-			.style("q")
-			.tabindex("r")
-			.target("s")
-			.title("t")
-			.translate("u")
-			.type("v");
+			.onabort("l")
+			.onblur("m")
+			.oncancel("n")
+			.oncanplay("o")
+			.oncanplaythrough("p")
+			.onchange("q")
+			.onclick("r")
+			.oncuechange("s")
+			.ondblclick("t")
+			.ondurationchange("u")
+			.onemptied("v")
+			.onended("w")
+			.onerror("x")
+			.onfocus("y")
+			.oninput("z")
+			.oninvalid("aa")
+			.onkeydown("ab")
+			.onkeypress("ac")
+			.onkeyup("ad")
+			.onload("ae")
+			.onloadeddata("af")
+			.onloadedmetadata("ag")
+			.onloadstart("ah")
+			.onmousedown("ai")
+			.onmouseenter("aj")
+			.onmouseleave("ak")
+			.onmousemove("al")
+			.onmouseout("am")
+			.onmouseover("an")
+			.onmouseup("ao")
+			.onmousewheel("ap")
+			.onpause("aq")
+			.onplay("ar")
+			.onplaying("as")
+			.onprogress("at")
+			.onratechange("au")
+			.onreset("av")
+			.onresize("aw")
+			.onscroll("ax")
+			.onseeked("ay")
+			.onseeking("az")
+			.onselect("ba")
+			.onshow("bb")
+			.onstalled("bc")
+			.onsubmit("bd")
+			.onsuspend("be")
+			.ontimeupdate("bf")
+			.ontoggle("bg")
+			.onvolumechange("bh")
+			.onwaiting("bi")
+			.rel("bj")
+			.spellcheck("bk")
+			.style("bl")
+			.tabindex("bm")
+			.target("bn")
+			.title("bo")
+			.translate("bp")
+			.type("bq");
 
 		assertString(
-			"<a class='a' accesskey='b' contenteditable='d' dir='e' download='f' hidden='g' href='h' hreflang='i' id='j' lang='k' onclick='l' onfocus='m' onmouseover='n' rel='o' spellcheck='p' style='q' tabindex='r' target='s' title='t' translate='u' type='v'>c1<strong>c2</strong></a>",
+			"<a class='a' accesskey='b' contenteditable='d' dir='e' download='f' hidden='g' href='h' hreflang='i' id='j' lang='k' onabort='l' onblur='m' oncancel='n' oncanplay='o' oncanplaythrough='p' onchange='q' onclick='r' oncuechange='s' ondblclick='t' ondurationchange='u' onemptied='v' onended='w' onerror='x' onfocus='y' oninput='z' oninvalid='aa' onkeydown='ab' onkeypress='ac' onkeyup='ad' onload='ae' onloadeddata='af' onloadedmetadata='ag' onloadstart='ah' onmousedown='ai' onmouseenter='aj' onmouseleave='ak' onmousemove='al' onmouseout='am' onmouseover='an' onmouseup='ao' onmousewheel='ap' onpause='aq' onplay='ar' onplaying='as' onprogress='at' onratechange='au' onreset='av' onresize='aw' onscroll='ax' onseeked='ay' onseeking='az' onselect='ba' onshow='bb' onstalled='bc' onsubmit='bd' onsuspend='be' ontimeupdate='bf' ontoggle='bg' onvolumechange='bh' onwaiting='bi' rel='bj' spellcheck='bk' style='bl' tabindex='bm' target='bn' title='bo' translate='bp' type='bq'>c1<strong>c2</strong></a>",
 			x
 		);
 	}
 
-	@Test @Disabled void a02_emptyBean() {
+	@Test void a02_emptyBean() {
 		assertString("<a></a>", a());
+	}
+
+	@Test void a03_otherConstructors() {
+		A x1 = new A("a", new Object[]{"b1", strong("b2")});
+		assertString("<a href='a'>b1<strong>b2</strong></a>", x1);
+
 	}
 }

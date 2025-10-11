@@ -28,45 +28,54 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple column group
- * 	Colgroup simple = new Colgroup();
- *
- * 	// Column group with span
- * 	Colgroup withSpan = new Colgroup()
- * 		.span(3);
- *
- * 	// Column group with individual columns
- * 	Colgroup withColumns = new Colgroup()
- * 		.children(
- * 			new Col().span(2),
- * 			new Col().span(1)
- * 		);
- *
- * 	// Column group with styling
- * 	Colgroup styled = new Colgroup()
- * 		._class("header-columns")
- * 		.style("background-color: #f0f0f0;");
- *
- * 	// Column group with multiple columns
- * 	Colgroup multiple = new Colgroup()
- * 		.children(
- * 			new Col()._class("name-column").style("width: 200px;"),
- * 			new Col()._class("age-column").style("width: 100px;"),
- * 			new Col()._class("city-column").style("width: 150px;")
- * 		);
- *
- * 	// Column group with alignment
- * 	Colgroup aligned = new Colgroup()
- * 		.children(
- * 			new Col().style("text-align: left;"),
- * 			new Col().style("text-align: center;"),
- * 			new Col().style("text-align: right;")
- * 		);
- *
- * 	// Column group with ID
- * 	Colgroup withId = new Colgroup()
- * 		.id("data-columns")
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple column group</jc>
+ * 	Colgroup <jv>simple</jv> = <jsm>colgroup</jsm>();
+ * 
+ * 	<jc>// Column group with span</jc>
+ * 	Colgroup <jv>withSpan</jv> = <jsm>colgroup</jsm>().span(3);
+ * 
+ * 	<jc>// Column group with individual columns</jc>
+ * 	Colgroup <jv>withColumns</jv> = <jsm>colgroup</jsm>(
+ * 		<jsm>col</jsm>().span(2),
+ * 		<jsm>col</jsm>().span(1)
+ * 	);
+ * 
+ * 	<jc>// Column group with styling</jc>
+ * 	Colgroup <jv>styled</jv> = <jsm>colgroup</jsm>()
+ * 		._class(<js>"header-columns"</js>)
+ * 		.style(<js>"background-color: #f0f0f0;"</js>);
+ * 
+ * 	<jc>// Column group with multiple columns</jc>
+ * 	Colgroup <jv>multiple</jv> = <jsm>colgroup</jsm>(
+ * 		<jsm>col</jsm>()._class(<js>"name-column"</js>).style(<js>"width: 200px;"</js>),
+ * 		<jsm>col</jsm>()._class(<js>"age-column"</js>).style(<js>"width: 100px;"</js>),
+ * 		<jsm>col</jsm>()._class(<js>"city-column"</js>).style(<js>"width: 150px;"</js>)
+ * 	);
+ * 
+ * 	<jc>// Column group with alignment</jc>
+ * 	Colgroup <jv>aligned</jv> = <jsm>colgroup</jsm>(
+ * 		<jsm>col</jsm>().style(<js>"text-align: left;"</js>),
+ * 		<jsm>col</jsm>().style(<js>"text-align: center;"</js>),
+ * 		<jsm>col</jsm>().style(<js>"text-align: right;"</js>)
+ * 	);
+ * 
+ * 	<jc>// Column group with ID</jc>
+ * 	Colgroup <jv>withId</jv> = <jsm>colgroup</jsm>()
+ * 		.id(<js>"data-columns"</js>)
  * 		.span(4);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#colgroup() colgroup()}
+ * 		<li class='jm'>{@link HtmlBuilder#colgroup(Object, Object...) colgroup(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

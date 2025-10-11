@@ -27,46 +27,52 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple term
- * 	Dt simple = new Dt()
- * 		.children("HTML");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple term</jc>
+ * 	Dt <jv>simple</jv> = <jsm>dt</jsm>(<js>"HTML"</js>);
+ * 
+ * 	<jc>// Term with styling</jc>
+ * 	Dt <jv>styled</jv> = <jsm>dt</jsm>(<js>"CSS"</js>)
+ * 		._class(<js>"term"</js>);
+ * 
+ * 	<jc>// Term with complex content</jc>
+ * 	Dt <jv>complex</jv> = <jsm>dt</jsm>(
+ * 		<js>"JavaScript"</js>,
+ * 		<jsm>span</jsm>()._class(<js>"abbrev"</js>).children(<js>" (JS)"</js>)
+ * 	);
+ * 
+ * 	<jc>// Term with links</jc>
+ * 	Dt <jv>withLinks</jv> = <jsm>dt</jsm>(
+ * 		<js>"Web Standards"</js>,
+ * 		<jsm>a</jsm>(<js>"/standards"</js>, <js>" (Learn More)"</js>)
+ * 	);
+ * 
+ * 	<jc>// Term with ID</jc>
+ * 	Dt <jv>withId</jv> = <jsm>dt</jsm>(<js>"HTML"</js>)
+ * 		.id(<js>"html-term"</js>);
+ * 
+ * 	<jc>// Term with styling</jc>
+ * 	Dt <jv>styled2</jv> = <jsm>dt</jsm>(<js>"API"</js>)
+ * 		.style(<js>"font-weight: bold; color: blue;"</js>);
+ * 
+ * 	<jc>// Term with multiple elements</jc>
+ * 	Dt <jv>multiple</jv> = <jsm>dt</jsm>(
+ * 		<js>"Responsive Design"</js>,
+ * 		<jsm>span</jsm>()._class(<js>"new"</js>).children(<js>" (New)"</js>),
+ * 		<jsm>span</jsm>()._class(<js>"popular"</js>).children(<js>" (Popular)"</js>)
+ * 	);
+ * </p>
  *
- * 	// Term with styling
- * 	Dt styled = new Dt()
- * 		._class("term")
- * 		.children("CSS");
- *
- * 	// Term with complex content
- * 	Dt complex = new Dt()
- * 		.children(
- * 			"JavaScript",
- * 			new Span()._class("abbrev").children(" (JS)")
- * 		);
- *
- * 	// Term with links
- * 	Dt withLinks = new Dt()
- * 		.children(
- * 			"Web Standards",
- * 			new A().href("/standards").children(" (Learn More)")
- * 		);
- *
- * 	// Term with ID
- * 	Dt withId = new Dt()
- * 		.id("html-term")
- * 		.children("HTML");
- *
- * 	// Term with styling
- * 	Dt styled2 = new Dt()
- * 		.style("font-weight: bold; color: blue;")
- * 		.children("API");
- *
- * 	// Term with multiple elements
- * 	Dt multiple = new Dt()
- * 		.children(
- * 			"Responsive Design",
- * 			new Span()._class("new").children(" (New)"),
- * 			new Span()._class("popular").children(" (Popular)")
- * 		);
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#dt() dt()}
+ * 		<li class='jm'>{@link HtmlBuilder#dt(Object, Object...) dt(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

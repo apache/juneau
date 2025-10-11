@@ -27,47 +27,39 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple table with headers and data
- * 	Table simple = new Table()
- * 		.children(
- * 			new Thead()
- * 				.children(
- * 					new Tr()
- * 						.children(
- * 							new Th().children("Name"),
- * 							new Th().children("Age"),
- * 							new Th().children("City")
- * 						)
- * 				),
- * 			new Tbody()
- * 				.children(
- * 					new Tr()
- * 						.children(
- * 							new Td().children("John"),
- * 							new Td().children("25"),
- * 							new Td().children("New York")
- * 						)
- * 				)
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Table with caption and styling
- * 	Table styled = new Table()
- * 		._class("data-table")
- * 		.border(1)
- * 		.children(
- * 			new Caption().children("Employee Information"),
- * 			new Thead()
- * 				.children(
- * 					new Tr()
- * 						.children(
- * 							new Th().children("ID"),
- * 							new Th().children("Name"),
- * 							new Th().children("Department")
- * 						)
- * 				)
- * 		);
+ * 	<jc>// Simple table with headers and data</jc>
+ * 	Table <jv>simple</jv> = <jsm>table</jsm>(
+ * 		<jsm>thead</jsm>(
+ * 			<jsm>tr</jsm>(
+ * 				<jsm>th</jsm>(<js>"Name"</js>),
+ * 				<jsm>th</jsm>(<js>"Age"</js>),
+ * 				<jsm>th</jsm>(<js>"City"</js>)
+ * 			)
+ * 		),
+ * 		<jsm>tbody</jsm>(
+ * 			<jsm>tr</jsm>(
+ * 				<jsm>td</jsm>(<js>"John"</js>),
+ * 				<jsm>td</jsm>(<js>"25"</js>),
+ * 				<jsm>td</jsm>(<js>"New York"</js>)
+ * 			)
+ * 		)
+ * 	);
  * 
- * 	// Table with multiple sections
+ * 	<jc>// Table with caption and styling</jc>
+ * 	Table <jv>styled</jv> = <jsm>table</jsm>(
+ * 		<jsm>caption</jsm>(<js>"Employee Information"</js>),
+ * 		<jsm>thead</jsm>(
+ * 			<jsm>tr</jsm>(
+ * 				<jsm>th</jsm>(<js>"ID"</js>),
+ * 				<jsm>th</jsm>(<js>"Name"</js>),
+ * 				<jsm>th</jsm>(<js>"Department"</js>)
+ * 			)
+ * 		)
+ * 	)._class(<js>"data-table"</js>).border(1);
+ * 
+ * 	<jc>// Table with multiple sections</jc>
  * 	Table complex = new Table()
  * 		.children(
  * 			new Caption().children("Sales Report"),

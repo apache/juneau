@@ -27,37 +27,32 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple table footer with totals
- * 	Tfoot simple = new Tfoot()
- * 		.children(
- * 			new Tr()
- * 				.children(
- * 					new Td().children("Total"),
- * 					new Td().children("$1,000"),
- * 					new Td().children("$2,000")
- * 				)
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Table footer with styling
- * 	Tfoot styled = new Tfoot()
- * 		._class("table-footer")
- * 		.children(
- * 			new Tr()
- * 				.children(
- * 					new Td().children("Grand Total"),
- * 					new Td().children("$3,000")
- * 				)
- * 		);
+ * 	<jc>// Simple table footer with totals</jc>
+ * 	Tfoot <jv>simple</jv> = <jsm>tfoot</jsm>(
+ * 		<jsm>tr</jsm>(
+ * 			<jsm>td</jsm>(<js>"Total"</js>),
+ * 			<jsm>td</jsm>(<js>"$1,000"</js>),
+ * 			<jsm>td</jsm>(<js>"$2,000"</js>)
+ * 		)
+ * 	);
  * 
- * 	// Table footer with multiple rows
- * 	Tfoot multiple = new Tfoot()
- * 		.children(
- * 			new Tr()
- * 				.children(
- * 					new Td().children("Subtotal"),
- * 					new Td().children("$500")
- * 				),
- * 			new Tr()
+ * 	<jc>// Table footer with styling</jc>
+ * 	Tfoot <jv>styled</jv> = <jsm>tfoot</jsm>(
+ * 		<jsm>tr</jsm>(
+ * 			<jsm>td</jsm>(<js>"Grand Total"</js>),
+ * 			<jsm>td</jsm>(<js>"$3,000"</js>)
+ * 		)
+ * 	)._class(<js>"table-footer"</js>);
+ * 
+ * 	<jc>// Table footer with multiple rows</jc>
+ * 	Tfoot <jv>multiple</jv> = <jsm>tfoot</jsm>(
+ * 		<jsm>tr</jsm>(
+ * 			<jsm>td</jsm>(<js>"Subtotal"</js>),
+ * 			<jsm>td</jsm>(<js>"$500"</js>)
+ * 		),
+ * 		<jsm>tr</jsm>(
  * 				.children(
  * 					new Td().children("Tax"),
  * 					new Td().children("$50")

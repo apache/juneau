@@ -27,50 +27,56 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple code snippet
- * 	Code simple = new Code()
- * 		.children("console.log('Hello World');");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple code snippet</jc>
+ * 	Code <jv>simple</jv> = <jsm>code</jsm>(<js>"console.log('Hello World');"</js>);
+ * 
+ * 	<jc>// Code with styling</jc>
+ * 	Code <jv>styled</jv> = <jsm>code</jsm>(<js>"getElementById"</js>)
+ * 		._class(<js>"inline-code"</js>);
+ * 
+ * 	<jc>// Code in a sentence</jc>
+ * 	P <jv>sentence</jv> = <jsm>p</jsm>(
+ * 		<js>"Use the "</js>,
+ * 		<jsm>code</jsm>(<js>"print()"</js>),
+ * 		<js>" function to display output."</js>
+ * 	);
+ * 
+ * 	<jc>// Variable name</jc>
+ * 	Code <jv>variable</jv> = <jsm>code</jsm>(<js>"userName"</js>);
  *
- * 	// Code with styling
- * 	Code styled = new Code()
- * 		._class("inline-code")
- * 		.children("getElementById");
+ * 	<jc>// Function call</jc>
+ * 	Code <jv>function</jv> = <jsm>code</jsm>(<js>"calculateTotal(price, tax)"</js>);
+ * 
+ * 	<jc>// Multiple code elements</jc>
+ * 	P <jv>multiple</jv> = <jsm>p</jsm>(
+ * 		<js>"The "</js>,
+ * 		<jsm>code</jsm>(<js>"if"</js>),
+ * 		<js>" statement checks the condition, and "</js>,
+ * 		<jsm>code</jsm>(<js>"else"</js>),
+ * 		<js>" provides an alternative."</js>
+ * 	);
+ * 
+ * 	<jc>// Code with complex content</jc>
+ * 	Code <jv>complex</jv> = <jsm>code</jsm>(
+ * 		<js>"const "</js>,
+ * 		<jsm>strong</jsm>(<js>"result"</js>),
+ * 		<js>" = "</js>,
+ * 		<jsm>em</jsm>(<js>"calculate"</js>),
+ * 		<js>"();"</js>
+ * 	);
+ * </p>
  *
- * 	// Code in a sentence
- * 	P sentence = new P()
- * 		.children(
- * 			"Use the ",
- * 			new Code().children("print()"),
- * 			" function to display output."
- * 		);
- *
- * 	// Variable name
- * 	Code variable = new Code()
- * 		.children("userName");
- *
- * 	// Function call
- * 	Code function = new Code()
- * 		.children("calculateTotal(price, tax)");
- *
- * 	// Multiple code elements
- * 	P multiple = new P()
- * 		.children(
- * 			"The ",
- * 			new Code().children("if"),
- * 			" statement checks the condition, and ",
- * 			new Code().children("else"),
- * 			" provides an alternative."
- * 		);
- *
- * 	// Code with complex content
- * 	Code complex = new Code()
- * 		.children(
- * 			"const ",
- * 			new Strong().children("result"),
- * 			" = ",
- * 			new Em().children("calculate"),
- * 			"();"
- * 		);
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#code() code()}
+ * 		<li class='jm'>{@link HtmlBuilder#code(Object, Object...) code(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

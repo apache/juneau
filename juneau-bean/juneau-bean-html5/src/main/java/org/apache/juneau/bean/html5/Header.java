@@ -28,77 +28,78 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple page header
- * 	Header simple = new Header()
- * 		.children(
- * 			new H1().children("My Website"),
- * 			new P().children("Welcome to our site")
- * 		);
- *
- * 	// Header with navigation
- * 	Header withNav = new Header()
- * 		.children(
- * 			new H1().children("Company Name"),
- * 			new Nav().children(
- * 				new Ul().children(
- * 					new Li().children(new A().href("/home").children("Home")),
- * 					new Li().children(new A().href("/about").children("About")),
- * 					new Li().children(new A().href("/contact").children("Contact"))
- * 				)
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple page header</jc>
+ * 	Header <jv>simple</jv> = <jsm>header</jsm>(
+ * 		<jsm>h1</jsm>(<js>"My Website"</js>),
+ * 		<jsm>p</jsm>(<js>"Welcome to our site"</js>)
+ * 	);
+ * 
+ * 	<jc>// Header with navigation</jc>
+ * 	Header <jv>withNav</jv> = <jsm>header</jsm>(
+ * 		<jsm>h1</jsm>(<js>"Company Name"</js>),
+ * 		<jsm>nav</jsm>(
+ * 			<jsm>ul</jsm>(
+ * 				<jsm>li</jsm>(<jsm>a</jsm>(<js>"/home"</js>).children(<js>"Home"</js>)),
+ * 				<jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>).children(<js>"About"</js>)),
+ * 				<jsm>li</jsm>(<jsm>a</jsm>(<js>"/contact"</js>).children(<js>"Contact"</js>))
  * 			)
- * 		);
- *
- * 	// Header with styling
- * 	Header styled = new Header()
- * 		._class("page-header")
- * 		.children(
- * 			new H1().children("Styled Header"),
- * 			new P().children("A beautifully styled header")
- * 		);
- *
- * 	// Header with logo and navigation
- * 	Header withLogo = new Header()
- * 		.children(
- * 			new Img().src("/logo.png").alt("Company Logo"),
- * 			new H1().children("Company Name"),
- * 			new Nav().children(
- * 				new Ul().children(
- * 					new Li().children(new A().href("/products").children("Products")),
- * 					new Li().children(new A().href("/services").children("Services"))
- * 				)
+ * 		)
+ * 	);
+ * 
+ * 	<jc>// Header with styling</jc>
+ * 	Header <jv>styled</jv> = <jsm>header</jsm>(
+ * 		<jsm>h1</jsm>(<js>"Styled Header"</js>),
+ * 		<jsm>p</jsm>(<js>"A beautifully styled header"</js>)
+ * 	)._class(<js>"page-header"</js>);
+ * 
+ * 	<jc>// Header with logo and navigation</jc>
+ * 	Header <jv>withLogo</jv> = <jsm>header</jsm>(
+ * 		<jsm>img</jsm>(<js>"/logo.png"</js>, <js>"Company Logo"</js>),
+ * 		<jsm>h1</jsm>(<js>"Company Name"</js>),
+ * 		<jsm>nav</jsm>(
+ * 			<jsm>ul</jsm>(
+ * 				<jsm>li</jsm>(<jsm>a</jsm>(<js>"/products"</js>).children(<js>"Products"</js>)),
+ * 				<jsm>li</jsm>(<jsm>a</jsm>(<js>"/services"</js>).children(<js>"Services"</js>))
  * 			)
- * 		);
+ * 		)
+ * 	);
+ * 
+ * 	<jc>// Header with ID</jc>
+ * 	Header <jv>withId</jv> = <jsm>header</jsm>(
+ * 		<jsm>h1</jsm>(<js>"Main Header"</js>),
+ * 		<jsm>p</jsm>(<js>"This is the main header of the page"</js>)
+ * 	).id(<js>"main-header"</js>);
+ * 
+ * 	<jc>// Header with styling</jc>
+ * 	Header <jv>styled2</jv> = <jsm>header</jsm>(
+ * 		<jsm>h1</jsm>(<js>"Dark Header"</js>),
+ * 		<jsm>p</jsm>(<js>"A header with dark styling"</js>)
+ * 	).style(<js>"background-color: #333; color: white; padding: 20px;"</js>);
+ * 
+ * 	<jc>// Header with multiple sections</jc>
+ * 	Header <jv>multiSection</jv> = <jsm>header</jsm>(
+ * 		<jsm>div</jsm>()._class(<js>"header-top"</js>).children(
+ * 			<jsm>p</jsm>(<js>"Call us: (555) 123-4567"</js>),
+ * 			<jsm>p</jsm>(<js>"Email: info@company.com"</js>)
+ * 		),
+ * 		<jsm>div</jsm>()._class(<js>"header-main"</js>).children(
+ * 			<jsm>h1</jsm>(<js>"Company Name"</js>),
+ * 			<jsm>p</jsm>(<js>"Your trusted partner"</js>)
+ * 		)
+ * 	);
+ * </p>
  *
- * 	// Header with ID
- * 	Header withId = new Header()
- * 		.id("main-header")
- * 		.children(
- * 			new H1().children("Main Header"),
- * 			new P().children("This is the main header of the page")
- * 		);
- *
- * 	// Header with styling
- * 	Header styled2 = new Header()
- * 		.style("background-color: #333; color: white; padding: 20px;")
- * 		.children(
- * 			new H1().children("Dark Header"),
- * 			new P().children("A header with dark styling")
- * 		);
- *
- * 	// Header with multiple sections
- * 	Header multiSection = new Header()
- * 		.children(
- * 			new Div()._class("header-top")
- * 				.children(
- * 					new P().children("Call us: (555) 123-4567"),
- * 					new P().children("Email: info@company.com")
- * 				),
- * 			new Div()._class("header-main")
- * 				.children(
- * 					new H1().children("Company Name"),
- * 					new P().children("Your trusted partner")
- * 				)
- * 		);
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#header() header()}
+ * 		<li class='jm'>{@link HtmlBuilder#header(Object, Object...) header(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

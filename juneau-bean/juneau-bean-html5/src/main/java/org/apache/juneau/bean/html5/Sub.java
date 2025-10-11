@@ -27,26 +27,30 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Chemical formula
- * 	Sub chemical = new Sub()
- * 		.children("H", new Sub().children("2"), "O");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Mathematical formula
- * 	Sub math = new Sub()
- * 		.children("x", new Sub().children("2"), " + y", new Sub().children("2"), " = z", new Sub().children("2"));
+ * 	<jc>// Chemical formula</jc>
+ * 	Sub <jv>chemical</jv> = <jsm>sub</jsm>(<js>"H"</js>, <jsm>sub</jsm>(<js>"2"</js>), <js>"O"</js>);
  * 
- * 	// Footnote reference
- * 	Sub footnote = new Sub()
- * 		.children("1");
+ * 	<jc>// Mathematical formula</jc>
+ * 	Sub <jv>math</jv> = <jsm>sub</jsm>(
+ * 		<js>"x"</js>, <jsm>sub</jsm>(<js>"2"</js>),
+ * 		<js>" + y"</js>, <jsm>sub</jsm>(<js>"2"</js>),
+ * 		<js>" = z"</js>, <jsm>sub</jsm>(<js>"2"</js>)
+ * 	);
  * 
- * 	// Subscript with styling
- * 	Sub styled = new Sub()
- * 		._class("subscript")
- * 		.children("n");
+ * 	<jc>// Footnote reference</jc>
+ * 	Sub <jv>footnote</jv> = <jsm>sub</jsm>(<js>"1"</js>);
  * 
- * 	// Multiple subscripts
- * 	Sub multiple = new Sub()
- * 		.children("A", new Sub().children("i,j"), " = B", new Sub().children("k"));
+ * 	<jc>// Subscript with styling</jc>
+ * 	Sub <jv>styled</jv> = <jsm>sub</jsm>(<js>"n"</js>)
+ * 		._class(<js>"subscript"</js>);
+ * 
+ * 	<jc>// Multiple subscripts</jc>
+ * 	Sub <jv>multiple</jv> = <jsm>sub</jsm>(
+ * 		<js>"A"</js>, <jsm>sub</jsm>(<js>"i,j"</js>),
+ * 		<js>" = B"</js>, <jsm>sub</jsm>(<js>"k"</js>)
+ * 	);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

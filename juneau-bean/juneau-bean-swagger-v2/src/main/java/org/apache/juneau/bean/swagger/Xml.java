@@ -67,7 +67,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
-@FluentSetters
 public class Xml extends SwaggerElement {
 
 	private String
@@ -261,11 +260,7 @@ public class Xml extends SwaggerElement {
 		return this;
 	}
 
-	// <FluentSetters>
-
-	// </FluentSetters>
-
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -278,7 +273,7 @@ public class Xml extends SwaggerElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Xml set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -294,7 +289,7 @@ public class Xml extends SwaggerElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(attribute != null, "attribute")

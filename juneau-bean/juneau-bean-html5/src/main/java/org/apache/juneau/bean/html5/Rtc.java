@@ -29,40 +29,36 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple ruby text container
- * 	Rtc simple = new Rtc()
- * 		.children(
- * 			new Rt().children("かんじ"),
- * 			new Rt().children("Chinese characters")
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Rtc with styling
- * 	Rtc styled = new Rtc()
- * 		._class("ruby-text-container")
- * 		.children(
- * 			new Rt().children("にほんご"),
- * 			new Rt().children("Japanese language")
- * 		);
+ * 	<jc>// Simple ruby text container</jc>
+ * 	Rtc <jv>simple</jv> = <jsm>rtc</jsm>(
+ * 		<jsm>rt</jsm>(<js>"かんじ"</js>),
+ * 		<jsm>rt</jsm>(<js>"Chinese characters"</js>)
+ * 	);
  *
- * 	// Rtc with complex content
- * 	Rtc complex = new Rtc()
- * 		.children(
- * 			new Rt().children("ふくざつな"),
- * 			new Rt().children("complex"),
- * 			new Rt().children("かんじ"),
- * 			new Rt().children("kanji")
- * 		);
+ * 	<jc>// Rtc with styling</jc>
+ * 	Rtc <jv>styled</jv> = <jsm>rtc</jsm>(
+ * 		<jsm>rt</jsm>(<js>"にほんご"</js>),
+ * 		<jsm>rt</jsm>(<js>"Japanese language"</js>)
+ * 	)._class(<js>"ruby-text-container"</js>);
  *
- * 	// Rtc with ID
- * 	Rtc withId = new Rtc()
- * 		.id("ruby-text-container-1")
- * 		.children(
- * 			new Rt().children("かんじ"),
- * 			new Rt().children("Chinese characters")
- * 		);
+ * 	<jc>// Rtc with complex content</jc>
+ * 	Rtc <jv>complex</jv> = <jsm>rtc</jsm>(
+ * 		<jsm>rt</jsm>(<js>"ふくざつな"</js>),
+ * 		<jsm>rt</jsm>(<js>"complex"</js>),
+ * 		<jsm>rt</jsm>(<js>"かんじ"</js>),
+ * 		<jsm>rt</jsm>(<js>"kanji"</js>)
+ * 	);
  *
- * 	// Rtc with styling
- * 	Rtc styled2 = new Rtc()
+ * 	<jc>// Rtc with ID</jc>
+ * 	Rtc <jv>withId</jv> = <jsm>rtc</jsm>(
+ * 		<jsm>rt</jsm>(<js>"かんじ"</js>),
+ * 		<jsm>rt</jsm>(<js>"Chinese characters"</js>)
+ * 	).id(<js>"ruby-text-container-1"</js>);
+ *
+ * 	<jc>// Rtc with styling</jc>
+ * 	Rtc <jv>styled2</jv> = <jsm>rtc</jsm>(
  * 		.style("font-size: 0.8em; color: #666;")
  * 		.children(
  * 			new Rt().children("かんじ"),

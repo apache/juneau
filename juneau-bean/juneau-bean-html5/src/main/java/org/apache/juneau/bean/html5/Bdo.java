@@ -27,42 +27,41 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Right-to-left text
- * 	Bdo rtl = new Bdo()
- * 		.dir("rtl")
- * 		.children("مرحبا بالعالم");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Left-to-right text
- * 	Bdo ltr = new Bdo()
- * 		.dir("ltr")
- * 		.children("Hello World");
+ * 	<jc>// Right-to-left text</jc>
+ * 	Bdo <jv>rtl</jv> = <jsm>bdo</jsm>(<js>"rtl"</js>, <js>"مرحبا بالعالم"</js>);
  * 
- * 	// Mixed direction text
- * 	Bdo mixed = new Bdo()
- * 		.dir("rtl")
- * 		.children("Hello ", new Bdo().dir("ltr").children("World"), " مرحبا");
+ * 	<jc>// Left-to-right text</jc>
+ * 	Bdo <jv>ltr</jv> = <jsm>bdo</jsm>(<js>"ltr"</js>, <js>"Hello World"</js>);
  * 
- * 	// Hebrew text with explicit direction
- * 	Bdo hebrew = new Bdo()
- * 		.dir("rtl")
- * 		.children("שלום עולם");
+ * 	<jc>// Mixed direction text</jc>
+ * 	Bdo <jv>mixed</jv> = <jsm>bdo</jsm>(<js>"rtl"</js>, <js>"Hello "</js>, <jsm>bdo</jsm>(<js>"ltr"</js>, <js>"World"</js>), <js>" مرحبا"</js>);
  * 
- * 	// Arabic text with explicit direction
- * 	Bdo arabic = new Bdo()
- * 		.dir("rtl")
- * 		.children("مرحبا بالعالم");
+ * 	<jc>// Hebrew text with explicit direction</jc>
+ * 	Bdo <jv>hebrew</jv> = <jsm>bdo</jsm>(<js>"rtl"</js>, <js>"שלום עולם"</js>);
  * 
- * 	// Styled bidirectional text
- * 	Bdo styled = new Bdo()
- * 		.dir("rtl")
- * 		._class("bidi-text")
- * 		.style("color: blue;")
- * 		.children("نص باللغة العربية");
+ * 	<jc>// Arabic text with explicit direction</jc>
+ * 	Bdo <jv>arabic</jv> = <jsm>bdo</jsm>(<js>"rtl"</js>, <js>"مرحبا بالعالم"</js>);
  * 
- * 	// Numbers with explicit direction
- * 	Bdo numbers = new Bdo()
- * 		.dir("rtl")
- * 		.children("١٢٣٤٥");
+ * 	<jc>// Styled bidirectional text</jc>
+ * 	Bdo <jv>styled</jv> = <jsm>bdo</jsm>(<js>"rtl"</js>, <js>"نص باللغة العربية"</js>)
+ * 		._class(<js>"bidi-text"</js>)
+ * 		.style(<js>"color: blue;"</js>);
+ * 
+ * 	<jc>// Numbers with explicit direction</jc>
+ * 	Bdo <jv>numbers</jv> = <jsm>bdo</jsm>(<js>"rtl"</js>, <js>"١٢٣٤٥"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#bdo() bdo()}
+ * 		<li class='jm'>{@link HtmlBuilder#bdo(Object, Object...) bdo(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

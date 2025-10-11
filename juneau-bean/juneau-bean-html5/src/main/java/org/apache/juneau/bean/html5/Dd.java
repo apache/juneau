@@ -27,51 +27,58 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple definition
- * 	Dd simple = new Dd()
- * 		.children("A markup language used to create web pages.");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple definition</jc>
+ * 	Dd <jv>simple</jv> = <jsm>dd</jsm>(<js>"A markup language used to create web pages."</js>);
+ * 
+ * 	<jc>// Definition with styling</jc>
+ * 	Dd <jv>styled</jv> = <jsm>dd</jsm>(<js>"A programming language for web development."</js>)
+ * 		._class(<js>"definition"</js>);
+ * 
+ * 	<jc>// Definition with complex content</jc>
+ * 	Dd <jv>complex</jv> = <jsm>dd</jsm>(
+ * 		<js>"A "</js>,
+ * 		<jsm>strong</jsm>(<js>"hypertext"</js>),
+ * 		<js>" markup language used to create "</js>,
+ * 		<jsm>em</jsm>(<js>"web pages"</js>),
+ * 		<js>"."</js>
+ * 	);
+ * 
+ * 	<jc>// Definition with multiple paragraphs</jc>
+ * 	Dd <jv>multiple</jv> = <jsm>dd</jsm>(
+ * 		<jsm>p</jsm>(<js>"A programming language that runs in web browsers."</js>),
+ * 		<jsm>p</jsm>(<js>"It is commonly used for creating interactive web applications."</js>)
+ * 	);
+ * 
+ * 	<jc>// Definition with links</jc>
+ * 	Dd <jv>withLinks</jv> = <jsm>dd</jsm>(
+ * 		<js>"A "</js>,
+ * 		<jsm>a</jsm>(<js>"/css"</js>, <js>"styling language"</js>),
+ * 		<js>" used to describe the presentation of "</js>,
+ * 		<jsm>a</jsm>(<js>"/html"</js>, <js>"HTML"</js>),
+ * 		<js>" documents."</js>
+ * 	);
+ * 
+ * 	<jc>// Definition with ID</jc>
+ * 	Dd <jv>withId</jv> = <jsm>dd</jsm>(<js>"A styling language for web documents."</js>)
+ * 		.id(<js>"css-definition"</js>)
+ * 		.children(<js>"Cascading Style Sheets - a language for describing the presentation of web pages."</js>);
+ * 
+ * 	<jc>// Definition with styling</jc>
+ * 	Dd <jv>styled2</jv> = <jsm>dd</jsm>(<js>"A server-side scripting language for web development."</js>)
+ * 		.style(<js>"margin-left: 20px; color: #666;"</js>);
+ * </p>
  *
- * 	// Definition with styling
- * 	Dd styled = new Dd()
- * 		._class("definition")
- * 		.children("A programming language for web development.");
- *
- * 	// Definition with complex content
- * 	Dd complex = new Dd()
- * 		.children(
- * 			"A ",
- * 			new Strong().children("hypertext"),
- * 			" markup language used to create ",
- * 			new Em().children("web pages"),
- * 			"."
- * 		);
- *
- * 	// Definition with multiple paragraphs
- * 	Dd multiple = new Dd()
- * 		.children(
- * 			new P().children("A programming language that runs in web browsers."),
- * 			new P().children("It is commonly used for creating interactive web applications.")
- * 		);
- *
- * 	// Definition with links
- * 	Dd withLinks = new Dd()
- * 		.children(
- * 			"A ",
- * 			new A().href("/css").children("styling language"),
- * 			" used to describe the presentation of ",
- * 			new A().href("/html").children("HTML"),
- * 			" documents."
- * 		);
- *
- * 	// Definition with ID
- * 	Dd withId = new Dd()
- * 		.id("css-definition")
- * 		.children("Cascading Style Sheets - a language for describing the presentation of web pages.");
- *
- * 	// Definition with styling
- * 	Dd styled2 = new Dd()
- * 		.style("margin-left: 20px; color: #666;")
- * 		.children("A server-side scripting language for web development.");
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#dd() dd()}
+ * 		<li class='jm'>{@link HtmlBuilder#dd(Object, Object...) dd(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

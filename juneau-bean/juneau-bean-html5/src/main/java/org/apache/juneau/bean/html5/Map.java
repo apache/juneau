@@ -26,33 +26,29 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple image map with rectangular areas
- * 	Map map1 = new Map()
- * 		.name("navigation")
- * 		.children(
- * 			new Area("rect", "0,0,100,50", "https://example.com/home"),
- * 			new Area("rect", "100,0,200,50", "https://example.com/about"),
- * 			new Area("rect", "200,0,300,50", "https://example.com/contact")
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Image map with different area shapes
- * 	Map map2 = new Map()
- * 		.name("shapes")
- * 		.children(
- * 			new Area("circle", "150,75,50", "https://example.com/circle"),
- * 			new Area("poly", "0,0,100,0,50,100", "https://example.com/triangle"),
- * 			new Area("default", null, "https://example.com/default")
- * 		);
+ * 	<jc>// Simple image map with rectangular areas</jc>
+ * 	Map <jv>map1</jv> = <jsm>map</jsm>(<js>"navigation"</js>,
+ * 		<jsm>area</jsm>(<js>"rect"</js>, <js>"0,0,100,50"</js>, <js>"https://example.com/home"</js>),
+ * 		<jsm>area</jsm>(<js>"rect"</js>, <js>"100,0,200,50"</js>, <js>"https://example.com/about"</js>),
+ * 		<jsm>area</jsm>(<js>"rect"</js>, <js>"200,0,300,50"</js>, <js>"https://example.com/contact"</js>)
+ * 	);
  * 
- * 	// Image map with accessibility
- * 	Map map3 = new Map()
- * 		.name("accessible")
- * 		.children(
- * 			new Area("rect", "0,0,100,100", "https://example.com/region1")
- * 				.alt("Click here for region 1"),
- * 			new Area("rect", "100,0,200,100", "https://example.com/region2")
- * 				.alt("Click here for region 2")
- * 		);
+ * 	<jc>// Image map with different area shapes</jc>
+ * 	Map <jv>map2</jv> = <jsm>map</jsm>(<js>"shapes"</js>,
+ * 		<jsm>area</jsm>(<js>"circle"</js>, <js>"150,75,50"</js>, <js>"https://example.com/circle"</js>),
+ * 		<jsm>area</jsm>(<js>"poly"</js>, <js>"0,0,100,0,50,100"</js>, <js>"https://example.com/triangle"</js>),
+ * 		<jsm>area</jsm>(<js>"default"</js>, <jk>null</jk>, <js>"https://example.com/default"</js>)
+ * 	);
+ * 
+ * 	<jc>// Image map with accessibility</jc>
+ * 	Map <jv>map3</jv> = <jsm>map</jsm>(<js>"accessible"</js>,
+ * 		<jsm>area</jsm>(<js>"rect"</js>, <js>"0,0,100,100"</js>, <js>"https://example.com/region1"</js>)
+ * 			.alt(<js>"Click here for region 1"</js>),
+ * 		<jsm>area</jsm>(<js>"rect"</js>, <js>"100,0,200,100"</js>, <js>"https://example.com/region2"</js>)
+ * 			.alt(<js>"Click here for region 2"</js>)
+ * 	);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

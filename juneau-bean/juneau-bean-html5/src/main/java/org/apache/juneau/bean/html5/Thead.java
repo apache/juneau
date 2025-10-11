@@ -27,37 +27,32 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple table header
- * 	Thead simple = new Thead()
- * 		.children(
- * 			new Tr()
- * 				.children(
- * 					new Th().children("Name"),
- * 					new Th().children("Age"),
- * 					new Th().children("City")
- * 				)
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Table header with styling
- * 	Thead styled = new Thead()
- * 		._class("table-header")
- * 		.children(
- * 			new Tr()
- * 				.children(
- * 					new Th().children("Product"),
- * 					new Th().children("Price"),
- * 					new Th().children("Stock")
- * 				)
- * 		);
+ * 	<jc>// Simple table header</jc>
+ * 	Thead <jv>simple</jv> = <jsm>thead</jsm>(
+ * 		<jsm>tr</jsm>(
+ * 			<jsm>th</jsm>(<js>"Name"</js>),
+ * 			<jsm>th</jsm>(<js>"Age"</js>),
+ * 			<jsm>th</jsm>(<js>"City"</js>)
+ * 		)
+ * 	);
  * 
- * 	// Table header with multiple rows
- * 	Thead multiple = new Thead()
- * 		.children(
- * 			new Tr()
- * 				.children(
- * 					new Th().colspan(2).children("Contact Information"),
- * 					new Th().colspan(2).children("Address")
- * 				),
+ * 	<jc>// Table header with styling</jc>
+ * 	Thead <jv>styled</jv> = <jsm>thead</jsm>(
+ * 		<jsm>tr</jsm>(
+ * 			<jsm>th</jsm>(<js>"Product"</js>),
+ * 			<jsm>th</jsm>(<js>"Price"</js>),
+ * 			<jsm>th</jsm>(<js>"Stock"</js>)
+ * 		)
+ * 	)._class(<js>"table-header"</js>);
+ * 
+ * 	<jc>// Table header with multiple rows</jc>
+ * 	Thead <jv>multiple</jv> = <jsm>thead</jsm>(
+ * 		<jsm>tr</jsm>(
+ * 			<jsm>th</jsm>(<js>"Contact Information"</js>).colspan(2),
+ * 			<jsm>th</jsm>(<js>"Address"</js>).colspan(2)
+ * 		),
  * 			new Tr()
  * 				.children(
  * 					new Th().children("Name"),

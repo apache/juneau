@@ -22,6 +22,63 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-track-element">&lt;track&gt;</a>
  * element.
  *
+ * <p>
+ * The track element is used to specify timed text tracks for media elements (audio and video).
+ * It allows you to add subtitles, captions, descriptions, chapters, or metadata to media content,
+ * making it more accessible and user-friendly.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Subtitles track</jc>
+ * 	Track <jv>subtitles</jv> = <jsm>track</jsm>()
+ * 		.kind(<js>"subtitles"</js>)
+ * 		.src(<js>"/media/subtitles-en.vtt"</js>)
+ * 		.srclang(<js>"en"</js>)
+ * 		.label(<js>"English"</js>);
+ * 
+ * 	<jc>// Captions track (for deaf/hard of hearing)</jc>
+ * 	Track <jv>captions</jv> = <jsm>track</jsm>()
+ * 		.kind(<js>"captions"</js>)
+ * 		.src(<js>"/media/captions-en.vtt"</js>)
+ * 		.srclang(<js>"en"</js>)
+ * 		.label(<js>"English Captions"</js>)
+ * 		._default(<jk>true</jk>);
+ * 
+ * 	<jc>// Descriptions track (for audio descriptions)</jc>
+ * 	Track <jv>descriptions</jv> = <jsm>track</jsm>()
+ * 		.kind(<js>"descriptions"</js>)
+ * 		.src(<js>"/media/descriptions-en.vtt"</js>)
+ * 		.srclang(<js>"en"</js>)
+ * 		.label(<js>"English Descriptions"</js>);
+ * 
+ * 	<jc>// Chapters track</jc>
+ * 	Track <jv>chapters</jv> = <jsm>track</jsm>()
+ * 		.kind(<js>"chapters"</js>)
+ * 		.src(<js>"/media/chapters.vtt"</js>)
+ * 		.srclang(<js>"en"</js>)
+ * 		.label(<js>"Chapters"</js>);
+ * 
+ * 	<jc>// Video with multiple tracks</jc>
+ * 	Video <jv>video</jv> = <jsm>video</jsm>()
+ * 		.src(<js>"/media/movie.mp4"</js>)
+ * 		.controls(<jk>true</jk>)
+ * 		.children(
+ * 			<jsm>track</jsm>(<js>"/media/subtitles-en.vtt"</js>, <js>"subtitles"</js>).srclang(<js>"en"</js>).label(<js>"English"</js>)._default(<jk>true</jk>),
+ * 			<jsm>track</jsm>(<js>"/media/subtitles-es.vtt"</js>, <js>"subtitles"</js>).srclang(<js>"es"</js>).label(<js>"Español"</js>),
+ * 			<jsm>track</jsm>(<js>"/media/subtitles-fr.vtt"</js>, <js>"subtitles"</js>).srclang(<js>"fr"</js>).label(<js>"Français"</js>)
+ * 		);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#track() track()}
+ * 	</ul>
+ * </ul>
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

@@ -28,49 +28,55 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple figure caption
- * 	Figcaption simple = new Figcaption()
- * 		.children("A beautiful sunset over the mountains.");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple figure caption</jc>
+ * 	Figcaption <jv>simple</jv> = <jsm>figcaption</jsm>(<js>"A beautiful sunset over the mountains."</js>);
+ * 
+ * 	<jc>// Figure caption with styling</jc>
+ * 	Figcaption <jv>styled</jv> = <jsm>figcaption</jsm>(<js>"Chart showing sales data for Q1 2024."</js>)
+ * 		._class(<js>"image-caption"</js>);
+ * 
+ * 	<jc>// Figure caption with complex content</jc>
+ * 	Figcaption <jv>complex</jv> = <jsm>figcaption</jsm>(
+ * 		<js>"Figure 1: "</js>,
+ * 		<jsm>strong</jsm>(<js>"Web Development Process"</js>),
+ * 		<js>" - A step-by-step guide to building websites."</js>
+ * 	);
+ * 
+ * 	<jc>// Figure caption with links</jc>
+ * 	Figcaption <jv>withLinks</jv> = <jsm>figcaption</jsm>(
+ * 		<js>"Source: "</js>,
+ * 		<jsm>a</jsm>(<js>"/data"</js>, <js>"Company Data"</js>),
+ * 		<js>" | "</js>,
+ * 		<jsm>a</jsm>(<js>"/methodology"</js>, <js>"Methodology"</js>)
+ * 	);
+ * 
+ * 	<jc>// Figure caption with ID</jc>
+ * 	Figcaption <jv>withId</jv> = <jsm>figcaption</jsm>(<js>"Interactive chart showing user engagement metrics."</js>)
+ * 		.id(<js>"chart-caption"</js>);
+ * 
+ * 	<jc>// Figure caption with styling</jc>
+ * 	Figcaption <jv>styled2</jv> = <jsm>figcaption</jsm>(<js>"Photograph by John Doe, 2024"</js>)
+ * 		.style(<js>"text-align: center; font-style: italic; color: #666;"</js>);
+ * 
+ * 	<jc>// Figure caption with multiple elements</jc>
+ * 	Figcaption <jv>multiple</jv> = <jsm>figcaption</jsm>(
+ * 		<js>"Code Example: "</js>,
+ * 		<jsm>code</jsm>(<js>"function hello() { return 'Hello World'; }"</js>),
+ * 		<js>" - A simple JavaScript function."</js>
+ * 	);
+ * </p>
  *
- * 	// Figure caption with styling
- * 	Figcaption styled = new Figcaption()
- * 		._class("image-caption")
- * 		.children("Chart showing sales data for Q1 2024.");
- *
- * 	// Figure caption with complex content
- * 	Figcaption complex = new Figcaption()
- * 		.children(
- * 			"Figure 1: ",
- * 			new Strong().children("Web Development Process"),
- * 			" - A step-by-step guide to building websites."
- * 		);
- *
- * 	// Figure caption with links
- * 	Figcaption withLinks = new Figcaption()
- * 		.children(
- * 			"Source: ",
- * 			new A().href("/data").children("Company Data"),
- * 			" | ",
- * 			new A().href("/methodology").children("Methodology")
- * 		);
- *
- * 	// Figure caption with ID
- * 	Figcaption withId = new Figcaption()
- * 		.id("chart-caption")
- * 		.children("Interactive chart showing user engagement metrics.");
- *
- * 	// Figure caption with styling
- * 	Figcaption styled2 = new Figcaption()
- * 		.style("text-align: center; font-style: italic; color: #666;")
- * 		.children("Photograph by John Doe, 2024");
- *
- * 	// Figure caption with multiple elements
- * 	Figcaption multiple = new Figcaption()
- * 		.children(
- * 			"Code Example: ",
- * 			new Code().children("function hello() { return 'Hello World'; }"),
- * 			" - A simple JavaScript function."
- * 		);
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#figcaption() figcaption()}
+ * 		<li class='jm'>{@link HtmlBuilder#figcaption(Object, Object...) figcaption(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

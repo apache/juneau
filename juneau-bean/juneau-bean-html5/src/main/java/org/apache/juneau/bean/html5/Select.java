@@ -28,49 +28,51 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple select dropdown
- * 	Select select1 = new Select()
- * 		.name("color")
- * 		.children(
- * 			new Option().value("red").text("Red"),
- * 			new Option().value("green").text("Green"),
- * 			new Option().value("blue").text("Blue")
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Multiple selection
- * 	Select select2 = new Select()
- * 		.name="hobbies"
- * 		.multiple(true)
- * 		.size(4)
- * 		.children(
- * 			new Option().value("reading").text("Reading"),
- * 			new Option().value="gaming").text("Gaming"),
- * 			new Option().value="sports").text("Sports")
- * 		);
+ * 	<jc>// Simple select dropdown</jc>
+ * 	Select <jv>select1</jv> = <jsm>select</jsm>(<js>"color"</js>,
+ * 		<jsm>option</jsm>(<js>"red"</js>, <js>"Red"</js>),
+ * 		<jsm>option</jsm>(<js>"green"</js>, <js>"Green"</js>),
+ * 		<jsm>option</jsm>(<js>"blue"</js>, <js>"Blue"</js>)
+ * 	);
  * 
- * 	// Select with option groups
- * 	Select select3 = new Select()
- * 		.name="food"
- * 		.children(
- * 			new Optgroup().label("Fruits")
- * 				.children(
- * 					new Option().value="apple").text("Apple"),
- * 					new Option().value="banana").text("Banana")
- * 				),
- * 			new Optgroup().label("Vegetables")
- * 				.children(
- * 					new Option().value="carrot").text("Carrot"),
- * 					new Option().value="broccoli").text("Broccoli")
- * 				)
- * 		);
+ * 	<jc>// Multiple selection</jc>
+ * 	Select <jv>select2</jv> = <jsm>select</jsm>(<js>"hobbies"</js>,
+ * 		<jsm>option</jsm>(<js>"reading"</js>, <js>"Reading"</js>),
+ * 		<jsm>option</jsm>(<js>"gaming"</js>, <js>"Gaming"</js>),
+ * 		<jsm>option</jsm>(<js>"sports"</js>, <js>"Sports"</js>)
+ * 	).multiple(<jk>true</jk>).size(4);
  * 
- * 	// Disabled select
- * 	Select select4 = new Select()
- * 		.name="disabled"
- * 		.disabled(true)
+ * 	<jc>// Select with option groups</jc>
+ * 	Select <jv>select3</jv> = <jsm>select</jsm>(<js>"food"</js>,
+ * 		<jsm>optgroup</jsm>(<js>"Fruits"</js>,
+ * 			<jsm>option</jsm>(<js>"apple"</js>, <js>"Apple"</js>),
+ * 			<jsm>option</jsm>(<js>"banana"</js>, <js>"Banana"</js>)
+ * 		),
+ * 		<jsm>optgroup</jsm>(<js>"Vegetables"</js>,
+ * 			<jsm>option</jsm>(<js>"carrot"</js>, <js>"Carrot"</js>),
+ * 			<jsm>option</jsm>(<js>"broccoli"</js>, <js>"Broccoli"</js>)
+ * 		)
+ * 	);
+ * 
+ * 	<jc>// Disabled select</jc>
+ * 	Select <jv>select4</jv> = <jsm>select</jsm>(<js>"disabled"</js>)
+ * 		.disabled(<jk>true</jk>)
  * 		.children(
- * 			new Option().value="option1").text("Option 1")
+ * 			option().value("option1").text("Option 1")
  * 		);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#select() select()}
+ * 		<li class='jm'>{@link HtmlBuilder#select(Object, Object...) select(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

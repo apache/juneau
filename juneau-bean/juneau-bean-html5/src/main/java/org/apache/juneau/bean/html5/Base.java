@@ -29,14 +29,24 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Set base URL for all relative links
- * 	Base base1 = new Base().href("https://example.com/docs/");
+ * 	<jc>// Set base URL for all relative links</jc>
+ * 	Base <jv>base1</jv> = <jsm>base</jsm>().href(<js>"https://example.com/docs/"</js>);
  * 
- * 	// Set default target for all links
- * 	Base base2 = new Base().target("_blank");
+ * 	<jc>// Set default target for all links</jc>
+ * 	Base <jv>base2</jv> = <jsm>base</jsm>().target(<js>"_blank"</js>);
  * 
- * 	// Set both base URL and default target
- * 	Base base3 = new Base().href("https://example.com/").target("_self");
+ * 	<jc>// Set both base URL and default target</jc>
+ * 	Base <jv>base3</jv> = <jsm>base</jsm>().href(<js>"https://example.com/"</js>).target(<js>"_self"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#base() base()}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

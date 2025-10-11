@@ -28,87 +28,71 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple main content
- * 	Main simple = new Main()
- * 		.children(
- * 			new H1().children("Welcome to Our Site"),
- * 			new P().children("This is the main content of our page.")
- * 		);
- *
- * 	// Main with styling
- * 	Main styled = new Main()
- * 		._class("main-content")
- * 		.children(
- * 			new H1().children("About Us"),
- * 			new P().children("Learn more about our company and mission.")
- * 		);
- *
- * 	// Main with complex content
- * 	Main complex = new Main()
- * 		.children(
- * 			new H1().children("Product Catalog"),
- * 			new Section()
- * 				.children(
- * 					new H2().children("Featured Products"),
- * 					new P().children("Check out our latest offerings.")
- * 				),
- * 			new Section()
- * 				.children(
- * 					new H2().children("Categories"),
- * 					new Ul().children(
- * 						new Li().children("Electronics"),
- * 						new Li().children("Clothing"),
- * 						new Li().children("Books")
- * 					)
- * 				)
- * 		);
- *
- * 	// Main with ID
- * 	Main withId = new Main()
- * 		.id("page-main")
- * 		.children(
- * 			new H1().children("Main Content"),
- * 			new P().children("This is the main content area.")
- * 		);
- *
- * 	// Main with styling
- * 	Main styled2 = new Main()
- * 		.style("max-width: 800px; margin: 0 auto; padding: 20px;")
- * 		.children(
- * 			new H1().children("Centered Content"),
- * 			new P().children("This content is centered and styled.")
- * 		);
- *
- * 	// Main with multiple sections
- * 	Main multiSection = new Main()
- * 		.children(
- * 			new Section()
- * 				.children(
- * 					new H1().children("Page Title"),
- * 					new P().children("Introduction to the page content.")
- * 				),
- * 			new Section()
- * 				.children(
- * 					new H2().children("Content Section"),
- * 					new P().children("Detailed content goes here.")
- * 				),
- * 			new Section()
- * 				.children(
- * 					new H2().children("Conclusion"),
- * 					new P().children("Summary and closing thoughts.")
- * 				)
- * 		);
- *
- * 	// Main with article
- * 	Main withArticle = new Main()
- * 		.children(
- * 			new Article()
- * 				.children(
- * 					new H1().children("Article Title"),
- * 					new P().children("Article content goes here."),
- * 					new Footer().children("Article footer")
- * 				)
- * 		);
+ * 	<jc>// Simple main content</jc>
+ * 	Main <jv>simple</jv> = <jsm>main</jsm>(
+ * 		<jsm>h1</jsm>(<js>"Welcome to Our Site"</js>),
+ * 		<jsm>p</jsm>(<js>"This is the main content of our page."</js>)
+ * 	);
+ * 
+ * 	<jc>// Main with styling</jc>
+ * 	Main <jv>styled</jv> = <jsm>main</jsm>(
+ * 		<jsm>h1</jsm>(<js>"About Us"</js>),
+ * 		<jsm>p</jsm>(<js>"Learn more about our company and mission."</js>)
+ * 	)._class(<js>"main-content"</js>);
+ * 
+ * 	<jc>// Main with complex content</jc>
+ * 	Main <jv>complex</jv> = <jsm>main</jsm>(
+ * 		<jsm>h1</jsm>(<js>"Product Catalog"</js>),
+ * 		<jsm>section</jsm>(
+ * 			<jsm>h2</jsm>(<js>"Featured Products"</js>),
+ * 			<jsm>p</jsm>(<js>"Check out our latest offerings."</js>)
+ * 		),
+ * 		<jsm>section</jsm>(
+ * 			<jsm>h2</jsm>(<js>"Categories"</js>),
+ * 			<jsm>ul</jsm>(
+ * 				<jsm>li</jsm>(<js>"Electronics"</js>),
+ * 				<jsm>li</jsm>(<js>"Clothing"</js>),
+ * 				<jsm>li</jsm>(<js>"Books"</js>)
+ * 			)
+ * 		)
+ * 	);
+ * 
+ * 	<jc>// Main with ID</jc>
+ * 	Main <jv>withId</jv> = <jsm>main</jsm>(
+ * 		<jsm>h1</jsm>(<js>"Main Content"</js>),
+ * 		<jsm>p</jsm>(<js>"This is the main content area."</js>)
+ * 	).id(<js>"page-main"</js>);
+ * 
+ * 	<jc>// Main with styling</jc>
+ * 	Main <jv>styled2</jv> = <jsm>main</jsm>(
+ * 		<jsm>h1</jsm>(<js>"Centered Content"</js>),
+ * 		<jsm>p</jsm>(<js>"This content is centered and styled."</js>)
+ * 	).style(<js>"max-width: 800px; margin: 0 auto; padding: 20px;"</js>);
+ * 
+ * 	<jc>// Main with multiple sections</jc>
+ * 	Main <jv>multiSection</jv> = <jsm>main</jsm>(
+ * 		<jsm>section</jsm>(
+ * 			<jsm>h1</jsm>(<js>"Page Title"</js>),
+ * 			<jsm>p</jsm>(<js>"Introduction to the page content."</js>)
+ * 		),
+ * 		<jsm>section</jsm>(
+ * 			<jsm>h2</jsm>(<js>"Content Section"</js>),
+ * 			<jsm>p</jsm>(<js>"Detailed content goes here."</js>)
+ * 		),
+ * 		<jsm>section</jsm>(
+ * 			<jsm>h2</jsm>(<js>"Conclusion"</js>),
+ * 			<jsm>p</jsm>(<js>"Summary and closing thoughts."</js>)
+ * 		)
+ * 	);
+ * 
+ * 	<jc>// Main with article</jc>
+ * 	Main <jv>withArticle</jv> = <jsm>main</jsm>(
+ * 		<jsm>article</jsm>(
+ * 			<jsm>h1</jsm>(<js>"Article Title"</js>),
+ * 			<jsm>p</jsm>(<js>"Article content goes here."</js>),
+ * 			<jsm>footer</jsm>(<js>"Article footer"</js>)
+ * 		)
+ * 	);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

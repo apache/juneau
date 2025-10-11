@@ -29,37 +29,48 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple contact form
- * 	Form form1 = new Form()
- * 		.action("/contact")
- * 		.method("post")
+ * 	<jc>// Simple contact form</jc>
+ * 	Form <jv>form1</jv> = <jsm>form</jsm>()
+ * 		.action(<js>"/contact"</js>)
+ * 		.method(<js>"post"</js>)
  * 		.children(
- * 			new Input().type("text").name("name").placeholder("Your Name"),
- * 			new Input().type("email").name("email").placeholder("Your Email"),
- * 			new Textarea().name("message").placeholder("Your Message"),
- * 			new Button().type("submit").text("Send Message")
+ * 			<jsm>input</jsm>(<js>"text"</js>).name(<js>"name"</js>).placeholder(<js>"Your Name"</js>),
+ * 			<jsm>input</jsm>(<js>"email"</js>).name(<js>"email"</js>).placeholder(<js>"Your Email"</js>),
+ * 			<jsm>textarea</jsm>().name(<js>"message"</js>).placeholder(<js>"Your Message"</js>),
+ * 			<jsm>button</jsm>().type(<js>"submit"</js>).text(<js>"Send Message"</js>)
  * 		);
  * 
- * 	// File upload form
- * 	Form form2 = new Form()
- * 		.action("/upload")
- * 		.method("post")
- * 		.enctype("multipart/form-data")
+ * 	<jc>// File upload form</jc>
+ * 	Form <jv>form2</jv> = <jsm>form</jsm>()
+ * 		.action(<js>"/upload"</js>)
+ * 		.method(<js>"post"</js>)
+ * 		.enctype(<js>"multipart/form-data"</js>)
  * 		.children(
- * 			new Input().type("file").name("file").accept("image/*"),
- * 			new Button().type("submit").text("Upload")
+ * 			<jsm>input</jsm>(<js>"file"</js>).name(<js>"file"</js>).accept(<js>"image/*"</js>),
+ * 			<jsm>button</jsm>().type(<js>"submit"</js>).text(<js>"Upload"</js>)
  * 		);
  * 
- * 	// Form with validation
- * 	Form form3 = new Form()
- * 		.action("/register")
- * 		.method("post")
- * 		.novalidate(false)
+ * 	<jc>// Form with validation</jc>
+ * 	Form <jv>form3</jv> = <jsm>form</jsm>()
+ * 		.action(<js>"/register"</js>)
+ * 		.method(<js>"post"</js>)
+ * 		.novalidate(<jk>false</jk>)
  * 		.children(
- * 			new Input().type("email").name("email").required(true),
- * 			new Input().type("password").name("password").required(true),
- * 			new Button().type("submit").text("Register")
+ * 			<jsm>input</jsm>(<js>"email"</js>).name(<js>"email"</js>).required(<jk>true</jk>),
+ * 			<jsm>input</jsm>(<js>"password"</js>).name(<js>"password"</js>).required(<jk>true</jk>),
+ * 			<jsm>button</jsm>().type(<js>"submit"</js>).text(<js>"Register"</js>)
  * 		);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#form() form()}
+ * 		<li class='jm'>{@link HtmlBuilder#form(Object, Object...) form(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

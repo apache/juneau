@@ -29,83 +29,89 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple template
- * 	Template simple = new Template()
- * 		.children(
- * 			new P().children("This is a template paragraph.")
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Template with styling
- * 	Template styled = new Template()
- * 		._class("item-template")
- * 		.children(
- * 			new Div()._class("item")
- * 				.children(
- * 					new H3().children("Item Title"),
- * 					new P().children("Item description")
- * 				)
- * 		);
+ * 	<jc>// Simple template</jc>
+ * 	Template <jv>simple</jv> = <jsm>template</jsm>(
+ * 		<jsm>p</jsm>(<js>"This is a template paragraph."</js>)
+ * 	);
  *
- * 	// Template with complex content
- * 	Template complex = new Template()
- * 		.children(
- * 			new Article()
- * 				.children(
- * 					new Header()
- * 						.children(
- * 							new H2().children("Article Title"),
- * 							new P().children("Article subtitle")
- * 						),
- * 					new P().children("Article content goes here."),
- * 					new Footer().children("Article footer")
+ * 	<jc>// Template with styling</jc>
+ * 	Template <jv>styled</jv> = <jsm>template</jsm>(
+ * 		<jsm>div</jsm>(
+ * 			<jsm>h3</jsm>(<js>"Item Title"</js>),
+ * 			<jsm>p</jsm>(<js>"Item description"</js>)
+ * 		)._class(<js>"item"</js>)
+ * 	)._class(<js>"item-template"</js>);
+ *
+ * 	<jc>// Template with complex content</jc>
+ * 	Template <jv>complex</jv> = <jsm>template</jsm>(
+ * 		<jsm>article</jsm>(
+ * 			<jsm>header</jsm>(
+ * 				<jsm>h2</jsm>(<js>"Article Title"</js>),
+ * 				<jsm>p</jsm>(<js>"Article subtitle"</js>)
+ * 			),
+ * 			<jsm>p</jsm>(<js>"Article content goes here."</js>),
+ * 			<jsm>footer</jsm>(<js>"Article footer"</js>)
  * 				)
  * 		);
  *
  * 	// Template with ID
- * 	Template withId = new Template()
+ * 	Template withId = template()
  * 		.id("user-card-template")
  * 		.children(
- * 			new Div()._class("user-card")
+ * 			div()._class("user-card")
  * 				.children(
- * 					new Img().src("/avatar.jpg").alt("User Avatar"),
- * 					new H3().children("User Name"),
- * 					new P().children("User Bio")
+ * 					img().src("/avatar.jpg").alt("User Avatar"),
+ * 					h3().children("User Name"),
+ * 					p().children("User Bio")
  * 				)
  * 		);
  *
  * 	// Template with styling
- * 	Template styled2 = new Template()
+ * 	Template styled2 = template()
  * 		.style("display: none;")
  * 		.children(
- * 			new Div()._class("modal")
+ * 			div()._class("modal")
  * 				.children(
- * 					new H2().children("Modal Title"),
- * 					new P().children("Modal content")
+ * 					h2().children("Modal Title"),
+ * 					p().children("Modal content")
  * 				)
  * 		);
  *
  * 	// Template with multiple elements
- * 	Template multiple = new Template()
+ * 	Template multiple = template()
  * 		.children(
- * 			new Div()._class("product-card")
+ * 			div()._class("product-card")
  * 				.children(
- * 					new Img().src("/product.jpg").alt("Product Image"),
- * 					new H3().children("Product Name"),
- * 					new P().children("Product Description"),
- * 					new Span()._class("price").children("$99.99"),
- * 					new Button().children("Add to Cart")
+ * 					img().src("/product.jpg").alt("Product Image"),
+ * 					h3().children("Product Name"),
+ * 					p().children("Product Description"),
+ * 					span()._class("price").children("$99.99"),
+ * 					button().children("Add to Cart")
  * 				)
  * 		);
  *
  * 	// Template with form
- * 	Template withForm = new Template()
+ * 	Template withForm = template()
  * 		.children(
- * 			new Form()._class("comment-form")
+ * 			form()._class("comment-form")
  * 				.children(
- * 					new Textarea().placeholder("Enter your comment"),
- * 					new Button().type("submit").children("Submit Comment")
+ * 					textarea().placeholder("Enter your comment"),
+ * 					button().type("submit").children("Submit Comment")
  * 				)
  * 		);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#template() template()}
+ * 		<li class='jm'>{@link HtmlBuilder#template(Object, Object...) template(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

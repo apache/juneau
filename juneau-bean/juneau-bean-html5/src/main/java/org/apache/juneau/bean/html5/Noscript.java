@@ -28,52 +28,46 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple noscript message
- * 	Noscript simple = new Noscript()
- * 		.children("Please enable JavaScript to use this application.");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Noscript with styling
- * 	Noscript styled = new Noscript()
- * 		._class("noscript-message")
- * 		.children("JavaScript is required for this page to function properly.");
+ * 	<jc>// Simple noscript message</jc>
+ * 	Noscript <jv>simple</jv> = <jsm>noscript</jsm>(<js>"Please enable JavaScript to use this application."</js>);
  *
- * 	// Noscript with complex content
- * 	Noscript complex = new Noscript()
- * 		.children(
- * 			new H2().children("JavaScript Required"),
- * 			new P().children("This application requires JavaScript to function."),
- * 			new P().children("Please enable JavaScript in your browser and refresh the page.")
- * 		);
+ * 	<jc>// Noscript with styling</jc>
+ * 	Noscript <jv>styled</jv> = <jsm>noscript</jsm>(<js>"JavaScript is required for this page to function properly."</js>)
+ * 		._class(<js>"noscript-message"</js>);
  *
- * 	// Noscript with ID
- * 	Noscript withId = new Noscript()
- * 		.id("noscript-message")
- * 		.children("JavaScript is disabled.");
+ * 	<jc>// Noscript with complex content</jc>
+ * 	Noscript <jv>complex</jv> = <jsm>noscript</jsm>(
+ * 		<jsm>h2</jsm>(<js>"JavaScript Required"</js>),
+ * 		<jsm>p</jsm>(<js>"This application requires JavaScript to function."</js>),
+ * 		<jsm>p</jsm>(<js>"Please enable JavaScript in your browser and refresh the page."</js>)
+ * 	);
  *
- * 	// Noscript with styling
- * 	Noscript styled2 = new Noscript()
- * 		.style("background-color: #f8d7da; color: #721c24; padding: 10px; border: 1px solid #f5c6cb;")
- * 		.children("JavaScript is required for this page.");
+ * 	<jc>// Noscript with ID</jc>
+ * 	Noscript <jv>withId</jv> = <jsm>noscript</jsm>(<js>"JavaScript is disabled."</js>)
+ * 		.id(<js>"noscript-message"</js>);
  *
- * 	// Noscript with multiple elements
- * 	Noscript multiple = new Noscript()
- * 		.children(
- * 			new H3().children("JavaScript Disabled"),
- * 			new P().children("This page requires JavaScript to function properly."),
- * 			new P().children("Please enable JavaScript and refresh the page."),
- * 			new A().href("/help/javascript").children("Learn how to enable JavaScript")
- * 		);
+ * 	<jc>// Noscript with styling</jc>
+ * 	Noscript <jv>styled2</jv> = <jsm>noscript</jsm>(<js>"JavaScript is required for this page."</js>)
+ * 		.style(<js>"background-color: #f8d7da; color: #721c24; padding: 10px; border: 1px solid #f5c6cb;"</js>);
  *
- * 	// Noscript with form
- * 	Noscript withForm = new Noscript()
- * 		.children(
- * 			new P().children("JavaScript is disabled. Please use the form below:"),
- * 			new Form().action("/submit").method("post")
- * 				.children(
- * 					new Input().type("text").name("name").placeholder("Name"),
- * 					new Input().type("submit").value("Submit")
- * 				)
- * 		);
+ * 	<jc>// Noscript with multiple elements</jc>
+ * 	Noscript <jv>multiple</jv> = <jsm>noscript</jsm>(
+ * 		<jsm>h3</jsm>(<js>"JavaScript Disabled"</js>),
+ * 		<jsm>p</jsm>(<js>"This page requires JavaScript to function properly."</js>),
+ * 		<jsm>p</jsm>(<js>"Please enable JavaScript and refresh the page."</js>),
+ * 		<jsm>a</jsm>(<js>"/help/javascript"</js>, <js>"Learn how to enable JavaScript"</js>)
+ * 	);
+ *
+ * 	<jc>// Noscript with form</jc>
+ * 	Noscript <jv>withForm</jv> = <jsm>noscript</jsm>(
+ * 		<jsm>p</jsm>(<js>"JavaScript is disabled. Please use the form below:"</js>),
+ * 		<jsm>form</jsm>().action(<js>"/submit"</js>).method(<js>"post"</js>).children(
+ * 			<jsm>input</jsm>(<js>"text"</js>).name(<js>"name"</js>).placeholder(<js>"Name"</js>),
+ * 			<jsm>input</jsm>(<js>"submit"</js>).value(<js>"Submit"</js>)
+ * 		)
+ * 	);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

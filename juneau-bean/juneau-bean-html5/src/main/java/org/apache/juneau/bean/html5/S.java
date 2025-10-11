@@ -28,41 +28,37 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple strikethrough text
- * 	S simple = new S()
- * 		.children("This text is no longer accurate");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// S with styling
- * 	S styled = new S()
- * 		._class("outdated")
- * 		.children("This information is outdated");
+ * 	<jc>// Simple strikethrough text</jc>
+ * 	S <jv>simple</jv> = <jsm>s</jsm>(<js>"This text is no longer accurate"</js>);
  *
- * 	// S with complex content
- * 	S complex = new S()
- * 		.children(
- * 			"The ",
- * 			new Strong().children("old price"),
- * 			" was $100."
- * 		);
+ * 	<jc>// S with styling</jc>
+ * 	S <jv>styled</jv> = <jsm>s</jsm>(<js>"This information is outdated"</js>)
+ * 		._class(<js>"outdated"</js>);
  *
- * 	// S with ID
- * 	S withId = new S()
- * 		.id("strikethrough-text")
- * 		.children("Text with ID");
+ * 	<jc>// S with complex content</jc>
+ * 	S <jv>complex</jv> = <jsm>s</jsm>(
+ * 		<js>"The "</js>,
+ * 		<jsm>strong</jsm>(<js>"old price"</js>),
+ * 		<js>" was $100."</js>
+ * 	);
  *
- * 	// S with styling
- * 	S styled2 = new S()
- * 		.style("color: #999; text-decoration: line-through;")
- * 		.children("Custom styled strikethrough text");
+ * 	<jc>// S with ID</jc>
+ * 	S <jv>withId</jv> = <jsm>s</jsm>(<js>"Text with ID"</js>)
+ * 		.id(<js>"strikethrough-text"</js>);
  *
- * 	// S with multiple elements
- * 	S multiple = new S()
- * 		.children(
- * 			"The ",
- * 			new S().children("old version"),
- * 			" has been ",
- * 			new S().children("replaced"),
- * 			" by the new one."
+ * 	<jc>// S with styling</jc>
+ * 	S <jv>styled2</jv> = <jsm>s</jsm>(<js>"Custom styled strikethrough text"</js>)
+ * 		.style(<js>"color: #999; text-decoration: line-through;"</js>);
+ *
+ * 	<jc>// S with multiple elements</jc>
+ * 	S <jv>multiple</jv> = <jsm>s</jsm>(
+ * 		<js>"The "</js>,
+ * 		<jsm>s</jsm>(<js>"old version"</js>),
+ * 		<js>" has been "</js>,
+ * 		<jsm>s</jsm>(<js>"replaced"</js>),
+ * 		<js>" by the new one."</js>
  * 		);
  *
  * 	// S with links

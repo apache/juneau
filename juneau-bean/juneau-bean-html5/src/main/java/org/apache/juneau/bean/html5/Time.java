@@ -27,36 +27,43 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple date
- * 	Time date = new Time()
- * 		.datetime("2024-01-15")
- * 		.children("January 15, 2024");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Date and time
- * 	Time datetime = new Time()
- * 		.datetime("2024-01-15T14:30:00Z")
- * 		.children("2:30 PM on January 15, 2024");
+ * 	<jc>// Simple date</jc>
+ * 	Time <jv>date</jv> = <jsm>time</jsm>(<js>"January 15, 2024"</js>)
+ * 		.datetime(<js>"2024-01-15"</js>);
  * 
- * 	// Relative time
- * 	Time relative = new Time()
- * 		.datetime("2024-01-15")
- * 		.children("yesterday");
+ * 	<jc>// Date and time</jc>
+ * 	Time <jv>datetime</jv> = <jsm>time</jsm>(<js>"2:30 PM on January 15, 2024"</js>)
+ * 		.datetime(<js>"2024-01-15T14:30:00Z"</js>);
  * 
- * 	// Duration
- * 	Time duration = new Time()
- * 		.datetime("PT2H30M")
- * 		.children("2 hours and 30 minutes");
+ * 	<jc>// Relative time</jc>
+ * 	Time <jv>relative</jv> = <jsm>time</jsm>(<js>"yesterday"</js>)
+ * 		.datetime(<js>"2024-01-15"</js>);
  * 
- * 	// Time with styling
- * 	Time styled = new Time()
- * 		.datetime("2024-01-15")
- * 		._class("event-date")
- * 		.children("Event Date: January 15, 2024");
+ * 	<jc>// Duration</jc>
+ * 	Time <jv>duration</jv> = <jsm>time</jsm>(<js>"2 hours and 30 minutes"</js>)
+ * 		.datetime(<js>"PT2H30M"</js>);
  * 
- * 	// Time with timezone
- * 	Time timezone = new Time()
- * 		.datetime("2024-01-15T14:30:00-05:00")
- * 		.children("2:30 PM EST on January 15, 2024");
+ * 	<jc>// Time with styling</jc>
+ * 	Time <jv>styled</jv> = <jsm>time</jsm>(<js>"Event Date: January 15, 2024"</js>)
+ * 		.datetime(<js>"2024-01-15"</js>)
+ * 		._class(<js>"event-date"</js>);
+ * 
+ * 	<jc>// Time with timezone</jc>
+ * 	Time <jv>timezone</jv> = <jsm>time</jsm>(<js>"2:30 PM EST on January 15, 2024"</js>)
+ * 		.datetime(<js>"2024-01-15T14:30:00-05:00"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#time() time()}
+ * 		<li class='jm'>{@link HtmlBuilder#time(Object, Object...) time(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

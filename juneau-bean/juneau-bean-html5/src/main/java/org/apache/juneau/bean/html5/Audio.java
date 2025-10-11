@@ -29,18 +29,29 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple audio with single source
- * 	Audio audio1 = new Audio().src("audio.mp3").controls(true);
+ * 	<jc>// Simple audio with single source</jc>
+ * 	Audio <jv>audio1</jv> = <jsm>audio</jsm>().src(<js>"audio.mp3"</js>).controls(<jk>true</jk>);
  * 
- * 	// Audio with multiple sources for browser compatibility
- * 	Audio audio2 = new Audio().controls(true)
+ * 	<jc>// Audio with multiple sources for browser compatibility</jc>
+ * 	Audio <jv>audio2</jv> = <jsm>audio</jsm>().controls(<jk>true</jk>)
  * 		.children(
- * 			new Source().src("audio.mp3").type("audio/mpeg"),
- * 			new Source().src("audio.ogg").type("audio/ogg")
+ * 			<jsm>source</jsm>().src(<js>"audio.mp3"</js>).type(<js>"audio/mpeg"</js>),
+ * 			<jsm>source</jsm>().src(<js>"audio.ogg"</js>).type(<js>"audio/ogg"</js>)
  * 		);
  * 
- * 	// Autoplay audio with loop
- * 	Audio audio3 = new Audio().src("background.mp3").autoplay(true).loop(true).muted(true);
+ * 	<jc>// Autoplay audio with loop</jc>
+ * 	Audio <jv>audio3</jv> = <jsm>audio</jsm>().src(<js>"background.mp3"</js>).autoplay(<jk>true</jk>).loop(<jk>true</jk>).muted(<jk>true</jk>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#audio() audio()}
+ * 		<li class='jm'>{@link HtmlBuilder#audio(Object, Object...) audio(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -27,58 +27,65 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple contact address
- * 	Address simple = new Address()
- * 		.children("123 Main Street, Anytown, ST 12345");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Contact information with multiple elements
- * 	Address contact = new Address()
- * 		.children(
- * 			"John Doe",
- * 			new Br(),
- * 			"123 Main Street",
- * 			new Br(),
- * 			"Anytown, ST 12345",
- * 			new Br(),
- * 			new A().href("mailto:john@example.com").children("john@example.com")
- * 		);
+ * 	<jc>// Simple contact address</jc>
+ * 	Address <jv>simple</jv> = <jsm>address</jsm>(<js>"123 Main Street, Anytown, ST 12345"</js>);
  * 
- * 	// Company address
- * 	Address company = new Address()
- * 		.children(
- * 			"Acme Corporation",
- * 			new Br(),
- * 			"456 Business Ave",
- * 			new Br(),
- * 			"Suite 100",
- * 			new Br(),
- * 			"Business City, BC 67890",
- * 			new Br(),
- * 			"Phone: (555) 123-4567"
- * 		);
+ * 	<jc>// Contact information with multiple elements</jc>
+ * 	Address <jv>contact</jv> = <jsm>address</jsm>(
+ * 		<js>"John Doe"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"123 Main Street"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Anytown, ST 12345"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<jsm>a</jsm>(<js>"mailto:john@example.com"</js>, <js>"john@example.com"</js>)
+ * 	);
  * 
- * 	// Styled address
- * 	Address styled = new Address()
- * 		._class("contact-info")
- * 		.children(
- * 			"Contact us at:",
- * 			new Br(),
- * 			new A().href("mailto:info@company.com").children("info@company.com")
- * 		);
+ * 	<jc>// Company address</jc>
+ * 	Address <jv>company</jv> = <jsm>address</jsm>(
+ * 		<js>"Acme Corporation"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"456 Business Ave"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Suite 100"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Business City, BC 67890"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Phone: (555) 123-4567"</js>
+ * 	);
  * 
- * 	// Address with multiple contact methods
- * 	Address multiple = new Address()
- * 		.children(
- * 			"Support Team",
- * 			new Br(),
- * 			"Email: ",
- * 			new A().href("mailto:support@example.com").children("support@example.com"),
- * 			new Br(),
- * 			"Phone: ",
- * 			new A().href("tel:+1-555-123-4567").children("(555) 123-4567"),
- * 			new Br(),
- * 			"Address: 789 Support St, Help City, HC 54321"
- * 		);
+ * 	<jc>// Styled address</jc>
+ * 	Address <jv>styled</jv> = <jsm>address</jsm>(
+ * 		<js>"Contact us at:"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<jsm>a</jsm>(<js>"mailto:info@company.com"</js>, <js>"info@company.com"</js>)
+ * 	)._class(<js>"contact-info"</js>);
+ * 
+ * 	<jc>// Address with multiple contact methods</jc>
+ * 	Address <jv>multiple</jv> = <jsm>address</jsm>(
+ * 		<js>"Support Team"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Email: "</js>,
+ * 		<jsm>a</jsm>(<js>"mailto:support@example.com"</js>, <js>"support@example.com"</js>),
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Phone: "</js>,
+ * 		<jsm>a</jsm>(<js>"tel:+1-555-123-4567"</js>, <js>"(555) 123-4567"</js>),
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Address: 789 Support St, Help City, HC 54321"</js>
+ * 	);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#address() address()}
+ * 		<li class='jm'>{@link HtmlBuilder#address(Object, Object...) address(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

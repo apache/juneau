@@ -28,17 +28,28 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple link to another page
- * 	A a1 = new A().href("https://example.com").text("Visit Example");
- * 
- * 	// Link with target to open in new window
- * 	A a2 = new A().href("https://example.com").target("_blank").text("Open in New Window");
- * 
- * 	// Email link
- * 	A a3 = new A().href("mailto:user@example.com").text("Send Email");
- * 
- * 	// Link with relationship and language
- * 	A a4 = new A().href("https://example.com").rel("nofollow").hreflang("en").text("English Version");
+ * 	<jc>// Simple link to another page</jc>
+ * 	A <jv>a1</jv> = <jsm>a</jsm>().href(<js>"https://example.com"</js>).text(<js>"Visit Example"</js>);
+ *
+ * 	<jc>// Link with target to open in new window</jc>
+ * 	A <jv>a2</jv> = <jsm>a</jsm>().href(<js>"https://example.com"</js>).target(<js>"_blank"</js>).text(<js>"Open in New Window"</js>);
+ *
+ * 	<jc>// Email link</jc>
+ * 	A <jv>a3</jv> = <jsm>a</jsm>().href(<js>"mailto:user@example.com"</js>).text(<js>"Send Email"</js>);
+ *
+ * 	<jc>// Link with relationship and language</jc>
+ * 	A <jv>a4</jv> = <jsm>a</jsm>().href(<js>"https://example.com"</js>).rel(<js>"nofollow"</js>).hreflang(<js>"en"</js>).text(<js>"English Version"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#a() a()}
+ * 		<li class='jm'>{@link HtmlBuilder#a(Object, Object...) a(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

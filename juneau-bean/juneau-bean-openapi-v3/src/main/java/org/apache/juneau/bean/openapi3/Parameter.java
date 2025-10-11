@@ -74,7 +74,6 @@ import org.apache.juneau.marshaller.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@FluentSetters
 public class Parameter extends OpenApiElement {
 
 	private static final String[] VALID_IN = {"query", "header", "path", "cookie"};
@@ -371,7 +370,7 @@ public class Parameter extends OpenApiElement {
 		return this;
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -391,7 +390,7 @@ public class Parameter extends OpenApiElement {
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public Parameter set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -414,7 +413,7 @@ public class Parameter extends OpenApiElement {
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(allowEmptyValue != null, "allowEmptyValue")
@@ -433,19 +432,16 @@ public class Parameter extends OpenApiElement {
 		return new MultiSet<>(s, super.keySet());
 	}
 
-	// <FluentSetters>
-
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public Parameter strict() {
 		super.strict();
 		return this;
 	}
 
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public Parameter strict(Object value) {
 		super.strict(value);
 		return this;
 	}
 
-	// </FluentSetters>
 }

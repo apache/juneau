@@ -71,14 +71,12 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@FluentSetters
 public class OAuthFlow extends OpenApiElement {
 
 	private String authorizationUrl;
 	private String tokenUrl;
 	private String refreshUrl;
 	private Map<String,String> scopes;
-
 
 	/**
 	 * Default constructor.
@@ -232,11 +230,7 @@ public class OAuthFlow extends OpenApiElement {
 		return this;
 	}
 
-	// <FluentSetters>
-
-	// </FluentSetters>
-
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -248,7 +242,7 @@ public class OAuthFlow extends OpenApiElement {
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public OAuthFlow set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -263,7 +257,7 @@ public class OAuthFlow extends OpenApiElement {
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(authorizationUrl != null, "authorizationUrl")
@@ -274,19 +268,16 @@ public class OAuthFlow extends OpenApiElement {
 		return new MultiSet<>(s, super.keySet());
 	}
 
-	// <FluentSetters>
-
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public OAuthFlow strict() {
 		super.strict();
 		return this;
 	}
 
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public OAuthFlow strict(Object value) {
 		super.strict(value);
 		return this;
 	}
 
-	// </FluentSetters>
 }

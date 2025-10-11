@@ -28,49 +28,55 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple legend
- * 	Legend simple = new Legend()
- * 		.children("Personal Information");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Legend with styling
- * 	Legend styled = new Legend()
- * 		._class("form-legend")
- * 		.children("Contact Details");
+ * 	<jc>// Simple legend</jc>
+ * 	Legend <jv>simple</jv> = <jsm>legend</jsm>(<js>"Personal Information"</js>);
  *
- * 	// Legend with complex content
- * 	Legend complex = new Legend()
- * 		.children(
- * 			"Step 1: ",
- * 			new Strong().children("Basic Information"),
- * 			" ",
- * 			new Em().children("(Required)")
- * 		);
+ * 	<jc>// Legend with styling</jc>
+ * 	Legend <jv>styled</jv> = <jsm>legend</jsm>(<js>"Contact Details"</js>)
+ * 		._class(<js>"form-legend"</js>);
  *
- * 	// Legend with ID
- * 	Legend withId = new Legend()
- * 		.id("form-legend")
- * 		.children("Form Legend");
+ * 	<jc>// Legend with complex content</jc>
+ * 	Legend <jv>complex</jv> = <jsm>legend</jsm>(
+ * 		<js>"Step 1: "</js>,
+ * 		<jsm>strong</jsm>(<js>"Basic Information"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>em</jsm>(<js>"(Required)"</js>)
+ * 	);
  *
- * 	// Legend with styling
- * 	Legend styled2 = new Legend()
- * 		.style("color: #333; font-weight: bold; padding: 0 10px;")
- * 		.children("Styled Legend");
+ * 	<jc>// Legend with ID</jc>
+ * 	Legend <jv>withId</jv> = <jsm>legend</jsm>(<js>"Form Legend"</js>)
+ * 		.id(<js>"form-legend"</js>);
  *
- * 	// Legend with multiple elements
- * 	Legend multiple = new Legend()
- * 		.children(
- * 			"Section 1: ",
- * 			new Span()._class("section-title").children("User Details"),
- * 			" ",
- * 			new Small().children("(All fields required)")
- * 		);
+ * 	<jc>// Legend with styling</jc>
+ * 	Legend <jv>styled2</jv> = <jsm>legend</jsm>(<js>"Styled Legend"</js>)
+ * 		.style(<js>"color: #333; font-weight: bold; padding: 0 10px;"</js>);
  *
- * 	// Legend with links
- * 	Legend withLinks = new Legend()
- * 		.children(
- * 			"Help: ",
- * 			new A().href("/help/forms").children("Form Guide")
- * 		);
+ * 	<jc>// Legend with multiple elements</jc>
+ * 	Legend <jv>multiple</jv> = <jsm>legend</jsm>(
+ * 		<js>"Section 1: "</js>,
+ * 		<jsm>span</jsm>(<js>"User Details"</js>)._class(<js>"section-title"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>small</jsm>(<js>"(All fields required)"</js>)
+ * 	);
+ *
+ * 	<jc>// Legend with links</jc>
+ * 	Legend <jv>withLinks</jv> = <jsm>legend</jsm>(
+ * 		<js>"Help: "</js>,
+ * 		<jsm>a</jsm>(<js>"/help/forms"</js>, <js>"Form Guide"</js>)
+ * 	);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#legend() legend()}
+ * 		<li class='jm'>{@link HtmlBuilder#legend(Object, Object...) legend(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

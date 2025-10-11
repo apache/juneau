@@ -29,40 +29,48 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Text input field
- * 	Input input1 = new Input()
- * 		.type("text")
- * 		.name("username")
- * 		.placeholder("Enter your username")
- * 		.required(true);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Email input with validation
- * 	Input input2 = new Input()
- * 		.type("email")
- * 		.name("email")
- * 		.placeholder("your@email.com")
- * 		.autocomplete("email");
+ * 	<jc>// Text input field</jc>
+ * 	Input <jv>input1</jv> = <jsm>input</jsm>(<js>"text"</js>)
+ * 		.name(<js>"username"</js>)
+ * 		.placeholder(<js>"Enter your username"</js>)
+ * 		.required(<jk>true</jk>);
  * 
- * 	// File upload input
- * 	Input input3 = new Input()
- * 		.type("file")
- * 		.name("avatar")
- * 		.accept("image/*")
- * 		.multiple(true);
+ * 	<jc>// Email input with validation</jc>
+ * 	Input <jv>input2</jv> = <jsm>input</jsm>(<js>"email"</js>)
+ * 		.name(<js>"email"</js>)
+ * 		.placeholder(<js>"your@email.com"</js>)
+ * 		.autocomplete(<js>"email"</js>);
  * 
- * 	// Checkbox input
- * 	Input input4 = new Input()
- * 		.type("checkbox")
- * 		.name("subscribe")
- * 		.value("yes")
- * 		.checked(true);
+ * 	<jc>// File upload input</jc>
+ * 	Input <jv>input3</jv> = <jsm>input</jsm>(<js>"file"</js>)
+ * 		.name(<js>"avatar"</js>)
+ * 		.accept(<js>"image/*"</js>)
+ * 		.multiple(<jk>true</jk>);
  * 
- * 	// Password input with pattern
- * 	Input input5 = new Input()
- * 		.type("password")
- * 		.name("password")
- * 		.pattern(".{8,}")
- * 		.title("Password must be at least 8 characters");
+ * 	<jc>// Checkbox input</jc>
+ * 	Input <jv>input4</jv> = <jsm>input</jsm>(<js>"checkbox"</js>)
+ * 		.name(<js>"subscribe"</js>)
+ * 		.value(<js>"yes"</js>)
+ * 		.checked(<jk>true</jk>);
+ * 
+ * 	<jc>// Password input with pattern</jc>
+ * 	Input <jv>input5</jv> = <jsm>input</jsm>(<js>"password"</js>)
+ * 		.name(<js>"password"</js>)
+ * 		.pattern(<js>".{8,}"</js>)
+ * 		.title(<js>"Password must be at least 8 characters"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#input() input()}
+ * 		<li class='jm'>{@link HtmlBuilder#input(String) input(String)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -162,10 +170,12 @@ public class Input extends HtmlElementVoid {
 	 * Automatically focuses the form control when the page loads.
 	 * Only one element per page should have this attribute.
 	 *
-	 * @param autofocus If <jk>true</jk>, adds <c>autofocus="autofocus"</c>.
+	 * @param autofocus
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public Input autofocus(String value) {
+	public Input autofocus(Object value) {
 		attr("autofocus", value);
 		return this;
 	}

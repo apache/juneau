@@ -26,27 +26,37 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple inline quotation
- * 	Q q1 = new Q().text("To be or not to be, that is the question.");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Quotation with citation
- * 	Q q2 = new Q()
- * 		.cite("https://example.com/source")
- * 		.text("The only way to do great work is to love what you do.");
+ * 	<jc>// Simple inline quotation</jc>
+ * 	Q <jv>q1</jv> = <jsm>q</jsm>(<js>"To be or not to be, that is the question."</js>);
  * 
- * 	// Quotation in a paragraph
- * 	P p1 = new P()
- * 		.children(
- * 			new Text("As Shakespeare once said, "),
- * 			new Q().text("All the world's a stage"),
- * 			new Text(" and we are merely players.")
- * 		);
+ * 	<jc>// Quotation with citation</jc>
+ * 	Q <jv>q2</jv> = <jsm>q</jsm>(<js>"The only way to do great work is to love what you do."</js>)
+ * 		.cite(<js>"https://example.com/source"</js>);
  * 
- * 	// Quotation with styling
- * 	Q q3 = new Q()
- * 		._class("highlighted-quote")
- * 		.cite("https://example.com/author")
- * 		.text("Innovation distinguishes between a leader and a follower.");
+ * 	<jc>// Quotation in a paragraph</jc>
+ * 	P <jv>p1</jv> = <jsm>p</jsm>(
+ * 		<js>"As Shakespeare once said, "</js>,
+ * 		<jsm>q</jsm>(<js>"All the world's a stage"</js>),
+ * 		<js>" and we are merely players."</js>
+ * 	);
+ * 
+ * 	<jc>// Quotation with styling</jc>
+ * 	Q <jv>q3</jv> = <jsm>q</jsm>(<js>"Innovation distinguishes between a leader and a follower."</js>)
+ * 		._class(<js>"highlighted-quote"</js>)
+ * 		.cite(<js>"https://example.com/author"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#q() q()}
+ * 		<li class='jm'>{@link HtmlBuilder#q(Object, Object...) q(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -51,7 +51,7 @@ class SwaggerUI_Test extends TestBase {
 		assertString(
 			"""
 			<div class='swagger-ui'>
-				<style nil='true'></style>
+				<style></style>
 				<script type='text/javascript'><sp/></script>
 				<table class='header'>
 					<tr><th>Description:</th><td>Test API Description</td></tr>
@@ -66,7 +66,7 @@ class SwaggerUI_Test extends TestBase {
 								<span class='summary'>Test operation</span>
 							</div>
 							<div class='op-block-contents'>
-								<div class='table-container' nil='true'></div>
+								<div class='table-container'></div>
 							</div>
 						</div>
 					</div>
@@ -91,27 +91,27 @@ class SwaggerUI_Test extends TestBase {
 		assertString(
 			"""
 			<div class='swagger-ui'>
-				<style nil='true'></style>
+				<style></style>
 				<script type='text/javascript'><sp/></script>
 				<table class='header'>
 					<tr><th>Version:</th><td>1.0.0</td></tr>
 				</table>
 				<div class='tag-block tag-block-open'>
-					<div class='tag-block-contents' nil='true'></div>
+					<div class='tag-block-contents'></div>
 				</div>
 				<div class='tag-block tag-block-open'>
 					<div class='tag-block-summary' onclick='toggleTagBlock(this)'>
 						<span class='name'>users</span>
 						<span class='description'>User operations</span>
 					</div>
-					<div class='tag-block-contents' nil='true'></div>
+					<div class='tag-block-contents'></div>
 				</div>
 				<div class='tag-block tag-block-open'>
 					<div class='tag-block-summary' onclick='toggleTagBlock(this)'>
 						<span class='name'>orders</span>
 						<span class='description'>Order operations</span>
 					</div>
-					<div class='tag-block-contents' nil='true'></div>
+					<div class='tag-block-contents'></div>
 				</div>
 			</div>
 			""".replaceAll("\\n\\s*", ""),
@@ -130,13 +130,13 @@ class SwaggerUI_Test extends TestBase {
 		assertString(
 			"""
 			<div class='swagger-ui'>
-				<style nil='true'></style>
+				<style></style>
 				<script type='text/javascript'><sp/></script>
 				<table class='header'>
 					<tr><th>Version:</th><td>1.0.0</td></tr>
 				</table>
 				<div class='tag-block tag-block-open'>
-					<div class='tag-block-contents' nil='true'></div>
+					<div class='tag-block-contents'></div>
 				</div>
 			</div>
 			""".replaceAll("\\n\\s*", ""),
@@ -155,13 +155,13 @@ class SwaggerUI_Test extends TestBase {
 		assertString(
 			"""
 			<div class='swagger-ui'>
-				<style nil='true'></style>
+				<style></style>
 				<script type='text/javascript'><sp/></script>
 				<table class='header'>
 					<tr><th>Version:</th><td>1.0.0</td></tr>
 				</table>
 				<div class='tag-block tag-block-open'>
-					<div class='tag-block-contents' nil='true'></div>
+					<div class='tag-block-contents'></div>
 				</div>
 			</div>
 			""".replaceAll("\\n\\s*", ""),
@@ -180,13 +180,13 @@ class SwaggerUI_Test extends TestBase {
 		assertString(
 			"""
 			<div class='swagger-ui'>
-				<style nil='true'></style>
+				<style></style>
 				<script type='text/javascript'><sp/></script>
 				<table class='header'>
 					<tr><th>Version:</th><td>1.0.0</td></tr>
 				</table>
 				<div class='tag-block tag-block-open'>
-					<div class='tag-block-contents' nil='true'></div>
+					<div class='tag-block-contents'></div>
 				</div>
 			</div>
 			""".replaceAll("\\n\\s*", ""),
@@ -205,13 +205,13 @@ class SwaggerUI_Test extends TestBase {
 		assertString(
 			"""
 			<div class='swagger-ui'>
-				<style nil='true'></style>
+				<style></style>
 				<script type='text/javascript'><sp/></script>
 				<table class='header'>
 					<tr><th>Version:</th><td>1.0.0</td></tr>
 				</table>
 				<div class='tag-block tag-block-open'>
-					<div class='tag-block-contents' nil='true'></div>
+					<div class='tag-block-contents'></div>
 				</div>
 			</div>
 			""".replaceAll("\\n\\s*", ""),
@@ -230,13 +230,13 @@ class SwaggerUI_Test extends TestBase {
 		assertString(
 			"""
 			<div class='swagger-ui'>
-				<style nil='true'></style>
+				<style></style>
 				<script type='text/javascript'><sp/></script>
 				<table class='header'>
 					<tr><th>Version:</th><td>1.0.0</td></tr>
 				</table>
 				<div class='tag-block tag-block-open'>
-					<div class='tag-block-contents' nil='true'></div>
+					<div class='tag-block-contents'></div>
 				</div>
 			</div>
 			""".replaceAll("\\n\\s*", ""),
@@ -255,13 +255,13 @@ class SwaggerUI_Test extends TestBase {
 		assertString(
 			"""
 			<div class='swagger-ui'>
-				<style nil='true'></style>
+				<style></style>
 				<script type='text/javascript'><sp/></script>
 				<table class='header'>
 					<tr><th>Version:</th><td>1.0.0</td></tr>
 				</table>
 				<div class='tag-block tag-block-open'>
-					<div class='tag-block-contents' nil='true'></div>
+					<div class='tag-block-contents'></div>
 				</div>
 			</div>
 			""".replaceAll("\\n\\s*", ""),
@@ -280,13 +280,13 @@ class SwaggerUI_Test extends TestBase {
 		assertString(
 			"""
 			<div class='swagger-ui'>
-				<style nil='true'></style>
+				<style></style>
 				<script type='text/javascript'><sp/></script>
 				<table class='header'>
 					<tr><th>Version:</th><td>1.0.0</td></tr>
 				</table>
 				<div class='tag-block tag-block-open'>
-					<div class='tag-block-contents' nil='true'></div>
+					<div class='tag-block-contents'></div>
 				</div>
 			</div>
 			""".replaceAll("\\n\\s*", ""),
@@ -315,7 +315,7 @@ class SwaggerUI_Test extends TestBase {
 		assertString(
 			"""
 			<div class='swagger-ui'>
-				<style nil='true'></style>
+				<style></style>
 				<script type='text/javascript'><sp/></script>
 				<table class='header'>
 					<tr><th>Version:</th><td>1.0.0</td></tr>
@@ -329,7 +329,7 @@ class SwaggerUI_Test extends TestBase {
 								<span class='summary'>Test operation</span>
 							</div>
 							<div class='op-block-contents'>
-								<div class='table-container' nil='true'></div>
+								<div class='table-container'></div>
 							</div>
 						</div>
 					</div>

@@ -29,16 +29,26 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Rectangular clickable area
- * 	Area area1 = new Area("rect", "0,0,100,50", "https://example.com/page1");
+ * 	<jc>// Rectangular clickable area</jc>
+ * 	Area <jv>area1</jv> = <jsm>area</jsm>().shape(<js>"rect"</js>).coords(<js>"0,0,100,50"</js>).href(<js>"https://example.com/page1"</js>);
  * 
- * 	// Circular clickable area
- * 	Area area2 = new Area("circle", "150,75,50", "https://example.com/page2");
+ * 	<jc>// Circular clickable area</jc>
+ * 	Area <jv>area2</jv> = <jsm>area</jsm>().shape(<js>"circle"</js>).coords(<js>"150,75,50"</js>).href(<js>"https://example.com/page2"</js>);
  * 
- * 	// Area with alternative text and target
- * 	Area area3 = new Area("rect", "200,0,300,100", "https://example.com/page3")
- * 		.alt("Click here for more info")
- * 		.target("_blank");
+ * 	<jc>// Area with alternative text and target</jc>
+ * 	Area <jv>area3</jv> = <jsm>area</jsm>().shape(<js>"rect"</js>).coords(<js>"200,0,300,100"</js>).href(<js>"https://example.com/page3"</js>)
+ * 		.alt(<js>"Click here for more info"</js>)
+ * 		.target(<js>"_blank"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#area() area()}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

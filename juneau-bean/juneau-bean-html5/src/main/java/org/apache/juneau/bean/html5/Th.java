@@ -27,37 +27,33 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple header cell
- * 	Th simple = new Th()
- * 		.children("Name");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Header cell with scope
- * 	Th scoped = new Th()
- * 		.scope("col")
- * 		.children("Age");
+ * 	<jc>// Simple header cell</jc>
+ * 	Th <jv>simple</jv> = <jsm>th</jsm>(<js>"Name"</js>);
  * 
- * 	// Header cell spanning multiple columns
- * 	Th colspan = new Th()
- * 		.colspan(2)
- * 		.children("Contact Information");
+ * 	<jc>// Header cell with scope</jc>
+ * 	Th <jv>scoped</jv> = <jsm>th</jsm>(<js>"Age"</js>)
+ * 		.scope(<js>"col"</js>);
  * 
- * 	// Header cell with abbreviation
- * 	Th abbreviated = new Th()
- * 		.abbr("Qty")
- * 		.children("Quantity");
+ * 	<jc>// Header cell spanning multiple columns</jc>
+ * 	Th <jv>colspan</jv> = <jsm>th</jsm>(<js>"Contact Information"</js>)
+ * 		.colspan(2);
  * 
- * 	// Header cell with sorting
- * 	Th sorted = new Th()
- * 		.sorted("asc")
- * 		.children("Price");
+ * 	<jc>// Header cell with abbreviation</jc>
+ * 	Th <jv>abbreviated</jv> = <jsm>th</jsm>(<js>"Quantity"</js>)
+ * 		.abbr(<js>"Qty"</js>);
  * 
- * 	// Header cell with styling
- * 	Th styled = new Th()
- * 		._class("header-cell")
- * 		.children("Status");
+ * 	<jc>// Header cell with sorting</jc>
+ * 	Th <jv>sorted</jv> = <jsm>th</jsm>(<js>"Price"</js>)
+ * 		.sorted(<js>"asc"</js>);
  * 
- * 	// Header cell with complex content
- * 	Th complex = new Th()
+ * 	<jc>// Header cell with styling</jc>
+ * 	Th <jv>styled</jv> = <jsm>th</jsm>(<js>"Status"</js>)
+ * 		._class(<js>"header-cell"</js>);
+ * 
+ * 	<jc>// Header cell with complex content</jc>
+ * 	Th <jv>complex</jv> = <jsm>th</jsm>(
  * 		.children(
  * 			new Strong().children("Total"),
  * 			" ",

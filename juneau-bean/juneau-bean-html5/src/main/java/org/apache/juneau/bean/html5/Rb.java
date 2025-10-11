@@ -29,40 +29,36 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple ruby base
- * 	Rb simple = new Rb()
- * 		.children("漢字");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Rb with styling
- * 	Rb styled = new Rb()
- * 		._class("ruby-base")
- * 		.children("日本語");
+ * 	<jc>// Simple ruby base</jc>
+ * 	Rb <jv>simple</jv> = <jsm>rb</jsm>(<js>"漢字"</js>);
  *
- * 	// Rb with complex content
- * 	Rb complex = new Rb()
- * 		.children(
- * 			"複雑な",
- * 			new Strong().children("漢字"),
- * 			"の例"
- * 		);
+ * 	<jc>// Rb with styling</jc>
+ * 	Rb <jv>styled</jv> = <jsm>rb</jsm>(<js>"日本語"</js>)
+ * 		._class(<js>"ruby-base"</js>);
  *
- * 	// Rb with ID
- * 	Rb withId = new Rb()
- * 		.id("ruby-base-1")
- * 		.children("漢字");
+ * 	<jc>// Rb with complex content</jc>
+ * 	Rb <jv>complex</jv> = <jsm>rb</jsm>(
+ * 		<js>"複雑な"</js>,
+ * 		<jsm>strong</jsm>(<js>"漢字"</js>),
+ * 		<js>"の例"</js>
+ * 	);
  *
- * 	// Rb with styling
- * 	Rb styled2 = new Rb()
- * 		.style("font-size: 1.2em; color: #333;")
- * 		.children("漢字");
+ * 	<jc>// Rb with ID</jc>
+ * 	Rb <jv>withId</jv> = <jsm>rb</jsm>(<js>"漢字"</js>)
+ * 		.id(<js>"ruby-base-1"</js>);
  *
- * 	// Rb with multiple elements
- * 	Rb multiple = new Rb()
- * 		.children(
- * 			"複雑な",
- * 			new Rb().children("漢字"),
- * 			"の",
- * 			new Rb().children("例")
+ * 	<jc>// Rb with styling</jc>
+ * 	Rb <jv>styled2</jv> = <jsm>rb</jsm>(<js>"漢字"</js>)
+ * 		.style(<js>"font-size: 1.2em; color: #333;"</js>);
+ *
+ * 	<jc>// Rb with multiple elements</jc>
+ * 	Rb <jv>multiple</jv> = <jsm>rb</jsm>(
+ * 		<js>"複雑な"</js>,
+ * 		<jsm>rb</jsm>(<js>"漢字"</js>),
+ * 		<js>"の"</js>,
+ * 		<jsm>rb</jsm>(<js>"例"</js>)
  * 		);
  *
  * 	// Rb with links

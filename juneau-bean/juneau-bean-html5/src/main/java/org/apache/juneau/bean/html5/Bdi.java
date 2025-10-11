@@ -28,36 +28,42 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// User comment in Arabic
- * 	Bdi arabic = new Bdi()
- * 		.text("مرحبا بالعالم");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Hebrew text in English context
- * 	Bdi hebrew = new Bdi()
- * 		.text("שלום עולם");
+ * 	<jc>// User comment in Arabic</jc>
+ * 	Bdi <jv>arabic</jv> = <jsm>bdi</jsm>(<js>"مرحبا بالعالم"</js>);
  * 
- * 	// Mixed direction text
- * 	Bdi mixed = new Bdi()
- * 		.text("Hello ", new Bdi().text("مرحبا"), " World");
+ * 	<jc>// Hebrew text in English context</jc>
+ * 	Bdi <jv>hebrew</jv> = <jsm>bdi</jsm>(<js>"שלום עולם"</js>);
  * 
- * 	// User-generated content
- * 	Bdi userContent = new Bdi()
- * 		._class("user-comment")
- * 		.text("This is a comment in Arabic: مرحبا");
+ * 	<jc>// Mixed direction text</jc>
+ * 	Bdi <jv>mixed</jv> = <jsm>bdi</jsm>(<js>"Hello "</js>, <jsm>bdi</jsm>(<js>"مرحبا"</js>), <js>" World"</js>);
  * 
- * 	// Names in different scripts
- * 	Bdi name = new Bdi()
- * 		.text("محمد أحمد");
+ * 	<jc>// User-generated content</jc>
+ * 	Bdi <jv>userContent</jv> = <jsm>bdi</jsm>(<js>"This is a comment in Arabic: مرحبا"</js>)
+ * 		._class(<js>"user-comment"</js>);
  * 
- * 	// Numbers in different scripts
- * 	Bdi numbers = new Bdi()
- * 		.text("١٢٣٤٥");
+ * 	<jc>// Names in different scripts</jc>
+ * 	Bdi <jv>name</jv> = <jsm>bdi</jsm>(<js>"محمد أحمد"</js>);
  * 
- * 	// Styled bidirectional text
- * 	Bdi styled = new Bdi()
- * 		._class("bidi-text")
- * 		.style("direction: rtl;")
- * 		.text("نص باللغة العربية");
+ * 	<jc>// Numbers in different scripts</jc>
+ * 	Bdi <jv>numbers</jv> = <jsm>bdi</jsm>(<js>"١٢٣٤٥"</js>);
+ * 
+ * 	<jc>// Styled bidirectional text</jc>
+ * 	Bdi <jv>styled</jv> = <jsm>bdi</jsm>(<js>"نص باللغة العربية"</js>)
+ * 		._class(<js>"bidi-text"</js>)
+ * 		.style(<js>"direction: rtl;"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#bdi() bdi()}
+ * 		<li class='jm'>{@link HtmlBuilder#bdi(Object, Object...) bdi(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

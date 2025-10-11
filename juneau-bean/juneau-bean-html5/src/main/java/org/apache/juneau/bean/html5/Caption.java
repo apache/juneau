@@ -27,50 +27,57 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple table caption
- * 	Caption simple = new Caption()
- * 		.children("Monthly Sales Report");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple table caption</jc>
+ * 	Caption <jv>simple</jv> = <jsm>caption</jsm>(<js>"Monthly Sales Report"</js>);
+ * 
+ * 	<jc>// Table caption with styling</jc>
+ * 	Caption <jv>styled</jv> = <jsm>caption</jsm>(<js>"Employee Directory"</js>)
+ * 		._class(<js>"table-title"</js>);
+ * 
+ * 	<jc>// Table caption with complex content</jc>
+ * 	Caption <jv>complex</jv> = <jsm>caption</jsm>(
+ * 		<js>"Sales Data for "</js>,
+ * 		<jsm>strong</jsm>(<js>"Q1 2024"</js>),
+ * 		<js>" - "</js>,
+ * 		<jsm>em</jsm>(<js>"Preliminary Results"</js>)
+ * 	);
+ * 
+ * 	<jc>// Table caption with links</jc>
+ * 	Caption <jv>withLinks</jv> = <jsm>caption</jsm>(
+ * 		<js>"Product Inventory - "</js>,
+ * 		<jsm>a</jsm>(<js>"/help/inventory"</js>, <js>"Help"</js>),
+ * 		<js>" | "</js>,
+ * 		<jsm>a</jsm>(<js>"/export/inventory"</js>, <js>"Export"</js>)
+ * 	);
+ * 
+ * 	<jc>// Table caption with icons</jc>
+ * 	Caption <jv>withIcons</jv> = <jsm>caption</jsm>(
+ * 		<js>"📊 "</js>,
+ * 		<js>"Financial Summary"</js>,
+ * 		<js>" "</js>,
+ * 		<jsm>span</jsm>()._class(<js>"icon"</js>).children(<js>"💰"</js>)
+ * 	);
+ * 
+ * 	<jc>// Table caption with multiple lines</jc>
+ * 	Caption <jv>multiLine</jv> = <jsm>caption</jsm>(
+ * 		<js>"Customer Contact Information"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Last Updated: "</js>,
+ * 		<jsm>time</jsm>(<js>"2024-01-15"</js>, <js>"January 15, 2024"</js>)
+ * 	);
+ * </p>
  *
- * 	// Table caption with styling
- * 	Caption styled = new Caption()
- * 		._class("table-title")
- * 		.children("Employee Directory");
- *
- * 	// Table caption with complex content
- * 	Caption complex = new Caption()
- * 		.children(
- * 			"Sales Data for ",
- * 			new Strong().children("Q1 2024"),
- * 			" - ",
- * 			new Em().children("Preliminary Results")
- * 		);
- *
- * 	// Table caption with links
- * 	Caption withLinks = new Caption()
- * 		.children(
- * 			"Product Inventory - ",
- * 			new A().href("/help/inventory").children("Help"),
- * 			" | ",
- * 			new A().href("/export/inventory").children("Export")
- * 		);
- *
- * 	// Table caption with icons
- * 	Caption withIcons = new Caption()
- * 		.children(
- * 			"📊 ",
- * 			"Financial Summary",
- * 			" ",
- * 			new Span()._class("icon").children("💰")
- * 		);
- *
- * 	// Table caption with multiple lines
- * 	Caption multiLine = new Caption()
- * 		.children(
- * 			"Customer Contact Information",
- * 			new Br(),
- * 			"Last Updated: ",
- * 			new Time().datetime("2024-01-15").children("January 15, 2024")
- * 		);
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#caption() caption()}
+ * 		<li class='jm'>{@link HtmlBuilder#caption(Object, Object...) caption(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

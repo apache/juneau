@@ -27,26 +27,23 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Important warning
- * 	Strong warning = new Strong()
- * 		.children("Warning: This action cannot be undone!");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Important notice
- * 	Strong notice = new Strong()
- * 		.children("Important: Please read the terms and conditions.");
+ * 	<jc>// Important warning</jc>
+ * 	Strong <jv>warning</jv> = <jsm>strong</jsm>(<js>"Warning: This action cannot be undone!"</js>);
  * 
- * 	// Emphasis in text
- * 	Strong emphasis = new Strong()
- * 		.children("This is very important information.");
+ * 	<jc>// Important notice</jc>
+ * 	Strong <jv>notice</jv> = <jsm>strong</jsm>(<js>"Important: Please read the terms and conditions."</js>);
  * 
- * 	// Strong text with styling
- * 	Strong styled = new Strong()
- * 		._class("alert")
- * 		.children("Critical system error detected!");
+ * 	<jc>// Emphasis in text</jc>
+ * 	Strong <jv>emphasis</jv> = <jsm>strong</jsm>(<js>"This is very important information."</js>);
  * 
- * 	// Strong text in a sentence
- * 	Strong sentence = new Strong()
- * 		.children("The deadline is tomorrow.");
+ * 	<jc>// Strong text with styling</jc>
+ * 	Strong <jv>styled</jv> = <jsm>strong</jsm>(<js>"Critical system error detected!"</js>)
+ * 		._class(<js>"alert"</js>);
+ * 
+ * 	<jc>// Strong text in a sentence</jc>
+ * 	Strong <jv>sentence</jv> = <jsm>strong</jsm>(<js>"The deadline is tomorrow."</js>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

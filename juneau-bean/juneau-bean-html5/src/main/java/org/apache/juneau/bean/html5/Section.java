@@ -28,72 +28,61 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple section
- * 	Section simple = new Section()
- * 		.children(
- * 			new H2().children("Introduction"),
- * 			new P().children("This is the introduction section.")
- * 		);
- *
- * 	// Section with styling
- * 	Section styled = new Section()
- * 		._class("content-section")
- * 		.children(
- * 			new H2().children("Features"),
- * 			new P().children("Here are the key features of our product.")
- * 		);
- *
- * 	// Section with complex content
- * 	Section complex = new Section()
- * 		.children(
- * 			new H2().children("Getting Started"),
- * 			new P().children("Follow these steps to get started:"),
- * 			new Ol().children(
- * 				new Li().children("Step 1: Install the software"),
- * 				new Li().children("Step 2: Configure settings"),
- * 				new Li().children("Step 3: Start using the application")
- * 			)
- * 		);
- *
- * 	// Section with ID
- * 	Section withId = new Section()
- * 		.id("main-content")
- * 		.children(
- * 			new H2().children("Main Content"),
- * 			new P().children("This is the main content section.")
- * 		);
- *
- * 	// Section with styling
- * 	Section styled2 = new Section()
- * 		.style("background-color: #f9f9f9; padding: 20px; margin: 10px 0;")
- * 		.children(
- * 			new H2().children("Styled Section"),
- * 			new P().children("This section has custom styling.")
- * 		);
- *
- * 	// Section with multiple elements
- * 	Section multiple = new Section()
- * 		.children(
- * 			new H2().children("Documentation"),
- * 			new P().children("This section contains documentation."),
- * 			new Ul().children(
- * 				new Li().children("API Reference"),
- * 				new Li().children("User Guide"),
- * 				new Li().children("Examples")
- * 			),
- * 			new Footer().children("Last updated: January 2024")
- * 		);
- *
- * 	// Section with article
- * 	Section withArticle = new Section()
- * 		.children(
- * 			new H2().children("Latest News"),
- * 			new Article()
- * 				.children(
- * 					new H3().children("News Article Title"),
- * 					new P().children("Article content goes here.")
- * 				)
- * 		);
+ * 	<jc>// Simple section</jc>
+ * 	Section <jv>simple</jv> = <jsm>section</jsm>(
+ * 		<jsm>h2</jsm>(<js>"Introduction"</js>),
+ * 		<jsm>p</jsm>(<js>"This is the introduction section."</js>)
+ * 	);
+ * 
+ * 	<jc>// Section with styling</jc>
+ * 	Section <jv>styled</jv> = <jsm>section</jsm>(
+ * 		<jsm>h2</jsm>(<js>"Features"</js>),
+ * 		<jsm>p</jsm>(<js>"Here are the key features of our product."</js>)
+ * 	)._class(<js>"content-section"</js>);
+ * 
+ * 	<jc>// Section with complex content</jc>
+ * 	Section <jv>complex</jv> = <jsm>section</jsm>(
+ * 		<jsm>h2</jsm>(<js>"Getting Started"</js>),
+ * 		<jsm>p</jsm>(<js>"Follow these steps to get started:"</js>),
+ * 		<jsm>ol</jsm>(
+ * 			<jsm>li</jsm>(<js>"Step 1: Install the software"</js>),
+ * 			<jsm>li</jsm>(<js>"Step 2: Configure settings"</js>),
+ * 			<jsm>li</jsm>(<js>"Step 3: Start using the application"</js>)
+ * 		)
+ * 	);
+ * 
+ * 	<jc>// Section with ID</jc>
+ * 	Section <jv>withId</jv> = <jsm>section</jsm>(
+ * 		<jsm>h2</jsm>(<js>"Main Content"</js>),
+ * 		<jsm>p</jsm>(<js>"This is the main content section."</js>)
+ * 	).id(<js>"main-content"</js>);
+ * 
+ * 	<jc>// Section with styling</jc>
+ * 	Section <jv>styled2</jv> = <jsm>section</jsm>(
+ * 		<jsm>h2</jsm>(<js>"Styled Section"</js>),
+ * 		<jsm>p</jsm>(<js>"This section has custom styling."</js>)
+ * 	).style(<js>"background-color: #f9f9f9; padding: 20px; margin: 10px 0;"</js>);
+ * 
+ * 	<jc>// Section with multiple elements</jc>
+ * 	Section <jv>multiple</jv> = <jsm>section</jsm>(
+ * 		<jsm>h2</jsm>(<js>"Documentation"</js>),
+ * 		<jsm>p</jsm>(<js>"This section contains documentation."</js>),
+ * 		<jsm>ul</jsm>(
+ * 			<jsm>li</jsm>(<js>"API Reference"</js>),
+ * 			<jsm>li</jsm>(<js>"User Guide"</js>),
+ * 			<jsm>li</jsm>(<js>"Examples"</js>)
+ * 		),
+ * 		<jsm>footer</jsm>(<js>"Last updated: January 2024"</js>)
+ * 	);
+ * 
+ * 	<jc>// Section with article</jc>
+ * 	Section <jv>withArticle</jv> = <jsm>section</jsm>(
+ * 		<jsm>h2</jsm>(<js>"Latest News"</js>),
+ * 		<jsm>article</jsm>(
+ * 			<jsm>h3</jsm>(<js>"News Article Title"</js>),
+ * 			<jsm>p</jsm>(<js>"Article content goes here."</js>)
+ * 		)
+ * 	);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -26,45 +26,51 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple ordered list
- * 	Ol ol1 = new Ol()
- * 		.children(
- * 			new Li().text("First item"),
- * 			new Li().text("Second item"),
- * 			new Li().text("Third item")
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Ordered list with custom numbering
- * 	Ol ol2 = new Ol()
- * 		.type("A")
- * 		.start(1)
- * 		.children(
- * 			new Li().text("Item A"),
- * 			new Li().text("Item B"),
- * 			new Li().text("Item C")
- * 		);
+ * 	<jc>// Simple ordered list</jc>
+ * 	Ol <jv>ol1</jv> = <jsm>ol</jsm>(
+ * 		<jsm>li</jsm>(<js>"First item"</js>),
+ * 		<jsm>li</jsm>(<js>"Second item"</js>),
+ * 		<jsm>li</jsm>(<js>"Third item"</js>)
+ * 	);
  * 
- * 	// Reversed ordered list
- * 	Ol ol3 = new Ol()
- * 		.reversed(true)
- * 		.children(
- * 			new Li().text("Last item"),
- * 			new Li().text("Middle item"),
- * 			new Li().text("First item")
- * 		);
+ * 	<jc>// Ordered list with custom numbering</jc>
+ * 	Ol <jv>ol2</jv> = <jsm>ol</jsm>(
+ * 		<jsm>li</jsm>(<js>"Item A"</js>),
+ * 		<jsm>li</jsm>(<js>"Item B"</js>),
+ * 		<jsm>li</jsm>(<js>"Item C"</js>)
+ * 	).type(<js>"A"</js>).start(1);
  * 
- * 	// Nested ordered list
- * 	Ol ol4 = new Ol()
- * 		.children(
- * 			new Li().text("Main item 1"),
- * 			new Li().children(
- * 				new Ol().children(
- * 					new Li().text("Sub item 1.1"),
- * 					new Li().text("Sub item 1.2")
- * 				)
- * 			),
- * 			new Li().text("Main item 2")
- * 		);
+ * 	<jc>// Reversed ordered list</jc>
+ * 	Ol <jv>ol3</jv> = <jsm>ol</jsm>(
+ * 		<jsm>li</jsm>(<js>"Last item"</js>),
+ * 		<jsm>li</jsm>(<js>"Middle item"</js>),
+ * 		<jsm>li</jsm>(<js>"First item"</js>)
+ * 	).reversed(<jk>true</jk>);
+ * 
+ * 	<jc>// Nested ordered list</jc>
+ * 	Ol <jv>ol4</jv> = <jsm>ol</jsm>(
+ * 		<jsm>li</jsm>(<js>"Main item 1"</js>),
+ * 		<jsm>li</jsm>(
+ * 			<jsm>ol</jsm>(
+ * 				<jsm>li</jsm>(<js>"Sub item 1.1"</js>),
+ * 				<jsm>li</jsm>(<js>"Sub item 1.2"</js>)
+ * 			)
+ * 		),
+ * 		<jsm>li</jsm>(<js>"Main item 2"</js>)
+ * 	);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#ol() ol()}
+ * 		<li class='jm'>{@link HtmlBuilder#ol(Object, Object...) ol(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

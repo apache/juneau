@@ -28,41 +28,37 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple sample output
- * 	Samp simple = new Samp()
- * 		.children("Hello World");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Samp with styling
- * 	Samp styled = new Samp()
- * 		._class("console-output")
- * 		.children("$ npm install");
+ * 	<jc>// Simple sample output</jc>
+ * 	Samp <jv>simple</jv> = <jsm>samp</jsm>(<js>"Hello World"</js>);
  *
- * 	// Samp with complex content
- * 	Samp complex = new Samp()
- * 		.children(
- * 			"Error: ",
- * 			new Strong().children("File not found"),
- * 			" at line 42"
- * 		);
+ * 	<jc>// Samp with styling</jc>
+ * 	Samp <jv>styled</jv> = <jsm>samp</jsm>(<js>"$ npm install"</js>)
+ * 		._class(<js>"console-output"</js>);
  *
- * 	// Samp with ID
- * 	Samp withId = new Samp()
- * 		.id("sample-output")
- * 		.children("Sample output with ID");
+ * 	<jc>// Samp with complex content</jc>
+ * 	Samp <jv>complex</jv> = <jsm>samp</jsm>(
+ * 		<js>"Error: "</js>,
+ * 		<jsm>strong</jsm>(<js>"File not found"</js>),
+ * 		<js>" at line 42"</js>
+ * 	);
  *
- * 	// Samp with styling
- * 	Samp styled2 = new Samp()
- * 		.style("background-color: #f4f4f4; padding: 5px; border: 1px solid #ddd;")
- * 		.children("Custom styled sample output");
+ * 	<jc>// Samp with ID</jc>
+ * 	Samp <jv>withId</jv> = <jsm>samp</jsm>(<js>"Sample output with ID"</js>)
+ * 		.id(<js>"sample-output"</js>);
  *
- * 	// Samp with multiple elements
- * 	Samp multiple = new Samp()
- * 		.children(
- * 			"$ ",
- * 			new Samp().children("ls -la"),
- * 			"\n",
- * 			new Samp().children("total 24"),
- * 			"\n",
+ * 	<jc>// Samp with styling</jc>
+ * 	Samp <jv>styled2</jv> = <jsm>samp</jsm>(<js>"Custom styled sample output"</js>)
+ * 		.style(<js>"background-color: #f4f4f4; padding: 5px; border: 1px solid #ddd;"</js>);
+ *
+ * 	<jc>// Samp with multiple elements</jc>
+ * 	Samp <jv>multiple</jv> = <jsm>samp</jsm>(
+ * 		<js>"$ "</js>,
+ * 		<jsm>samp</jsm>(<js>"ls -la"</js>),
+ * 		<js>"\n"</js>,
+ * 		<jsm>samp</jsm>(<js>"total 24"</js>),
+ * 		<js>"\n"</js>,
  * 			new Samp().children("drwxr-xr-x  5 user  staff  160 Jan 15 10:30 .")
  * 		);
  *

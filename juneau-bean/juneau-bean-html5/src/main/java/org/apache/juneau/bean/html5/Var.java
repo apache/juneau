@@ -28,50 +28,59 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple variable
- * 	Var simple = new Var()
- * 		.children("x");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Var with styling
- * 	Var styled = new Var()
- * 		._class("variable")
- * 		.children("userName");
+ * 	<jc>// Simple variable</jc>
+ * 	Var <jv>simple</jv> = <jsm>var</jsm>(<js>"x"</js>);
  *
- * 	// Var with complex content
- * 	Var complex = new Var()
- * 		.children(
- * 			"The variable ",
- * 			new Strong().children("count"),
- * 			" represents the number of items."
- * 		);
+ * 	<jc>// Var with styling</jc>
+ * 	Var <jv>styled</jv> = <jsm>var</jsm>(<js>"userName"</js>)
+ * 		._class(<js>"variable"</js>);
  *
- * 	// Var with ID
- * 	Var withId = new Var()
- * 		.id("variable-name")
- * 		.children("totalCount");
+ * 	<jc>// Var with complex content</jc>
+ * 	Var <jv>complex</jv> = <jsm>var</jsm>(
+ * 		<js>"The variable "</js>,
+ * 		<jsm>strong</jsm>(<js>"count"</js>),
+ * 		<js>" represents the number of items."</js>
+ * 	);
  *
- * 	// Var with styling
- * 	Var styled2 = new Var()
- * 		.style("color: #0066cc; font-style: italic;")
+ * 	<jc>// Var with ID</jc>
+ * 	Var <jv>withId</jv> = <jsm>var</jsm>(<js>"totalCount"</js>)
+ * 		.id(<js>"variable-name"</js>);
+ *
+ * 	<jc>// Var with styling</jc>
+ * 	Var <jv>styled2</jv> = <jsm>var</jsm>(<js>"customVariable"</js>)
+ * 		.style(<js>"color: #0066cc; font-style: italic;"</js>)
  * 		.children("maxValue");
  *
  * 	// Var with multiple elements
- * 	Var multiple = new Var()
+ * 	Var multiple = var()
  * 		.children(
  * 			"The ",
- * 			new Var().children("x"),
+ * 			var().children("x"),
  * 			" and ",
- * 			new Var().children("y"),
+ * 			var().children("y"),
  * 			" variables are used in the equation."
  * 		);
  *
  * 	// Var with links
- * 	Var withLinks = new Var()
+ * 	Var withLinks = var()
  * 		.children(
  * 			"See ",
- * 			new A().href("/docs/variables").children("variable documentation"),
+ * 			a().href("/docs/variables").children("variable documentation"),
  * 			" for more information."
  * 		);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#var() var()}
+ * 		<li class='jm'>{@link HtmlBuilder#var(Object, Object...) var(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

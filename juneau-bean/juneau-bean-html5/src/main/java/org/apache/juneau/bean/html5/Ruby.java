@@ -29,40 +29,36 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple ruby annotation
- * 	Ruby simple = new Ruby()
- * 		.children(
- * 			new Rb().children("漢字"),
- * 			new Rt().children("かんじ")
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Ruby with styling
- * 	Ruby styled = new Ruby()
- * 		._class("ruby-annotation")
- * 		.children(
- * 			new Rb().children("日本語"),
- * 			new Rt().children("にほんご")
- * 		);
+ * 	<jc>// Simple ruby annotation</jc>
+ * 	Ruby <jv>simple</jv> = <jsm>ruby</jsm>(
+ * 		<jsm>rb</jsm>(<js>"漢字"</js>),
+ * 		<jsm>rt</jsm>(<js>"かんじ"</js>)
+ * 	);
  *
- * 	// Ruby with complex content
- * 	Ruby complex = new Ruby()
- * 		.children(
- * 			new Rb().children("複雑な漢字"),
- * 			new Rt().children("ふくざつなかんじ"),
- * 			new Rp().children("("),
- * 			new Rp().children(")")
- * 		);
+ * 	<jc>// Ruby with styling</jc>
+ * 	Ruby <jv>styled</jv> = <jsm>ruby</jsm>(
+ * 		<jsm>rb</jsm>(<js>"日本語"</js>),
+ * 		<jsm>rt</jsm>(<js>"にほんご"</js>)
+ * 	)._class(<js>"ruby-annotation"</js>);
  *
- * 	// Ruby with ID
- * 	Ruby withId = new Ruby()
- * 		.id("ruby-annotation-1")
- * 		.children(
- * 			new Rb().children("漢字"),
- * 			new Rt().children("かんじ")
- * 		);
+ * 	<jc>// Ruby with complex content</jc>
+ * 	Ruby <jv>complex</jv> = <jsm>ruby</jsm>(
+ * 		<jsm>rb</jsm>(<js>"複雑な漢字"</js>),
+ * 		<jsm>rt</jsm>(<js>"ふくざつなかんじ"</js>),
+ * 		<jsm>rp</jsm>(<js>"("</js>),
+ * 		<jsm>rp</jsm>(<js>")"</js>)
+ * 	);
  *
- * 	// Ruby with styling
- * 	Ruby styled2 = new Ruby()
+ * 	<jc>// Ruby with ID</jc>
+ * 	Ruby <jv>withId</jv> = <jsm>ruby</jsm>(
+ * 		<jsm>rb</jsm>(<js>"漢字"</js>),
+ * 		<jsm>rt</jsm>(<js>"かんじ"</js>)
+ * 	).id(<js>"ruby-annotation-1"</js>);
+ *
+ * 	<jc>// Ruby with styling</jc>
+ * 	Ruby <jv>styled2</jv> = <jsm>ruby</jsm>(
  * 		.style("font-size: 1.2em; line-height: 1.5;")
  * 		.children(
  * 			new Rb().children("漢字"),

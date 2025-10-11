@@ -28,50 +28,56 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple list item
- * 	Li simple = new Li()
- * 		.children("First item");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Li with styling
- * 	Li styled = new Li()
- * 		._class("list-item")
- * 		.children("Styled list item");
+ * 	<jc>// Simple list item</jc>
+ * 	Li <jv>simple</jv> = <jsm>li</jsm>(<js>"First item"</js>);
  *
- * 	// Li with complex content
- * 	Li complex = new Li()
- * 		.children(
- * 			"Item with ",
- * 			new Strong().children("bold text"),
- * 			" and ",
- * 			new Em().children("italic text")
- * 		);
+ * 	<jc>// Li with styling</jc>
+ * 	Li <jv>styled</jv> = <jsm>li</jsm>(<js>"Styled list item"</js>)
+ * 		._class(<js>"list-item"</js>);
  *
- * 	// Li with ID
- * 	Li withId = new Li()
- * 		.id("list-item-1")
- * 		.children("List item with ID");
+ * 	<jc>// Li with complex content</jc>
+ * 	Li <jv>complex</jv> = <jsm>li</jsm>(
+ * 		<js>"Item with "</js>,
+ * 		<jsm>strong</jsm>(<js>"bold text"</js>),
+ * 		<js>" and "</js>,
+ * 		<jsm>em</jsm>(<js>"italic text"</js>)
+ * 	);
  *
- * 	// Li with styling
- * 	Li styled2 = new Li()
- * 		.style("color: #666; margin: 5px 0;")
- * 		.children("Custom styled list item");
+ * 	<jc>// Li with ID</jc>
+ * 	Li <jv>withId</jv> = <jsm>li</jsm>(<js>"List item with ID"</js>)
+ * 		.id(<js>"list-item-1"</js>);
  *
- * 	// Li with multiple elements
- * 	Li multiple = new Li()
- * 		.children(
- * 			"Step 1: ",
- * 			new Span()._class("step-title").children("Complete the form"),
- * 			" ",
- * 			new Small().children("(Required)")
- * 		);
+ * 	<jc>// Li with styling</jc>
+ * 	Li <jv>styled2</jv> = <jsm>li</jsm>(<js>"Custom styled list item"</js>)
+ * 		.style(<js>"color: #666; margin: 5px 0;"</js>);
  *
- * 	// Li with links
- * 	Li withLinks = new Li()
- * 		.children(
- * 			"Visit ",
- * 			new A().href("/help").children("help page"),
- * 			" for assistance"
- * 		);
+ * 	<jc>// Li with multiple elements</jc>
+ * 	Li <jv>multiple</jv> = <jsm>li</jsm>(
+ * 		<js>"Step 1: "</js>,
+ * 		<jsm>span</jsm>(<js>"Complete the form"</js>)._class(<js>"step-title"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>small</jsm>(<js>"(Required)"</js>)
+ * 	);
+ *
+ * 	<jc>// Li with links</jc>
+ * 	Li <jv>withLinks</jv> = <jsm>li</jsm>(
+ * 		<js>"Visit "</js>,
+ * 		<jsm>a</jsm>(<js>"/help"</js>, <js>"help page"</js>),
+ * 		<js>" for assistance"</js>
+ * 	);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#li() li()}
+ * 		<li class='jm'>{@link HtmlBuilder#li(Object, Object...) li(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

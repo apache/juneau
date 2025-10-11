@@ -28,80 +28,81 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple navigation
- * 	Nav simple = new Nav()
- * 		.children(
- * 			new Ul().children(
- * 				new Li().children(new A().href("/home").children("Home")),
- * 				new Li().children(new A().href("/about").children("About")),
- * 				new Li().children(new A().href("/contact").children("Contact"))
- * 			)
- * 		);
+ * 	<jc>// Simple navigation</jc>
+ * 	Nav <jv>simple</jv> = <jsm>nav</jsm>(
+ * 		<jsm>ul</jsm>(
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/home"</js>, <js>"Home"</js>)),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>)),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/contact"</js>, <js>"Contact"</js>))
+ * 		)
+ * 	);
+ * 
+ * 	<jc>// Nav with styling</jc>
+ * 	Nav <jv>styled</jv> = <jsm>nav</jsm>(
+ * 		<jsm>ul</jsm>(
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/products"</js>, <js>"Products"</js>)),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/services"</js>, <js>"Services"</js>)),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/support"</js>, <js>"Support"</js>))
+ * 		)
+ * 	)._class(<js>"main-navigation"</js>);
+ * 
+ * 	<jc>// Nav with complex content</jc>
+ * 	Nav <jv>complex</jv> = <jsm>nav</jsm>(
+ * 		<jsm>h3</jsm>(<js>"Site Navigation"</js>),
+ * 		<jsm>ul</jsm>(
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/home"</js>, <js>"Home"</js>)),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>)),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/contact"</js>, <js>"Contact"</js>))
+ * 		)
+ * 	);
+ * 
+ * 	<jc>// Nav with ID</jc>
+ * 	Nav <jv>withId</jv> = <jsm>nav</jsm>(
+ * 		<jsm>ul</jsm>(
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/home"</js>, <js>"Home"</js>)),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>))
+ * 		)
+ * 	).id(<js>"main-nav"</js>);
+ * 
+ * 	<jc>// Nav with styling</jc>
+ * 	Nav <jv>styled2</jv> = <jsm>nav</jsm>(
+ * 		<jsm>ul</jsm>(
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/home"</js>, <js>"Home"</js>)),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>))
+ * 		)
+ * 	).style(<js>"background-color: #333; padding: 10px;"</js>);
+ * 
+ * 	<jc>// Nav with multiple elements</jc>
+ * 	Nav <jv>multiple</jv> = <jsm>nav</jsm>(
+ * 		<jsm>h3</jsm>(<js>"Navigation"</js>),
+ * 		<jsm>ul</jsm>(
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/home"</js>, <js>"Home"</js>)),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>))
+ * 		),
+ * 		<jsm>p</jsm>(<js>"Use the links above to navigate the site."</js>)
+ * 	);
+ * 
+ * 	<jc>// Nav with breadcrumbs</jc>
+ * 	Nav <jv>breadcrumbs</jv> = <jsm>nav</jsm>(
+ * 		<jsm>ul</jsm>(
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/"</js>, <js>"Home"</js>)),
+ * 			<jsm>li</jsm>(<js>" > "</js>),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/products"</js>, <js>"Products"</js>)),
+ * 			<jsm>li</jsm>(<js>" > "</js>),
+ * 			<jsm>li</jsm>(<js>"Current Page"</js>)
+ * 		)
+ * 	);
+ * </p>
  *
- * 	// Nav with styling
- * 	Nav styled = new Nav()
- * 		._class("main-navigation")
- * 		.children(
- * 			new Ul().children(
- * 				new Li().children(new A().href("/products").children("Products")),
- * 				new Li().children(new A().href("/services").children("Services")),
- * 				new Li().children(new A().href("/support").children("Support"))
- * 			)
- * 		);
- *
- * 	// Nav with complex content
- * 	Nav complex = new Nav()
- * 		.children(
- * 			new H3().children("Site Navigation"),
- * 			new Ul().children(
- * 				new Li().children(new A().href("/home").children("Home")),
- * 				new Li().children(new A().href("/about").children("About")),
- * 				new Li().children(new A().href("/contact").children("Contact"))
- * 			)
- * 		);
- *
- * 	// Nav with ID
- * 	Nav withId = new Nav()
- * 		.id("main-nav")
- * 		.children(
- * 			new Ul().children(
- * 				new Li().children(new A().href("/home").children("Home")),
- * 				new Li().children(new A().href("/about").children("About"))
- * 			)
- * 		);
- *
- * 	// Nav with styling
- * 	Nav styled2 = new Nav()
- * 		.style("background-color: #333; padding: 10px;")
- * 		.children(
- * 			new Ul().children(
- * 				new Li().children(new A().href("/home").children("Home")),
- * 				new Li().children(new A().href("/about").children("About"))
- * 			)
- * 		);
- *
- * 	// Nav with multiple elements
- * 	Nav multiple = new Nav()
- * 		.children(
- * 			new H3().children("Navigation"),
- * 			new Ul().children(
- * 				new Li().children(new A().href("/home").children("Home")),
- * 				new Li().children(new A().href("/about").children("About"))
- * 			),
- * 			new P().children("Use the links above to navigate the site.")
- * 		);
- *
- * 	// Nav with breadcrumbs
- * 	Nav breadcrumbs = new Nav()
- * 		.children(
- * 			new Ul().children(
- * 				new Li().children(new A().href("/").children("Home")),
- * 				new Li().children(" > "),
- * 				new Li().children(new A().href("/products").children("Products")),
- * 				new Li().children(" > "),
- * 				new Li().children("Current Page")
- * 			)
- * 		);
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#nav() nav()}
+ * 		<li class='jm'>{@link HtmlBuilder#nav(Object, Object...) nav(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

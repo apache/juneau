@@ -26,55 +26,60 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple table row with data cells
- * 	Tr simple = new Tr()
- * 		.children(
- * 			new Td().children("John"),
- * 			new Td().children("25"),
- * 			new Td().children("New York")
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Table row with header cells
- * 	Tr header = new Tr()
- * 		.children(
- * 			new Th().children("Name"),
- * 			new Th().children("Age"),
- * 			new Th().children("City")
- * 		);
+ * 	<jc>// Simple table row with data cells</jc>
+ * 	Tr <jv>simple</jv> = <jsm>tr</jsm>(
+ * 		<jsm>td</jsm>(<js>"John"</js>),
+ * 		<jsm>td</jsm>(<js>"25"</js>),
+ * 		<jsm>td</jsm>(<js>"New York"</js>)
+ * 	);
  * 
- * 	// Table row with styling
- * 	Tr styled = new Tr()
- * 		._class("highlight-row")
- * 		.children(
- * 			new Td().children("Product A"),
- * 			new Td().children("100"),
- * 			new Td().children("$10.00")
- * 		);
+ * 	<jc>// Table row with header cells</jc>
+ * 	Tr <jv>header</jv> = <jsm>tr</jsm>(
+ * 		<jsm>th</jsm>(<js>"Name"</js>),
+ * 		<jsm>th</jsm>(<js>"Age"</js>),
+ * 		<jsm>th</jsm>(<js>"City"</js>)
+ * 	);
  * 
- * 	// Table row with click handler
- * 	Tr clickable = new Tr()
- * 		.onclick("selectRow(this)")
- * 		.children(
- * 			new Td().children("Clickable Row")
- * 		);
+ * 	<jc>// Table row with styling</jc>
+ * 	Tr <jv>styled</jv> = <jsm>tr</jsm>(
+ * 		<jsm>td</jsm>(<js>"Product A"</js>),
+ * 		<jsm>td</jsm>(<js>"100"</js>),
+ * 		<jsm>td</jsm>(<js>"$10.00"</js>)
+ * 	)._class(<js>"highlight-row"</js>);
  * 
- * 	// Table row with mixed cell types
- * 	Tr mixed = new Tr()
- * 		.children(
- * 			new Th().children("Total"),
- * 			new Td().children("$1,000"),
- * 			new Td().children("$2,000")
- * 		);
+ * 	<jc>// Table row with click handler</jc>
+ * 	Tr <jv>clickable</jv> = <jsm>tr</jsm>(
+ * 		<jsm>td</jsm>(<js>"Clickable Row"</js>)
+ * 	).onclick(<js>"selectRow(this)"</js>);
  * 
- * 	// Table row with complex content
- * 	Tr complex = new Tr()
- * 		.children(
- * 			new Td().children(
- * 				new Strong().children("Important"),
- * 				" data"
- * 			),
- * 			new Td().children("Value")
- * 		);
+ * 	<jc>// Table row with mixed cell types</jc>
+ * 	Tr <jv>mixed</jv> = <jsm>tr</jsm>(
+ * 		<jsm>th</jsm>(<js>"Total"</js>),
+ * 		<jsm>td</jsm>(<js>"$1,000"</js>),
+ * 		<jsm>td</jsm>(<js>"$2,000"</js>)
+ * 	);
+ * 
+ * 	<jc>// Table row with complex content</jc>
+ * 	Tr <jv>complex</jv> = <jsm>tr</jsm>(
+ * 		<jsm>td</jsm>(
+ * 			<jsm>strong</jsm>(<js>"Important"</js>),
+ * 			<js>" data"</js>
+ * 		),
+ * 		<jsm>td</jsm>(<js>"Value"</js>)
+ * 	);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#tr() tr()}
+ * 		<li class='jm'>{@link HtmlBuilder#tr(Object, Object...) tr(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

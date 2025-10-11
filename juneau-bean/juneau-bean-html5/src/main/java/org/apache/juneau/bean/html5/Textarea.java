@@ -27,37 +27,34 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Basic textarea
- * 	Textarea basic = new Textarea()
- * 		.name("comments")
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Basic textarea</jc>
+ * 	Textarea <jv>basic</jv> = <jsm>textarea</jsm>(<js>"comments"</js>)
  * 		.rows(4)
  * 		.cols(50);
  * 
- * 	// Textarea with placeholder and validation
- * 	Textarea validated = new Textarea()
- * 		.name("description")
- * 		.placeholder("Enter a description...")
- * 		.required(true)
+ * 	<jc>// Textarea with placeholder and validation</jc>
+ * 	Textarea <jv>validated</jv> = <jsm>textarea</jsm>(<js>"description"</js>)
+ * 		.placeholder(<js>"Enter a description..."</js>)
+ * 		.required(<jk>true</jk>)
  * 		.minlength(10)
  * 		.maxlength(500);
  * 
- * 	// Textarea with initial content
- * 	Textarea withContent = new Textarea()
- * 		.name("message")
- * 		.text("Default message text");
+ * 	<jc>// Textarea with initial content</jc>
+ * 	Textarea <jv>withContent</jv> = <jsm>textarea</jsm>(<js>"message"</js>)
+ * 		.text(<js>"Default message text"</js>);
  * 
- * 	// Textarea with styling and behavior
- * 	Textarea styled = new Textarea()
- * 		.name("feedback")
- * 		._class("large-textarea")
+ * 	<jc>// Textarea with styling and behavior</jc>
+ * 	Textarea <jv>styled</jv> = <jsm>textarea</jsm>(<js>"feedback"</js>)
+ * 		._class(<js>"large-textarea"</js>)
  * 		.rows(6)
  * 		.cols(60)
- * 		.placeholder("Please provide your feedback...")
- * 		.wrap("hard");
+ * 		.placeholder(<js>"Please provide your feedback..."</js>)
+ * 		.wrap(<js>"hard"</js>);
  * 
- * 	// Disabled textarea
- * 	Textarea disabled = new Textarea()
- * 		.name="readonly"
+ * 	<jc>// Disabled textarea</jc>
+ * 	Textarea <jv>disabled</jv> = <jsm>textarea</jsm>(<js>"readonly"</js>)
  * 		.disabled(true)
  * 		.text("This textarea is disabled");
  * 
@@ -66,6 +63,17 @@ import org.apache.juneau.internal.*;
  * 		.name="external"
  * 		.form="myForm"
  * 		.placeholder="This textarea is outside the form";
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#textarea() textarea()}
+ * 		<li class='jm'>{@link HtmlBuilder#textarea(Object, Object...) textarea(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -129,7 +137,7 @@ public class Textarea extends HtmlElementRawText {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public Textarea autofocus(Boolean value) {
+	public Textarea autofocus(Object value) {
 		attr("autofocus", value);
 		return this;
 	}

@@ -67,7 +67,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@FluentSetters
 public class ServerVariable extends OpenApiElement {
 
 	private List<Object> _enum;  // NOSONAR - Intentional naming.
@@ -100,13 +99,13 @@ public class ServerVariable extends OpenApiElement {
 		return new ServerVariable(this);
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	protected ServerVariable strict() {
 		super.strict();
 		return this;
 	}
 
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public ServerVariable strict(Object value) {
 		super.strict(value);
 		return this;
@@ -250,11 +249,7 @@ public class ServerVariable extends OpenApiElement {
 		return this;
 	}
 
-	// <FluentSetters>
-
-	// </FluentSetters>
-
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -265,7 +260,7 @@ public class ServerVariable extends OpenApiElement {
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public ServerVariable set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -279,7 +274,7 @@ public class ServerVariable extends OpenApiElement {
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(_default != null,"default" )

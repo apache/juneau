@@ -82,7 +82,6 @@ import org.apache.juneau.objecttools.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
-@FluentSetters
 public class Swagger extends SwaggerElement {
 
 	/** Represents a null swagger */
@@ -1022,11 +1021,7 @@ public class Swagger extends SwaggerElement {
 		return opt(getPath(path)).map(x -> x.get(method)).map(x -> x.getParameter(in, name)).orElse(null);
 	}
 
-	// <FluentSetters>
-
-	// </FluentSetters>
-
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -1050,7 +1045,7 @@ public class Swagger extends SwaggerElement {
 	}
 
 	@SuppressWarnings("rawtypes")
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Swagger set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -1076,7 +1071,7 @@ public class Swagger extends SwaggerElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(basePath != null, "basePath")

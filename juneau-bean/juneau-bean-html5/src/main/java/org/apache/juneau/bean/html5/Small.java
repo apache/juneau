@@ -26,25 +26,25 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Copyright notice
- * 	Small copyright = new Small()
- * 		.children("Copyright 2024 My Company. All rights reserved.");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Legal disclaimer
- * 	Small disclaimer = new Small()
- * 		.children("This information is provided as-is without warranty.");
+ * 	<jc>// Copyright notice</jc>
+ * 	Small <jv>copyright</jv> = <jsm>small</jsm>(<js>"Copyright 2024 My Company. All rights reserved."</js>);
  * 
- * 	// Terms and conditions
- * 	Small terms = new Small()
- * 		.children("By using this service, you agree to our terms and conditions.");
+ * 	<jc>// Legal disclaimer</jc>
+ * 	Small <jv>disclaimer</jv> = <jsm>small</jsm>(<js>"This information is provided as-is without warranty."</js>);
  * 
- * 	// Price with small print
- * 	Small price = new Small()
- * 		.children("$99.99", new Small().children("*plus tax and shipping"));
+ * 	<jc>// Terms and conditions</jc>
+ * 	Small <jv>terms</jv> = <jsm>small</jsm>(<js>"By using this service, you agree to our terms and conditions."</js>);
  * 
- * 	// Form with small print
- * 	Small formNote = new Small()
- * 		.children("Required fields are marked with an asterisk (*)");
+ * 	<jc>// Price with small print</jc>
+ * 	Small <jv>price</jv> = <jsm>small</jsm>(
+ * 		<js>"$99.99"</js>,
+ * 		<jsm>small</jsm>(<js>"*plus tax and shipping"</js>)
+ * 	);
+ * 
+ * 	<jc>// Form with small print</jc>
+ * 	Small <jv>formNote</jv> = <jsm>small</jsm>(<js>"Required fields are marked with an asterisk (*)"</js>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -26,28 +26,40 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Basic keygen with RSA key type
- * 	Keygen keygen1 = new Keygen()
- * 		.name("userkey")
- * 		.keytype("RSA");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Keygen with challenge string
- * 	Keygen keygen2 = new Keygen()
- * 		.name("certkey")
- * 		.keytype("RSA")
- * 		.challenge("server-challenge-string");
+ * 	<jc>// Basic keygen with RSA key type</jc>
+ * 	Keygen <jv>keygen1</jv> = <jsm>keygen</jsm>()
+ * 		.name(<js>"userkey"</js>)
+ * 		.keytype(<js>"RSA"</js>);
  * 
- * 	// Keygen with form association
- * 	Keygen keygen3 = new Keygen()
- * 		.name("formkey")
- * 		.keytype("DSA")
- * 		.form("myform");
+ * 	<jc>// Keygen with challenge string</jc>
+ * 	Keygen <jv>keygen2</jv> = <jsm>keygen</jsm>()
+ * 		.name(<js>"certkey"</js>)
+ * 		.keytype(<js>"RSA"</js>)
+ * 		.challenge(<js>"server-challenge-string"</js>);
  * 
- * 	// Keygen with disabled state
- * 	Keygen keygen4 = new Keygen()
- * 		.name("disabledkey")
- * 		.keytype("RSA")
- * 		.disabled(true);
+ * 	<jc>// Keygen with form association</jc>
+ * 	Keygen <jv>keygen3</jv> = <jsm>keygen</jsm>()
+ * 		.name(<js>"formkey"</js>)
+ * 		.keytype(<js>"DSA"</js>)
+ * 		.form(<js>"myform"</js>);
+ * 
+ * 	<jc>// Keygen with disabled state</jc>
+ * 	Keygen <jv>keygen4</jv> = <jsm>keygen</jsm>()
+ * 		.name(<js>"disabledkey"</js>)
+ * 		.keytype(<js>"RSA"</js>)
+ * 		.disabled(<jk>true</jk>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#keygen() keygen()}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

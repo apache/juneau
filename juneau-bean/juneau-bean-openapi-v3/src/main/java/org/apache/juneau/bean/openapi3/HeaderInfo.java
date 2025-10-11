@@ -71,7 +71,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@FluentSetters
 public class HeaderInfo extends OpenApiElement {
 
 	private String
@@ -86,7 +85,6 @@ public class HeaderInfo extends OpenApiElement {
 	private SchemaInfo schema;
 	private Object example;
 	private Map<String,Example> examples;
-
 
 	/**
 	 * Default constructor.
@@ -122,13 +120,13 @@ public class HeaderInfo extends OpenApiElement {
 		return new HeaderInfo(this);
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	protected HeaderInfo strict() {
 		super.strict();
 		return this;
 	}
 
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public HeaderInfo strict(Object value) {
 		super.strict(value);
 		return this;
@@ -423,11 +421,7 @@ public class HeaderInfo extends OpenApiElement {
 		return this;
 	}
 
-	// <FluentSetters>
-
-	// </FluentSetters>
-
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -445,7 +439,7 @@ public class HeaderInfo extends OpenApiElement {
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public HeaderInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {

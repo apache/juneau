@@ -28,48 +28,54 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple emphasis
- * 	Em simple = new Em()
- * 		.children("important");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple emphasis</jc>
+ * 	Em <jv>simple</jv> = <jsm>em</jsm>(<js>"important"</js>);
+ * 
+ * 	<jc>// Emphasis with styling</jc>
+ * 	Em <jv>styled</jv> = <jsm>em</jsm>(<js>"critical"</js>)
+ * 		._class(<js>"highlight"</js>);
+ * 
+ * 	<jc>// Emphasis in a sentence</jc>
+ * 	P <jv>sentence</jv> = <jsm>p</jsm>(
+ * 		<js>"This is "</js>,
+ * 		<jsm>em</jsm>(<js>"very important"</js>),
+ * 		<js>" information."</js>
+ * 	);
+ * 
+ * 	<jc>// Emphasis with complex content</jc>
+ * 	Em <jv>complex</jv> = <jsm>em</jsm>(
+ * 		<js>"must"</js>,
+ * 		<jsm>span</jsm>()._class(<js>"not"</js>).children(<js>" not"</js>),
+ * 		<js>" be ignored"</js>
+ * 	);
+ * 
+ * 	<jc>// Emphasis with links</jc>
+ * 	Em <jv>withLinks</jv> = <jsm>em</jsm>(
+ * 		<js>"Please read the "</js>,
+ * 		<jsm>a</jsm>(<js>"/manual"</js>, <js>"manual"</js>),
+ * 		<js>" carefully."</js>
+ * 	);
+ * 
+ * 	<jc>// Emphasis with ID</jc>
+ * 	Em <jv>withId</jv> = <jsm>em</jsm>(<js>"Warning: This action cannot be undone."</js>)
+ * 		.id(<js>"warning-text"</js>);
  *
- * 	// Emphasis with styling
- * 	Em styled = new Em()
- * 		._class("highlight")
- * 		.children("critical");
+ * 	<jc>// Emphasis with styling</jc>
+ * 	Em <jv>styled2</jv> = <jsm>em</jsm>(<js>"Error: Invalid input"</js>)
+ * 		.style(<js>"color: red; font-weight: bold;"</js>);
+ * </p>
  *
- * 	// Emphasis in a sentence
- * 	P sentence = new P()
- * 		.children(
- * 			"This is ",
- * 			new Em().children("very important"),
- * 			" information."
- * 		);
- *
- * 	// Emphasis with complex content
- * 	Em complex = new Em()
- * 		.children(
- * 			"must",
- * 			new Span()._class("not").children(" not"),
- * 			" be ignored"
- * 		);
- *
- * 	// Emphasis with links
- * 	Em withLinks = new Em()
- * 		.children(
- * 			"Please read the ",
- * 			new A().href("/manual").children("manual"),
- * 			" carefully."
- * 		);
- *
- * 	// Emphasis with ID
- * 	Em withId = new Em()
- * 		.id("warning-text")
- * 		.children("Warning: This action cannot be undone.");
- *
- * 	// Emphasis with styling
- * 	Em styled2 = new Em()
- * 		.style("color: red; font-weight: bold;")
- * 		.children("Error: Invalid input");
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#em() em()}
+ * 		<li class='jm'>{@link HtmlBuilder#em(Object, Object...) em(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

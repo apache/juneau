@@ -15,6 +15,109 @@ package org.apache.juneau.bean.html5;
 /**
  * Various useful static methods for creating HTML elements.
  *
+ * <p>
+ * The HtmlBuilder class contains lots of static creator methods to minimize the amount of code needed to produce HTML DOMs.
+ * Instead of using constructors directly, you can use these static methods for more concise code.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Instead of this...</jc>
+ * 	P <jv>address</jv> = <jk>new</jk> P()
+ * 		.children(
+ * 			<js>"John Doe"</js>,
+ * 			<jk>new</jk> Br(),
+ * 			<js>"123 Main Street"</js>,
+ * 			<jk>new</jk> Br(),
+ * 			<js>"Anytown, ST 12345"</js>
+ * 		);
+ * 
+ * 	<jc>// ...you can write this...</jc>
+ * 	P <jv>address</jv> = <jsm>p</jsm>(
+ * 		<js>"John Doe"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"123 Main Street"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Anytown, ST 12345"</js>
+ * 	);
+ * 
+ * 	<jc>// Form with builder methods</jc>
+ * 	Form <jv>form</jv> = <jsm>form</jsm>(<js>"/submit"</js>,
+ * 		<jsm>input</jsm>(<js>"text"</js>).name(<js>"username"</js>).placeholder(<js>"Username"</js>),
+ * 		<jsm>input</jsm>(<js>"password"</js>).name(<js>"password"</js>).placeholder(<js>"Password"</js>),
+ * 		<jsm>button</jsm>(<js>"submit"</js>, <js>"Login"</js>)
+ * 	);
+ * 
+ * 	<jc>// Table with builder methods</jc>
+ * 	Table <jv>table</jv> = <jsm>table</jsm>(
+ * 		<jsm>thead</jsm>(
+ * 			<jsm>tr</jsm>(
+ * 				<jsm>th</jsm>(<js>"Name"</js>),
+ * 				<jsm>th</jsm>(<js>"Age"</js>),
+ * 				<jsm>th</jsm>(<js>"City"</js>)
+ * 			)
+ * 		),
+ * 		<jsm>tbody</jsm>(
+ * 			<jsm>tr</jsm>(
+ * 				<jsm>td</jsm>(<js>"John Doe"</js>),
+ * 				<jsm>td</jsm>(<js>"25"</js>),
+ * 				<jsm>td</jsm>(<js>"New York"</js>)
+ * 			),
+ * 			<jsm>tr</jsm>(
+ * 				<jsm>td</jsm>(<js>"Jane Smith"</js>),
+ * 				<jsm>td</jsm>(<js>"30"</js>),
+ * 				<jsm>td</jsm>(<js>"Los Angeles"</js>)
+ * 			)
+ * 		)
+ * 	);
+ * 
+ * 	<jc>// Navigation menu</jc>
+ * 	Nav <jv>nav</jv> = <jsm>nav</jsm>(
+ * 		<jsm>ul</jsm>(
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/home"</js>, <js>"Home"</js>)),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>)),
+ * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/contact"</js>, <js>"Contact"</js>))
+ * 		)
+ * 	);
+ * 
+ * 	<jc>// Fieldset with attributes after children</jc>
+ * 	Fieldset <jv>fieldset</jv> = <jsm>fieldset</jsm>(
+ * 		<jsm>legend</jsm>(<js>"User Information"</js>),
+ * 		<jsm>input</jsm>(<js>"text"</js>).name(<js>"firstName"</js>).placeholder(<js>"First Name"</js>),
+ * 		<jsm>input</jsm>(<js>"text"</js>).name(<js>"lastName"</js>).placeholder(<js>"Last Name"</js>)
+ * 	).disabled(<jk>true</jk>);
+ * 
+ * 	<jc>// List with mixed content</jc>
+ * 	Ul <jv>list</jv> = <jsm>ul</jsm>(
+ * 		<jsm>li</jsm>(<js>"Simple item"</js>),
+ * 		<jsm>li</jsm>(<jsm>strong</jsm>(<js>"Bold item"</js>)),
+ * 		<jsm>li</jsm>(
+ * 			<js>"Item with "</js>,
+ * 			<jsm>em</jsm>(<js>"emphasis"</js>),
+ * 			<js>" and "</js>,
+ * 			<jsm>code</jsm>(<js>"code"</js>)
+ * 		)
+ * 	);
+ * 
+ * 	<jc>// Media elements</jc>
+ * 	Video <jv>video</jv> = <jsm>video</jsm>(<js>"/path/to/video.mp4"</js>)
+ * 		.controls(<jk>true</jk>)
+ * 		.width(640)
+ * 		.height(480)
+ * 		.children(
+ * 			<jsm>track</jsm>(<js>"/path/to/subtitles.vtt"</js>, <js>"captions"</js>).srclang(<js>"en"</js>).label(<js>"English"</js>)
+ * 		);
+ * 
+ * 	Audio <jv>audio</jv> = <jsm>audio</jsm>(<js>"/path/to/audio.mp3"</js>)
+ * 		.controls(<jk>true</jk>)
+ * 		.autoplay(<jk>false</jk>)
+ * 		.children(
+ * 			<jsm>source</jsm>(<js>"/path/to/audio.ogg"</js>, <js>"audio/ogg"</js>),
+ * 			<jsm>source</jsm>(<js>"/path/to/audio.mp3"</js>, <js>"audio/mpeg"</js>)
+ * 		);
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

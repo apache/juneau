@@ -76,7 +76,6 @@ import org.apache.juneau.json.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@FluentSetters
 public class Items extends OpenApiElement {
 
 	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array"};
@@ -147,14 +146,13 @@ public class Items extends OpenApiElement {
 		return new Items(this);
 	}
 
-
 	@Override /* SwaggerElement */
 	protected Items strict() {
 		super.strict();
 		return this;
 	}
 
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public Items strict(Object value) {
 		super.strict(value);
 		return this;
@@ -673,10 +671,6 @@ public class Items extends OpenApiElement {
 		ref = Utils.s(value);
 		return this;
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

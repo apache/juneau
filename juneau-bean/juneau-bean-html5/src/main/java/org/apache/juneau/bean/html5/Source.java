@@ -30,36 +30,47 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Video with multiple sources
- * 	Video video = new Video()
- * 		.controls(true)
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Video with multiple sources</jc>
+ * 	Video <jv>video</jv> = <jsm>video</jsm>()
+ * 		.controls(<jk>true</jk>)
  * 		.children(
- * 			new Source().src("movie.mp4").type("video/mp4"),
- * 			new Source().src("movie.webm").type("video/webm"),
- * 			new Source().src("movie.ogg").type("video/ogg")
+ * 			<jsm>source</jsm>().src(<js>"movie.mp4"</js>).type(<js>"video/mp4"</js>),
+ * 			<jsm>source</jsm>().src(<js>"movie.webm"</js>).type(<js>"video/webm"</js>),
+ * 			<jsm>source</jsm>().src(<js>"movie.ogg"</js>).type(<js>"video/ogg"</js>)
  * 		);
  * 
- * 	// Audio with multiple sources
- * 	Audio audio = new Audio()
- * 		.controls(true)
+ * 	<jc>// Audio with multiple sources</jc>
+ * 	Audio <jv>audio</jv> = <jsm>audio</jsm>()
+ * 		.controls(<jk>true</jk>)
  * 		.children(
- * 			new Source().src("sound.mp3").type("audio/mpeg"),
- * 			new Source().src("sound.ogg").type("audio/ogg"),
- * 			new Source().src("sound.wav").type("audio/wav")
+ * 			<jsm>source</jsm>().src(<js>"sound.mp3"</js>).type(<js>"audio/mpeg"</js>),
+ * 			<jsm>source</jsm>().src(<js>"sound.ogg"</js>).type(<js>"audio/ogg"</js>),
+ * 			<jsm>source</jsm>().src(<js>"sound.wav"</js>).type(<js>"audio/wav"</js>)
  * 		);
  * 
- * 	// Picture with multiple sources
- * 	Picture picture = new Picture()
- * 		.children(
- * 			new Source().src("image.webp").type("image/webp"),
- * 			new Source().src("image.jpg").type("image/jpeg")
- * 		);
+ * 	<jc>// Picture with multiple sources</jc>
+ * 	Picture <jv>picture</jv> = <jsm>picture</jsm>(
+ * 		<jsm>source</jsm>().src(<js>"image.webp"</js>).type(<js>"image/webp"</js>),
+ * 		<jsm>source</jsm>().src(<js>"image.jpg"</js>).type(<js>"image/jpeg"</js>)
+ * 	);
  * 
- * 	// Source with media query
- * 	Source responsive = new Source()
- * 		.src("large-image.jpg")
- * 		.media("(min-width: 800px)")
- * 		.type("image/jpeg");
+ * 	<jc>// Source with media query</jc>
+ * 	Source <jv>responsive</jv> = <jsm>source</jsm>()
+ * 		.src(<js>"large-image.jpg"</js>)
+ * 		.media(<js>"(min-width: 800px)"</js>)
+ * 		.type(<js>"image/jpeg"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#source() source()}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

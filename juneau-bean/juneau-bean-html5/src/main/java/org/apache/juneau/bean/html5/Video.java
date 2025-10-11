@@ -30,39 +30,39 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple video with controls
- * 	Video simple = new Video()
- * 		.src("movie.mp4")
- * 		.controls(true)
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple video with controls</jc>
+ * 	Video <jv>simple</jv> = <jsm>video</jsm>()
+ * 		.src(<js>"movie.mp4"</js>)
+ * 		.controls(<jk>true</jk>)
  * 		.width(640)
  * 		.height(360);
  * 
- * 	// Video with multiple sources
- * 	Video multiple = new Video()
- * 		.controls(true)
- * 		.children(
- * 			new Source().src("movie.mp4").type("video/mp4"),
- * 			new Source().src("movie.webm").type("video/webm"),
- * 			new Source().src("movie.ogg").type("video/ogg")
- * 		);
+ * 	<jc>// Video with multiple sources</jc>
+ * 	Video <jv>multiple</jv> = <jsm>video</jsm>(
+ * 		<jsm>source</jsm>().src(<js>"movie.mp4"</js>).type(<js>"video/mp4"</js>),
+ * 		<jsm>source</jsm>().src(<js>"movie.webm"</js>).type(<js>"video/webm"</js>),
+ * 		<jsm>source</jsm>().src(<js>"movie.ogg"</js>).type(<js>"video/ogg"</js>)
+ * 	).controls(<jk>true</jk>);
  * 
- * 	// Autoplay video (muted for browser compatibility)
- * 	Video autoplay = new Video()
- * 		.src("intro.mp4")
- * 		.autoplay(true)
- * 		.muted(true)
- * 		.loop(true);
+ * 	<jc>// Autoplay video (muted for browser compatibility)</jc>
+ * 	Video <jv>autoplay</jv> = <jsm>video</jsm>()
+ * 		.src(<js>"intro.mp4"</js>)
+ * 		.autoplay(<jk>true</jk>)
+ * 		.muted(<jk>true</jk>)
+ * 		.loop(<jk>true</jk>);
  * 
- * 	// Video with poster image
- * 	Video poster = new Video()
- * 		.src("trailer.mp4")
- * 		.poster("trailer-poster.jpg")
- * 		.controls(true)
+ * 	<jc>// Video with poster image</jc>
+ * 	Video <jv>poster</jv> = <jsm>video</jsm>()
+ * 		.src(<js>"trailer.mp4"</js>)
+ * 		.poster(<js>"trailer-poster.jpg"</js>)
+ * 		.controls(<jk>true</jk>)
  * 		.width(800)
  * 		.height(450);
  * 
- * 	// Video with custom styling
- * 	Video styled = new Video()
+ * 	<jc>// Video with custom styling</jc>
+ * 	Video <jv>styled</jv> = <jsm>video</jsm>()
  * 		.src("presentation.mp4")
  * 		.controls(true)
  * 		._class("video-player")
@@ -74,6 +74,17 @@ import org.apache.juneau.internal.*;
  * 		.controls(true)
  * 		.onplay("trackVideoPlay()")
  * 		.onended("showNextVideo()");
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#video() video()}
+ * 		<li class='jm'>{@link HtmlBuilder#video(Object, Object...) video(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

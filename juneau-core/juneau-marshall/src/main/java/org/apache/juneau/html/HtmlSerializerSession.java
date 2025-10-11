@@ -396,6 +396,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		ClassMeta<?> wType = null;     // The wrapped type (delegate)
 		ClassMeta<?> sType = object();   // The serialized type
 
+		var addJsonTags = isAddJsonTags();
+
 		if (eType == null)
 			eType = object();
 
@@ -420,7 +422,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		// Determine the type.
 		if (o == null || (aType.isChar() && ((Character)o).charValue() == 0)) {
-			out.tag("null");
+			if (addJsonTags) out.tag("null");
 			cr = ContentResult.CR_MIXED;
 
 		} else {
@@ -488,18 +490,18 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				cr = CR_MIXED;
 
 			} else if (o == null || (sType.isChar() && ((Character)o).charValue() == 0)) {
-				out.tag("null");
+				if (addJsonTags) out.tag("null");
 				cr = CR_MIXED;
 
 			} else if (sType.isNumber()) {
-				if (eType.isNumber() && ! isRoot)
+				if (eType.isNumber() && !(isRoot && addJsonTags))
 					out.append(o);
 				else
 					out.sTag("number").append(o).eTag("number");
 				cr = CR_MIXED;
 
 			} else if (sType.isBoolean()) {
-				if (eType.isBoolean() && ! isRoot)
+				if (eType.isBoolean() && !(isRoot && addJsonTags))
 					out.append(o);
 				else
 					out.sTag("boolean").append(o).eTag("boolean");
@@ -540,7 +542,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				cr = CR_MIXED;
 
 			} else {
-				if (isRoot)
+				if (isRoot && addJsonTags)
 					out.sTag("string").text(toString(o)).eTag("string");
 				else
 					out.text(toString(o));

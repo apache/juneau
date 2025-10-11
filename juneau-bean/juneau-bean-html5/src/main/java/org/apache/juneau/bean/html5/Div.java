@@ -28,50 +28,55 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple div
- * 	Div simple = new Div()
- * 		.children("Hello World");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple div</jc>
+ * 	Div <jv>simple</jv> = <jsm>div</jsm>(<js>"Hello World"</js>);
+ * 
+ * 	<jc>// Div with styling</jc>
+ * 	Div <jv>styled</jv> = <jsm>div</jsm>()
+ * 		._class(<js>"container"</js>)
+ * 		.style(<js>"padding: 20px; background-color: #f0f0f0;"</js>);
+ * 
+ * 	<jc>// Div with multiple children</jc>
+ * 	Div <jv>multiple</jv> = <jsm>div</jsm>(
+ * 		<jsm>h1</jsm>(<js>"Title"</js>),
+ * 		<jsm>p</jsm>(<js>"Content"</js>),
+ * 		<jsm>p</jsm>(<js>"More content"</js>)
+ * 	);
+ * 
+ * 	<jc>// Div with complex content</jc>
+ * 	Div <jv>complex</jv> = <jsm>div</jsm>(
+ * 		<jsm>div</jsm>()._class(<js>"card-header"</js>).children(<js>"Card Title"</js>),
+ * 		<jsm>div</jsm>()._class(<js>"card-body"</js>).children(<js>"Card content"</js>),
+ * 		<jsm>div</jsm>()._class(<js>"card-footer"</js>).children(<js>"Card footer"</js>)
+ * 	)._class(<js>"card"</js>);
+ * 
+ * 	<jc>// Div with ID</jc>
+ * 	Div <jv>withId</jv> = <jsm>div</jsm>(<js>"Main content area"</js>)
+ * 		.id(<js>"main-content"</js>);
+ * 
+ * 	<jc>// Div with styling</jc>
+ * 	Div <jv>styled2</jv> = <jsm>div</jsm>(
+ * 		<jsm>div</jsm>()._class(<js>"left-column"</js>).children(<js>"Left content"</js>),
+ * 		<jsm>div</jsm>()._class(<js>"right-column"</js>).children(<js>"Right content"</js>)
+ * 	).style(<js>"display: flex; justify-content: space-between;"</js>);
  *
- * 	// Div with styling
- * 	Div styled = new Div()
- * 		._class("container")
- * 		.style("padding: 20px; background-color: #f0f0f0;");
+ * 	<jc>// Div with event handlers</jc>
+ * 	Div <jv>interactive</jv> = <jsm>div</jsm>(<js>"Interactive div"</js>)
+ * 		.onclick(<js>"handleClick()"</js>)
+ * 		.onmouseover(<js>"handleMouseOver()"</js>);
+ * </p>
  *
- * 	// Div with multiple children
- * 	Div multiple = new Div()
- * 		.children(
- * 			new H1().children("Title"),
- * 			new P().children("Content"),
- * 			new P().children("More content")
- * 		);
- *
- * 	// Div with complex content
- * 	Div complex = new Div()
- * 		._class("card")
- * 		.children(
- * 			new Div()._class("card-header").children("Card Title"),
- * 			new Div()._class("card-body").children("Card content"),
- * 			new Div()._class("card-footer").children("Card footer")
- * 		);
- *
- * 	// Div with ID
- * 	Div withId = new Div()
- * 		.id("main-content")
- * 		.children("Main content area");
- *
- * 	// Div with styling
- * 	Div styled2 = new Div()
- * 		.style("display: flex; justify-content: space-between;")
- * 		.children(
- * 			new Div()._class("left-column").children("Left content"),
- * 			new Div()._class("right-column").children("Right content")
- * 		);
- *
- * 	// Div with event handlers
- * 	Div interactive = new Div()
- * 		.onclick("handleClick()")
- * 		.onmouseover("handleMouseOver()")
- * 		.children("Interactive div");
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#div() div()}
+ * 		<li class='jm'>{@link HtmlBuilder#div(Object, Object...) div(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

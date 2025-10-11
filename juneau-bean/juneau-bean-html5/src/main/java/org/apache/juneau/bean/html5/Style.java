@@ -28,32 +28,45 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Basic CSS styles
- * 	Style basic = new Style()
- * 		.text("body { font-family: Arial, sans-serif; }");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// CSS with media query
- * 	Style responsive = new Style()
- * 		.media("screen and (max-width: 600px)")
- * 		.text("body { font-size: 14px; }");
+ * 	<jc>// Basic CSS styles</jc>
+ * 	Style <jv>basic</jv> = <jsm>style</jsm>()
+ * 		.text(<js>"body { font-family: Arial, sans-serif; }"</js>);
  * 
- * 	// Multiple CSS rules
- * 	Style multiple = new Style()
+ * 	<jc>// CSS with media query</jc>
+ * 	Style <jv>responsive</jv> = <jsm>style</jsm>()
+ * 		.media(<js>"screen and (max-width: 600px)"</js>)
+ * 		.text(<js>"body { font-size: 14px; }"</js>);
+ * 
+ * 	<jc>// Multiple CSS rules</jc>
+ * 	Style <jv>multiple</jv> = <jsm>style</jsm>()
  * 		.text(
- * 			"h1 { color: blue; }",
- * 			"p { margin: 10px; }",
- * 			".highlight { background-color: yellow; }"
+ * 			<js>"h1 { color: blue; }"</js>,
+ * 			<js>"p { margin: 10px; }"</js>,
+ * 			<js>".highlight { background-color: yellow; }"</js>
  * 		);
  * 
- * 	// CSS with type specification
- * 	Style typed = new Style()
- * 		.type("text/css")
- * 		.text(".button { padding: 10px; background: #007bff; }");
+ * 	<jc>// CSS with type specification</jc>
+ * 	Style <jv>typed</jv> = <jsm>style</jsm>()
+ * 		.type(<js>"text/css"</js>)
+ * 		.text(<js>".button { padding: 10px; background: #007bff; }"</js>);
  * 
- * 	// Print-specific styles
- * 	Style print = new Style()
- * 		.media("print")
- * 		.text("body { color: black; background: white; }");
+ * 	<jc>// Print-specific styles</jc>
+ * 	Style <jv>print</jv> = <jsm>style</jsm>()
+ * 		.media(<js>"print"</js>)
+ * 		.text(<js>"body { color: black; background: white; }"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#style() style()}
+ * 		<li class='jm'>{@link HtmlBuilder#style(Object, Object...) style(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

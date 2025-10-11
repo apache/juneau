@@ -28,21 +28,23 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple meter
- * 	Meter simple = new Meter()
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ *
+ * 	<jc>// Simple meter</jc>
+ * 	Meter <jv>simple</jv> = <jsm>meter</jsm>()
  * 		.value(50)
  * 		.min(0)
  * 		.max(100);
  *
- * 	// Meter with styling
- * 	Meter styled = new Meter()
- * 		._class("progress-meter")
+ * 	<jc>// Meter with styling</jc>
+ * 	Meter <jv>styled</jv> = <jsm>meter</jsm>()
+ * 		._class(<js>"progress-meter"</js>)
  * 		.value(75)
  * 		.min(0)
  * 		.max(100);
  *
- * 	// Meter with complex content
- * 	Meter complex = new Meter()
+ * 	<jc>// Meter with complex content</jc>
+ * 	Meter <jv>complex</jv> = <jsm>meter</jsm>()
  * 		.value(60)
  * 		.min(0)
  * 		.max(100)
@@ -50,29 +52,29 @@ import org.apache.juneau.internal.*;
  * 		.high(75)
  * 		.optimum(50);
  *
- * 	// Meter with ID
- * 	Meter withId = new Meter()
- * 		.id("disk-usage")
+ * 	<jc>// Meter with ID</jc>
+ * 	Meter <jv>withId</jv> = <jsm>meter</jsm>()
+ * 		.id(<js>"disk-usage"</js>)
  * 		.value(80)
  * 		.min(0)
  * 		.max(100);
  *
- * 	// Meter with styling
- * 	Meter styled2 = new Meter()
- * 		.style("width: 200px; height: 20px;")
+ * 	<jc>// Meter with styling</jc>
+ * 	Meter <jv>styled2</jv> = <jsm>meter</jsm>()
+ * 		.style(<js>"width: 200px; height: 20px;"</js>)
  * 		.value(40)
  * 		.min(0)
  * 		.max(100);
  *
- * 	// Meter with multiple attributes
- * 	Meter multiple = new Meter()
+ * 	<jc>// Meter with multiple attributes</jc>
+ * 	Meter <jv>multiple</jv> = <jsm>meter</jsm>()
  * 		.value(85)
  * 		.min(0)
  * 		.max(100)
  * 		.low(20)
  * 		.high(80)
  * 		.optimum(50)
- * 		.title("Disk Usage: 85%");
+ * 		.title(<js>"Disk Usage: 85%"</js>);
  *
  * 	// Meter with form
  * 	Meter withForm = new Meter()

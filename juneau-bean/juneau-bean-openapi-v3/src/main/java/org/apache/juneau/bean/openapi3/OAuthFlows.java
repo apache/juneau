@@ -68,7 +68,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@FluentSetters
 public class OAuthFlows extends OpenApiElement {
 
 	private OAuthFlow implicit,
@@ -110,7 +109,7 @@ public class OAuthFlows extends OpenApiElement {
 		return this;
 	}
 
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public OAuthFlows strict(Object value) {
 		super.strict(value);
 		return this;
@@ -231,10 +230,6 @@ public class OAuthFlows extends OpenApiElement {
 		authorizationCode = value;
 		return this;
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

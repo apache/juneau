@@ -29,32 +29,44 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple image with alt text
- * 	Img img1 = new Img()
- * 		.src("photo.jpg")
- * 		.alt("A beautiful sunset over the mountains");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Image with dimensions and styling
- * 	Img img2 = new Img()
- * 		.src("logo.png")
- * 		.alt("Company Logo")
- * 		.width("200")
- * 		.height("100")
- * 		._class("logo");
+ * 	<jc>// Simple image with alt text</jc>
+ * 	Img <jv>img1</jv> = <jsm>img</jsm>()
+ * 		.src(<js>"photo.jpg"</js>)
+ * 		.alt(<js>"A beautiful sunset over the mountains"</js>);
  * 
- * 	// Image with CORS and image map
- * 	Img img3 = new Img()
- * 		.src("https://example.com/image.jpg")
- * 		.alt("Interactive image")
- * 		.crossorigin("anonymous")
- * 		.usemap("#imagemap");
+ * 	<jc>// Image with dimensions and styling</jc>
+ * 	Img <jv>img2</jv> = <jsm>img</jsm>()
+ * 		.src(<js>"logo.png"</js>)
+ * 		.alt(<js>"Company Logo"</js>)
+ * 		.width(<js>"200"</js>)
+ * 		.height(<js>"100"</js>)
+ * 		._class(<js>"logo"</js>);
  * 
- * 	// Responsive image with multiple sources
- * 	Img img4 = new Img()
- * 		.src("image-800w.jpg")
- * 		.alt("Responsive image")
- * 		.sizes("(max-width: 600px) 100vw, 50vw")
- * 		.srcset("image-400w.jpg 400w, image-800w.jpg 800w");
+ * 	<jc>// Image with CORS and image map</jc>
+ * 	Img <jv>img3</jv> = <jsm>img</jsm>()
+ * 		.src(<js>"https://example.com/image.jpg"</js>)
+ * 		.alt(<js>"Interactive image"</js>)
+ * 		.crossorigin(<js>"anonymous"</js>)
+ * 		.usemap(<js>"#imagemap"</js>);
+ * 
+ * 	<jc>// Responsive image with multiple sources</jc>
+ * 	Img <jv>img4</jv> = <jsm>img</jsm>()
+ * 		.src(<js>"image-800w.jpg"</js>)
+ * 		.alt(<js>"Responsive image"</js>)
+ * 		.sizes(<js>"(max-width: 600px) 100vw, 50vw"</js>)
+ * 		.srcset(<js>"image-400w.jpg 400w, image-800w.jpg 800w"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#img() img()}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

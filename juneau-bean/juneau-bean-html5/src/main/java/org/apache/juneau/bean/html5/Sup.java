@@ -27,26 +27,30 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Mathematical formula
- * 	Sup math = new Sup()
- * 		.children("x", new Sup().children("2"), " + y", new Sup().children("2"), " = z", new Sup().children("2"));
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Ordinal numbers
- * 	Sup ordinal = new Sup()
- * 		.children("1st", new Sup().children("st"));
+ * 	<jc>// Mathematical formula</jc>
+ * 	Sup <jv>math</jv> = <jsm>sup</jsm>(
+ * 		<js>"x"</js>, <jsm>sup</jsm>(<js>"2"</js>),
+ * 		<js>" + y"</js>, <jsm>sup</jsm>(<js>"2"</js>),
+ * 		<js>" = z"</js>, <jsm>sup</jsm>(<js>"2"</js>)
+ * 	);
  * 
- * 	// Footnote reference
- * 	Sup footnote = new Sup()
- * 		.children("1");
+ * 	<jc>// Ordinal numbers</jc>
+ * 	Sup <jv>ordinal</jv> = <jsm>sup</jsm>(<js>"1st"</js>, <jsm>sup</jsm>(<js>"st"</js>));
  * 
- * 	// Superscript with styling
- * 	Sup styled = new Sup()
- * 		._class("superscript")
- * 		.children("n");
+ * 	<jc>// Footnote reference</jc>
+ * 	Sup <jv>footnote</jv> = <jsm>sup</jsm>(<js>"1"</js>);
  * 
- * 	// Multiple superscripts
- * 	Sup multiple = new Sup()
- * 		.children("A", new Sup().children("i,j"), " = B", new Sup().children("k"));
+ * 	<jc>// Superscript with styling</jc>
+ * 	Sup <jv>styled</jv> = <jsm>sup</jsm>(<js>"n"</js>)
+ * 		._class(<js>"superscript"</js>);
+ * 
+ * 	<jc>// Multiple superscripts</jc>
+ * 	Sup <jv>multiple</jv> = <jsm>sup</jsm>(
+ * 		<js>"A"</js>, <jsm>sup</jsm>(<js>"i,j"</js>),
+ * 		<js>" = B"</js>, <jsm>sup</jsm>(<js>"k"</js>)
+ * 	);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

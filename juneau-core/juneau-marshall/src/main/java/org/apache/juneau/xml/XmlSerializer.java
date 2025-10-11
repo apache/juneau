@@ -252,7 +252,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 		private static final Cache<HashKey,XmlSerializer> CACHE = Cache.of(HashKey.class, XmlSerializer.class).build();
 
-		boolean addBeanTypesXml, addNamespaceUrisToRoot, disableAutoDetectNamespaces, enableNamespaces;
+		boolean addBeanTypesXml, addNamespaceUrisToRoot, disableAutoDetectNamespaces, disableJsonTags, enableNamespaces;
 		Namespace defaultNamespace;
 		List<Namespace> namespaces;
 
@@ -264,6 +264,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			addBeanTypesXml = env("XmlSerializer.addBeanTypes", false);
 			addNamespaceUrisToRoot = env("XmlSerializer.addNamespaceUrisToRoot", false);
 			disableAutoDetectNamespaces = env("XmlSerializer.disableAutoDetectNamespaces", false);
+			disableJsonTags = env("XmlSerializer.disableJsonTags", false);
 			enableNamespaces = env("XmlSerializer.enableNamespaces", false);
 			defaultNamespace = null;
 			namespaces = null;
@@ -280,6 +281,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			addBeanTypesXml = copyFrom.addBeanTypesXml;
 			addNamespaceUrisToRoot = copyFrom.addNamespaceUrlsToRoot;
 			disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
+			disableJsonTags = ! copyFrom.addJsonTags;
 			enableNamespaces = copyFrom.enableNamespaces;
 			defaultNamespace = copyFrom.defaultNamespace;
 			namespaces = copyFrom.namespaces.length == 0 ? null : Utils.list(copyFrom.namespaces);
@@ -295,6 +297,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			addBeanTypesXml = copyFrom.addBeanTypesXml;
 			addNamespaceUrisToRoot = copyFrom.addNamespaceUrisToRoot;
 			disableAutoDetectNamespaces = copyFrom.disableAutoDetectNamespaces;
+			disableJsonTags = copyFrom.disableJsonTags;
 			enableNamespaces = copyFrom.enableNamespaces;
 			defaultNamespace = copyFrom.defaultNamespace;
 			namespaces = copyOf(copyFrom.namespaces);
@@ -317,6 +320,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 				addBeanTypesXml,
 				addNamespaceUrisToRoot,
 				disableAutoDetectNamespaces,
+				disableJsonTags,
 				enableNamespaces,
 				defaultNamespace,
 				namespaces
@@ -433,6 +437,33 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		@FluentSetter
 		public Builder disableAutoDetectNamespaces(boolean value) {
 			disableAutoDetectNamespaces = value;
+			return this;
+		}
+
+		/**
+		 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Disable use of JSON type identifier tags.
+		 *
+		 * <p>
+		 * When enabled, JSON type tags (e.g. <js>"&lt;string&gt;"</js>) tags and attributes will not be added to the output.
+		 * Note that JSON type tags are used to ensure parsers are able to recreate the original data types passed
+		 * into the serializer.  Disabling JSON tags can cause different data to be parsed (e.g. strings instead of numbers).
+		 *
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder disableJsonTags() {
+			return disableJsonTags(true);
+		}
+
+		/**
+		 * Same as {@link #disableJsonTags()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder disableJsonTags(boolean value) {
+			disableJsonTags = value;
 			return this;
 		}
 
@@ -1169,7 +1200,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		autoDetectNamespaces,
 		enableNamespaces,
 		addNamespaceUrlsToRoot,
-		addBeanTypesXml;
+		addBeanTypesXml,
+		addJsonTags;
 
 	final Namespace defaultNamespace;
 	final Namespace[] namespaces;
@@ -1191,6 +1223,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		enableNamespaces = builder.enableNamespaces;
 		addNamespaceUrlsToRoot = builder.addNamespaceUrisToRoot;
 		addBeanTypesXml = builder.addBeanTypesXml;
+		addJsonTags = ! builder.disableJsonTags;
 		defaultNamespace = builder.defaultNamespace != null ? builder.defaultNamespace : DEFAULT_JUNEAU_NAMESPACE;
 		namespaces = builder.namespaces != null ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;
 		addBeanTypes = addBeanTypesXml || super.isAddBeanTypes();

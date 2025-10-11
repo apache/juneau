@@ -26,21 +26,34 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple deleted text
- * 	Del del1 = new Del().text("This text has been removed.");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Deleted text with citation and timestamp
- * 	Del del2 = new Del()
- * 		.cite("https://example.com/revision-log")
- * 		.datetime("2024-01-15T10:30:00Z")
- * 		.text("Outdated information removed");
+ * 	<jc>// Simple deleted text</jc>
+ * 	Del <jv>del1</jv> = <jsm>del</jsm>(<js>"This text has been removed."</js>);
  * 
- * 	// Deleted text with reason
- * 	Del del3 = new Del()
- * 		.cite("https://example.com/corrections")
- * 		.datetime("2024-01-15")
- * 		.text("Incorrect statement")
- * 		.title("Removed due to factual error");
+ * 	<jc>// Deleted text with citation and timestamp</jc>
+ * 	Del <jv>del2</jv> = <jsm>del</jsm>()
+ * 		.cite(<js>"https://example.com/revision-log"</js>)
+ * 		.datetime(<js>"2024-01-15T10:30:00Z"</js>)
+ * 		.text(<js>"Outdated information removed"</js>);
+ * 
+ * 	<jc>// Deleted text with reason</jc>
+ * 	Del <jv>del3</jv> = <jsm>del</jsm>()
+ * 		.cite(<js>"https://example.com/corrections"</js>)
+ * 		.datetime(<js>"2024-01-15"</js>)
+ * 		.text(<js>"Incorrect statement"</js>)
+ * 		.title(<js>"Removed due to factual error"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#del() del()}
+ * 		<li class='jm'>{@link HtmlBuilder#del(Object, Object...) del(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

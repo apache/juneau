@@ -28,50 +28,59 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple underlined text
- * 	U simple = new U()
- * 		.children("This text is underlined");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// U with styling
- * 	U styled = new U()
- * 		._class("underlined")
- * 		.children("Styled underlined text");
+ * 	<jc>// Simple underlined text</jc>
+ * 	U <jv>simple</jv> = <jsm>u</jsm>(<js>"This text is underlined"</js>);
  *
- * 	// U with complex content
- * 	U complex = new U()
- * 		.children(
- * 			"The ",
- * 			new Strong().children("proper name"),
- * 			" is underlined."
- * 		);
+ * 	<jc>// U with styling</jc>
+ * 	U <jv>styled</jv> = <jsm>u</jsm>(<js>"Styled underlined text"</js>)
+ * 		._class(<js>"underlined"</js>);
  *
- * 	// U with ID
- * 	U withId = new U()
- * 		.id("underlined-text")
- * 		.children("Text with ID");
+ * 	<jc>// U with complex content</jc>
+ * 	U <jv>complex</jv> = <jsm>u</jsm>(
+ * 		<js>"The "</js>,
+ * 		<jsm>strong</jsm>(<js>"proper name"</js>),
+ * 		<js>" is underlined."</js>
+ * 	);
  *
- * 	// U with styling
- * 	U styled2 = new U()
- * 		.style("color: #666; text-decoration: underline;")
+ * 	<jc>// U with ID</jc>
+ * 	U <jv>withId</jv> = <jsm>u</jsm>(<js>"Text with ID"</js>)
+ * 		.id(<js>"underlined-text"</js>);
+ *
+ * 	<jc>// U with styling</jc>
+ * 	U <jv>styled2</jv> = <jsm>u</jsm>(<js>"Custom underlined text"</js>)
+ * 		.style(<js>"color: #666; text-decoration: underline;"</js>)
  * 		.children("Custom styled underlined text");
  *
  * 	// U with multiple elements
- * 	U multiple = new U()
+ * 	U multiple = u()
  * 		.children(
  * 			"The ",
- * 			new U().children("proper name"),
+ * 			u().children("proper name"),
  * 			" is ",
- * 			new U().children("underlined"),
+ * 			u().children("underlined"),
  * 			" for emphasis."
  * 		);
  *
  * 	// U with links
- * 	U withLinks = new U()
+ * 	U withLinks = u()
  * 		.children(
  * 			"See ",
- * 			new A().href("/help/underline").children("underline guide"),
+ * 			a().href("/help/underline").children("underline guide"),
  * 			" for more information."
  * 		);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#u() u()}
+ * 		<li class='jm'>{@link HtmlBuilder#u(Object, Object...) u(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -26,28 +26,40 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple parameter
- * 	Param param1 = new Param()
- * 		.name("autoplay")
- * 		.value("true");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Parameter with constructor
- * 	Param param2 = new Param("quality", "high");
+ * 	<jc>// Simple parameter</jc>
+ * 	Param <jv>param1</jv> = <jsm>param</jsm>()
+ * 		.name(<js>"autoplay"</js>)
+ * 		.value(<js>"true"</js>);
  * 
- * 	// Parameters in an object
- * 	Object_ object1 = new Object_()
- * 		.data("video.swf")
- * 		.type("application/x-shockwave-flash")
+ * 	<jc>// Parameter with constructor</jc>
+ * 	Param <jv>param2</jv> = <jk>new</jk> Param(<js>"quality"</js>, <js>"high"</js>);
+ * 
+ * 	<jc>// Parameters in an object</jc>
+ * 	Object_ <jv>object1</jv> = <jsm>object_</jsm>()
+ * 		.data(<js>"video.swf"</js>)
+ * 		.type(<js>"application/x-shockwave-flash"</js>)
  * 		.children(
- * 			new Param("autoplay", "false"),
- * 			new Param("loop", "true"),
- * 			new Param("quality", "high")
+ * 			<jk>new</jk> Param(<js>"autoplay"</js>, <js>"false"</js>),
+ * 			<jk>new</jk> Param(<js>"loop"</js>, <js>"true"</js>),
+ * 			<jk>new</jk> Param(<js>"quality"</js>, <js>"high"</js>)
  * 		);
  * 
- * 	// Parameter with special characters
- * 	Param param3 = new Param()
- * 		.name("config")
- * 		.value("width=800&height=600&theme=dark");
+ * 	<jc>// Parameter with special characters</jc>
+ * 	Param <jv>param3</jv> = <jsm>param</jsm>()
+ * 		.name(<js>"config"</js>)
+ * 		.value(<js>"width=800&height=600&theme=dark"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#param() param()}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

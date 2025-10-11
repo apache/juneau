@@ -28,54 +28,53 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Basic canvas
- * 	Canvas basic = new Canvas()
- * 		.width(300)
- * 		.height(200);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Canvas with ID for JavaScript access
- * 	Canvas withId = new Canvas()
- * 		.id("myCanvas")
- * 		.width(400)
- * 		.height(300);
+ * 	<jc>// Basic canvas</jc>
+ * 	Canvas <jv>basic</jv> = <jsm>canvas</jsm>(300, 200);
  * 
- * 	// Canvas with styling
- * 	Canvas styled = new Canvas()
- * 		.id("drawingCanvas")
- * 		.width(500)
- * 		.height(400)
- * 		._class("canvas-element")
- * 		.style("border: 1px solid #ccc;");
+ * 	<jc>// Canvas with ID for JavaScript access</jc>
+ * 	Canvas <jv>withId</jv> = <jsm>canvas</jsm>(400, 300)
+ * 		.id(<js>"myCanvas"</js>);
  * 
- * 	// Canvas with event handlers
- * 	Canvas interactive = new Canvas()
- * 		.id("gameCanvas")
- * 		.width(800)
- * 		.height(600)
- * 		.onclick("handleCanvasClick(event)")
- * 		.onmousemove("handleMouseMove(event)");
+ * 	<jc>// Canvas with styling</jc>
+ * 	Canvas <jv>styled</jv> = <jsm>canvas</jsm>(500, 400)
+ * 		.id(<js>"drawingCanvas"</js>)
+ * 		._class(<js>"canvas-element"</js>)
+ * 		.style(<js>"border: 1px solid #ccc;"</js>);
  * 
- * 	// Canvas with fallback content
- * 	Canvas withFallback = new Canvas()
- * 		.id("chartCanvas")
- * 		.width(600)
- * 		.height(400)
- * 		.children("Your browser does not support the canvas element.");
+ * 	<jc>// Canvas with event handlers</jc>
+ * 	Canvas <jv>interactive</jv> = <jsm>canvas</jsm>(800, 600)
+ * 		.id(<js>"gameCanvas"</js>)
+ * 		.onclick(<js>"handleCanvasClick(event)"</js>)
+ * 		.onmousemove(<js>"handleMouseMove(event)"</js>);
  * 
- * 	// Canvas for data visualization
- * 	Canvas chart = new Canvas()
- * 		.id("dataChart")
- * 		.width(800)
- * 		.height(500)
- * 		.title("Interactive Data Chart");
+ * 	<jc>// Canvas with fallback content</jc>
+ * 	Canvas <jv>withFallback</jv> = <jsm>canvas</jsm>(600, 400)
+ * 		.id(<js>"chartCanvas"</js>)
+ * 		.children(<js>"Your browser does not support the canvas element."</js>);
  * 
- * 	// Canvas with accessibility
- * 	Canvas accessible = new Canvas()
- * 		.id("accessibleCanvas")
- * 		.width(400)
- * 		.height(300)
- * 		.title("Interactive drawing canvas")
- * 		.children("Use your mouse to draw on this canvas.");
+ * 	<jc>// Canvas for data visualization</jc>
+ * 	Canvas <jv>chart</jv> = <jsm>canvas</jsm>(800, 500)
+ * 		.id(<js>"dataChart"</js>)
+ * 		.title(<js>"Interactive Data Chart"</js>);
+ * 
+ * 	<jc>// Canvas with accessibility</jc>
+ * 	Canvas <jv>accessible</jv> = <jsm>canvas</jsm>(400, 300)
+ * 		.id(<js>"accessibleCanvas"</js>)
+ * 		.title(<js>"Interactive drawing canvas"</js>)
+ * 		.children(<js>"Use your mouse to draw on this canvas."</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#canvas() canvas()}
+ * 		<li class='jm'>{@link HtmlBuilder#canvas(Object, Object...) canvas(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

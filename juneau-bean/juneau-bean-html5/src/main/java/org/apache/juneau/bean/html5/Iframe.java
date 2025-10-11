@@ -30,31 +30,44 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple iframe embedding external content
- * 	Iframe iframe1 = new Iframe()
- * 		.src("https://example.com/embed")
- * 		.width("800")
- * 		.height("600");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Iframe with sandbox restrictions
- * 	Iframe iframe2 = new Iframe()
- * 		.src("https://example.com/untrusted")
- * 		.sandbox("allow-scripts allow-same-origin")
- * 		.width("400")
- * 		.height("300");
+ * 	<jc>// Simple iframe embedding external content</jc>
+ * 	Iframe <jv>iframe1</jv> = <jsm>iframe</jsm>()
+ * 		.src(<js>"https://example.com/embed"</js>)
+ * 		.width(<js>"800"</js>)
+ * 		.height(<js>"600"</js>);
  * 
- * 	// Iframe with inline content
- * 	Iframe iframe3 = new Iframe()
- * 		.srcdoc("&lt;h1&gt;Inline Content&lt;/h1&gt;&lt;p&gt;This content is embedded directly.&lt;/p&gt;")
- * 		.width("500")
- * 		.height("200");
+ * 	<jc>// Iframe with sandbox restrictions</jc>
+ * 	Iframe <jv>iframe2</jv> = <jsm>iframe</jsm>()
+ * 		.src(<js>"https://example.com/untrusted"</js>)
+ * 		.sandbox(<js>"allow-scripts allow-same-origin"</js>)
+ * 		.width(<js>"400"</js>)
+ * 		.height(<js>"300"</js>);
  * 
- * 	// Iframe with name for targeting
- * 	Iframe iframe4 = new Iframe()
- * 		.name("contentFrame")
- * 		.src("https://example.com/content")
- * 		.width("100%")
- * 		.height("400");
+ * 	<jc>// Iframe with inline content</jc>
+ * 	Iframe <jv>iframe3</jv> = <jsm>iframe</jsm>()
+ * 		.srcdoc(<js>"&lt;h1&gt;Inline Content&lt;/h1&gt;&lt;p&gt;This content is embedded directly.&lt;/p&gt;"</js>)
+ * 		.width(<js>"500"</js>)
+ * 		.height(<js>"200"</js>);
+ * 
+ * 	<jc>// Iframe with name for targeting</jc>
+ * 	Iframe <jv>iframe4</jv> = <jsm>iframe</jsm>()
+ * 		.name(<js>"contentFrame"</js>)
+ * 		.src(<js>"https://example.com/content"</js>)
+ * 		.width(<js>"100%"</js>)
+ * 		.height(<js>"400"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#iframe() iframe()}
+ * 		<li class='jm'>{@link HtmlBuilder#iframe(Object, Object...) iframe(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -27,95 +27,90 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple blog post article
- * 	Article blogPost = new Article()
- * 		.children(
- * 			new Header()
- * 				.children(
- * 					new H1().children("How to Use HTML5 Semantic Elements"),
- * 					new P().children("Published on ", new Time().datetime("2024-01-15").children("January 15, 2024"))
- * 				),
- * 			new P().children("HTML5 introduced several semantic elements that help structure content..."),
- * 			new Footer()
- * 				.children(
- * 					new P().children("Author: John Doe"),
- * 					new Address().children("Contact: john@example.com")
- * 				)
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// News article
- * 	Article newsArticle = new Article()
- * 		.children(
- * 			new Header()
- * 				.children(
- * 					new H1().children("Breaking: New Technology Released"),
- * 					new P().children("By Jane Smith, Technology Reporter")
- * 				),
- * 			new P().children("A revolutionary new technology was announced today..."),
- * 			new Section()
- * 				.children(
- * 					new H2().children("Technical Details"),
- * 					new P().children("The technology works by...")
- * 				)
- * 		);
+ * 	<jc>// Simple blog post article</jc>
+ * 	Article <jv>blogPost</jv> = <jsm>article</jsm>(
+ * 		<jsm>header</jsm>(
+ * 			<jsm>h1</jsm>(<js>"How to Use HTML5 Semantic Elements"</js>),
+ * 			<jsm>p</jsm>(<js>"Published on "</js>, <jsm>time</jsm>(<js>"2024-01-15"</js>, <js>"January 15, 2024"</js>))
+ * 		),
+ * 		<jsm>p</jsm>(<js>"HTML5 introduced several semantic elements that help structure content..."</js>),
+ * 		<jsm>footer</jsm>(
+ * 			<jsm>p</jsm>(<js>"Author: John Doe"</js>),
+ * 			<jsm>address</jsm>(<js>"Contact: john@example.com"</js>)
+ * 		)
+ * 	);
  * 
- * 	// Forum post
- * 	Article forumPost = new Article()
- * 		._class("forum-post")
- * 		.children(
- * 			new Header()
- * 				.children(
- * 					new H3().children("Question about CSS Grid"),
- * 					new P().children("Posted by ", new Strong().children("user123"), " on ", new Time().datetime("2024-01-14").children("yesterday"))
- * 				),
- * 			new P().children("I'm having trouble with CSS Grid layout..."),
- * 			new Footer()
- * 				.children(
- * 					new P().children("Tags: ", new A().href("/tag/css").children("CSS"), ", ", new A().href("/tag/grid").children("Grid"))
- * 				)
- * 		);
+ * 	<jc>// News article</jc>
+ * 	Article <jv>newsArticle</jv> = <jsm>article</jsm>(
+ * 		<jsm>header</jsm>(
+ * 			<jsm>h1</jsm>(<js>"Breaking: New Technology Released"</js>),
+ * 			<jsm>p</jsm>(<js>"By Jane Smith, Technology Reporter"</js>)
+ * 		),
+ * 		<jsm>p</jsm>(<js>"A revolutionary new technology was announced today..."</js>),
+ * 		<jsm>section</jsm>(
+ * 			<jsm>h2</jsm>(<js>"Technical Details"</js>),
+ * 			<jsm>p</jsm>(<js>"The technology works by..."</js>)
+ * 		)
+ * 	);
  * 
- * 	// Product review
- * 	Article review = new Article()
- * 		.children(
- * 			new Header()
- * 				.children(
- * 					new H1().children("Review: Amazing Widget Pro"),
- * 					new P().children("Rating: ", new Strong().children("5/5 stars"))
- * 				),
- * 			new P().children("After using the Amazing Widget Pro for a month..."),
- * 			new Section()
- * 				.children(
- * 					new H2().children("Pros"),
- * 					new Ul().children(
- * 						new Li().children("Easy to use"),
- * 						new Li().children("Great performance"),
- * 						new Li().children("Excellent support")
- * 					)
- * 				)
- * 		);
+ * 	<jc>// Forum post</jc>
+ * 	Article <jv>forumPost</jv> = <jsm>article</jsm>(
+ * 		<jsm>header</jsm>(
+ * 			<jsm>h3</jsm>(<js>"Question about CSS Grid"</js>),
+ * 			<jsm>p</jsm>(<js>"Posted by "</js>, <jsm>strong</jsm>(<js>"user123"</js>), <js>" on "</js>, <jsm>time</jsm>(<js>"2024-01-14"</js>, <js>"yesterday"</js>))
+ * 		),
+ * 		<jsm>p</jsm>(<js>"I'm having trouble with CSS Grid layout..."</js>),
+ * 		<jsm>footer</jsm>(
+ * 			<jsm>p</jsm>(<js>"Tags: "</js>, <jsm>a</jsm>(<js>"/tag/css"</js>, <js>"CSS"</js>), <js>", "</js>, <jsm>a</jsm>(<js>"/tag/grid"</js>, <js>"Grid"</js>))
+ * 		)
+ * 	)._class(<js>"forum-post"</js>);
  * 
- * 	// Article with multiple sections
- * 	Article multiSection = new Article()
- * 		.children(
- * 			new Header()
- * 				.children(new H1().children("Complete Guide to Web Development")),
- * 			new Section()
- * 				.children(
- * 					new H2().children("Introduction"),
- * 					new P().children("Web development encompasses many technologies...")
- * 				),
- * 			new Section()
- * 				.children(
- * 					new H2().children("Frontend Development"),
- * 					new P().children("Frontend development focuses on...")
- * 				),
- * 			new Section()
- * 				.children(
- * 					new H2().children("Backend Development"),
- * 					new P().children("Backend development handles...")
- * 				)
- * 		);
+ * 	<jc>// Product review</jc>
+ * 	Article <jv>review</jv> = <jsm>article</jsm>(
+ * 		<jsm>header</jsm>(
+ * 			<jsm>h1</jsm>(<js>"Review: Amazing Widget Pro"</js>),
+ * 			<jsm>p</jsm>(<js>"Rating: "</js>, <jsm>strong</jsm>(<js>"5/5 stars"</js>))
+ * 		),
+ * 		<jsm>p</jsm>(<js>"After using the Amazing Widget Pro for a month..."</js>),
+ * 		<jsm>section</jsm>(
+ * 			<jsm>h2</jsm>(<js>"Pros"</js>),
+ * 			<jsm>ul</jsm>(
+ * 				<jsm>li</jsm>(<js>"Easy to use"</js>),
+ * 				<jsm>li</jsm>(<js>"Great performance"</js>),
+ * 				<jsm>li</jsm>(<js>"Excellent support"</js>)
+ * 			)
+ * 		)
+ * 	);
+ * 
+ * 	<jc>// Article with multiple sections</jc>
+ * 	Article <jv>multiSection</jv> = <jsm>article</jsm>(
+ * 		<jsm>header</jsm>(<jsm>h1</jsm>(<js>"Complete Guide to Web Development"</js>)),
+ * 		<jsm>section</jsm>(
+ * 			<jsm>h2</jsm>(<js>"Introduction"</js>),
+ * 			<jsm>p</jsm>(<js>"Web development encompasses many technologies..."</js>)
+ * 		),
+ * 		<jsm>section</jsm>(
+ * 			<jsm>h2</jsm>(<js>"Frontend Development"</js>),
+ * 			<jsm>p</jsm>(<js>"Frontend development focuses on..."</js>)
+ * 		),
+ * 		<jsm>section</jsm>(
+ * 			<jsm>h2</jsm>(<js>"Backend Development"</js>),
+ * 			<jsm>p</jsm>(<js>"Backend development handles..."</js>)
+ * 		)
+ * 	);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#article() article()}
+ * 		<li class='jm'>{@link HtmlBuilder#article(Object, Object...) article(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

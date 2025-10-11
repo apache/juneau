@@ -31,7 +31,6 @@ import org.apache.juneau.json.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
-@FluentSetters
 public abstract class SwaggerElement {
 
 	private boolean strict;
@@ -165,10 +164,6 @@ public abstract class SwaggerElement {
 		keySet().forEach(x -> m.put(x, get(x, Object.class)));
 		return m;
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 
 	@Override /* Object */
 	public String toString() {

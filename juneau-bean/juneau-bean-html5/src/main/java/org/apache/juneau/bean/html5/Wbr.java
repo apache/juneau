@@ -28,47 +28,58 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple word break
- * 	Wbr simple = new Wbr();
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Wbr with styling
- * 	Wbr styled = new Wbr()
- * 		._class("word-break");
+ * 	<jc>// Simple word break</jc>
+ * 	Wbr <jv>simple</jv> = <jsm>wbr</jsm>();
  *
- * 	// Wbr with ID
- * 	Wbr withId = new Wbr()
- * 		.id("word-break-1");
+ * 	<jc>// Wbr with styling</jc>
+ * 	Wbr <jv>styled</jv> = <jsm>wbr</jsm>()
+ * 		._class(<js>"word-break"</js>);
  *
- * 	// Wbr with styling
- * 	Wbr styled2 = new Wbr()
- * 		.style("display: inline;");
+ * 	<jc>// Wbr with ID</jc>
+ * 	Wbr <jv>withId</jv> = <jsm>wbr</jsm>()
+ * 		.id(<js>"word-break-1"</js>);
  *
- * 	// Wbr in long word
- * 	P longWord = new P()
- * 		.children(
- * 			"This is a very long word: ",
- * 			"supercalifragilisticexpialidocious",
- * 			new Wbr(),
- * 			" that might need to break."
- * 		);
+ * 	<jc>// Wbr with styling</jc>
+ * 	Wbr <jv>styled2</jv> = <jsm>wbr</jsm>()
+ * 		.style(<js>"display: inline;"</js>);
  *
- * 	// Wbr in URL
- * 	P longUrl = new P()
+ * 	<jc>// Wbr in long word</jc>
+ * 	P <jv>longWord</jv> = <jsm>p</jsm>(
+ * 		<js>"This is a very long word: "</js>,
+ * 		<js>"supercalifragilisticexpialidocious"</js>,
+ * 		<jsm>wbr</jsm>(),
+ * 		<js>" that might need to break."</js>
+ * 	);
+ *
+ * 	<jc>// Wbr in URL</jc>
+ * 	P longUrl = p()
  * 		.children(
  * 			"Visit: ",
  * 			"https://www.example.com/very/long/path/to/resource",
- * 			new Wbr(),
+ * 			wbr(),
  * 			" for more information."
  * 		);
  *
  * 	// Wbr in code
- * 	P code = new P()
+ * 	P code = p()
  * 		.children(
  * 			"Function: ",
  * 			"veryLongFunctionName",
- * 			new Wbr(),
+ * 			wbr(),
  * 			"()"
  * 		);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#wbr() wbr()}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

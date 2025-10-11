@@ -28,41 +28,46 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Product name in a sentence
- * 	B product = new B()
- * 		.children("Widget Pro");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Keywords in text
- * 	B keywords = new B()
- * 		.children("HTML", new B().children("CSS"), " and ", new B().children("JavaScript"));
+ * 	<jc>// Product name in a sentence</jc>
+ * 	B <jv>product</jv> = <jsm>b</jsm>(<js>"Widget Pro"</js>);
  * 
- * 	// Names or titles
- * 	B name = new B()
- * 		.children("Dr. Jane Smith");
+ * 	<jc>// Keywords in text</jc>
+ * 	B <jv>keywords</jv> = <jsm>b</jsm>(<js>"HTML"</js>, <jsm>b</jsm>(<js>"CSS"</js>), <js>" and "</js>, <jsm>b</jsm>(<js>"JavaScript"</js>));
  * 
- * 	// Stylistic offset without emphasis
- * 	B offset = new B()
- * 		._class("highlight")
- * 		.children("Important note");
+ * 	<jc>// Names or titles</jc>
+ * 	B <jv>name</jv> = <jsm>b</jsm>(<js>"Dr. Jane Smith"</js>);
  * 
- * 	// Text that needs visual distinction
- * 	B distinct = new B()
- * 		.children("User ID: 12345");
+ * 	<jc>// Stylistic offset without emphasis</jc>
+ * 	B <jv>offset</jv> = <jsm>b</jsm>(<js>"Important note"</js>)._class(<js>"highlight"</js>);
  * 
- * 	// Mixed content with bold text
- * 	B mixed = new B()
- * 		.children(
- * 			"Welcome to ",
- * 			new B().children("Our Website"),
- * 			" - the best place for ",
- * 			new B().children("quality products")
- * 		);
+ * 	<jc>// Text that needs visual distinction</jc>
+ * 	B <jv>distinct</jv> = <jsm>b</jsm>(<js>"User ID: 12345"</js>);
  * 
- * 	// Bold text with styling
- * 	B styled = new B()
- * 		._class("product-name")
- * 		.style("color: blue;")
- * 		.children("Amazing Widget");
+ * 	<jc>// Mixed content with bold text</jc>
+ * 	B <jv>mixed</jv> = <jsm>b</jsm>(
+ * 		<js>"Welcome to "</js>,
+ * 		<jsm>b</jsm>(<js>"Our Website"</js>),
+ * 		<js>" - the best place for "</js>,
+ * 		<jsm>b</jsm>(<js>"quality products"</js>)
+ * 	);
+ * 
+ * 	<jc>// Bold text with styling</jc>
+ * 	B <jv>styled</jv> = <jsm>b</jsm>(<js>"Amazing Widget"</js>)
+ * 		._class(<js>"product-name"</js>)
+ * 		.style(<js>"color: blue;"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#b() b()}
+ * 		<li class='jm'>{@link HtmlBuilder#b(Object, Object...) b(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

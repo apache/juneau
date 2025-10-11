@@ -73,7 +73,6 @@ import org.apache.juneau.marshaller.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
-@FluentSetters
 public class Items extends SwaggerElement {
 
 	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array"};
@@ -144,8 +143,7 @@ public class Items extends SwaggerElement {
 		return new Items(this);
 	}
 
-
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Items strict() {
 		super.strict();
 		return this;
@@ -666,11 +664,7 @@ public class Items extends SwaggerElement {
 		return this;
 	}
 
-	// <FluentSetters>
-
-	// </FluentSetters>
-
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -696,7 +690,7 @@ public class Items extends SwaggerElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Items set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -725,7 +719,7 @@ public class Items extends SwaggerElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(collectionFormat != null, "collectionFormat")

@@ -28,50 +28,56 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple section heading
- * 	H2 simple = new H2()
- * 		.children("Getting Started");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple section heading</jc>
+ * 	H2 <jv>simple</jv> = <jsm>h2</jsm>(<js>"Getting Started"</js>);
+ * 
+ * 	<jc>// H2 with styling</jc>
+ * 	H2 <jv>styled</jv> = <jsm>h2</jsm>(<js>"Product Features"</js>)
+ * 		._class(<js>"section-title"</js>);
+ * 
+ * 	<jc>// H2 with complex content</jc>
+ * 	H2 <jv>complex</jv> = <jsm>h2</jsm>(
+ * 		<js>"Chapter 2: "</js>,
+ * 		<jsm>strong</jsm>(<js>"Advanced Topics"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>em</jsm>(<js>"(Expert Level)"</js>)
+ * 	);
+ * 
+ * 	<jc>// H2 with ID</jc>
+ * 	H2 <jv>withId</jv> = <jsm>h2</jsm>(<js>"Installation Guide"</js>)
+ * 		.id(<js>"installation"</js>);
+ * 
+ * 	<jc>// H2 with styling</jc>
+ * 	H2 <jv>styled2</jv> = <jsm>h2</jsm>(<js>"Configuration Options"</js>)
+ * 		.style(<js>"color: #666; border-bottom: 2px solid #ccc; padding-bottom: 10px;"</js>);
+ * 
+ * 	<jc>// H2 with multiple elements</jc>
+ * 	H2 <jv>multiple</jv> = <jsm>h2</jsm>(
+ * 		<js>"Section 2.1: "</js>,
+ * 		<jsm>span</jsm>()._class(<js>"subsection"</js>).children(<js>"Basic Setup"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>small</jsm>(<js>"(Required)"</js>)
+ * 	);
+ * 
+ * 	<jc>// H2 with links</jc>
+ * 	H2 <jv>withLinks</jv> = <jsm>h2</jsm>(
+ * 		<js>"API Reference: "</js>,
+ * 		<jsm>a</jsm>(<js>"/api/users"</js>).children(<js>"User Management"</js>),
+ * 		<js>" Endpoints"</js>
+ * 	);
+ * </p>
  *
- * 	// H2 with styling
- * 	H2 styled = new H2()
- * 		._class("section-title")
- * 		.children("Product Features");
- *
- * 	// H2 with complex content
- * 	H2 complex = new H2()
- * 		.children(
- * 			"Chapter 2: ",
- * 			new Strong().children("Advanced Topics"),
- * 			" ",
- * 			new Em().children("(Expert Level)")
- * 		);
- *
- * 	// H2 with ID
- * 	H2 withId = new H2()
- * 		.id("installation")
- * 		.children("Installation Guide");
- *
- * 	// H2 with styling
- * 	H2 styled2 = new H2()
- * 		.style("color: #666; border-bottom: 2px solid #ccc; padding-bottom: 10px;")
- * 		.children("Configuration Options");
- *
- * 	// H2 with multiple elements
- * 	H2 multiple = new H2()
- * 		.children(
- * 			"Section 2.1: ",
- * 			new Span()._class("subsection").children("Basic Setup"),
- * 			" ",
- * 			new Small().children("(Required)")
- * 		);
- *
- * 	// H2 with links
- * 	H2 withLinks = new H2()
- * 		.children(
- * 			"API Reference: ",
- * 			new A().href("/api/users").children("User Management"),
- * 			" Endpoints"
- * 		);
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#h2() h2()}
+ * 		<li class='jm'>{@link HtmlBuilder#h2(Object, Object...) h2(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

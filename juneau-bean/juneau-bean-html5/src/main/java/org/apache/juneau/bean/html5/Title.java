@@ -28,29 +28,25 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple page title
- * 	Title simple = new Title()
- * 		.text("Welcome to My Website");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Title with dynamic content
- * 	Title dynamic = new Title()
- * 		.text("User Dashboard - " + username);
+ * 	<jc>// Simple page title</jc>
+ * 	Title <jv>simple</jv> = <jsm>title</jsm>(<js>"Welcome to My Website"</js>);
  * 
- * 	// Title with branding
- * 	Title branded = new Title()
- * 		.text("About Us | My Company");
+ * 	<jc>// Title with dynamic content</jc>
+ * 	Title <jv>dynamic</jv> = <jsm>title</jsm>(<js>"User Dashboard - "</js> + <jv>username</jv>);
  * 
- * 	// Title with SEO keywords
- * 	Title seo = new Title()
- * 		.text("Best Coffee Shops in Seattle - 2024 Guide");
+ * 	<jc>// Title with branding</jc>
+ * 	Title <jv>branded</jv> = <jsm>title</jsm>(<js>"About Us | My Company"</js>);
  * 
- * 	// Title with separator
- * 	Title separated = new Title()
- * 		.text("Contact Us - Get in Touch");
+ * 	<jc>// Title with SEO keywords</jc>
+ * 	Title <jv>seo</jv> = <jsm>title</jsm>(<js>"Best Coffee Shops in Seattle - 2024 Guide"</js>);
  * 
- * 	// Title with emoji
- * 	Title emoji = new Title()
- * 		.text("🎉 Welcome to Our Store!");
+ * 	<jc>// Title with separator</jc>
+ * 	Title <jv>separated</jv> = <jsm>title</jsm>(<js>"Contact Us - Get in Touch"</js>);
+ * 
+ * 	<jc>// Title with emoji</jc>
+ * 	Title <jv>emoji</jv> = <jsm>title</jsm>(<js>"🎉 Welcome to Our Store!"</js>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -27,37 +27,33 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple table body with data rows
- * 	Tbody simple = new Tbody()
- * 		.children(
- * 			new Tr()
- * 				.children(
- * 					new Td().children("John"),
- * 					new Td().children("25"),
- * 					new Td().children("New York")
- * 				),
- * 			new Tr()
- * 				.children(
- * 					new Td().children("Jane"),
- * 					new Td().children("30"),
- * 					new Td().children("Los Angeles")
- * 				)
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Table body with styling
- * 	Tbody styled = new Tbody()
- * 		._class("data-rows")
- * 		.children(
- * 			new Tr()
- * 				.children(
- * 					new Td().children("Product A"),
- * 					new Td().children("100"),
- * 					new Td().children("$10.00")
- * 				)
- * 		);
+ * 	<jc>// Simple table body with data rows</jc>
+ * 	Tbody <jv>simple</jv> = <jsm>tbody</jsm>(
+ * 		<jsm>tr</jsm>(
+ * 			<jsm>td</jsm>(<js>"John"</js>),
+ * 			<jsm>td</jsm>(<js>"25"</js>),
+ * 			<jsm>td</jsm>(<js>"New York"</js>)
+ * 		),
+ * 		<jsm>tr</jsm>(
+ * 			<jsm>td</jsm>(<js>"Jane"</js>),
+ * 			<jsm>td</jsm>(<js>"30"</js>),
+ * 			<jsm>td</jsm>(<js>"Los Angeles"</js>)
+ * 		)
+ * 	);
  * 
- * 	// Table body with multiple rows
- * 	Tbody multiple = new Tbody()
+ * 	<jc>// Table body with styling</jc>
+ * 	Tbody <jv>styled</jv> = <jsm>tbody</jsm>(
+ * 		<jsm>tr</jsm>(
+ * 			<jsm>td</jsm>(<js>"Product A"</js>),
+ * 			<jsm>td</jsm>(<js>"100"</js>),
+ * 			<jsm>td</jsm>(<js>"$10.00"</js>)
+ * 		)
+ * 	)._class(<js>"data-rows"</js>);
+ * 
+ * 	<jc>// Table body with multiple rows</jc>
+ * 	Tbody <jv>multiple</jv> = <jsm>tbody</jsm>(
  * 		.children(
  * 			new Tr()
  * 				.children(

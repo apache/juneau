@@ -29,40 +29,36 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple ruby text
- * 	Rt simple = new Rt()
- * 		.children("かんじ");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Rt with styling
- * 	Rt styled = new Rt()
- * 		._class("ruby-text")
- * 		.children("にほんご");
+ * 	<jc>// Simple ruby text</jc>
+ * 	Rt <jv>simple</jv> = <jsm>rt</jsm>(<js>"かんじ"</js>);
  *
- * 	// Rt with complex content
- * 	Rt complex = new Rt()
- * 		.children(
- * 			"ふくざつな",
- * 			new Strong().children("かんじ"),
- * 			"のれい"
- * 		);
+ * 	<jc>// Rt with styling</jc>
+ * 	Rt <jv>styled</jv> = <jsm>rt</jsm>(<js>"にほんご"</js>)
+ * 		._class(<js>"ruby-text"</js>);
  *
- * 	// Rt with ID
- * 	Rt withId = new Rt()
- * 		.id("ruby-text-1")
- * 		.children("かんじ");
+ * 	<jc>// Rt with complex content</jc>
+ * 	Rt <jv>complex</jv> = <jsm>rt</jsm>(
+ * 		<js>"ふくざつな"</js>,
+ * 		<jsm>strong</jsm>(<js>"かんじ"</js>),
+ * 		<js>"のれい"</js>
+ * 	);
  *
- * 	// Rt with styling
- * 	Rt styled2 = new Rt()
- * 		.style("font-size: 0.8em; color: #666;")
- * 		.children("かんじ");
+ * 	<jc>// Rt with ID</jc>
+ * 	Rt <jv>withId</jv> = <jsm>rt</jsm>(<js>"かんじ"</js>)
+ * 		.id(<js>"ruby-text-1"</js>);
  *
- * 	// Rt with multiple elements
- * 	Rt multiple = new Rt()
- * 		.children(
- * 			"ふくざつな",
- * 			new Rt().children("かんじ"),
- * 			"の",
- * 			new Rt().children("れい")
+ * 	<jc>// Rt with styling</jc>
+ * 	Rt <jv>styled2</jv> = <jsm>rt</jsm>(<js>"かんじ"</js>)
+ * 		.style(<js>"font-size: 0.8em; color: #666;"</js>);
+ *
+ * 	<jc>// Rt with multiple elements</jc>
+ * 	Rt <jv>multiple</jv> = <jsm>rt</jsm>(
+ * 		<js>"ふくざつな"</js>,
+ * 		<jsm>rt</jsm>(<js>"かんじ"</js>),
+ * 		<js>"の"</js>,
+ * 		<jsm>rt</jsm>(<js>"れい"</js>)
  * 		);
  *
  * 	// Rt with links

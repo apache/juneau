@@ -27,64 +27,67 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple unordered list
- * 	Ul simple = new Ul()
- * 		.children(
- * 			new Li().children("First item"),
- * 			new Li().children("Second item"),
- * 			new Li().children("Third item")
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Navigation menu
- * 	Ul navigation = new Ul()
- * 		._class("nav-menu")
- * 		.children(
- * 			new Li().children(new A().href("/home").children("Home")),
- * 			new Li().children(new A().href("/about").children("About")),
- * 			new Li().children(new A().href("/contact").children("Contact"))
- * 		);
+ * 	<jc>// Simple unordered list</jc>
+ * 	Ul <jv>simple</jv> = <jsm>ul</jsm>(
+ * 		<jsm>li</jsm>(<js>"First item"</js>),
+ * 		<jsm>li</jsm>(<js>"Second item"</js>),
+ * 		<jsm>li</jsm>(<js>"Third item"</js>)
+ * 	);
  * 
- * 	// Feature list
- * 	Ul features = new Ul()
- * 		._class("feature-list")
- * 		.children(
- * 			new Li().children("Fast performance"),
- * 			new Li().children("Easy to use"),
- * 			new Li().children("24/7 support")
- * 		);
+ * 	<jc>// Navigation menu</jc>
+ * 	Ul <jv>navigation</jv> = <jsm>ul</jsm>(
+ * 		<jsm>li</jsm>(<jsm>a</jsm>(<js>"/home"</js>, <js>"Home"</js>)),
+ * 		<jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>)),
+ * 		<jsm>li</jsm>(<jsm>a</jsm>(<js>"/contact"</js>, <js>"Contact"</js>))
+ * 	)._class(<js>"nav-menu"</js>);
  * 
- * 	// List with styling
- * 	Ul styled = new Ul()
- * 		._class("custom-list")
- * 		.style("list-style-type: square;")
- * 		.children(
- * 			new Li().children("Styled item 1"),
- * 			new Li().children("Styled item 2")
- * 		);
+ * 	<jc>// Feature list</jc>
+ * 	Ul <jv>features</jv> = <jsm>ul</jsm>(
+ * 		<jsm>li</jsm>(<js>"Fast performance"</js>),
+ * 		<jsm>li</jsm>(<js>"Easy to use"</js>),
+ * 		<jsm>li</jsm>(<js>"24/7 support"</js>)
+ * 	)._class(<js>"feature-list"</js>);
  * 
- * 	// Nested list
- * 	Ul nested = new Ul()
- * 		.children(
- * 			new Li().children("Main item 1"),
- * 			new Li().children(
- * 				"Main item 2",
- * 				new Ul().children(
- * 					new Li().children("Sub item 1"),
- * 					new Li().children("Sub item 2")
- * 				)
+ * 	<jc>// List with styling</jc>
+ * 	Ul <jv>styled</jv> = <jsm>ul</jsm>(
+ * 		<jsm>li</jsm>(<js>"Styled item 1"</js>),
+ * 		<jsm>li</jsm>(<js>"Styled item 2"</js>)
+ * 	)._class(<js>"custom-list"</js>).style(<js>"list-style-type: square;"</js>);
+ * 
+ * 	<jc>// Nested list</jc>
+ * 	Ul <jv>nested</jv> = <jsm>ul</jsm>(
+ * 		<jsm>li</jsm>(<js>"Main item 1"</js>),
+ * 		<jsm>li</jsm>(
+ * 			<js>"Main item 2"</js>,
+ * 			<jsm>ul</jsm>(
+ * 				<jsm>li</jsm>(<js>"Sub item 1"</js>),
+ * 				<jsm>li</jsm>(<js>"Sub item 2"</js>)
  * 			)
- * 		);
+ * 		)
+ * 	);
  * 
- * 	// List with complex content
- * 	Ul complex = new Ul()
- * 		.children(
- * 			new Li().children(
- * 				new Strong().children("Important"),
- * 				" item with ",
- * 				new Em().children("emphasis")
- * 			),
- * 			new Li().children("Simple item")
- * 		);
+ * 	<jc>// List with complex content</jc>
+ * 	Ul <jv>complex</jv> = <jsm>ul</jsm>(
+ * 		<jsm>li</jsm>(
+ * 			<jsm>strong</jsm>(<js>"Important"</js>),
+ * 			<js>" item with "</js>,
+ * 			<jsm>em</jsm>(<js>"emphasis"</js>)
+ * 		),
+ * 		<jsm>li</jsm>(<js>"Simple item"</js>)
+ * 	);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#ul() ul()}
+ * 		<li class='jm'>{@link HtmlBuilder#ul(Object, Object...) ul(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

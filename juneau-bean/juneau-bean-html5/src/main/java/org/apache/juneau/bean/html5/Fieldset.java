@@ -26,30 +26,38 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple fieldset with legend
- * 	Fieldset fieldset1 = new Fieldset()
- * 		.children(
- * 			new Legend().text("Personal Information"),
- * 			new Input().type("text").name("firstName").placeholder("First Name"),
- * 			new Input().type("text").name("lastName").placeholder("Last Name")
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Disabled fieldset
- * 	Fieldset fieldset2 = new Fieldset()
- * 		.disabled(true)
- * 		.children(
- * 			new Legend().text("Disabled Section"),
- * 			new Input().type("text").name("disabledField").value("Cannot edit")
- * 		);
+ * 	<jc>// Simple fieldset with legend</jc>
+ * 	Fieldset <jv>fieldset1</jv> = <jsm>fieldset</jsm>(
+ * 		<jsm>legend</jsm>(<js>"Personal Information"</js>),
+ * 		<jsm>input</jsm>(<js>"text"</js>).name(<js>"firstName"</js>).placeholder(<js>"First Name"</js>),
+ * 		<jsm>input</jsm>(<js>"text"</js>).name(<js>"lastName"</js>).placeholder(<js>"Last Name"</js>)
+ * 	);
  * 
- * 	// Fieldset with custom styling
- * 	Fieldset fieldset3 = new Fieldset()
- * 		._class("form-group")
- * 		.children(
- * 			new Legend().text("Contact Details"),
- * 			new Input().type("email").name("email").placeholder("Email"),
- * 			new Input().type("tel").name("phone").placeholder("Phone")
- * 		);
+ * 	<jc>// Disabled fieldset</jc>
+ * 	Fieldset <jv>fieldset2</jv> = <jsm>fieldset</jsm>(
+ * 		<jsm>legend</jsm>(<js>"Disabled Section"</js>),
+ * 		<jsm>input</jsm>(<js>"text"</js>).name(<js>"disabledField"</js>).value(<js>"Cannot edit"</js>)
+ * 	).disabled(<jk>true</jk>);
+ * 
+ * 	<jc>// Fieldset with custom styling</jc>
+ * 	Fieldset <jv>fieldset3</jv> = <jsm>fieldset</jsm>(
+ * 		<jsm>legend</jsm>(<js>"Contact Details"</js>),
+ * 		<jsm>input</jsm>(<js>"email"</js>).name(<js>"email"</js>).placeholder(<js>"Email"</js>),
+ * 		<jsm>input</jsm>(<js>"tel"</js>).name(<js>"phone"</js>).placeholder(<js>"Phone"</js>)
+ * 	)._class(<js>"form-group"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#fieldset() fieldset()}
+ * 		<li class='jm'>{@link HtmlBuilder#fieldset(Object, Object...) fieldset(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -93,7 +101,7 @@ public class Fieldset extends HtmlElementMixed {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	public Fieldset disabled(Boolean value) {
+	public Fieldset disabled(Object value) {
 		attr("disabled", deminimize(value, "disabled"));
 		return this;
 	}

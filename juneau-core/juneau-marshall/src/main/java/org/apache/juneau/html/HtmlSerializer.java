@@ -156,6 +156,9 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	/** Default serializer, single quotes, whitespace added. */
 	public static final HtmlSerializer DEFAULT_SQ_READABLE = new HtmlSerializer.SqReadable(create());
 
+	/** Default serializer, single quotes, simplified (no JSON type tags on strings). */
+	public static final HtmlSerializer DEFAULT_SIMPLE_SQ = new HtmlSerializer(create().sq().disableJsonTags());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -455,6 +458,20 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			disableDetectLinksInStrings = value;
 			return this;
 		}
+
+	@Override /* XmlSerializer.Builder */
+	@FluentSetter
+	public Builder disableJsonTags() {
+		super.disableJsonTags();
+		return this;
+	}
+
+	@Override /* XmlSerializer.Builder */
+	@FluentSetter
+	public Builder disableJsonTags(boolean value) {
+		super.disableJsonTags(value);
+		return this;
+	}
 
 		/**
 		 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Link label parameter name.

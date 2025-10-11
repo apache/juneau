@@ -28,50 +28,45 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple marked text
- * 	Mark simple = new Mark()
- * 		.children("This text is highlighted");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Mark with styling
- * 	Mark styled = new Mark()
- * 		._class("highlight")
- * 		.children("Styled highlighted text");
+ * 	<jc>// Simple marked text</jc>
+ * 	Mark <jv>simple</jv> = <jsm>mark</jsm>(<js>"This text is highlighted"</js>);
  *
- * 	// Mark with complex content
- * 	Mark complex = new Mark()
- * 		.children(
- * 			"The ",
- * 			new Strong().children("important"),
- * 			" information is highlighted."
- * 		);
+ * 	<jc>// Mark with styling</jc>
+ * 	Mark <jv>styled</jv> = <jsm>mark</jsm>(<js>"Styled highlighted text"</js>)
+ * 		._class(<js>"highlight"</js>);
  *
- * 	// Mark with ID
- * 	Mark withId = new Mark()
- * 		.id("highlighted-text")
- * 		.children("Text with ID");
+ * 	<jc>// Mark with complex content</jc>
+ * 	Mark <jv>complex</jv> = <jsm>mark</jsm>(
+ * 		<js>"The "</js>,
+ * 		<jsm>strong</jsm>(<js>"important"</js>),
+ * 		<js>" information is highlighted."</js>
+ * 	);
  *
- * 	// Mark with styling
- * 	Mark styled2 = new Mark()
- * 		.style("background-color: #ffeb3b; color: #000; padding: 2px 4px;")
- * 		.children("Custom styled highlighted text");
+ * 	<jc>// Mark with ID</jc>
+ * 	Mark <jv>withId</jv> = <jsm>mark</jsm>(<js>"Text with ID"</js>)
+ * 		.id(<js>"highlighted-text"</js>);
  *
- * 	// Mark with multiple elements
- * 	Mark multiple = new Mark()
- * 		.children(
- * 			"The ",
- * 			new Mark().children("key points"),
- * 			" are ",
- * 			new Mark().children("highlighted"),
- * 			" for emphasis."
- * 		);
+ * 	<jc>// Mark with styling</jc>
+ * 	Mark <jv>styled2</jv> = <jsm>mark</jsm>(<js>"Custom styled highlighted text"</js>)
+ * 		.style(<js>"background-color: #ffeb3b; color: #000; padding: 2px 4px;"</js>);
  *
- * 	// Mark with links
- * 	Mark withLinks = new Mark()
- * 		.children(
- * 			"See ",
- * 			new A().href("/search").children("search results"),
- * 			" for more information."
- * 		);
+ * 	<jc>// Mark with multiple elements</jc>
+ * 	Mark <jv>multiple</jv> = <jsm>mark</jsm>(
+ * 		<js>"The "</js>,
+ * 		<jsm>mark</jsm>(<js>"key points"</js>),
+ * 		<js>" are "</js>,
+ * 		<jsm>mark</jsm>(<js>"highlighted"</js>),
+ * 		<js>" for emphasis."</js>
+ * 	);
+ *
+ * 	<jc>// Mark with links</jc>
+ * 	Mark <jv>withLinks</jv> = <jsm>mark</jsm>(
+ * 		<js>"See "</js>,
+ * 		<jsm>a</jsm>(<js>"/search"</js>, <js>"search results"</js>),
+ * 		<js>" for more information."</js>
+ * 	);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

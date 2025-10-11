@@ -28,49 +28,55 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple sub-sub-subsection heading
- * 	H5 simple = new H5()
- * 		.children("Connection Settings");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple sub-sub-subsection heading</jc>
+ * 	H5 <jv>simple</jv> = <jsm>h5</jsm>(<js>"Connection Settings"</js>);
+ * 
+ * 	<jc>// H5 with styling</jc>
+ * 	H5 <jv>styled</jv> = <jsm>h5</jsm>(<js>"Timeout Configuration"</js>)
+ * 		._class(<js>"detail-heading"</js>);
+ * 
+ * 	<jc>// H5 with complex content</jc>
+ * 	H5 <jv>complex</jv> = <jsm>h5</jsm>(
+ * 		<js>"5.1 "</js>,
+ * 		<jsm>strong</jsm>(<js>"Connection Pool Settings"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>em</jsm>(<js>"(Optional)"</js>)
+ * 	);
+ * 
+ * 	<jc>// H5 with ID</jc>
+ * 	H5 <jv>withId</jv> = <jsm>h5</jsm>(<js>"SSL Configuration"</js>)
+ * 		.id(<js>"ssl-config"</js>);
+ * 
+ * 	<jc>// H5 with styling</jc>
+ * 	H5 <jv>styled2</jv> = <jsm>h5</jsm>(<js>"Additional Parameters"</js>)
+ * 		.style(<js>"color: #aaa; font-size: 0.9em;"</js>);
+ * 
+ * 	<jc>// H5 with multiple elements</jc>
+ * 	H5 <jv>multiple</jv> = <jsm>h5</jsm>(
+ * 		<js>"5.1.1 "</js>,
+ * 		<jsm>span</jsm>()._class(<js>"param-title"</js>).children(<js>"Max Connections"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>small</jsm>(<js>"(Default: 10)"</js>)
+ * 	);
+ * 
+ * 	<jc>// H5 with links</jc>
+ * 	H5 <jv>withLinks</jv> = <jsm>h5</jsm>(
+ * 		<js>"See: "</js>,
+ * 		<jsm>a</jsm>(<js>"/docs/ssl"</js>).children(<js>"SSL Documentation"</js>)
+ * 	);
+ * </p>
  *
- * 	// H5 with styling
- * 	H5 styled = new H5()
- * 		._class("detail-heading")
- * 		.children("Timeout Configuration");
- *
- * 	// H5 with complex content
- * 	H5 complex = new H5()
- * 		.children(
- * 			"5.1 ",
- * 			new Strong().children("Connection Pool Settings"),
- * 			" ",
- * 			new Em().children("(Optional)")
- * 		);
- *
- * 	// H5 with ID
- * 	H5 withId = new H5()
- * 		.id("ssl-config")
- * 		.children("SSL Configuration");
- *
- * 	// H5 with styling
- * 	H5 styled2 = new H5()
- * 		.style("color: #aaa; font-size: 0.9em;")
- * 		.children("Additional Parameters");
- *
- * 	// H5 with multiple elements
- * 	H5 multiple = new H5()
- * 		.children(
- * 			"5.1.1 ",
- * 			new Span()._class("param-title").children("Max Connections"),
- * 			" ",
- * 			new Small().children("(Default: 10)")
- * 		);
- *
- * 	// H5 with links
- * 	H5 withLinks = new H5()
- * 		.children(
- * 			"See: ",
- * 			new A().href("/docs/ssl").children("SSL Documentation")
- * 		);
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#h5() h5()}
+ * 		<li class='jm'>{@link HtmlBuilder#h5(Object, Object...) h5(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

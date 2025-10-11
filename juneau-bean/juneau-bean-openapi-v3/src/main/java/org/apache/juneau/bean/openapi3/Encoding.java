@@ -70,7 +70,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@FluentSetters
 public class Encoding extends OpenApiElement{
 
 	private String contentType,
@@ -108,13 +107,13 @@ public class Encoding extends OpenApiElement{
 		return new Encoding(this);
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	protected Encoding strict() {
 		super.strict();
 		return this;
 	}
 
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public Encoding strict(Object value) {
 		super.strict(value);
 		return this;
@@ -270,11 +269,7 @@ public class Encoding extends OpenApiElement{
 		return this;
 	}
 
-	// <FluentSetters>
-
-	// </FluentSetters>
-
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -287,7 +282,7 @@ public class Encoding extends OpenApiElement{
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public Encoding set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -303,7 +298,7 @@ public class Encoding extends OpenApiElement{
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(allowReserved != null, "allowReserved")

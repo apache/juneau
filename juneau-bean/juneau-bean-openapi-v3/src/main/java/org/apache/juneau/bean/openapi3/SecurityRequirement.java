@@ -27,7 +27,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@FluentSetters
 public class SecurityRequirement extends OpenApiElement {
 
 	private Map<String,List<String>> requirements;
@@ -123,7 +122,7 @@ public class SecurityRequirement extends OpenApiElement {
 		return addRequirement(schemeName);
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -132,7 +131,7 @@ public class SecurityRequirement extends OpenApiElement {
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public SecurityRequirement set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -144,7 +143,7 @@ public class SecurityRequirement extends OpenApiElement {
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(requirements != null, "requirements")
@@ -152,19 +151,16 @@ public class SecurityRequirement extends OpenApiElement {
 		return new MultiSet<>(s, super.keySet());
 	}
 
-	// <FluentSetters>
-
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public SecurityRequirement strict() {
 		super.strict();
 		return this;
 	}
 
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public SecurityRequirement strict(Object value) {
 		super.strict(value);
 		return this;
 	}
 
-	// </FluentSetters>
 }

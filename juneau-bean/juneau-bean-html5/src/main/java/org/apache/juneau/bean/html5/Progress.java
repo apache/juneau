@@ -29,45 +29,45 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple progress bar
- * 	Progress simple = new Progress()
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ *
+ * 	<jc>// Simple progress bar</jc>
+ * 	Progress <jv>simple</jv> = <jsm>progress</jsm>()
  * 		.value(50)
  * 		.max(100);
  *
- * 	// Progress with styling
- * 	Progress styled = new Progress()
- * 		._class("file-upload-progress")
+ * 	<jc>// Progress with styling</jc>
+ * 	Progress <jv>styled</jv> = <jsm>progress</jsm>()
+ * 		._class(<js>"file-upload-progress"</js>)
  * 		.value(75)
  * 		.max(100);
  *
- * 	// Progress with complex content
- * 	Progress complex = new Progress()
+ * 	<jc>// Progress with complex content</jc>
+ * 	Progress <jv>complex</jv> = <jsm>progress</jsm>(<js>"60% complete"</js>)
  * 		.value(60)
- * 		.max(100)
- * 		.children("60% complete");
+ * 		.max(100);
  *
- * 	// Progress with ID
- * 	Progress withId = new Progress()
- * 		.id("download-progress")
+ * 	<jc>// Progress with ID</jc>
+ * 	Progress <jv>withId</jv> = <jsm>progress</jsm>()
+ * 		.id(<js>"download-progress"</js>)
  * 		.value(30)
  * 		.max(100);
  *
- * 	// Progress with styling
- * 	Progress styled2 = new Progress()
- * 		.style("width: 300px; height: 20px;")
+ * 	<jc>// Progress with styling</jc>
+ * 	Progress <jv>styled2</jv> = <jsm>progress</jsm>()
+ * 		.style(<js>"width: 300px; height: 20px;"</js>)
  * 		.value(40)
  * 		.max(100);
  *
- * 	// Progress with multiple attributes
- * 	Progress multiple = new Progress()
+ * 	<jc>// Progress with multiple attributes</jc>
+ * 	Progress <jv>multiple</jv> = <jsm>progress</jsm>(<js>"85% complete"</js>)
  * 		.value(85)
  * 		.max(100)
- * 		.title("Upload Progress: 85%")
- * 		.children("85% complete");
+ * 		.title(<js>"Upload Progress: 85%"</js>);
  *
- * 	// Progress with form
- * 	Progress withForm = new Progress()
- * 		.form("upload-form")
+ * 	<jc>// Progress with form</jc>
+ * 	Progress <jv>withForm</jv> = <jsm>progress</jsm>()
+ * 		.form(<js>"upload-form"</js>)
  * 		.value(25)
  * 		.max(100);
  *

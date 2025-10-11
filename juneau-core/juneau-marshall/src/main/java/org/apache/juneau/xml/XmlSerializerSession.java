@@ -547,8 +547,10 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		String en = elementName;
 		if (en == null && ! isRaw) {
-			en = type.toString();
-			type = null;
+			if (isAddJsonTags()) {
+				en = type.toString();
+				type = null;
+			}
 		}
 
 		boolean encodeEn = elementName != null;
@@ -825,13 +827,15 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				for (Object value : c) {
 					serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 				}
-			} else {
-				serializeAnything(out, content, contentType, null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
-			}
 		} else {
-			out.attr("nil", "true").w('>').nlIf(! isMixedOrText, indent);
+			serializeAnything(out, content, contentType, null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 		}
-		return isMixedOrText ? CR_MIXED : CR_ELEMENTS;
+	} else {
+		if (isAddJsonTags())
+			out.attr("nil", "true");
+		out.w('>').nlIf(! isMixedOrText, indent);
+	}
+	return isMixedOrText ? CR_MIXED : CR_ELEMENTS;
 	}
 
 	private XmlWriter serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType,
@@ -993,5 +997,20 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 */
 	public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return bpm == null ? XmlBeanPropertyMeta.DEFAULT : ctx.getXmlBeanPropertyMeta(bpm);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Add JSON type tags.
+	 *
+	 * @see XmlSerializer.Builder#disableJsonTags()
+	 * @return
+	 * 	<jk>true</jk> if plain strings will be wrapped in <js>&lt;string&gt;</js> tags when serialized as root elements.
+	 */
+	protected final boolean isAddJsonTags() {
+		return ctx.addJsonTags;
 	}
 }

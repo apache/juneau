@@ -28,40 +28,36 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple ruby parenthesis
- * 	Rp simple = new Rp()
- * 		.children("(");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Rp with styling
- * 	Rp styled = new Rp()
- * 		._class("ruby-paren")
- * 		.children(")");
+ * 	<jc>// Simple ruby parenthesis</jc>
+ * 	Rp <jv>simple</jv> = <jsm>rp</jsm>(<js>"("</js>);
  *
- * 	// Rp with complex content
- * 	Rp complex = new Rp()
- * 		.children(
- * 			"(",
- * 			new Strong().children("注"),
- * 			")"
- * 		);
+ * 	<jc>// Rp with styling</jc>
+ * 	Rp <jv>styled</jv> = <jsm>rp</jsm>(<js>")"</js>)
+ * 		._class(<js>"ruby-paren"</js>);
  *
- * 	// Rp with ID
- * 	Rp withId = new Rp()
- * 		.id("ruby-paren-1")
- * 		.children("(");
+ * 	<jc>// Rp with complex content</jc>
+ * 	Rp <jv>complex</jv> = <jsm>rp</jsm>(
+ * 		<js>"("</js>,
+ * 		<jsm>strong</jsm>(<js>"注"</js>),
+ * 		<js>")"</js>
+ * 	);
  *
- * 	// Rp with styling
- * 	Rp styled2 = new Rp()
- * 		.style("color: #999; font-size: 0.8em;")
- * 		.children(")");
+ * 	<jc>// Rp with ID</jc>
+ * 	Rp <jv>withId</jv> = <jsm>rp</jsm>(<js>"("</js>)
+ * 		.id(<js>"ruby-paren-1"</js>);
  *
- * 	// Rp with multiple elements
- * 	Rp multiple = new Rp()
- * 		.children(
- * 			"(",
- * 			new Rp().children("注"),
- * 			")"
- * 		);
+ * 	<jc>// Rp with styling</jc>
+ * 	Rp <jv>styled2</jv> = <jsm>rp</jsm>(<js>")"</js>)
+ * 		.style(<js>"color: #999; font-size: 0.8em;"</js>);
+ *
+ * 	<jc>// Rp with multiple elements</jc>
+ * 	Rp <jv>multiple</jv> = <jsm>rp</jsm>(
+ * 		<js>"("</js>,
+ * 		<jsm>rp</jsm>(<js>"注"</js>),
+ * 		<js>")"</js>
+ * 	);
  *
  * 	// Rp with links
  * 	Rp withLinks = new Rp()

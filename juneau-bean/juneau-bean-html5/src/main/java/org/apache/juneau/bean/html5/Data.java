@@ -28,51 +28,52 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple data element
- * 	Data simple = new Data()
- * 		.value("12345")
- * 		.children("Product #12345");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple data element</jc>
+ * 	Data <jv>simple</jv> = <jsm>data</jsm>(<js>"12345"</js>, <js>"Product #12345"</js>);
+ * 
+ * 	<jc>// Data with styling</jc>
+ * 	Data <jv>styled</jv> = <jsm>data</jsm>(<js>"USD"</js>, <js>"US Dollar"</js>)
+ * 		._class(<js>"currency"</js>);
+ * 
+ * 	<jc>// Data in a sentence</jc>
+ * 	P <jv>sentence</jv> = <jsm>p</jsm>(
+ * 		<js>"Price: "</js>,
+ * 		<jsm>data</jsm>(<js>"29.99"</js>, <js>"$29.99"</js>),
+ * 		<js>" per item"</js>
+ * 	);
+ * 
+ * 	<jc>// Data with complex content</jc>
+ * 	Data <jv>complex</jv> = <jsm>data</jsm>(<js>"2024-01-15"</js>,
+ * 		<js>"January 15, 2024"</js>,
+ * 		<jsm>span</jsm>()._class(<js>"date"</js>).children(<js>" (Monday)"</js>)
+ * 	);
+ * 
+ * 	<jc>// Data with multiple attributes</jc>
+ * 	Data <jv>multiple</jv> = <jsm>data</jsm>(<js>"SKU-12345"</js>, <js>"SKU: 12345"</js>)
+ * 		._class(<js>"product-sku"</js>)
+ * 		.title(<js>"Product SKU"</js>);
+ * 
+ * 	<jc>// Data with ID</jc>
+ * 	Data <jv>withId</jv> = <jsm>data</jsm>(<js>"user-123"</js>, <js>"User ID: 123"</js>)
+ * 		.id(<js>"user-id"</js>)
+ * 		.children(<js>"User ID: 123"</js>);
+ * 
+ * 	<jc>// Data with styling</jc>
+ * 	Data <jv>styled2</jv> = <jsm>data</jsm>(<js>"active"</js>, <js>"Active"</js>)
+ * 		.style(<js>"color: green; font-weight: bold;"</js>);
+ * </p>
  *
- * 	// Data with styling
- * 	Data styled = new Data()
- * 		.value("USD")
- * 		._class("currency")
- * 		.children("US Dollar");
- *
- * 	// Data in a sentence
- * 	P sentence = new P()
- * 		.children(
- * 			"Price: ",
- * 			new Data().value("29.99").children("$29.99"),
- * 			" per item"
- * 		);
- *
- * 	// Data with complex content
- * 	Data complex = new Data()
- * 		.value("2024-01-15")
- * 		.children(
- * 			"January 15, 2024",
- * 			new Span()._class("date").children(" (Monday)")
- * 		);
- *
- * 	// Data with multiple attributes
- * 	Data multiple = new Data()
- * 		.value("SKU-12345")
- * 		._class("product-sku")
- * 		.title("Product SKU")
- * 		.children("SKU: 12345");
- *
- * 	// Data with ID
- * 	Data withId = new Data()
- * 		.value("user-123")
- * 		.id("user-id")
- * 		.children("User ID: 123");
- *
- * 	// Data with styling
- * 	Data styled2 = new Data()
- * 		.value("active")
- * 		.style("color: green; font-weight: bold;")
- * 		.children("Active");
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#data() data()}
+ * 		<li class='jm'>{@link HtmlBuilder#data(Object, Object...) data(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -30,31 +30,44 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Inline JavaScript
- * 	Script script1 = new Script()
- * 		.text("console.log('Hello, World!');");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// External JavaScript file
- * 	Script script2 = new Script()
- * 		.src("https://example.com/script.js")
- * 		.type("text/javascript");
+ * 	<jc>// Inline JavaScript</jc>
+ * 	Script <jv>script1</jv> = <jsm>script</jsm>()
+ * 		.text(<js>"console.log('Hello, World!');"</js>);
  * 
- * 	// Async script loading
- * 	Script script3 = new Script()
- * 		.src("https://example.com/analytics.js")
- * 		.async(true)
- * 		.defer(true);
+ * 	<jc>// External JavaScript file</jc>
+ * 	Script <jv>script2</jv> = <jsm>script</jsm>()
+ * 		.src(<js>"https://example.com/script.js"</js>)
+ * 		.type(<js>"text/javascript"</js>);
  * 
- * 	// Script with integrity check
- * 	Script script4 = new Script()
- * 		.src("https://example.com/library.js")
- * 		.integrity("sha384-...")
- * 		.crossorigin("anonymous");
+ * 	<jc>// Async script loading</jc>
+ * 	Script <jv>script3</jv> = <jsm>script</jsm>()
+ * 		.src(<js>"https://example.com/analytics.js"</js>)
+ * 		.async(<jk>true</jk>)
+ * 		.defer(<jk>true</jk>);
  * 
- * 	// Module script
- * 	Script script5 = new Script()
- * 		.src("https://example.com/module.js")
- * 		.type("module");
+ * 	<jc>// Script with integrity check</jc>
+ * 	Script <jv>script4</jv> = <jsm>script</jsm>()
+ * 		.src(<js>"https://example.com/library.js"</js>)
+ * 		.integrity(<js>"sha384-..."</js>)
+ * 		.crossorigin(<js>"anonymous"</js>);
+ * 
+ * 	<jc>// Module script</jc>
+ * 	Script <jv>script5</jv> = <jsm>script</jsm>()
+ * 		.src(<js>"https://example.com/module.js"</js>)
+ * 		.type(<js>"module"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#script() script()}
+ * 		<li class='jm'>{@link HtmlBuilder#script(Object, Object...) script(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

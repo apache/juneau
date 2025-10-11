@@ -85,7 +85,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-@FluentSetters
 public class Operation extends OpenApiElement {
 
 	private List<String> tags;
@@ -626,7 +625,7 @@ public class Operation extends OpenApiElement {
 		return new Operation(this);
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -646,7 +645,7 @@ public class Operation extends OpenApiElement {
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public Operation set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -669,7 +668,7 @@ public class Operation extends OpenApiElement {
 		};
 	}
 
-	@Override /* OpenApiElement */
+	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(callbacks != null, "callbacks")
@@ -688,19 +687,16 @@ public class Operation extends OpenApiElement {
 		return new MultiSet<>(s, super.keySet());
 	}
 
-	// <FluentSetters>
-
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public Operation strict() {
 		super.strict();
 		return this;
 	}
 
-	@Override /* GENERATED - do not modify */
+	@Override /* Overridden from OpenApiElement */
 	public Operation strict(Object value) {
 		super.strict(value);
 		return this;
 	}
 
-	// </FluentSetters>
 }

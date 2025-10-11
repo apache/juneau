@@ -27,62 +27,69 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple line break
- * 	Br simple = new Br();
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Address with line breaks
- * 	P address = new P()
- * 		.children(
- * 			"John Doe",
- * 			new Br(),
- * 			"123 Main Street",
- * 			new Br(),
- * 			"Anytown, ST 12345"
- * 		);
+ * 	<jc>// Simple line break</jc>
+ * 	Br <jv>simple</jv> = <jsm>br</jsm>();
  * 
- * 	// Poetry with line breaks
- * 	P poetry = new P()
- * 		.children(
- * 			"Roses are red,",
- * 			new Br(),
- * 			"Violets are blue,",
- * 			new Br(),
- * 			"Sugar is sweet,",
- * 			new Br(),
- * 			"And so are you."
- * 		);
+ * 	<jc>// Address with line breaks</jc>
+ * 	P <jv>address</jv> = <jsm>p</jsm>(
+ * 		<js>"John Doe"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"123 Main Street"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Anytown, ST 12345"</js>
+ * 	);
  * 
- * 	// Contact information
- * 	P contact = new P()
- * 		.children(
- * 			"Phone: (555) 123-4567",
- * 			new Br(),
- * 			"Email: john@example.com",
- * 			new Br(),
- * 			"Website: www.example.com"
- * 		);
+ * 	<jc>// Poetry with line breaks</jc>
+ * 	P <jv>poetry</jv> = <jsm>p</jsm>(
+ * 		<js>"Roses are red,"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Violets are blue,"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Sugar is sweet,"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"And so are you."</js>
+ * 	);
  * 
- * 	// Styled line break
- * 	Br styled = new Br()
- * 		._class("line-break")
- * 		.style("margin: 10px 0;");
+ * 	<jc>// Contact information</jc>
+ * 	P <jv>contact</jv> = <jsm>p</jsm>(
+ * 		<js>"Phone: (555) 123-4567"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Email: john@example.com"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Website: www.example.com"</js>
+ * 	);
  * 
- * 	// Multiple line breaks
- * 	P multiple = new P()
- * 		.children(
- * 			"First line",
- * 			new Br(),
- * 			new Br(),
- * 			"Third line (with extra space)"
- * 		);
+ * 	<jc>// Styled line break</jc>
+ * 	Br <jv>styled</jv> = <jsm>br</jsm>()
+ * 		._class(<js>"line-break"</js>)
+ * 		.style(<js>"margin: 10px 0;"</js>);
  * 
- * 	// Line break in a list
- * 	Li listItem = new Li()
- * 		.children(
- * 			"Item 1",
- * 			new Br(),
- * 			"Additional details for item 1"
- * 		);
+ * 	<jc>// Multiple line breaks</jc>
+ * 	P <jv>multiple</jv> = <jsm>p</jsm>(
+ * 		<js>"First line"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Third line (with extra space)"</js>
+ * 	);
+ * 
+ * 	<jc>// Line break in a list</jc>
+ * 	Li <jv>listItem</jv> = <jsm>li</jsm>(
+ * 		<js>"Item 1"</js>,
+ * 		<jsm>br</jsm>(),
+ * 		<js>"Additional details for item 1"</js>
+ * 	);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#br() br()}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

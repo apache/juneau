@@ -27,37 +27,34 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Text with highlighted portion
- * 	Span highlight = new Span()
- * 		._class("highlight")
- * 		.children("This is highlighted text");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Text with multiple styled portions
- * 	Span styled = new Span()
- * 		.children(
- * 			"Normal text ",
- * 			new Span()._class("bold").children("bold text"),
- * 			" and ",
- * 			new Span()._class("italic").children("italic text")
- * 		);
+ * 	<jc>// Text with highlighted portion</jc>
+ * 	Span <jv>highlight</jv> = <jsm>span</jsm>(<js>"This is highlighted text"</js>)
+ * 		._class(<js>"highlight"</js>);
  * 
- * 	// Text with clickable portion
- * 	Span clickable = new Span()
- * 		.children(
- * 			"Click ",
- * 			new Span()._class("link").onclick("showDetails()").children("here"),
- * 			" for more information"
- * 		);
+ * 	<jc>// Text with multiple styled portions</jc>
+ * 	Span <jv>styled</jv> = <jsm>span</jsm>(
+ * 		<js>"Normal text "</js>,
+ * 		<jsm>span</jsm>(<js>"bold text"</js>)._class(<js>"bold"</js>),
+ * 		<js>" and "</js>,
+ * 		<jsm>span</jsm>(<js>"italic text"</js>)._class(<js>"italic"</js>)
+ * 	);
  * 
- * 	// Text with tooltip
- * 	Span tooltip = new Span()
- * 		.title("This is a tooltip")
- * 		.children("Hover over this text");
+ * 	<jc>// Text with clickable portion</jc>
+ * 	Span <jv>clickable</jv> = <jsm>span</jsm>(
+ * 		<js>"Click "</js>,
+ * 		<jsm>span</jsm>(<js>"here"</js>)._class(<js>"link"</js>).onclick(<js>"showDetails()"</js>),
+ * 		<js>" for more information"</js>
+ * 	);
  * 
- * 	// Text with language specification
- * 	Span lang = new Span()
- * 		.lang("es")
- * 		.children("Hola mundo");
+ * 	<jc>// Text with tooltip</jc>
+ * 	Span <jv>tooltip</jv> = <jsm>span</jsm>(<js>"Hover over this text"</js>)
+ * 		.title(<js>"This is a tooltip"</js>);
+ * 
+ * 	<jc>// Text with language specification</jc>
+ * 	Span <jv>lang</jv> = <jsm>span</jsm>(<js>"Hola mundo"</js>)
+ * 		.lang(<js>"es"</js>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -79,7 +79,6 @@ import org.apache.juneau.marshaller.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
-@FluentSetters
 public class SecurityScheme extends SwaggerElement {
 
 	private static final String[] VALID_TYPES = {"basic", "apiKey", "oauth2"};
@@ -126,8 +125,7 @@ public class SecurityScheme extends SwaggerElement {
 		return new SecurityScheme(this);
 	}
 
-
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public SecurityScheme strict() {
 		super.strict();
 		return this;
@@ -419,11 +417,7 @@ public class SecurityScheme extends SwaggerElement {
 		return this;
 	}
 
-	// <FluentSetters>
-
-	// </FluentSetters>
-
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -439,7 +433,7 @@ public class SecurityScheme extends SwaggerElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public SecurityScheme set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -458,7 +452,7 @@ public class SecurityScheme extends SwaggerElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(authorizationUrl != null, "authorizationUrl")

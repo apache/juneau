@@ -26,39 +26,43 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple option group
- * 	Optgroup optgroup1 = new Optgroup()
- * 		.label("Fruits")
- * 		.children(
- * 			new Option().value("apple").text("Apple"),
- * 			new Option().value("banana").text("Banana"),
- * 			new Option().value("orange").text("Orange")
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Disabled option group
- * 	Optgroup optgroup2 = new Optgroup()
- * 		.label("Vegetables")
- * 		.disabled(true)
- * 		.children(
- * 			new Option().value("carrot").text("Carrot"),
- * 			new Option().value("broccoli").text("Broccoli")
- * 		);
+ * 	<jc>// Simple option group</jc>
+ * 	Optgroup <jv>optgroup1</jv> = <jsm>optgroup</jsm>(<js>"Fruits"</js>,
+ * 		<jsm>option</jsm>(<js>"apple"</js>, <js>"Apple"</js>),
+ * 		<jsm>option</jsm>(<js>"banana"</js>, <js>"Banana"</js>),
+ * 		<jsm>option</jsm>(<js>"orange"</js>, <js>"Orange"</js>)
+ * 	);
  * 
- * 	// Multiple option groups in a select
- * 	Select select1 = new Select()
- * 		.name("food")
- * 		.children(
- * 			new Optgroup().label("Fruits")
- * 				.children(
- * 					new Option().value("apple").text("Apple"),
- * 					new Option().value("banana").text("Banana")
- * 				),
- * 			new Optgroup().label("Vegetables")
- * 				.children(
- * 					new Option().value("carrot").text("Carrot"),
- * 					new Option().value("broccoli").text("Broccoli")
- * 				)
- * 		);
+ * 	<jc>// Disabled option group</jc>
+ * 	Optgroup <jv>optgroup2</jv> = <jsm>optgroup</jsm>(<js>"Vegetables"</js>,
+ * 		<jsm>option</jsm>(<js>"carrot"</js>, <js>"Carrot"</js>),
+ * 		<jsm>option</jsm>(<js>"broccoli"</js>, <js>"Broccoli"</js>)
+ * 	).disabled(<jk>true</jk>);
+ * 
+ * 	<jc>// Multiple option groups in a select</jc>
+ * 	Select <jv>select1</jv> = <jsm>select</jsm>(<js>"food"</js>,
+ * 		<jsm>optgroup</jsm>(<js>"Fruits"</js>,
+ * 			<jsm>option</jsm>(<js>"apple"</js>, <js>"Apple"</js>),
+ * 			<jsm>option</jsm>(<js>"banana"</js>, <js>"Banana"</js>)
+ * 		),
+ * 		<jsm>optgroup</jsm>(<js>"Vegetables"</js>,
+ * 			<jsm>option</jsm>(<js>"carrot"</js>, <js>"Carrot"</js>),
+ * 			<jsm>option</jsm>(<js>"broccoli"</js>, <js>"Broccoli"</js>)
+ * 		)
+ * 	);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#optgroup() optgroup()}
+ * 		<li class='jm'>{@link HtmlBuilder#optgroup(Object, Object...) optgroup(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

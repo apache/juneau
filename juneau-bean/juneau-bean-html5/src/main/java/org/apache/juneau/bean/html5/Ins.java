@@ -28,50 +28,56 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple inserted text
- * 	Ins simple = new Ins()
- * 		.children("This text was added");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// Ins with styling
- * 	Ins styled = new Ins()
- * 		._class("insertion")
- * 		.children("Styled inserted text");
+ * 	<jc>// Simple inserted text</jc>
+ * 	Ins <jv>simple</jv> = <jsm>ins</jsm>(<js>"This text was added"</js>);
  *
- * 	// Ins with complex content
- * 	Ins complex = new Ins()
- * 		.children(
- * 			"The ",
- * 			new Strong().children("new feature"),
- * 			" has been added to the system."
- * 		);
+ * 	<jc>// Ins with styling</jc>
+ * 	Ins <jv>styled</jv> = <jsm>ins</jsm>(<js>"Styled inserted text"</js>)
+ * 		._class(<js>"insertion"</js>);
  *
- * 	// Ins with ID
- * 	Ins withId = new Ins()
- * 		.id("inserted-text")
- * 		.children("Text with ID");
+ * 	<jc>// Ins with complex content</jc>
+ * 	Ins <jv>complex</jv> = <jsm>ins</jsm>(
+ * 		<js>"The "</js>,
+ * 		<jsm>strong</jsm>(<js>"new feature"</js>),
+ * 		<js>" has been added to the system."</js>
+ * 	);
  *
- * 	// Ins with styling
- * 	Ins styled2 = new Ins()
- * 		.style("background-color: #d4edda; color: #155724; text-decoration: underline;")
- * 		.children("Custom styled inserted text");
+ * 	<jc>// Ins with ID</jc>
+ * 	Ins <jv>withId</jv> = <jsm>ins</jsm>(<js>"Text with ID"</js>)
+ * 		.id(<js>"inserted-text"</js>);
  *
- * 	// Ins with multiple elements
- * 	Ins multiple = new Ins()
- * 		.children(
- * 			"The ",
- * 			new Ins().children("new section"),
- * 			" has been ",
- * 			new Ins().children("added"),
- * 			" to the document."
- * 		);
+ * 	<jc>// Ins with styling</jc>
+ * 	Ins <jv>styled2</jv> = <jsm>ins</jsm>(<js>"Custom styled inserted text"</js>)
+ * 		.style(<js>"background-color: #d4edda; color: #155724; text-decoration: underline;"</js>);
  *
- * 	// Ins with links
- * 	Ins withLinks = new Ins()
- * 		.children(
- * 			"See ",
- * 			new A().href("/changes").children("change log"),
- * 			" for more details."
- * 		);
+ * 	<jc>// Ins with multiple elements</jc>
+ * 	Ins <jv>multiple</jv> = <jsm>ins</jsm>(
+ * 		<js>"The "</js>,
+ * 		<jsm>ins</jsm>(<js>"new section"</js>),
+ * 		<js>" has been "</js>,
+ * 		<jsm>ins</jsm>(<js>"added"</js>),
+ * 		<js>" to the document."</js>
+ * 	);
+ *
+ * 	<jc>// Ins with links</jc>
+ * 	Ins <jv>withLinks</jv> = <jsm>ins</jsm>(
+ * 		<js>"See "</js>,
+ * 		<jsm>a</jsm>(<js>"/changes"</js>, <js>"change log"</js>),
+ * 		<js>" for more details."</js>
+ * 	);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#ins() ins()}
+ * 		<li class='jm'>{@link HtmlBuilder#ins(Object, Object...) ins(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

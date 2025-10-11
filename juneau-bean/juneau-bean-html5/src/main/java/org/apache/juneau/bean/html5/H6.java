@@ -28,49 +28,55 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple lowest-level heading
- * 	H6 simple = new H6()
- * 		.children("Connection Timeout");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
- * 	// H6 with styling
- * 	H6 styled = new H6()
- * 		._class("micro-heading")
- * 		.children("Retry Attempts");
+ * 	<jc>// Simple lowest-level heading</jc>
+ * 	H6 <jv>simple</jv> = <jsm>h6</jsm>(<js>"Connection Timeout"</js>);
  *
- * 	// H6 with complex content
- * 	H6 complex = new H6()
- * 		.children(
- * 			"6.1 ",
- * 			new Strong().children("Connection Pool Size"),
- * 			" ",
- * 			new Em().children("(Default: 5)")
- * 		);
+ * 	<jc>// H6 with styling</jc>
+ * 	H6 <jv>styled</jv> = <jsm>h6</jsm>(<js>"Retry Attempts"</js>)
+ * 		._class(<js>"micro-heading"</js>);
  *
- * 	// H6 with ID
- * 	H6 withId = new H6()
- * 		.id("keep-alive")
- * 		.children("Keep-Alive Settings");
+ * 	<jc>// H6 with complex content</jc>
+ * 	H6 <jv>complex</jv> = <jsm>h6</jsm>(
+ * 		<js>"6.1 "</js>,
+ * 		<jsm>strong</jsm>(<js>"Connection Pool Size"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>em</jsm>(<js>"(Default: 5)"</js>)
+ * 	);
  *
- * 	// H6 with styling
- * 	H6 styled2 = new H6()
- * 		.style("color: #bbb; font-size: 0.8em; font-weight: normal;")
- * 		.children("Advanced Options");
+ * 	<jc>// H6 with ID</jc>
+ * 	H6 <jv>withId</jv> = <jsm>h6</jsm>(<js>"Keep-Alive Settings"</js>)
+ * 		.id(<js>"keep-alive"</js>);
  *
- * 	// H6 with multiple elements
- * 	H6 multiple = new H6()
- * 		.children(
- * 			"6.1.1 ",
- * 			new Span()._class("micro-title").children("Max Retries"),
- * 			" ",
- * 			new Small().children("(Range: 1-10)")
- * 		);
+ * 	<jc>// H6 with styling</jc>
+ * 	H6 <jv>styled2</jv> = <jsm>h6</jsm>(<js>"Advanced Options"</js>)
+ * 		.style(<js>"color: #bbb; font-size: 0.8em; font-weight: normal;"</js>);
  *
- * 	// H6 with links
- * 	H6 withLinks = new H6()
- * 		.children(
- * 			"Ref: ",
- * 			new A().href("/docs/connection").children("Connection Guide")
- * 		);
+ * 	<jc>// H6 with multiple elements</jc>
+ * 	H6 <jv>multiple</jv> = <jsm>h6</jsm>(
+ * 		<js>"6.1.1 "</js>,
+ * 		<jsm>span</jsm>()._class(<js>"micro-title"</js>).children(<js>"Max Retries"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>small</jsm>(<js>"(Range: 1-10)"</js>)
+ * 	);
+ *
+ * 	<jc>// H6 with links</jc>
+ * 	H6 <jv>withLinks</jv> = <jsm>h6</jsm>(
+ * 		<js>"Ref: "</js>,
+ * 		<jsm>a</jsm>(<js>"/docs/connection"</js>).children(<js>"Connection Guide"</js>)
+ * 	);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#h6() h6()}
+ * 		<li class='jm'>{@link HtmlBuilder#h6(Object, Object...) h6(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

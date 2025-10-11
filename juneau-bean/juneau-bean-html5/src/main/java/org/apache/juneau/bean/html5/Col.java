@@ -28,37 +28,48 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple column
- * 	Col simple = new Col();
- *
- * 	// Column spanning multiple columns
- * 	Col spanning = new Col()
- * 		.span(3);
- *
- * 	// Column with styling
- * 	Col styled = new Col()
- * 		._class("highlight-column")
- * 		.style("background-color: #f0f0f0;");
- *
- * 	// Column with width
- * 	Col withWidth = new Col()
- * 		.style("width: 200px;");
- *
- * 	// Column with alignment
- * 	Col aligned = new Col()
- * 		.style("text-align: center;");
- *
- * 	// Column with ID
- * 	Col withId = new Col()
- * 		.id("name-column")
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple column</jc>
+ * 	Col <jv>simple</jv> = <jsm>col</jsm>();
+ * 
+ * 	<jc>// Column spanning multiple columns</jc>
+ * 	Col <jv>spanning</jv> = <jsm>col</jsm>().span(3);
+ * 
+ * 	<jc>// Column with styling</jc>
+ * 	Col <jv>styled</jv> = <jsm>col</jsm>()
+ * 		._class(<js>"highlight-column"</js>)
+ * 		.style(<js>"background-color: #f0f0f0;"</js>);
+ * 
+ * 	<jc>// Column with width</jc>
+ * 	Col <jv>withWidth</jv> = <jsm>col</jsm>()
+ * 		.style(<js>"width: 200px;"</js>);
+ * 
+ * 	<jc>// Column with alignment</jc>
+ * 	Col <jv>aligned</jv> = <jsm>col</jsm>()
+ * 		.style(<js>"text-align: center;"</js>);
+ * 
+ * 	<jc>// Column with ID</jc>
+ * 	Col <jv>withId</jv> = <jsm>col</jsm>()
+ * 		.id(<js>"name-column"</js>)
  * 		.span(2);
- *
- * 	// Column with multiple attributes
- * 	Col complex = new Col()
+ * 
+ * 	<jc>// Column with multiple attributes</jc>
+ * 	Col <jv>complex</jv> = <jsm>col</jsm>()
  * 		.span(2)
- * 		._class("data-column")
- * 		.style("width: 150px; text-align: right;")
- * 		.title("Numeric data column");
+ * 		._class(<js>"data-column"</js>)
+ * 		.style(<js>"width: 150px; text-align: right;"</js>)
+ * 		.title(<js>"Numeric data column"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#col() col()}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

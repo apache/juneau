@@ -27,44 +27,50 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple definition
- * 	Dfn simple = new Dfn()
- * 		.children("HTML");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple definition</jc>
+ * 	Dfn <jv>simple</jv> = <jsm>dfn</jsm>(<js>"HTML"</js>);
+ * 
+ * 	<jc>// Definition with styling</jc>
+ * 	Dfn <jv>styled</jv> = <jsm>dfn</jsm>(<js>"CSS"</js>)
+ * 		._class(<js>"term"</js>);
+ * 
+ * 	<jc>// Definition in a sentence</jc>
+ * 	P <jv>sentence</jv> = <jsm>p</jsm>(
+ * 		<js>"The "</js>,
+ * 		<jsm>dfn</jsm>(<js>"DOM"</js>),
+ * 		<js>" represents the structure of a web page."</js>
+ * 	);
+ * 
+ * 	<jc>// Definition with complex content</jc>
+ * 	Dfn <jv>complex</jv> = <jsm>dfn</jsm>(
+ * 		<js>"JavaScript"</js>,
+ * 		<jsm>span</jsm>()._class(<js>"abbrev"</js>).children(<js>" (JS)"</js>)
+ * 	);
+ * 
+ * 	<jc>// Definition with title</jc>
+ * 	Dfn <jv>withTitle</jv> = <jsm>dfn</jsm>(<js>"HTML"</js>)
+ * 		.title(<js>"HyperText Markup Language"</js>);
+ * 
+ * 	<jc>// Definition with ID</jc>
+ * 	Dfn <jv>withId</jv> = <jsm>dfn</jsm>(<js>"CSS"</js>)
+ * 		.id(<js>"css-term"</js>);
+ * 
+ * 	<jc>// Definition with styling</jc>
+ * 	Dfn <jv>styled2</jv> = <jsm>dfn</jsm>(<js>"API"</js>)
+ * 		.style(<js>"font-style: italic; color: blue;"</js>);
+ * </p>
  *
- * 	// Definition with styling
- * 	Dfn styled = new Dfn()
- * 		._class("term")
- * 		.children("CSS");
- *
- * 	// Definition in a sentence
- * 	P sentence = new P()
- * 		.children(
- * 			"The ",
- * 			new Dfn().children("DOM"),
- * 			" represents the structure of a web page."
- * 		);
- *
- * 	// Definition with complex content
- * 	Dfn complex = new Dfn()
- * 		.children(
- * 			"JavaScript",
- * 			new Span()._class("abbrev").children(" (JS)")
- * 		);
- *
- * 	// Definition with title
- * 	Dfn withTitle = new Dfn()
- * 		.title("HyperText Markup Language")
- * 		.children("HTML");
- *
- * 	// Definition with ID
- * 	Dfn withId = new Dfn()
- * 		.id("css-term")
- * 		.children("CSS");
- *
- * 	// Definition with styling
- * 	Dfn styled2 = new Dfn()
- * 		.style("font-style: italic; color: blue;")
- * 		.children("API");
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#dfn() dfn()}
+ * 		<li class='jm'>{@link HtmlBuilder#dfn(Object, Object...) dfn(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

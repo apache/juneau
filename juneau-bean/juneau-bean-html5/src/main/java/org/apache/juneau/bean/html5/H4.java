@@ -28,49 +28,55 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple sub-subsection heading
- * 	H4 simple = new H4()
- * 		.children("Configuration Options");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple sub-subsection heading</jc>
+ * 	H4 <jv>simple</jv> = <jsm>h4</jsm>(<js>"Configuration Options"</js>);
+ * 
+ * 	<jc>// H4 with styling</jc>
+ * 	H4 <jv>styled</jv> = <jsm>h4</jsm>(<js>"Environment Variables"</js>)
+ * 		._class(<js>"sub-subsection-title"</js>);
+ * 
+ * 	<jc>// H4 with complex content</jc>
+ * 	H4 <jv>complex</jv> = <jsm>h4</jsm>(
+ * 		<js>"4.1 "</js>,
+ * 		<jsm>strong</jsm>(<js>"Database Configuration"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>em</jsm>(<js>"(Required)"</js>)
+ * 	);
+ * 
+ * 	<jc>// H4 with ID</jc>
+ * 	H4 <jv>withId</jv> = <jsm>h4</jsm>(<js>"Performance Tuning"</js>)
+ * 		.id(<js>"performance-tuning"</js>);
+ * 
+ * 	<jc>// H4 with styling</jc>
+ * 	H4 <jv>styled2</jv> = <jsm>h4</jsm>(<js>"Additional Notes"</js>)
+ * 		.style(<js>"color: #999; font-weight: normal;"</js>);
+ * 
+ * 	<jc>// H4 with multiple elements</jc>
+ * 	H4 <jv>multiple</jv> = <jsm>h4</jsm>(
+ * 		<js>"4.1.1 "</js>,
+ * 		<jsm>span</jsm>()._class(<js>"detail-title"</js>).children(<js>"Connection Pool"</js>),
+ * 		<js>" "</js>,
+ * 		<jsm>small</jsm>(<js>"(Advanced)"</js>)
+ * 	);
+ * 
+ * 	<jc>// H4 with links</jc>
+ * 	H4 <jv>withLinks</jv> = <jsm>h4</jsm>(
+ * 		<js>"Related: "</js>,
+ * 		<jsm>a</jsm>(<js>"/docs/performance"</js>).children(<js>"Performance Guide"</js>)
+ * 	);
+ * </p>
  *
- * 	// H4 with styling
- * 	H4 styled = new H4()
- * 		._class("sub-subsection-title")
- * 		.children("Environment Variables");
- *
- * 	// H4 with complex content
- * 	H4 complex = new H4()
- * 		.children(
- * 			"4.1 ",
- * 			new Strong().children("Database Configuration"),
- * 			" ",
- * 			new Em().children("(Required)")
- * 		);
- *
- * 	// H4 with ID
- * 	H4 withId = new H4()
- * 		.id("performance-tuning")
- * 		.children("Performance Tuning");
- *
- * 	// H4 with styling
- * 	H4 styled2 = new H4()
- * 		.style("color: #999; font-weight: normal;")
- * 		.children("Additional Notes");
- *
- * 	// H4 with multiple elements
- * 	H4 multiple = new H4()
- * 		.children(
- * 			"4.1.1 ",
- * 			new Span()._class("detail-title").children("Connection Pool"),
- * 			" ",
- * 			new Small().children("(Advanced)")
- * 		);
- *
- * 	// H4 with links
- * 	H4 withLinks = new H4()
- * 		.children(
- * 			"Related: ",
- * 			new A().href("/docs/performance").children("Performance Guide")
- * 		);
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#h4() h4()}
+ * 		<li class='jm'>{@link HtmlBuilder#h4(Object, Object...) h4(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

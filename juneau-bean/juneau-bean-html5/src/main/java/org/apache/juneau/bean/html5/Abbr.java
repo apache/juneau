@@ -27,41 +27,44 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple abbreviation
- * 	Abbr simple = new Abbr()
- * 		.title("HyperText Markup Language")
- * 		.children("HTML");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Acronym with expansion
- * 	Abbr acronym = new Abbr()
- * 		.title("World Wide Web")
- * 		.children("WWW");
+ * 	<jc>// Simple abbreviation</jc>
+ * 	Abbr <jv>simple</jv> = <jsm>abbr</jsm>(<js>"HyperText Markup Language"</js>, <js>"HTML"</js>);
  * 
- * 	// Technical abbreviation
- * 	Abbr technical = new Abbr()
- * 		.title("Cascading Style Sheets")
- * 		.children("CSS");
+ * 	<jc>// Acronym with expansion</jc>
+ * 	Abbr <jv>acronym</jv> = <jsm>abbr</jsm>(<js>"World Wide Web"</js>, <js>"WWW"</js>);
  * 
- * 	// Date abbreviation
- * 	Abbr date = new Abbr()
- * 		.title("January")
- * 		.children("Jan");
+ * 	<jc>// Technical abbreviation</jc>
+ * 	Abbr <jv>technical</jv> = <jsm>abbr</jsm>(<js>"Cascading Style Sheets"</js>, <js>"CSS"</js>);
  * 
- * 	// Abbreviation with styling
- * 	Abbr styled = new Abbr()
- * 		.title("JavaScript Object Notation")
- * 		._class("abbreviation")
- * 		.children("JSON");
+ * 	<jc>// Date abbreviation</jc>
+ * 	Abbr <jv>date</jv> = <jsm>abbr</jsm>(<js>"January"</js>, <js>"Jan"</js>);
  * 
- * 	// Multiple abbreviations in text
- * 	Abbr multiple = new Abbr()
+ * 	<jc>// Abbreviation with styling</jc>
+ * 	Abbr <jv>styled</jv> = <jsm>abbr</jsm>(<js>"JavaScript Object Notation"</js>, <js>"JSON"</js>)
+ * 		._class(<js>"abbreviation"</js>);
+ * 
+ * 	<jc>// Multiple abbreviations in text</jc>
+ * 	Abbr <jv>multiple</jv> = <jsm>abbr</jsm>()
  * 		.children(
- * 			"The ",
- * 			new Abbr().title("World Wide Web Consortium").children("W3C"),
- * 			" defines ",
- * 			new Abbr().title("HyperText Markup Language").children("HTML"),
- * 			" standards."
+ * 			<js>"The "</js>,
+ * 			<jsm>abbr</jsm>(<js>"World Wide Web Consortium"</js>, <js>"W3C"</js>),
+ * 			<js>" defines "</js>,
+ * 			<jsm>abbr</jsm>(<js>"HyperText Markup Language"</js>, <js>"HTML"</js>),
+ * 			<js>" standards."</js>
  * 		);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#abbr() abbr()}
+ * 		<li class='jm'>{@link HtmlBuilder#abbr(Object, Object...) abbr(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

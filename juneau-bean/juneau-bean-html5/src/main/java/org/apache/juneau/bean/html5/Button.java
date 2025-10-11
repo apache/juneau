@@ -29,31 +29,42 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple submit button
- * 	Button btn1 = new Button().type("submit").text("Submit Form");
+ * 	<jc>// Simple submit button</jc>
+ * 	Button <jv>btn1</jv> = <jsm>button</jsm>().type(<js>"submit"</js>).text(<js>"Submit Form"</js>);
  * 
- * 	// Button with custom styling and click handler
- * 	Button btn2 = new Button()
- * 		.type("button")
- * 		._class("btn btn-primary")
- * 		.onclick("handleClick()")
- * 		.text("Click Me");
+ * 	<jc>// Button with custom styling and click handler</jc>
+ * 	Button <jv>btn2</jv> = <jsm>button</jsm>()
+ * 		.type(<js>"button"</js>)
+ * 		._class(<js>"btn btn-primary"</js>)
+ * 		.onclick(<js>"handleClick()"</js>)
+ * 		.text(<js>"Click Me"</js>);
  * 
- * 	// Button with form override attributes
- * 	Button btn3 = new Button()
- * 		.type("submit")
- * 		.formaction("https://api.example.com/submit")
- * 		.formmethod("post")
- * 		.formtarget("_blank")
- * 		.text("Submit to API");
+ * 	<jc>// Button with form override attributes</jc>
+ * 	Button <jv>btn3</jv> = <jsm>button</jsm>()
+ * 		.type(<js>"submit"</js>)
+ * 		.formaction(<js>"https://api.example.com/submit"</js>)
+ * 		.formmethod(<js>"post"</js>)
+ * 		.formtarget(<js>"_blank"</js>)
+ * 		.text(<js>"Submit to API"</js>);
  * 
- * 	// Button with icon and text
- * 	Button btn4 = new Button()
- * 		.type("button")
+ * 	<jc>// Button with icon and text</jc>
+ * 	Button <jv>btn4</jv> = <jsm>button</jsm>()
+ * 		.type(<js>"button"</js>)
  * 		.children(
- * 			new Span()._class("icon").text("📧"),
- * 			new Span().text("Send Email")
+ * 			<jsm>span</jsm>()._class(<js>"icon"</js>).text(<js>"📧"</js>),
+ * 			<jsm>span</jsm>().text(<js>"Send Email"</js>)
  * 		);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#button() button()}
+ * 		<li class='jm'>{@link HtmlBuilder#button(Object, Object...) button(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -29,27 +29,39 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Embed a PDF document
- * 	Embed embed1 = new Embed()
- * 		.src("document.pdf")
- * 		.type("application/pdf")
- * 		.width("800")
- * 		.height("600");
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  * 
- * 	// Embed a Flash application
- * 	Embed embed2 = new Embed()
- * 		.src("game.swf")
- * 		.type("application/x-shockwave-flash")
- * 		.width("640")
- * 		.height("480");
+ * 	<jc>// Embed a PDF document</jc>
+ * 	Embed <jv>embed1</jv> = <jsm>embed</jsm>()
+ * 		.src(<js>"document.pdf"</js>)
+ * 		.type(<js>"application/pdf"</js>)
+ * 		.width(<js>"800"</js>)
+ * 		.height(<js>"600"</js>);
  * 
- * 	// Embed with fallback content
- * 	Embed embed3 = new Embed()
- * 		.src("interactive-content.swf")
- * 		.type("application/x-shockwave-flash")
+ * 	<jc>// Embed a Flash application</jc>
+ * 	Embed <jv>embed2</jv> = <jsm>embed</jsm>()
+ * 		.src(<js>"game.swf"</js>)
+ * 		.type(<js>"application/x-shockwave-flash"</js>)
+ * 		.width(<js>"640"</js>)
+ * 		.height(<js>"480"</js>);
+ * 
+ * 	<jc>// Embed with fallback content</jc>
+ * 	Embed <jv>embed3</jv> = <jsm>embed</jsm>()
+ * 		.src(<js>"interactive-content.swf"</js>)
+ * 		.type(<js>"application/x-shockwave-flash"</js>)
  * 		.children(
- * 			new P().text("Your browser does not support embedded content.")
+ * 			<jsm>p</jsm>(<js>"Your browser does not support embedded content."</js>)
  * 		);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#embed() embed()}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -14,7 +14,7 @@
 -->
 
 > **📢 Documentation Update**  
-> This README has been updated to reflect our new Docusaurus-based documentation site. For the most current documentation, please visit the [official Apache Juneau website](https://juneau.staged.apache.org/).
+> This README has been updated to reflect our new Docusaurus-based documentation site. For the most current documentation, please visit the [official Apache Juneau website](https://juneau.apache.org/).
 
 # Apache Juneau
 
@@ -26,23 +26,24 @@
 ## Documentation & Resources
 
 ### Official Resources
-* **[Homepage](https://juneau.staged.apache.org/)** - Official Apache Juneau website
+* **[Homepage](https://juneau.apache.org/)** - Official Apache Juneau website
+* **[Staged Website](https://juneau.staged.apache.org/)** - Preview of pending website changes
 * **[Wiki](https://github.com/apache/juneau/wiki)** - Community documentation and guides
 * **[Pet Store App](https://github.com/apache/juneau-petstore)** - Complete example application
 
 ### Documentation
-* **[Javadocs](https://juneau.staged.apache.org/site/apidocs/)** - Complete API documentation
-* **[User Guide](https://juneau.staged.apache.org/docs/topics/JuneauEcosystemOverview)** - Comprehensive framework documentation
-* **[Why Choose Juneau?](https://juneau.staged.apache.org/docs/topics/WhyJuneau)** - Benefits and comparisons with alternatives
-* **[Framework Comparisons](https://juneau.staged.apache.org/docs/topics/FrameworkComparisons)** - Compare Juneau with Jackson, Spring Boot, and JAX-RS
-* **[Examples](https://juneau.staged.apache.org/docs/topics/JuneauExamplesCore)** - Code examples and tutorials
-  * [juneau-examples-core](https://juneau.staged.apache.org/docs/topics/JuneauExamplesCore) - Core serialization examples
-  * [juneau-examples-rest](https://juneau.staged.apache.org/docs/topics/JuneauExamplesRest) - REST API examples
-  * [juneau-examples-rest-jetty](https://juneau.staged.apache.org/docs/topics/JuneauExamplesRestJetty) - Jetty microservice examples
-  * [juneau-examples-rest-springboot](https://juneau.staged.apache.org/docs/topics/JuneauExamplesRestSpringboot) - Spring Boot examples
-* **[Test Reports](https://juneau.staged.apache.org/site/surefire.html)** - JUnit test execution results
-* **[Dependencies](https://juneau.staged.apache.org/site/dependency-info.html)** - Project dependency analysis
-* **[Project Reports](https://juneau.staged.apache.org/site/project-reports.html)** - Complete Maven site reports
+* **[Javadocs](https://juneau.apache.org/site/apidocs/)** - Complete API documentation
+* **[User Guide](https://juneau.apache.org/docs/topics/JuneauEcosystemOverview)** - Comprehensive framework documentation
+* **[Why Choose Juneau?](https://juneau.apache.org/docs/topics/WhyJuneau)** - Benefits and comparisons with alternatives
+* **[Framework Comparisons](https://juneau.apache.org/docs/topics/FrameworkComparisons)** - Compare Juneau with Jackson, Spring Boot, and JAX-RS
+* **[Examples](https://juneau.apache.org/docs/topics/JuneauExamplesCore)** - Code examples and tutorials
+  * [juneau-examples-core](https://juneau.apache.org/docs/topics/JuneauExamplesCore) - Core serialization examples
+  * [juneau-examples-rest](https://juneau.apache.org/docs/topics/JuneauExamplesRest) - REST API examples
+  * [juneau-examples-rest-jetty](https://juneau.apache.org/docs/topics/JuneauExamplesRestJetty) - Jetty microservice examples
+  * [juneau-examples-rest-springboot](https://juneau.apache.org/docs/topics/JuneauExamplesRestSpringboot) - Spring Boot examples
+* **[Test Reports](https://juneau.apache.org/site/surefire.html)** - JUnit test execution results
+* **[Dependencies](https://juneau.apache.org/site/dependency-info.html)** - Project dependency analysis
+* **[Project Reports](https://juneau.apache.org/site/project-reports.html)** - Complete Maven site reports
 
 > **Note:** The documentation is automatically updated and provides the most current project information.
 

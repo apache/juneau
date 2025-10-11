@@ -28,68 +28,72 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple head with title
- * 	Head simple = new Head()
- * 		.children(
- * 			new Title().children("My Website"),
- * 			new Meta().charset("UTF-8")
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple head with title</jc>
+ * 	Head <jv>simple</jv> = <jsm>head</jsm>(
+ * 		<jsm>title</jsm>(<js>"My Website"</js>),
+ * 		<jsm>meta</jsm>().charset(<js>"UTF-8"</js>)
+ * 	);
+ * 
+ * 	<jc>// Head with styling</jc>
+ * 	Head <jv>styled</jv> = <jsm>head</jsm>(
+ * 		<jsm>title</jsm>(<js>"Styled Page"</js>),
+ * 		<jsm>meta</jsm>().charset(<js>"UTF-8"</js>),
+ * 		<jsm>link</jsm>().rel(<js>"stylesheet"</js>).href(<js>"/css/style.css"</js>)
+ * 	);
+ * 
+ * 	<jc>// Head with complex content</jc>
+ * 	Head <jv>complex</jv> = <jsm>head</jsm>(
+ * 		<jsm>title</jsm>(<js>"Complete Page"</js>),
+ * 		<jsm>meta</jsm>().charset(<js>"UTF-8"</js>),
+ * 		<jsm>meta</jsm>().name(<js>"viewport"</js>).content(<js>"width=device-width, initial-scale=1.0"</js>),
+ * 		<jsm>link</jsm>().rel(<js>"stylesheet"</js>).href(<js>"/css/main.css"</js>),
+ * 		<jsm>link</jsm>().rel(<js>"icon"</js>).href(<js>"/favicon.ico"</js>),
+ * 		<jsm>script</jsm>().src(<js>"/js/main.js"</js>)
+ * 	);
+ * 
+ * 	<jc>// Head with ID</jc>
+ * 	Head <jv>withId</jv> = <jsm>head</jsm>(
+ * 		<jsm>title</jsm>(<js>"Page with ID"</js>),
+ * 		<jsm>meta</jsm>().charset(<js>"UTF-8"</js>)
+ * 	).id(<js>"page-head"</js>);
+ * 
+ * 	<jc>// Head with styling</jc>
+ * 	Head <jv>styled2</jv> = <jsm>head</jsm>(
+ * 		<jsm>title</jsm>(<js>"Styled Head"</js>),
+ * 		<jsm>meta</jsm>().charset(<js>"UTF-8"</js>)
+ * 	).style(<js>"background-color: #f0f0f0;"</js>);
+ * 
+ * 	<jc>// Head with multiple elements</jc>
+ * 	Head <jv>multiple</jv> = <jsm>head</jsm>(
+ * 		<jsm>title</jsm>(<js>"Multi-Element Head"</js>),
+ * 		<jsm>meta</jsm>().charset(<js>"UTF-8"</js>),
+ * 		<jsm>meta</jsm>().name(<js>"description"</js>).content(<js>"A comprehensive page"</js>),
+ * 		<jsm>link</jsm>().rel(<js>"stylesheet"</js>).href(<js>"/css/reset.css"</js>),
+ * 		<jsm>link</jsm>().rel(<js>"stylesheet"</js>).href(<js>"/css/layout.css"</js>),
+ * 		<jsm>script</jsm>().src(<js>"/js/jquery.js"</js>),
+ * 		<jsm>script</jsm>().src(<js>"/js/app.js"</js>)
+ * 	);
+ * 
+ * 	<jc>// Head with base element</jc>
+ * 	Head <jv>withBase</jv> = <jsm>head</jsm>(
+ * 		<jsm>title</jsm>(<js>"Page with Base"</js>),
+ * 		<jsm>meta</jsm>().charset(<js>"UTF-8"</js>),
+ * 		<jsm>base</jsm>().href(<js>"https://example.com/"</js>),
+ * 		<jsm>link</jsm>().rel(<js>"stylesheet"</js>).href(<js>"css/style.css"</js>)
+ * 	);
+ * </p>
  *
- * 	// Head with styling
- * 	Head styled = new Head()
- * 		.children(
- * 			new Title().children("Styled Page"),
- * 			new Meta().charset("UTF-8"),
- * 			new Link().rel("stylesheet").href("/css/style.css")
- * 		);
- *
- * 	// Head with complex content
- * 	Head complex = new Head()
- * 		.children(
- * 			new Title().children("Complete Page"),
- * 			new Meta().charset("UTF-8"),
- * 			new Meta().name("viewport").content("width=device-width, initial-scale=1.0"),
- * 			new Link().rel("stylesheet").href("/css/main.css"),
- * 			new Link().rel("icon").href("/favicon.ico"),
- * 			new Script().src("/js/main.js")
- * 		);
- *
- * 	// Head with ID
- * 	Head withId = new Head()
- * 		.id("page-head")
- * 		.children(
- * 			new Title().children("Page with ID"),
- * 			new Meta().charset("UTF-8")
- * 		);
- *
- * 	// Head with styling
- * 	Head styled2 = new Head()
- * 		.style("background-color: #f0f0f0;")
- * 		.children(
- * 			new Title().children("Styled Head"),
- * 			new Meta().charset("UTF-8")
- * 		);
- *
- * 	// Head with multiple elements
- * 	Head multiple = new Head()
- * 		.children(
- * 			new Title().children("Multi-Element Head"),
- * 			new Meta().charset("UTF-8"),
- * 			new Meta().name("description").content("A comprehensive page"),
- * 			new Link().rel("stylesheet").href("/css/reset.css"),
- * 			new Link().rel("stylesheet").href("/css/layout.css"),
- * 			new Script().src("/js/jquery.js"),
- * 			new Script().src("/js/app.js")
- * 		);
- *
- * 	// Head with base element
- * 	Head withBase = new Head()
- * 		.children(
- * 			new Title().children("Page with Base"),
- * 			new Meta().charset("UTF-8"),
- * 			new Base().href("https://example.com/"),
- * 			new Link().rel("stylesheet").href("css/style.css")
- * 		);
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#head() head()}
+ * 		<li class='jm'>{@link HtmlBuilder#head(Object, Object...) head(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

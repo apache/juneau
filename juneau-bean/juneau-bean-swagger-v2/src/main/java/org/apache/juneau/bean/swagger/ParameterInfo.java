@@ -118,7 +118,6 @@ import org.apache.juneau.marshaller.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
-@FluentSetters
 public class ParameterInfo extends SwaggerElement {
 
 	private static final String[] VALID_IN = {"query", "header", "path", "formData", "body"};
@@ -205,7 +204,7 @@ public class ParameterInfo extends SwaggerElement {
 		return new ParameterInfo(this);
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public ParameterInfo strict() {
 		super.strict();
 		return this;
@@ -665,7 +664,6 @@ public class ParameterInfo extends SwaggerElement {
 		return this;
 	}
 
-
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
 	 *
@@ -960,7 +958,6 @@ public class ParameterInfo extends SwaggerElement {
 		return this;
 	}
 
-
 	/**
 	 * Bean property getter:  <property>example</property>.
 	 *
@@ -1017,11 +1014,7 @@ public class ParameterInfo extends SwaggerElement {
 		return this;
 	}
 
-	// <FluentSetters>
-
-	// </FluentSetters>
-
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -1054,7 +1047,7 @@ public class ParameterInfo extends SwaggerElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public ParameterInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -1090,7 +1083,7 @@ public class ParameterInfo extends SwaggerElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(allowEmptyValue != null, "allowEmptyValue")

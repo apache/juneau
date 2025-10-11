@@ -27,27 +27,37 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	// Character encoding
- * 	Meta meta1 = new Meta().charset("utf-8");
+ * 	Meta meta1 = meta().charset("utf-8");
  * 
  * 	// Viewport for responsive design
- * 	Meta meta2 = new Meta()
+ * 	Meta meta2 = meta()
  * 		.name("viewport")
  * 		.content("width=device-width, initial-scale=1.0");
  * 
  * 	// SEO description
- * 	Meta meta3 = new Meta()
+ * 	Meta meta3 = meta()
  * 		.name("description")
  * 		.content("This is a sample web page with meta information");
  * 
  * 	// Open Graph tags for social media
- * 	Meta meta4 = new Meta()
+ * 	Meta meta4 = meta()
  * 		.property("og:title")
  * 		.content("My Web Page");
  * 
  * 	// HTTP-equiv for cache control
- * 	Meta meta5 = new Meta()
+ * 	Meta meta5 = meta()
  * 		.httpequiv("Cache-Control")
  * 		.content("no-cache, no-store, must-revalidate");
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#meta() meta()}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

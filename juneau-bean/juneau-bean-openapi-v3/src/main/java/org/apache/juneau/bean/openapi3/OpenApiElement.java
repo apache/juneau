@@ -28,7 +28,6 @@ import org.apache.juneau.json.*;
 /**
  * Root class for all Swagger beans.
  */
-@FluentSetters
 public abstract class OpenApiElement {
 
 	private boolean strict;
@@ -164,10 +163,6 @@ public abstract class OpenApiElement {
 			m.put(s, get(s, Object.class));
 		return m;
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 
 	@Override /* Object */
 	public String toString() {

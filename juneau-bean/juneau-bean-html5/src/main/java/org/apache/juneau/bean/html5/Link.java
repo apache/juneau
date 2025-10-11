@@ -22,6 +22,66 @@ import org.apache.juneau.internal.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-link-element">&lt;link&gt;</a>
  * element.
  *
+ * <p>
+ * The link element specifies relationships between the current document and an external resource.
+ * It is most commonly used to link to stylesheets, but can also be used to establish site icons,
+ * prefetch resources, define alternate versions of the document, and more. Link elements are typically
+ * placed in the head section of an HTML document.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Stylesheet link</jc>
+ * 	Link <jv>stylesheet</jv> = <jsm>link</jsm>()
+ * 		.rel(<js>"stylesheet"</js>)
+ * 		.href(<js>"/css/styles.css"</js>);
+ * 
+ * 	<jc>// Favicon link</jc>
+ * 	Link <jv>favicon</jv> = <jsm>link</jsm>()
+ * 		.rel(<js>"icon"</js>)
+ * 		.type(<js>"image/x-icon"</js>)
+ * 		.href(<js>"/favicon.ico"</js>);
+ * 
+ * 	<jc>// Preload resource</jc>
+ * 	Link <jv>preload</jv> = <jsm>link</jsm>()
+ * 		.rel(<js>"preload"</js>)
+ * 		.href(<js>"/fonts/myfont.woff2"</js>)
+ * 		._as(<js>"font"</js>)
+ * 		.type(<js>"font/woff2"</js>)
+ * 		.crossorigin(<js>"anonymous"</js>);
+ * 
+ * 	<jc>// Alternate language version</jc>
+ * 	Link <jv>alternate</jv> = <jsm>link</jsm>()
+ * 		.rel(<js>"alternate"</js>)
+ * 		.href(<js>"/es/page.html"</js>)
+ * 		.hreflang(<js>"es"</js>);
+ * 
+ * 	<jc>// Responsive stylesheet with media query</jc>
+ * 	Link <jv>print</jv> = <jsm>link</jsm>()
+ * 		.rel(<js>"stylesheet"</js>)
+ * 		.href(<js>"/css/print.css"</js>)
+ * 		.media(<js>"print"</js>);
+ * 
+ * 	<jc>// Canonical URL for SEO</jc>
+ * 	Link <jv>canonical</jv> = <jsm>link</jsm>()
+ * 		.rel(<js>"canonical"</js>)
+ * 		.href(<js>"https://example.com/page"</js>);
+ * 
+ * 	<jc>// DNS prefetch for performance</jc>
+ * 	Link <jv>dnsPrefetch</jv> = <jsm>link</jsm>()
+ * 		.rel(<js>"dns-prefetch"</js>)
+ * 		.href(<js>"https://cdn.example.com"</js>);
+ * </p>
+ *
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#link() link()}
+ * 	</ul>
+ * </ul>
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>

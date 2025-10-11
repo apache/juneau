@@ -28,65 +28,64 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	// Simple datalist
- * 	Datalist simple = new Datalist()
- * 		.id("colors")
- * 		.children(
- * 			new Option().value("red").children("Red"),
- * 			new Option().value("green").children("Green"),
- * 			new Option().value("blue").children("Blue")
- * 		);
+ * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ * 
+ * 	<jc>// Simple datalist</jc>
+ * 	Datalist <jv>simple</jv> = <jsm>datalist</jsm>(<js>"colors"</js>,
+ * 		<jsm>option</jsm>(<js>"red"</js>, <js>"Red"</js>),
+ * 		<jsm>option</jsm>(<js>"green"</js>, <js>"Green"</js>),
+ * 		<jsm>option</jsm>(<js>"blue"</js>, <js>"Blue"</js>)
+ * 	);
+ * 
+ * 	<jc>// Datalist with styling</jc>
+ * 	Datalist <jv>styled</jv> = <jsm>datalist</jsm>(<js>"countries"</js>,
+ * 		<jsm>option</jsm>(<js>"us"</js>, <js>"United States"</js>),
+ * 		<jsm>option</jsm>(<js>"ca"</js>, <js>"Canada"</js>),
+ * 		<jsm>option</jsm>(<js>"mx"</js>, <js>"Mexico"</js>)
+ * 	)._class(<js>"country-list"</js>);
+ * 
+ * 	<jc>// Datalist with multiple options</jc>
+ * 	Datalist <jv>multiple</jv> = <jsm>datalist</jsm>(<js>"fruits"</js>,
+ * 		<jsm>option</jsm>(<js>"apple"</js>, <js>"Apple"</js>),
+ * 		<jsm>option</jsm>(<js>"banana"</js>, <js>"Banana"</js>),
+ * 		<jsm>option</jsm>(<js>"cherry"</js>, <js>"Cherry"</js>),
+ * 		<jsm>option</jsm>(<js>"date"</js>, <js>"Date"</js>),
+ * 		<jsm>option</jsm>(<js>"elderberry"</js>, <js>"Elderberry"</js>)
+ * 	);
+ * 
+ * 	<jc>// Datalist with complex options</jc>
+ * 	Datalist <jv>complex</jv> = <jsm>datalist</jsm>(<js>"products"</js>,
+ * 		<jsm>option</jsm>(<js>"laptop-001"</js>, <js>"Laptop Pro 15\" - $1,299"</js>),
+ * 		<jsm>option</jsm>(<js>"laptop-002"</js>, <js>"Laptop Air 13\" - $999"</js>),
+ * 		<jsm>option</jsm>(<js>"tablet-001"</js>, <js>"Tablet 10\" - $499"</js>)
+ * 	);
  *
- * 	// Datalist with styling
- * 	Datalist styled = new Datalist()
- * 		.id("countries")
- * 		._class("country-list")
- * 		.children(
- * 			new Option().value("us").children("United States"),
- * 			new Option().value("ca").children("Canada"),
- * 			new Option().value("mx").children("Mexico")
- * 		);
+ * 	<jc>// Datalist with ID</jc>
+ * 	Datalist <jv>withId</jv> = <jsm>datalist</jsm>(<js>"cities"</js>,
+ * 		<jsm>option</jsm>(<js>"new-york"</js>, <js>"New York"</js>),
+ * 		<jsm>option</jsm>(<js>"los-angeles"</js>, <js>"Los Angeles"</js>),
+ * 		<jsm>option</jsm>(<js>"chicago"</js>, <js>"Chicago"</js>)
+ * 	);
+ * 
+ * 	<jc>// Datalist with styling</jc>
+ * 	Datalist <jv>styled2</jv> = <jsm>datalist</jsm>(<js>"sizes"</js>,
+ * 		<jsm>option</jsm>(<js>"xs"</js>, <js>"Extra Small"</js>),
+ * 		<jsm>option</jsm>(<js>"s"</js>, <js>"Small"</js>),
+ * 		<jsm>option</jsm>(<js>"m"</js>, <js>"Medium"</js>),
+ * 		<jsm>option</jsm>(<js>"l"</js>, <js>"Large"</js>),
+ * 		<jsm>option</jsm>(<js>"xl"</js>, <js>"Extra Large"</js>)
+ * 	).style(<js>"display: none;"</js>);
+ * </p>
  *
- * 	// Datalist with multiple options
- * 	Datalist multiple = new Datalist()
- * 		.id("fruits")
- * 		.children(
- * 			new Option().value("apple").children("Apple"),
- * 			new Option().value("banana").children("Banana"),
- * 			new Option().value("cherry").children("Cherry"),
- * 			new Option().value("date").children("Date"),
- * 			new Option().value("elderberry").children("Elderberry")
- * 		);
- *
- * 	// Datalist with complex options
- * 	Datalist complex = new Datalist()
- * 		.id("products")
- * 		.children(
- * 			new Option().value("laptop-001").children("Laptop Pro 15\" - $1,299"),
- * 			new Option().value("laptop-002").children("Laptop Air 13\" - $999"),
- * 			new Option().value("tablet-001").children("Tablet 10\" - $499")
- * 		);
- *
- * 	// Datalist with ID
- * 	Datalist withId = new Datalist()
- * 		.id("cities")
- * 		.children(
- * 			new Option().value("new-york").children("New York"),
- * 			new Option().value("los-angeles").children("Los Angeles"),
- * 			new Option().value("chicago").children("Chicago")
- * 		);
- *
- * 	// Datalist with styling
- * 	Datalist styled2 = new Datalist()
- * 		.id("sizes")
- * 		.style("display: none;")
- * 		.children(
- * 			new Option().value("xs").children("Extra Small"),
- * 			new Option().value("s").children("Small"),
- * 			new Option().value("m").children("Medium"),
- * 			new Option().value("l").children("Large"),
- * 			new Option().value("xl").children("Extra Large")
- * 		);
+ * <p>
+ * The following convenience methods are provided for constructing instances of this bean:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link HtmlBuilder}
+ * 	<ul class='javatree'>
+ * 		<li class='jm'>{@link HtmlBuilder#datalist() datalist()}
+ * 		<li class='jm'>{@link HtmlBuilder#datalist(Object, Object...) datalist(Object, Object...)}
+ * 	</ul>
+ * </ul>
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
