@@ -40,72 +40,72 @@
 <span class="source-line-no">027</span><span id="line-27"> *</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> * &lt;p class='bcode w800'&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> *    // Sidebar with related links</span>
-<span class="source-line-no">031</span><span id="line-31"> *    Aside sidebar = new Aside()</span>
-<span class="source-line-no">032</span><span id="line-32"> *       ._class("sidebar")</span>
-<span class="source-line-no">033</span><span id="line-33"> *       .children(</span>
-<span class="source-line-no">034</span><span id="line-34"> *          new H3().children("Related Articles"),</span>
-<span class="source-line-no">035</span><span id="line-35"> *          new Ul().children(</span>
-<span class="source-line-no">036</span><span id="line-36"> *             new Li().children(new A().href("/article1").children("Article 1")),</span>
-<span class="source-line-no">037</span><span id="line-37"> *             new Li().children(new A().href("/article2").children("Article 2")),</span>
-<span class="source-line-no">038</span><span id="line-38"> *             new Li().children(new A().href("/article3").children("Article 3"))</span>
-<span class="source-line-no">039</span><span id="line-39"> *          )</span>
-<span class="source-line-no">040</span><span id="line-40"> *       );</span>
+<span class="source-line-no">030</span><span id="line-30"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
+<span class="source-line-no">031</span><span id="line-31"> * </span>
+<span class="source-line-no">032</span><span id="line-32"> *    &lt;jc&gt;// Sidebar with related links&lt;/jc&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> *    Aside &lt;jv&gt;sidebar&lt;/jv&gt; = &lt;jsm&gt;aside&lt;/jsm&gt;(</span>
+<span class="source-line-no">034</span><span id="line-34"> *       &lt;jsm&gt;h3&lt;/jsm&gt;(&lt;js&gt;"Related Articles"&lt;/js&gt;),</span>
+<span class="source-line-no">035</span><span id="line-35"> *       &lt;jsm&gt;ul&lt;/jsm&gt;(</span>
+<span class="source-line-no">036</span><span id="line-36"> *          &lt;jsm&gt;li&lt;/jsm&gt;(&lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"/article1"&lt;/js&gt;, &lt;js&gt;"Article 1"&lt;/js&gt;)),</span>
+<span class="source-line-no">037</span><span id="line-37"> *          &lt;jsm&gt;li&lt;/jsm&gt;(&lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"/article2"&lt;/js&gt;, &lt;js&gt;"Article 2"&lt;/js&gt;)),</span>
+<span class="source-line-no">038</span><span id="line-38"> *          &lt;jsm&gt;li&lt;/jsm&gt;(&lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"/article3"&lt;/js&gt;, &lt;js&gt;"Article 3"&lt;/js&gt;))</span>
+<span class="source-line-no">039</span><span id="line-39"> *       )</span>
+<span class="source-line-no">040</span><span id="line-40"> *    )._class(&lt;js&gt;"sidebar"&lt;/js&gt;);</span>
 <span class="source-line-no">041</span><span id="line-41"> * </span>
-<span class="source-line-no">042</span><span id="line-42"> *    // Pull quote</span>
-<span class="source-line-no">043</span><span id="line-43"> *    Aside pullQuote = new Aside()</span>
-<span class="source-line-no">044</span><span id="line-44"> *       ._class("pull-quote")</span>
-<span class="source-line-no">045</span><span id="line-45"> *       .children(</span>
-<span class="source-line-no">046</span><span id="line-46"> *          new Blockquote()</span>
-<span class="source-line-no">047</span><span id="line-47"> *             .children(</span>
-<span class="source-line-no">048</span><span id="line-48"> *                "The best way to predict the future is to create it.",</span>
-<span class="source-line-no">049</span><span id="line-49"> *                new Footer().children("— Peter Drucker")</span>
-<span class="source-line-no">050</span><span id="line-50"> *             )</span>
-<span class="source-line-no">051</span><span id="line-51"> *       );</span>
-<span class="source-line-no">052</span><span id="line-52"> * </span>
-<span class="source-line-no">053</span><span id="line-53"> *    // Advertisement</span>
-<span class="source-line-no">054</span><span id="line-54"> *    Aside advertisement = new Aside()</span>
-<span class="source-line-no">055</span><span id="line-55"> *       ._class("advertisement")</span>
-<span class="source-line-no">056</span><span id="line-56"> *       .children(</span>
-<span class="source-line-no">057</span><span id="line-57"> *          new H4().children("Sponsored Content"),</span>
-<span class="source-line-no">058</span><span id="line-58"> *          new P().children("Check out our latest product!"),</span>
-<span class="source-line-no">059</span><span id="line-59"> *          new A().href("/product").children("Learn More")</span>
-<span class="source-line-no">060</span><span id="line-60"> *       );</span>
-<span class="source-line-no">061</span><span id="line-61"> * </span>
-<span class="source-line-no">062</span><span id="line-62"> *    // Author bio</span>
-<span class="source-line-no">063</span><span id="line-63"> *    Aside authorBio = new Aside()</span>
-<span class="source-line-no">064</span><span id="line-64"> *       ._class("author-bio")</span>
-<span class="source-line-no">065</span><span id="line-65"> *       .children(</span>
-<span class="source-line-no">066</span><span id="line-66"> *          new H3().children("About the Author"),</span>
-<span class="source-line-no">067</span><span id="line-67"> *          new P().children("John Doe is a web developer with 10 years of experience..."),</span>
-<span class="source-line-no">068</span><span id="line-68"> *          new A().href("/author/john-doe").children("Read more articles")</span>
-<span class="source-line-no">069</span><span id="line-69"> *       );</span>
-<span class="source-line-no">070</span><span id="line-70"> * </span>
-<span class="source-line-no">071</span><span id="line-71"> *    // Navigation menu</span>
-<span class="source-line-no">072</span><span id="line-72"> *    Aside navigation = new Aside()</span>
-<span class="source-line-no">073</span><span id="line-73"> *       ._class("navigation")</span>
-<span class="source-line-no">074</span><span id="line-74"> *       .children(</span>
-<span class="source-line-no">075</span><span id="line-75"> *          new Nav().children(</span>
-<span class="source-line-no">076</span><span id="line-76"> *             new Ul().children(</span>
-<span class="source-line-no">077</span><span id="line-77"> *                new Li().children(new A().href("/home").children("Home")),</span>
-<span class="source-line-no">078</span><span id="line-78"> *                new Li().children(new A().href("/about").children("About")),</span>
-<span class="source-line-no">079</span><span id="line-79"> *                new Li().children(new A().href("/contact").children("Contact"))</span>
-<span class="source-line-no">080</span><span id="line-80"> *             )</span>
-<span class="source-line-no">081</span><span id="line-81"> *          )</span>
-<span class="source-line-no">082</span><span id="line-82"> *       );</span>
-<span class="source-line-no">083</span><span id="line-83"> * </span>
-<span class="source-line-no">084</span><span id="line-84"> *    // Glossary or definitions</span>
-<span class="source-line-no">085</span><span id="line-85"> *    Aside glossary = new Aside()</span>
-<span class="source-line-no">086</span><span id="line-86"> *       ._class("glossary")</span>
-<span class="source-line-no">087</span><span id="line-87"> *       .children(</span>
-<span class="source-line-no">088</span><span id="line-88"> *          new H3().children("Key Terms"),</span>
-<span class="source-line-no">089</span><span id="line-89"> *          new Dl().children(</span>
-<span class="source-line-no">090</span><span id="line-90"> *             new Dt().children("HTML"),</span>
-<span class="source-line-no">091</span><span id="line-91"> *             new Dd().children("HyperText Markup Language"),</span>
-<span class="source-line-no">092</span><span id="line-92"> *             new Dt().children("CSS"),</span>
-<span class="source-line-no">093</span><span id="line-93"> *             new Dd().children("Cascading Style Sheets")</span>
-<span class="source-line-no">094</span><span id="line-94"> *          )</span>
-<span class="source-line-no">095</span><span id="line-95"> *       );</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;jc&gt;// Pull quote&lt;/jc&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> *    Aside &lt;jv&gt;pullQuote&lt;/jv&gt; = &lt;jsm&gt;aside&lt;/jsm&gt;(</span>
+<span class="source-line-no">044</span><span id="line-44"> *       &lt;jsm&gt;blockquote&lt;/jsm&gt;(</span>
+<span class="source-line-no">045</span><span id="line-45"> *          &lt;js&gt;"The best way to predict the future is to create it."&lt;/js&gt;,</span>
+<span class="source-line-no">046</span><span id="line-46"> *          &lt;jsm&gt;footer&lt;/jsm&gt;(&lt;js&gt;"— Peter Drucker"&lt;/js&gt;)</span>
+<span class="source-line-no">047</span><span id="line-47"> *       )</span>
+<span class="source-line-no">048</span><span id="line-48"> *    )._class(&lt;js&gt;"pull-quote"&lt;/js&gt;);</span>
+<span class="source-line-no">049</span><span id="line-49"> * </span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;jc&gt;// Advertisement&lt;/jc&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *    Aside &lt;jv&gt;advertisement&lt;/jv&gt; = &lt;jsm&gt;aside&lt;/jsm&gt;(</span>
+<span class="source-line-no">052</span><span id="line-52"> *       &lt;jsm&gt;h4&lt;/jsm&gt;(&lt;js&gt;"Sponsored Content"&lt;/js&gt;),</span>
+<span class="source-line-no">053</span><span id="line-53"> *       &lt;jsm&gt;p&lt;/jsm&gt;(&lt;js&gt;"Check out our latest product!"&lt;/js&gt;),</span>
+<span class="source-line-no">054</span><span id="line-54"> *       &lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"/product"&lt;/js&gt;, &lt;js&gt;"Learn More"&lt;/js&gt;)</span>
+<span class="source-line-no">055</span><span id="line-55"> *    )._class(&lt;js&gt;"advertisement"&lt;/js&gt;);</span>
+<span class="source-line-no">056</span><span id="line-56"> * </span>
+<span class="source-line-no">057</span><span id="line-57"> *    &lt;jc&gt;// Author bio&lt;/jc&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> *    Aside &lt;jv&gt;authorBio&lt;/jv&gt; = &lt;jsm&gt;aside&lt;/jsm&gt;(</span>
+<span class="source-line-no">059</span><span id="line-59"> *       &lt;jsm&gt;h3&lt;/jsm&gt;(&lt;js&gt;"About the Author"&lt;/js&gt;),</span>
+<span class="source-line-no">060</span><span id="line-60"> *       &lt;jsm&gt;p&lt;/jsm&gt;(&lt;js&gt;"John Doe is a web developer with 10 years of experience..."&lt;/js&gt;),</span>
+<span class="source-line-no">061</span><span id="line-61"> *       &lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"/author/john-doe"&lt;/js&gt;, &lt;js&gt;"Read more articles"&lt;/js&gt;)</span>
+<span class="source-line-no">062</span><span id="line-62"> *    )._class(&lt;js&gt;"author-bio"&lt;/js&gt;);</span>
+<span class="source-line-no">063</span><span id="line-63"> * </span>
+<span class="source-line-no">064</span><span id="line-64"> *    &lt;jc&gt;// Navigation menu&lt;/jc&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> *    Aside &lt;jv&gt;navigation&lt;/jv&gt; = &lt;jsm&gt;aside&lt;/jsm&gt;(</span>
+<span class="source-line-no">066</span><span id="line-66"> *       &lt;jsm&gt;nav&lt;/jsm&gt;(</span>
+<span class="source-line-no">067</span><span id="line-67"> *          &lt;jsm&gt;ul&lt;/jsm&gt;(</span>
+<span class="source-line-no">068</span><span id="line-68"> *             &lt;jsm&gt;li&lt;/jsm&gt;(&lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"/home"&lt;/js&gt;, &lt;js&gt;"Home"&lt;/js&gt;)),</span>
+<span class="source-line-no">069</span><span id="line-69"> *             &lt;jsm&gt;li&lt;/jsm&gt;(&lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"/about"&lt;/js&gt;, &lt;js&gt;"About"&lt;/js&gt;)),</span>
+<span class="source-line-no">070</span><span id="line-70"> *             &lt;jsm&gt;li&lt;/jsm&gt;(&lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"/contact"&lt;/js&gt;, &lt;js&gt;"Contact"&lt;/js&gt;))</span>
+<span class="source-line-no">071</span><span id="line-71"> *          )</span>
+<span class="source-line-no">072</span><span id="line-72"> *       )</span>
+<span class="source-line-no">073</span><span id="line-73"> *    )._class(&lt;js&gt;"navigation"&lt;/js&gt;);</span>
+<span class="source-line-no">074</span><span id="line-74"> * </span>
+<span class="source-line-no">075</span><span id="line-75"> *    &lt;jc&gt;// Glossary or definitions&lt;/jc&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> *    Aside &lt;jv&gt;glossary&lt;/jv&gt; = &lt;jsm&gt;aside&lt;/jsm&gt;(</span>
+<span class="source-line-no">077</span><span id="line-77"> *       &lt;jsm&gt;h3&lt;/jsm&gt;(&lt;js&gt;"Key Terms"&lt;/js&gt;),</span>
+<span class="source-line-no">078</span><span id="line-78"> *       &lt;jsm&gt;dl&lt;/jsm&gt;(</span>
+<span class="source-line-no">079</span><span id="line-79"> *          &lt;jsm&gt;dt&lt;/jsm&gt;(&lt;js&gt;"HTML"&lt;/js&gt;),</span>
+<span class="source-line-no">080</span><span id="line-80"> *          &lt;jsm&gt;dd&lt;/jsm&gt;(&lt;js&gt;"HyperText Markup Language"&lt;/js&gt;),</span>
+<span class="source-line-no">081</span><span id="line-81"> *          &lt;jsm&gt;dt&lt;/jsm&gt;(&lt;js&gt;"CSS"&lt;/js&gt;),</span>
+<span class="source-line-no">082</span><span id="line-82"> *          &lt;jsm&gt;dd&lt;/jsm&gt;(&lt;js&gt;"Cascading Style Sheets"&lt;/js&gt;)</span>
+<span class="source-line-no">083</span><span id="line-83"> *       )</span>
+<span class="source-line-no">084</span><span id="line-84"> *    )._class(&lt;js&gt;"glossary"&lt;/js&gt;);</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;/p&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> *</span>
+<span class="source-line-no">087</span><span id="line-87"> * &lt;p&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> * The following convenience methods are provided for constructing instances of this bean:</span>
+<span class="source-line-no">089</span><span id="line-89"> * &lt;ul class='javatree'&gt;</span>
+<span class="source-line-no">090</span><span id="line-90"> *    &lt;li class='jc'&gt;{@link HtmlBuilder}</span>
+<span class="source-line-no">091</span><span id="line-91"> *    &lt;ul class='javatree'&gt;</span>
+<span class="source-line-no">092</span><span id="line-92"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#aside() aside()}</span>
+<span class="source-line-no">093</span><span id="line-93"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#aside(Object, Object...) aside(Object, Object...)}</span>
+<span class="source-line-no">094</span><span id="line-94"> *    &lt;/ul&gt;</span>
+<span class="source-line-no">095</span><span id="line-95"> * &lt;/ul&gt;</span>
 <span class="source-line-no">096</span><span id="line-96"> * &lt;/p&gt;</span>
 <span class="source-line-no">097</span><span id="line-97"> *</span>
 <span class="source-line-no">098</span><span id="line-98"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>

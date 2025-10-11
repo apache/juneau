@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations"><a href="../../annotation/Bean.html" title="annotation interface in org.apache.juneau.annotation">@Bean</a>(<a href="../../annotation/Bean.html#typeName()">typeName</a>="article")
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-125">Article</a></span>
+</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-120">Article</a></span>
 <span class="extends-implements">extends <a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></span></div>
 <div class="block">DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-article-element">&lt;article&gt;</a>
  element.
@@ -96,95 +96,90 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
-   // Simple blog post article
-   Article blogPost = new Article()
-      .children(
-         new Header()
-            .children(
-               new H1().children("How to Use HTML5 Semantic Elements"),
-               new P().children("Published on ", new Time().datetime("2024-01-15").children("January 15, 2024"))
-            ),
-         new P().children("HTML5 introduced several semantic elements that help structure content..."),
-         new Footer()
-            .children(
-               new P().children("Author: John Doe"),
-               new Address().children("Contact: john@example.com")
-            )
-      );
+   <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  
-   // News article
-   Article newsArticle = new Article()
-      .children(
-         new Header()
-            .children(
-               new H1().children("Breaking: New Technology Released"),
-               new P().children("By Jane Smith, Technology Reporter")
-            ),
-         new P().children("A revolutionary new technology was announced today..."),
-         new Section()
-            .children(
-               new H2().children("Technical Details"),
-               new P().children("The technology works by...")
-            )
-      );
+   <jc>// Simple blog post article</jc>
+   Article <jv>blogPost</jv> = <jsm>article</jsm>(
+      <jsm>header</jsm>(
+         <jsm>h1</jsm>(<js>"How to Use HTML5 Semantic Elements"</js>),
+         <jsm>p</jsm>(<js>"Published on "</js>, <jsm>time</jsm>(<js>"2024-01-15"</js>, <js>"January 15, 2024"</js>))
+      ),
+      <jsm>p</jsm>(<js>"HTML5 introduced several semantic elements that help structure content..."</js>),
+      <jsm>footer</jsm>(
+         <jsm>p</jsm>(<js>"Author: John Doe"</js>),
+         <jsm>address</jsm>(<js>"Contact: john@example.com"</js>)
+      )
+   );
  
-   // Forum post
-   Article forumPost = new Article()
-      ._class("forum-post")
-      .children(
-         new Header()
-            .children(
-               new H3().children("Question about CSS Grid"),
-               new P().children("Posted by ", new Strong().children("user123"), " on ", new Time().datetime("2024-01-14").children("yesterday"))
-            ),
-         new P().children("I'm having trouble with CSS Grid layout..."),
-         new Footer()
-            .children(
-               new P().children("Tags: ", new A().href("/tag/css").children("CSS"), ", ", new A().href("/tag/grid").children("Grid"))
-            )
-      );
+   <jc>// News article</jc>
+   Article <jv>newsArticle</jv> = <jsm>article</jsm>(
+      <jsm>header</jsm>(
+         <jsm>h1</jsm>(<js>"Breaking: New Technology Released"</js>),
+         <jsm>p</jsm>(<js>"By Jane Smith, Technology Reporter"</js>)
+      ),
+      <jsm>p</jsm>(<js>"A revolutionary new technology was announced today..."</js>),
+      <jsm>section</jsm>(
+         <jsm>h2</jsm>(<js>"Technical Details"</js>),
+         <jsm>p</jsm>(<js>"The technology works by..."</js>)
+      )
+   );
  
-   // Product review
-   Article review = new Article()
-      .children(
-         new Header()
-            .children(
-               new H1().children("Review: Amazing Widget Pro"),
-               new P().children("Rating: ", new Strong().children("5/5 stars"))
-            ),
-         new P().children("After using the Amazing Widget Pro for a month..."),
-         new Section()
-            .children(
-               new H2().children("Pros"),
-               new Ul().children(
-                  new Li().children("Easy to use"),
-                  new Li().children("Great performance"),
-                  new Li().children("Excellent support")
-               )
-            )
-      );
+   <jc>// Forum post</jc>
+   Article <jv>forumPost</jv> = <jsm>article</jsm>(
+      <jsm>header</jsm>(
+         <jsm>h3</jsm>(<js>"Question about CSS Grid"</js>),
+         <jsm>p</jsm>(<js>"Posted by "</js>, <jsm>strong</jsm>(<js>"user123"</js>), <js>" on "</js>, <jsm>time</jsm>(<js>"2024-01-14"</js>, <js>"yesterday"</js>))
+      ),
+      <jsm>p</jsm>(<js>"I'm having trouble with CSS Grid layout..."</js>),
+      <jsm>footer</jsm>(
+         <jsm>p</jsm>(<js>"Tags: "</js>, <jsm>a</jsm>(<js>"/tag/css"</js>, <js>"CSS"</js>), <js>", "</js>, <jsm>a</jsm>(<js>"/tag/grid"</js>, <js>"Grid"</js>))
+      )
+   )._class(<js>"forum-post"</js>);
  
-   // Article with multiple sections
-   Article multiSection = new Article()
-      .children(
-         new Header()
-            .children(new H1().children("Complete Guide to Web Development")),
-         new Section()
-            .children(
-               new H2().children("Introduction"),
-               new P().children("Web development encompasses many technologies...")
-            ),
-         new Section()
-            .children(
-               new H2().children("Frontend Development"),
-               new P().children("Frontend development focuses on...")
-            ),
-         new Section()
-            .children(
-               new H2().children("Backend Development"),
-               new P().children("Backend development handles...")
-            )
-      );
+   <jc>// Product review</jc>
+   Article <jv>review</jv> = <jsm>article</jsm>(
+      <jsm>header</jsm>(
+         <jsm>h1</jsm>(<js>"Review: Amazing Widget Pro"</js>),
+         <jsm>p</jsm>(<js>"Rating: "</js>, <jsm>strong</jsm>(<js>"5/5 stars"</js>))
+      ),
+      <jsm>p</jsm>(<js>"After using the Amazing Widget Pro for a month..."</js>),
+      <jsm>section</jsm>(
+         <jsm>h2</jsm>(<js>"Pros"</js>),
+         <jsm>ul</jsm>(
+            <jsm>li</jsm>(<js>"Easy to use"</js>),
+            <jsm>li</jsm>(<js>"Great performance"</js>),
+            <jsm>li</jsm>(<js>"Excellent support"</js>)
+         )
+      )
+   );
+ 
+   <jc>// Article with multiple sections</jc>
+   Article <jv>multiSection</jv> = <jsm>article</jsm>(
+      <jsm>header</jsm>(<jsm>h1</jsm>(<js>"Complete Guide to Web Development"</js>)),
+      <jsm>section</jsm>(
+         <jsm>h2</jsm>(<js>"Introduction"</js>),
+         <jsm>p</jsm>(<js>"Web development encompasses many technologies..."</js>)
+      ),
+      <jsm>section</jsm>(
+         <jsm>h2</jsm>(<js>"Frontend Development"</js>),
+         <jsm>p</jsm>(<js>"Frontend development focuses on..."</js>)
+      ),
+      <jsm>section</jsm>(
+         <jsm>h2</jsm>(<js>"Backend Development"</js>),
+         <jsm>p</jsm>(<js>"Backend development handles..."</js>)
+      )
+   );
+ </p>
+
+ <p>
+ The following convenience methods are provided for constructing instances of this bean:
+ <ul class='javatree'>
+   <li class='jc'><a href="HtmlBuilder.html" title="class in org.apache.juneau.bean.html5"><code>HtmlBuilder</code></a>
+   <ul class='javatree'>
+      <li class='jm'><a href="HtmlBuilder.html#article()"><code>article()</code></a>
+      <li class='jm'><code>article(Object, Object...)</code>
+   </ul>
+ </ul>
  </p>
 
  <h5 class='section'>See Also:</h5><ul>
@@ -605,14 +600,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Article</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-132">Article</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-127">Article</a></span>()</div>
 <div class="block">Creates an empty <a href="Article.html" title="class in org.apache.juneau.bean.html5"><code>Article</code></a> element.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Object...)">
 <h3>Article</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-139">Article</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;children)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-134">Article</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;children)</span></div>
 <div class="block">Creates an <a href="Article.html" title="class in org.apache.juneau.bean.html5"><code>Article</code></a> element with the specified child nodes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -631,7 +626,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="header(java.lang.Object...)">
 <h3>header</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-149">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;children)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-144">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;children)</span></div>
 <div class="block">Adds a header node to this element.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -644,7 +639,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="footer(java.lang.Object...)">
 <h3>footer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-160">footer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;children)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-155">footer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;children)</span></div>
 <div class="block">Adds a footer node to this element.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -657,7 +652,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="link(org.apache.juneau.bean.html5.Link)">
 <h3>link</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-171">link</a></span><wbr><span class="parameters">(<a href="Link.html" title="class in org.apache.juneau.bean.html5">Link</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-166">link</a></span><wbr><span class="parameters">(<a href="Link.html" title="class in org.apache.juneau.bean.html5">Link</a>&nbsp;value)</span></div>
 <div class="block">Adds a link node to this element.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -670,7 +665,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="section(org.apache.juneau.bean.html5.Section)">
 <h3>section</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-182">section</a></span><wbr><span class="parameters">(<a href="Section.html" title="class in org.apache.juneau.bean.html5">Section</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-177">section</a></span><wbr><span class="parameters">(<a href="Section.html" title="class in org.apache.juneau.bean.html5">Section</a>&nbsp;value)</span></div>
 <div class="block">Adds a section node to this element.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -683,7 +678,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="_class(java.lang.String)">
 <h3>_class</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-193">_class</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-188">_class</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#_class(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/dom.html#classes">class</a> attribute.
 
@@ -701,7 +696,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="accesskey(java.lang.String)">
 <h3>accesskey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-199">accesskey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-194">accesskey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#accesskey(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/editing.html#the-accesskey-attribute">accesskey</a>
  attribute.
@@ -721,7 +716,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="contenteditable(java.lang.Object)">
 <h3>contenteditable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-205">contenteditable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-200">contenteditable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#contenteditable(java.lang.Object)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-contenteditable">contenteditable</a>
  attribute.
@@ -747,7 +742,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="dir(java.lang.String)">
 <h3>dir</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-211">dir</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-206">dir</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#dir(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/dom.html#the-dir-attribute">dir</a> attribute.
 
@@ -772,7 +767,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hidden(java.lang.Object)">
 <h3>hidden</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-217">hidden</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-212">hidden</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#hidden(java.lang.Object)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/editing.html#the-hidden-attribute">hidden</a> attribute.
 
@@ -794,7 +789,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="id(java.lang.String)">
 <h3>id</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-223">id</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-218">id</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#id(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/dom.html#the-id-attribute">id</a> attribute.
 
@@ -812,7 +807,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="lang(java.lang.String)">
 <h3>lang</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-229">lang</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-224">lang</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#lang(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-lang">lang</a> attribute.
 
@@ -830,7 +825,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onabort(java.lang.String)">
 <h3>onabort</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-235">onabort</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-230">onabort</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onabort(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onabort">onabort</a> attribute.
 
@@ -847,12 +842,22 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onblur(java.lang.String)">
 <h3>onblur</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-241">onblur</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-236">onblur</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onblur(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onblur">onblur</a> attribute.
 
  <p>
- Event handler for when the element loses focus.</div>
+ Event handler for when the element loses focus.
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onblur(<js>"validate(\"email\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onblur(<js>"validate('email')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onblur(java.lang.String)">onblur</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>
@@ -864,7 +869,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oncancel(java.lang.String)">
 <h3>oncancel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-247">oncancel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-242">oncancel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#oncancel(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncancel">oncancel</a> attribute.
 
@@ -881,7 +886,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oncanplay(java.lang.String)">
 <h3>oncanplay</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-253">oncanplay</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-248">oncanplay</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#oncanplay(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncanplay">oncanplay</a> attribute.
 
@@ -898,7 +903,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oncanplaythrough(java.lang.String)">
 <h3>oncanplaythrough</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-259">oncanplaythrough</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-254">oncanplaythrough</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#oncanplaythrough(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncanplaythrough">oncanplaythrough</a>
  attribute.
@@ -916,12 +921,22 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onchange(java.lang.String)">
 <h3>onchange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-265">onchange</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-260">onchange</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onchange(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onchange">onchange</a> attribute.
 
  <p>
- Event handler for when the value of a form element changes and loses focus.</div>
+ Event handler for when the value of a form element changes and loses focus.
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onchange(<js>"validate(\"field\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onchange(<js>"validate('field')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onchange(java.lang.String)">onchange</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>
@@ -933,12 +948,22 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onclick(java.lang.String)">
 <h3>onclick</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-271">onclick</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-266">onclick</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onclick(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onclick">onclick</a> attribute.
 
  <p>
- Event handler for when the element is clicked.</div>
+ Event handler for when the element is clicked.
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onclick(<js>"alert(\"Hello\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onclick(<js>"alert('Hello')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onclick(java.lang.String)">onclick</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>
@@ -950,7 +975,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oncuechange(java.lang.String)">
 <h3>oncuechange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-277">oncuechange</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-272">oncuechange</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#oncuechange(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncuechange">oncuechange</a>
  attribute.
@@ -968,7 +993,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ondblclick(java.lang.String)">
 <h3>ondblclick</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-283">ondblclick</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-278">ondblclick</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#ondblclick(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ondblclick">ondblclick</a> attribute.
 
@@ -985,7 +1010,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ondurationchange(java.lang.String)">
 <h3>ondurationchange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-289">ondurationchange</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-284">ondurationchange</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#ondurationchange(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ondurationchange">ondurationchange</a>
  attribute.
@@ -1003,7 +1028,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onemptied(java.lang.String)">
 <h3>onemptied</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-295">onemptied</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-290">onemptied</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onemptied(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onemptied">onemptied</a> attribute.
 
@@ -1020,7 +1045,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onended(java.lang.String)">
 <h3>onended</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-301">onended</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-296">onended</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onended(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onended">onended</a> attribute.
 
@@ -1037,7 +1062,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onerror(java.lang.String)">
 <h3>onerror</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-307">onerror</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-302">onerror</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onerror(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onerror">onerror</a> attribute.
 
@@ -1054,12 +1079,22 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onfocus(java.lang.String)">
 <h3>onfocus</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-313">onfocus</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-308">onfocus</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onfocus(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onfocus">onfocus</a> attribute.
 
  <p>
- Event handler for when the element receives focus.</div>
+ Event handler for when the element receives focus.
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onfocus(<js>"highlight(\"field\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onfocus(<js>"highlight('field')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onfocus(java.lang.String)">onfocus</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>
@@ -1071,7 +1106,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oninput(java.lang.String)">
 <h3>oninput</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-319">oninput</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-314">oninput</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#oninput(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oninput">oninput</a> attribute.
 
@@ -1088,7 +1123,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oninvalid(java.lang.String)">
 <h3>oninvalid</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-325">oninvalid</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-320">oninvalid</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#oninvalid(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oninvalid">oninvalid</a> attribute.
 
@@ -1105,7 +1140,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onkeydown(java.lang.String)">
 <h3>onkeydown</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-331">onkeydown</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-326">onkeydown</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onkeydown(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onkeydown">onkeydown</a> attribute.
 
@@ -1122,7 +1157,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onkeypress(java.lang.String)">
 <h3>onkeypress</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-337">onkeypress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-332">onkeypress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onkeypress(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onkeypress">onkeypress</a> attribute.
 
@@ -1139,7 +1174,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onkeyup(java.lang.String)">
 <h3>onkeyup</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-343">onkeyup</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-338">onkeyup</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onkeyup(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onkeyup">onkeyup</a> attribute.
 
@@ -1156,12 +1191,22 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onload(java.lang.String)">
 <h3>onload</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-349">onload</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-344">onload</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onload(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onload">onload</a> attribute.
 
  <p>
- Event handler for when the element and its resources have finished loading.</div>
+ Event handler for when the element and its resources have finished loading.
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onload(<js>"init(\"config\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onload(<js>"init('config')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onload(java.lang.String)">onload</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>
@@ -1173,7 +1218,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onloadeddata(java.lang.String)">
 <h3>onloadeddata</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-355">onloadeddata</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-350">onloadeddata</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onloadeddata(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadeddata">onloadeddata</a>
  attribute.
@@ -1191,7 +1236,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onloadedmetadata(java.lang.String)">
 <h3>onloadedmetadata</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-361">onloadedmetadata</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-356">onloadedmetadata</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onloadedmetadata(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadedmetadata">onloadedmetadata</a>
  attribute.
@@ -1209,7 +1254,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onloadstart(java.lang.String)">
 <h3>onloadstart</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-367">onloadstart</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-362">onloadstart</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onloadstart(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadstart">onloadstart</a>
  attribute.
@@ -1227,7 +1272,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onmousedown(java.lang.String)">
 <h3>onmousedown</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-373">onmousedown</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-368">onmousedown</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onmousedown(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmousedown">onmousedown</a>
  attribute.
@@ -1245,7 +1290,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onmouseenter(java.lang.String)">
 <h3>onmouseenter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-379">onmouseenter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-374">onmouseenter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onmouseenter(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseenter">onmouseenter</a> attribute.
 
@@ -1262,7 +1307,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onmouseleave(java.lang.String)">
 <h3>onmouseleave</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-385">onmouseleave</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-380">onmouseleave</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onmouseleave(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseleave">onmouseleave</a>
  attribute.
@@ -1280,7 +1325,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onmousemove(java.lang.String)">
 <h3>onmousemove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-391">onmousemove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-386">onmousemove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onmousemove(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmousemove">onmousemove</a>
  attribute.
@@ -1298,7 +1343,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onmouseout(java.lang.String)">
 <h3>onmouseout</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-397">onmouseout</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-392">onmouseout</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onmouseout(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseout">onmouseout</a> attribute.
 
@@ -1315,13 +1360,23 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onmouseover(java.lang.String)">
 <h3>onmouseover</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-403">onmouseover</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-398">onmouseover</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onmouseover(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseover">onmouseover</a>
  attribute.
 
  <p>
- Event handler for when the mouse pointer moves over the element (bubbles).</div>
+ Event handler for when the mouse pointer moves over the element (bubbles).
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onmouseover(<js>"showTooltip(\"info\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onmouseover(<js>"showTooltip('info')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onmouseover(java.lang.String)">onmouseover</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>
@@ -1333,7 +1388,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onmouseup(java.lang.String)">
 <h3>onmouseup</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-409">onmouseup</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-404">onmouseup</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onmouseup(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseup">onmouseup</a> attribute.
 
@@ -1350,7 +1405,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onmousewheel(java.lang.String)">
 <h3>onmousewheel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-415">onmousewheel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-410">onmousewheel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onmousewheel(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmousewheel">onmousewheel</a>
  attribute.
@@ -1368,7 +1423,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onpause(java.lang.String)">
 <h3>onpause</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-421">onpause</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-416">onpause</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onpause(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onpause">onpause</a> attribute.
 
@@ -1385,7 +1440,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onplay(java.lang.String)">
 <h3>onplay</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-427">onplay</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-422">onplay</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onplay(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onplay">onplay</a> attribute.
 
@@ -1402,7 +1457,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onplaying(java.lang.String)">
 <h3>onplaying</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-433">onplaying</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-428">onplaying</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onplaying(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onplaying">onplaying</a> attribute.
 
@@ -1419,7 +1474,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onprogress(java.lang.String)">
 <h3>onprogress</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-439">onprogress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-434">onprogress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onprogress(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onprogress">onprogress</a> attribute.
 
@@ -1436,7 +1491,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onratechange(java.lang.String)">
 <h3>onratechange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-445">onratechange</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-440">onratechange</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onratechange(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onratechange">onratechange</a>
  attribute.
@@ -1454,7 +1509,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onreset(java.lang.String)">
 <h3>onreset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-451">onreset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-446">onreset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onreset(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onreset">onreset</a> attribute.
 
@@ -1471,7 +1526,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onresize(java.lang.String)">
 <h3>onresize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-457">onresize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-452">onresize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onresize(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onresize">onresize</a> attribute.
 
@@ -1488,7 +1543,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onscroll(java.lang.String)">
 <h3>onscroll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-463">onscroll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-458">onscroll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onscroll(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onscroll">onscroll</a> attribute.
 
@@ -1505,7 +1560,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onseeked(java.lang.String)">
 <h3>onseeked</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-469">onseeked</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-464">onseeked</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onseeked(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onseeked">onseeked</a> attribute.
 
@@ -1522,7 +1577,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onseeking(java.lang.String)">
 <h3>onseeking</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-475">onseeking</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-470">onseeking</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onseeking(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onseeking">onseeking</a> attribute.
 
@@ -1539,7 +1594,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onselect(java.lang.String)">
 <h3>onselect</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-481">onselect</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-476">onselect</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onselect(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onselect">onselect</a> attribute.
 
@@ -1556,7 +1611,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onshow(java.lang.String)">
 <h3>onshow</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-487">onshow</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-482">onshow</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onshow(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onshow">onshow</a> attribute.
 
@@ -1573,7 +1628,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onstalled(java.lang.String)">
 <h3>onstalled</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-493">onstalled</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-488">onstalled</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onstalled(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onstalled">onstalled</a> attribute.
 
@@ -1590,12 +1645,22 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onsubmit(java.lang.String)">
 <h3>onsubmit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-499">onsubmit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-494">onsubmit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onsubmit(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onsubmit">onsubmit</a> attribute.
 
  <p>
- Event handler for when a form is submitted.</div>
+ Event handler for when a form is submitted.
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onsubmit(<js>"return validate(\"form\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onsubmit(<js>"return validate('form')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onsubmit(java.lang.String)">onsubmit</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>
@@ -1607,7 +1672,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onsuspend(java.lang.String)">
 <h3>onsuspend</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-505">onsuspend</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-500">onsuspend</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onsuspend(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onsuspend">onsuspend</a> attribute.
 
@@ -1624,7 +1689,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ontimeupdate(java.lang.String)">
 <h3>ontimeupdate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-511">ontimeupdate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-506">ontimeupdate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#ontimeupdate(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ontimeupdate">ontimeupdate</a>
  attribute.
@@ -1642,7 +1707,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ontoggle(java.lang.String)">
 <h3>ontoggle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-517">ontoggle</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-512">ontoggle</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#ontoggle(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ontoggle">ontoggle</a> attribute.
 
@@ -1659,7 +1724,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onvolumechange(java.lang.String)">
 <h3>onvolumechange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-523">onvolumechange</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-518">onvolumechange</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onvolumechange(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onvolumechange">onvolumechange</a>
  attribute.
@@ -1677,7 +1742,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onwaiting(java.lang.String)">
 <h3>onwaiting</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-529">onwaiting</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-524">onwaiting</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#onwaiting(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onwaiting">onwaiting</a> attribute.
 
@@ -1694,7 +1759,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="spellcheck(java.lang.Object)">
 <h3>spellcheck</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-535">spellcheck</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-530">spellcheck</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#spellcheck(java.lang.Object)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-spellcheck">spellcheck</a> attribute.
 
@@ -1718,7 +1783,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="style(java.lang.String)">
 <h3>style</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-541">style</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-536">style</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#style(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/dom.html#the-style-attribute">style</a> attribute.
 
@@ -1736,7 +1801,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tabindex(java.lang.Object)">
 <h3>tabindex</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-547">tabindex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-542">tabindex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#tabindex(java.lang.Object)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-tabindex">tabindex</a> attribute.
 
@@ -1761,7 +1826,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="title(java.lang.String)">
 <h3>title</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-553">title</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-548">title</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#title(java.lang.String)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-title">title</a> attribute.
 
@@ -1779,7 +1844,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="translate(java.lang.Object)">
 <h3>translate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-559">translate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-554">translate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElement.html#translate(java.lang.Object)">HtmlElement</a></code></span></div>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-translate">translate</a> attribute.
 
@@ -1803,7 +1868,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="child(java.lang.Object)">
 <h3>child</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-565">child</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-560">child</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElementMixed.html#child(java.lang.Object)">HtmlElementMixed</a></code></span></div>
 <div class="block">Adds a child element to this element.</div>
 <dl class="notes">
@@ -1817,7 +1882,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="children(java.lang.Object...)">
 <h3>children</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-571">children</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Article.html" title="class in org.apache.juneau.bean.html5">Article</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/html5/Article.html#line-566">children</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HtmlElementMixed.html#children(java.lang.Object...)">HtmlElementMixed</a></code></span></div>
 <div class="block">Adds one or more child elements to this element.</div>
 <dl class="notes">

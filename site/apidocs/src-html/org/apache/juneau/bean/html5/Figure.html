@@ -41,70 +41,70 @@
 <span class="source-line-no">028</span><span id="line-28"> *</span>
 <span class="source-line-no">029</span><span id="line-29"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;p class='bcode w800'&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> *    // Simple figure with image</span>
-<span class="source-line-no">032</span><span id="line-32"> *    Figure simple = new Figure()</span>
-<span class="source-line-no">033</span><span id="line-33"> *       .children(</span>
-<span class="source-line-no">034</span><span id="line-34"> *          new Img().src("/images/sunset.jpg").alt("Sunset"),</span>
-<span class="source-line-no">035</span><span id="line-35"> *          new Figcaption().children("A beautiful sunset over the mountains.")</span>
-<span class="source-line-no">036</span><span id="line-36"> *       );</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> *    // Figure with code snippet</span>
-<span class="source-line-no">039</span><span id="line-39"> *    Figure codeFigure = new Figure()</span>
-<span class="source-line-no">040</span><span id="line-40"> *       .children(</span>
-<span class="source-line-no">041</span><span id="line-41"> *          new Pre().children(</span>
-<span class="source-line-no">042</span><span id="line-42"> *             new Code().children("function hello() {\n  return 'Hello World';\n}")</span>
-<span class="source-line-no">043</span><span id="line-43"> *          ),</span>
-<span class="source-line-no">044</span><span id="line-44"> *          new Figcaption().children("A simple JavaScript function.")</span>
-<span class="source-line-no">045</span><span id="line-45"> *       );</span>
-<span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> *    // Figure with styling</span>
-<span class="source-line-no">048</span><span id="line-48"> *    Figure styled = new Figure()</span>
-<span class="source-line-no">049</span><span id="line-49"> *       ._class("chart-figure")</span>
-<span class="source-line-no">050</span><span id="line-50"> *       .children(</span>
-<span class="source-line-no">051</span><span id="line-51"> *          new Img().src("/charts/sales.png").alt("Sales Chart"),</span>
-<span class="source-line-no">052</span><span id="line-52"> *          new Figcaption().children("Monthly sales data for 2024.")</span>
-<span class="source-line-no">053</span><span id="line-53"> *       );</span>
-<span class="source-line-no">054</span><span id="line-54"> *</span>
-<span class="source-line-no">055</span><span id="line-55"> *    // Figure with multiple elements</span>
-<span class="source-line-no">056</span><span id="line-56"> *    Figure complex = new Figure()</span>
-<span class="source-line-no">057</span><span id="line-57"> *       .children(</span>
-<span class="source-line-no">058</span><span id="line-58"> *          new Img().src("/images/diagram.png").alt("Process Diagram"),</span>
-<span class="source-line-no">059</span><span id="line-59"> *          new P().children("This diagram shows the complete workflow."),</span>
-<span class="source-line-no">060</span><span id="line-60"> *          new Figcaption().children("Figure 1: System Architecture Overview.")</span>
-<span class="source-line-no">061</span><span id="line-61"> *       );</span>
-<span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> *    // Figure with ID</span>
-<span class="source-line-no">064</span><span id="line-64"> *    Figure withId = new Figure()</span>
-<span class="source-line-no">065</span><span id="line-65"> *       .id("main-chart")</span>
-<span class="source-line-no">066</span><span id="line-66"> *       .children(</span>
-<span class="source-line-no">067</span><span id="line-67"> *          new Img().src("/charts/main.png").alt("Main Chart"),</span>
-<span class="source-line-no">068</span><span id="line-68"> *          new Figcaption().children("Primary performance metrics.")</span>
-<span class="source-line-no">069</span><span id="line-69"> *       );</span>
-<span class="source-line-no">070</span><span id="line-70"> *</span>
-<span class="source-line-no">071</span><span id="line-71"> *    // Figure with styling</span>
-<span class="source-line-no">072</span><span id="line-72"> *    Figure styled2 = new Figure()</span>
-<span class="source-line-no">073</span><span id="line-73"> *       .style("border: 1px solid #ccc; padding: 10px; margin: 20px 0;")</span>
-<span class="source-line-no">074</span><span id="line-74"> *       .children(</span>
-<span class="source-line-no">075</span><span id="line-75"> *          new Img().src("/images/example.png").alt("Example"),</span>
-<span class="source-line-no">076</span><span id="line-76"> *          new Figcaption().children("An example of the new feature.")</span>
-<span class="source-line-no">077</span><span id="line-77"> *       );</span>
-<span class="source-line-no">078</span><span id="line-78"> *</span>
-<span class="source-line-no">079</span><span id="line-79"> *    // Figure with table</span>
-<span class="source-line-no">080</span><span id="line-80"> *    Figure tableFigure = new Figure()</span>
-<span class="source-line-no">081</span><span id="line-81"> *       .children(</span>
-<span class="source-line-no">082</span><span id="line-82"> *          new Table()</span>
-<span class="source-line-no">083</span><span id="line-83"> *             .children(</span>
-<span class="source-line-no">084</span><span id="line-84"> *                new Tr().children(</span>
-<span class="source-line-no">085</span><span id="line-85"> *                   new Th().children("Name"),</span>
-<span class="source-line-no">086</span><span id="line-86"> *                   new Th().children("Value")</span>
-<span class="source-line-no">087</span><span id="line-87"> *                ),</span>
-<span class="source-line-no">088</span><span id="line-88"> *                new Tr().children(</span>
-<span class="source-line-no">089</span><span id="line-89"> *                   new Td().children("Item 1"),</span>
-<span class="source-line-no">090</span><span id="line-90"> *                   new Td().children("100")</span>
-<span class="source-line-no">091</span><span id="line-91"> *                )</span>
-<span class="source-line-no">092</span><span id="line-92"> *             ),</span>
-<span class="source-line-no">093</span><span id="line-93"> *          new Figcaption().children("Data summary table.")</span>
-<span class="source-line-no">094</span><span id="line-94"> *       );</span>
+<span class="source-line-no">031</span><span id="line-31"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
+<span class="source-line-no">032</span><span id="line-32"> * </span>
+<span class="source-line-no">033</span><span id="line-33"> *    &lt;jc&gt;// Simple figure with image&lt;/jc&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> *    Figure &lt;jv&gt;simple&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
+<span class="source-line-no">035</span><span id="line-35"> *       &lt;jsm&gt;img&lt;/jsm&gt;(&lt;js&gt;"/images/sunset.jpg"&lt;/js&gt;, &lt;js&gt;"Sunset"&lt;/js&gt;),</span>
+<span class="source-line-no">036</span><span id="line-36"> *       &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"A beautiful sunset over the mountains."&lt;/js&gt;)</span>
+<span class="source-line-no">037</span><span id="line-37"> *    );</span>
+<span class="source-line-no">038</span><span id="line-38"> * </span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;jc&gt;// Figure with code snippet&lt;/jc&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *    Figure &lt;jv&gt;codeFigure&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
+<span class="source-line-no">041</span><span id="line-41"> *       &lt;jsm&gt;pre&lt;/jsm&gt;(&lt;jsm&gt;code&lt;/jsm&gt;(&lt;js&gt;"function hello() {\n  return 'Hello World';\n}"&lt;/js&gt;)),</span>
+<span class="source-line-no">042</span><span id="line-42"> *       &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"A simple JavaScript function."&lt;/js&gt;)</span>
+<span class="source-line-no">043</span><span id="line-43"> *    );</span>
+<span class="source-line-no">044</span><span id="line-44"> * </span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;jc&gt;// Figure with styling&lt;/jc&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> *    Figure &lt;jv&gt;styled&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
+<span class="source-line-no">047</span><span id="line-47"> *       &lt;jsm&gt;img&lt;/jsm&gt;(&lt;js&gt;"/charts/sales.png"&lt;/js&gt;, &lt;js&gt;"Sales Chart"&lt;/js&gt;),</span>
+<span class="source-line-no">048</span><span id="line-48"> *       &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"Monthly sales data for 2024."&lt;/js&gt;)</span>
+<span class="source-line-no">049</span><span id="line-49"> *    )._class(&lt;js&gt;"chart-figure"&lt;/js&gt;);</span>
+<span class="source-line-no">050</span><span id="line-50"> * </span>
+<span class="source-line-no">051</span><span id="line-51"> *    &lt;jc&gt;// Figure with multiple elements&lt;/jc&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> *    Figure &lt;jv&gt;complex&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
+<span class="source-line-no">053</span><span id="line-53"> *       &lt;jsm&gt;img&lt;/jsm&gt;(&lt;js&gt;"/images/diagram.png"&lt;/js&gt;, &lt;js&gt;"Process Diagram"&lt;/js&gt;),</span>
+<span class="source-line-no">054</span><span id="line-54"> *       &lt;jsm&gt;p&lt;/jsm&gt;(&lt;js&gt;"This diagram shows the complete workflow."&lt;/js&gt;),</span>
+<span class="source-line-no">055</span><span id="line-55"> *       &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"Figure 1: System Architecture Overview."&lt;/js&gt;)</span>
+<span class="source-line-no">056</span><span id="line-56"> *    );</span>
+<span class="source-line-no">057</span><span id="line-57"> * </span>
+<span class="source-line-no">058</span><span id="line-58"> *    &lt;jc&gt;// Figure with ID&lt;/jc&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> *    Figure &lt;jv&gt;withId&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
+<span class="source-line-no">060</span><span id="line-60"> *       &lt;jsm&gt;img&lt;/jsm&gt;(&lt;js&gt;"/charts/main.png"&lt;/js&gt;, &lt;js&gt;"Main Chart"&lt;/js&gt;),</span>
+<span class="source-line-no">061</span><span id="line-61"> *       &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"Primary performance metrics."&lt;/js&gt;)</span>
+<span class="source-line-no">062</span><span id="line-62"> *    ).id(&lt;js&gt;"main-chart"&lt;/js&gt;);</span>
+<span class="source-line-no">063</span><span id="line-63"> * </span>
+<span class="source-line-no">064</span><span id="line-64"> *    &lt;jc&gt;// Figure with styling&lt;/jc&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> *    Figure &lt;jv&gt;styled2&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
+<span class="source-line-no">066</span><span id="line-66"> *       &lt;jsm&gt;img&lt;/jsm&gt;(&lt;js&gt;"/images/example.png"&lt;/js&gt;, &lt;js&gt;"Example"&lt;/js&gt;),</span>
+<span class="source-line-no">067</span><span id="line-67"> *       &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"An example of the new feature."&lt;/js&gt;)</span>
+<span class="source-line-no">068</span><span id="line-68"> *    ).style(&lt;js&gt;"border: 1px solid #ccc; padding: 10px; margin: 20px 0;"&lt;/js&gt;);</span>
+<span class="source-line-no">069</span><span id="line-69"> * </span>
+<span class="source-line-no">070</span><span id="line-70"> *    &lt;jc&gt;// Figure with table&lt;/jc&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> *    Figure &lt;jv&gt;tableFigure&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
+<span class="source-line-no">072</span><span id="line-72"> *       &lt;jsm&gt;table&lt;/jsm&gt;(</span>
+<span class="source-line-no">073</span><span id="line-73"> *          &lt;jsm&gt;tr&lt;/jsm&gt;(</span>
+<span class="source-line-no">074</span><span id="line-74"> *             &lt;jsm&gt;th&lt;/jsm&gt;(&lt;js&gt;"Name"&lt;/js&gt;),</span>
+<span class="source-line-no">075</span><span id="line-75"> *             &lt;jsm&gt;th&lt;/jsm&gt;(&lt;js&gt;"Value"&lt;/js&gt;)</span>
+<span class="source-line-no">076</span><span id="line-76"> *          ),</span>
+<span class="source-line-no">077</span><span id="line-77"> *          &lt;jsm&gt;tr&lt;/jsm&gt;(</span>
+<span class="source-line-no">078</span><span id="line-78"> *             &lt;jsm&gt;td&lt;/jsm&gt;(&lt;js&gt;"Item 1"&lt;/js&gt;),</span>
+<span class="source-line-no">079</span><span id="line-79"> *             &lt;jsm&gt;td&lt;/jsm&gt;(&lt;js&gt;"100"&lt;/js&gt;)</span>
+<span class="source-line-no">080</span><span id="line-80"> *          )</span>
+<span class="source-line-no">081</span><span id="line-81"> *       ),</span>
+<span class="source-line-no">082</span><span id="line-82"> *       &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"Data summary table."&lt;/js&gt;)</span>
+<span class="source-line-no">083</span><span id="line-83"> *    );</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;/p&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> *</span>
+<span class="source-line-no">086</span><span id="line-86"> * &lt;p&gt;</span>
+<span class="source-line-no">087</span><span id="line-87"> * The following convenience methods are provided for constructing instances of this bean:</span>
+<span class="source-line-no">088</span><span id="line-88"> * &lt;ul class='javatree'&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> *    &lt;li class='jc'&gt;{@link HtmlBuilder}</span>
+<span class="source-line-no">090</span><span id="line-90"> *    &lt;ul class='javatree'&gt;</span>
+<span class="source-line-no">091</span><span id="line-91"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#figure() figure()}</span>
+<span class="source-line-no">092</span><span id="line-92"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#figure(Object, Object...) figure(Object, Object...)}</span>
+<span class="source-line-no">093</span><span id="line-93"> *    &lt;/ul&gt;</span>
+<span class="source-line-no">094</span><span id="line-94"> * &lt;/ul&gt;</span>
 <span class="source-line-no">095</span><span id="line-95"> * &lt;/p&gt;</span>
 <span class="source-line-no">096</span><span id="line-96"> *</span>
 <span class="source-line-no">097</span><span id="line-97"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>

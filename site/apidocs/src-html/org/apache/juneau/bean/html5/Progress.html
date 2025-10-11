@@ -42,45 +42,45 @@
 <span class="source-line-no">029</span><span id="line-29"> *</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p class='bcode w800'&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> *    // Simple progress bar</span>
-<span class="source-line-no">033</span><span id="line-33"> *    Progress simple = new Progress()</span>
-<span class="source-line-no">034</span><span id="line-34"> *       .value(50)</span>
-<span class="source-line-no">035</span><span id="line-35"> *       .max(100);</span>
-<span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> *    // Progress with styling</span>
-<span class="source-line-no">038</span><span id="line-38"> *    Progress styled = new Progress()</span>
-<span class="source-line-no">039</span><span id="line-39"> *       ._class("file-upload-progress")</span>
-<span class="source-line-no">040</span><span id="line-40"> *       .value(75)</span>
-<span class="source-line-no">041</span><span id="line-41"> *       .max(100);</span>
-<span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> *    // Progress with complex content</span>
-<span class="source-line-no">044</span><span id="line-44"> *    Progress complex = new Progress()</span>
-<span class="source-line-no">045</span><span id="line-45"> *       .value(60)</span>
-<span class="source-line-no">046</span><span id="line-46"> *       .max(100)</span>
-<span class="source-line-no">047</span><span id="line-47"> *       .children("60% complete");</span>
-<span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> *    // Progress with ID</span>
-<span class="source-line-no">050</span><span id="line-50"> *    Progress withId = new Progress()</span>
-<span class="source-line-no">051</span><span id="line-51"> *       .id("download-progress")</span>
-<span class="source-line-no">052</span><span id="line-52"> *       .value(30)</span>
-<span class="source-line-no">053</span><span id="line-53"> *       .max(100);</span>
-<span class="source-line-no">054</span><span id="line-54"> *</span>
-<span class="source-line-no">055</span><span id="line-55"> *    // Progress with styling</span>
-<span class="source-line-no">056</span><span id="line-56"> *    Progress styled2 = new Progress()</span>
-<span class="source-line-no">057</span><span id="line-57"> *       .style("width: 300px; height: 20px;")</span>
-<span class="source-line-no">058</span><span id="line-58"> *       .value(40)</span>
-<span class="source-line-no">059</span><span id="line-59"> *       .max(100);</span>
-<span class="source-line-no">060</span><span id="line-60"> *</span>
-<span class="source-line-no">061</span><span id="line-61"> *    // Progress with multiple attributes</span>
-<span class="source-line-no">062</span><span id="line-62"> *    Progress multiple = new Progress()</span>
-<span class="source-line-no">063</span><span id="line-63"> *       .value(85)</span>
-<span class="source-line-no">064</span><span id="line-64"> *       .max(100)</span>
-<span class="source-line-no">065</span><span id="line-65"> *       .title("Upload Progress: 85%")</span>
-<span class="source-line-no">066</span><span id="line-66"> *       .children("85% complete");</span>
+<span class="source-line-no">032</span><span id="line-32"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
+<span class="source-line-no">033</span><span id="line-33"> *</span>
+<span class="source-line-no">034</span><span id="line-34"> *    &lt;jc&gt;// Simple progress bar&lt;/jc&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> *    Progress &lt;jv&gt;simple&lt;/jv&gt; = &lt;jsm&gt;progress&lt;/jsm&gt;()</span>
+<span class="source-line-no">036</span><span id="line-36"> *       .value(50)</span>
+<span class="source-line-no">037</span><span id="line-37"> *       .max(100);</span>
+<span class="source-line-no">038</span><span id="line-38"> *</span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;jc&gt;// Progress with styling&lt;/jc&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *    Progress &lt;jv&gt;styled&lt;/jv&gt; = &lt;jsm&gt;progress&lt;/jsm&gt;()</span>
+<span class="source-line-no">041</span><span id="line-41"> *       ._class(&lt;js&gt;"file-upload-progress"&lt;/js&gt;)</span>
+<span class="source-line-no">042</span><span id="line-42"> *       .value(75)</span>
+<span class="source-line-no">043</span><span id="line-43"> *       .max(100);</span>
+<span class="source-line-no">044</span><span id="line-44"> *</span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;jc&gt;// Progress with complex content&lt;/jc&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> *    Progress &lt;jv&gt;complex&lt;/jv&gt; = &lt;jsm&gt;progress&lt;/jsm&gt;(&lt;js&gt;"60% complete"&lt;/js&gt;)</span>
+<span class="source-line-no">047</span><span id="line-47"> *       .value(60)</span>
+<span class="source-line-no">048</span><span id="line-48"> *       .max(100);</span>
+<span class="source-line-no">049</span><span id="line-49"> *</span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;jc&gt;// Progress with ID&lt;/jc&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *    Progress &lt;jv&gt;withId&lt;/jv&gt; = &lt;jsm&gt;progress&lt;/jsm&gt;()</span>
+<span class="source-line-no">052</span><span id="line-52"> *       .id(&lt;js&gt;"download-progress"&lt;/js&gt;)</span>
+<span class="source-line-no">053</span><span id="line-53"> *       .value(30)</span>
+<span class="source-line-no">054</span><span id="line-54"> *       .max(100);</span>
+<span class="source-line-no">055</span><span id="line-55"> *</span>
+<span class="source-line-no">056</span><span id="line-56"> *    &lt;jc&gt;// Progress with styling&lt;/jc&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> *    Progress &lt;jv&gt;styled2&lt;/jv&gt; = &lt;jsm&gt;progress&lt;/jsm&gt;()</span>
+<span class="source-line-no">058</span><span id="line-58"> *       .style(&lt;js&gt;"width: 300px; height: 20px;"&lt;/js&gt;)</span>
+<span class="source-line-no">059</span><span id="line-59"> *       .value(40)</span>
+<span class="source-line-no">060</span><span id="line-60"> *       .max(100);</span>
+<span class="source-line-no">061</span><span id="line-61"> *</span>
+<span class="source-line-no">062</span><span id="line-62"> *    &lt;jc&gt;// Progress with multiple attributes&lt;/jc&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> *    Progress &lt;jv&gt;multiple&lt;/jv&gt; = &lt;jsm&gt;progress&lt;/jsm&gt;(&lt;js&gt;"85% complete"&lt;/js&gt;)</span>
+<span class="source-line-no">064</span><span id="line-64"> *       .value(85)</span>
+<span class="source-line-no">065</span><span id="line-65"> *       .max(100)</span>
+<span class="source-line-no">066</span><span id="line-66"> *       .title(&lt;js&gt;"Upload Progress: 85%"&lt;/js&gt;);</span>
 <span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> *    // Progress with form</span>
-<span class="source-line-no">069</span><span id="line-69"> *    Progress withForm = new Progress()</span>
-<span class="source-line-no">070</span><span id="line-70"> *       .form("upload-form")</span>
+<span class="source-line-no">068</span><span id="line-68"> *    &lt;jc&gt;// Progress with form&lt;/jc&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> *    Progress &lt;jv&gt;withForm&lt;/jv&gt; = &lt;jsm&gt;progress&lt;/jsm&gt;()</span>
+<span class="source-line-no">070</span><span id="line-70"> *       .form(&lt;js&gt;"upload-form"&lt;/js&gt;)</span>
 <span class="source-line-no">071</span><span id="line-71"> *       .value(25)</span>
 <span class="source-line-no">072</span><span id="line-72"> *       .max(100);</span>
 <span class="source-line-no">073</span><span id="line-73"> *</span>

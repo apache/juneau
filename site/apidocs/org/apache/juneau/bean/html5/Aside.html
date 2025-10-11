@@ -96,72 +96,72 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
-   // Sidebar with related links
-   Aside sidebar = new Aside()
-      ._class("sidebar")
-      .children(
-         new H3().children("Related Articles"),
-         new Ul().children(
-            new Li().children(new A().href("/article1").children("Article 1")),
-            new Li().children(new A().href("/article2").children("Article 2")),
-            new Li().children(new A().href("/article3").children("Article 3"))
+   <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+ 
+   <jc>// Sidebar with related links</jc>
+   Aside <jv>sidebar</jv> = <jsm>aside</jsm>(
+      <jsm>h3</jsm>(<js>"Related Articles"</js>),
+      <jsm>ul</jsm>(
+         <jsm>li</jsm>(<jsm>a</jsm>(<js>"/article1"</js>, <js>"Article 1"</js>)),
+         <jsm>li</jsm>(<jsm>a</jsm>(<js>"/article2"</js>, <js>"Article 2"</js>)),
+         <jsm>li</jsm>(<jsm>a</jsm>(<js>"/article3"</js>, <js>"Article 3"</js>))
+      )
+   )._class(<js>"sidebar"</js>);
+ 
+   <jc>// Pull quote</jc>
+   Aside <jv>pullQuote</jv> = <jsm>aside</jsm>(
+      <jsm>blockquote</jsm>(
+         <js>"The best way to predict the future is to create it."</js>,
+         <jsm>footer</jsm>(<js>"— Peter Drucker"</js>)
+      )
+   )._class(<js>"pull-quote"</js>);
+ 
+   <jc>// Advertisement</jc>
+   Aside <jv>advertisement</jv> = <jsm>aside</jsm>(
+      <jsm>h4</jsm>(<js>"Sponsored Content"</js>),
+      <jsm>p</jsm>(<js>"Check out our latest product!"</js>),
+      <jsm>a</jsm>(<js>"/product"</js>, <js>"Learn More"</js>)
+   )._class(<js>"advertisement"</js>);
+ 
+   <jc>// Author bio</jc>
+   Aside <jv>authorBio</jv> = <jsm>aside</jsm>(
+      <jsm>h3</jsm>(<js>"About the Author"</js>),
+      <jsm>p</jsm>(<js>"John Doe is a web developer with 10 years of experience..."</js>),
+      <jsm>a</jsm>(<js>"/author/john-doe"</js>, <js>"Read more articles"</js>)
+   )._class(<js>"author-bio"</js>);
+ 
+   <jc>// Navigation menu</jc>
+   Aside <jv>navigation</jv> = <jsm>aside</jsm>(
+      <jsm>nav</jsm>(
+         <jsm>ul</jsm>(
+            <jsm>li</jsm>(<jsm>a</jsm>(<js>"/home"</js>, <js>"Home"</js>)),
+            <jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>)),
+            <jsm>li</jsm>(<jsm>a</jsm>(<js>"/contact"</js>, <js>"Contact"</js>))
          )
-      );
+      )
+   )._class(<js>"navigation"</js>);
  
-   // Pull quote
-   Aside pullQuote = new Aside()
-      ._class("pull-quote")
-      .children(
-         new Blockquote()
-            .children(
-               "The best way to predict the future is to create it.",
-               new Footer().children("— Peter Drucker")
-            )
-      );
- 
-   // Advertisement
-   Aside advertisement = new Aside()
-      ._class("advertisement")
-      .children(
-         new H4().children("Sponsored Content"),
-         new P().children("Check out our latest product!"),
-         new A().href("/product").children("Learn More")
-      );
- 
-   // Author bio
-   Aside authorBio = new Aside()
-      ._class("author-bio")
-      .children(
-         new H3().children("About the Author"),
-         new P().children("John Doe is a web developer with 10 years of experience..."),
-         new A().href("/author/john-doe").children("Read more articles")
-      );
- 
-   // Navigation menu
-   Aside navigation = new Aside()
-      ._class("navigation")
-      .children(
-         new Nav().children(
-            new Ul().children(
-               new Li().children(new A().href("/home").children("Home")),
-               new Li().children(new A().href("/about").children("About")),
-               new Li().children(new A().href("/contact").children("Contact"))
-            )
-         )
-      );
- 
-   // Glossary or definitions
-   Aside glossary = new Aside()
-      ._class("glossary")
-      .children(
-         new H3().children("Key Terms"),
-         new Dl().children(
-            new Dt().children("HTML"),
-            new Dd().children("HyperText Markup Language"),
-            new Dt().children("CSS"),
-            new Dd().children("Cascading Style Sheets")
-         )
-      );
+   <jc>// Glossary or definitions</jc>
+   Aside <jv>glossary</jv> = <jsm>aside</jsm>(
+      <jsm>h3</jsm>(<js>"Key Terms"</js>),
+      <jsm>dl</jsm>(
+         <jsm>dt</jsm>(<js>"HTML"</js>),
+         <jsm>dd</jsm>(<js>"HyperText Markup Language"</js>),
+         <jsm>dt</jsm>(<js>"CSS"</js>),
+         <jsm>dd</jsm>(<js>"Cascading Style Sheets"</js>)
+      )
+   )._class(<js>"glossary"</js>);
+ </p>
+
+ <p>
+ The following convenience methods are provided for constructing instances of this bean:
+ <ul class='javatree'>
+   <li class='jc'><a href="HtmlBuilder.html" title="class in org.apache.juneau.bean.html5"><code>HtmlBuilder</code></a>
+   <ul class='javatree'>
+      <li class='jm'><a href="HtmlBuilder.html#aside()"><code>aside()</code></a>
+      <li class='jm'><code>aside(Object, Object...)</code>
+   </ul>
+ </ul>
  </p>
 
  <h5 class='section'>See Also:</h5><ul>
@@ -757,7 +757,17 @@ loadScripts(document, 'script');</script>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onblur">onblur</a> attribute.
 
  <p>
- Event handler for when the element loses focus.</div>
+ Event handler for when the element loses focus.
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onblur(<js>"validate(\"email\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onblur(<js>"validate('email')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onblur(java.lang.String)">onblur</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>
@@ -826,7 +836,17 @@ loadScripts(document, 'script');</script>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onchange">onchange</a> attribute.
 
  <p>
- Event handler for when the value of a form element changes and loses focus.</div>
+ Event handler for when the value of a form element changes and loses focus.
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onchange(<js>"validate(\"field\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onchange(<js>"validate('field')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onchange(java.lang.String)">onchange</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>
@@ -843,7 +863,17 @@ loadScripts(document, 'script');</script>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onclick">onclick</a> attribute.
 
  <p>
- Event handler for when the element is clicked.</div>
+ Event handler for when the element is clicked.
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onclick(<js>"alert(\"Hello\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onclick(<js>"alert('Hello')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onclick(java.lang.String)">onclick</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>
@@ -964,7 +994,17 @@ loadScripts(document, 'script');</script>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onfocus">onfocus</a> attribute.
 
  <p>
- Event handler for when the element receives focus.</div>
+ Event handler for when the element receives focus.
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onfocus(<js>"highlight(\"field\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onfocus(<js>"highlight('field')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onfocus(java.lang.String)">onfocus</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>
@@ -1066,7 +1106,17 @@ loadScripts(document, 'script');</script>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onload">onload</a> attribute.
 
  <p>
- Event handler for when the element and its resources have finished loading.</div>
+ Event handler for when the element and its resources have finished loading.
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onload(<js>"init(\"config\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onload(<js>"init('config')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onload(java.lang.String)">onload</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>
@@ -1226,7 +1276,17 @@ loadScripts(document, 'script');</script>
  attribute.
 
  <p>
- Event handler for when the mouse pointer moves over the element (bubbles).</div>
+ Event handler for when the mouse pointer moves over the element (bubbles).
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onmouseover(<js>"showTooltip(\"info\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onmouseover(<js>"showTooltip('info')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onmouseover(java.lang.String)">onmouseover</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>
@@ -1500,7 +1560,17 @@ loadScripts(document, 'script');</script>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onsubmit">onsubmit</a> attribute.
 
  <p>
- Event handler for when a form is submitted.</div>
+ Event handler for when a form is submitted.
+
+ <h5 class='section'>Note:</h5>
+ <p>
+ If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
+ in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
+ For example:
+ <ul>
+   <li>If using single quotes for attributes: <c>onsubmit(<js>"return validate(\"form\")"</js>)</c>
+   <li>If using double quotes for attributes: <c>onsubmit(<js>"return validate('form')"</js>)</c>
+ </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="HtmlElementMixed.html#onsubmit(java.lang.String)">onsubmit</a></code>&nbsp;in class&nbsp;<code><a href="HtmlElementMixed.html" title="class in org.apache.juneau.bean.html5">HtmlElementMixed</a></code></dd>

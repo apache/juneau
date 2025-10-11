@@ -35,519 +35,576 @@
 <span class="source-line-no">022</span><span id="line-22"> * DTO for an HTML &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-track-element"&gt;&amp;lt;track&amp;gt;&lt;/a&gt;</span>
 <span class="source-line-no">023</span><span id="line-23"> * element.</span>
 <span class="source-line-no">024</span><span id="line-24"> *</span>
-<span class="source-line-no">025</span><span id="line-25"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">026</span><span id="line-26"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;/ul&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> */</span>
-<span class="source-line-no">029</span><span id="line-29">@Bean(typeName="track")</span>
-<span class="source-line-no">030</span><span id="line-30">@FluentSetters</span>
-<span class="source-line-no">031</span><span id="line-31">public class Track extends HtmlElementVoid {</span>
-<span class="source-line-no">032</span><span id="line-32"></span>
-<span class="source-line-no">033</span><span id="line-33">   /**</span>
-<span class="source-line-no">034</span><span id="line-34">    * Creates an empty {@link Track} element.</span>
-<span class="source-line-no">035</span><span id="line-35">    */</span>
-<span class="source-line-no">036</span><span id="line-36">   public Track() {}</span>
-<span class="source-line-no">037</span><span id="line-37"></span>
-<span class="source-line-no">038</span><span id="line-38">   /**</span>
-<span class="source-line-no">039</span><span id="line-39">    * Creates a {@link Track} element with the specified {@link Track#src(Object)} and {@link Track#kind(String)}</span>
-<span class="source-line-no">040</span><span id="line-40">    * attributes.</span>
-<span class="source-line-no">041</span><span id="line-41">    *</span>
-<span class="source-line-no">042</span><span id="line-42">    * @param src The {@link Track#src(Object)} attribute.</span>
-<span class="source-line-no">043</span><span id="line-43">    * @param kind The {@link Track#kind(String)} attribute.</span>
-<span class="source-line-no">044</span><span id="line-44">    */</span>
-<span class="source-line-no">045</span><span id="line-45">   public Track(Object src, String kind) {</span>
-<span class="source-line-no">046</span><span id="line-46">      src(src).kind(kind);</span>
-<span class="source-line-no">047</span><span id="line-47">   }</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   /**</span>
-<span class="source-line-no">050</span><span id="line-50">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-default"&gt;default&lt;/a&gt;</span>
-<span class="source-line-no">051</span><span id="line-51">    * attribute.</span>
-<span class="source-line-no">052</span><span id="line-52">    *</span>
-<span class="source-line-no">053</span><span id="line-53">    * &lt;p&gt;</span>
-<span class="source-line-no">054</span><span id="line-54">    * Specifies that this track should be enabled by default if no other text track is more suitable.</span>
-<span class="source-line-no">055</span><span id="line-55">    * This is useful for providing fallback captions or subtitles.</span>
-<span class="source-line-no">056</span><span id="line-56">    *</span>
-<span class="source-line-no">057</span><span id="line-57">    * &lt;p&gt;</span>
-<span class="source-line-no">058</span><span id="line-58">    * This attribute uses deminimized values:</span>
-<span class="source-line-no">059</span><span id="line-59">    * &lt;ul&gt;</span>
-<span class="source-line-no">060</span><span id="line-60">    *    &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt; - Track is not enabled by default (default)&lt;/li&gt;</span>
-<span class="source-line-no">061</span><span id="line-61">    *    &lt;li&gt;&lt;jk&gt;true&lt;/jk&gt; - Track is enabled by default&lt;/li&gt;</span>
-<span class="source-line-no">062</span><span id="line-62">    *    &lt;li&gt;Other values - Passed through as-is&lt;/li&gt;</span>
-<span class="source-line-no">063</span><span id="line-63">    * &lt;/ul&gt;</span>
-<span class="source-line-no">064</span><span id="line-64">    *</span>
-<span class="source-line-no">065</span><span id="line-65">    * @param _default Whether this track should be enabled by default.</span>
-<span class="source-line-no">066</span><span id="line-66">    * @return This object.</span>
-<span class="source-line-no">067</span><span id="line-67">    */</span>
-<span class="source-line-no">068</span><span id="line-68">   public Track _default(String value) {  // NOSONAR - Intentional naming.</span>
-<span class="source-line-no">069</span><span id="line-69">      attr("default", value);</span>
-<span class="source-line-no">070</span><span id="line-70">      return this;</span>
-<span class="source-line-no">071</span><span id="line-71">   }</span>
-<span class="source-line-no">072</span><span id="line-72"></span>
-<span class="source-line-no">073</span><span id="line-73">   /**</span>
-<span class="source-line-no">074</span><span id="line-74">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind"&gt;kind&lt;/a&gt; attribute.</span>
-<span class="source-line-no">075</span><span id="line-75">    *</span>
-<span class="source-line-no">076</span><span id="line-76">    * &lt;p&gt;</span>
-<span class="source-line-no">077</span><span id="line-77">    * Specifies the type of text track. This determines how the track is used by the media element.</span>
-<span class="source-line-no">078</span><span id="line-78">    *</span>
-<span class="source-line-no">079</span><span id="line-79">    * &lt;p&gt;</span>
-<span class="source-line-no">080</span><span id="line-80">    * Possible values:</span>
-<span class="source-line-no">081</span><span id="line-81">    * &lt;ul&gt;</span>
-<span class="source-line-no">082</span><span id="line-82">    *    &lt;li&gt;&lt;js&gt;"subtitles"&lt;/js&gt; - Subtitles for the deaf and hard-of-hearing&lt;/li&gt;</span>
-<span class="source-line-no">083</span><span id="line-83">    *    &lt;li&gt;&lt;js&gt;"captions"&lt;/js&gt; - Captions for the deaf and hard-of-hearing&lt;/li&gt;</span>
-<span class="source-line-no">084</span><span id="line-84">    *    &lt;li&gt;&lt;js&gt;"descriptions"&lt;/js&gt; - Text descriptions of the video content&lt;/li&gt;</span>
-<span class="source-line-no">085</span><span id="line-85">    *    &lt;li&gt;&lt;js&gt;"chapters"&lt;/js&gt; - Chapter titles for navigation&lt;/li&gt;</span>
-<span class="source-line-no">086</span><span id="line-86">    *    &lt;li&gt;&lt;js&gt;"metadata"&lt;/js&gt; - Metadata for the media&lt;/li&gt;</span>
-<span class="source-line-no">087</span><span id="line-87">    * &lt;/ul&gt;</span>
-<span class="source-line-no">088</span><span id="line-88">    *</span>
-<span class="source-line-no">089</span><span id="line-89">    * @param kind The type of text track.</span>
-<span class="source-line-no">090</span><span id="line-90">    * @return This object.</span>
-<span class="source-line-no">091</span><span id="line-91">    */</span>
-<span class="source-line-no">092</span><span id="line-92">   public Track kind(String value) {</span>
-<span class="source-line-no">093</span><span id="line-93">      attr("kind", value);</span>
-<span class="source-line-no">094</span><span id="line-94">      return this;</span>
-<span class="source-line-no">095</span><span id="line-95">   }</span>
-<span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">   /**</span>
-<span class="source-line-no">098</span><span id="line-98">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-label"&gt;label&lt;/a&gt; attribute.</span>
-<span class="source-line-no">099</span><span id="line-99">    *</span>
-<span class="source-line-no">100</span><span id="line-100">    * &lt;p&gt;</span>
-<span class="source-line-no">101</span><span id="line-101">    * Specifies a user-visible label for the text track. This label is displayed in the media</span>
-<span class="source-line-no">102</span><span id="line-102">    * player's track selection menu.</span>
-<span class="source-line-no">103</span><span id="line-103">    *</span>
-<span class="source-line-no">104</span><span id="line-104">    * &lt;p&gt;</span>
-<span class="source-line-no">105</span><span id="line-105">    * The label should be descriptive and help users identify the track (e.g., "English Subtitles",</span>
-<span class="source-line-no">106</span><span id="line-106">    * "Spanish Captions").</span>
-<span class="source-line-no">107</span><span id="line-107">    *</span>
-<span class="source-line-no">108</span><span id="line-108">    * @param label The user-visible label for the text track.</span>
-<span class="source-line-no">109</span><span id="line-109">    * @return This object.</span>
-<span class="source-line-no">110</span><span id="line-110">    */</span>
-<span class="source-line-no">111</span><span id="line-111">   public Track label(String value) {</span>
-<span class="source-line-no">112</span><span id="line-112">      attr("label", value);</span>
-<span class="source-line-no">113</span><span id="line-113">      return this;</span>
-<span class="source-line-no">114</span><span id="line-114">   }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   /**</span>
-<span class="source-line-no">117</span><span id="line-117">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-src"&gt;src&lt;/a&gt; attribute.</span>
-<span class="source-line-no">118</span><span id="line-118">    *</span>
-<span class="source-line-no">119</span><span id="line-119">    * &lt;p&gt;</span>
-<span class="source-line-no">120</span><span id="line-120">    * Address of the resource.</span>
+<span class="source-line-no">025</span><span id="line-25"> * &lt;p&gt;</span>
+<span class="source-line-no">026</span><span id="line-26"> * The track element is used to specify timed text tracks for media elements (audio and video).</span>
+<span class="source-line-no">027</span><span id="line-27"> * It allows you to add subtitles, captions, descriptions, chapters, or metadata to media content,</span>
+<span class="source-line-no">028</span><span id="line-28"> * making it more accessible and user-friendly.</span>
+<span class="source-line-no">029</span><span id="line-29"> *</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;p class='bcode w800'&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> *    &lt;jc&gt;// Subtitles track&lt;/jc&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> *    Track &lt;jv&gt;subtitles&lt;/jv&gt; = &lt;jsm&gt;track&lt;/jsm&gt;()</span>
+<span class="source-line-no">034</span><span id="line-34"> *       .kind(&lt;js&gt;"subtitles"&lt;/js&gt;)</span>
+<span class="source-line-no">035</span><span id="line-35"> *       .src(&lt;js&gt;"/media/subtitles-en.vtt"&lt;/js&gt;)</span>
+<span class="source-line-no">036</span><span id="line-36"> *       .srclang(&lt;js&gt;"en"&lt;/js&gt;)</span>
+<span class="source-line-no">037</span><span id="line-37"> *       .label(&lt;js&gt;"English"&lt;/js&gt;);</span>
+<span class="source-line-no">038</span><span id="line-38"> * </span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;jc&gt;// Captions track (for deaf/hard of hearing)&lt;/jc&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *    Track &lt;jv&gt;captions&lt;/jv&gt; = &lt;jsm&gt;track&lt;/jsm&gt;()</span>
+<span class="source-line-no">041</span><span id="line-41"> *       .kind(&lt;js&gt;"captions"&lt;/js&gt;)</span>
+<span class="source-line-no">042</span><span id="line-42"> *       .src(&lt;js&gt;"/media/captions-en.vtt"&lt;/js&gt;)</span>
+<span class="source-line-no">043</span><span id="line-43"> *       .srclang(&lt;js&gt;"en"&lt;/js&gt;)</span>
+<span class="source-line-no">044</span><span id="line-44"> *       .label(&lt;js&gt;"English Captions"&lt;/js&gt;)</span>
+<span class="source-line-no">045</span><span id="line-45"> *       ._default(&lt;jk&gt;true&lt;/jk&gt;);</span>
+<span class="source-line-no">046</span><span id="line-46"> * </span>
+<span class="source-line-no">047</span><span id="line-47"> *    &lt;jc&gt;// Descriptions track (for audio descriptions)&lt;/jc&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> *    Track &lt;jv&gt;descriptions&lt;/jv&gt; = &lt;jsm&gt;track&lt;/jsm&gt;()</span>
+<span class="source-line-no">049</span><span id="line-49"> *       .kind(&lt;js&gt;"descriptions"&lt;/js&gt;)</span>
+<span class="source-line-no">050</span><span id="line-50"> *       .src(&lt;js&gt;"/media/descriptions-en.vtt"&lt;/js&gt;)</span>
+<span class="source-line-no">051</span><span id="line-51"> *       .srclang(&lt;js&gt;"en"&lt;/js&gt;)</span>
+<span class="source-line-no">052</span><span id="line-52"> *       .label(&lt;js&gt;"English Descriptions"&lt;/js&gt;);</span>
+<span class="source-line-no">053</span><span id="line-53"> * </span>
+<span class="source-line-no">054</span><span id="line-54"> *    &lt;jc&gt;// Chapters track&lt;/jc&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> *    Track &lt;jv&gt;chapters&lt;/jv&gt; = &lt;jsm&gt;track&lt;/jsm&gt;()</span>
+<span class="source-line-no">056</span><span id="line-56"> *       .kind(&lt;js&gt;"chapters"&lt;/js&gt;)</span>
+<span class="source-line-no">057</span><span id="line-57"> *       .src(&lt;js&gt;"/media/chapters.vtt"&lt;/js&gt;)</span>
+<span class="source-line-no">058</span><span id="line-58"> *       .srclang(&lt;js&gt;"en"&lt;/js&gt;)</span>
+<span class="source-line-no">059</span><span id="line-59"> *       .label(&lt;js&gt;"Chapters"&lt;/js&gt;);</span>
+<span class="source-line-no">060</span><span id="line-60"> * </span>
+<span class="source-line-no">061</span><span id="line-61"> *    &lt;jc&gt;// Video with multiple tracks&lt;/jc&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> *    Video &lt;jv&gt;video&lt;/jv&gt; = &lt;jsm&gt;video&lt;/jsm&gt;()</span>
+<span class="source-line-no">063</span><span id="line-63"> *       .src(&lt;js&gt;"/media/movie.mp4"&lt;/js&gt;)</span>
+<span class="source-line-no">064</span><span id="line-64"> *       .controls(&lt;jk&gt;true&lt;/jk&gt;)</span>
+<span class="source-line-no">065</span><span id="line-65"> *       .children(</span>
+<span class="source-line-no">066</span><span id="line-66"> *          &lt;jsm&gt;track&lt;/jsm&gt;(&lt;js&gt;"/media/subtitles-en.vtt"&lt;/js&gt;, &lt;js&gt;"subtitles"&lt;/js&gt;).srclang(&lt;js&gt;"en"&lt;/js&gt;).label(&lt;js&gt;"English"&lt;/js&gt;)._default(&lt;jk&gt;true&lt;/jk&gt;),</span>
+<span class="source-line-no">067</span><span id="line-67"> *          &lt;jsm&gt;track&lt;/jsm&gt;(&lt;js&gt;"/media/subtitles-es.vtt"&lt;/js&gt;, &lt;js&gt;"subtitles"&lt;/js&gt;).srclang(&lt;js&gt;"es"&lt;/js&gt;).label(&lt;js&gt;"Español"&lt;/js&gt;),</span>
+<span class="source-line-no">068</span><span id="line-68"> *          &lt;jsm&gt;track&lt;/jsm&gt;(&lt;js&gt;"/media/subtitles-fr.vtt"&lt;/js&gt;, &lt;js&gt;"subtitles"&lt;/js&gt;).srclang(&lt;js&gt;"fr"&lt;/js&gt;).label(&lt;js&gt;"Français"&lt;/js&gt;)</span>
+<span class="source-line-no">069</span><span id="line-69"> *       );</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;/p&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> *</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;p&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> * The following convenience methods are provided for constructing instances of this bean:</span>
+<span class="source-line-no">074</span><span id="line-74"> * &lt;ul class='javatree'&gt;</span>
+<span class="source-line-no">075</span><span id="line-75"> *    &lt;li class='jc'&gt;{@link HtmlBuilder}</span>
+<span class="source-line-no">076</span><span id="line-76"> *    &lt;ul class='javatree'&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#track() track()}</span>
+<span class="source-line-no">078</span><span id="line-78"> *    &lt;/ul&gt;</span>
+<span class="source-line-no">079</span><span id="line-79"> * &lt;/ul&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> * &lt;/p&gt;</span>
+<span class="source-line-no">081</span><span id="line-81"> *</span>
+<span class="source-line-no">082</span><span id="line-82"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">083</span><span id="line-83"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;/ul&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> */</span>
+<span class="source-line-no">086</span><span id="line-86">@Bean(typeName="track")</span>
+<span class="source-line-no">087</span><span id="line-87">@FluentSetters</span>
+<span class="source-line-no">088</span><span id="line-88">public class Track extends HtmlElementVoid {</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   /**</span>
+<span class="source-line-no">091</span><span id="line-91">    * Creates an empty {@link Track} element.</span>
+<span class="source-line-no">092</span><span id="line-92">    */</span>
+<span class="source-line-no">093</span><span id="line-93">   public Track() {}</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">   /**</span>
+<span class="source-line-no">096</span><span id="line-96">    * Creates a {@link Track} element with the specified {@link Track#src(Object)} and {@link Track#kind(String)}</span>
+<span class="source-line-no">097</span><span id="line-97">    * attributes.</span>
+<span class="source-line-no">098</span><span id="line-98">    *</span>
+<span class="source-line-no">099</span><span id="line-99">    * @param src The {@link Track#src(Object)} attribute.</span>
+<span class="source-line-no">100</span><span id="line-100">    * @param kind The {@link Track#kind(String)} attribute.</span>
+<span class="source-line-no">101</span><span id="line-101">    */</span>
+<span class="source-line-no">102</span><span id="line-102">   public Track(Object src, String kind) {</span>
+<span class="source-line-no">103</span><span id="line-103">      src(src).kind(kind);</span>
+<span class="source-line-no">104</span><span id="line-104">   }</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">   /**</span>
+<span class="source-line-no">107</span><span id="line-107">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-default"&gt;default&lt;/a&gt;</span>
+<span class="source-line-no">108</span><span id="line-108">    * attribute.</span>
+<span class="source-line-no">109</span><span id="line-109">    *</span>
+<span class="source-line-no">110</span><span id="line-110">    * &lt;p&gt;</span>
+<span class="source-line-no">111</span><span id="line-111">    * Specifies that this track should be enabled by default if no other text track is more suitable.</span>
+<span class="source-line-no">112</span><span id="line-112">    * This is useful for providing fallback captions or subtitles.</span>
+<span class="source-line-no">113</span><span id="line-113">    *</span>
+<span class="source-line-no">114</span><span id="line-114">    * &lt;p&gt;</span>
+<span class="source-line-no">115</span><span id="line-115">    * This attribute uses deminimized values:</span>
+<span class="source-line-no">116</span><span id="line-116">    * &lt;ul&gt;</span>
+<span class="source-line-no">117</span><span id="line-117">    *    &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt; - Track is not enabled by default (default)&lt;/li&gt;</span>
+<span class="source-line-no">118</span><span id="line-118">    *    &lt;li&gt;&lt;jk&gt;true&lt;/jk&gt; - Track is enabled by default&lt;/li&gt;</span>
+<span class="source-line-no">119</span><span id="line-119">    *    &lt;li&gt;Other values - Passed through as-is&lt;/li&gt;</span>
+<span class="source-line-no">120</span><span id="line-120">    * &lt;/ul&gt;</span>
 <span class="source-line-no">121</span><span id="line-121">    *</span>
-<span class="source-line-no">122</span><span id="line-122">    * &lt;p&gt;</span>
-<span class="source-line-no">123</span><span id="line-123">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
-<span class="source-line-no">124</span><span id="line-124">    * Strings must be valid URIs.</span>
-<span class="source-line-no">125</span><span id="line-125">    *</span>
-<span class="source-line-no">126</span><span id="line-126">    * &lt;p&gt;</span>
-<span class="source-line-no">127</span><span id="line-127">    * URIs defined by {@link UriResolver} can be used for values.</span>
-<span class="source-line-no">128</span><span id="line-128">    *</span>
-<span class="source-line-no">129</span><span id="line-129">    * @param src</span>
-<span class="source-line-no">130</span><span id="line-130">    *    The new value for this attribute.</span>
-<span class="source-line-no">131</span><span id="line-131">    *    Typically a {@link URL} or {@link String}.</span>
-<span class="source-line-no">132</span><span id="line-132">    * @return This object.</span>
-<span class="source-line-no">133</span><span id="line-133">    */</span>
-<span class="source-line-no">134</span><span id="line-134">   public Track src(Object value) {</span>
-<span class="source-line-no">135</span><span id="line-135">      attrUri("src", value);</span>
-<span class="source-line-no">136</span><span id="line-136">      return this;</span>
-<span class="source-line-no">137</span><span id="line-137">   }</span>
-<span class="source-line-no">138</span><span id="line-138"></span>
-<span class="source-line-no">139</span><span id="line-139">   /**</span>
-<span class="source-line-no">140</span><span id="line-140">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-srclang"&gt;srclang&lt;/a&gt;</span>
-<span class="source-line-no">141</span><span id="line-141">    * attribute.</span>
-<span class="source-line-no">142</span><span id="line-142">    *</span>
-<span class="source-line-no">143</span><span id="line-143">    * &lt;p&gt;</span>
-<span class="source-line-no">144</span><span id="line-144">    * Specifies the language of the text track. This helps browsers and media players</span>
-<span class="source-line-no">145</span><span id="line-145">    * determine which track to use based on the user's language preferences.</span>
-<span class="source-line-no">146</span><span id="line-146">    *</span>
-<span class="source-line-no">147</span><span id="line-147">    * &lt;p&gt;</span>
-<span class="source-line-no">148</span><span id="line-148">    * The value should be a valid language code (e.g., "en", "es", "fr", "de").</span>
-<span class="source-line-no">149</span><span id="line-149">    *</span>
-<span class="source-line-no">150</span><span id="line-150">    * @param srclang The language code of the text track.</span>
-<span class="source-line-no">151</span><span id="line-151">    * @return This object.</span>
-<span class="source-line-no">152</span><span id="line-152">    */</span>
-<span class="source-line-no">153</span><span id="line-153">   public Track srclang(String value) {</span>
-<span class="source-line-no">154</span><span id="line-154">      attr("srclang", value);</span>
-<span class="source-line-no">155</span><span id="line-155">      return this;</span>
-<span class="source-line-no">156</span><span id="line-156">   }</span>
-<span class="source-line-no">157</span><span id="line-157"></span>
-<span class="source-line-no">158</span><span id="line-158">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">159</span><span id="line-159">   // Overridden methods</span>
-<span class="source-line-no">160</span><span id="line-160">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">161</span><span id="line-161"></span>
-<span class="source-line-no">162</span><span id="line-162">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">165</span><span id="line-165">   public Track _class(String value) {  // NOSONAR - Intentional naming.</span>
-<span class="source-line-no">166</span><span id="line-166">      super._class(value);</span>
-<span class="source-line-no">167</span><span id="line-167">      return this;</span>
-<span class="source-line-no">168</span><span id="line-168">   }</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">171</span><span id="line-171">   public Track accesskey(String value) {</span>
-<span class="source-line-no">172</span><span id="line-172">      super.accesskey(value);</span>
-<span class="source-line-no">173</span><span id="line-173">      return this;</span>
-<span class="source-line-no">174</span><span id="line-174">   }</span>
-<span class="source-line-no">175</span><span id="line-175"></span>
-<span class="source-line-no">176</span><span id="line-176">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">177</span><span id="line-177">   public Track contenteditable(Object value) {</span>
-<span class="source-line-no">178</span><span id="line-178">      super.contenteditable(value);</span>
-<span class="source-line-no">179</span><span id="line-179">      return this;</span>
-<span class="source-line-no">180</span><span id="line-180">   }</span>
-<span class="source-line-no">181</span><span id="line-181"></span>
-<span class="source-line-no">182</span><span id="line-182">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">183</span><span id="line-183">   public Track dir(String value) {</span>
-<span class="source-line-no">184</span><span id="line-184">      super.dir(value);</span>
-<span class="source-line-no">185</span><span id="line-185">      return this;</span>
-<span class="source-line-no">186</span><span id="line-186">   }</span>
-<span class="source-line-no">187</span><span id="line-187"></span>
-<span class="source-line-no">188</span><span id="line-188">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">189</span><span id="line-189">   public Track hidden(Object value) {</span>
-<span class="source-line-no">190</span><span id="line-190">      super.hidden(value);</span>
-<span class="source-line-no">191</span><span id="line-191">      return this;</span>
-<span class="source-line-no">192</span><span id="line-192">   }</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">195</span><span id="line-195">   public Track id(String value) {</span>
-<span class="source-line-no">196</span><span id="line-196">      super.id(value);</span>
-<span class="source-line-no">197</span><span id="line-197">      return this;</span>
-<span class="source-line-no">198</span><span id="line-198">   }</span>
-<span class="source-line-no">199</span><span id="line-199"></span>
-<span class="source-line-no">200</span><span id="line-200">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">201</span><span id="line-201">   public Track lang(String value) {</span>
-<span class="source-line-no">202</span><span id="line-202">      super.lang(value);</span>
-<span class="source-line-no">203</span><span id="line-203">      return this;</span>
-<span class="source-line-no">204</span><span id="line-204">   }</span>
-<span class="source-line-no">205</span><span id="line-205"></span>
-<span class="source-line-no">206</span><span id="line-206">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">207</span><span id="line-207">   public Track onabort(String value) {</span>
-<span class="source-line-no">208</span><span id="line-208">      super.onabort(value);</span>
-<span class="source-line-no">209</span><span id="line-209">      return this;</span>
-<span class="source-line-no">210</span><span id="line-210">   }</span>
-<span class="source-line-no">211</span><span id="line-211"></span>
-<span class="source-line-no">212</span><span id="line-212">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">213</span><span id="line-213">   public Track onblur(String value) {</span>
-<span class="source-line-no">214</span><span id="line-214">      super.onblur(value);</span>
-<span class="source-line-no">215</span><span id="line-215">      return this;</span>
-<span class="source-line-no">216</span><span id="line-216">   }</span>
-<span class="source-line-no">217</span><span id="line-217"></span>
-<span class="source-line-no">218</span><span id="line-218">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">219</span><span id="line-219">   public Track oncancel(String value) {</span>
-<span class="source-line-no">220</span><span id="line-220">      super.oncancel(value);</span>
-<span class="source-line-no">221</span><span id="line-221">      return this;</span>
-<span class="source-line-no">222</span><span id="line-222">   }</span>
-<span class="source-line-no">223</span><span id="line-223"></span>
-<span class="source-line-no">224</span><span id="line-224">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">225</span><span id="line-225">   public Track oncanplay(String value) {</span>
-<span class="source-line-no">226</span><span id="line-226">      super.oncanplay(value);</span>
-<span class="source-line-no">227</span><span id="line-227">      return this;</span>
-<span class="source-line-no">228</span><span id="line-228">   }</span>
-<span class="source-line-no">229</span><span id="line-229"></span>
-<span class="source-line-no">230</span><span id="line-230">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">231</span><span id="line-231">   public Track oncanplaythrough(String value) {</span>
-<span class="source-line-no">232</span><span id="line-232">      super.oncanplaythrough(value);</span>
-<span class="source-line-no">233</span><span id="line-233">      return this;</span>
-<span class="source-line-no">234</span><span id="line-234">   }</span>
-<span class="source-line-no">235</span><span id="line-235"></span>
-<span class="source-line-no">236</span><span id="line-236">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">237</span><span id="line-237">   public Track onchange(String value) {</span>
-<span class="source-line-no">238</span><span id="line-238">      super.onchange(value);</span>
-<span class="source-line-no">239</span><span id="line-239">      return this;</span>
-<span class="source-line-no">240</span><span id="line-240">   }</span>
-<span class="source-line-no">241</span><span id="line-241"></span>
-<span class="source-line-no">242</span><span id="line-242">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">243</span><span id="line-243">   public Track onclick(String value) {</span>
-<span class="source-line-no">244</span><span id="line-244">      super.onclick(value);</span>
-<span class="source-line-no">245</span><span id="line-245">      return this;</span>
-<span class="source-line-no">246</span><span id="line-246">   }</span>
-<span class="source-line-no">247</span><span id="line-247"></span>
-<span class="source-line-no">248</span><span id="line-248">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">249</span><span id="line-249">   public Track oncuechange(String value) {</span>
-<span class="source-line-no">250</span><span id="line-250">      super.oncuechange(value);</span>
-<span class="source-line-no">251</span><span id="line-251">      return this;</span>
-<span class="source-line-no">252</span><span id="line-252">   }</span>
-<span class="source-line-no">253</span><span id="line-253"></span>
-<span class="source-line-no">254</span><span id="line-254">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">255</span><span id="line-255">   public Track ondblclick(String value) {</span>
-<span class="source-line-no">256</span><span id="line-256">      super.ondblclick(value);</span>
-<span class="source-line-no">257</span><span id="line-257">      return this;</span>
-<span class="source-line-no">258</span><span id="line-258">   }</span>
-<span class="source-line-no">259</span><span id="line-259"></span>
-<span class="source-line-no">260</span><span id="line-260">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">261</span><span id="line-261">   public Track ondurationchange(String value) {</span>
-<span class="source-line-no">262</span><span id="line-262">      super.ondurationchange(value);</span>
-<span class="source-line-no">263</span><span id="line-263">      return this;</span>
-<span class="source-line-no">264</span><span id="line-264">   }</span>
-<span class="source-line-no">265</span><span id="line-265"></span>
-<span class="source-line-no">266</span><span id="line-266">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">267</span><span id="line-267">   public Track onemptied(String value) {</span>
-<span class="source-line-no">268</span><span id="line-268">      super.onemptied(value);</span>
-<span class="source-line-no">269</span><span id="line-269">      return this;</span>
-<span class="source-line-no">270</span><span id="line-270">   }</span>
-<span class="source-line-no">271</span><span id="line-271"></span>
-<span class="source-line-no">272</span><span id="line-272">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">273</span><span id="line-273">   public Track onended(String value) {</span>
-<span class="source-line-no">274</span><span id="line-274">      super.onended(value);</span>
-<span class="source-line-no">275</span><span id="line-275">      return this;</span>
-<span class="source-line-no">276</span><span id="line-276">   }</span>
-<span class="source-line-no">277</span><span id="line-277"></span>
-<span class="source-line-no">278</span><span id="line-278">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">279</span><span id="line-279">   public Track onerror(String value) {</span>
-<span class="source-line-no">280</span><span id="line-280">      super.onerror(value);</span>
-<span class="source-line-no">281</span><span id="line-281">      return this;</span>
-<span class="source-line-no">282</span><span id="line-282">   }</span>
-<span class="source-line-no">283</span><span id="line-283"></span>
-<span class="source-line-no">284</span><span id="line-284">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">285</span><span id="line-285">   public Track onfocus(String value) {</span>
-<span class="source-line-no">286</span><span id="line-286">      super.onfocus(value);</span>
-<span class="source-line-no">287</span><span id="line-287">      return this;</span>
-<span class="source-line-no">288</span><span id="line-288">   }</span>
-<span class="source-line-no">289</span><span id="line-289"></span>
-<span class="source-line-no">290</span><span id="line-290">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">291</span><span id="line-291">   public Track oninput(String value) {</span>
-<span class="source-line-no">292</span><span id="line-292">      super.oninput(value);</span>
-<span class="source-line-no">293</span><span id="line-293">      return this;</span>
-<span class="source-line-no">294</span><span id="line-294">   }</span>
-<span class="source-line-no">295</span><span id="line-295"></span>
-<span class="source-line-no">296</span><span id="line-296">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">297</span><span id="line-297">   public Track oninvalid(String value) {</span>
-<span class="source-line-no">298</span><span id="line-298">      super.oninvalid(value);</span>
-<span class="source-line-no">299</span><span id="line-299">      return this;</span>
-<span class="source-line-no">300</span><span id="line-300">   }</span>
-<span class="source-line-no">301</span><span id="line-301"></span>
-<span class="source-line-no">302</span><span id="line-302">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">303</span><span id="line-303">   public Track onkeydown(String value) {</span>
-<span class="source-line-no">304</span><span id="line-304">      super.onkeydown(value);</span>
-<span class="source-line-no">305</span><span id="line-305">      return this;</span>
-<span class="source-line-no">306</span><span id="line-306">   }</span>
-<span class="source-line-no">307</span><span id="line-307"></span>
-<span class="source-line-no">308</span><span id="line-308">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">309</span><span id="line-309">   public Track onkeypress(String value) {</span>
-<span class="source-line-no">310</span><span id="line-310">      super.onkeypress(value);</span>
-<span class="source-line-no">311</span><span id="line-311">      return this;</span>
-<span class="source-line-no">312</span><span id="line-312">   }</span>
-<span class="source-line-no">313</span><span id="line-313"></span>
-<span class="source-line-no">314</span><span id="line-314">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">315</span><span id="line-315">   public Track onkeyup(String value) {</span>
-<span class="source-line-no">316</span><span id="line-316">      super.onkeyup(value);</span>
-<span class="source-line-no">317</span><span id="line-317">      return this;</span>
-<span class="source-line-no">318</span><span id="line-318">   }</span>
-<span class="source-line-no">319</span><span id="line-319"></span>
-<span class="source-line-no">320</span><span id="line-320">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">321</span><span id="line-321">   public Track onload(String value) {</span>
-<span class="source-line-no">322</span><span id="line-322">      super.onload(value);</span>
-<span class="source-line-no">323</span><span id="line-323">      return this;</span>
-<span class="source-line-no">324</span><span id="line-324">   }</span>
-<span class="source-line-no">325</span><span id="line-325"></span>
-<span class="source-line-no">326</span><span id="line-326">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">327</span><span id="line-327">   public Track onloadeddata(String value) {</span>
-<span class="source-line-no">328</span><span id="line-328">      super.onloadeddata(value);</span>
-<span class="source-line-no">329</span><span id="line-329">      return this;</span>
-<span class="source-line-no">330</span><span id="line-330">   }</span>
-<span class="source-line-no">331</span><span id="line-331"></span>
-<span class="source-line-no">332</span><span id="line-332">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">333</span><span id="line-333">   public Track onloadedmetadata(String value) {</span>
-<span class="source-line-no">334</span><span id="line-334">      super.onloadedmetadata(value);</span>
-<span class="source-line-no">335</span><span id="line-335">      return this;</span>
-<span class="source-line-no">336</span><span id="line-336">   }</span>
-<span class="source-line-no">337</span><span id="line-337"></span>
-<span class="source-line-no">338</span><span id="line-338">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">339</span><span id="line-339">   public Track onloadstart(String value) {</span>
-<span class="source-line-no">340</span><span id="line-340">      super.onloadstart(value);</span>
-<span class="source-line-no">341</span><span id="line-341">      return this;</span>
-<span class="source-line-no">342</span><span id="line-342">   }</span>
-<span class="source-line-no">343</span><span id="line-343"></span>
-<span class="source-line-no">344</span><span id="line-344">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">345</span><span id="line-345">   public Track onmousedown(String value) {</span>
-<span class="source-line-no">346</span><span id="line-346">      super.onmousedown(value);</span>
-<span class="source-line-no">347</span><span id="line-347">      return this;</span>
-<span class="source-line-no">348</span><span id="line-348">   }</span>
-<span class="source-line-no">349</span><span id="line-349"></span>
-<span class="source-line-no">350</span><span id="line-350">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">351</span><span id="line-351">   public Track onmouseenter(String value) {</span>
-<span class="source-line-no">352</span><span id="line-352">      super.onmouseenter(value);</span>
-<span class="source-line-no">353</span><span id="line-353">      return this;</span>
-<span class="source-line-no">354</span><span id="line-354">   }</span>
-<span class="source-line-no">355</span><span id="line-355"></span>
-<span class="source-line-no">356</span><span id="line-356">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">357</span><span id="line-357">   public Track onmouseleave(String value) {</span>
-<span class="source-line-no">358</span><span id="line-358">      super.onmouseleave(value);</span>
-<span class="source-line-no">359</span><span id="line-359">      return this;</span>
-<span class="source-line-no">360</span><span id="line-360">   }</span>
-<span class="source-line-no">361</span><span id="line-361"></span>
-<span class="source-line-no">362</span><span id="line-362">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">363</span><span id="line-363">   public Track onmousemove(String value) {</span>
-<span class="source-line-no">364</span><span id="line-364">      super.onmousemove(value);</span>
-<span class="source-line-no">365</span><span id="line-365">      return this;</span>
-<span class="source-line-no">366</span><span id="line-366">   }</span>
-<span class="source-line-no">367</span><span id="line-367"></span>
-<span class="source-line-no">368</span><span id="line-368">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">369</span><span id="line-369">   public Track onmouseout(String value) {</span>
-<span class="source-line-no">370</span><span id="line-370">      super.onmouseout(value);</span>
-<span class="source-line-no">371</span><span id="line-371">      return this;</span>
-<span class="source-line-no">372</span><span id="line-372">   }</span>
-<span class="source-line-no">373</span><span id="line-373"></span>
-<span class="source-line-no">374</span><span id="line-374">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">375</span><span id="line-375">   public Track onmouseover(String value) {</span>
-<span class="source-line-no">376</span><span id="line-376">      super.onmouseover(value);</span>
-<span class="source-line-no">377</span><span id="line-377">      return this;</span>
-<span class="source-line-no">378</span><span id="line-378">   }</span>
-<span class="source-line-no">379</span><span id="line-379"></span>
-<span class="source-line-no">380</span><span id="line-380">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">381</span><span id="line-381">   public Track onmouseup(String value) {</span>
-<span class="source-line-no">382</span><span id="line-382">      super.onmouseup(value);</span>
-<span class="source-line-no">383</span><span id="line-383">      return this;</span>
-<span class="source-line-no">384</span><span id="line-384">   }</span>
-<span class="source-line-no">385</span><span id="line-385"></span>
-<span class="source-line-no">386</span><span id="line-386">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">387</span><span id="line-387">   public Track onmousewheel(String value) {</span>
-<span class="source-line-no">388</span><span id="line-388">      super.onmousewheel(value);</span>
-<span class="source-line-no">389</span><span id="line-389">      return this;</span>
-<span class="source-line-no">390</span><span id="line-390">   }</span>
-<span class="source-line-no">391</span><span id="line-391"></span>
-<span class="source-line-no">392</span><span id="line-392">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">393</span><span id="line-393">   public Track onpause(String value) {</span>
-<span class="source-line-no">394</span><span id="line-394">      super.onpause(value);</span>
-<span class="source-line-no">395</span><span id="line-395">      return this;</span>
-<span class="source-line-no">396</span><span id="line-396">   }</span>
-<span class="source-line-no">397</span><span id="line-397"></span>
-<span class="source-line-no">398</span><span id="line-398">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">399</span><span id="line-399">   public Track onplay(String value) {</span>
-<span class="source-line-no">400</span><span id="line-400">      super.onplay(value);</span>
-<span class="source-line-no">401</span><span id="line-401">      return this;</span>
-<span class="source-line-no">402</span><span id="line-402">   }</span>
-<span class="source-line-no">403</span><span id="line-403"></span>
-<span class="source-line-no">404</span><span id="line-404">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">405</span><span id="line-405">   public Track onplaying(String value) {</span>
-<span class="source-line-no">406</span><span id="line-406">      super.onplaying(value);</span>
-<span class="source-line-no">407</span><span id="line-407">      return this;</span>
-<span class="source-line-no">408</span><span id="line-408">   }</span>
-<span class="source-line-no">409</span><span id="line-409"></span>
-<span class="source-line-no">410</span><span id="line-410">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">411</span><span id="line-411">   public Track onprogress(String value) {</span>
-<span class="source-line-no">412</span><span id="line-412">      super.onprogress(value);</span>
-<span class="source-line-no">413</span><span id="line-413">      return this;</span>
-<span class="source-line-no">414</span><span id="line-414">   }</span>
-<span class="source-line-no">415</span><span id="line-415"></span>
-<span class="source-line-no">416</span><span id="line-416">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">417</span><span id="line-417">   public Track onratechange(String value) {</span>
-<span class="source-line-no">418</span><span id="line-418">      super.onratechange(value);</span>
-<span class="source-line-no">419</span><span id="line-419">      return this;</span>
-<span class="source-line-no">420</span><span id="line-420">   }</span>
-<span class="source-line-no">421</span><span id="line-421"></span>
-<span class="source-line-no">422</span><span id="line-422">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">423</span><span id="line-423">   public Track onreset(String value) {</span>
-<span class="source-line-no">424</span><span id="line-424">      super.onreset(value);</span>
-<span class="source-line-no">425</span><span id="line-425">      return this;</span>
-<span class="source-line-no">426</span><span id="line-426">   }</span>
-<span class="source-line-no">427</span><span id="line-427"></span>
-<span class="source-line-no">428</span><span id="line-428">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">429</span><span id="line-429">   public Track onresize(String value) {</span>
-<span class="source-line-no">430</span><span id="line-430">      super.onresize(value);</span>
-<span class="source-line-no">431</span><span id="line-431">      return this;</span>
-<span class="source-line-no">432</span><span id="line-432">   }</span>
-<span class="source-line-no">433</span><span id="line-433"></span>
-<span class="source-line-no">434</span><span id="line-434">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">435</span><span id="line-435">   public Track onscroll(String value) {</span>
-<span class="source-line-no">436</span><span id="line-436">      super.onscroll(value);</span>
-<span class="source-line-no">437</span><span id="line-437">      return this;</span>
-<span class="source-line-no">438</span><span id="line-438">   }</span>
-<span class="source-line-no">439</span><span id="line-439"></span>
-<span class="source-line-no">440</span><span id="line-440">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">441</span><span id="line-441">   public Track onseeked(String value) {</span>
-<span class="source-line-no">442</span><span id="line-442">      super.onseeked(value);</span>
-<span class="source-line-no">443</span><span id="line-443">      return this;</span>
-<span class="source-line-no">444</span><span id="line-444">   }</span>
-<span class="source-line-no">445</span><span id="line-445"></span>
-<span class="source-line-no">446</span><span id="line-446">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">447</span><span id="line-447">   public Track onseeking(String value) {</span>
-<span class="source-line-no">448</span><span id="line-448">      super.onseeking(value);</span>
-<span class="source-line-no">449</span><span id="line-449">      return this;</span>
-<span class="source-line-no">450</span><span id="line-450">   }</span>
-<span class="source-line-no">451</span><span id="line-451"></span>
-<span class="source-line-no">452</span><span id="line-452">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">453</span><span id="line-453">   public Track onselect(String value) {</span>
-<span class="source-line-no">454</span><span id="line-454">      super.onselect(value);</span>
-<span class="source-line-no">455</span><span id="line-455">      return this;</span>
-<span class="source-line-no">456</span><span id="line-456">   }</span>
-<span class="source-line-no">457</span><span id="line-457"></span>
-<span class="source-line-no">458</span><span id="line-458">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">459</span><span id="line-459">   public Track onshow(String value) {</span>
-<span class="source-line-no">460</span><span id="line-460">      super.onshow(value);</span>
-<span class="source-line-no">461</span><span id="line-461">      return this;</span>
-<span class="source-line-no">462</span><span id="line-462">   }</span>
-<span class="source-line-no">463</span><span id="line-463"></span>
-<span class="source-line-no">464</span><span id="line-464">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">465</span><span id="line-465">   public Track onstalled(String value) {</span>
-<span class="source-line-no">466</span><span id="line-466">      super.onstalled(value);</span>
-<span class="source-line-no">467</span><span id="line-467">      return this;</span>
-<span class="source-line-no">468</span><span id="line-468">   }</span>
-<span class="source-line-no">469</span><span id="line-469"></span>
-<span class="source-line-no">470</span><span id="line-470">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">471</span><span id="line-471">   public Track onsubmit(String value) {</span>
-<span class="source-line-no">472</span><span id="line-472">      super.onsubmit(value);</span>
-<span class="source-line-no">473</span><span id="line-473">      return this;</span>
-<span class="source-line-no">474</span><span id="line-474">   }</span>
-<span class="source-line-no">475</span><span id="line-475"></span>
-<span class="source-line-no">476</span><span id="line-476">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">477</span><span id="line-477">   public Track onsuspend(String value) {</span>
-<span class="source-line-no">478</span><span id="line-478">      super.onsuspend(value);</span>
-<span class="source-line-no">479</span><span id="line-479">      return this;</span>
-<span class="source-line-no">480</span><span id="line-480">   }</span>
-<span class="source-line-no">481</span><span id="line-481"></span>
-<span class="source-line-no">482</span><span id="line-482">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">483</span><span id="line-483">   public Track ontimeupdate(String value) {</span>
-<span class="source-line-no">484</span><span id="line-484">      super.ontimeupdate(value);</span>
-<span class="source-line-no">485</span><span id="line-485">      return this;</span>
-<span class="source-line-no">486</span><span id="line-486">   }</span>
-<span class="source-line-no">487</span><span id="line-487"></span>
-<span class="source-line-no">488</span><span id="line-488">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">489</span><span id="line-489">   public Track ontoggle(String value) {</span>
-<span class="source-line-no">490</span><span id="line-490">      super.ontoggle(value);</span>
-<span class="source-line-no">491</span><span id="line-491">      return this;</span>
-<span class="source-line-no">492</span><span id="line-492">   }</span>
-<span class="source-line-no">493</span><span id="line-493"></span>
-<span class="source-line-no">494</span><span id="line-494">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">495</span><span id="line-495">   public Track onvolumechange(String value) {</span>
-<span class="source-line-no">496</span><span id="line-496">      super.onvolumechange(value);</span>
-<span class="source-line-no">497</span><span id="line-497">      return this;</span>
-<span class="source-line-no">498</span><span id="line-498">   }</span>
-<span class="source-line-no">499</span><span id="line-499"></span>
-<span class="source-line-no">500</span><span id="line-500">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">501</span><span id="line-501">   public Track onwaiting(String value) {</span>
-<span class="source-line-no">502</span><span id="line-502">      super.onwaiting(value);</span>
-<span class="source-line-no">503</span><span id="line-503">      return this;</span>
-<span class="source-line-no">504</span><span id="line-504">   }</span>
-<span class="source-line-no">505</span><span id="line-505"></span>
-<span class="source-line-no">506</span><span id="line-506">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">507</span><span id="line-507">   public Track spellcheck(Object value) {</span>
-<span class="source-line-no">508</span><span id="line-508">      super.spellcheck(value);</span>
-<span class="source-line-no">509</span><span id="line-509">      return this;</span>
-<span class="source-line-no">510</span><span id="line-510">   }</span>
-<span class="source-line-no">511</span><span id="line-511"></span>
-<span class="source-line-no">512</span><span id="line-512">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">513</span><span id="line-513">   public Track style(String value) {</span>
-<span class="source-line-no">514</span><span id="line-514">      super.style(value);</span>
-<span class="source-line-no">515</span><span id="line-515">      return this;</span>
-<span class="source-line-no">516</span><span id="line-516">   }</span>
-<span class="source-line-no">517</span><span id="line-517"></span>
-<span class="source-line-no">518</span><span id="line-518">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">519</span><span id="line-519">   public Track tabindex(Object value) {</span>
-<span class="source-line-no">520</span><span id="line-520">      super.tabindex(value);</span>
-<span class="source-line-no">521</span><span id="line-521">      return this;</span>
-<span class="source-line-no">522</span><span id="line-522">   }</span>
-<span class="source-line-no">523</span><span id="line-523"></span>
-<span class="source-line-no">524</span><span id="line-524">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">525</span><span id="line-525">   public Track title(String value) {</span>
-<span class="source-line-no">526</span><span id="line-526">      super.title(value);</span>
-<span class="source-line-no">527</span><span id="line-527">      return this;</span>
-<span class="source-line-no">528</span><span id="line-528">   }</span>
-<span class="source-line-no">529</span><span id="line-529"></span>
-<span class="source-line-no">530</span><span id="line-530">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">531</span><span id="line-531">   public Track translate(Object value) {</span>
-<span class="source-line-no">532</span><span id="line-532">      super.translate(value);</span>
-<span class="source-line-no">533</span><span id="line-533">      return this;</span>
-<span class="source-line-no">534</span><span id="line-534">   }</span>
-<span class="source-line-no">535</span><span id="line-535"></span>
-<span class="source-line-no">536</span><span id="line-536">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">537</span><span id="line-537">}</span>
+<span class="source-line-no">122</span><span id="line-122">    * @param _default Whether this track should be enabled by default.</span>
+<span class="source-line-no">123</span><span id="line-123">    * @return This object.</span>
+<span class="source-line-no">124</span><span id="line-124">    */</span>
+<span class="source-line-no">125</span><span id="line-125">   public Track _default(String value) {  // NOSONAR - Intentional naming.</span>
+<span class="source-line-no">126</span><span id="line-126">      attr("default", value);</span>
+<span class="source-line-no">127</span><span id="line-127">      return this;</span>
+<span class="source-line-no">128</span><span id="line-128">   }</span>
+<span class="source-line-no">129</span><span id="line-129"></span>
+<span class="source-line-no">130</span><span id="line-130">   /**</span>
+<span class="source-line-no">131</span><span id="line-131">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind"&gt;kind&lt;/a&gt; attribute.</span>
+<span class="source-line-no">132</span><span id="line-132">    *</span>
+<span class="source-line-no">133</span><span id="line-133">    * &lt;p&gt;</span>
+<span class="source-line-no">134</span><span id="line-134">    * Specifies the type of text track. This determines how the track is used by the media element.</span>
+<span class="source-line-no">135</span><span id="line-135">    *</span>
+<span class="source-line-no">136</span><span id="line-136">    * &lt;p&gt;</span>
+<span class="source-line-no">137</span><span id="line-137">    * Possible values:</span>
+<span class="source-line-no">138</span><span id="line-138">    * &lt;ul&gt;</span>
+<span class="source-line-no">139</span><span id="line-139">    *    &lt;li&gt;&lt;js&gt;"subtitles"&lt;/js&gt; - Subtitles for the deaf and hard-of-hearing&lt;/li&gt;</span>
+<span class="source-line-no">140</span><span id="line-140">    *    &lt;li&gt;&lt;js&gt;"captions"&lt;/js&gt; - Captions for the deaf and hard-of-hearing&lt;/li&gt;</span>
+<span class="source-line-no">141</span><span id="line-141">    *    &lt;li&gt;&lt;js&gt;"descriptions"&lt;/js&gt; - Text descriptions of the video content&lt;/li&gt;</span>
+<span class="source-line-no">142</span><span id="line-142">    *    &lt;li&gt;&lt;js&gt;"chapters"&lt;/js&gt; - Chapter titles for navigation&lt;/li&gt;</span>
+<span class="source-line-no">143</span><span id="line-143">    *    &lt;li&gt;&lt;js&gt;"metadata"&lt;/js&gt; - Metadata for the media&lt;/li&gt;</span>
+<span class="source-line-no">144</span><span id="line-144">    * &lt;/ul&gt;</span>
+<span class="source-line-no">145</span><span id="line-145">    *</span>
+<span class="source-line-no">146</span><span id="line-146">    * @param kind The type of text track.</span>
+<span class="source-line-no">147</span><span id="line-147">    * @return This object.</span>
+<span class="source-line-no">148</span><span id="line-148">    */</span>
+<span class="source-line-no">149</span><span id="line-149">   public Track kind(String value) {</span>
+<span class="source-line-no">150</span><span id="line-150">      attr("kind", value);</span>
+<span class="source-line-no">151</span><span id="line-151">      return this;</span>
+<span class="source-line-no">152</span><span id="line-152">   }</span>
+<span class="source-line-no">153</span><span id="line-153"></span>
+<span class="source-line-no">154</span><span id="line-154">   /**</span>
+<span class="source-line-no">155</span><span id="line-155">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-label"&gt;label&lt;/a&gt; attribute.</span>
+<span class="source-line-no">156</span><span id="line-156">    *</span>
+<span class="source-line-no">157</span><span id="line-157">    * &lt;p&gt;</span>
+<span class="source-line-no">158</span><span id="line-158">    * Specifies a user-visible label for the text track. This label is displayed in the media</span>
+<span class="source-line-no">159</span><span id="line-159">    * player's track selection menu.</span>
+<span class="source-line-no">160</span><span id="line-160">    *</span>
+<span class="source-line-no">161</span><span id="line-161">    * &lt;p&gt;</span>
+<span class="source-line-no">162</span><span id="line-162">    * The label should be descriptive and help users identify the track (e.g., "English Subtitles",</span>
+<span class="source-line-no">163</span><span id="line-163">    * "Spanish Captions").</span>
+<span class="source-line-no">164</span><span id="line-164">    *</span>
+<span class="source-line-no">165</span><span id="line-165">    * @param label The user-visible label for the text track.</span>
+<span class="source-line-no">166</span><span id="line-166">    * @return This object.</span>
+<span class="source-line-no">167</span><span id="line-167">    */</span>
+<span class="source-line-no">168</span><span id="line-168">   public Track label(String value) {</span>
+<span class="source-line-no">169</span><span id="line-169">      attr("label", value);</span>
+<span class="source-line-no">170</span><span id="line-170">      return this;</span>
+<span class="source-line-no">171</span><span id="line-171">   }</span>
+<span class="source-line-no">172</span><span id="line-172"></span>
+<span class="source-line-no">173</span><span id="line-173">   /**</span>
+<span class="source-line-no">174</span><span id="line-174">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-src"&gt;src&lt;/a&gt; attribute.</span>
+<span class="source-line-no">175</span><span id="line-175">    *</span>
+<span class="source-line-no">176</span><span id="line-176">    * &lt;p&gt;</span>
+<span class="source-line-no">177</span><span id="line-177">    * Address of the resource.</span>
+<span class="source-line-no">178</span><span id="line-178">    *</span>
+<span class="source-line-no">179</span><span id="line-179">    * &lt;p&gt;</span>
+<span class="source-line-no">180</span><span id="line-180">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
+<span class="source-line-no">181</span><span id="line-181">    * Strings must be valid URIs.</span>
+<span class="source-line-no">182</span><span id="line-182">    *</span>
+<span class="source-line-no">183</span><span id="line-183">    * &lt;p&gt;</span>
+<span class="source-line-no">184</span><span id="line-184">    * URIs defined by {@link UriResolver} can be used for values.</span>
+<span class="source-line-no">185</span><span id="line-185">    *</span>
+<span class="source-line-no">186</span><span id="line-186">    * @param src</span>
+<span class="source-line-no">187</span><span id="line-187">    *    The new value for this attribute.</span>
+<span class="source-line-no">188</span><span id="line-188">    *    Typically a {@link URL} or {@link String}.</span>
+<span class="source-line-no">189</span><span id="line-189">    * @return This object.</span>
+<span class="source-line-no">190</span><span id="line-190">    */</span>
+<span class="source-line-no">191</span><span id="line-191">   public Track src(Object value) {</span>
+<span class="source-line-no">192</span><span id="line-192">      attrUri("src", value);</span>
+<span class="source-line-no">193</span><span id="line-193">      return this;</span>
+<span class="source-line-no">194</span><span id="line-194">   }</span>
+<span class="source-line-no">195</span><span id="line-195"></span>
+<span class="source-line-no">196</span><span id="line-196">   /**</span>
+<span class="source-line-no">197</span><span id="line-197">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-srclang"&gt;srclang&lt;/a&gt;</span>
+<span class="source-line-no">198</span><span id="line-198">    * attribute.</span>
+<span class="source-line-no">199</span><span id="line-199">    *</span>
+<span class="source-line-no">200</span><span id="line-200">    * &lt;p&gt;</span>
+<span class="source-line-no">201</span><span id="line-201">    * Specifies the language of the text track. This helps browsers and media players</span>
+<span class="source-line-no">202</span><span id="line-202">    * determine which track to use based on the user's language preferences.</span>
+<span class="source-line-no">203</span><span id="line-203">    *</span>
+<span class="source-line-no">204</span><span id="line-204">    * &lt;p&gt;</span>
+<span class="source-line-no">205</span><span id="line-205">    * The value should be a valid language code (e.g., "en", "es", "fr", "de").</span>
+<span class="source-line-no">206</span><span id="line-206">    *</span>
+<span class="source-line-no">207</span><span id="line-207">    * @param srclang The language code of the text track.</span>
+<span class="source-line-no">208</span><span id="line-208">    * @return This object.</span>
+<span class="source-line-no">209</span><span id="line-209">    */</span>
+<span class="source-line-no">210</span><span id="line-210">   public Track srclang(String value) {</span>
+<span class="source-line-no">211</span><span id="line-211">      attr("srclang", value);</span>
+<span class="source-line-no">212</span><span id="line-212">      return this;</span>
+<span class="source-line-no">213</span><span id="line-213">   }</span>
+<span class="source-line-no">214</span><span id="line-214"></span>
+<span class="source-line-no">215</span><span id="line-215">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">216</span><span id="line-216">   // Overridden methods</span>
+<span class="source-line-no">217</span><span id="line-217">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">218</span><span id="line-218"></span>
+<span class="source-line-no">219</span><span id="line-219">   // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">220</span><span id="line-220"></span>
+<span class="source-line-no">221</span><span id="line-221">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">222</span><span id="line-222">   public Track _class(String value) {  // NOSONAR - Intentional naming.</span>
+<span class="source-line-no">223</span><span id="line-223">      super._class(value);</span>
+<span class="source-line-no">224</span><span id="line-224">      return this;</span>
+<span class="source-line-no">225</span><span id="line-225">   }</span>
+<span class="source-line-no">226</span><span id="line-226"></span>
+<span class="source-line-no">227</span><span id="line-227">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">228</span><span id="line-228">   public Track accesskey(String value) {</span>
+<span class="source-line-no">229</span><span id="line-229">      super.accesskey(value);</span>
+<span class="source-line-no">230</span><span id="line-230">      return this;</span>
+<span class="source-line-no">231</span><span id="line-231">   }</span>
+<span class="source-line-no">232</span><span id="line-232"></span>
+<span class="source-line-no">233</span><span id="line-233">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">234</span><span id="line-234">   public Track contenteditable(Object value) {</span>
+<span class="source-line-no">235</span><span id="line-235">      super.contenteditable(value);</span>
+<span class="source-line-no">236</span><span id="line-236">      return this;</span>
+<span class="source-line-no">237</span><span id="line-237">   }</span>
+<span class="source-line-no">238</span><span id="line-238"></span>
+<span class="source-line-no">239</span><span id="line-239">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">240</span><span id="line-240">   public Track dir(String value) {</span>
+<span class="source-line-no">241</span><span id="line-241">      super.dir(value);</span>
+<span class="source-line-no">242</span><span id="line-242">      return this;</span>
+<span class="source-line-no">243</span><span id="line-243">   }</span>
+<span class="source-line-no">244</span><span id="line-244"></span>
+<span class="source-line-no">245</span><span id="line-245">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">246</span><span id="line-246">   public Track hidden(Object value) {</span>
+<span class="source-line-no">247</span><span id="line-247">      super.hidden(value);</span>
+<span class="source-line-no">248</span><span id="line-248">      return this;</span>
+<span class="source-line-no">249</span><span id="line-249">   }</span>
+<span class="source-line-no">250</span><span id="line-250"></span>
+<span class="source-line-no">251</span><span id="line-251">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">252</span><span id="line-252">   public Track id(String value) {</span>
+<span class="source-line-no">253</span><span id="line-253">      super.id(value);</span>
+<span class="source-line-no">254</span><span id="line-254">      return this;</span>
+<span class="source-line-no">255</span><span id="line-255">   }</span>
+<span class="source-line-no">256</span><span id="line-256"></span>
+<span class="source-line-no">257</span><span id="line-257">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">258</span><span id="line-258">   public Track lang(String value) {</span>
+<span class="source-line-no">259</span><span id="line-259">      super.lang(value);</span>
+<span class="source-line-no">260</span><span id="line-260">      return this;</span>
+<span class="source-line-no">261</span><span id="line-261">   }</span>
+<span class="source-line-no">262</span><span id="line-262"></span>
+<span class="source-line-no">263</span><span id="line-263">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">264</span><span id="line-264">   public Track onabort(String value) {</span>
+<span class="source-line-no">265</span><span id="line-265">      super.onabort(value);</span>
+<span class="source-line-no">266</span><span id="line-266">      return this;</span>
+<span class="source-line-no">267</span><span id="line-267">   }</span>
+<span class="source-line-no">268</span><span id="line-268"></span>
+<span class="source-line-no">269</span><span id="line-269">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">270</span><span id="line-270">   public Track onblur(String value) {</span>
+<span class="source-line-no">271</span><span id="line-271">      super.onblur(value);</span>
+<span class="source-line-no">272</span><span id="line-272">      return this;</span>
+<span class="source-line-no">273</span><span id="line-273">   }</span>
+<span class="source-line-no">274</span><span id="line-274"></span>
+<span class="source-line-no">275</span><span id="line-275">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">276</span><span id="line-276">   public Track oncancel(String value) {</span>
+<span class="source-line-no">277</span><span id="line-277">      super.oncancel(value);</span>
+<span class="source-line-no">278</span><span id="line-278">      return this;</span>
+<span class="source-line-no">279</span><span id="line-279">   }</span>
+<span class="source-line-no">280</span><span id="line-280"></span>
+<span class="source-line-no">281</span><span id="line-281">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">282</span><span id="line-282">   public Track oncanplay(String value) {</span>
+<span class="source-line-no">283</span><span id="line-283">      super.oncanplay(value);</span>
+<span class="source-line-no">284</span><span id="line-284">      return this;</span>
+<span class="source-line-no">285</span><span id="line-285">   }</span>
+<span class="source-line-no">286</span><span id="line-286"></span>
+<span class="source-line-no">287</span><span id="line-287">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">288</span><span id="line-288">   public Track oncanplaythrough(String value) {</span>
+<span class="source-line-no">289</span><span id="line-289">      super.oncanplaythrough(value);</span>
+<span class="source-line-no">290</span><span id="line-290">      return this;</span>
+<span class="source-line-no">291</span><span id="line-291">   }</span>
+<span class="source-line-no">292</span><span id="line-292"></span>
+<span class="source-line-no">293</span><span id="line-293">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">294</span><span id="line-294">   public Track onchange(String value) {</span>
+<span class="source-line-no">295</span><span id="line-295">      super.onchange(value);</span>
+<span class="source-line-no">296</span><span id="line-296">      return this;</span>
+<span class="source-line-no">297</span><span id="line-297">   }</span>
+<span class="source-line-no">298</span><span id="line-298"></span>
+<span class="source-line-no">299</span><span id="line-299">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">300</span><span id="line-300">   public Track onclick(String value) {</span>
+<span class="source-line-no">301</span><span id="line-301">      super.onclick(value);</span>
+<span class="source-line-no">302</span><span id="line-302">      return this;</span>
+<span class="source-line-no">303</span><span id="line-303">   }</span>
+<span class="source-line-no">304</span><span id="line-304"></span>
+<span class="source-line-no">305</span><span id="line-305">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">306</span><span id="line-306">   public Track oncuechange(String value) {</span>
+<span class="source-line-no">307</span><span id="line-307">      super.oncuechange(value);</span>
+<span class="source-line-no">308</span><span id="line-308">      return this;</span>
+<span class="source-line-no">309</span><span id="line-309">   }</span>
+<span class="source-line-no">310</span><span id="line-310"></span>
+<span class="source-line-no">311</span><span id="line-311">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">312</span><span id="line-312">   public Track ondblclick(String value) {</span>
+<span class="source-line-no">313</span><span id="line-313">      super.ondblclick(value);</span>
+<span class="source-line-no">314</span><span id="line-314">      return this;</span>
+<span class="source-line-no">315</span><span id="line-315">   }</span>
+<span class="source-line-no">316</span><span id="line-316"></span>
+<span class="source-line-no">317</span><span id="line-317">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">318</span><span id="line-318">   public Track ondurationchange(String value) {</span>
+<span class="source-line-no">319</span><span id="line-319">      super.ondurationchange(value);</span>
+<span class="source-line-no">320</span><span id="line-320">      return this;</span>
+<span class="source-line-no">321</span><span id="line-321">   }</span>
+<span class="source-line-no">322</span><span id="line-322"></span>
+<span class="source-line-no">323</span><span id="line-323">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">324</span><span id="line-324">   public Track onemptied(String value) {</span>
+<span class="source-line-no">325</span><span id="line-325">      super.onemptied(value);</span>
+<span class="source-line-no">326</span><span id="line-326">      return this;</span>
+<span class="source-line-no">327</span><span id="line-327">   }</span>
+<span class="source-line-no">328</span><span id="line-328"></span>
+<span class="source-line-no">329</span><span id="line-329">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">330</span><span id="line-330">   public Track onended(String value) {</span>
+<span class="source-line-no">331</span><span id="line-331">      super.onended(value);</span>
+<span class="source-line-no">332</span><span id="line-332">      return this;</span>
+<span class="source-line-no">333</span><span id="line-333">   }</span>
+<span class="source-line-no">334</span><span id="line-334"></span>
+<span class="source-line-no">335</span><span id="line-335">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">336</span><span id="line-336">   public Track onerror(String value) {</span>
+<span class="source-line-no">337</span><span id="line-337">      super.onerror(value);</span>
+<span class="source-line-no">338</span><span id="line-338">      return this;</span>
+<span class="source-line-no">339</span><span id="line-339">   }</span>
+<span class="source-line-no">340</span><span id="line-340"></span>
+<span class="source-line-no">341</span><span id="line-341">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">342</span><span id="line-342">   public Track onfocus(String value) {</span>
+<span class="source-line-no">343</span><span id="line-343">      super.onfocus(value);</span>
+<span class="source-line-no">344</span><span id="line-344">      return this;</span>
+<span class="source-line-no">345</span><span id="line-345">   }</span>
+<span class="source-line-no">346</span><span id="line-346"></span>
+<span class="source-line-no">347</span><span id="line-347">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">348</span><span id="line-348">   public Track oninput(String value) {</span>
+<span class="source-line-no">349</span><span id="line-349">      super.oninput(value);</span>
+<span class="source-line-no">350</span><span id="line-350">      return this;</span>
+<span class="source-line-no">351</span><span id="line-351">   }</span>
+<span class="source-line-no">352</span><span id="line-352"></span>
+<span class="source-line-no">353</span><span id="line-353">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">354</span><span id="line-354">   public Track oninvalid(String value) {</span>
+<span class="source-line-no">355</span><span id="line-355">      super.oninvalid(value);</span>
+<span class="source-line-no">356</span><span id="line-356">      return this;</span>
+<span class="source-line-no">357</span><span id="line-357">   }</span>
+<span class="source-line-no">358</span><span id="line-358"></span>
+<span class="source-line-no">359</span><span id="line-359">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">360</span><span id="line-360">   public Track onkeydown(String value) {</span>
+<span class="source-line-no">361</span><span id="line-361">      super.onkeydown(value);</span>
+<span class="source-line-no">362</span><span id="line-362">      return this;</span>
+<span class="source-line-no">363</span><span id="line-363">   }</span>
+<span class="source-line-no">364</span><span id="line-364"></span>
+<span class="source-line-no">365</span><span id="line-365">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">366</span><span id="line-366">   public Track onkeypress(String value) {</span>
+<span class="source-line-no">367</span><span id="line-367">      super.onkeypress(value);</span>
+<span class="source-line-no">368</span><span id="line-368">      return this;</span>
+<span class="source-line-no">369</span><span id="line-369">   }</span>
+<span class="source-line-no">370</span><span id="line-370"></span>
+<span class="source-line-no">371</span><span id="line-371">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">372</span><span id="line-372">   public Track onkeyup(String value) {</span>
+<span class="source-line-no">373</span><span id="line-373">      super.onkeyup(value);</span>
+<span class="source-line-no">374</span><span id="line-374">      return this;</span>
+<span class="source-line-no">375</span><span id="line-375">   }</span>
+<span class="source-line-no">376</span><span id="line-376"></span>
+<span class="source-line-no">377</span><span id="line-377">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">378</span><span id="line-378">   public Track onload(String value) {</span>
+<span class="source-line-no">379</span><span id="line-379">      super.onload(value);</span>
+<span class="source-line-no">380</span><span id="line-380">      return this;</span>
+<span class="source-line-no">381</span><span id="line-381">   }</span>
+<span class="source-line-no">382</span><span id="line-382"></span>
+<span class="source-line-no">383</span><span id="line-383">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">384</span><span id="line-384">   public Track onloadeddata(String value) {</span>
+<span class="source-line-no">385</span><span id="line-385">      super.onloadeddata(value);</span>
+<span class="source-line-no">386</span><span id="line-386">      return this;</span>
+<span class="source-line-no">387</span><span id="line-387">   }</span>
+<span class="source-line-no">388</span><span id="line-388"></span>
+<span class="source-line-no">389</span><span id="line-389">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">390</span><span id="line-390">   public Track onloadedmetadata(String value) {</span>
+<span class="source-line-no">391</span><span id="line-391">      super.onloadedmetadata(value);</span>
+<span class="source-line-no">392</span><span id="line-392">      return this;</span>
+<span class="source-line-no">393</span><span id="line-393">   }</span>
+<span class="source-line-no">394</span><span id="line-394"></span>
+<span class="source-line-no">395</span><span id="line-395">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">396</span><span id="line-396">   public Track onloadstart(String value) {</span>
+<span class="source-line-no">397</span><span id="line-397">      super.onloadstart(value);</span>
+<span class="source-line-no">398</span><span id="line-398">      return this;</span>
+<span class="source-line-no">399</span><span id="line-399">   }</span>
+<span class="source-line-no">400</span><span id="line-400"></span>
+<span class="source-line-no">401</span><span id="line-401">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">402</span><span id="line-402">   public Track onmousedown(String value) {</span>
+<span class="source-line-no">403</span><span id="line-403">      super.onmousedown(value);</span>
+<span class="source-line-no">404</span><span id="line-404">      return this;</span>
+<span class="source-line-no">405</span><span id="line-405">   }</span>
+<span class="source-line-no">406</span><span id="line-406"></span>
+<span class="source-line-no">407</span><span id="line-407">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">408</span><span id="line-408">   public Track onmouseenter(String value) {</span>
+<span class="source-line-no">409</span><span id="line-409">      super.onmouseenter(value);</span>
+<span class="source-line-no">410</span><span id="line-410">      return this;</span>
+<span class="source-line-no">411</span><span id="line-411">   }</span>
+<span class="source-line-no">412</span><span id="line-412"></span>
+<span class="source-line-no">413</span><span id="line-413">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">414</span><span id="line-414">   public Track onmouseleave(String value) {</span>
+<span class="source-line-no">415</span><span id="line-415">      super.onmouseleave(value);</span>
+<span class="source-line-no">416</span><span id="line-416">      return this;</span>
+<span class="source-line-no">417</span><span id="line-417">   }</span>
+<span class="source-line-no">418</span><span id="line-418"></span>
+<span class="source-line-no">419</span><span id="line-419">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">420</span><span id="line-420">   public Track onmousemove(String value) {</span>
+<span class="source-line-no">421</span><span id="line-421">      super.onmousemove(value);</span>
+<span class="source-line-no">422</span><span id="line-422">      return this;</span>
+<span class="source-line-no">423</span><span id="line-423">   }</span>
+<span class="source-line-no">424</span><span id="line-424"></span>
+<span class="source-line-no">425</span><span id="line-425">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">426</span><span id="line-426">   public Track onmouseout(String value) {</span>
+<span class="source-line-no">427</span><span id="line-427">      super.onmouseout(value);</span>
+<span class="source-line-no">428</span><span id="line-428">      return this;</span>
+<span class="source-line-no">429</span><span id="line-429">   }</span>
+<span class="source-line-no">430</span><span id="line-430"></span>
+<span class="source-line-no">431</span><span id="line-431">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">432</span><span id="line-432">   public Track onmouseover(String value) {</span>
+<span class="source-line-no">433</span><span id="line-433">      super.onmouseover(value);</span>
+<span class="source-line-no">434</span><span id="line-434">      return this;</span>
+<span class="source-line-no">435</span><span id="line-435">   }</span>
+<span class="source-line-no">436</span><span id="line-436"></span>
+<span class="source-line-no">437</span><span id="line-437">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">438</span><span id="line-438">   public Track onmouseup(String value) {</span>
+<span class="source-line-no">439</span><span id="line-439">      super.onmouseup(value);</span>
+<span class="source-line-no">440</span><span id="line-440">      return this;</span>
+<span class="source-line-no">441</span><span id="line-441">   }</span>
+<span class="source-line-no">442</span><span id="line-442"></span>
+<span class="source-line-no">443</span><span id="line-443">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">444</span><span id="line-444">   public Track onmousewheel(String value) {</span>
+<span class="source-line-no">445</span><span id="line-445">      super.onmousewheel(value);</span>
+<span class="source-line-no">446</span><span id="line-446">      return this;</span>
+<span class="source-line-no">447</span><span id="line-447">   }</span>
+<span class="source-line-no">448</span><span id="line-448"></span>
+<span class="source-line-no">449</span><span id="line-449">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">450</span><span id="line-450">   public Track onpause(String value) {</span>
+<span class="source-line-no">451</span><span id="line-451">      super.onpause(value);</span>
+<span class="source-line-no">452</span><span id="line-452">      return this;</span>
+<span class="source-line-no">453</span><span id="line-453">   }</span>
+<span class="source-line-no">454</span><span id="line-454"></span>
+<span class="source-line-no">455</span><span id="line-455">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">456</span><span id="line-456">   public Track onplay(String value) {</span>
+<span class="source-line-no">457</span><span id="line-457">      super.onplay(value);</span>
+<span class="source-line-no">458</span><span id="line-458">      return this;</span>
+<span class="source-line-no">459</span><span id="line-459">   }</span>
+<span class="source-line-no">460</span><span id="line-460"></span>
+<span class="source-line-no">461</span><span id="line-461">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">462</span><span id="line-462">   public Track onplaying(String value) {</span>
+<span class="source-line-no">463</span><span id="line-463">      super.onplaying(value);</span>
+<span class="source-line-no">464</span><span id="line-464">      return this;</span>
+<span class="source-line-no">465</span><span id="line-465">   }</span>
+<span class="source-line-no">466</span><span id="line-466"></span>
+<span class="source-line-no">467</span><span id="line-467">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">468</span><span id="line-468">   public Track onprogress(String value) {</span>
+<span class="source-line-no">469</span><span id="line-469">      super.onprogress(value);</span>
+<span class="source-line-no">470</span><span id="line-470">      return this;</span>
+<span class="source-line-no">471</span><span id="line-471">   }</span>
+<span class="source-line-no">472</span><span id="line-472"></span>
+<span class="source-line-no">473</span><span id="line-473">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">474</span><span id="line-474">   public Track onratechange(String value) {</span>
+<span class="source-line-no">475</span><span id="line-475">      super.onratechange(value);</span>
+<span class="source-line-no">476</span><span id="line-476">      return this;</span>
+<span class="source-line-no">477</span><span id="line-477">   }</span>
+<span class="source-line-no">478</span><span id="line-478"></span>
+<span class="source-line-no">479</span><span id="line-479">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">480</span><span id="line-480">   public Track onreset(String value) {</span>
+<span class="source-line-no">481</span><span id="line-481">      super.onreset(value);</span>
+<span class="source-line-no">482</span><span id="line-482">      return this;</span>
+<span class="source-line-no">483</span><span id="line-483">   }</span>
+<span class="source-line-no">484</span><span id="line-484"></span>
+<span class="source-line-no">485</span><span id="line-485">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">486</span><span id="line-486">   public Track onresize(String value) {</span>
+<span class="source-line-no">487</span><span id="line-487">      super.onresize(value);</span>
+<span class="source-line-no">488</span><span id="line-488">      return this;</span>
+<span class="source-line-no">489</span><span id="line-489">   }</span>
+<span class="source-line-no">490</span><span id="line-490"></span>
+<span class="source-line-no">491</span><span id="line-491">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">492</span><span id="line-492">   public Track onscroll(String value) {</span>
+<span class="source-line-no">493</span><span id="line-493">      super.onscroll(value);</span>
+<span class="source-line-no">494</span><span id="line-494">      return this;</span>
+<span class="source-line-no">495</span><span id="line-495">   }</span>
+<span class="source-line-no">496</span><span id="line-496"></span>
+<span class="source-line-no">497</span><span id="line-497">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">498</span><span id="line-498">   public Track onseeked(String value) {</span>
+<span class="source-line-no">499</span><span id="line-499">      super.onseeked(value);</span>
+<span class="source-line-no">500</span><span id="line-500">      return this;</span>
+<span class="source-line-no">501</span><span id="line-501">   }</span>
+<span class="source-line-no">502</span><span id="line-502"></span>
+<span class="source-line-no">503</span><span id="line-503">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">504</span><span id="line-504">   public Track onseeking(String value) {</span>
+<span class="source-line-no">505</span><span id="line-505">      super.onseeking(value);</span>
+<span class="source-line-no">506</span><span id="line-506">      return this;</span>
+<span class="source-line-no">507</span><span id="line-507">   }</span>
+<span class="source-line-no">508</span><span id="line-508"></span>
+<span class="source-line-no">509</span><span id="line-509">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">510</span><span id="line-510">   public Track onselect(String value) {</span>
+<span class="source-line-no">511</span><span id="line-511">      super.onselect(value);</span>
+<span class="source-line-no">512</span><span id="line-512">      return this;</span>
+<span class="source-line-no">513</span><span id="line-513">   }</span>
+<span class="source-line-no">514</span><span id="line-514"></span>
+<span class="source-line-no">515</span><span id="line-515">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">516</span><span id="line-516">   public Track onshow(String value) {</span>
+<span class="source-line-no">517</span><span id="line-517">      super.onshow(value);</span>
+<span class="source-line-no">518</span><span id="line-518">      return this;</span>
+<span class="source-line-no">519</span><span id="line-519">   }</span>
+<span class="source-line-no">520</span><span id="line-520"></span>
+<span class="source-line-no">521</span><span id="line-521">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">522</span><span id="line-522">   public Track onstalled(String value) {</span>
+<span class="source-line-no">523</span><span id="line-523">      super.onstalled(value);</span>
+<span class="source-line-no">524</span><span id="line-524">      return this;</span>
+<span class="source-line-no">525</span><span id="line-525">   }</span>
+<span class="source-line-no">526</span><span id="line-526"></span>
+<span class="source-line-no">527</span><span id="line-527">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">528</span><span id="line-528">   public Track onsubmit(String value) {</span>
+<span class="source-line-no">529</span><span id="line-529">      super.onsubmit(value);</span>
+<span class="source-line-no">530</span><span id="line-530">      return this;</span>
+<span class="source-line-no">531</span><span id="line-531">   }</span>
+<span class="source-line-no">532</span><span id="line-532"></span>
+<span class="source-line-no">533</span><span id="line-533">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">534</span><span id="line-534">   public Track onsuspend(String value) {</span>
+<span class="source-line-no">535</span><span id="line-535">      super.onsuspend(value);</span>
+<span class="source-line-no">536</span><span id="line-536">      return this;</span>
+<span class="source-line-no">537</span><span id="line-537">   }</span>
+<span class="source-line-no">538</span><span id="line-538"></span>
+<span class="source-line-no">539</span><span id="line-539">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">540</span><span id="line-540">   public Track ontimeupdate(String value) {</span>
+<span class="source-line-no">541</span><span id="line-541">      super.ontimeupdate(value);</span>
+<span class="source-line-no">542</span><span id="line-542">      return this;</span>
+<span class="source-line-no">543</span><span id="line-543">   }</span>
+<span class="source-line-no">544</span><span id="line-544"></span>
+<span class="source-line-no">545</span><span id="line-545">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">546</span><span id="line-546">   public Track ontoggle(String value) {</span>
+<span class="source-line-no">547</span><span id="line-547">      super.ontoggle(value);</span>
+<span class="source-line-no">548</span><span id="line-548">      return this;</span>
+<span class="source-line-no">549</span><span id="line-549">   }</span>
+<span class="source-line-no">550</span><span id="line-550"></span>
+<span class="source-line-no">551</span><span id="line-551">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">552</span><span id="line-552">   public Track onvolumechange(String value) {</span>
+<span class="source-line-no">553</span><span id="line-553">      super.onvolumechange(value);</span>
+<span class="source-line-no">554</span><span id="line-554">      return this;</span>
+<span class="source-line-no">555</span><span id="line-555">   }</span>
+<span class="source-line-no">556</span><span id="line-556"></span>
+<span class="source-line-no">557</span><span id="line-557">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">558</span><span id="line-558">   public Track onwaiting(String value) {</span>
+<span class="source-line-no">559</span><span id="line-559">      super.onwaiting(value);</span>
+<span class="source-line-no">560</span><span id="line-560">      return this;</span>
+<span class="source-line-no">561</span><span id="line-561">   }</span>
+<span class="source-line-no">562</span><span id="line-562"></span>
+<span class="source-line-no">563</span><span id="line-563">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">564</span><span id="line-564">   public Track spellcheck(Object value) {</span>
+<span class="source-line-no">565</span><span id="line-565">      super.spellcheck(value);</span>
+<span class="source-line-no">566</span><span id="line-566">      return this;</span>
+<span class="source-line-no">567</span><span id="line-567">   }</span>
+<span class="source-line-no">568</span><span id="line-568"></span>
+<span class="source-line-no">569</span><span id="line-569">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">570</span><span id="line-570">   public Track style(String value) {</span>
+<span class="source-line-no">571</span><span id="line-571">      super.style(value);</span>
+<span class="source-line-no">572</span><span id="line-572">      return this;</span>
+<span class="source-line-no">573</span><span id="line-573">   }</span>
+<span class="source-line-no">574</span><span id="line-574"></span>
+<span class="source-line-no">575</span><span id="line-575">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">576</span><span id="line-576">   public Track tabindex(Object value) {</span>
+<span class="source-line-no">577</span><span id="line-577">      super.tabindex(value);</span>
+<span class="source-line-no">578</span><span id="line-578">      return this;</span>
+<span class="source-line-no">579</span><span id="line-579">   }</span>
+<span class="source-line-no">580</span><span id="line-580"></span>
+<span class="source-line-no">581</span><span id="line-581">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">582</span><span id="line-582">   public Track title(String value) {</span>
+<span class="source-line-no">583</span><span id="line-583">      super.title(value);</span>
+<span class="source-line-no">584</span><span id="line-584">      return this;</span>
+<span class="source-line-no">585</span><span id="line-585">   }</span>
+<span class="source-line-no">586</span><span id="line-586"></span>
+<span class="source-line-no">587</span><span id="line-587">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">588</span><span id="line-588">   public Track translate(Object value) {</span>
+<span class="source-line-no">589</span><span id="line-589">      super.translate(value);</span>
+<span class="source-line-no">590</span><span id="line-590">      return this;</span>
+<span class="source-line-no">591</span><span id="line-591">   }</span>
+<span class="source-line-no">592</span><span id="line-592"></span>
+<span class="source-line-no">593</span><span id="line-593">   // &lt;/FluentSetters&gt;</span>
+<span class="source-line-no">594</span><span id="line-594">}</span>
 
 
 

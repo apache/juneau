@@ -40,466 +40,473 @@
 <span class="source-line-no">027</span><span id="line-27"> *</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> * &lt;p class='bcode w800'&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> *    // Simple table caption</span>
-<span class="source-line-no">031</span><span id="line-31"> *    Caption simple = new Caption()</span>
-<span class="source-line-no">032</span><span id="line-32"> *       .children("Monthly Sales Report");</span>
-<span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> *    // Table caption with styling</span>
-<span class="source-line-no">035</span><span id="line-35"> *    Caption styled = new Caption()</span>
-<span class="source-line-no">036</span><span id="line-36"> *       ._class("table-title")</span>
-<span class="source-line-no">037</span><span id="line-37"> *       .children("Employee Directory");</span>
-<span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> *    // Table caption with complex content</span>
-<span class="source-line-no">040</span><span id="line-40"> *    Caption complex = new Caption()</span>
-<span class="source-line-no">041</span><span id="line-41"> *       .children(</span>
-<span class="source-line-no">042</span><span id="line-42"> *          "Sales Data for ",</span>
-<span class="source-line-no">043</span><span id="line-43"> *          new Strong().children("Q1 2024"),</span>
-<span class="source-line-no">044</span><span id="line-44"> *          " - ",</span>
-<span class="source-line-no">045</span><span id="line-45"> *          new Em().children("Preliminary Results")</span>
-<span class="source-line-no">046</span><span id="line-46"> *       );</span>
-<span class="source-line-no">047</span><span id="line-47"> *</span>
-<span class="source-line-no">048</span><span id="line-48"> *    // Table caption with links</span>
-<span class="source-line-no">049</span><span id="line-49"> *    Caption withLinks = new Caption()</span>
-<span class="source-line-no">050</span><span id="line-50"> *       .children(</span>
-<span class="source-line-no">051</span><span id="line-51"> *          "Product Inventory - ",</span>
-<span class="source-line-no">052</span><span id="line-52"> *          new A().href("/help/inventory").children("Help"),</span>
-<span class="source-line-no">053</span><span id="line-53"> *          " | ",</span>
-<span class="source-line-no">054</span><span id="line-54"> *          new A().href("/export/inventory").children("Export")</span>
-<span class="source-line-no">055</span><span id="line-55"> *       );</span>
-<span class="source-line-no">056</span><span id="line-56"> *</span>
-<span class="source-line-no">057</span><span id="line-57"> *    // Table caption with icons</span>
-<span class="source-line-no">058</span><span id="line-58"> *    Caption withIcons = new Caption()</span>
-<span class="source-line-no">059</span><span id="line-59"> *       .children(</span>
-<span class="source-line-no">060</span><span id="line-60"> *          "📊 ",</span>
-<span class="source-line-no">061</span><span id="line-61"> *          "Financial Summary",</span>
-<span class="source-line-no">062</span><span id="line-62"> *          " ",</span>
-<span class="source-line-no">063</span><span id="line-63"> *          new Span()._class("icon").children("💰")</span>
-<span class="source-line-no">064</span><span id="line-64"> *       );</span>
-<span class="source-line-no">065</span><span id="line-65"> *</span>
-<span class="source-line-no">066</span><span id="line-66"> *    // Table caption with multiple lines</span>
-<span class="source-line-no">067</span><span id="line-67"> *    Caption multiLine = new Caption()</span>
-<span class="source-line-no">068</span><span id="line-68"> *       .children(</span>
-<span class="source-line-no">069</span><span id="line-69"> *          "Customer Contact Information",</span>
-<span class="source-line-no">070</span><span id="line-70"> *          new Br(),</span>
-<span class="source-line-no">071</span><span id="line-71"> *          "Last Updated: ",</span>
-<span class="source-line-no">072</span><span id="line-72"> *          new Time().datetime("2024-01-15").children("January 15, 2024")</span>
-<span class="source-line-no">073</span><span id="line-73"> *       );</span>
-<span class="source-line-no">074</span><span id="line-74"> * &lt;/p&gt;</span>
-<span class="source-line-no">075</span><span id="line-75"> *</span>
-<span class="source-line-no">076</span><span id="line-76"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">077</span><span id="line-77"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
-<span class="source-line-no">078</span><span id="line-78"> * &lt;/ul&gt;</span>
-<span class="source-line-no">079</span><span id="line-79"> */</span>
-<span class="source-line-no">080</span><span id="line-80">@Bean(typeName="caption")</span>
-<span class="source-line-no">081</span><span id="line-81">@FluentSetters</span>
-<span class="source-line-no">082</span><span id="line-82">public class Caption extends HtmlElementMixed {</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">   /**</span>
-<span class="source-line-no">085</span><span id="line-85">    * Creates an empty {@link Caption} element.</span>
-<span class="source-line-no">086</span><span id="line-86">    */</span>
-<span class="source-line-no">087</span><span id="line-87">   public Caption() {}</span>
-<span class="source-line-no">088</span><span id="line-88"></span>
-<span class="source-line-no">089</span><span id="line-89">   /**</span>
-<span class="source-line-no">090</span><span id="line-90">    * Creates a {@link Caption} element with the specified child nodes.</span>
-<span class="source-line-no">091</span><span id="line-91">    *</span>
-<span class="source-line-no">092</span><span id="line-92">    * @param children The child nodes.</span>
+<span class="source-line-no">030</span><span id="line-30"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
+<span class="source-line-no">031</span><span id="line-31"> * </span>
+<span class="source-line-no">032</span><span id="line-32"> *    &lt;jc&gt;// Simple table caption&lt;/jc&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> *    Caption &lt;jv&gt;simple&lt;/jv&gt; = &lt;jsm&gt;caption&lt;/jsm&gt;(&lt;js&gt;"Monthly Sales Report"&lt;/js&gt;);</span>
+<span class="source-line-no">034</span><span id="line-34"> * </span>
+<span class="source-line-no">035</span><span id="line-35"> *    &lt;jc&gt;// Table caption with styling&lt;/jc&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> *    Caption &lt;jv&gt;styled&lt;/jv&gt; = &lt;jsm&gt;caption&lt;/jsm&gt;(&lt;js&gt;"Employee Directory"&lt;/js&gt;)</span>
+<span class="source-line-no">037</span><span id="line-37"> *       ._class(&lt;js&gt;"table-title"&lt;/js&gt;);</span>
+<span class="source-line-no">038</span><span id="line-38"> * </span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;jc&gt;// Table caption with complex content&lt;/jc&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *    Caption &lt;jv&gt;complex&lt;/jv&gt; = &lt;jsm&gt;caption&lt;/jsm&gt;(</span>
+<span class="source-line-no">041</span><span id="line-41"> *       &lt;js&gt;"Sales Data for "&lt;/js&gt;,</span>
+<span class="source-line-no">042</span><span id="line-42"> *       &lt;jsm&gt;strong&lt;/jsm&gt;(&lt;js&gt;"Q1 2024"&lt;/js&gt;),</span>
+<span class="source-line-no">043</span><span id="line-43"> *       &lt;js&gt;" - "&lt;/js&gt;,</span>
+<span class="source-line-no">044</span><span id="line-44"> *       &lt;jsm&gt;em&lt;/jsm&gt;(&lt;js&gt;"Preliminary Results"&lt;/js&gt;)</span>
+<span class="source-line-no">045</span><span id="line-45"> *    );</span>
+<span class="source-line-no">046</span><span id="line-46"> * </span>
+<span class="source-line-no">047</span><span id="line-47"> *    &lt;jc&gt;// Table caption with links&lt;/jc&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> *    Caption &lt;jv&gt;withLinks&lt;/jv&gt; = &lt;jsm&gt;caption&lt;/jsm&gt;(</span>
+<span class="source-line-no">049</span><span id="line-49"> *       &lt;js&gt;"Product Inventory - "&lt;/js&gt;,</span>
+<span class="source-line-no">050</span><span id="line-50"> *       &lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"/help/inventory"&lt;/js&gt;, &lt;js&gt;"Help"&lt;/js&gt;),</span>
+<span class="source-line-no">051</span><span id="line-51"> *       &lt;js&gt;" | "&lt;/js&gt;,</span>
+<span class="source-line-no">052</span><span id="line-52"> *       &lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"/export/inventory"&lt;/js&gt;, &lt;js&gt;"Export"&lt;/js&gt;)</span>
+<span class="source-line-no">053</span><span id="line-53"> *    );</span>
+<span class="source-line-no">054</span><span id="line-54"> * </span>
+<span class="source-line-no">055</span><span id="line-55"> *    &lt;jc&gt;// Table caption with icons&lt;/jc&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> *    Caption &lt;jv&gt;withIcons&lt;/jv&gt; = &lt;jsm&gt;caption&lt;/jsm&gt;(</span>
+<span class="source-line-no">057</span><span id="line-57"> *       &lt;js&gt;"📊 "&lt;/js&gt;,</span>
+<span class="source-line-no">058</span><span id="line-58"> *       &lt;js&gt;"Financial Summary"&lt;/js&gt;,</span>
+<span class="source-line-no">059</span><span id="line-59"> *       &lt;js&gt;" "&lt;/js&gt;,</span>
+<span class="source-line-no">060</span><span id="line-60"> *       &lt;jsm&gt;span&lt;/jsm&gt;()._class(&lt;js&gt;"icon"&lt;/js&gt;).children(&lt;js&gt;"💰"&lt;/js&gt;)</span>
+<span class="source-line-no">061</span><span id="line-61"> *    );</span>
+<span class="source-line-no">062</span><span id="line-62"> * </span>
+<span class="source-line-no">063</span><span id="line-63"> *    &lt;jc&gt;// Table caption with multiple lines&lt;/jc&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> *    Caption &lt;jv&gt;multiLine&lt;/jv&gt; = &lt;jsm&gt;caption&lt;/jsm&gt;(</span>
+<span class="source-line-no">065</span><span id="line-65"> *       &lt;js&gt;"Customer Contact Information"&lt;/js&gt;,</span>
+<span class="source-line-no">066</span><span id="line-66"> *       &lt;jsm&gt;br&lt;/jsm&gt;(),</span>
+<span class="source-line-no">067</span><span id="line-67"> *       &lt;js&gt;"Last Updated: "&lt;/js&gt;,</span>
+<span class="source-line-no">068</span><span id="line-68"> *       &lt;jsm&gt;time&lt;/jsm&gt;(&lt;js&gt;"2024-01-15"&lt;/js&gt;, &lt;js&gt;"January 15, 2024"&lt;/js&gt;)</span>
+<span class="source-line-no">069</span><span id="line-69"> *    );</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;/p&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> *</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;p&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> * The following convenience methods are provided for constructing instances of this bean:</span>
+<span class="source-line-no">074</span><span id="line-74"> * &lt;ul class='javatree'&gt;</span>
+<span class="source-line-no">075</span><span id="line-75"> *    &lt;li class='jc'&gt;{@link HtmlBuilder}</span>
+<span class="source-line-no">076</span><span id="line-76"> *    &lt;ul class='javatree'&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#caption() caption()}</span>
+<span class="source-line-no">078</span><span id="line-78"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#caption(Object, Object...) caption(Object, Object...)}</span>
+<span class="source-line-no">079</span><span id="line-79"> *    &lt;/ul&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> * &lt;/ul&gt;</span>
+<span class="source-line-no">081</span><span id="line-81"> * &lt;/p&gt;</span>
+<span class="source-line-no">082</span><span id="line-82"> *</span>
+<span class="source-line-no">083</span><span id="line-83"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;/ul&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> */</span>
+<span class="source-line-no">087</span><span id="line-87">@Bean(typeName="caption")</span>
+<span class="source-line-no">088</span><span id="line-88">@FluentSetters</span>
+<span class="source-line-no">089</span><span id="line-89">public class Caption extends HtmlElementMixed {</span>
+<span class="source-line-no">090</span><span id="line-90"></span>
+<span class="source-line-no">091</span><span id="line-91">   /**</span>
+<span class="source-line-no">092</span><span id="line-92">    * Creates an empty {@link Caption} element.</span>
 <span class="source-line-no">093</span><span id="line-93">    */</span>
-<span class="source-line-no">094</span><span id="line-94">   public Caption(Object...children) {</span>
-<span class="source-line-no">095</span><span id="line-95">      children(children);</span>
-<span class="source-line-no">096</span><span id="line-96">   }</span>
-<span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">099</span><span id="line-99">   // Overridden methods</span>
-<span class="source-line-no">100</span><span id="line-100">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">103</span><span id="line-103"></span>
-<span class="source-line-no">104</span><span id="line-104">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">105</span><span id="line-105">   public Caption _class(String value) {  // NOSONAR - Intentional naming.</span>
-<span class="source-line-no">106</span><span id="line-106">      super._class(value);</span>
-<span class="source-line-no">107</span><span id="line-107">      return this;</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">111</span><span id="line-111">   public Caption accesskey(String value) {</span>
-<span class="source-line-no">112</span><span id="line-112">      super.accesskey(value);</span>
-<span class="source-line-no">113</span><span id="line-113">      return this;</span>
-<span class="source-line-no">114</span><span id="line-114">   }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">117</span><span id="line-117">   public Caption contenteditable(Object value) {</span>
-<span class="source-line-no">118</span><span id="line-118">      super.contenteditable(value);</span>
-<span class="source-line-no">119</span><span id="line-119">      return this;</span>
-<span class="source-line-no">120</span><span id="line-120">   }</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">123</span><span id="line-123">   public Caption dir(String value) {</span>
-<span class="source-line-no">124</span><span id="line-124">      super.dir(value);</span>
-<span class="source-line-no">125</span><span id="line-125">      return this;</span>
-<span class="source-line-no">126</span><span id="line-126">   }</span>
-<span class="source-line-no">127</span><span id="line-127"></span>
-<span class="source-line-no">128</span><span id="line-128">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">129</span><span id="line-129">   public Caption hidden(Object value) {</span>
-<span class="source-line-no">130</span><span id="line-130">      super.hidden(value);</span>
-<span class="source-line-no">131</span><span id="line-131">      return this;</span>
-<span class="source-line-no">132</span><span id="line-132">   }</span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">135</span><span id="line-135">   public Caption id(String value) {</span>
-<span class="source-line-no">136</span><span id="line-136">      super.id(value);</span>
-<span class="source-line-no">137</span><span id="line-137">      return this;</span>
-<span class="source-line-no">138</span><span id="line-138">   }</span>
-<span class="source-line-no">139</span><span id="line-139"></span>
-<span class="source-line-no">140</span><span id="line-140">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">141</span><span id="line-141">   public Caption lang(String value) {</span>
-<span class="source-line-no">142</span><span id="line-142">      super.lang(value);</span>
-<span class="source-line-no">143</span><span id="line-143">      return this;</span>
-<span class="source-line-no">144</span><span id="line-144">   }</span>
-<span class="source-line-no">145</span><span id="line-145"></span>
-<span class="source-line-no">146</span><span id="line-146">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">147</span><span id="line-147">   public Caption onabort(String value) {</span>
-<span class="source-line-no">148</span><span id="line-148">      super.onabort(value);</span>
-<span class="source-line-no">149</span><span id="line-149">      return this;</span>
-<span class="source-line-no">150</span><span id="line-150">   }</span>
-<span class="source-line-no">151</span><span id="line-151"></span>
-<span class="source-line-no">152</span><span id="line-152">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">153</span><span id="line-153">   public Caption onblur(String value) {</span>
-<span class="source-line-no">154</span><span id="line-154">      super.onblur(value);</span>
-<span class="source-line-no">155</span><span id="line-155">      return this;</span>
-<span class="source-line-no">156</span><span id="line-156">   }</span>
-<span class="source-line-no">157</span><span id="line-157"></span>
-<span class="source-line-no">158</span><span id="line-158">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">159</span><span id="line-159">   public Caption oncancel(String value) {</span>
-<span class="source-line-no">160</span><span id="line-160">      super.oncancel(value);</span>
-<span class="source-line-no">161</span><span id="line-161">      return this;</span>
-<span class="source-line-no">162</span><span id="line-162">   }</span>
-<span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">165</span><span id="line-165">   public Caption oncanplay(String value) {</span>
-<span class="source-line-no">166</span><span id="line-166">      super.oncanplay(value);</span>
-<span class="source-line-no">167</span><span id="line-167">      return this;</span>
-<span class="source-line-no">168</span><span id="line-168">   }</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">171</span><span id="line-171">   public Caption oncanplaythrough(String value) {</span>
-<span class="source-line-no">172</span><span id="line-172">      super.oncanplaythrough(value);</span>
-<span class="source-line-no">173</span><span id="line-173">      return this;</span>
-<span class="source-line-no">174</span><span id="line-174">   }</span>
-<span class="source-line-no">175</span><span id="line-175"></span>
-<span class="source-line-no">176</span><span id="line-176">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">177</span><span id="line-177">   public Caption onchange(String value) {</span>
-<span class="source-line-no">178</span><span id="line-178">      super.onchange(value);</span>
-<span class="source-line-no">179</span><span id="line-179">      return this;</span>
-<span class="source-line-no">180</span><span id="line-180">   }</span>
-<span class="source-line-no">181</span><span id="line-181"></span>
-<span class="source-line-no">182</span><span id="line-182">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">183</span><span id="line-183">   public Caption onclick(String value) {</span>
-<span class="source-line-no">184</span><span id="line-184">      super.onclick(value);</span>
-<span class="source-line-no">185</span><span id="line-185">      return this;</span>
-<span class="source-line-no">186</span><span id="line-186">   }</span>
-<span class="source-line-no">187</span><span id="line-187"></span>
-<span class="source-line-no">188</span><span id="line-188">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">189</span><span id="line-189">   public Caption oncuechange(String value) {</span>
-<span class="source-line-no">190</span><span id="line-190">      super.oncuechange(value);</span>
-<span class="source-line-no">191</span><span id="line-191">      return this;</span>
-<span class="source-line-no">192</span><span id="line-192">   }</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">195</span><span id="line-195">   public Caption ondblclick(String value) {</span>
-<span class="source-line-no">196</span><span id="line-196">      super.ondblclick(value);</span>
-<span class="source-line-no">197</span><span id="line-197">      return this;</span>
-<span class="source-line-no">198</span><span id="line-198">   }</span>
-<span class="source-line-no">199</span><span id="line-199"></span>
-<span class="source-line-no">200</span><span id="line-200">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">201</span><span id="line-201">   public Caption ondurationchange(String value) {</span>
-<span class="source-line-no">202</span><span id="line-202">      super.ondurationchange(value);</span>
-<span class="source-line-no">203</span><span id="line-203">      return this;</span>
-<span class="source-line-no">204</span><span id="line-204">   }</span>
-<span class="source-line-no">205</span><span id="line-205"></span>
-<span class="source-line-no">206</span><span id="line-206">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">207</span><span id="line-207">   public Caption onemptied(String value) {</span>
-<span class="source-line-no">208</span><span id="line-208">      super.onemptied(value);</span>
-<span class="source-line-no">209</span><span id="line-209">      return this;</span>
-<span class="source-line-no">210</span><span id="line-210">   }</span>
-<span class="source-line-no">211</span><span id="line-211"></span>
-<span class="source-line-no">212</span><span id="line-212">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">213</span><span id="line-213">   public Caption onended(String value) {</span>
-<span class="source-line-no">214</span><span id="line-214">      super.onended(value);</span>
-<span class="source-line-no">215</span><span id="line-215">      return this;</span>
-<span class="source-line-no">216</span><span id="line-216">   }</span>
-<span class="source-line-no">217</span><span id="line-217"></span>
-<span class="source-line-no">218</span><span id="line-218">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">219</span><span id="line-219">   public Caption onerror(String value) {</span>
-<span class="source-line-no">220</span><span id="line-220">      super.onerror(value);</span>
-<span class="source-line-no">221</span><span id="line-221">      return this;</span>
-<span class="source-line-no">222</span><span id="line-222">   }</span>
-<span class="source-line-no">223</span><span id="line-223"></span>
-<span class="source-line-no">224</span><span id="line-224">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">225</span><span id="line-225">   public Caption onfocus(String value) {</span>
-<span class="source-line-no">226</span><span id="line-226">      super.onfocus(value);</span>
-<span class="source-line-no">227</span><span id="line-227">      return this;</span>
-<span class="source-line-no">228</span><span id="line-228">   }</span>
-<span class="source-line-no">229</span><span id="line-229"></span>
-<span class="source-line-no">230</span><span id="line-230">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">231</span><span id="line-231">   public Caption oninput(String value) {</span>
-<span class="source-line-no">232</span><span id="line-232">      super.oninput(value);</span>
-<span class="source-line-no">233</span><span id="line-233">      return this;</span>
-<span class="source-line-no">234</span><span id="line-234">   }</span>
-<span class="source-line-no">235</span><span id="line-235"></span>
-<span class="source-line-no">236</span><span id="line-236">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">237</span><span id="line-237">   public Caption oninvalid(String value) {</span>
-<span class="source-line-no">238</span><span id="line-238">      super.oninvalid(value);</span>
-<span class="source-line-no">239</span><span id="line-239">      return this;</span>
-<span class="source-line-no">240</span><span id="line-240">   }</span>
-<span class="source-line-no">241</span><span id="line-241"></span>
-<span class="source-line-no">242</span><span id="line-242">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">243</span><span id="line-243">   public Caption onkeydown(String value) {</span>
-<span class="source-line-no">244</span><span id="line-244">      super.onkeydown(value);</span>
-<span class="source-line-no">245</span><span id="line-245">      return this;</span>
-<span class="source-line-no">246</span><span id="line-246">   }</span>
-<span class="source-line-no">247</span><span id="line-247"></span>
-<span class="source-line-no">248</span><span id="line-248">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">249</span><span id="line-249">   public Caption onkeypress(String value) {</span>
-<span class="source-line-no">250</span><span id="line-250">      super.onkeypress(value);</span>
-<span class="source-line-no">251</span><span id="line-251">      return this;</span>
-<span class="source-line-no">252</span><span id="line-252">   }</span>
-<span class="source-line-no">253</span><span id="line-253"></span>
-<span class="source-line-no">254</span><span id="line-254">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">255</span><span id="line-255">   public Caption onkeyup(String value) {</span>
-<span class="source-line-no">256</span><span id="line-256">      super.onkeyup(value);</span>
-<span class="source-line-no">257</span><span id="line-257">      return this;</span>
-<span class="source-line-no">258</span><span id="line-258">   }</span>
-<span class="source-line-no">259</span><span id="line-259"></span>
-<span class="source-line-no">260</span><span id="line-260">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">261</span><span id="line-261">   public Caption onload(String value) {</span>
-<span class="source-line-no">262</span><span id="line-262">      super.onload(value);</span>
-<span class="source-line-no">263</span><span id="line-263">      return this;</span>
-<span class="source-line-no">264</span><span id="line-264">   }</span>
-<span class="source-line-no">265</span><span id="line-265"></span>
-<span class="source-line-no">266</span><span id="line-266">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">267</span><span id="line-267">   public Caption onloadeddata(String value) {</span>
-<span class="source-line-no">268</span><span id="line-268">      super.onloadeddata(value);</span>
-<span class="source-line-no">269</span><span id="line-269">      return this;</span>
-<span class="source-line-no">270</span><span id="line-270">   }</span>
-<span class="source-line-no">271</span><span id="line-271"></span>
-<span class="source-line-no">272</span><span id="line-272">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">273</span><span id="line-273">   public Caption onloadedmetadata(String value) {</span>
-<span class="source-line-no">274</span><span id="line-274">      super.onloadedmetadata(value);</span>
-<span class="source-line-no">275</span><span id="line-275">      return this;</span>
-<span class="source-line-no">276</span><span id="line-276">   }</span>
-<span class="source-line-no">277</span><span id="line-277"></span>
-<span class="source-line-no">278</span><span id="line-278">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">279</span><span id="line-279">   public Caption onloadstart(String value) {</span>
-<span class="source-line-no">280</span><span id="line-280">      super.onloadstart(value);</span>
-<span class="source-line-no">281</span><span id="line-281">      return this;</span>
-<span class="source-line-no">282</span><span id="line-282">   }</span>
-<span class="source-line-no">283</span><span id="line-283"></span>
-<span class="source-line-no">284</span><span id="line-284">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">285</span><span id="line-285">   public Caption onmousedown(String value) {</span>
-<span class="source-line-no">286</span><span id="line-286">      super.onmousedown(value);</span>
-<span class="source-line-no">287</span><span id="line-287">      return this;</span>
-<span class="source-line-no">288</span><span id="line-288">   }</span>
-<span class="source-line-no">289</span><span id="line-289"></span>
-<span class="source-line-no">290</span><span id="line-290">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">291</span><span id="line-291">   public Caption onmouseenter(String value) {</span>
-<span class="source-line-no">292</span><span id="line-292">      super.onmouseenter(value);</span>
-<span class="source-line-no">293</span><span id="line-293">      return this;</span>
-<span class="source-line-no">294</span><span id="line-294">   }</span>
-<span class="source-line-no">295</span><span id="line-295"></span>
-<span class="source-line-no">296</span><span id="line-296">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">297</span><span id="line-297">   public Caption onmouseleave(String value) {</span>
-<span class="source-line-no">298</span><span id="line-298">      super.onmouseleave(value);</span>
-<span class="source-line-no">299</span><span id="line-299">      return this;</span>
-<span class="source-line-no">300</span><span id="line-300">   }</span>
-<span class="source-line-no">301</span><span id="line-301"></span>
-<span class="source-line-no">302</span><span id="line-302">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">303</span><span id="line-303">   public Caption onmousemove(String value) {</span>
-<span class="source-line-no">304</span><span id="line-304">      super.onmousemove(value);</span>
-<span class="source-line-no">305</span><span id="line-305">      return this;</span>
-<span class="source-line-no">306</span><span id="line-306">   }</span>
-<span class="source-line-no">307</span><span id="line-307"></span>
-<span class="source-line-no">308</span><span id="line-308">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">309</span><span id="line-309">   public Caption onmouseout(String value) {</span>
-<span class="source-line-no">310</span><span id="line-310">      super.onmouseout(value);</span>
-<span class="source-line-no">311</span><span id="line-311">      return this;</span>
-<span class="source-line-no">312</span><span id="line-312">   }</span>
-<span class="source-line-no">313</span><span id="line-313"></span>
-<span class="source-line-no">314</span><span id="line-314">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">315</span><span id="line-315">   public Caption onmouseover(String value) {</span>
-<span class="source-line-no">316</span><span id="line-316">      super.onmouseover(value);</span>
-<span class="source-line-no">317</span><span id="line-317">      return this;</span>
-<span class="source-line-no">318</span><span id="line-318">   }</span>
-<span class="source-line-no">319</span><span id="line-319"></span>
-<span class="source-line-no">320</span><span id="line-320">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">321</span><span id="line-321">   public Caption onmouseup(String value) {</span>
-<span class="source-line-no">322</span><span id="line-322">      super.onmouseup(value);</span>
-<span class="source-line-no">323</span><span id="line-323">      return this;</span>
-<span class="source-line-no">324</span><span id="line-324">   }</span>
-<span class="source-line-no">325</span><span id="line-325"></span>
-<span class="source-line-no">326</span><span id="line-326">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">327</span><span id="line-327">   public Caption onmousewheel(String value) {</span>
-<span class="source-line-no">328</span><span id="line-328">      super.onmousewheel(value);</span>
-<span class="source-line-no">329</span><span id="line-329">      return this;</span>
-<span class="source-line-no">330</span><span id="line-330">   }</span>
-<span class="source-line-no">331</span><span id="line-331"></span>
-<span class="source-line-no">332</span><span id="line-332">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">333</span><span id="line-333">   public Caption onpause(String value) {</span>
-<span class="source-line-no">334</span><span id="line-334">      super.onpause(value);</span>
-<span class="source-line-no">335</span><span id="line-335">      return this;</span>
-<span class="source-line-no">336</span><span id="line-336">   }</span>
-<span class="source-line-no">337</span><span id="line-337"></span>
-<span class="source-line-no">338</span><span id="line-338">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">339</span><span id="line-339">   public Caption onplay(String value) {</span>
-<span class="source-line-no">340</span><span id="line-340">      super.onplay(value);</span>
-<span class="source-line-no">341</span><span id="line-341">      return this;</span>
-<span class="source-line-no">342</span><span id="line-342">   }</span>
-<span class="source-line-no">343</span><span id="line-343"></span>
-<span class="source-line-no">344</span><span id="line-344">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">345</span><span id="line-345">   public Caption onplaying(String value) {</span>
-<span class="source-line-no">346</span><span id="line-346">      super.onplaying(value);</span>
-<span class="source-line-no">347</span><span id="line-347">      return this;</span>
-<span class="source-line-no">348</span><span id="line-348">   }</span>
-<span class="source-line-no">349</span><span id="line-349"></span>
-<span class="source-line-no">350</span><span id="line-350">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">351</span><span id="line-351">   public Caption onprogress(String value) {</span>
-<span class="source-line-no">352</span><span id="line-352">      super.onprogress(value);</span>
-<span class="source-line-no">353</span><span id="line-353">      return this;</span>
-<span class="source-line-no">354</span><span id="line-354">   }</span>
-<span class="source-line-no">355</span><span id="line-355"></span>
-<span class="source-line-no">356</span><span id="line-356">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">357</span><span id="line-357">   public Caption onratechange(String value) {</span>
-<span class="source-line-no">358</span><span id="line-358">      super.onratechange(value);</span>
-<span class="source-line-no">359</span><span id="line-359">      return this;</span>
-<span class="source-line-no">360</span><span id="line-360">   }</span>
-<span class="source-line-no">361</span><span id="line-361"></span>
-<span class="source-line-no">362</span><span id="line-362">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">363</span><span id="line-363">   public Caption onreset(String value) {</span>
-<span class="source-line-no">364</span><span id="line-364">      super.onreset(value);</span>
-<span class="source-line-no">365</span><span id="line-365">      return this;</span>
-<span class="source-line-no">366</span><span id="line-366">   }</span>
-<span class="source-line-no">367</span><span id="line-367"></span>
-<span class="source-line-no">368</span><span id="line-368">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">369</span><span id="line-369">   public Caption onresize(String value) {</span>
-<span class="source-line-no">370</span><span id="line-370">      super.onresize(value);</span>
-<span class="source-line-no">371</span><span id="line-371">      return this;</span>
-<span class="source-line-no">372</span><span id="line-372">   }</span>
-<span class="source-line-no">373</span><span id="line-373"></span>
-<span class="source-line-no">374</span><span id="line-374">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">375</span><span id="line-375">   public Caption onscroll(String value) {</span>
-<span class="source-line-no">376</span><span id="line-376">      super.onscroll(value);</span>
-<span class="source-line-no">377</span><span id="line-377">      return this;</span>
-<span class="source-line-no">378</span><span id="line-378">   }</span>
-<span class="source-line-no">379</span><span id="line-379"></span>
-<span class="source-line-no">380</span><span id="line-380">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">381</span><span id="line-381">   public Caption onseeked(String value) {</span>
-<span class="source-line-no">382</span><span id="line-382">      super.onseeked(value);</span>
-<span class="source-line-no">383</span><span id="line-383">      return this;</span>
-<span class="source-line-no">384</span><span id="line-384">   }</span>
-<span class="source-line-no">385</span><span id="line-385"></span>
-<span class="source-line-no">386</span><span id="line-386">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">387</span><span id="line-387">   public Caption onseeking(String value) {</span>
-<span class="source-line-no">388</span><span id="line-388">      super.onseeking(value);</span>
-<span class="source-line-no">389</span><span id="line-389">      return this;</span>
-<span class="source-line-no">390</span><span id="line-390">   }</span>
-<span class="source-line-no">391</span><span id="line-391"></span>
-<span class="source-line-no">392</span><span id="line-392">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">393</span><span id="line-393">   public Caption onselect(String value) {</span>
-<span class="source-line-no">394</span><span id="line-394">      super.onselect(value);</span>
-<span class="source-line-no">395</span><span id="line-395">      return this;</span>
-<span class="source-line-no">396</span><span id="line-396">   }</span>
-<span class="source-line-no">397</span><span id="line-397"></span>
-<span class="source-line-no">398</span><span id="line-398">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">399</span><span id="line-399">   public Caption onshow(String value) {</span>
-<span class="source-line-no">400</span><span id="line-400">      super.onshow(value);</span>
-<span class="source-line-no">401</span><span id="line-401">      return this;</span>
-<span class="source-line-no">402</span><span id="line-402">   }</span>
-<span class="source-line-no">403</span><span id="line-403"></span>
-<span class="source-line-no">404</span><span id="line-404">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">405</span><span id="line-405">   public Caption onstalled(String value) {</span>
-<span class="source-line-no">406</span><span id="line-406">      super.onstalled(value);</span>
-<span class="source-line-no">407</span><span id="line-407">      return this;</span>
-<span class="source-line-no">408</span><span id="line-408">   }</span>
-<span class="source-line-no">409</span><span id="line-409"></span>
-<span class="source-line-no">410</span><span id="line-410">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">411</span><span id="line-411">   public Caption onsubmit(String value) {</span>
-<span class="source-line-no">412</span><span id="line-412">      super.onsubmit(value);</span>
-<span class="source-line-no">413</span><span id="line-413">      return this;</span>
-<span class="source-line-no">414</span><span id="line-414">   }</span>
-<span class="source-line-no">415</span><span id="line-415"></span>
-<span class="source-line-no">416</span><span id="line-416">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">417</span><span id="line-417">   public Caption onsuspend(String value) {</span>
-<span class="source-line-no">418</span><span id="line-418">      super.onsuspend(value);</span>
-<span class="source-line-no">419</span><span id="line-419">      return this;</span>
-<span class="source-line-no">420</span><span id="line-420">   }</span>
-<span class="source-line-no">421</span><span id="line-421"></span>
-<span class="source-line-no">422</span><span id="line-422">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">423</span><span id="line-423">   public Caption ontimeupdate(String value) {</span>
-<span class="source-line-no">424</span><span id="line-424">      super.ontimeupdate(value);</span>
-<span class="source-line-no">425</span><span id="line-425">      return this;</span>
-<span class="source-line-no">426</span><span id="line-426">   }</span>
-<span class="source-line-no">427</span><span id="line-427"></span>
-<span class="source-line-no">428</span><span id="line-428">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">429</span><span id="line-429">   public Caption ontoggle(String value) {</span>
-<span class="source-line-no">430</span><span id="line-430">      super.ontoggle(value);</span>
-<span class="source-line-no">431</span><span id="line-431">      return this;</span>
-<span class="source-line-no">432</span><span id="line-432">   }</span>
-<span class="source-line-no">433</span><span id="line-433"></span>
-<span class="source-line-no">434</span><span id="line-434">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">435</span><span id="line-435">   public Caption onvolumechange(String value) {</span>
-<span class="source-line-no">436</span><span id="line-436">      super.onvolumechange(value);</span>
-<span class="source-line-no">437</span><span id="line-437">      return this;</span>
-<span class="source-line-no">438</span><span id="line-438">   }</span>
-<span class="source-line-no">439</span><span id="line-439"></span>
-<span class="source-line-no">440</span><span id="line-440">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">441</span><span id="line-441">   public Caption onwaiting(String value) {</span>
-<span class="source-line-no">442</span><span id="line-442">      super.onwaiting(value);</span>
-<span class="source-line-no">443</span><span id="line-443">      return this;</span>
-<span class="source-line-no">444</span><span id="line-444">   }</span>
-<span class="source-line-no">445</span><span id="line-445"></span>
-<span class="source-line-no">446</span><span id="line-446">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">447</span><span id="line-447">   public Caption spellcheck(Object value) {</span>
-<span class="source-line-no">448</span><span id="line-448">      super.spellcheck(value);</span>
-<span class="source-line-no">449</span><span id="line-449">      return this;</span>
-<span class="source-line-no">450</span><span id="line-450">   }</span>
-<span class="source-line-no">451</span><span id="line-451"></span>
-<span class="source-line-no">452</span><span id="line-452">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">453</span><span id="line-453">   public Caption style(String value) {</span>
-<span class="source-line-no">454</span><span id="line-454">      super.style(value);</span>
-<span class="source-line-no">455</span><span id="line-455">      return this;</span>
-<span class="source-line-no">456</span><span id="line-456">   }</span>
-<span class="source-line-no">457</span><span id="line-457"></span>
-<span class="source-line-no">458</span><span id="line-458">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">459</span><span id="line-459">   public Caption tabindex(Object value) {</span>
-<span class="source-line-no">460</span><span id="line-460">      super.tabindex(value);</span>
-<span class="source-line-no">461</span><span id="line-461">      return this;</span>
-<span class="source-line-no">462</span><span id="line-462">   }</span>
-<span class="source-line-no">463</span><span id="line-463"></span>
-<span class="source-line-no">464</span><span id="line-464">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">465</span><span id="line-465">   public Caption title(String value) {</span>
-<span class="source-line-no">466</span><span id="line-466">      super.title(value);</span>
-<span class="source-line-no">467</span><span id="line-467">      return this;</span>
-<span class="source-line-no">468</span><span id="line-468">   }</span>
-<span class="source-line-no">469</span><span id="line-469"></span>
-<span class="source-line-no">470</span><span id="line-470">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">471</span><span id="line-471">   public Caption translate(Object value) {</span>
-<span class="source-line-no">472</span><span id="line-472">      super.translate(value);</span>
-<span class="source-line-no">473</span><span id="line-473">      return this;</span>
-<span class="source-line-no">474</span><span id="line-474">   }</span>
-<span class="source-line-no">475</span><span id="line-475"></span>
-<span class="source-line-no">476</span><span id="line-476">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */</span>
-<span class="source-line-no">477</span><span id="line-477">   public Caption child(Object value) {</span>
-<span class="source-line-no">478</span><span id="line-478">      super.child(value);</span>
-<span class="source-line-no">479</span><span id="line-479">      return this;</span>
-<span class="source-line-no">480</span><span id="line-480">   }</span>
-<span class="source-line-no">481</span><span id="line-481"></span>
-<span class="source-line-no">482</span><span id="line-482">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */</span>
-<span class="source-line-no">483</span><span id="line-483">   public Caption children(Object...value) {</span>
-<span class="source-line-no">484</span><span id="line-484">      super.children(value);</span>
-<span class="source-line-no">485</span><span id="line-485">      return this;</span>
-<span class="source-line-no">486</span><span id="line-486">   }</span>
-<span class="source-line-no">487</span><span id="line-487"></span>
-<span class="source-line-no">488</span><span id="line-488">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">489</span><span id="line-489">}</span>
+<span class="source-line-no">094</span><span id="line-94">   public Caption() {}</span>
+<span class="source-line-no">095</span><span id="line-95"></span>
+<span class="source-line-no">096</span><span id="line-96">   /**</span>
+<span class="source-line-no">097</span><span id="line-97">    * Creates a {@link Caption} element with the specified child nodes.</span>
+<span class="source-line-no">098</span><span id="line-98">    *</span>
+<span class="source-line-no">099</span><span id="line-99">    * @param children The child nodes.</span>
+<span class="source-line-no">100</span><span id="line-100">    */</span>
+<span class="source-line-no">101</span><span id="line-101">   public Caption(Object...children) {</span>
+<span class="source-line-no">102</span><span id="line-102">      children(children);</span>
+<span class="source-line-no">103</span><span id="line-103">   }</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">106</span><span id="line-106">   // Overridden methods</span>
+<span class="source-line-no">107</span><span id="line-107">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">110</span><span id="line-110"></span>
+<span class="source-line-no">111</span><span id="line-111">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">112</span><span id="line-112">   public Caption _class(String value) {  // NOSONAR - Intentional naming.</span>
+<span class="source-line-no">113</span><span id="line-113">      super._class(value);</span>
+<span class="source-line-no">114</span><span id="line-114">      return this;</span>
+<span class="source-line-no">115</span><span id="line-115">   }</span>
+<span class="source-line-no">116</span><span id="line-116"></span>
+<span class="source-line-no">117</span><span id="line-117">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">118</span><span id="line-118">   public Caption accesskey(String value) {</span>
+<span class="source-line-no">119</span><span id="line-119">      super.accesskey(value);</span>
+<span class="source-line-no">120</span><span id="line-120">      return this;</span>
+<span class="source-line-no">121</span><span id="line-121">   }</span>
+<span class="source-line-no">122</span><span id="line-122"></span>
+<span class="source-line-no">123</span><span id="line-123">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">124</span><span id="line-124">   public Caption contenteditable(Object value) {</span>
+<span class="source-line-no">125</span><span id="line-125">      super.contenteditable(value);</span>
+<span class="source-line-no">126</span><span id="line-126">      return this;</span>
+<span class="source-line-no">127</span><span id="line-127">   }</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">130</span><span id="line-130">   public Caption dir(String value) {</span>
+<span class="source-line-no">131</span><span id="line-131">      super.dir(value);</span>
+<span class="source-line-no">132</span><span id="line-132">      return this;</span>
+<span class="source-line-no">133</span><span id="line-133">   }</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">136</span><span id="line-136">   public Caption hidden(Object value) {</span>
+<span class="source-line-no">137</span><span id="line-137">      super.hidden(value);</span>
+<span class="source-line-no">138</span><span id="line-138">      return this;</span>
+<span class="source-line-no">139</span><span id="line-139">   }</span>
+<span class="source-line-no">140</span><span id="line-140"></span>
+<span class="source-line-no">141</span><span id="line-141">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">142</span><span id="line-142">   public Caption id(String value) {</span>
+<span class="source-line-no">143</span><span id="line-143">      super.id(value);</span>
+<span class="source-line-no">144</span><span id="line-144">      return this;</span>
+<span class="source-line-no">145</span><span id="line-145">   }</span>
+<span class="source-line-no">146</span><span id="line-146"></span>
+<span class="source-line-no">147</span><span id="line-147">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">148</span><span id="line-148">   public Caption lang(String value) {</span>
+<span class="source-line-no">149</span><span id="line-149">      super.lang(value);</span>
+<span class="source-line-no">150</span><span id="line-150">      return this;</span>
+<span class="source-line-no">151</span><span id="line-151">   }</span>
+<span class="source-line-no">152</span><span id="line-152"></span>
+<span class="source-line-no">153</span><span id="line-153">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">154</span><span id="line-154">   public Caption onabort(String value) {</span>
+<span class="source-line-no">155</span><span id="line-155">      super.onabort(value);</span>
+<span class="source-line-no">156</span><span id="line-156">      return this;</span>
+<span class="source-line-no">157</span><span id="line-157">   }</span>
+<span class="source-line-no">158</span><span id="line-158"></span>
+<span class="source-line-no">159</span><span id="line-159">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">160</span><span id="line-160">   public Caption onblur(String value) {</span>
+<span class="source-line-no">161</span><span id="line-161">      super.onblur(value);</span>
+<span class="source-line-no">162</span><span id="line-162">      return this;</span>
+<span class="source-line-no">163</span><span id="line-163">   }</span>
+<span class="source-line-no">164</span><span id="line-164"></span>
+<span class="source-line-no">165</span><span id="line-165">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">166</span><span id="line-166">   public Caption oncancel(String value) {</span>
+<span class="source-line-no">167</span><span id="line-167">      super.oncancel(value);</span>
+<span class="source-line-no">168</span><span id="line-168">      return this;</span>
+<span class="source-line-no">169</span><span id="line-169">   }</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
+<span class="source-line-no">171</span><span id="line-171">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">172</span><span id="line-172">   public Caption oncanplay(String value) {</span>
+<span class="source-line-no">173</span><span id="line-173">      super.oncanplay(value);</span>
+<span class="source-line-no">174</span><span id="line-174">      return this;</span>
+<span class="source-line-no">175</span><span id="line-175">   }</span>
+<span class="source-line-no">176</span><span id="line-176"></span>
+<span class="source-line-no">177</span><span id="line-177">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">178</span><span id="line-178">   public Caption oncanplaythrough(String value) {</span>
+<span class="source-line-no">179</span><span id="line-179">      super.oncanplaythrough(value);</span>
+<span class="source-line-no">180</span><span id="line-180">      return this;</span>
+<span class="source-line-no">181</span><span id="line-181">   }</span>
+<span class="source-line-no">182</span><span id="line-182"></span>
+<span class="source-line-no">183</span><span id="line-183">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">184</span><span id="line-184">   public Caption onchange(String value) {</span>
+<span class="source-line-no">185</span><span id="line-185">      super.onchange(value);</span>
+<span class="source-line-no">186</span><span id="line-186">      return this;</span>
+<span class="source-line-no">187</span><span id="line-187">   }</span>
+<span class="source-line-no">188</span><span id="line-188"></span>
+<span class="source-line-no">189</span><span id="line-189">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">190</span><span id="line-190">   public Caption onclick(String value) {</span>
+<span class="source-line-no">191</span><span id="line-191">      super.onclick(value);</span>
+<span class="source-line-no">192</span><span id="line-192">      return this;</span>
+<span class="source-line-no">193</span><span id="line-193">   }</span>
+<span class="source-line-no">194</span><span id="line-194"></span>
+<span class="source-line-no">195</span><span id="line-195">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">196</span><span id="line-196">   public Caption oncuechange(String value) {</span>
+<span class="source-line-no">197</span><span id="line-197">      super.oncuechange(value);</span>
+<span class="source-line-no">198</span><span id="line-198">      return this;</span>
+<span class="source-line-no">199</span><span id="line-199">   }</span>
+<span class="source-line-no">200</span><span id="line-200"></span>
+<span class="source-line-no">201</span><span id="line-201">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">202</span><span id="line-202">   public Caption ondblclick(String value) {</span>
+<span class="source-line-no">203</span><span id="line-203">      super.ondblclick(value);</span>
+<span class="source-line-no">204</span><span id="line-204">      return this;</span>
+<span class="source-line-no">205</span><span id="line-205">   }</span>
+<span class="source-line-no">206</span><span id="line-206"></span>
+<span class="source-line-no">207</span><span id="line-207">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">208</span><span id="line-208">   public Caption ondurationchange(String value) {</span>
+<span class="source-line-no">209</span><span id="line-209">      super.ondurationchange(value);</span>
+<span class="source-line-no">210</span><span id="line-210">      return this;</span>
+<span class="source-line-no">211</span><span id="line-211">   }</span>
+<span class="source-line-no">212</span><span id="line-212"></span>
+<span class="source-line-no">213</span><span id="line-213">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">214</span><span id="line-214">   public Caption onemptied(String value) {</span>
+<span class="source-line-no">215</span><span id="line-215">      super.onemptied(value);</span>
+<span class="source-line-no">216</span><span id="line-216">      return this;</span>
+<span class="source-line-no">217</span><span id="line-217">   }</span>
+<span class="source-line-no">218</span><span id="line-218"></span>
+<span class="source-line-no">219</span><span id="line-219">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">220</span><span id="line-220">   public Caption onended(String value) {</span>
+<span class="source-line-no">221</span><span id="line-221">      super.onended(value);</span>
+<span class="source-line-no">222</span><span id="line-222">      return this;</span>
+<span class="source-line-no">223</span><span id="line-223">   }</span>
+<span class="source-line-no">224</span><span id="line-224"></span>
+<span class="source-line-no">225</span><span id="line-225">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">226</span><span id="line-226">   public Caption onerror(String value) {</span>
+<span class="source-line-no">227</span><span id="line-227">      super.onerror(value);</span>
+<span class="source-line-no">228</span><span id="line-228">      return this;</span>
+<span class="source-line-no">229</span><span id="line-229">   }</span>
+<span class="source-line-no">230</span><span id="line-230"></span>
+<span class="source-line-no">231</span><span id="line-231">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">232</span><span id="line-232">   public Caption onfocus(String value) {</span>
+<span class="source-line-no">233</span><span id="line-233">      super.onfocus(value);</span>
+<span class="source-line-no">234</span><span id="line-234">      return this;</span>
+<span class="source-line-no">235</span><span id="line-235">   }</span>
+<span class="source-line-no">236</span><span id="line-236"></span>
+<span class="source-line-no">237</span><span id="line-237">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">238</span><span id="line-238">   public Caption oninput(String value) {</span>
+<span class="source-line-no">239</span><span id="line-239">      super.oninput(value);</span>
+<span class="source-line-no">240</span><span id="line-240">      return this;</span>
+<span class="source-line-no">241</span><span id="line-241">   }</span>
+<span class="source-line-no">242</span><span id="line-242"></span>
+<span class="source-line-no">243</span><span id="line-243">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">244</span><span id="line-244">   public Caption oninvalid(String value) {</span>
+<span class="source-line-no">245</span><span id="line-245">      super.oninvalid(value);</span>
+<span class="source-line-no">246</span><span id="line-246">      return this;</span>
+<span class="source-line-no">247</span><span id="line-247">   }</span>
+<span class="source-line-no">248</span><span id="line-248"></span>
+<span class="source-line-no">249</span><span id="line-249">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">250</span><span id="line-250">   public Caption onkeydown(String value) {</span>
+<span class="source-line-no">251</span><span id="line-251">      super.onkeydown(value);</span>
+<span class="source-line-no">252</span><span id="line-252">      return this;</span>
+<span class="source-line-no">253</span><span id="line-253">   }</span>
+<span class="source-line-no">254</span><span id="line-254"></span>
+<span class="source-line-no">255</span><span id="line-255">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">256</span><span id="line-256">   public Caption onkeypress(String value) {</span>
+<span class="source-line-no">257</span><span id="line-257">      super.onkeypress(value);</span>
+<span class="source-line-no">258</span><span id="line-258">      return this;</span>
+<span class="source-line-no">259</span><span id="line-259">   }</span>
+<span class="source-line-no">260</span><span id="line-260"></span>
+<span class="source-line-no">261</span><span id="line-261">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">262</span><span id="line-262">   public Caption onkeyup(String value) {</span>
+<span class="source-line-no">263</span><span id="line-263">      super.onkeyup(value);</span>
+<span class="source-line-no">264</span><span id="line-264">      return this;</span>
+<span class="source-line-no">265</span><span id="line-265">   }</span>
+<span class="source-line-no">266</span><span id="line-266"></span>
+<span class="source-line-no">267</span><span id="line-267">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">268</span><span id="line-268">   public Caption onload(String value) {</span>
+<span class="source-line-no">269</span><span id="line-269">      super.onload(value);</span>
+<span class="source-line-no">270</span><span id="line-270">      return this;</span>
+<span class="source-line-no">271</span><span id="line-271">   }</span>
+<span class="source-line-no">272</span><span id="line-272"></span>
+<span class="source-line-no">273</span><span id="line-273">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">274</span><span id="line-274">   public Caption onloadeddata(String value) {</span>
+<span class="source-line-no">275</span><span id="line-275">      super.onloadeddata(value);</span>
+<span class="source-line-no">276</span><span id="line-276">      return this;</span>
+<span class="source-line-no">277</span><span id="line-277">   }</span>
+<span class="source-line-no">278</span><span id="line-278"></span>
+<span class="source-line-no">279</span><span id="line-279">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">280</span><span id="line-280">   public Caption onloadedmetadata(String value) {</span>
+<span class="source-line-no">281</span><span id="line-281">      super.onloadedmetadata(value);</span>
+<span class="source-line-no">282</span><span id="line-282">      return this;</span>
+<span class="source-line-no">283</span><span id="line-283">   }</span>
+<span class="source-line-no">284</span><span id="line-284"></span>
+<span class="source-line-no">285</span><span id="line-285">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">286</span><span id="line-286">   public Caption onloadstart(String value) {</span>
+<span class="source-line-no">287</span><span id="line-287">      super.onloadstart(value);</span>
+<span class="source-line-no">288</span><span id="line-288">      return this;</span>
+<span class="source-line-no">289</span><span id="line-289">   }</span>
+<span class="source-line-no">290</span><span id="line-290"></span>
+<span class="source-line-no">291</span><span id="line-291">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">292</span><span id="line-292">   public Caption onmousedown(String value) {</span>
+<span class="source-line-no">293</span><span id="line-293">      super.onmousedown(value);</span>
+<span class="source-line-no">294</span><span id="line-294">      return this;</span>
+<span class="source-line-no">295</span><span id="line-295">   }</span>
+<span class="source-line-no">296</span><span id="line-296"></span>
+<span class="source-line-no">297</span><span id="line-297">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">298</span><span id="line-298">   public Caption onmouseenter(String value) {</span>
+<span class="source-line-no">299</span><span id="line-299">      super.onmouseenter(value);</span>
+<span class="source-line-no">300</span><span id="line-300">      return this;</span>
+<span class="source-line-no">301</span><span id="line-301">   }</span>
+<span class="source-line-no">302</span><span id="line-302"></span>
+<span class="source-line-no">303</span><span id="line-303">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">304</span><span id="line-304">   public Caption onmouseleave(String value) {</span>
+<span class="source-line-no">305</span><span id="line-305">      super.onmouseleave(value);</span>
+<span class="source-line-no">306</span><span id="line-306">      return this;</span>
+<span class="source-line-no">307</span><span id="line-307">   }</span>
+<span class="source-line-no">308</span><span id="line-308"></span>
+<span class="source-line-no">309</span><span id="line-309">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">310</span><span id="line-310">   public Caption onmousemove(String value) {</span>
+<span class="source-line-no">311</span><span id="line-311">      super.onmousemove(value);</span>
+<span class="source-line-no">312</span><span id="line-312">      return this;</span>
+<span class="source-line-no">313</span><span id="line-313">   }</span>
+<span class="source-line-no">314</span><span id="line-314"></span>
+<span class="source-line-no">315</span><span id="line-315">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">316</span><span id="line-316">   public Caption onmouseout(String value) {</span>
+<span class="source-line-no">317</span><span id="line-317">      super.onmouseout(value);</span>
+<span class="source-line-no">318</span><span id="line-318">      return this;</span>
+<span class="source-line-no">319</span><span id="line-319">   }</span>
+<span class="source-line-no">320</span><span id="line-320"></span>
+<span class="source-line-no">321</span><span id="line-321">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">322</span><span id="line-322">   public Caption onmouseover(String value) {</span>
+<span class="source-line-no">323</span><span id="line-323">      super.onmouseover(value);</span>
+<span class="source-line-no">324</span><span id="line-324">      return this;</span>
+<span class="source-line-no">325</span><span id="line-325">   }</span>
+<span class="source-line-no">326</span><span id="line-326"></span>
+<span class="source-line-no">327</span><span id="line-327">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">328</span><span id="line-328">   public Caption onmouseup(String value) {</span>
+<span class="source-line-no">329</span><span id="line-329">      super.onmouseup(value);</span>
+<span class="source-line-no">330</span><span id="line-330">      return this;</span>
+<span class="source-line-no">331</span><span id="line-331">   }</span>
+<span class="source-line-no">332</span><span id="line-332"></span>
+<span class="source-line-no">333</span><span id="line-333">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">334</span><span id="line-334">   public Caption onmousewheel(String value) {</span>
+<span class="source-line-no">335</span><span id="line-335">      super.onmousewheel(value);</span>
+<span class="source-line-no">336</span><span id="line-336">      return this;</span>
+<span class="source-line-no">337</span><span id="line-337">   }</span>
+<span class="source-line-no">338</span><span id="line-338"></span>
+<span class="source-line-no">339</span><span id="line-339">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">340</span><span id="line-340">   public Caption onpause(String value) {</span>
+<span class="source-line-no">341</span><span id="line-341">      super.onpause(value);</span>
+<span class="source-line-no">342</span><span id="line-342">      return this;</span>
+<span class="source-line-no">343</span><span id="line-343">   }</span>
+<span class="source-line-no">344</span><span id="line-344"></span>
+<span class="source-line-no">345</span><span id="line-345">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">346</span><span id="line-346">   public Caption onplay(String value) {</span>
+<span class="source-line-no">347</span><span id="line-347">      super.onplay(value);</span>
+<span class="source-line-no">348</span><span id="line-348">      return this;</span>
+<span class="source-line-no">349</span><span id="line-349">   }</span>
+<span class="source-line-no">350</span><span id="line-350"></span>
+<span class="source-line-no">351</span><span id="line-351">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">352</span><span id="line-352">   public Caption onplaying(String value) {</span>
+<span class="source-line-no">353</span><span id="line-353">      super.onplaying(value);</span>
+<span class="source-line-no">354</span><span id="line-354">      return this;</span>
+<span class="source-line-no">355</span><span id="line-355">   }</span>
+<span class="source-line-no">356</span><span id="line-356"></span>
+<span class="source-line-no">357</span><span id="line-357">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">358</span><span id="line-358">   public Caption onprogress(String value) {</span>
+<span class="source-line-no">359</span><span id="line-359">      super.onprogress(value);</span>
+<span class="source-line-no">360</span><span id="line-360">      return this;</span>
+<span class="source-line-no">361</span><span id="line-361">   }</span>
+<span class="source-line-no">362</span><span id="line-362"></span>
+<span class="source-line-no">363</span><span id="line-363">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">364</span><span id="line-364">   public Caption onratechange(String value) {</span>
+<span class="source-line-no">365</span><span id="line-365">      super.onratechange(value);</span>
+<span class="source-line-no">366</span><span id="line-366">      return this;</span>
+<span class="source-line-no">367</span><span id="line-367">   }</span>
+<span class="source-line-no">368</span><span id="line-368"></span>
+<span class="source-line-no">369</span><span id="line-369">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">370</span><span id="line-370">   public Caption onreset(String value) {</span>
+<span class="source-line-no">371</span><span id="line-371">      super.onreset(value);</span>
+<span class="source-line-no">372</span><span id="line-372">      return this;</span>
+<span class="source-line-no">373</span><span id="line-373">   }</span>
+<span class="source-line-no">374</span><span id="line-374"></span>
+<span class="source-line-no">375</span><span id="line-375">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">376</span><span id="line-376">   public Caption onresize(String value) {</span>
+<span class="source-line-no">377</span><span id="line-377">      super.onresize(value);</span>
+<span class="source-line-no">378</span><span id="line-378">      return this;</span>
+<span class="source-line-no">379</span><span id="line-379">   }</span>
+<span class="source-line-no">380</span><span id="line-380"></span>
+<span class="source-line-no">381</span><span id="line-381">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">382</span><span id="line-382">   public Caption onscroll(String value) {</span>
+<span class="source-line-no">383</span><span id="line-383">      super.onscroll(value);</span>
+<span class="source-line-no">384</span><span id="line-384">      return this;</span>
+<span class="source-line-no">385</span><span id="line-385">   }</span>
+<span class="source-line-no">386</span><span id="line-386"></span>
+<span class="source-line-no">387</span><span id="line-387">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">388</span><span id="line-388">   public Caption onseeked(String value) {</span>
+<span class="source-line-no">389</span><span id="line-389">      super.onseeked(value);</span>
+<span class="source-line-no">390</span><span id="line-390">      return this;</span>
+<span class="source-line-no">391</span><span id="line-391">   }</span>
+<span class="source-line-no">392</span><span id="line-392"></span>
+<span class="source-line-no">393</span><span id="line-393">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">394</span><span id="line-394">   public Caption onseeking(String value) {</span>
+<span class="source-line-no">395</span><span id="line-395">      super.onseeking(value);</span>
+<span class="source-line-no">396</span><span id="line-396">      return this;</span>
+<span class="source-line-no">397</span><span id="line-397">   }</span>
+<span class="source-line-no">398</span><span id="line-398"></span>
+<span class="source-line-no">399</span><span id="line-399">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">400</span><span id="line-400">   public Caption onselect(String value) {</span>
+<span class="source-line-no">401</span><span id="line-401">      super.onselect(value);</span>
+<span class="source-line-no">402</span><span id="line-402">      return this;</span>
+<span class="source-line-no">403</span><span id="line-403">   }</span>
+<span class="source-line-no">404</span><span id="line-404"></span>
+<span class="source-line-no">405</span><span id="line-405">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">406</span><span id="line-406">   public Caption onshow(String value) {</span>
+<span class="source-line-no">407</span><span id="line-407">      super.onshow(value);</span>
+<span class="source-line-no">408</span><span id="line-408">      return this;</span>
+<span class="source-line-no">409</span><span id="line-409">   }</span>
+<span class="source-line-no">410</span><span id="line-410"></span>
+<span class="source-line-no">411</span><span id="line-411">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">412</span><span id="line-412">   public Caption onstalled(String value) {</span>
+<span class="source-line-no">413</span><span id="line-413">      super.onstalled(value);</span>
+<span class="source-line-no">414</span><span id="line-414">      return this;</span>
+<span class="source-line-no">415</span><span id="line-415">   }</span>
+<span class="source-line-no">416</span><span id="line-416"></span>
+<span class="source-line-no">417</span><span id="line-417">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">418</span><span id="line-418">   public Caption onsubmit(String value) {</span>
+<span class="source-line-no">419</span><span id="line-419">      super.onsubmit(value);</span>
+<span class="source-line-no">420</span><span id="line-420">      return this;</span>
+<span class="source-line-no">421</span><span id="line-421">   }</span>
+<span class="source-line-no">422</span><span id="line-422"></span>
+<span class="source-line-no">423</span><span id="line-423">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">424</span><span id="line-424">   public Caption onsuspend(String value) {</span>
+<span class="source-line-no">425</span><span id="line-425">      super.onsuspend(value);</span>
+<span class="source-line-no">426</span><span id="line-426">      return this;</span>
+<span class="source-line-no">427</span><span id="line-427">   }</span>
+<span class="source-line-no">428</span><span id="line-428"></span>
+<span class="source-line-no">429</span><span id="line-429">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">430</span><span id="line-430">   public Caption ontimeupdate(String value) {</span>
+<span class="source-line-no">431</span><span id="line-431">      super.ontimeupdate(value);</span>
+<span class="source-line-no">432</span><span id="line-432">      return this;</span>
+<span class="source-line-no">433</span><span id="line-433">   }</span>
+<span class="source-line-no">434</span><span id="line-434"></span>
+<span class="source-line-no">435</span><span id="line-435">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">436</span><span id="line-436">   public Caption ontoggle(String value) {</span>
+<span class="source-line-no">437</span><span id="line-437">      super.ontoggle(value);</span>
+<span class="source-line-no">438</span><span id="line-438">      return this;</span>
+<span class="source-line-no">439</span><span id="line-439">   }</span>
+<span class="source-line-no">440</span><span id="line-440"></span>
+<span class="source-line-no">441</span><span id="line-441">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">442</span><span id="line-442">   public Caption onvolumechange(String value) {</span>
+<span class="source-line-no">443</span><span id="line-443">      super.onvolumechange(value);</span>
+<span class="source-line-no">444</span><span id="line-444">      return this;</span>
+<span class="source-line-no">445</span><span id="line-445">   }</span>
+<span class="source-line-no">446</span><span id="line-446"></span>
+<span class="source-line-no">447</span><span id="line-447">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">448</span><span id="line-448">   public Caption onwaiting(String value) {</span>
+<span class="source-line-no">449</span><span id="line-449">      super.onwaiting(value);</span>
+<span class="source-line-no">450</span><span id="line-450">      return this;</span>
+<span class="source-line-no">451</span><span id="line-451">   }</span>
+<span class="source-line-no">452</span><span id="line-452"></span>
+<span class="source-line-no">453</span><span id="line-453">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">454</span><span id="line-454">   public Caption spellcheck(Object value) {</span>
+<span class="source-line-no">455</span><span id="line-455">      super.spellcheck(value);</span>
+<span class="source-line-no">456</span><span id="line-456">      return this;</span>
+<span class="source-line-no">457</span><span id="line-457">   }</span>
+<span class="source-line-no">458</span><span id="line-458"></span>
+<span class="source-line-no">459</span><span id="line-459">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">460</span><span id="line-460">   public Caption style(String value) {</span>
+<span class="source-line-no">461</span><span id="line-461">      super.style(value);</span>
+<span class="source-line-no">462</span><span id="line-462">      return this;</span>
+<span class="source-line-no">463</span><span id="line-463">   }</span>
+<span class="source-line-no">464</span><span id="line-464"></span>
+<span class="source-line-no">465</span><span id="line-465">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">466</span><span id="line-466">   public Caption tabindex(Object value) {</span>
+<span class="source-line-no">467</span><span id="line-467">      super.tabindex(value);</span>
+<span class="source-line-no">468</span><span id="line-468">      return this;</span>
+<span class="source-line-no">469</span><span id="line-469">   }</span>
+<span class="source-line-no">470</span><span id="line-470"></span>
+<span class="source-line-no">471</span><span id="line-471">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">472</span><span id="line-472">   public Caption title(String value) {</span>
+<span class="source-line-no">473</span><span id="line-473">      super.title(value);</span>
+<span class="source-line-no">474</span><span id="line-474">      return this;</span>
+<span class="source-line-no">475</span><span id="line-475">   }</span>
+<span class="source-line-no">476</span><span id="line-476"></span>
+<span class="source-line-no">477</span><span id="line-477">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
+<span class="source-line-no">478</span><span id="line-478">   public Caption translate(Object value) {</span>
+<span class="source-line-no">479</span><span id="line-479">      super.translate(value);</span>
+<span class="source-line-no">480</span><span id="line-480">      return this;</span>
+<span class="source-line-no">481</span><span id="line-481">   }</span>
+<span class="source-line-no">482</span><span id="line-482"></span>
+<span class="source-line-no">483</span><span id="line-483">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */</span>
+<span class="source-line-no">484</span><span id="line-484">   public Caption child(Object value) {</span>
+<span class="source-line-no">485</span><span id="line-485">      super.child(value);</span>
+<span class="source-line-no">486</span><span id="line-486">      return this;</span>
+<span class="source-line-no">487</span><span id="line-487">   }</span>
+<span class="source-line-no">488</span><span id="line-488"></span>
+<span class="source-line-no">489</span><span id="line-489">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElementMixed */</span>
+<span class="source-line-no">490</span><span id="line-490">   public Caption children(Object...value) {</span>
+<span class="source-line-no">491</span><span id="line-491">      super.children(value);</span>
+<span class="source-line-no">492</span><span id="line-492">      return this;</span>
+<span class="source-line-no">493</span><span id="line-493">   }</span>
+<span class="source-line-no">494</span><span id="line-494"></span>
+<span class="source-line-no">495</span><span id="line-495">   // &lt;/FluentSetters&gt;</span>
+<span class="source-line-no">496</span><span id="line-496">}</span>
 
 
 

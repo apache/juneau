@@ -39,25 +39,25 @@
 <span class="source-line-no">026</span><span id="line-26"> *</span>
 <span class="source-line-no">027</span><span id="line-27"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;p class='bcode w800'&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> *    // Copyright notice</span>
-<span class="source-line-no">030</span><span id="line-30"> *    Small copyright = new Small()</span>
-<span class="source-line-no">031</span><span id="line-31"> *       .children("Copyright 2024 My Company. All rights reserved.");</span>
-<span class="source-line-no">032</span><span id="line-32"> * </span>
-<span class="source-line-no">033</span><span id="line-33"> *    // Legal disclaimer</span>
-<span class="source-line-no">034</span><span id="line-34"> *    Small disclaimer = new Small()</span>
-<span class="source-line-no">035</span><span id="line-35"> *       .children("This information is provided as-is without warranty.");</span>
+<span class="source-line-no">029</span><span id="line-29"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
+<span class="source-line-no">030</span><span id="line-30"> * </span>
+<span class="source-line-no">031</span><span id="line-31"> *    &lt;jc&gt;// Copyright notice&lt;/jc&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> *    Small &lt;jv&gt;copyright&lt;/jv&gt; = &lt;jsm&gt;small&lt;/jsm&gt;(&lt;js&gt;"Copyright 2024 My Company. All rights reserved."&lt;/js&gt;);</span>
+<span class="source-line-no">033</span><span id="line-33"> * </span>
+<span class="source-line-no">034</span><span id="line-34"> *    &lt;jc&gt;// Legal disclaimer&lt;/jc&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> *    Small &lt;jv&gt;disclaimer&lt;/jv&gt; = &lt;jsm&gt;small&lt;/jsm&gt;(&lt;js&gt;"This information is provided as-is without warranty."&lt;/js&gt;);</span>
 <span class="source-line-no">036</span><span id="line-36"> * </span>
-<span class="source-line-no">037</span><span id="line-37"> *    // Terms and conditions</span>
-<span class="source-line-no">038</span><span id="line-38"> *    Small terms = new Small()</span>
-<span class="source-line-no">039</span><span id="line-39"> *       .children("By using this service, you agree to our terms and conditions.");</span>
-<span class="source-line-no">040</span><span id="line-40"> * </span>
-<span class="source-line-no">041</span><span id="line-41"> *    // Price with small print</span>
-<span class="source-line-no">042</span><span id="line-42"> *    Small price = new Small()</span>
-<span class="source-line-no">043</span><span id="line-43"> *       .children("$99.99", new Small().children("*plus tax and shipping"));</span>
-<span class="source-line-no">044</span><span id="line-44"> * </span>
-<span class="source-line-no">045</span><span id="line-45"> *    // Form with small print</span>
-<span class="source-line-no">046</span><span id="line-46"> *    Small formNote = new Small()</span>
-<span class="source-line-no">047</span><span id="line-47"> *       .children("Required fields are marked with an asterisk (*)");</span>
+<span class="source-line-no">037</span><span id="line-37"> *    &lt;jc&gt;// Terms and conditions&lt;/jc&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> *    Small &lt;jv&gt;terms&lt;/jv&gt; = &lt;jsm&gt;small&lt;/jsm&gt;(&lt;js&gt;"By using this service, you agree to our terms and conditions."&lt;/js&gt;);</span>
+<span class="source-line-no">039</span><span id="line-39"> * </span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;jc&gt;// Price with small print&lt;/jc&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> *    Small &lt;jv&gt;price&lt;/jv&gt; = &lt;jsm&gt;small&lt;/jsm&gt;(</span>
+<span class="source-line-no">042</span><span id="line-42"> *       &lt;js&gt;"$99.99"&lt;/js&gt;,</span>
+<span class="source-line-no">043</span><span id="line-43"> *       &lt;jsm&gt;small&lt;/jsm&gt;(&lt;js&gt;"*plus tax and shipping"&lt;/js&gt;)</span>
+<span class="source-line-no">044</span><span id="line-44"> *    );</span>
+<span class="source-line-no">045</span><span id="line-45"> * </span>
+<span class="source-line-no">046</span><span id="line-46"> *    &lt;jc&gt;// Form with small print&lt;/jc&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *    Small &lt;jv&gt;formNote&lt;/jv&gt; = &lt;jsm&gt;small&lt;/jsm&gt;(&lt;js&gt;"Required fields are marked with an asterisk (*)"&lt;/js&gt;);</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;/p&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>

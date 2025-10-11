@@ -560,454 +560,473 @@
 <span class="source-line-no">547</span><span id="line-547"></span>
 <span class="source-line-no">548</span><span id="line-548">      String en = elementName;</span>
 <span class="source-line-no">549</span><span id="line-549">      if (en == null &amp;&amp; ! isRaw) {</span>
-<span class="source-line-no">550</span><span id="line-550">         en = type.toString();</span>
-<span class="source-line-no">551</span><span id="line-551">         type = null;</span>
-<span class="source-line-no">552</span><span id="line-552">      }</span>
-<span class="source-line-no">553</span><span id="line-553"></span>
-<span class="source-line-no">554</span><span id="line-554">      boolean encodeEn = elementName != null;</span>
-<span class="source-line-no">555</span><span id="line-555">      String ns = (elementNamespace == null ? null : elementNamespace.name);</span>
-<span class="source-line-no">556</span><span id="line-556">      String dns = null, elementNs = null;</span>
-<span class="source-line-no">557</span><span id="line-557">      if (isEnableNamespaces()) {</span>
-<span class="source-line-no">558</span><span id="line-558">         dns = elementName == null &amp;&amp; defaultNamespace != null ? defaultNamespace.name : null;</span>
-<span class="source-line-no">559</span><span id="line-559">         elementNs = elementName == null ? dns : ns;</span>
-<span class="source-line-no">560</span><span id="line-560">         if (elementName == null)</span>
-<span class="source-line-no">561</span><span id="line-561">            elementNamespace = null;</span>
-<span class="source-line-no">562</span><span id="line-562">      }</span>
-<span class="source-line-no">563</span><span id="line-563"></span>
-<span class="source-line-no">564</span><span id="line-564">      // Render the start tag.</span>
-<span class="source-line-no">565</span><span id="line-565">      if (! isCollapsed) {</span>
-<span class="source-line-no">566</span><span id="line-566">         if (en != null) {</span>
-<span class="source-line-no">567</span><span id="line-567">            out.oTag(i, elementNs, en, encodeEn);</span>
-<span class="source-line-no">568</span><span id="line-568">            if (addNamespaceUris) {</span>
-<span class="source-line-no">569</span><span id="line-569">               out.attr((String)null, "xmlns", defaultNamespace.getUri());</span>
-<span class="source-line-no">570</span><span id="line-570"></span>
-<span class="source-line-no">571</span><span id="line-571">               for (Namespace n : namespaces)</span>
-<span class="source-line-no">572</span><span id="line-572">                  out.attr("xmlns", n.getName(), n.getUri());</span>
-<span class="source-line-no">573</span><span id="line-573">            }</span>
-<span class="source-line-no">574</span><span id="line-574">            if (! isExpectedType) {</span>
-<span class="source-line-no">575</span><span id="line-575">               if (resolvedDictionaryName != null)</span>
-<span class="source-line-no">576</span><span id="line-576">                  out.attr(dns, getBeanTypePropertyName(eType), resolvedDictionaryName);</span>
-<span class="source-line-no">577</span><span id="line-577">               else if (type != null &amp;&amp; type != STRING)</span>
-<span class="source-line-no">578</span><span id="line-578">                  out.attr(dns, getBeanTypePropertyName(eType), type);</span>
-<span class="source-line-no">579</span><span id="line-579">            }</span>
-<span class="source-line-no">580</span><span id="line-580">            if (name != null)</span>
-<span class="source-line-no">581</span><span id="line-581">               out.attr(getNamePropertyName(), name);</span>
-<span class="source-line-no">582</span><span id="line-582">         } else {</span>
-<span class="source-line-no">583</span><span id="line-583">            out.i(i);</span>
-<span class="source-line-no">584</span><span id="line-584">         }</span>
-<span class="source-line-no">585</span><span id="line-585">         if (o == null) {</span>
-<span class="source-line-no">586</span><span id="line-586">            if ((sType.isBoolean() || sType.isNumber()) &amp;&amp; ! sType.isNullable())</span>
-<span class="source-line-no">587</span><span id="line-587">               o = sType.getPrimitiveDefault();</span>
-<span class="source-line-no">588</span><span id="line-588">         }</span>
-<span class="source-line-no">589</span><span id="line-589"></span>
-<span class="source-line-no">590</span><span id="line-590">         if (o != null &amp;&amp; ! (sType.isMapOrBean() || en == null))</span>
-<span class="source-line-no">591</span><span id="line-591">            out.w('&gt;');</span>
-<span class="source-line-no">592</span><span id="line-592"></span>
-<span class="source-line-no">593</span><span id="line-593">         if (cr &amp;&amp; ! (sType.isMapOrBean()))</span>
-<span class="source-line-no">594</span><span id="line-594">            out.nl(i+1);</span>
-<span class="source-line-no">595</span><span id="line-595">      }</span>
-<span class="source-line-no">596</span><span id="line-596"></span>
-<span class="source-line-no">597</span><span id="line-597">      ContentResult rc = CR_ELEMENTS;</span>
+<span class="source-line-no">550</span><span id="line-550">         if (isAddJsonTags()) {</span>
+<span class="source-line-no">551</span><span id="line-551">            en = type.toString();</span>
+<span class="source-line-no">552</span><span id="line-552">            type = null;</span>
+<span class="source-line-no">553</span><span id="line-553">         }</span>
+<span class="source-line-no">554</span><span id="line-554">      }</span>
+<span class="source-line-no">555</span><span id="line-555"></span>
+<span class="source-line-no">556</span><span id="line-556">      boolean encodeEn = elementName != null;</span>
+<span class="source-line-no">557</span><span id="line-557">      String ns = (elementNamespace == null ? null : elementNamespace.name);</span>
+<span class="source-line-no">558</span><span id="line-558">      String dns = null, elementNs = null;</span>
+<span class="source-line-no">559</span><span id="line-559">      if (isEnableNamespaces()) {</span>
+<span class="source-line-no">560</span><span id="line-560">         dns = elementName == null &amp;&amp; defaultNamespace != null ? defaultNamespace.name : null;</span>
+<span class="source-line-no">561</span><span id="line-561">         elementNs = elementName == null ? dns : ns;</span>
+<span class="source-line-no">562</span><span id="line-562">         if (elementName == null)</span>
+<span class="source-line-no">563</span><span id="line-563">            elementNamespace = null;</span>
+<span class="source-line-no">564</span><span id="line-564">      }</span>
+<span class="source-line-no">565</span><span id="line-565"></span>
+<span class="source-line-no">566</span><span id="line-566">      // Render the start tag.</span>
+<span class="source-line-no">567</span><span id="line-567">      if (! isCollapsed) {</span>
+<span class="source-line-no">568</span><span id="line-568">         if (en != null) {</span>
+<span class="source-line-no">569</span><span id="line-569">            out.oTag(i, elementNs, en, encodeEn);</span>
+<span class="source-line-no">570</span><span id="line-570">            if (addNamespaceUris) {</span>
+<span class="source-line-no">571</span><span id="line-571">               out.attr((String)null, "xmlns", defaultNamespace.getUri());</span>
+<span class="source-line-no">572</span><span id="line-572"></span>
+<span class="source-line-no">573</span><span id="line-573">               for (Namespace n : namespaces)</span>
+<span class="source-line-no">574</span><span id="line-574">                  out.attr("xmlns", n.getName(), n.getUri());</span>
+<span class="source-line-no">575</span><span id="line-575">            }</span>
+<span class="source-line-no">576</span><span id="line-576">            if (! isExpectedType) {</span>
+<span class="source-line-no">577</span><span id="line-577">               if (resolvedDictionaryName != null)</span>
+<span class="source-line-no">578</span><span id="line-578">                  out.attr(dns, getBeanTypePropertyName(eType), resolvedDictionaryName);</span>
+<span class="source-line-no">579</span><span id="line-579">               else if (type != null &amp;&amp; type != STRING)</span>
+<span class="source-line-no">580</span><span id="line-580">                  out.attr(dns, getBeanTypePropertyName(eType), type);</span>
+<span class="source-line-no">581</span><span id="line-581">            }</span>
+<span class="source-line-no">582</span><span id="line-582">            if (name != null)</span>
+<span class="source-line-no">583</span><span id="line-583">               out.attr(getNamePropertyName(), name);</span>
+<span class="source-line-no">584</span><span id="line-584">         } else {</span>
+<span class="source-line-no">585</span><span id="line-585">            out.i(i);</span>
+<span class="source-line-no">586</span><span id="line-586">         }</span>
+<span class="source-line-no">587</span><span id="line-587">         if (o == null) {</span>
+<span class="source-line-no">588</span><span id="line-588">            if ((sType.isBoolean() || sType.isNumber()) &amp;&amp; ! sType.isNullable())</span>
+<span class="source-line-no">589</span><span id="line-589">               o = sType.getPrimitiveDefault();</span>
+<span class="source-line-no">590</span><span id="line-590">         }</span>
+<span class="source-line-no">591</span><span id="line-591"></span>
+<span class="source-line-no">592</span><span id="line-592">         if (o != null &amp;&amp; ! (sType.isMapOrBean() || en == null))</span>
+<span class="source-line-no">593</span><span id="line-593">            out.w('&gt;');</span>
+<span class="source-line-no">594</span><span id="line-594"></span>
+<span class="source-line-no">595</span><span id="line-595">         if (cr &amp;&amp; ! (sType.isMapOrBean()))</span>
+<span class="source-line-no">596</span><span id="line-596">            out.nl(i+1);</span>
+<span class="source-line-no">597</span><span id="line-597">      }</span>
 <span class="source-line-no">598</span><span id="line-598"></span>
-<span class="source-line-no">599</span><span id="line-599">      // Render the tag contents.</span>
-<span class="source-line-no">600</span><span id="line-600">      if (o != null) {</span>
-<span class="source-line-no">601</span><span id="line-601">         if (sType.isUri() || (pMeta != null &amp;&amp; pMeta.isUri())) {</span>
-<span class="source-line-no">602</span><span id="line-602">            out.textUri(o);</span>
-<span class="source-line-no">603</span><span id="line-603">         } else if (sType.isCharSequence() || sType.isChar()) {</span>
-<span class="source-line-no">604</span><span id="line-604">            if (isXmlText(format, sType))</span>
-<span class="source-line-no">605</span><span id="line-605">               out.append(o);</span>
-<span class="source-line-no">606</span><span id="line-606">            else</span>
-<span class="source-line-no">607</span><span id="line-607">               out.text(o, preserveWhitespace);</span>
-<span class="source-line-no">608</span><span id="line-608">         } else if (sType.isNumber() || sType.isBoolean()) {</span>
-<span class="source-line-no">609</span><span id="line-609">            out.append(o);</span>
-<span class="source-line-no">610</span><span id="line-610">         } else if (sType.isMap() || (wType != null &amp;&amp; wType.isMap())) {</span>
-<span class="source-line-no">611</span><span id="line-611">            if (o instanceof BeanMap)</span>
-<span class="source-line-no">612</span><span id="line-612">               rc = serializeBeanMap(out, (BeanMap)o, elementNamespace, isCollapsed, isMixedOrText);</span>
-<span class="source-line-no">613</span><span id="line-613">            else</span>
-<span class="source-line-no">614</span><span id="line-614">               rc = serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), isMixedOrText);</span>
-<span class="source-line-no">615</span><span id="line-615">         } else if (sType.isBean()) {</span>
-<span class="source-line-no">616</span><span id="line-616">            rc = serializeBeanMap(out, toBeanMap(o), elementNamespace, isCollapsed, isMixedOrText);</span>
-<span class="source-line-no">617</span><span id="line-617">         } else if (sType.isCollection() || (wType != null &amp;&amp; wType.isCollection())) {</span>
-<span class="source-line-no">618</span><span id="line-618">            if (isCollapsed)</span>
-<span class="source-line-no">619</span><span id="line-619">               this.indent--;</span>
-<span class="source-line-no">620</span><span id="line-620">            serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);</span>
-<span class="source-line-no">621</span><span id="line-621">            if (isCollapsed)</span>
-<span class="source-line-no">622</span><span id="line-622">               this.indent++;</span>
-<span class="source-line-no">623</span><span id="line-623">         } else if (sType.isArray()) {</span>
-<span class="source-line-no">624</span><span id="line-624">            if (isCollapsed)</span>
-<span class="source-line-no">625</span><span id="line-625">               this.indent--;</span>
-<span class="source-line-no">626</span><span id="line-626">            serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);</span>
-<span class="source-line-no">627</span><span id="line-627">            if (isCollapsed)</span>
-<span class="source-line-no">628</span><span id="line-628">               this.indent++;</span>
-<span class="source-line-no">629</span><span id="line-629">         } else if (sType.isReader()) {</span>
-<span class="source-line-no">630</span><span id="line-630">            pipe((Reader)o, out, SerializerSession::handleThrown);</span>
-<span class="source-line-no">631</span><span id="line-631">         } else if (sType.isInputStream()) {</span>
-<span class="source-line-no">632</span><span id="line-632">            pipe((InputStream)o, out, SerializerSession::handleThrown);</span>
-<span class="source-line-no">633</span><span id="line-633">         } else {</span>
-<span class="source-line-no">634</span><span id="line-634">            if (isXmlText(format, sType))</span>
-<span class="source-line-no">635</span><span id="line-635">               out.append(toString(o));</span>
-<span class="source-line-no">636</span><span id="line-636">            else</span>
-<span class="source-line-no">637</span><span id="line-637">               out.text(toString(o));</span>
-<span class="source-line-no">638</span><span id="line-638">         }</span>
-<span class="source-line-no">639</span><span id="line-639">      }</span>
-<span class="source-line-no">640</span><span id="line-640"></span>
-<span class="source-line-no">641</span><span id="line-641">      pop();</span>
+<span class="source-line-no">599</span><span id="line-599">      ContentResult rc = CR_ELEMENTS;</span>
+<span class="source-line-no">600</span><span id="line-600"></span>
+<span class="source-line-no">601</span><span id="line-601">      // Render the tag contents.</span>
+<span class="source-line-no">602</span><span id="line-602">      if (o != null) {</span>
+<span class="source-line-no">603</span><span id="line-603">         if (sType.isUri() || (pMeta != null &amp;&amp; pMeta.isUri())) {</span>
+<span class="source-line-no">604</span><span id="line-604">            out.textUri(o);</span>
+<span class="source-line-no">605</span><span id="line-605">         } else if (sType.isCharSequence() || sType.isChar()) {</span>
+<span class="source-line-no">606</span><span id="line-606">            if (isXmlText(format, sType))</span>
+<span class="source-line-no">607</span><span id="line-607">               out.append(o);</span>
+<span class="source-line-no">608</span><span id="line-608">            else</span>
+<span class="source-line-no">609</span><span id="line-609">               out.text(o, preserveWhitespace);</span>
+<span class="source-line-no">610</span><span id="line-610">         } else if (sType.isNumber() || sType.isBoolean()) {</span>
+<span class="source-line-no">611</span><span id="line-611">            out.append(o);</span>
+<span class="source-line-no">612</span><span id="line-612">         } else if (sType.isMap() || (wType != null &amp;&amp; wType.isMap())) {</span>
+<span class="source-line-no">613</span><span id="line-613">            if (o instanceof BeanMap)</span>
+<span class="source-line-no">614</span><span id="line-614">               rc = serializeBeanMap(out, (BeanMap)o, elementNamespace, isCollapsed, isMixedOrText);</span>
+<span class="source-line-no">615</span><span id="line-615">            else</span>
+<span class="source-line-no">616</span><span id="line-616">               rc = serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), isMixedOrText);</span>
+<span class="source-line-no">617</span><span id="line-617">         } else if (sType.isBean()) {</span>
+<span class="source-line-no">618</span><span id="line-618">            rc = serializeBeanMap(out, toBeanMap(o), elementNamespace, isCollapsed, isMixedOrText);</span>
+<span class="source-line-no">619</span><span id="line-619">         } else if (sType.isCollection() || (wType != null &amp;&amp; wType.isCollection())) {</span>
+<span class="source-line-no">620</span><span id="line-620">            if (isCollapsed)</span>
+<span class="source-line-no">621</span><span id="line-621">               this.indent--;</span>
+<span class="source-line-no">622</span><span id="line-622">            serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);</span>
+<span class="source-line-no">623</span><span id="line-623">            if (isCollapsed)</span>
+<span class="source-line-no">624</span><span id="line-624">               this.indent++;</span>
+<span class="source-line-no">625</span><span id="line-625">         } else if (sType.isArray()) {</span>
+<span class="source-line-no">626</span><span id="line-626">            if (isCollapsed)</span>
+<span class="source-line-no">627</span><span id="line-627">               this.indent--;</span>
+<span class="source-line-no">628</span><span id="line-628">            serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);</span>
+<span class="source-line-no">629</span><span id="line-629">            if (isCollapsed)</span>
+<span class="source-line-no">630</span><span id="line-630">               this.indent++;</span>
+<span class="source-line-no">631</span><span id="line-631">         } else if (sType.isReader()) {</span>
+<span class="source-line-no">632</span><span id="line-632">            pipe((Reader)o, out, SerializerSession::handleThrown);</span>
+<span class="source-line-no">633</span><span id="line-633">         } else if (sType.isInputStream()) {</span>
+<span class="source-line-no">634</span><span id="line-634">            pipe((InputStream)o, out, SerializerSession::handleThrown);</span>
+<span class="source-line-no">635</span><span id="line-635">         } else {</span>
+<span class="source-line-no">636</span><span id="line-636">            if (isXmlText(format, sType))</span>
+<span class="source-line-no">637</span><span id="line-637">               out.append(toString(o));</span>
+<span class="source-line-no">638</span><span id="line-638">            else</span>
+<span class="source-line-no">639</span><span id="line-639">               out.text(toString(o));</span>
+<span class="source-line-no">640</span><span id="line-640">         }</span>
+<span class="source-line-no">641</span><span id="line-641">      }</span>
 <span class="source-line-no">642</span><span id="line-642"></span>
-<span class="source-line-no">643</span><span id="line-643">      // Render the end tag.</span>
-<span class="source-line-no">644</span><span id="line-644">      if (! isCollapsed) {</span>
-<span class="source-line-no">645</span><span id="line-645">         if (en != null) {</span>
-<span class="source-line-no">646</span><span id="line-646">            if (rc == CR_EMPTY) {</span>
-<span class="source-line-no">647</span><span id="line-647">               if (isHtmlMode())</span>
-<span class="source-line-no">648</span><span id="line-648">                  out.w('&gt;').eTag(elementNs, en, encodeEn);</span>
-<span class="source-line-no">649</span><span id="line-649">               else</span>
-<span class="source-line-no">650</span><span id="line-650">                  out.w('/').w('&gt;');</span>
-<span class="source-line-no">651</span><span id="line-651">            } else if (rc == CR_VOID || o == null) {</span>
-<span class="source-line-no">652</span><span id="line-652">               out.w('/').w('&gt;');</span>
-<span class="source-line-no">653</span><span id="line-653">            }</span>
-<span class="source-line-no">654</span><span id="line-654">            else</span>
-<span class="source-line-no">655</span><span id="line-655">               out.ie(cr &amp;&amp; rc != CR_MIXED ? i : 0).eTag(elementNs, en, encodeEn);</span>
-<span class="source-line-no">656</span><span id="line-656">         }</span>
-<span class="source-line-no">657</span><span id="line-657">         if (! isMixedOrText)</span>
-<span class="source-line-no">658</span><span id="line-658">            out.nl(i);</span>
-<span class="source-line-no">659</span><span id="line-659">      }</span>
-<span class="source-line-no">660</span><span id="line-660"></span>
-<span class="source-line-no">661</span><span id="line-661">      return rc;</span>
-<span class="source-line-no">662</span><span id="line-662">   }</span>
-<span class="source-line-no">663</span><span id="line-663"></span>
-<span class="source-line-no">664</span><span id="line-664">   private boolean isXmlText(XmlFormat format, ClassMeta&lt;?&gt; sType) {</span>
-<span class="source-line-no">665</span><span id="line-665">      if (format == XMLTEXT)</span>
-<span class="source-line-no">666</span><span id="line-666">         return true;</span>
-<span class="source-line-no">667</span><span id="line-667">      XmlClassMeta xcm = getXmlClassMeta(sType);</span>
-<span class="source-line-no">668</span><span id="line-668">      if (xcm == null)</span>
-<span class="source-line-no">669</span><span id="line-669">         return false;</span>
-<span class="source-line-no">670</span><span id="line-670">      return xcm.getFormat() == XMLTEXT;</span>
-<span class="source-line-no">671</span><span id="line-671">   }</span>
-<span class="source-line-no">672</span><span id="line-672"></span>
-<span class="source-line-no">673</span><span id="line-673">   private ContentResult serializeMap(XmlWriter out, Map m, ClassMeta&lt;?&gt; sType,</span>
-<span class="source-line-no">674</span><span id="line-674">         ClassMeta&lt;?&gt; eKeyType, ClassMeta&lt;?&gt; eValueType, boolean isMixed) throws SerializeException {</span>
-<span class="source-line-no">675</span><span id="line-675"></span>
-<span class="source-line-no">676</span><span id="line-676">      ClassMeta&lt;?&gt; keyType = eKeyType == null ? sType.getKeyType() : eKeyType;</span>
-<span class="source-line-no">677</span><span id="line-677">      ClassMeta&lt;?&gt; valueType = eValueType == null ? sType.getValueType() : eValueType;</span>
-<span class="source-line-no">678</span><span id="line-678"></span>
-<span class="source-line-no">679</span><span id="line-679">      Flag hasChildren = Flag.create();</span>
-<span class="source-line-no">680</span><span id="line-680">      forEachEntry(m, e -&gt; {</span>
-<span class="source-line-no">681</span><span id="line-681"></span>
-<span class="source-line-no">682</span><span id="line-682">         Object k = e.getKey();</span>
-<span class="source-line-no">683</span><span id="line-683">         if (k == null) {</span>
-<span class="source-line-no">684</span><span id="line-684">            k = "\u0000";</span>
-<span class="source-line-no">685</span><span id="line-685">         } else {</span>
-<span class="source-line-no">686</span><span id="line-686">            k = generalize(k, keyType);</span>
-<span class="source-line-no">687</span><span id="line-687">            if (isTrimStrings() &amp;&amp; k instanceof String)</span>
-<span class="source-line-no">688</span><span id="line-688">               k = k.toString().trim();</span>
-<span class="source-line-no">689</span><span id="line-689">         }</span>
-<span class="source-line-no">690</span><span id="line-690"></span>
-<span class="source-line-no">691</span><span id="line-691">         Object value = e.getValue();</span>
+<span class="source-line-no">643</span><span id="line-643">      pop();</span>
+<span class="source-line-no">644</span><span id="line-644"></span>
+<span class="source-line-no">645</span><span id="line-645">      // Render the end tag.</span>
+<span class="source-line-no">646</span><span id="line-646">      if (! isCollapsed) {</span>
+<span class="source-line-no">647</span><span id="line-647">         if (en != null) {</span>
+<span class="source-line-no">648</span><span id="line-648">            if (rc == CR_EMPTY) {</span>
+<span class="source-line-no">649</span><span id="line-649">               if (isHtmlMode())</span>
+<span class="source-line-no">650</span><span id="line-650">                  out.w('&gt;').eTag(elementNs, en, encodeEn);</span>
+<span class="source-line-no">651</span><span id="line-651">               else</span>
+<span class="source-line-no">652</span><span id="line-652">                  out.w('/').w('&gt;');</span>
+<span class="source-line-no">653</span><span id="line-653">            } else if (rc == CR_VOID || o == null) {</span>
+<span class="source-line-no">654</span><span id="line-654">               out.w('/').w('&gt;');</span>
+<span class="source-line-no">655</span><span id="line-655">            }</span>
+<span class="source-line-no">656</span><span id="line-656">            else</span>
+<span class="source-line-no">657</span><span id="line-657">               out.ie(cr &amp;&amp; rc != CR_MIXED ? i : 0).eTag(elementNs, en, encodeEn);</span>
+<span class="source-line-no">658</span><span id="line-658">         }</span>
+<span class="source-line-no">659</span><span id="line-659">         if (! isMixedOrText)</span>
+<span class="source-line-no">660</span><span id="line-660">            out.nl(i);</span>
+<span class="source-line-no">661</span><span id="line-661">      }</span>
+<span class="source-line-no">662</span><span id="line-662"></span>
+<span class="source-line-no">663</span><span id="line-663">      return rc;</span>
+<span class="source-line-no">664</span><span id="line-664">   }</span>
+<span class="source-line-no">665</span><span id="line-665"></span>
+<span class="source-line-no">666</span><span id="line-666">   private boolean isXmlText(XmlFormat format, ClassMeta&lt;?&gt; sType) {</span>
+<span class="source-line-no">667</span><span id="line-667">      if (format == XMLTEXT)</span>
+<span class="source-line-no">668</span><span id="line-668">         return true;</span>
+<span class="source-line-no">669</span><span id="line-669">      XmlClassMeta xcm = getXmlClassMeta(sType);</span>
+<span class="source-line-no">670</span><span id="line-670">      if (xcm == null)</span>
+<span class="source-line-no">671</span><span id="line-671">         return false;</span>
+<span class="source-line-no">672</span><span id="line-672">      return xcm.getFormat() == XMLTEXT;</span>
+<span class="source-line-no">673</span><span id="line-673">   }</span>
+<span class="source-line-no">674</span><span id="line-674"></span>
+<span class="source-line-no">675</span><span id="line-675">   private ContentResult serializeMap(XmlWriter out, Map m, ClassMeta&lt;?&gt; sType,</span>
+<span class="source-line-no">676</span><span id="line-676">         ClassMeta&lt;?&gt; eKeyType, ClassMeta&lt;?&gt; eValueType, boolean isMixed) throws SerializeException {</span>
+<span class="source-line-no">677</span><span id="line-677"></span>
+<span class="source-line-no">678</span><span id="line-678">      ClassMeta&lt;?&gt; keyType = eKeyType == null ? sType.getKeyType() : eKeyType;</span>
+<span class="source-line-no">679</span><span id="line-679">      ClassMeta&lt;?&gt; valueType = eValueType == null ? sType.getValueType() : eValueType;</span>
+<span class="source-line-no">680</span><span id="line-680"></span>
+<span class="source-line-no">681</span><span id="line-681">      Flag hasChildren = Flag.create();</span>
+<span class="source-line-no">682</span><span id="line-682">      forEachEntry(m, e -&gt; {</span>
+<span class="source-line-no">683</span><span id="line-683"></span>
+<span class="source-line-no">684</span><span id="line-684">         Object k = e.getKey();</span>
+<span class="source-line-no">685</span><span id="line-685">         if (k == null) {</span>
+<span class="source-line-no">686</span><span id="line-686">            k = "\u0000";</span>
+<span class="source-line-no">687</span><span id="line-687">         } else {</span>
+<span class="source-line-no">688</span><span id="line-688">            k = generalize(k, keyType);</span>
+<span class="source-line-no">689</span><span id="line-689">            if (isTrimStrings() &amp;&amp; k instanceof String)</span>
+<span class="source-line-no">690</span><span id="line-690">               k = k.toString().trim();</span>
+<span class="source-line-no">691</span><span id="line-691">         }</span>
 <span class="source-line-no">692</span><span id="line-692"></span>
-<span class="source-line-no">693</span><span id="line-693">         hasChildren.ifNotSet(()-&gt;out.w('&gt;').nlIf(! isMixed, indent)).set();</span>
-<span class="source-line-no">694</span><span id="line-694">         serializeAnything(out, value, valueType, toString(k), null, null, false, XmlFormat.DEFAULT, isMixed, false, null);</span>
-<span class="source-line-no">695</span><span id="line-695">      });</span>
-<span class="source-line-no">696</span><span id="line-696"></span>
-<span class="source-line-no">697</span><span id="line-697">      return hasChildren.isSet() ? CR_ELEMENTS : CR_EMPTY;</span>
-<span class="source-line-no">698</span><span id="line-698">   }</span>
-<span class="source-line-no">699</span><span id="line-699"></span>
-<span class="source-line-no">700</span><span id="line-700">   private ContentResult serializeBeanMap(XmlWriter out, BeanMap&lt;?&gt; m,</span>
-<span class="source-line-no">701</span><span id="line-701">         Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws SerializeException {</span>
-<span class="source-line-no">702</span><span id="line-702">      boolean hasChildren = false;</span>
-<span class="source-line-no">703</span><span id="line-703">      BeanMeta&lt;?&gt; bm = m.getMeta();</span>
-<span class="source-line-no">704</span><span id="line-704"></span>
-<span class="source-line-no">705</span><span id="line-705">      List&lt;BeanPropertyValue&gt; lp = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">693</span><span id="line-693">         Object value = e.getValue();</span>
+<span class="source-line-no">694</span><span id="line-694"></span>
+<span class="source-line-no">695</span><span id="line-695">         hasChildren.ifNotSet(()-&gt;out.w('&gt;').nlIf(! isMixed, indent)).set();</span>
+<span class="source-line-no">696</span><span id="line-696">         serializeAnything(out, value, valueType, toString(k), null, null, false, XmlFormat.DEFAULT, isMixed, false, null);</span>
+<span class="source-line-no">697</span><span id="line-697">      });</span>
+<span class="source-line-no">698</span><span id="line-698"></span>
+<span class="source-line-no">699</span><span id="line-699">      return hasChildren.isSet() ? CR_ELEMENTS : CR_EMPTY;</span>
+<span class="source-line-no">700</span><span id="line-700">   }</span>
+<span class="source-line-no">701</span><span id="line-701"></span>
+<span class="source-line-no">702</span><span id="line-702">   private ContentResult serializeBeanMap(XmlWriter out, BeanMap&lt;?&gt; m,</span>
+<span class="source-line-no">703</span><span id="line-703">         Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws SerializeException {</span>
+<span class="source-line-no">704</span><span id="line-704">      boolean hasChildren = false;</span>
+<span class="source-line-no">705</span><span id="line-705">      BeanMeta&lt;?&gt; bm = m.getMeta();</span>
 <span class="source-line-no">706</span><span id="line-706"></span>
-<span class="source-line-no">707</span><span id="line-707">      Predicate&lt;Object&gt; checkNull = x -&gt; isKeepNullProperties() || x != null;</span>
-<span class="source-line-no">708</span><span id="line-708">      m.forEachValue(checkNull, (pMeta,key,value,thrown) -&gt; {</span>
-<span class="source-line-no">709</span><span id="line-709">         lp.add(new BeanPropertyValue(pMeta, key, value, thrown));</span>
-<span class="source-line-no">710</span><span id="line-710">      });</span>
-<span class="source-line-no">711</span><span id="line-711"></span>
-<span class="source-line-no">712</span><span id="line-712">      XmlBeanMeta xbm = getXmlBeanMeta(bm);</span>
+<span class="source-line-no">707</span><span id="line-707">      List&lt;BeanPropertyValue&gt; lp = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">708</span><span id="line-708"></span>
+<span class="source-line-no">709</span><span id="line-709">      Predicate&lt;Object&gt; checkNull = x -&gt; isKeepNullProperties() || x != null;</span>
+<span class="source-line-no">710</span><span id="line-710">      m.forEachValue(checkNull, (pMeta,key,value,thrown) -&gt; {</span>
+<span class="source-line-no">711</span><span id="line-711">         lp.add(new BeanPropertyValue(pMeta, key, value, thrown));</span>
+<span class="source-line-no">712</span><span id="line-712">      });</span>
 <span class="source-line-no">713</span><span id="line-713"></span>
-<span class="source-line-no">714</span><span id="line-714">      Set&lt;String&gt;</span>
-<span class="source-line-no">715</span><span id="line-715">         attrs = xbm.getAttrPropertyNames(),</span>
-<span class="source-line-no">716</span><span id="line-716">         elements = xbm.getElementPropertyNames(),</span>
-<span class="source-line-no">717</span><span id="line-717">         collapsedElements = xbm.getCollapsedPropertyNames();</span>
-<span class="source-line-no">718</span><span id="line-718">      String</span>
-<span class="source-line-no">719</span><span id="line-719">         attrsProperty = xbm.getAttrsPropertyName(),</span>
-<span class="source-line-no">720</span><span id="line-720">         contentProperty = xbm.getContentPropertyName();</span>
-<span class="source-line-no">721</span><span id="line-721"></span>
-<span class="source-line-no">722</span><span id="line-722">      XmlFormat cf = null;</span>
+<span class="source-line-no">714</span><span id="line-714">      XmlBeanMeta xbm = getXmlBeanMeta(bm);</span>
+<span class="source-line-no">715</span><span id="line-715"></span>
+<span class="source-line-no">716</span><span id="line-716">      Set&lt;String&gt;</span>
+<span class="source-line-no">717</span><span id="line-717">         attrs = xbm.getAttrPropertyNames(),</span>
+<span class="source-line-no">718</span><span id="line-718">         elements = xbm.getElementPropertyNames(),</span>
+<span class="source-line-no">719</span><span id="line-719">         collapsedElements = xbm.getCollapsedPropertyNames();</span>
+<span class="source-line-no">720</span><span id="line-720">      String</span>
+<span class="source-line-no">721</span><span id="line-721">         attrsProperty = xbm.getAttrsPropertyName(),</span>
+<span class="source-line-no">722</span><span id="line-722">         contentProperty = xbm.getContentPropertyName();</span>
 <span class="source-line-no">723</span><span id="line-723"></span>
-<span class="source-line-no">724</span><span id="line-724">      Object content = null;</span>
-<span class="source-line-no">725</span><span id="line-725">      ClassMeta&lt;?&gt; contentType = null;</span>
-<span class="source-line-no">726</span><span id="line-726">      for (BeanPropertyValue p : lp) {</span>
-<span class="source-line-no">727</span><span id="line-727">         String n = p.getName();</span>
-<span class="source-line-no">728</span><span id="line-728">         if (attrs.contains(n) || attrs.contains("*") || n.equals(attrsProperty)) {</span>
-<span class="source-line-no">729</span><span id="line-729">            BeanPropertyMeta pMeta = p.getMeta();</span>
-<span class="source-line-no">730</span><span id="line-730">            if (pMeta.canRead()) {</span>
-<span class="source-line-no">731</span><span id="line-731">               ClassMeta&lt;?&gt; cMeta = p.getClassMeta();</span>
-<span class="source-line-no">732</span><span id="line-732"></span>
-<span class="source-line-no">733</span><span id="line-733">               String key = p.getName();</span>
-<span class="source-line-no">734</span><span id="line-734">               Object value = p.getValue();</span>
-<span class="source-line-no">735</span><span id="line-735">               Throwable t = p.getThrown();</span>
-<span class="source-line-no">736</span><span id="line-736">               if (t != null)</span>
-<span class="source-line-no">737</span><span id="line-737">                  onBeanGetterException(pMeta, t);</span>
-<span class="source-line-no">738</span><span id="line-738"></span>
-<span class="source-line-no">739</span><span id="line-739">               if (canIgnoreValue(cMeta, key, value))</span>
-<span class="source-line-no">740</span><span id="line-740">                  continue;</span>
-<span class="source-line-no">741</span><span id="line-741"></span>
-<span class="source-line-no">742</span><span id="line-742">               XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(pMeta);</span>
-<span class="source-line-no">743</span><span id="line-743">               Namespace ns = (isEnableNamespaces() &amp;&amp; bpXml.getNamespace() != elementNs ? bpXml.getNamespace() : null);</span>
-<span class="source-line-no">744</span><span id="line-744"></span>
-<span class="source-line-no">745</span><span id="line-745">               if (pMeta.isUri()  ) {</span>
-<span class="source-line-no">746</span><span id="line-746">                  out.attrUri(ns, key, value);</span>
-<span class="source-line-no">747</span><span id="line-747">               } else if (n.equals(attrsProperty)) {</span>
-<span class="source-line-no">748</span><span id="line-748">                  if (value instanceof BeanMap) {</span>
-<span class="source-line-no">749</span><span id="line-749">                     BeanMap&lt;?&gt; bm2 = (BeanMap)value;</span>
-<span class="source-line-no">750</span><span id="line-750">                     bm2.forEachValue(x -&gt; true, (pMeta2,key2,value2,thrown2) -&gt; {</span>
-<span class="source-line-no">751</span><span id="line-751">                        if (thrown2 != null)</span>
-<span class="source-line-no">752</span><span id="line-752">                           onBeanGetterException(pMeta, thrown2);</span>
-<span class="source-line-no">753</span><span id="line-753">                        out.attr(ns, key2, value2);</span>
-<span class="source-line-no">754</span><span id="line-754">                     });</span>
-<span class="source-line-no">755</span><span id="line-755">                  } else /* Map */ {</span>
-<span class="source-line-no">756</span><span id="line-756">                     Map m2 = (Map)value;</span>
-<span class="source-line-no">757</span><span id="line-757">                     if (m2 != null)</span>
-<span class="source-line-no">758</span><span id="line-758">                        m2.forEach((k,v) -&gt; out.attr(ns, Utils.s(k), v));</span>
-<span class="source-line-no">759</span><span id="line-759">                  }</span>
-<span class="source-line-no">760</span><span id="line-760">               } else {</span>
-<span class="source-line-no">761</span><span id="line-761">                  out.attr(ns, key, value);</span>
-<span class="source-line-no">762</span><span id="line-762">               }</span>
-<span class="source-line-no">763</span><span id="line-763">            }</span>
-<span class="source-line-no">764</span><span id="line-764">         }</span>
-<span class="source-line-no">765</span><span id="line-765">      }</span>
-<span class="source-line-no">766</span><span id="line-766"></span>
-<span class="source-line-no">767</span><span id="line-767">      boolean</span>
-<span class="source-line-no">768</span><span id="line-768">         hasContent = false,</span>
-<span class="source-line-no">769</span><span id="line-769">         preserveWhitespace = false,</span>
-<span class="source-line-no">770</span><span id="line-770">         isVoidElement = xbm.getContentFormat() == VOID;</span>
-<span class="source-line-no">771</span><span id="line-771"></span>
-<span class="source-line-no">772</span><span id="line-772">      for (BeanPropertyValue p : lp) {</span>
-<span class="source-line-no">773</span><span id="line-773">         BeanPropertyMeta pMeta = p.getMeta();</span>
-<span class="source-line-no">774</span><span id="line-774">         if (pMeta.canRead()) {</span>
-<span class="source-line-no">775</span><span id="line-775">            ClassMeta&lt;?&gt; cMeta = p.getClassMeta();</span>
-<span class="source-line-no">776</span><span id="line-776"></span>
-<span class="source-line-no">777</span><span id="line-777">            String n = p.getName();</span>
-<span class="source-line-no">778</span><span id="line-778">            if (n.equals(contentProperty)) {</span>
-<span class="source-line-no">779</span><span id="line-779">               content = p.getValue();</span>
-<span class="source-line-no">780</span><span id="line-780">               contentType = p.getClassMeta();</span>
-<span class="source-line-no">781</span><span id="line-781">               hasContent = true;</span>
-<span class="source-line-no">782</span><span id="line-782">               cf = xbm.getContentFormat();</span>
-<span class="source-line-no">783</span><span id="line-783">               if (cf.isOneOf(MIXED,MIXED_PWS,TEXT,TEXT_PWS,XMLTEXT))</span>
-<span class="source-line-no">784</span><span id="line-784">                  isMixedOrText = true;</span>
-<span class="source-line-no">785</span><span id="line-785">               if (cf.isOneOf(MIXED_PWS, TEXT_PWS))</span>
-<span class="source-line-no">786</span><span id="line-786">                  preserveWhitespace = true;</span>
-<span class="source-line-no">787</span><span id="line-787">               if (contentType.isCollection() &amp;&amp; ((Collection)content).isEmpty())</span>
-<span class="source-line-no">788</span><span id="line-788">                  hasContent = false;</span>
-<span class="source-line-no">789</span><span id="line-789">               else if (contentType.isArray() &amp;&amp; Array.getLength(content) == 0)</span>
+<span class="source-line-no">724</span><span id="line-724">      XmlFormat cf = null;</span>
+<span class="source-line-no">725</span><span id="line-725"></span>
+<span class="source-line-no">726</span><span id="line-726">      Object content = null;</span>
+<span class="source-line-no">727</span><span id="line-727">      ClassMeta&lt;?&gt; contentType = null;</span>
+<span class="source-line-no">728</span><span id="line-728">      for (BeanPropertyValue p : lp) {</span>
+<span class="source-line-no">729</span><span id="line-729">         String n = p.getName();</span>
+<span class="source-line-no">730</span><span id="line-730">         if (attrs.contains(n) || attrs.contains("*") || n.equals(attrsProperty)) {</span>
+<span class="source-line-no">731</span><span id="line-731">            BeanPropertyMeta pMeta = p.getMeta();</span>
+<span class="source-line-no">732</span><span id="line-732">            if (pMeta.canRead()) {</span>
+<span class="source-line-no">733</span><span id="line-733">               ClassMeta&lt;?&gt; cMeta = p.getClassMeta();</span>
+<span class="source-line-no">734</span><span id="line-734"></span>
+<span class="source-line-no">735</span><span id="line-735">               String key = p.getName();</span>
+<span class="source-line-no">736</span><span id="line-736">               Object value = p.getValue();</span>
+<span class="source-line-no">737</span><span id="line-737">               Throwable t = p.getThrown();</span>
+<span class="source-line-no">738</span><span id="line-738">               if (t != null)</span>
+<span class="source-line-no">739</span><span id="line-739">                  onBeanGetterException(pMeta, t);</span>
+<span class="source-line-no">740</span><span id="line-740"></span>
+<span class="source-line-no">741</span><span id="line-741">               if (canIgnoreValue(cMeta, key, value))</span>
+<span class="source-line-no">742</span><span id="line-742">                  continue;</span>
+<span class="source-line-no">743</span><span id="line-743"></span>
+<span class="source-line-no">744</span><span id="line-744">               XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(pMeta);</span>
+<span class="source-line-no">745</span><span id="line-745">               Namespace ns = (isEnableNamespaces() &amp;&amp; bpXml.getNamespace() != elementNs ? bpXml.getNamespace() : null);</span>
+<span class="source-line-no">746</span><span id="line-746"></span>
+<span class="source-line-no">747</span><span id="line-747">               if (pMeta.isUri()  ) {</span>
+<span class="source-line-no">748</span><span id="line-748">                  out.attrUri(ns, key, value);</span>
+<span class="source-line-no">749</span><span id="line-749">               } else if (n.equals(attrsProperty)) {</span>
+<span class="source-line-no">750</span><span id="line-750">                  if (value instanceof BeanMap) {</span>
+<span class="source-line-no">751</span><span id="line-751">                     BeanMap&lt;?&gt; bm2 = (BeanMap)value;</span>
+<span class="source-line-no">752</span><span id="line-752">                     bm2.forEachValue(x -&gt; true, (pMeta2,key2,value2,thrown2) -&gt; {</span>
+<span class="source-line-no">753</span><span id="line-753">                        if (thrown2 != null)</span>
+<span class="source-line-no">754</span><span id="line-754">                           onBeanGetterException(pMeta, thrown2);</span>
+<span class="source-line-no">755</span><span id="line-755">                        out.attr(ns, key2, value2);</span>
+<span class="source-line-no">756</span><span id="line-756">                     });</span>
+<span class="source-line-no">757</span><span id="line-757">                  } else /* Map */ {</span>
+<span class="source-line-no">758</span><span id="line-758">                     Map m2 = (Map)value;</span>
+<span class="source-line-no">759</span><span id="line-759">                     if (m2 != null)</span>
+<span class="source-line-no">760</span><span id="line-760">                        m2.forEach((k,v) -&gt; out.attr(ns, Utils.s(k), v));</span>
+<span class="source-line-no">761</span><span id="line-761">                  }</span>
+<span class="source-line-no">762</span><span id="line-762">               } else {</span>
+<span class="source-line-no">763</span><span id="line-763">                  out.attr(ns, key, value);</span>
+<span class="source-line-no">764</span><span id="line-764">               }</span>
+<span class="source-line-no">765</span><span id="line-765">            }</span>
+<span class="source-line-no">766</span><span id="line-766">         }</span>
+<span class="source-line-no">767</span><span id="line-767">      }</span>
+<span class="source-line-no">768</span><span id="line-768"></span>
+<span class="source-line-no">769</span><span id="line-769">      boolean</span>
+<span class="source-line-no">770</span><span id="line-770">         hasContent = false,</span>
+<span class="source-line-no">771</span><span id="line-771">         preserveWhitespace = false,</span>
+<span class="source-line-no">772</span><span id="line-772">         isVoidElement = xbm.getContentFormat() == VOID;</span>
+<span class="source-line-no">773</span><span id="line-773"></span>
+<span class="source-line-no">774</span><span id="line-774">      for (BeanPropertyValue p : lp) {</span>
+<span class="source-line-no">775</span><span id="line-775">         BeanPropertyMeta pMeta = p.getMeta();</span>
+<span class="source-line-no">776</span><span id="line-776">         if (pMeta.canRead()) {</span>
+<span class="source-line-no">777</span><span id="line-777">            ClassMeta&lt;?&gt; cMeta = p.getClassMeta();</span>
+<span class="source-line-no">778</span><span id="line-778"></span>
+<span class="source-line-no">779</span><span id="line-779">            String n = p.getName();</span>
+<span class="source-line-no">780</span><span id="line-780">            if (n.equals(contentProperty)) {</span>
+<span class="source-line-no">781</span><span id="line-781">               content = p.getValue();</span>
+<span class="source-line-no">782</span><span id="line-782">               contentType = p.getClassMeta();</span>
+<span class="source-line-no">783</span><span id="line-783">               hasContent = true;</span>
+<span class="source-line-no">784</span><span id="line-784">               cf = xbm.getContentFormat();</span>
+<span class="source-line-no">785</span><span id="line-785">               if (cf.isOneOf(MIXED,MIXED_PWS,TEXT,TEXT_PWS,XMLTEXT))</span>
+<span class="source-line-no">786</span><span id="line-786">                  isMixedOrText = true;</span>
+<span class="source-line-no">787</span><span id="line-787">               if (cf.isOneOf(MIXED_PWS, TEXT_PWS))</span>
+<span class="source-line-no">788</span><span id="line-788">                  preserveWhitespace = true;</span>
+<span class="source-line-no">789</span><span id="line-789">               if (contentType.isCollection() &amp;&amp; ((Collection)content).isEmpty())</span>
 <span class="source-line-no">790</span><span id="line-790">                  hasContent = false;</span>
-<span class="source-line-no">791</span><span id="line-791">            } else if (elements.contains(n) || collapsedElements.contains(n) || elements.contains("*") || collapsedElements.contains("*") ) {</span>
-<span class="source-line-no">792</span><span id="line-792">               String key = p.getName();</span>
-<span class="source-line-no">793</span><span id="line-793">               Object value = p.getValue();</span>
-<span class="source-line-no">794</span><span id="line-794">               Throwable t = p.getThrown();</span>
-<span class="source-line-no">795</span><span id="line-795">               if (t != null)</span>
-<span class="source-line-no">796</span><span id="line-796">                  onBeanGetterException(pMeta, t);</span>
-<span class="source-line-no">797</span><span id="line-797"></span>
-<span class="source-line-no">798</span><span id="line-798">               if (canIgnoreValue(cMeta, key, value))</span>
-<span class="source-line-no">799</span><span id="line-799">                  continue;</span>
-<span class="source-line-no">800</span><span id="line-800"></span>
-<span class="source-line-no">801</span><span id="line-801">               if (! hasChildren) {</span>
-<span class="source-line-no">802</span><span id="line-802">                  hasChildren = true;</span>
-<span class="source-line-no">803</span><span id="line-803">                  out.appendIf(! isCollapsed, '&gt;').nlIf(! isMixedOrText, indent);</span>
-<span class="source-line-no">804</span><span id="line-804">               }</span>
-<span class="source-line-no">805</span><span id="line-805"></span>
-<span class="source-line-no">806</span><span id="line-806">               XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(pMeta);</span>
-<span class="source-line-no">807</span><span id="line-807">               serializeAnything(out, value, cMeta, key, null, bpXml.getNamespace(), false, bpXml.getXmlFormat(), isMixedOrText, false, pMeta);</span>
-<span class="source-line-no">808</span><span id="line-808">            }</span>
-<span class="source-line-no">809</span><span id="line-809">         }</span>
-<span class="source-line-no">810</span><span id="line-810">      }</span>
-<span class="source-line-no">811</span><span id="line-811">      if (contentProperty == null &amp;&amp; ! hasContent)</span>
-<span class="source-line-no">812</span><span id="line-812">         return (hasChildren ? CR_ELEMENTS : isVoidElement ? CR_VOID : CR_EMPTY);</span>
-<span class="source-line-no">813</span><span id="line-813"></span>
-<span class="source-line-no">814</span><span id="line-814">      // Serialize XML content.</span>
-<span class="source-line-no">815</span><span id="line-815">      if (content != null) {</span>
-<span class="source-line-no">816</span><span id="line-816">         out.w('&gt;').nlIf(! isMixedOrText, indent);</span>
-<span class="source-line-no">817</span><span id="line-817">         if (contentType == null) {</span>
-<span class="source-line-no">818</span><span id="line-818">         } else if (contentType.isCollection()) {</span>
-<span class="source-line-no">819</span><span id="line-819">            Collection c = (Collection)content;</span>
-<span class="source-line-no">820</span><span id="line-820">            for (Object value : c) {</span>
-<span class="source-line-no">821</span><span id="line-821">               serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);</span>
-<span class="source-line-no">822</span><span id="line-822">            }</span>
-<span class="source-line-no">823</span><span id="line-823">         } else if (contentType.isArray()) {</span>
-<span class="source-line-no">824</span><span id="line-824">            Collection c = toList(Object[].class, content);</span>
-<span class="source-line-no">825</span><span id="line-825">            for (Object value : c) {</span>
-<span class="source-line-no">826</span><span id="line-826">               serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);</span>
-<span class="source-line-no">827</span><span id="line-827">            }</span>
-<span class="source-line-no">828</span><span id="line-828">         } else {</span>
-<span class="source-line-no">829</span><span id="line-829">            serializeAnything(out, content, contentType, null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);</span>
-<span class="source-line-no">830</span><span id="line-830">         }</span>
-<span class="source-line-no">831</span><span id="line-831">      } else {</span>
-<span class="source-line-no">832</span><span id="line-832">         out.attr("nil", "true").w('&gt;').nlIf(! isMixedOrText, indent);</span>
-<span class="source-line-no">833</span><span id="line-833">      }</span>
-<span class="source-line-no">834</span><span id="line-834">      return isMixedOrText ? CR_MIXED : CR_ELEMENTS;</span>
-<span class="source-line-no">835</span><span id="line-835">   }</span>
-<span class="source-line-no">836</span><span id="line-836"></span>
-<span class="source-line-no">837</span><span id="line-837">   private XmlWriter serializeCollection(XmlWriter out, Object in, ClassMeta&lt;?&gt; sType,</span>
-<span class="source-line-no">838</span><span id="line-838">         ClassMeta&lt;?&gt; eType, BeanPropertyMeta ppMeta, boolean isMixed) throws SerializeException {</span>
-<span class="source-line-no">839</span><span id="line-839"></span>
-<span class="source-line-no">840</span><span id="line-840">      ClassMeta&lt;?&gt; eeType = eType.getElementType();</span>
-<span class="source-line-no">841</span><span id="line-841"></span>
-<span class="source-line-no">842</span><span id="line-842">      Collection c = (sType.isCollection() ? (Collection)in : toList(sType.getInnerClass(), in));</span>
+<span class="source-line-no">791</span><span id="line-791">               else if (contentType.isArray() &amp;&amp; Array.getLength(content) == 0)</span>
+<span class="source-line-no">792</span><span id="line-792">                  hasContent = false;</span>
+<span class="source-line-no">793</span><span id="line-793">            } else if (elements.contains(n) || collapsedElements.contains(n) || elements.contains("*") || collapsedElements.contains("*") ) {</span>
+<span class="source-line-no">794</span><span id="line-794">               String key = p.getName();</span>
+<span class="source-line-no">795</span><span id="line-795">               Object value = p.getValue();</span>
+<span class="source-line-no">796</span><span id="line-796">               Throwable t = p.getThrown();</span>
+<span class="source-line-no">797</span><span id="line-797">               if (t != null)</span>
+<span class="source-line-no">798</span><span id="line-798">                  onBeanGetterException(pMeta, t);</span>
+<span class="source-line-no">799</span><span id="line-799"></span>
+<span class="source-line-no">800</span><span id="line-800">               if (canIgnoreValue(cMeta, key, value))</span>
+<span class="source-line-no">801</span><span id="line-801">                  continue;</span>
+<span class="source-line-no">802</span><span id="line-802"></span>
+<span class="source-line-no">803</span><span id="line-803">               if (! hasChildren) {</span>
+<span class="source-line-no">804</span><span id="line-804">                  hasChildren = true;</span>
+<span class="source-line-no">805</span><span id="line-805">                  out.appendIf(! isCollapsed, '&gt;').nlIf(! isMixedOrText, indent);</span>
+<span class="source-line-no">806</span><span id="line-806">               }</span>
+<span class="source-line-no">807</span><span id="line-807"></span>
+<span class="source-line-no">808</span><span id="line-808">               XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(pMeta);</span>
+<span class="source-line-no">809</span><span id="line-809">               serializeAnything(out, value, cMeta, key, null, bpXml.getNamespace(), false, bpXml.getXmlFormat(), isMixedOrText, false, pMeta);</span>
+<span class="source-line-no">810</span><span id="line-810">            }</span>
+<span class="source-line-no">811</span><span id="line-811">         }</span>
+<span class="source-line-no">812</span><span id="line-812">      }</span>
+<span class="source-line-no">813</span><span id="line-813">      if (contentProperty == null &amp;&amp; ! hasContent)</span>
+<span class="source-line-no">814</span><span id="line-814">         return (hasChildren ? CR_ELEMENTS : isVoidElement ? CR_VOID : CR_EMPTY);</span>
+<span class="source-line-no">815</span><span id="line-815"></span>
+<span class="source-line-no">816</span><span id="line-816">      // Serialize XML content.</span>
+<span class="source-line-no">817</span><span id="line-817">      if (content != null) {</span>
+<span class="source-line-no">818</span><span id="line-818">         out.w('&gt;').nlIf(! isMixedOrText, indent);</span>
+<span class="source-line-no">819</span><span id="line-819">         if (contentType == null) {</span>
+<span class="source-line-no">820</span><span id="line-820">         } else if (contentType.isCollection()) {</span>
+<span class="source-line-no">821</span><span id="line-821">            Collection c = (Collection)content;</span>
+<span class="source-line-no">822</span><span id="line-822">            for (Object value : c) {</span>
+<span class="source-line-no">823</span><span id="line-823">               serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);</span>
+<span class="source-line-no">824</span><span id="line-824">            }</span>
+<span class="source-line-no">825</span><span id="line-825">         } else if (contentType.isArray()) {</span>
+<span class="source-line-no">826</span><span id="line-826">            Collection c = toList(Object[].class, content);</span>
+<span class="source-line-no">827</span><span id="line-827">            for (Object value : c) {</span>
+<span class="source-line-no">828</span><span id="line-828">               serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);</span>
+<span class="source-line-no">829</span><span id="line-829">            }</span>
+<span class="source-line-no">830</span><span id="line-830">      } else {</span>
+<span class="source-line-no">831</span><span id="line-831">         serializeAnything(out, content, contentType, null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);</span>
+<span class="source-line-no">832</span><span id="line-832">      }</span>
+<span class="source-line-no">833</span><span id="line-833">   } else {</span>
+<span class="source-line-no">834</span><span id="line-834">      if (isAddJsonTags())</span>
+<span class="source-line-no">835</span><span id="line-835">         out.attr("nil", "true");</span>
+<span class="source-line-no">836</span><span id="line-836">      out.w('&gt;').nlIf(! isMixedOrText, indent);</span>
+<span class="source-line-no">837</span><span id="line-837">   }</span>
+<span class="source-line-no">838</span><span id="line-838">   return isMixedOrText ? CR_MIXED : CR_ELEMENTS;</span>
+<span class="source-line-no">839</span><span id="line-839">   }</span>
+<span class="source-line-no">840</span><span id="line-840"></span>
+<span class="source-line-no">841</span><span id="line-841">   private XmlWriter serializeCollection(XmlWriter out, Object in, ClassMeta&lt;?&gt; sType,</span>
+<span class="source-line-no">842</span><span id="line-842">         ClassMeta&lt;?&gt; eType, BeanPropertyMeta ppMeta, boolean isMixed) throws SerializeException {</span>
 <span class="source-line-no">843</span><span id="line-843"></span>
-<span class="source-line-no">844</span><span id="line-844">      String type2 = null;</span>
+<span class="source-line-no">844</span><span id="line-844">      ClassMeta&lt;?&gt; eeType = eType.getElementType();</span>
 <span class="source-line-no">845</span><span id="line-845"></span>
-<span class="source-line-no">846</span><span id="line-846">      Value&lt;String&gt; eName = Value.of(type2);</span>
-<span class="source-line-no">847</span><span id="line-847">      Value&lt;Namespace&gt; eNs = Value.empty();</span>
-<span class="source-line-no">848</span><span id="line-848"></span>
-<span class="source-line-no">849</span><span id="line-849">      if (ppMeta != null) {</span>
-<span class="source-line-no">850</span><span id="line-850">         XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(ppMeta);</span>
-<span class="source-line-no">851</span><span id="line-851">         eName.set(bpXml.getChildName());</span>
-<span class="source-line-no">852</span><span id="line-852">         eNs.set(bpXml.getNamespace());</span>
-<span class="source-line-no">853</span><span id="line-853">      }</span>
-<span class="source-line-no">854</span><span id="line-854"></span>
-<span class="source-line-no">855</span><span id="line-855">      forEachEntry(c, x -&gt; serializeAnything(out, x, eeType, null, eName.get(), eNs.get(), false, XmlFormat.DEFAULT, isMixed, false, null));</span>
-<span class="source-line-no">856</span><span id="line-856"></span>
-<span class="source-line-no">857</span><span id="line-857">      return out;</span>
-<span class="source-line-no">858</span><span id="line-858">   }</span>
-<span class="source-line-no">859</span><span id="line-859"></span>
-<span class="source-line-no">860</span><span id="line-860">   enum JsonType {</span>
-<span class="source-line-no">861</span><span id="line-861">      STRING("string"),BOOLEAN("boolean"),NUMBER("number"),ARRAY("array"),OBJECT("object"),NULL("null");</span>
-<span class="source-line-no">862</span><span id="line-862"></span>
-<span class="source-line-no">863</span><span id="line-863">      private final String value;</span>
-<span class="source-line-no">864</span><span id="line-864">      JsonType(String value) {</span>
-<span class="source-line-no">865</span><span id="line-865">         this.value = value;</span>
-<span class="source-line-no">866</span><span id="line-866">      }</span>
-<span class="source-line-no">867</span><span id="line-867"></span>
-<span class="source-line-no">868</span><span id="line-868">      @Override</span>
-<span class="source-line-no">869</span><span id="line-869">      public String toString() {</span>
-<span class="source-line-no">870</span><span id="line-870">         return value;</span>
-<span class="source-line-no">871</span><span id="line-871">      }</span>
-<span class="source-line-no">872</span><span id="line-872"></span>
-<span class="source-line-no">873</span><span id="line-873">      boolean isOneOf(JsonType...types) {</span>
-<span class="source-line-no">874</span><span id="line-874">         for (JsonType type : types)</span>
-<span class="source-line-no">875</span><span id="line-875">            if (type == this)</span>
-<span class="source-line-no">876</span><span id="line-876">               return true;</span>
-<span class="source-line-no">877</span><span id="line-877">         return false;</span>
-<span class="source-line-no">878</span><span id="line-878">      }</span>
-<span class="source-line-no">879</span><span id="line-879">   }</span>
-<span class="source-line-no">880</span><span id="line-880"></span>
-<span class="source-line-no">881</span><span id="line-881">   /**</span>
-<span class="source-line-no">882</span><span id="line-882">    * Identifies what the contents were of a serialized bean.</span>
-<span class="source-line-no">883</span><span id="line-883">    */</span>
-<span class="source-line-no">884</span><span id="line-884">   @SuppressWarnings("javadoc")</span>
-<span class="source-line-no">885</span><span id="line-885">   public enum ContentResult {</span>
-<span class="source-line-no">886</span><span id="line-886">      CR_VOID,      // No content...append "/&gt;" to the start tag.</span>
-<span class="source-line-no">887</span><span id="line-887">      CR_EMPTY,     // No content...append "/&gt;" to the start tag if XML, "/&gt;&lt;/end&gt;" if HTML.</span>
-<span class="source-line-no">888</span><span id="line-888">      CR_MIXED,     // Mixed content...don't add whitespace.</span>
-<span class="source-line-no">889</span><span id="line-889">      CR_ELEMENTS   // Elements...use normal whitespace rules.</span>
-<span class="source-line-no">890</span><span id="line-890">   }</span>
-<span class="source-line-no">891</span><span id="line-891"></span>
-<span class="source-line-no">892</span><span id="line-892">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">893</span><span id="line-893">   // Properties</span>
-<span class="source-line-no">894</span><span id="line-894">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">846</span><span id="line-846">      Collection c = (sType.isCollection() ? (Collection)in : toList(sType.getInnerClass(), in));</span>
+<span class="source-line-no">847</span><span id="line-847"></span>
+<span class="source-line-no">848</span><span id="line-848">      String type2 = null;</span>
+<span class="source-line-no">849</span><span id="line-849"></span>
+<span class="source-line-no">850</span><span id="line-850">      Value&lt;String&gt; eName = Value.of(type2);</span>
+<span class="source-line-no">851</span><span id="line-851">      Value&lt;Namespace&gt; eNs = Value.empty();</span>
+<span class="source-line-no">852</span><span id="line-852"></span>
+<span class="source-line-no">853</span><span id="line-853">      if (ppMeta != null) {</span>
+<span class="source-line-no">854</span><span id="line-854">         XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(ppMeta);</span>
+<span class="source-line-no">855</span><span id="line-855">         eName.set(bpXml.getChildName());</span>
+<span class="source-line-no">856</span><span id="line-856">         eNs.set(bpXml.getNamespace());</span>
+<span class="source-line-no">857</span><span id="line-857">      }</span>
+<span class="source-line-no">858</span><span id="line-858"></span>
+<span class="source-line-no">859</span><span id="line-859">      forEachEntry(c, x -&gt; serializeAnything(out, x, eeType, null, eName.get(), eNs.get(), false, XmlFormat.DEFAULT, isMixed, false, null));</span>
+<span class="source-line-no">860</span><span id="line-860"></span>
+<span class="source-line-no">861</span><span id="line-861">      return out;</span>
+<span class="source-line-no">862</span><span id="line-862">   }</span>
+<span class="source-line-no">863</span><span id="line-863"></span>
+<span class="source-line-no">864</span><span id="line-864">   enum JsonType {</span>
+<span class="source-line-no">865</span><span id="line-865">      STRING("string"),BOOLEAN("boolean"),NUMBER("number"),ARRAY("array"),OBJECT("object"),NULL("null");</span>
+<span class="source-line-no">866</span><span id="line-866"></span>
+<span class="source-line-no">867</span><span id="line-867">      private final String value;</span>
+<span class="source-line-no">868</span><span id="line-868">      JsonType(String value) {</span>
+<span class="source-line-no">869</span><span id="line-869">         this.value = value;</span>
+<span class="source-line-no">870</span><span id="line-870">      }</span>
+<span class="source-line-no">871</span><span id="line-871"></span>
+<span class="source-line-no">872</span><span id="line-872">      @Override</span>
+<span class="source-line-no">873</span><span id="line-873">      public String toString() {</span>
+<span class="source-line-no">874</span><span id="line-874">         return value;</span>
+<span class="source-line-no">875</span><span id="line-875">      }</span>
+<span class="source-line-no">876</span><span id="line-876"></span>
+<span class="source-line-no">877</span><span id="line-877">      boolean isOneOf(JsonType...types) {</span>
+<span class="source-line-no">878</span><span id="line-878">         for (JsonType type : types)</span>
+<span class="source-line-no">879</span><span id="line-879">            if (type == this)</span>
+<span class="source-line-no">880</span><span id="line-880">               return true;</span>
+<span class="source-line-no">881</span><span id="line-881">         return false;</span>
+<span class="source-line-no">882</span><span id="line-882">      }</span>
+<span class="source-line-no">883</span><span id="line-883">   }</span>
+<span class="source-line-no">884</span><span id="line-884"></span>
+<span class="source-line-no">885</span><span id="line-885">   /**</span>
+<span class="source-line-no">886</span><span id="line-886">    * Identifies what the contents were of a serialized bean.</span>
+<span class="source-line-no">887</span><span id="line-887">    */</span>
+<span class="source-line-no">888</span><span id="line-888">   @SuppressWarnings("javadoc")</span>
+<span class="source-line-no">889</span><span id="line-889">   public enum ContentResult {</span>
+<span class="source-line-no">890</span><span id="line-890">      CR_VOID,      // No content...append "/&gt;" to the start tag.</span>
+<span class="source-line-no">891</span><span id="line-891">      CR_EMPTY,     // No content...append "/&gt;" to the start tag if XML, "/&gt;&lt;/end&gt;" if HTML.</span>
+<span class="source-line-no">892</span><span id="line-892">      CR_MIXED,     // Mixed content...don't add whitespace.</span>
+<span class="source-line-no">893</span><span id="line-893">      CR_ELEMENTS   // Elements...use normal whitespace rules.</span>
+<span class="source-line-no">894</span><span id="line-894">   }</span>
 <span class="source-line-no">895</span><span id="line-895"></span>
-<span class="source-line-no">896</span><span id="line-896">   /**</span>
-<span class="source-line-no">897</span><span id="line-897">    * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</span>
-<span class="source-line-no">898</span><span id="line-898">    *</span>
-<span class="source-line-no">899</span><span id="line-899">    * @see XmlSerializer.Builder#addBeanTypesXml()</span>
-<span class="source-line-no">900</span><span id="line-900">    * @return</span>
-<span class="source-line-no">901</span><span id="line-901">    *    &lt;jk&gt;true&lt;/jk&gt; if&lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</span>
-<span class="source-line-no">902</span><span id="line-902">    *    through reflection.</span>
-<span class="source-line-no">903</span><span id="line-903">    */</span>
-<span class="source-line-no">904</span><span id="line-904">   @Override</span>
-<span class="source-line-no">905</span><span id="line-905">   protected boolean isAddBeanTypes() {</span>
-<span class="source-line-no">906</span><span id="line-906">      return ctx.isAddBeanTypes();</span>
-<span class="source-line-no">907</span><span id="line-907">   }</span>
-<span class="source-line-no">908</span><span id="line-908"></span>
-<span class="source-line-no">909</span><span id="line-909">   /**</span>
-<span class="source-line-no">910</span><span id="line-910">    * Add namespace URLs to the root element.</span>
-<span class="source-line-no">911</span><span id="line-911">    *</span>
-<span class="source-line-no">912</span><span id="line-912">    * @see XmlSerializer.Builder#addNamespaceUrisToRoot()</span>
-<span class="source-line-no">913</span><span id="line-913">    * @return</span>
-<span class="source-line-no">914</span><span id="line-914">    *    &lt;jk&gt;true&lt;/jk&gt; if {@code xmlns:x} attributes are added to the root element for the default and all mapped namespaces.</span>
-<span class="source-line-no">915</span><span id="line-915">    */</span>
-<span class="source-line-no">916</span><span id="line-916">   protected final boolean isAddNamespaceUrisToRoot() {</span>
-<span class="source-line-no">917</span><span id="line-917">      return ctx.isAddNamespaceUrlsToRoot();</span>
-<span class="source-line-no">918</span><span id="line-918">   }</span>
-<span class="source-line-no">919</span><span id="line-919"></span>
-<span class="source-line-no">920</span><span id="line-920">   /**</span>
-<span class="source-line-no">921</span><span id="line-921">    * Auto-detect namespace usage.</span>
-<span class="source-line-no">922</span><span id="line-922">    *</span>
-<span class="source-line-no">923</span><span id="line-923">    * @see XmlSerializer.Builder#disableAutoDetectNamespaces()</span>
-<span class="source-line-no">924</span><span id="line-924">    * @return</span>
-<span class="source-line-no">925</span><span id="line-925">    *    &lt;jk&gt;true&lt;/jk&gt; if namespace usage is detected before serialization.</span>
-<span class="source-line-no">926</span><span id="line-926">    */</span>
-<span class="source-line-no">927</span><span id="line-927">   protected final boolean isAutoDetectNamespaces() {</span>
-<span class="source-line-no">928</span><span id="line-928">      return ctx.isAutoDetectNamespaces();</span>
-<span class="source-line-no">929</span><span id="line-929">   }</span>
-<span class="source-line-no">930</span><span id="line-930"></span>
-<span class="source-line-no">931</span><span id="line-931">   /**</span>
-<span class="source-line-no">932</span><span id="line-932">    * Default namespace.</span>
-<span class="source-line-no">933</span><span id="line-933">    *</span>
-<span class="source-line-no">934</span><span id="line-934">    * @see XmlSerializer.Builder#defaultNamespace(Namespace)</span>
-<span class="source-line-no">935</span><span id="line-935">    * @return</span>
-<span class="source-line-no">936</span><span id="line-936">    *    The default namespace URI for this document.</span>
-<span class="source-line-no">937</span><span id="line-937">    */</span>
-<span class="source-line-no">938</span><span id="line-938">   protected final Namespace getDefaultNamespace() {</span>
-<span class="source-line-no">939</span><span id="line-939">      return defaultNamespace;</span>
-<span class="source-line-no">940</span><span id="line-940">   }</span>
-<span class="source-line-no">941</span><span id="line-941"></span>
-<span class="source-line-no">942</span><span id="line-942">   /**</span>
-<span class="source-line-no">943</span><span id="line-943">    * Enable support for XML namespaces.</span>
-<span class="source-line-no">944</span><span id="line-944">    *</span>
-<span class="source-line-no">945</span><span id="line-945">    * @see XmlSerializer.Builder#enableNamespaces()</span>
-<span class="source-line-no">946</span><span id="line-946">    * @return</span>
-<span class="source-line-no">947</span><span id="line-947">    *    &lt;jk&gt;false&lt;/jk&gt; if XML output will not contain any namespaces regardless of any other settings.</span>
-<span class="source-line-no">948</span><span id="line-948">    */</span>
-<span class="source-line-no">949</span><span id="line-949">   protected final boolean isEnableNamespaces() {</span>
-<span class="source-line-no">950</span><span id="line-950">      return ctx.isEnableNamespaces();</span>
-<span class="source-line-no">951</span><span id="line-951">   }</span>
-<span class="source-line-no">952</span><span id="line-952"></span>
-<span class="source-line-no">953</span><span id="line-953">   /**</span>
-<span class="source-line-no">954</span><span id="line-954">    * Default namespaces.</span>
-<span class="source-line-no">955</span><span id="line-955">    *</span>
-<span class="source-line-no">956</span><span id="line-956">    * @see XmlSerializer.Builder#namespaces(Namespace...)</span>
-<span class="source-line-no">957</span><span id="line-957">    * @return</span>
-<span class="source-line-no">958</span><span id="line-958">    *    The default list of namespaces associated with this serializer.</span>
-<span class="source-line-no">959</span><span id="line-959">    */</span>
-<span class="source-line-no">960</span><span id="line-960">   protected final Namespace[] getNamespaces() {</span>
-<span class="source-line-no">961</span><span id="line-961">      return namespaces;</span>
-<span class="source-line-no">962</span><span id="line-962">   }</span>
-<span class="source-line-no">963</span><span id="line-963"></span>
-<span class="source-line-no">964</span><span id="line-964">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">965</span><span id="line-965">   // Extended metadata</span>
-<span class="source-line-no">966</span><span id="line-966">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">896</span><span id="line-896">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">897</span><span id="line-897">   // Properties</span>
+<span class="source-line-no">898</span><span id="line-898">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">899</span><span id="line-899"></span>
+<span class="source-line-no">900</span><span id="line-900">   /**</span>
+<span class="source-line-no">901</span><span id="line-901">    * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</span>
+<span class="source-line-no">902</span><span id="line-902">    *</span>
+<span class="source-line-no">903</span><span id="line-903">    * @see XmlSerializer.Builder#addBeanTypesXml()</span>
+<span class="source-line-no">904</span><span id="line-904">    * @return</span>
+<span class="source-line-no">905</span><span id="line-905">    *    &lt;jk&gt;true&lt;/jk&gt; if&lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</span>
+<span class="source-line-no">906</span><span id="line-906">    *    through reflection.</span>
+<span class="source-line-no">907</span><span id="line-907">    */</span>
+<span class="source-line-no">908</span><span id="line-908">   @Override</span>
+<span class="source-line-no">909</span><span id="line-909">   protected boolean isAddBeanTypes() {</span>
+<span class="source-line-no">910</span><span id="line-910">      return ctx.isAddBeanTypes();</span>
+<span class="source-line-no">911</span><span id="line-911">   }</span>
+<span class="source-line-no">912</span><span id="line-912"></span>
+<span class="source-line-no">913</span><span id="line-913">   /**</span>
+<span class="source-line-no">914</span><span id="line-914">    * Add namespace URLs to the root element.</span>
+<span class="source-line-no">915</span><span id="line-915">    *</span>
+<span class="source-line-no">916</span><span id="line-916">    * @see XmlSerializer.Builder#addNamespaceUrisToRoot()</span>
+<span class="source-line-no">917</span><span id="line-917">    * @return</span>
+<span class="source-line-no">918</span><span id="line-918">    *    &lt;jk&gt;true&lt;/jk&gt; if {@code xmlns:x} attributes are added to the root element for the default and all mapped namespaces.</span>
+<span class="source-line-no">919</span><span id="line-919">    */</span>
+<span class="source-line-no">920</span><span id="line-920">   protected final boolean isAddNamespaceUrisToRoot() {</span>
+<span class="source-line-no">921</span><span id="line-921">      return ctx.isAddNamespaceUrlsToRoot();</span>
+<span class="source-line-no">922</span><span id="line-922">   }</span>
+<span class="source-line-no">923</span><span id="line-923"></span>
+<span class="source-line-no">924</span><span id="line-924">   /**</span>
+<span class="source-line-no">925</span><span id="line-925">    * Auto-detect namespace usage.</span>
+<span class="source-line-no">926</span><span id="line-926">    *</span>
+<span class="source-line-no">927</span><span id="line-927">    * @see XmlSerializer.Builder#disableAutoDetectNamespaces()</span>
+<span class="source-line-no">928</span><span id="line-928">    * @return</span>
+<span class="source-line-no">929</span><span id="line-929">    *    &lt;jk&gt;true&lt;/jk&gt; if namespace usage is detected before serialization.</span>
+<span class="source-line-no">930</span><span id="line-930">    */</span>
+<span class="source-line-no">931</span><span id="line-931">   protected final boolean isAutoDetectNamespaces() {</span>
+<span class="source-line-no">932</span><span id="line-932">      return ctx.isAutoDetectNamespaces();</span>
+<span class="source-line-no">933</span><span id="line-933">   }</span>
+<span class="source-line-no">934</span><span id="line-934"></span>
+<span class="source-line-no">935</span><span id="line-935">   /**</span>
+<span class="source-line-no">936</span><span id="line-936">    * Default namespace.</span>
+<span class="source-line-no">937</span><span id="line-937">    *</span>
+<span class="source-line-no">938</span><span id="line-938">    * @see XmlSerializer.Builder#defaultNamespace(Namespace)</span>
+<span class="source-line-no">939</span><span id="line-939">    * @return</span>
+<span class="source-line-no">940</span><span id="line-940">    *    The default namespace URI for this document.</span>
+<span class="source-line-no">941</span><span id="line-941">    */</span>
+<span class="source-line-no">942</span><span id="line-942">   protected final Namespace getDefaultNamespace() {</span>
+<span class="source-line-no">943</span><span id="line-943">      return defaultNamespace;</span>
+<span class="source-line-no">944</span><span id="line-944">   }</span>
+<span class="source-line-no">945</span><span id="line-945"></span>
+<span class="source-line-no">946</span><span id="line-946">   /**</span>
+<span class="source-line-no">947</span><span id="line-947">    * Enable support for XML namespaces.</span>
+<span class="source-line-no">948</span><span id="line-948">    *</span>
+<span class="source-line-no">949</span><span id="line-949">    * @see XmlSerializer.Builder#enableNamespaces()</span>
+<span class="source-line-no">950</span><span id="line-950">    * @return</span>
+<span class="source-line-no">951</span><span id="line-951">    *    &lt;jk&gt;false&lt;/jk&gt; if XML output will not contain any namespaces regardless of any other settings.</span>
+<span class="source-line-no">952</span><span id="line-952">    */</span>
+<span class="source-line-no">953</span><span id="line-953">   protected final boolean isEnableNamespaces() {</span>
+<span class="source-line-no">954</span><span id="line-954">      return ctx.isEnableNamespaces();</span>
+<span class="source-line-no">955</span><span id="line-955">   }</span>
+<span class="source-line-no">956</span><span id="line-956"></span>
+<span class="source-line-no">957</span><span id="line-957">   /**</span>
+<span class="source-line-no">958</span><span id="line-958">    * Default namespaces.</span>
+<span class="source-line-no">959</span><span id="line-959">    *</span>
+<span class="source-line-no">960</span><span id="line-960">    * @see XmlSerializer.Builder#namespaces(Namespace...)</span>
+<span class="source-line-no">961</span><span id="line-961">    * @return</span>
+<span class="source-line-no">962</span><span id="line-962">    *    The default list of namespaces associated with this serializer.</span>
+<span class="source-line-no">963</span><span id="line-963">    */</span>
+<span class="source-line-no">964</span><span id="line-964">   protected final Namespace[] getNamespaces() {</span>
+<span class="source-line-no">965</span><span id="line-965">      return namespaces;</span>
+<span class="source-line-no">966</span><span id="line-966">   }</span>
 <span class="source-line-no">967</span><span id="line-967"></span>
-<span class="source-line-no">968</span><span id="line-968">   /**</span>
-<span class="source-line-no">969</span><span id="line-969">    * Returns the language-specific metadata on the specified class.</span>
-<span class="source-line-no">970</span><span id="line-970">    *</span>
-<span class="source-line-no">971</span><span id="line-971">    * @param cm The class to return the metadata on.</span>
-<span class="source-line-no">972</span><span id="line-972">    * @return The metadata.</span>
-<span class="source-line-no">973</span><span id="line-973">    */</span>
-<span class="source-line-no">974</span><span id="line-974">   public XmlClassMeta getXmlClassMeta(ClassMeta&lt;?&gt; cm) {</span>
-<span class="source-line-no">975</span><span id="line-975">      return ctx.getXmlClassMeta(cm);</span>
-<span class="source-line-no">976</span><span id="line-976">   }</span>
-<span class="source-line-no">977</span><span id="line-977"></span>
-<span class="source-line-no">978</span><span id="line-978">   /**</span>
-<span class="source-line-no">979</span><span id="line-979">    * Returns the language-specific metadata on the specified bean.</span>
-<span class="source-line-no">980</span><span id="line-980">    *</span>
-<span class="source-line-no">981</span><span id="line-981">    * @param bm The bean to return the metadata on.</span>
-<span class="source-line-no">982</span><span id="line-982">    * @return The metadata.</span>
-<span class="source-line-no">983</span><span id="line-983">    */</span>
-<span class="source-line-no">984</span><span id="line-984">   public XmlBeanMeta getXmlBeanMeta(BeanMeta&lt;?&gt; bm) {</span>
-<span class="source-line-no">985</span><span id="line-985">      return ctx.getXmlBeanMeta(bm);</span>
-<span class="source-line-no">986</span><span id="line-986">   }</span>
-<span class="source-line-no">987</span><span id="line-987"></span>
-<span class="source-line-no">988</span><span id="line-988">   /**</span>
-<span class="source-line-no">989</span><span id="line-989">    * Returns the language-specific metadata on the specified bean property.</span>
-<span class="source-line-no">990</span><span id="line-990">    *</span>
-<span class="source-line-no">991</span><span id="line-991">    * @param bpm The bean property to return the metadata on.</span>
-<span class="source-line-no">992</span><span id="line-992">    * @return The metadata.</span>
-<span class="source-line-no">993</span><span id="line-993">    */</span>
-<span class="source-line-no">994</span><span id="line-994">   public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">995</span><span id="line-995">      return bpm == null ? XmlBeanPropertyMeta.DEFAULT : ctx.getXmlBeanPropertyMeta(bpm);</span>
-<span class="source-line-no">996</span><span id="line-996">   }</span>
-<span class="source-line-no">997</span><span id="line-997">}</span>
+<span class="source-line-no">968</span><span id="line-968">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">969</span><span id="line-969">   // Extended metadata</span>
+<span class="source-line-no">970</span><span id="line-970">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">971</span><span id="line-971"></span>
+<span class="source-line-no">972</span><span id="line-972">   /**</span>
+<span class="source-line-no">973</span><span id="line-973">    * Returns the language-specific metadata on the specified class.</span>
+<span class="source-line-no">974</span><span id="line-974">    *</span>
+<span class="source-line-no">975</span><span id="line-975">    * @param cm The class to return the metadata on.</span>
+<span class="source-line-no">976</span><span id="line-976">    * @return The metadata.</span>
+<span class="source-line-no">977</span><span id="line-977">    */</span>
+<span class="source-line-no">978</span><span id="line-978">   public XmlClassMeta getXmlClassMeta(ClassMeta&lt;?&gt; cm) {</span>
+<span class="source-line-no">979</span><span id="line-979">      return ctx.getXmlClassMeta(cm);</span>
+<span class="source-line-no">980</span><span id="line-980">   }</span>
+<span class="source-line-no">981</span><span id="line-981"></span>
+<span class="source-line-no">982</span><span id="line-982">   /**</span>
+<span class="source-line-no">983</span><span id="line-983">    * Returns the language-specific metadata on the specified bean.</span>
+<span class="source-line-no">984</span><span id="line-984">    *</span>
+<span class="source-line-no">985</span><span id="line-985">    * @param bm The bean to return the metadata on.</span>
+<span class="source-line-no">986</span><span id="line-986">    * @return The metadata.</span>
+<span class="source-line-no">987</span><span id="line-987">    */</span>
+<span class="source-line-no">988</span><span id="line-988">   public XmlBeanMeta getXmlBeanMeta(BeanMeta&lt;?&gt; bm) {</span>
+<span class="source-line-no">989</span><span id="line-989">      return ctx.getXmlBeanMeta(bm);</span>
+<span class="source-line-no">990</span><span id="line-990">   }</span>
+<span class="source-line-no">991</span><span id="line-991"></span>
+<span class="source-line-no">992</span><span id="line-992">   /**</span>
+<span class="source-line-no">993</span><span id="line-993">    * Returns the language-specific metadata on the specified bean property.</span>
+<span class="source-line-no">994</span><span id="line-994">    *</span>
+<span class="source-line-no">995</span><span id="line-995">    * @param bpm The bean property to return the metadata on.</span>
+<span class="source-line-no">996</span><span id="line-996">    * @return The metadata.</span>
+<span class="source-line-no">997</span><span id="line-997">    */</span>
+<span class="source-line-no">998</span><span id="line-998">   public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">999</span><span id="line-999">      return bpm == null ? XmlBeanPropertyMeta.DEFAULT : ctx.getXmlBeanPropertyMeta(bpm);</span>
+<span class="source-line-no">1000</span><span id="line-1000">   }</span>
+<span class="source-line-no">1001</span><span id="line-1001"></span>
+<span class="source-line-no">1002</span><span id="line-1002">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">1003</span><span id="line-1003">   // Properties</span>
+<span class="source-line-no">1004</span><span id="line-1004">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">1005</span><span id="line-1005"></span>
+<span class="source-line-no">1006</span><span id="line-1006">   /**</span>
+<span class="source-line-no">1007</span><span id="line-1007">    * Add JSON type tags.</span>
+<span class="source-line-no">1008</span><span id="line-1008">    *</span>
+<span class="source-line-no">1009</span><span id="line-1009">    * @see XmlSerializer.Builder#disableJsonTags()</span>
+<span class="source-line-no">1010</span><span id="line-1010">    * @return</span>
+<span class="source-line-no">1011</span><span id="line-1011">    *    &lt;jk&gt;true&lt;/jk&gt; if plain strings will be wrapped in &lt;js&gt;&amp;lt;string&amp;gt;&lt;/js&gt; tags when serialized as root elements.</span>
+<span class="source-line-no">1012</span><span id="line-1012">    */</span>
+<span class="source-line-no">1013</span><span id="line-1013">   protected final boolean isAddJsonTags() {</span>
+<span class="source-line-no">1014</span><span id="line-1014">      return ctx.addJsonTags;</span>
+<span class="source-line-no">1015</span><span id="line-1015">   }</span>
+<span class="source-line-no">1016</span><span id="line-1016">}</span>
 
 
 
