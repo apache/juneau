@@ -112,4 +112,42 @@ class Select_Test extends TestBase {
 		assertString("<select name='a'>b1<strong>b2</strong></select>", x1);
 
 	}
+
+	@Test void a04_choose_withValue() {
+		Select x = select("test",
+			option("val1", "Option 1"),
+			option("val2", "Option 2"),
+			option("val3", "Option 3")
+		).choose("val2");
+		
+		assertString("<select name='test'><option value='val1'>Option 1</option><option value='val2' selected='selected'>Option 2</option><option value='val3'>Option 3</option></select>", x);
+	}
+
+	@Test void a04_choose_withNull() {
+		Select x = select("test",
+			option("val1", "Option 1"),
+			option("val2", "Option 2")
+		).choose(null);
+		
+		assertString("<select name='test'><option value='val1'>Option 1</option><option value='val2'>Option 2</option></select>", x);
+	}
+
+	@Test void a04_choose_withNonMatchingValue() {
+		Select x = select("test",
+			option("val1", "Option 1"),
+			option("val2", "Option 2")
+		).choose("val3");
+		
+		assertString("<select name='test'><option value='val1'>Option 1</option><option value='val2'>Option 2</option></select>", x);
+	}
+
+	@Test void a04_choose_withNonOptionChildren() {
+		Select x = select("test",
+			option("val1", "Option 1"),
+			"plain text",
+			div("not an option")
+		).choose("val1");
+		
+		assertString("<select name='test'><option value='val1' selected='selected'>Option 1</option>plain text<div>not an option</div></select>", x);
+	}
 }
