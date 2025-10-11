@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="HeaderList.Void.html" title="class in org.apache.juneau.http.header">HeaderList.Void</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-59">HeaderList</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-63">HeaderList</a></span>
 <span class="extends-implements">extends <a href="../../collections/ControlledArrayList.html" title="class in org.apache.juneau.collections">ControlledArrayList</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;</span></div>
 <div class="block">A simple list of HTTP headers with various convenience methods.
 
@@ -494,14 +494,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>HeaderList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-142">HeaderList</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-146">HeaderList</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.header.HeaderList)">
 <h3>HeaderList</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-151">HeaderList</a></span><wbr><span class="parameters">(<a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-155">HeaderList</a></span><wbr><span class="parameters">(<a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -520,7 +520,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-78">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-82">create</a></span>()</div>
 <div class="block">Instantiates a new list.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -531,7 +531,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.util.List)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-91">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;headers)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-95">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;headers)</span></div>
 <div class="block">Creates a new <a href="HeaderList.html" title="class in org.apache.juneau.http.header"><code>HeaderList</code></a> initialized with the specified headers.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -546,7 +546,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(org.apache.http.Header...)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-103">of</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;headers)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-107">of</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;headers)</span></div>
 <div class="block">Creates a new <a href="HeaderList.html" title="class in org.apache.juneau.http.header"><code>HeaderList</code></a> initialized with the specified headers.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -560,7 +560,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ofPairs(java.lang.String...)">
 <h3>ofPairs</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-121">ofPairs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-125">ofPairs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</span></div>
 <div class="block">Creates a new <a href="HeaderList.html" title="class in org.apache.juneau.http.header"><code>HeaderList</code></a> initialized with the specified name/value pairs.
 
  <h5 class='figure'>Example</h5>
@@ -581,7 +581,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-161">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-165">copy</a></span>()</div>
 <div class="block">Makes a copy of this list.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -592,7 +592,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setDefault(java.util.List)">
 <h3>setDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-174">setDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;headers)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-178">setDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;headers)</span></div>
 <div class="block">Adds a collection of default headers.
 
  <p>
@@ -608,7 +608,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setDefault(java.lang.String,java.lang.Object)">
 <h3>setDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-187">setDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-191">setDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Replaces the first occurrence of the headers with the same name.</div>
 <dl class="notes">
@@ -623,7 +623,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setDefault(java.lang.String,java.util.function.Supplier)">
 <h3>setDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-198">setDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-202">setDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</span></div>
 <div class="block">Replaces the first occurrence of the headers with the same name.</div>
 <dl class="notes">
@@ -638,7 +638,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setDefault(org.apache.http.Header...)">
 <h3>setDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-211">setDefault</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;headers)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-215">setDefault</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;headers)</span></div>
 <div class="block">Makes a copy of this list of headers and adds a collection of default headers.
 
  <p>
@@ -654,7 +654,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolving()">
 <h3>resolving</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-240">resolving</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-244">resolving</a></span>()</div>
 <div class="block">Allows header values to contain SVL variables.
 
  <p>
@@ -679,7 +679,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolving(org.apache.juneau.svl.VarResolver)">
 <h3>resolving</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-261">resolving</a></span><wbr><span class="parameters">(<a href="../../svl/VarResolver.html" title="class in org.apache.juneau.svl">VarResolver</a>&nbsp;varResolver)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-265">resolving</a></span><wbr><span class="parameters">(<a href="../../svl/VarResolver.html" title="class in org.apache.juneau.svl">VarResolver</a>&nbsp;varResolver)</span></div>
 <div class="block">Allows header values to contain SVL variables.
 
  <p>
@@ -703,7 +703,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="caseSensitive(boolean)">
 <h3>caseSensitive</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-276">caseSensitive</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-280">caseSensitive</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Specifies that the headers in this list should be treated as case-sensitive.
 
  <p>
@@ -719,7 +719,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(org.apache.http.Header)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-288">append</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-292">append</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;value)</span></div>
 <div class="block">Adds the specified header to the end of the headers in this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -732,7 +732,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.String,java.lang.Object)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-305">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-309">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Appends the specified header to the end of this list.
 
@@ -750,7 +750,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.String,java.util.function.Supplier)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-322">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-326">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</span></div>
 <div class="block">Appends the specified header to the end of this list using a value supplier.
 
@@ -771,7 +771,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(org.apache.http.Header...)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-332">append</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-336">append</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
 <div class="block">Adds the specified headers to the end of the headers in this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -784,7 +784,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.util.List)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-347">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-351">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;values)</span></div>
 <div class="block">Adds the specified headers to the end of the headers in this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -797,7 +797,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="prepend(org.apache.http.Header)">
 <h3>prepend</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-360">prepend</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-364">prepend</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;value)</span></div>
 <div class="block">Adds the specified header to the beginning of the headers in this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -810,7 +810,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="prepend(java.lang.String,java.lang.Object)">
 <h3>prepend</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-377">prepend</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-381">prepend</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Appends the specified header to the beginning of this list.
 
@@ -828,7 +828,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="prepend(java.lang.String,java.util.function.Supplier)">
 <h3>prepend</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-394">prepend</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-398">prepend</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</span></div>
 <div class="block">Appends the specified header to the beginning of this list using a value supplier.
 
@@ -849,7 +849,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="prepend(org.apache.http.Header...)">
 <h3>prepend</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-404">prepend</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-408">prepend</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
 <div class="block">Adds the specified headers to the beginning of the headers in this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -862,7 +862,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="prepend(java.util.List)">
 <h3>prepend</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-417">prepend</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-421">prepend</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;values)</span></div>
 <div class="block">Adds the specified headers to the beginning of the headers in this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -875,7 +875,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="remove(org.apache.http.Header)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-430">remove</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-434">remove</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;value)</span></div>
 <div class="block">Removes the specified header from this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -888,7 +888,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="remove(org.apache.http.Header...)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-443">remove</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-447">remove</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
 <div class="block">Removes the specified headers from this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -901,7 +901,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="remove(java.util.List)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-456">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-460">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;values)</span></div>
 <div class="block">Removes the specified headers from this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -914,7 +914,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="remove(java.lang.String)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-469">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-473">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Removes the header with the specified name from this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -927,7 +927,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="remove(java.lang.String...)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-481">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-485">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
 <div class="block">Removes the header with the specified name from this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -940,7 +940,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="removeAll()">
 <h3>removeAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-494">removeAll</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-498">removeAll</a></span>()</div>
 <div class="block">Removes all headers from this list.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -951,7 +951,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(org.apache.http.Header)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-508">set</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-512">set</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;value)</span></div>
 <div class="block">Adds or replaces the header(s) with the same name.
 
  <p>
@@ -967,7 +967,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(org.apache.http.Header...)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-541">set</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-545">set</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
 <div class="block">Adds or replaces the header(s) with the same name.
 
  <p>
@@ -983,7 +983,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-555">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-559">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Replaces the first occurrence of the headers with the same name.</div>
 <dl class="notes">
@@ -998,7 +998,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.String,java.util.function.Supplier)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-566">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-570">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</span></div>
 <div class="block">Replaces the first occurrence of the headers with the same name.</div>
 <dl class="notes">
@@ -1013,7 +1013,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.util.List)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-579">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-583">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;values)</span></div>
 <div class="block">Replaces the first occurrence of the headers with the same name.
 
  <p>
@@ -1029,7 +1029,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getFirst(java.lang.String)">
 <h3>getFirst</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-614">getFirst</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-618">getFirst</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Gets the first header with the given name.
 
  <p>
@@ -1045,7 +1045,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLast(java.lang.String)">
 <h3>getLast</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-632">getLast</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-636">getLast</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Gets the last header with the given name.
 
  <p>
@@ -1061,7 +1061,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.String)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-651">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-655">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Gets a header representing all of the header values with the given name.
 
  <p>
@@ -1078,7 +1078,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.String,java.lang.Class)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-709">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-713">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Gets a header representing all of the header values with the given name.
 
@@ -1113,7 +1113,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.Class)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-757">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-761">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Gets a header representing all of the header values with the given name.
 
  <p>
@@ -1137,7 +1137,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAll()">
 <h3>getAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-779">getAll</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-783">getAll</a></span>()</div>
 <div class="block">Gets all of the headers.
 
  <p>
@@ -1156,7 +1156,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAll(java.lang.String)">
 <h3>getAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-800">getAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-804">getAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Gets all of the headers with the given name.
 
  <p>
@@ -1179,7 +1179,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forEachValue(java.util.function.Predicate,java.util.function.Consumer)">
 <h3>forEachValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-811">forEachValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;filter,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-815">forEachValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;filter,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on the values for all matching headers in this list.</div>
 <dl class="notes">
@@ -1194,7 +1194,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forEachValue(java.lang.String,java.util.function.Consumer)">
 <h3>forEachValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-822">forEachValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-826">forEachValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on the values of all matching headers in this list.</div>
 <dl class="notes">
@@ -1209,7 +1209,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getValues(java.lang.String)">
 <h3>getValues</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-832">getValues</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-836">getValues</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns all the string values for all headers with the specified name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1222,7 +1222,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="contains(java.lang.String)">
 <h3>contains</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-845">contains</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-849">contains</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Tests if headers with the given name are contained within this list.
 
  <p>
@@ -1238,7 +1238,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="headerIterator()">
 <h3>headerIterator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HeaderIterator.html" title="class or interface in org.apache.http" class="external-link">HeaderIterator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-854">headerIterator</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HeaderIterator.html" title="class or interface in org.apache.http" class="external-link">HeaderIterator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-858">headerIterator</a></span>()</div>
 <div class="block">Returns an iterator over this list of headers.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1249,7 +1249,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="headerIterator(java.lang.String)">
 <h3>headerIterator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HeaderIterator.html" title="class or interface in org.apache.http" class="external-link">HeaderIterator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-865">headerIterator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HeaderIterator.html" title="class or interface in org.apache.http" class="external-link">HeaderIterator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-869">headerIterator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns an iterator over the headers with a given name in this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1262,7 +1262,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forEach(java.lang.String,java.util.function.Consumer)">
 <h3>forEach</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-880">forEach</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-884">forEach</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on all headers with the specified name in this list.
 
@@ -1281,7 +1281,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forEach(java.util.function.Predicate,java.util.function.Consumer)">
 <h3>forEach</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-895">forEach</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;filter,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-899">forEach</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;filter,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on all matching headers in this list.
 
@@ -1300,7 +1300,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="stream(java.lang.String)">
 <h3>stream</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-909">stream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-913">stream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns a stream of the headers in this list with the specified name.
 
  <p>
@@ -1316,7 +1316,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-948">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-952">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractCollection.html#toString()" title="class or interface in java.util" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractCollection.html" title="class or interface in java.util" class="external-link">AbstractCollection</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;</code></dd>
@@ -1326,7 +1326,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setUnmodifiable()">
 <h3>setUnmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-955">setUnmodifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HeaderList.html#line-959">setUnmodifiable</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../collections/ControlledArrayList.html#setUnmodifiable()">ControlledArrayList</a></code></span></div>
 <div class="block">Specifies whether this bean should be unmodifiable.
  <p>

@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../rest/widget/ContentTypeMenuItem.html" title="class in org.apache.juneau.rest.widget">ContentTypeMenuItem</a></code>, <code><a href="../rest/widget/MenuItemWidget.html" title="class in org.apache.juneau.rest.widget">MenuItemWidget</a></code>, <code><a href="../rest/widget/PoweredByApache.html" title="class in org.apache.juneau.rest.widget">PoweredByApache</a></code>, <code><a href="../rest/widget/PoweredByJuneau.html" title="class in org.apache.juneau.rest.widget">PoweredByJuneau</a></code>, <code><a href="../rest/widget/QueryMenuItem.html" title="class in org.apache.juneau.rest.widget">QueryMenuItem</a></code>, <code><a href="../rest/widget/ThemeMenuItem.html" title="class in org.apache.juneau.rest.widget">ThemeMenuItem</a></code>, <code><a href="../rest/widget/Widget.html" title="class in org.apache.juneau.rest.widget">Widget</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWidget.html#line-34">HtmlWidget</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWidget.html#line-38">HtmlWidget</a></span></div>
 <div class="block">Defines an interface for resolvers of <js>"$W{...}"</js> string variables.
 
  <p>
@@ -146,7 +146,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getName()">
 <h3>getName</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWidget.html#line-41">getName</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWidget.html#line-45">getName</a></span>()</div>
 <div class="block">The name for this widget.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -157,7 +157,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getHtml(org.apache.juneau.svl.VarResolverSession)">
 <h3>getHtml</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWidget.html#line-52">getHtml</a></span><wbr><span class="parameters">(<a href="../svl/VarResolverSession.html" title="class in org.apache.juneau.svl">VarResolverSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWidget.html#line-56">getHtml</a></span><wbr><span class="parameters">(<a href="../svl/VarResolverSession.html" title="class in org.apache.juneau.svl">VarResolverSession</a>&nbsp;session)</span></div>
 <div class="block">Resolves the HTML content for this widget.
 
  <p>
@@ -173,7 +173,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getScript(org.apache.juneau.svl.VarResolverSession)">
 <h3>getScript</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWidget.html#line-63">getScript</a></span><wbr><span class="parameters">(<a href="../svl/VarResolverSession.html" title="class in org.apache.juneau.svl">VarResolverSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWidget.html#line-67">getScript</a></span><wbr><span class="parameters">(<a href="../svl/VarResolverSession.html" title="class in org.apache.juneau.svl">VarResolverSession</a>&nbsp;session)</span></div>
 <div class="block">Resolves any Javascript that should be added to the <xt>&lt;head&gt;/&lt;script&gt;</xt> element.
 
  <p>
@@ -189,7 +189,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStyle(org.apache.juneau.svl.VarResolverSession)">
 <h3>getStyle</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWidget.html#line-74">getStyle</a></span><wbr><span class="parameters">(<a href="../svl/VarResolverSession.html" title="class in org.apache.juneau.svl">VarResolverSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWidget.html#line-78">getStyle</a></span><wbr><span class="parameters">(<a href="../svl/VarResolverSession.html" title="class in org.apache.juneau.svl">VarResolverSession</a>&nbsp;session)</span></div>
 <div class="block">Resolves any CSS styles that should be added to the <xt>&lt;head&gt;/&lt;style&gt;</xt> element.
 
  <p>

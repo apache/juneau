@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../AnnotationProvider.html" title="interface in org.apache.juneau">AnnotationProvider</a></code>, <code><a href="../httppart/HttpPartParser.html" title="interface in org.apache.juneau.httppart">HttpPartParser</a></code>, <code><a href="../uon/UonMetaProvider.html" title="interface in org.apache.juneau.uon">UonMetaProvider</a></code>, <code><a href="UrlEncodingMetaProvider.html" title="interface in org.apache.juneau.urlencoding">UrlEncodingMetaProvider</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-54">UrlEncodingParser</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-58">UrlEncodingParser</a></span>
 <span class="extends-implements">extends <a href="../uon/UonParser.html" title="class in org.apache.juneau.uon">UonParser</a>
 implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache.juneau.urlencoding">UrlEncodingMetaProvider</a></span></div>
 <div class="block">Parses URL-encoded text into POJO models.
@@ -277,7 +277,7 @@ implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="UrlEncodingParser.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParser</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-61">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="UrlEncodingParser.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParser</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-65">DEFAULT</a></span></div>
 <div class="block">Reusable instance of <a href="UrlEncodingParser.html" title="class in org.apache.juneau.urlencoding"><code>UrlEncodingParser</code></a>.</div>
 </section>
 </li>
@@ -292,7 +292,7 @@ implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.urlencoding.UrlEncodingParser.Builder)">
 <h3>UrlEncodingParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-732">UrlEncodingParser</a></span><wbr><span class="parameters">(<a href="UrlEncodingParser.Builder.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParser.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-736">UrlEncodingParser</a></span><wbr><span class="parameters">(<a href="UrlEncodingParser.Builder.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParser.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -311,7 +311,7 @@ implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="UrlEncodingParser.Builder.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-68">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="UrlEncodingParser.Builder.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-72">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -322,7 +322,7 @@ implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UrlEncodingParser.Builder.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-737">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UrlEncodingParser.Builder.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-741">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -339,7 +339,7 @@ implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UrlEncodingParserSession.Builder.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-742">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UrlEncodingParserSession.Builder.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-746">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -357,7 +357,7 @@ implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UrlEncodingParserSession.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-747">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UrlEncodingParserSession.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-751">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -374,7 +374,7 @@ implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache
 <li>
 <section class="detail" id="getUrlEncodingClassMeta(org.apache.juneau.ClassMeta)">
 <h3>getUrlEncodingClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UrlEncodingClassMeta.html" title="class in org.apache.juneau.urlencoding">UrlEncodingClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-756">getUrlEncodingClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UrlEncodingClassMeta.html" title="class in org.apache.juneau.urlencoding">UrlEncodingClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-760">getUrlEncodingClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="UrlEncodingMetaProvider.html#getUrlEncodingClassMeta(org.apache.juneau.ClassMeta)">UrlEncodingMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -390,7 +390,7 @@ implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache
 <li>
 <section class="detail" id="getUrlEncodingBeanPropertyMeta(org.apache.juneau.BeanPropertyMeta)">
 <h3>getUrlEncodingBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UrlEncodingBeanPropertyMeta.html" title="class in org.apache.juneau.urlencoding">UrlEncodingBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-766">getUrlEncodingBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UrlEncodingBeanPropertyMeta.html" title="class in org.apache.juneau.urlencoding">UrlEncodingBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-770">getUrlEncodingBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="UrlEncodingMetaProvider.html#getUrlEncodingBeanPropertyMeta(org.apache.juneau.BeanPropertyMeta)">UrlEncodingMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -406,7 +406,7 @@ implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache
 <li>
 <section class="detail" id="isExpandedParams()">
 <h3>isExpandedParams</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-790">isExpandedParams</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-794">isExpandedParams</a></span>()</div>
 <div class="block">Parser bean property collections/arrays as separate key/value pairs.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -424,7 +424,7 @@ implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-798">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParser.html#line-802">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

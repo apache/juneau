@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/soap/SoapXmlSerializerSession.html#line-40">SoapXmlSerializerSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/soap/SoapXmlSerializerSession.html#line-44">SoapXmlSerializerSession</a></span>
 <span class="extends-implements">extends <a href="../xml/XmlSerializerSession.html" title="class in org.apache.juneau.xml">XmlSerializerSession</a></span></div>
 <div class="block">Session object that lives for the duration of a single use of <a href="SoapXmlSerializer.html" title="class in org.apache.juneau.soap"><code>SoapXmlSerializer</code></a>.
 
@@ -219,7 +219,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.soap.SoapXmlSerializerSession.Builder)">
 <h3>SoapXmlSerializerSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/soap/SoapXmlSerializerSession.html#line-213">SoapXmlSerializerSession</a></span><wbr><span class="parameters">(<a href="SoapXmlSerializerSession.Builder.html" title="class in org.apache.juneau.soap">SoapXmlSerializerSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/soap/SoapXmlSerializerSession.html#line-217">SoapXmlSerializerSession</a></span><wbr><span class="parameters">(<a href="SoapXmlSerializerSession.Builder.html" title="class in org.apache.juneau.soap">SoapXmlSerializerSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -238,7 +238,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.soap.SoapXmlSerializer)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SoapXmlSerializerSession.Builder.html" title="class in org.apache.juneau.soap">SoapXmlSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/soap/SoapXmlSerializerSession.html#line-52">create</a></span><wbr><span class="parameters">(<a href="SoapXmlSerializer.html" title="class in org.apache.juneau.soap">SoapXmlSerializer</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SoapXmlSerializerSession.Builder.html" title="class in org.apache.juneau.soap">SoapXmlSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/soap/SoapXmlSerializerSession.html#line-56">create</a></span><wbr><span class="parameters">(<a href="SoapXmlSerializer.html" title="class in org.apache.juneau.soap">SoapXmlSerializer</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -251,7 +251,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="doSerialize(org.apache.juneau.serializer.SerializerPipe,java.lang.Object)">
 <h3>doSerialize</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/soap/SoapXmlSerializerSession.html#line-223">doSerialize</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.serializer">SerializerPipe</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/soap/SoapXmlSerializerSession.html#line-227">doSerialize</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../serializer/SerializeException.html" title="class in org.apache.juneau.serializer">SerializeException</a></span></div>
@@ -278,7 +278,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getResponseHeaders()">
 <h3>getResponseHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/soap/SoapXmlSerializerSession.html#line-242">getResponseHeaders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/soap/SoapXmlSerializerSession.html#line-246">getResponseHeaders</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerSession.html#getResponseHeaders()">SerializerSession</a></code></span></div>
 <div class="block">Optional method that specifies HTTP request headers for this serializer.
 
@@ -303,7 +303,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSoapAction()">
 <h3>getSoapAction</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/soap/SoapXmlSerializerSession.html#line-258">getSoapAction</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/soap/SoapXmlSerializerSession.html#line-262">getSoapAction</a></span>()</div>
 <div class="block">The SOAPAction HTTP header value to set on responses.</div>
 <dl class="notes">
 <dt>Returns:</dt>

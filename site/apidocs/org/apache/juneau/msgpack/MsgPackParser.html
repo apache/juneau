@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="MsgPackParser.Base64.html" title="class in org.apache.juneau.msgpack">MsgPackParser.Base64</a></code>, <code><a href="MsgPackParser.SpacedHex.html" title="class in org.apache.juneau.msgpack">MsgPackParser.SpacedHex</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-40">MsgPackParser</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-44">MsgPackParser</a></span>
 <span class="extends-implements">extends <a href="../parser/InputStreamParser.html" title="class in org.apache.juneau.parser">InputStreamParser</a>
 implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.juneau.msgpack">MsgPackMetaProvider</a></span></div>
 <div class="block">Parses a MessagePack stream into a POJO model.
@@ -268,21 +268,21 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MsgPackParser.html" title="class in org.apache.juneau.msgpack">MsgPackParser</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-47">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MsgPackParser.html" title="class in org.apache.juneau.msgpack">MsgPackParser</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-51">DEFAULT</a></span></div>
 <div class="block">Default parser, all default settings.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEFAULT_SPACED_HEX">
 <h3>DEFAULT_SPACED_HEX</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MsgPackParser.html" title="class in org.apache.juneau.msgpack">MsgPackParser</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-50">DEFAULT_SPACED_HEX</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MsgPackParser.html" title="class in org.apache.juneau.msgpack">MsgPackParser</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-54">DEFAULT_SPACED_HEX</a></span></div>
 <div class="block">Default parser, all default settings, string input encoded as spaced-hex.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEFAULT_BASE64">
 <h3>DEFAULT_BASE64</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MsgPackParser.html" title="class in org.apache.juneau.msgpack">MsgPackParser</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-53">DEFAULT_BASE64</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MsgPackParser.html" title="class in org.apache.juneau.msgpack">MsgPackParser</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-57">DEFAULT_BASE64</a></span></div>
 <div class="block">Default parser, all default settings, string input encoded as BASE64.</div>
 </section>
 </li>
@@ -297,7 +297,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.msgpack.MsgPackParser.Builder)">
 <h3>MsgPackParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-662">MsgPackParser</a></span><wbr><span class="parameters">(<a href="MsgPackParser.Builder.html" title="class in org.apache.juneau.msgpack">MsgPackParser.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-666">MsgPackParser</a></span><wbr><span class="parameters">(<a href="MsgPackParser.Builder.html" title="class in org.apache.juneau.msgpack">MsgPackParser.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -316,7 +316,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MsgPackParser.Builder.html" title="class in org.apache.juneau.msgpack">MsgPackParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-60">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MsgPackParser.Builder.html" title="class in org.apache.juneau.msgpack">MsgPackParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-64">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -327,7 +327,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackParser.Builder.html" title="class in org.apache.juneau.msgpack">MsgPackParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-666">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackParser.Builder.html" title="class in org.apache.juneau.msgpack">MsgPackParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-670">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -344,7 +344,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackParserSession.Builder.html" title="class in org.apache.juneau.msgpack">MsgPackParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-671">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackParserSession.Builder.html" title="class in org.apache.juneau.msgpack">MsgPackParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-675">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -362,7 +362,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackParserSession.html" title="class in org.apache.juneau.msgpack">MsgPackParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-676">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackParserSession.html" title="class in org.apache.juneau.msgpack">MsgPackParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-680">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -379,7 +379,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getMsgPackClassMeta(org.apache.juneau.ClassMeta)">
 <h3>getMsgPackClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackClassMeta.html" title="class in org.apache.juneau.msgpack">MsgPackClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-685">getMsgPackClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackClassMeta.html" title="class in org.apache.juneau.msgpack">MsgPackClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-689">getMsgPackClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="MsgPackMetaProvider.html#getMsgPackClassMeta(org.apache.juneau.ClassMeta)">MsgPackMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -395,7 +395,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getMsgPackBeanPropertyMeta(org.apache.juneau.BeanPropertyMeta)">
 <h3>getMsgPackBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackBeanPropertyMeta.html" title="class in org.apache.juneau.msgpack">MsgPackBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-695">getMsgPackBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackBeanPropertyMeta.html" title="class in org.apache.juneau.msgpack">MsgPackBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/msgpack/MsgPackParser.html#line-699">getMsgPackBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="MsgPackMetaProvider.html#getMsgPackBeanPropertyMeta(org.apache.juneau.BeanPropertyMeta)">MsgPackMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">

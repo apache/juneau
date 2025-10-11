@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="FluentAssertion.html" title="class in org.apache.juneau.assertions">FluentAssertion</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-56">Assertion</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-60">Assertion</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Base class for all assertion objects.
 
@@ -214,7 +214,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.assertions.Assertion)">
 <h3>Assertion</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-83">Assertion</a></span><wbr><span class="parameters">(<a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a>&nbsp;creator)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-87">Assertion</a></span><wbr><span class="parameters">(<a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a>&nbsp;creator)</span></div>
 <div class="block">Constructor used when this assertion is being created from within another assertion.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -233,7 +233,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setMsg(java.lang.String,java.lang.Object...)">
 <h3>setMsg</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-116">setMsg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-120">setMsg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Allows you to override the assertion failure message.
 
@@ -261,7 +261,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setStdOut()">
 <h3>setStdOut</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-128">setStdOut</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-132">setStdOut</a></span>()</div>
 <div class="block">If an error occurs, send the error message to STDOUT instead of STDERR.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -272,7 +272,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setOut(java.io.PrintStream)">
 <h3>setOut</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-141">setOut</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintStream.html" title="class or interface in java.io" class="external-link">PrintStream</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-145">setOut</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintStream.html" title="class or interface in java.io" class="external-link">PrintStream</a>&nbsp;value)</span></div>
 <div class="block">If an error occurs, send the error message to the specified stream instead of STDERR.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -286,7 +286,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setSilent()">
 <h3>setSilent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-155">setSilent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-159">setSilent</a></span>()</div>
 <div class="block">Suppresses output to STDERR.
 
  <p>
@@ -300,7 +300,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setThrowable(java.lang.Class)">
 <h3>setThrowable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-186">setThrowable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-190">setThrowable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;value)</span></div>
 <div class="block">If an error occurs, throw this exception instead of the standard <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link"><code>AssertionError</code></a>.
 
  <p>
@@ -333,7 +333,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="error(java.lang.String,java.lang.Object...)">
 <h3>error</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../BasicAssertionError.html" title="class in org.apache.juneau">BasicAssertionError</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-212">error</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../BasicAssertionError.html" title="class in org.apache.juneau">BasicAssertionError</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-216">error</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Creates a new <a href="../BasicAssertionError.html" title="class in org.apache.juneau"><code>BasicAssertionError</code></a>.</div>
 <dl class="notes">
@@ -348,7 +348,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="error(java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>error</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../BasicAssertionError.html" title="class in org.apache.juneau">BasicAssertionError</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-224">error</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../BasicAssertionError.html" title="class in org.apache.juneau">BasicAssertionError</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-228">error</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Creates a new <a href="../BasicAssertionError.html" title="class in org.apache.juneau"><code>BasicAssertionError</code></a>.</div>
@@ -365,7 +365,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="className(java.lang.Object)">
 <h3>className</h3>
-<div class="member-signature"><span class="modifiers">protected static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-254">className</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">protected static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-258">className</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Convenience method for getting the class name for an object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -378,7 +378,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="arrayClass(java.lang.Class)">
 <h3>arrayClass</h3>
-<div class="member-signature"><span class="modifiers">protected static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-265">arrayClass</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">protected static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/Assertion.html#line-269">arrayClass</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;c)</span></div>
 <div class="block">Convenience method for getting the array class of the specified element type.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>

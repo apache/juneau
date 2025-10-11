@@ -11,420 +11,424 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.swap;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.internal.ClassUtils.*;</span>
-<span class="source-line-no">016</span><span id="line-16"></span>
-<span class="source-line-no">017</span><span id="line-17">import java.util.*;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.swap;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.annotation.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.parser.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.reflect.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.serializer.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">/**</span>
-<span class="source-line-no">026</span><span id="line-26"> * Used to swap out non-serializable objects with serializable replacements during serialization, and vis-versa during</span>
-<span class="source-line-no">027</span><span id="line-27"> * parsing.</span>
-<span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;c&gt;ObjectSwaps&lt;/c&gt; are used to extend the functionality of the serializers and parsers to be able to handle</span>
-<span class="source-line-no">033</span><span id="line-33"> * objects that aren't automatically handled by the serializers or parsers.</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;br&gt;For example, JSON does not have a standard representation for rendering dates.</span>
-<span class="source-line-no">035</span><span id="line-35"> * By defining a special {@code Date} swap and associating it with a serializer and parser, you can convert a</span>
-<span class="source-line-no">036</span><span id="line-36"> * {@code Date} object to a {@code String} during serialization, and convert that {@code String} object back into a</span>
-<span class="source-line-no">037</span><span id="line-37"> * {@code Date} object during parsing.</span>
-<span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> * Swaps MUST declare a public no-arg constructor so that the bean context can instantiate them.</span>
-<span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;p&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;c&gt;ObjectSwaps&lt;/c&gt; are associated with serializers and parsers through the following:</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;ul class='javatree'&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> *    &lt;li class='ja'&gt;{@link Swap @Swap}</span>
-<span class="source-line-no">046</span><span id="line-46"> *    &lt;li class='jm'&gt;{@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;p&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;c&gt;ObjectSwaps&lt;/c&gt; have two parameters:</span>
-<span class="source-line-no">051</span><span id="line-51"> * &lt;ol&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> *    &lt;li&gt;{@code &lt;T&gt;} - The normal representation of an object.</span>
-<span class="source-line-no">053</span><span id="line-53"> *    &lt;li&gt;{@code &lt;S&gt;} - The swapped representation of an object.</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;/ol&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;br&gt;{@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to</span>
-<span class="source-line-no">056</span><span id="line-56"> * {@link BeanMap#get(Object)}.</span>
-<span class="source-line-no">057</span><span id="line-57"> * &lt;br&gt;{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to</span>
-<span class="source-line-no">058</span><span id="line-58"> * {@link BeanMap#put(String,Object)}.</span>
-<span class="source-line-no">059</span><span id="line-59"> *</span>
-<span class="source-line-no">060</span><span id="line-60"> * &lt;h5 class='topic'&gt;Swap Class Type {@code &lt;S&gt;}&lt;/h5&gt;</span>
-<span class="source-line-no">061</span><span id="line-61"> *</span>
-<span class="source-line-no">062</span><span id="line-62"> * &lt;p&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> * For normal serialization, the swapped object representation of an object must be an object type that the serializers can natively convert to</span>
-<span class="source-line-no">064</span><span id="line-64"> * JSON (or language-specific equivalent).</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;br&gt;The list of valid transformed types are as follows...</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;ul&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *    &lt;li&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> *       {@link String}</span>
-<span class="source-line-no">069</span><span id="line-69"> *    &lt;li&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> *       {@link Number}</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.internal.ClassUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.annotation.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.parser.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.reflect.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.serializer.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">/**</span>
+<span class="source-line-no">030</span><span id="line-30"> * Used to swap out non-serializable objects with serializable replacements during serialization, and vis-versa during</span>
+<span class="source-line-no">031</span><span id="line-31"> * parsing.</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> *</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;c&gt;ObjectSwaps&lt;/c&gt; are used to extend the functionality of the serializers and parsers to be able to handle</span>
+<span class="source-line-no">037</span><span id="line-37"> * objects that aren't automatically handled by the serializers or parsers.</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;br&gt;For example, JSON does not have a standard representation for rendering dates.</span>
+<span class="source-line-no">039</span><span id="line-39"> * By defining a special {@code Date} swap and associating it with a serializer and parser, you can convert a</span>
+<span class="source-line-no">040</span><span id="line-40"> * {@code Date} object to a {@code String} during serialization, and convert that {@code String} object back into a</span>
+<span class="source-line-no">041</span><span id="line-41"> * {@code Date} object during parsing.</span>
+<span class="source-line-no">042</span><span id="line-42"> *</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * Swaps MUST declare a public no-arg constructor so that the bean context can instantiate them.</span>
+<span class="source-line-no">045</span><span id="line-45"> *</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;p&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;c&gt;ObjectSwaps&lt;/c&gt; are associated with serializers and parsers through the following:</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;ul class='javatree'&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;li class='ja'&gt;{@link Swap @Swap}</span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;li class='jm'&gt;{@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}</span>
+<span class="source-line-no">051</span><span id="line-51"> * &lt;/ul&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> *</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;p&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;c&gt;ObjectSwaps&lt;/c&gt; have two parameters:</span>
+<span class="source-line-no">055</span><span id="line-55"> * &lt;ol&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> *    &lt;li&gt;{@code &lt;T&gt;} - The normal representation of an object.</span>
+<span class="source-line-no">057</span><span id="line-57"> *    &lt;li&gt;{@code &lt;S&gt;} - The swapped representation of an object.</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;/ol&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> * &lt;br&gt;{@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to</span>
+<span class="source-line-no">060</span><span id="line-60"> * {@link BeanMap#get(Object)}.</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;br&gt;{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to</span>
+<span class="source-line-no">062</span><span id="line-62"> * {@link BeanMap#put(String,Object)}.</span>
+<span class="source-line-no">063</span><span id="line-63"> *</span>
+<span class="source-line-no">064</span><span id="line-64"> * &lt;h5 class='topic'&gt;Swap Class Type {@code &lt;S&gt;}&lt;/h5&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> *</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;p&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> * For normal serialization, the swapped object representation of an object must be an object type that the serializers can natively convert to</span>
+<span class="source-line-no">068</span><span id="line-68"> * JSON (or language-specific equivalent).</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;br&gt;The list of valid transformed types are as follows...</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;ul&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;li&gt;</span>
-<span class="source-line-no">072</span><span id="line-72"> *       {@link Boolean}</span>
+<span class="source-line-no">072</span><span id="line-72"> *       {@link String}</span>
 <span class="source-line-no">073</span><span id="line-73"> *    &lt;li&gt;</span>
-<span class="source-line-no">074</span><span id="line-74"> *       {@link Collection} containing anything on this list.</span>
+<span class="source-line-no">074</span><span id="line-74"> *       {@link Number}</span>
 <span class="source-line-no">075</span><span id="line-75"> *    &lt;li&gt;</span>
-<span class="source-line-no">076</span><span id="line-76"> *       {@link Map} containing anything on this list.</span>
+<span class="source-line-no">076</span><span id="line-76"> *       {@link Boolean}</span>
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;li&gt;</span>
-<span class="source-line-no">078</span><span id="line-78"> *       A java bean with properties of anything on this list.</span>
+<span class="source-line-no">078</span><span id="line-78"> *       {@link Collection} containing anything on this list.</span>
 <span class="source-line-no">079</span><span id="line-79"> *    &lt;li&gt;</span>
-<span class="source-line-no">080</span><span id="line-80"> *       An array of anything on this list.</span>
-<span class="source-line-no">081</span><span id="line-81"> * &lt;/ul&gt;</span>
-<span class="source-line-no">082</span><span id="line-82"> *</span>
-<span class="source-line-no">083</span><span id="line-83"> * &lt;p&gt;</span>
-<span class="source-line-no">084</span><span id="line-84"> * For OpenAPI serialization, the valid swapped types also include &lt;code&gt;&lt;jk&gt;byte&lt;/jk&gt;[]&lt;/code&gt; and &lt;c&gt;Calendar&lt;/c&gt;.</span>
-<span class="source-line-no">085</span><span id="line-85"> *</span>
-<span class="source-line-no">086</span><span id="line-86"> * &lt;h5 class='topic'&gt;Normal Class Type {@code &lt;T&gt;}&lt;/h5&gt;</span>
-<span class="source-line-no">087</span><span id="line-87"> *</span>
-<span class="source-line-no">088</span><span id="line-88"> * &lt;p&gt;</span>
-<span class="source-line-no">089</span><span id="line-89"> * The normal object representation of an object.</span>
-<span class="source-line-no">090</span><span id="line-90"> *</span>
-<span class="source-line-no">091</span><span id="line-91"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">092</span><span id="line-92"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics"&gt;Swap Basics&lt;/a&gt;</span>
-<span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94"> * &lt;/ul&gt;</span>
-<span class="source-line-no">095</span><span id="line-95"> *</span>
-<span class="source-line-no">096</span><span id="line-96"> * @param &lt;T&gt; The normal form of the class.</span>
-<span class="source-line-no">097</span><span id="line-97"> * @param &lt;S&gt; The swapped form of the class.</span>
-<span class="source-line-no">098</span><span id="line-98"> */</span>
-<span class="source-line-no">099</span><span id="line-99">@SuppressWarnings({"unchecked","rawtypes"})</span>
-<span class="source-line-no">100</span><span id="line-100">public abstract class ObjectSwap&lt;T,S&gt; {</span>
-<span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">   /**</span>
-<span class="source-line-no">103</span><span id="line-103">    * Represents a non-existent object swap.</span>
-<span class="source-line-no">104</span><span id="line-104">    */</span>
-<span class="source-line-no">105</span><span id="line-105">   public static final ObjectSwap NULL = new ObjectSwap((Class)null, (Class)null) {};</span>
-<span class="source-line-no">106</span><span id="line-106"></span>
-<span class="source-line-no">107</span><span id="line-107">   private final Class&lt;T&gt; normalClass;</span>
-<span class="source-line-no">108</span><span id="line-108">   private final Class&lt;?&gt; swapClass;</span>
-<span class="source-line-no">109</span><span id="line-109">   private final ClassInfo normalClassInfo, swapClassInfo;</span>
-<span class="source-line-no">110</span><span id="line-110">   private ClassMeta&lt;?&gt; swapClassMeta;</span>
-<span class="source-line-no">111</span><span id="line-111"></span>
-<span class="source-line-no">112</span><span id="line-112">   // Unfortunately these cannot be made final because we want to allow for ObjectSwaps with no-arg constructors</span>
-<span class="source-line-no">113</span><span id="line-113">   // which simplifies declarations.</span>
-<span class="source-line-no">114</span><span id="line-114">   private MediaType[] forMediaTypes;</span>
-<span class="source-line-no">115</span><span id="line-115">   private String template;</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   /**</span>
-<span class="source-line-no">118</span><span id="line-118">    * Constructor.</span>
-<span class="source-line-no">119</span><span id="line-119">    */</span>
-<span class="source-line-no">120</span><span id="line-120">   protected ObjectSwap() {</span>
-<span class="source-line-no">121</span><span id="line-121">      ClassInfo ci = ClassInfo.of(this.getClass());</span>
-<span class="source-line-no">122</span><span id="line-122">      normalClass = (Class&lt;T&gt;)ci.getParameterType(0, ObjectSwap.class);</span>
-<span class="source-line-no">123</span><span id="line-123">      swapClass = ci.getParameterType(1, ObjectSwap.class);</span>
-<span class="source-line-no">124</span><span id="line-124">      normalClassInfo = ClassInfo.of(normalClass);</span>
-<span class="source-line-no">125</span><span id="line-125">      swapClassInfo = ClassInfo.of(swapClass);</span>
-<span class="source-line-no">126</span><span id="line-126">      forMediaTypes = forMediaTypes();</span>
-<span class="source-line-no">127</span><span id="line-127">      template = withTemplate();</span>
-<span class="source-line-no">128</span><span id="line-128">   }</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">   /**</span>
-<span class="source-line-no">131</span><span id="line-131">    * Constructor for when the normal and transformed classes are already known.</span>
-<span class="source-line-no">132</span><span id="line-132">    *</span>
-<span class="source-line-no">133</span><span id="line-133">    * @param normalClass The normal class (cannot be serialized).</span>
-<span class="source-line-no">134</span><span id="line-134">    * @param swapClass The transformed class (serializable).</span>
-<span class="source-line-no">135</span><span id="line-135">    */</span>
-<span class="source-line-no">136</span><span id="line-136">   protected ObjectSwap(Class&lt;T&gt; normalClass, Class&lt;?&gt; swapClass) {</span>
-<span class="source-line-no">137</span><span id="line-137">      this.normalClass = normalClass;</span>
-<span class="source-line-no">138</span><span id="line-138">      this.swapClass = swapClass;</span>
-<span class="source-line-no">139</span><span id="line-139">      normalClassInfo = ClassInfo.of(normalClass);</span>
-<span class="source-line-no">140</span><span id="line-140">      swapClassInfo = ClassInfo.of(swapClass);</span>
-<span class="source-line-no">141</span><span id="line-141">      this.forMediaTypes = forMediaTypes();</span>
-<span class="source-line-no">142</span><span id="line-142">      this.template = withTemplate();</span>
-<span class="source-line-no">143</span><span id="line-143">   }</span>
-<span class="source-line-no">144</span><span id="line-144"></span>
-<span class="source-line-no">145</span><span id="line-145">   /**</span>
-<span class="source-line-no">146</span><span id="line-146">    * Returns the media types that this swap is applicable to.</span>
-<span class="source-line-no">147</span><span id="line-147">    *</span>
-<span class="source-line-no">148</span><span id="line-148">    * &lt;p&gt;</span>
-<span class="source-line-no">149</span><span id="line-149">    * This method can be overridden to programmatically specify what media types it applies to.</span>
-<span class="source-line-no">150</span><span id="line-150">    *</span>
-<span class="source-line-no">151</span><span id="line-151">    * &lt;p&gt;</span>
-<span class="source-line-no">152</span><span id="line-152">    * This method is the programmatic equivalent to the {@link Swap#mediaTypes() @Swap(mediaTypes)} annotation.</span>
-<span class="source-line-no">153</span><span id="line-153">    *</span>
-<span class="source-line-no">154</span><span id="line-154">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">155</span><span id="line-155">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/PerMediaTypeSwaps"&gt;Per-media-type Swaps&lt;/a&gt;</span>
-<span class="source-line-no">156</span><span id="line-156">    * &lt;/ul&gt;</span>
-<span class="source-line-no">157</span><span id="line-157">    * @return The media types that this swap is applicable to, or &lt;jk&gt;null&lt;/jk&gt; if it's applicable for all media types.</span>
-<span class="source-line-no">158</span><span id="line-158">    */</span>
-<span class="source-line-no">159</span><span id="line-159">   public MediaType[] forMediaTypes() {</span>
-<span class="source-line-no">160</span><span id="line-160">      return null;</span>
-<span class="source-line-no">161</span><span id="line-161">   }</span>
-<span class="source-line-no">162</span><span id="line-162"></span>
-<span class="source-line-no">163</span><span id="line-163">   /**</span>
-<span class="source-line-no">164</span><span id="line-164">    * Returns additional context information for this swap.</span>
-<span class="source-line-no">165</span><span id="line-165">    *</span>
-<span class="source-line-no">166</span><span id="line-166">    * &lt;p&gt;</span>
-<span class="source-line-no">167</span><span id="line-167">    * Typically this is going to be used to specify a template name, such as a FreeMarker template file name.</span>
-<span class="source-line-no">168</span><span id="line-168">    *</span>
-<span class="source-line-no">169</span><span id="line-169">    * &lt;p&gt;</span>
-<span class="source-line-no">170</span><span id="line-170">    * This method can be overridden to programmatically specify a template value.</span>
-<span class="source-line-no">171</span><span id="line-171">    *</span>
-<span class="source-line-no">172</span><span id="line-172">    * &lt;p&gt;</span>
-<span class="source-line-no">173</span><span id="line-173">    * This method is the programmatic equivalent to the {@link Swap#template() @Swap(template)} annotation.</span>
-<span class="source-line-no">174</span><span id="line-174">    *</span>
-<span class="source-line-no">175</span><span id="line-175">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">176</span><span id="line-176">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps"&gt;Templated Swaps&lt;/a&gt;</span>
-<span class="source-line-no">177</span><span id="line-177">    * &lt;/ul&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> *       {@link Map} containing anything on this list.</span>
+<span class="source-line-no">081</span><span id="line-81"> *    &lt;li&gt;</span>
+<span class="source-line-no">082</span><span id="line-82"> *       A java bean with properties of anything on this list.</span>
+<span class="source-line-no">083</span><span id="line-83"> *    &lt;li&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> *       An array of anything on this list.</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;/ul&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> *</span>
+<span class="source-line-no">087</span><span id="line-87"> * &lt;p&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> * For OpenAPI serialization, the valid swapped types also include &lt;code&gt;&lt;jk&gt;byte&lt;/jk&gt;[]&lt;/code&gt; and &lt;c&gt;Calendar&lt;/c&gt;.</span>
+<span class="source-line-no">089</span><span id="line-89"> *</span>
+<span class="source-line-no">090</span><span id="line-90"> * &lt;h5 class='topic'&gt;Normal Class Type {@code &lt;T&gt;}&lt;/h5&gt;</span>
+<span class="source-line-no">091</span><span id="line-91"> *</span>
+<span class="source-line-no">092</span><span id="line-92"> * &lt;p&gt;</span>
+<span class="source-line-no">093</span><span id="line-93"> * The normal object representation of an object.</span>
+<span class="source-line-no">094</span><span id="line-94"> *</span>
+<span class="source-line-no">095</span><span id="line-95"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">096</span><span id="line-96"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics"&gt;Swap Basics&lt;/a&gt;</span>
+<span class="source-line-no">097</span><span id="line-97"></span>
+<span class="source-line-no">098</span><span id="line-98"> * &lt;/ul&gt;</span>
+<span class="source-line-no">099</span><span id="line-99"> *</span>
+<span class="source-line-no">100</span><span id="line-100"> * @param &lt;T&gt; The normal form of the class.</span>
+<span class="source-line-no">101</span><span id="line-101"> * @param &lt;S&gt; The swapped form of the class.</span>
+<span class="source-line-no">102</span><span id="line-102"> */</span>
+<span class="source-line-no">103</span><span id="line-103">@SuppressWarnings({"unchecked","rawtypes"})</span>
+<span class="source-line-no">104</span><span id="line-104">public abstract class ObjectSwap&lt;T,S&gt; {</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">   /**</span>
+<span class="source-line-no">107</span><span id="line-107">    * Represents a non-existent object swap.</span>
+<span class="source-line-no">108</span><span id="line-108">    */</span>
+<span class="source-line-no">109</span><span id="line-109">   public static final ObjectSwap NULL = new ObjectSwap((Class)null, (Class)null) {};</span>
+<span class="source-line-no">110</span><span id="line-110"></span>
+<span class="source-line-no">111</span><span id="line-111">   private final Class&lt;T&gt; normalClass;</span>
+<span class="source-line-no">112</span><span id="line-112">   private final Class&lt;?&gt; swapClass;</span>
+<span class="source-line-no">113</span><span id="line-113">   private final ClassInfo normalClassInfo, swapClassInfo;</span>
+<span class="source-line-no">114</span><span id="line-114">   private ClassMeta&lt;?&gt; swapClassMeta;</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   // Unfortunately these cannot be made final because we want to allow for ObjectSwaps with no-arg constructors</span>
+<span class="source-line-no">117</span><span id="line-117">   // which simplifies declarations.</span>
+<span class="source-line-no">118</span><span id="line-118">   private MediaType[] forMediaTypes;</span>
+<span class="source-line-no">119</span><span id="line-119">   private String template;</span>
+<span class="source-line-no">120</span><span id="line-120"></span>
+<span class="source-line-no">121</span><span id="line-121">   /**</span>
+<span class="source-line-no">122</span><span id="line-122">    * Constructor.</span>
+<span class="source-line-no">123</span><span id="line-123">    */</span>
+<span class="source-line-no">124</span><span id="line-124">   protected ObjectSwap() {</span>
+<span class="source-line-no">125</span><span id="line-125">      ClassInfo ci = ClassInfo.of(this.getClass());</span>
+<span class="source-line-no">126</span><span id="line-126">      normalClass = (Class&lt;T&gt;)ci.getParameterType(0, ObjectSwap.class);</span>
+<span class="source-line-no">127</span><span id="line-127">      swapClass = ci.getParameterType(1, ObjectSwap.class);</span>
+<span class="source-line-no">128</span><span id="line-128">      normalClassInfo = ClassInfo.of(normalClass);</span>
+<span class="source-line-no">129</span><span id="line-129">      swapClassInfo = ClassInfo.of(swapClass);</span>
+<span class="source-line-no">130</span><span id="line-130">      forMediaTypes = forMediaTypes();</span>
+<span class="source-line-no">131</span><span id="line-131">      template = withTemplate();</span>
+<span class="source-line-no">132</span><span id="line-132">   }</span>
+<span class="source-line-no">133</span><span id="line-133"></span>
+<span class="source-line-no">134</span><span id="line-134">   /**</span>
+<span class="source-line-no">135</span><span id="line-135">    * Constructor for when the normal and transformed classes are already known.</span>
+<span class="source-line-no">136</span><span id="line-136">    *</span>
+<span class="source-line-no">137</span><span id="line-137">    * @param normalClass The normal class (cannot be serialized).</span>
+<span class="source-line-no">138</span><span id="line-138">    * @param swapClass The transformed class (serializable).</span>
+<span class="source-line-no">139</span><span id="line-139">    */</span>
+<span class="source-line-no">140</span><span id="line-140">   protected ObjectSwap(Class&lt;T&gt; normalClass, Class&lt;?&gt; swapClass) {</span>
+<span class="source-line-no">141</span><span id="line-141">      this.normalClass = normalClass;</span>
+<span class="source-line-no">142</span><span id="line-142">      this.swapClass = swapClass;</span>
+<span class="source-line-no">143</span><span id="line-143">      normalClassInfo = ClassInfo.of(normalClass);</span>
+<span class="source-line-no">144</span><span id="line-144">      swapClassInfo = ClassInfo.of(swapClass);</span>
+<span class="source-line-no">145</span><span id="line-145">      this.forMediaTypes = forMediaTypes();</span>
+<span class="source-line-no">146</span><span id="line-146">      this.template = withTemplate();</span>
+<span class="source-line-no">147</span><span id="line-147">   }</span>
+<span class="source-line-no">148</span><span id="line-148"></span>
+<span class="source-line-no">149</span><span id="line-149">   /**</span>
+<span class="source-line-no">150</span><span id="line-150">    * Returns the media types that this swap is applicable to.</span>
+<span class="source-line-no">151</span><span id="line-151">    *</span>
+<span class="source-line-no">152</span><span id="line-152">    * &lt;p&gt;</span>
+<span class="source-line-no">153</span><span id="line-153">    * This method can be overridden to programmatically specify what media types it applies to.</span>
+<span class="source-line-no">154</span><span id="line-154">    *</span>
+<span class="source-line-no">155</span><span id="line-155">    * &lt;p&gt;</span>
+<span class="source-line-no">156</span><span id="line-156">    * This method is the programmatic equivalent to the {@link Swap#mediaTypes() @Swap(mediaTypes)} annotation.</span>
+<span class="source-line-no">157</span><span id="line-157">    *</span>
+<span class="source-line-no">158</span><span id="line-158">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">159</span><span id="line-159">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/PerMediaTypeSwaps"&gt;Per-media-type Swaps&lt;/a&gt;</span>
+<span class="source-line-no">160</span><span id="line-160">    * &lt;/ul&gt;</span>
+<span class="source-line-no">161</span><span id="line-161">    * @return The media types that this swap is applicable to, or &lt;jk&gt;null&lt;/jk&gt; if it's applicable for all media types.</span>
+<span class="source-line-no">162</span><span id="line-162">    */</span>
+<span class="source-line-no">163</span><span id="line-163">   public MediaType[] forMediaTypes() {</span>
+<span class="source-line-no">164</span><span id="line-164">      return null;</span>
+<span class="source-line-no">165</span><span id="line-165">   }</span>
+<span class="source-line-no">166</span><span id="line-166"></span>
+<span class="source-line-no">167</span><span id="line-167">   /**</span>
+<span class="source-line-no">168</span><span id="line-168">    * Returns additional context information for this swap.</span>
+<span class="source-line-no">169</span><span id="line-169">    *</span>
+<span class="source-line-no">170</span><span id="line-170">    * &lt;p&gt;</span>
+<span class="source-line-no">171</span><span id="line-171">    * Typically this is going to be used to specify a template name, such as a FreeMarker template file name.</span>
+<span class="source-line-no">172</span><span id="line-172">    *</span>
+<span class="source-line-no">173</span><span id="line-173">    * &lt;p&gt;</span>
+<span class="source-line-no">174</span><span id="line-174">    * This method can be overridden to programmatically specify a template value.</span>
+<span class="source-line-no">175</span><span id="line-175">    *</span>
+<span class="source-line-no">176</span><span id="line-176">    * &lt;p&gt;</span>
+<span class="source-line-no">177</span><span id="line-177">    * This method is the programmatic equivalent to the {@link Swap#template() @Swap(template)} annotation.</span>
 <span class="source-line-no">178</span><span id="line-178">    *</span>
-<span class="source-line-no">179</span><span id="line-179">    * @return Additional context information, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</span>
-<span class="source-line-no">180</span><span id="line-180">    */</span>
-<span class="source-line-no">181</span><span id="line-181">   public String withTemplate() {</span>
-<span class="source-line-no">182</span><span id="line-182">      return null;</span>
-<span class="source-line-no">183</span><span id="line-183">   }</span>
-<span class="source-line-no">184</span><span id="line-184"></span>
-<span class="source-line-no">185</span><span id="line-185">   /**</span>
-<span class="source-line-no">186</span><span id="line-186">    * Sets the media types that this swap is associated with.</span>
-<span class="source-line-no">187</span><span id="line-187">    *</span>
-<span class="source-line-no">188</span><span id="line-188">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">189</span><span id="line-189">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/PerMediaTypeSwaps"&gt;Per-media-type Swaps&lt;/a&gt;</span>
-<span class="source-line-no">190</span><span id="line-190">    * &lt;/ul&gt;</span>
+<span class="source-line-no">179</span><span id="line-179">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">180</span><span id="line-180">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps"&gt;Templated Swaps&lt;/a&gt;</span>
+<span class="source-line-no">181</span><span id="line-181">    * &lt;/ul&gt;</span>
+<span class="source-line-no">182</span><span id="line-182">    *</span>
+<span class="source-line-no">183</span><span id="line-183">    * @return Additional context information, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</span>
+<span class="source-line-no">184</span><span id="line-184">    */</span>
+<span class="source-line-no">185</span><span id="line-185">   public String withTemplate() {</span>
+<span class="source-line-no">186</span><span id="line-186">      return null;</span>
+<span class="source-line-no">187</span><span id="line-187">   }</span>
+<span class="source-line-no">188</span><span id="line-188"></span>
+<span class="source-line-no">189</span><span id="line-189">   /**</span>
+<span class="source-line-no">190</span><span id="line-190">    * Sets the media types that this swap is associated with.</span>
 <span class="source-line-no">191</span><span id="line-191">    *</span>
-<span class="source-line-no">192</span><span id="line-192">    * @param mediaTypes The media types that this swap is associated with.</span>
-<span class="source-line-no">193</span><span id="line-193">    * @return This object.</span>
-<span class="source-line-no">194</span><span id="line-194">    */</span>
-<span class="source-line-no">195</span><span id="line-195">   public ObjectSwap&lt;T,?&gt; forMediaTypes(MediaType[] mediaTypes) {</span>
-<span class="source-line-no">196</span><span id="line-196">      this.forMediaTypes = mediaTypes;</span>
-<span class="source-line-no">197</span><span id="line-197">      return this;</span>
-<span class="source-line-no">198</span><span id="line-198">   }</span>
-<span class="source-line-no">199</span><span id="line-199"></span>
-<span class="source-line-no">200</span><span id="line-200">   /**</span>
-<span class="source-line-no">201</span><span id="line-201">    * Sets the template string on this swap.</span>
-<span class="source-line-no">202</span><span id="line-202">    *</span>
-<span class="source-line-no">203</span><span id="line-203">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">204</span><span id="line-204">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps"&gt;Templated Swaps&lt;/a&gt;</span>
-<span class="source-line-no">205</span><span id="line-205">    * &lt;/ul&gt;</span>
+<span class="source-line-no">192</span><span id="line-192">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">193</span><span id="line-193">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/PerMediaTypeSwaps"&gt;Per-media-type Swaps&lt;/a&gt;</span>
+<span class="source-line-no">194</span><span id="line-194">    * &lt;/ul&gt;</span>
+<span class="source-line-no">195</span><span id="line-195">    *</span>
+<span class="source-line-no">196</span><span id="line-196">    * @param mediaTypes The media types that this swap is associated with.</span>
+<span class="source-line-no">197</span><span id="line-197">    * @return This object.</span>
+<span class="source-line-no">198</span><span id="line-198">    */</span>
+<span class="source-line-no">199</span><span id="line-199">   public ObjectSwap&lt;T,?&gt; forMediaTypes(MediaType[] mediaTypes) {</span>
+<span class="source-line-no">200</span><span id="line-200">      this.forMediaTypes = mediaTypes;</span>
+<span class="source-line-no">201</span><span id="line-201">      return this;</span>
+<span class="source-line-no">202</span><span id="line-202">   }</span>
+<span class="source-line-no">203</span><span id="line-203"></span>
+<span class="source-line-no">204</span><span id="line-204">   /**</span>
+<span class="source-line-no">205</span><span id="line-205">    * Sets the template string on this swap.</span>
 <span class="source-line-no">206</span><span id="line-206">    *</span>
-<span class="source-line-no">207</span><span id="line-207">    * @param template The template string on this swap.</span>
-<span class="source-line-no">208</span><span id="line-208">    * @return This object.</span>
-<span class="source-line-no">209</span><span id="line-209">    */</span>
-<span class="source-line-no">210</span><span id="line-210">   public ObjectSwap&lt;T,?&gt; withTemplate(String template) {</span>
-<span class="source-line-no">211</span><span id="line-211">      this.template = template;</span>
-<span class="source-line-no">212</span><span id="line-212">      return this;</span>
-<span class="source-line-no">213</span><span id="line-213">   }</span>
-<span class="source-line-no">214</span><span id="line-214"></span>
-<span class="source-line-no">215</span><span id="line-215">   /**</span>
-<span class="source-line-no">216</span><span id="line-216">    * Returns a number indicating how well this swap matches the specified session.</span>
-<span class="source-line-no">217</span><span id="line-217">    *</span>
-<span class="source-line-no">218</span><span id="line-218">    * &lt;p&gt;</span>
-<span class="source-line-no">219</span><span id="line-219">    * Uses the {@link MediaType#match(MediaType, boolean)} method algorithm to produce a number whereby a</span>
-<span class="source-line-no">220</span><span id="line-220">    * larger value indicates a "better match".</span>
-<span class="source-line-no">221</span><span id="line-221">    * The idea being that if multiple swaps are associated with a given object, we want to pick the best one.</span>
-<span class="source-line-no">222</span><span id="line-222">    *</span>
-<span class="source-line-no">223</span><span id="line-223">    * &lt;p&gt;</span>
-<span class="source-line-no">224</span><span id="line-224">    * For example, if the session media type is &lt;js&gt;"text/json"&lt;/js&gt;, then the match values are shown below:</span>
-<span class="source-line-no">225</span><span id="line-225">    *</span>
-<span class="source-line-no">226</span><span id="line-226">    * &lt;ul&gt;</span>
-<span class="source-line-no">227</span><span id="line-227">    *    &lt;li&gt;&lt;js&gt;"text/json"&lt;/js&gt; = &lt;c&gt;100,000&lt;/c&gt;</span>
-<span class="source-line-no">228</span><span id="line-228">    *    &lt;li&gt;&lt;js&gt;"&amp;#42;/json"&lt;/js&gt; = &lt;c&gt;5,100&lt;/c&gt;</span>
-<span class="source-line-no">229</span><span id="line-229">    *    &lt;li&gt;&lt;js&gt;"&amp;#42;/&amp;#42;"&lt;/js&gt; = &lt;c&gt;5,000&lt;/c&gt;</span>
-<span class="source-line-no">230</span><span id="line-230">    *    &lt;li&gt;No media types specified on swap = &lt;c&gt;1&lt;/c&gt;</span>
-<span class="source-line-no">231</span><span id="line-231">    *    &lt;li&gt;&lt;js&gt;"text/xml"&lt;/js&gt; = &lt;c&gt;0&lt;/c&gt;</span>
-<span class="source-line-no">232</span><span id="line-232">    * &lt;/ul&gt;</span>
-<span class="source-line-no">233</span><span id="line-233">    *</span>
-<span class="source-line-no">234</span><span id="line-234">    * @param session The bean session.</span>
-<span class="source-line-no">235</span><span id="line-235">    * @return Zero if swap doesn't match the session, or a positive number if it does.</span>
-<span class="source-line-no">236</span><span id="line-236">    */</span>
-<span class="source-line-no">237</span><span id="line-237">   public int match(BeanSession session) {</span>
-<span class="source-line-no">238</span><span id="line-238">      if (forMediaTypes == null)</span>
-<span class="source-line-no">239</span><span id="line-239">         return 1;</span>
-<span class="source-line-no">240</span><span id="line-240">      int i = 0;</span>
-<span class="source-line-no">241</span><span id="line-241">      MediaType mt = session.getMediaType();</span>
-<span class="source-line-no">242</span><span id="line-242">      if (mt == null)</span>
-<span class="source-line-no">243</span><span id="line-243">         return 0;</span>
-<span class="source-line-no">244</span><span id="line-244">      if (forMediaTypes != null)</span>
-<span class="source-line-no">245</span><span id="line-245">         for (MediaType mt2 : forMediaTypes)</span>
-<span class="source-line-no">246</span><span id="line-246">            i = Math.max(i, mt2.match(mt, false));</span>
-<span class="source-line-no">247</span><span id="line-247">      return i;</span>
-<span class="source-line-no">248</span><span id="line-248">   }</span>
-<span class="source-line-no">249</span><span id="line-249"></span>
-<span class="source-line-no">250</span><span id="line-250">   /**</span>
-<span class="source-line-no">251</span><span id="line-251">    * If this transform is to be used to serialize non-serializable objects, it must implement this method.</span>
-<span class="source-line-no">252</span><span id="line-252">    *</span>
-<span class="source-line-no">253</span><span id="line-253">    * &lt;p&gt;</span>
-<span class="source-line-no">254</span><span id="line-254">    * The object must be converted into one of the following serializable types:</span>
-<span class="source-line-no">255</span><span id="line-255">    * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">256</span><span id="line-256">    *    &lt;li&gt;</span>
-<span class="source-line-no">257</span><span id="line-257">    *       {@link String}</span>
-<span class="source-line-no">258</span><span id="line-258">    *    &lt;li&gt;</span>
-<span class="source-line-no">259</span><span id="line-259">    *       {@link Number}</span>
+<span class="source-line-no">207</span><span id="line-207">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">208</span><span id="line-208">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps"&gt;Templated Swaps&lt;/a&gt;</span>
+<span class="source-line-no">209</span><span id="line-209">    * &lt;/ul&gt;</span>
+<span class="source-line-no">210</span><span id="line-210">    *</span>
+<span class="source-line-no">211</span><span id="line-211">    * @param template The template string on this swap.</span>
+<span class="source-line-no">212</span><span id="line-212">    * @return This object.</span>
+<span class="source-line-no">213</span><span id="line-213">    */</span>
+<span class="source-line-no">214</span><span id="line-214">   public ObjectSwap&lt;T,?&gt; withTemplate(String template) {</span>
+<span class="source-line-no">215</span><span id="line-215">      this.template = template;</span>
+<span class="source-line-no">216</span><span id="line-216">      return this;</span>
+<span class="source-line-no">217</span><span id="line-217">   }</span>
+<span class="source-line-no">218</span><span id="line-218"></span>
+<span class="source-line-no">219</span><span id="line-219">   /**</span>
+<span class="source-line-no">220</span><span id="line-220">    * Returns a number indicating how well this swap matches the specified session.</span>
+<span class="source-line-no">221</span><span id="line-221">    *</span>
+<span class="source-line-no">222</span><span id="line-222">    * &lt;p&gt;</span>
+<span class="source-line-no">223</span><span id="line-223">    * Uses the {@link MediaType#match(MediaType, boolean)} method algorithm to produce a number whereby a</span>
+<span class="source-line-no">224</span><span id="line-224">    * larger value indicates a "better match".</span>
+<span class="source-line-no">225</span><span id="line-225">    * The idea being that if multiple swaps are associated with a given object, we want to pick the best one.</span>
+<span class="source-line-no">226</span><span id="line-226">    *</span>
+<span class="source-line-no">227</span><span id="line-227">    * &lt;p&gt;</span>
+<span class="source-line-no">228</span><span id="line-228">    * For example, if the session media type is &lt;js&gt;"text/json"&lt;/js&gt;, then the match values are shown below:</span>
+<span class="source-line-no">229</span><span id="line-229">    *</span>
+<span class="source-line-no">230</span><span id="line-230">    * &lt;ul&gt;</span>
+<span class="source-line-no">231</span><span id="line-231">    *    &lt;li&gt;&lt;js&gt;"text/json"&lt;/js&gt; = &lt;c&gt;100,000&lt;/c&gt;</span>
+<span class="source-line-no">232</span><span id="line-232">    *    &lt;li&gt;&lt;js&gt;"&amp;#42;/json"&lt;/js&gt; = &lt;c&gt;5,100&lt;/c&gt;</span>
+<span class="source-line-no">233</span><span id="line-233">    *    &lt;li&gt;&lt;js&gt;"&amp;#42;/&amp;#42;"&lt;/js&gt; = &lt;c&gt;5,000&lt;/c&gt;</span>
+<span class="source-line-no">234</span><span id="line-234">    *    &lt;li&gt;No media types specified on swap = &lt;c&gt;1&lt;/c&gt;</span>
+<span class="source-line-no">235</span><span id="line-235">    *    &lt;li&gt;&lt;js&gt;"text/xml"&lt;/js&gt; = &lt;c&gt;0&lt;/c&gt;</span>
+<span class="source-line-no">236</span><span id="line-236">    * &lt;/ul&gt;</span>
+<span class="source-line-no">237</span><span id="line-237">    *</span>
+<span class="source-line-no">238</span><span id="line-238">    * @param session The bean session.</span>
+<span class="source-line-no">239</span><span id="line-239">    * @return Zero if swap doesn't match the session, or a positive number if it does.</span>
+<span class="source-line-no">240</span><span id="line-240">    */</span>
+<span class="source-line-no">241</span><span id="line-241">   public int match(BeanSession session) {</span>
+<span class="source-line-no">242</span><span id="line-242">      if (forMediaTypes == null)</span>
+<span class="source-line-no">243</span><span id="line-243">         return 1;</span>
+<span class="source-line-no">244</span><span id="line-244">      int i = 0;</span>
+<span class="source-line-no">245</span><span id="line-245">      MediaType mt = session.getMediaType();</span>
+<span class="source-line-no">246</span><span id="line-246">      if (mt == null)</span>
+<span class="source-line-no">247</span><span id="line-247">         return 0;</span>
+<span class="source-line-no">248</span><span id="line-248">      if (forMediaTypes != null)</span>
+<span class="source-line-no">249</span><span id="line-249">         for (MediaType mt2 : forMediaTypes)</span>
+<span class="source-line-no">250</span><span id="line-250">            i = Math.max(i, mt2.match(mt, false));</span>
+<span class="source-line-no">251</span><span id="line-251">      return i;</span>
+<span class="source-line-no">252</span><span id="line-252">   }</span>
+<span class="source-line-no">253</span><span id="line-253"></span>
+<span class="source-line-no">254</span><span id="line-254">   /**</span>
+<span class="source-line-no">255</span><span id="line-255">    * If this transform is to be used to serialize non-serializable objects, it must implement this method.</span>
+<span class="source-line-no">256</span><span id="line-256">    *</span>
+<span class="source-line-no">257</span><span id="line-257">    * &lt;p&gt;</span>
+<span class="source-line-no">258</span><span id="line-258">    * The object must be converted into one of the following serializable types:</span>
+<span class="source-line-no">259</span><span id="line-259">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">260</span><span id="line-260">    *    &lt;li&gt;</span>
-<span class="source-line-no">261</span><span id="line-261">    *       {@link Boolean}</span>
+<span class="source-line-no">261</span><span id="line-261">    *       {@link String}</span>
 <span class="source-line-no">262</span><span id="line-262">    *    &lt;li&gt;</span>
-<span class="source-line-no">263</span><span id="line-263">    *       {@link Collection} containing anything on this list.</span>
+<span class="source-line-no">263</span><span id="line-263">    *       {@link Number}</span>
 <span class="source-line-no">264</span><span id="line-264">    *    &lt;li&gt;</span>
-<span class="source-line-no">265</span><span id="line-265">    *       {@link Map} containing anything on this list.</span>
+<span class="source-line-no">265</span><span id="line-265">    *       {@link Boolean}</span>
 <span class="source-line-no">266</span><span id="line-266">    *    &lt;li&gt;</span>
-<span class="source-line-no">267</span><span id="line-267">    *       A java bean with properties of anything on this list.</span>
+<span class="source-line-no">267</span><span id="line-267">    *       {@link Collection} containing anything on this list.</span>
 <span class="source-line-no">268</span><span id="line-268">    *    &lt;li&gt;</span>
-<span class="source-line-no">269</span><span id="line-269">    *       An array of anything on this list.</span>
-<span class="source-line-no">270</span><span id="line-270">    * &lt;/ul&gt;</span>
-<span class="source-line-no">271</span><span id="line-271">    *</span>
-<span class="source-line-no">272</span><span id="line-272">    * @param session</span>
-<span class="source-line-no">273</span><span id="line-273">    *    The bean session to use to get the class meta.</span>
-<span class="source-line-no">274</span><span id="line-274">    *    This is always going to be the same bean context that created this swap.</span>
-<span class="source-line-no">275</span><span id="line-275">    * @param o The object to be transformed.</span>
-<span class="source-line-no">276</span><span id="line-276">    * @return The transformed object.</span>
-<span class="source-line-no">277</span><span id="line-277">    * @throws Exception If a problem occurred trying to convert the output.</span>
-<span class="source-line-no">278</span><span id="line-278">    */</span>
-<span class="source-line-no">279</span><span id="line-279">   public S swap(BeanSession session, T o) throws Exception {</span>
-<span class="source-line-no">280</span><span id="line-280">      return swap(session, o, template);</span>
-<span class="source-line-no">281</span><span id="line-281">   }</span>
-<span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">   /**</span>
-<span class="source-line-no">284</span><span id="line-284">    * Same as {@link #swap(BeanSession, Object)}, but can be used if your swap has a template associated with it.</span>
-<span class="source-line-no">285</span><span id="line-285">    *</span>
-<span class="source-line-no">286</span><span id="line-286">    * @param session</span>
-<span class="source-line-no">287</span><span id="line-287">    *    The bean session to use to get the class meta.</span>
-<span class="source-line-no">288</span><span id="line-288">    *    This is always going to be the same bean context that created this swap.</span>
-<span class="source-line-no">289</span><span id="line-289">    * @param o The object to be transformed.</span>
-<span class="source-line-no">290</span><span id="line-290">    * @param template</span>
-<span class="source-line-no">291</span><span id="line-291">    *    The template string associated with this swap.</span>
-<span class="source-line-no">292</span><span id="line-292">    * @return The transformed object.</span>
-<span class="source-line-no">293</span><span id="line-293">    * @throws Exception If a problem occurred trying to convert the output.</span>
-<span class="source-line-no">294</span><span id="line-294">    */</span>
-<span class="source-line-no">295</span><span id="line-295">   public S swap(BeanSession session, T o, String template) throws Exception {</span>
-<span class="source-line-no">296</span><span id="line-296">      throw new SerializeException("Swap method not implemented on ObjectSwap ''{0}''", className(this));</span>
-<span class="source-line-no">297</span><span id="line-297">   }</span>
-<span class="source-line-no">298</span><span id="line-298"></span>
-<span class="source-line-no">299</span><span id="line-299">   /**</span>
-<span class="source-line-no">300</span><span id="line-300">    * If this transform is to be used to reconstitute objects that aren't true Java beans, it must implement this method.</span>
-<span class="source-line-no">301</span><span id="line-301">    *</span>
-<span class="source-line-no">302</span><span id="line-302">    * @param session</span>
-<span class="source-line-no">303</span><span id="line-303">    *    The bean session to use to get the class meta.</span>
-<span class="source-line-no">304</span><span id="line-304">    *    This is always going to be the same bean context that created this swap.</span>
-<span class="source-line-no">305</span><span id="line-305">    * @param f The transformed object.</span>
-<span class="source-line-no">306</span><span id="line-306">    * @param hint</span>
-<span class="source-line-no">307</span><span id="line-307">    *    If possible, the parser will try to tell you the object type being created.</span>
-<span class="source-line-no">308</span><span id="line-308">    *    For example, on a serialized date, this may tell you that the object being created must be of type</span>
-<span class="source-line-no">309</span><span id="line-309">    *    {@code GregorianCalendar}.</span>
-<span class="source-line-no">310</span><span id="line-310">    *    &lt;br&gt;This may be &lt;jk&gt;null&lt;/jk&gt; if the parser cannot make this determination.</span>
-<span class="source-line-no">311</span><span id="line-311">    * @return The narrowed object.</span>
-<span class="source-line-no">312</span><span id="line-312">    * @throws Exception If this method is not implemented.</span>
-<span class="source-line-no">313</span><span id="line-313">    */</span>
-<span class="source-line-no">314</span><span id="line-314">   public T unswap(BeanSession session, S f, ClassMeta&lt;?&gt; hint) throws Exception {</span>
-<span class="source-line-no">315</span><span id="line-315">      return unswap(session, f, hint, template);</span>
-<span class="source-line-no">316</span><span id="line-316">   }</span>
-<span class="source-line-no">317</span><span id="line-317"></span>
-<span class="source-line-no">318</span><span id="line-318">   /**</span>
-<span class="source-line-no">319</span><span id="line-319">    * Same as {@link #unswap(BeanSession, Object, ClassMeta)}, but can be used if your swap has a template associated with it.</span>
-<span class="source-line-no">320</span><span id="line-320">    *</span>
-<span class="source-line-no">321</span><span id="line-321">    * @param session</span>
-<span class="source-line-no">322</span><span id="line-322">    *    The bean session to use to get the class meta.</span>
-<span class="source-line-no">323</span><span id="line-323">    *    This is always going to be the same bean context that created this swap.</span>
-<span class="source-line-no">324</span><span id="line-324">    * @param f The transformed object.</span>
-<span class="source-line-no">325</span><span id="line-325">    * @param hint</span>
-<span class="source-line-no">326</span><span id="line-326">    *    If possible, the parser will try to tell you the object type being created.</span>
-<span class="source-line-no">327</span><span id="line-327">    *    For example, on a serialized date, this may tell you that the object being created must be of type</span>
-<span class="source-line-no">328</span><span id="line-328">    *    {@code GregorianCalendar}.</span>
-<span class="source-line-no">329</span><span id="line-329">    *    &lt;br&gt;This may be &lt;jk&gt;null&lt;/jk&gt; if the parser cannot make this determination.</span>
-<span class="source-line-no">330</span><span id="line-330">    * @param template</span>
-<span class="source-line-no">331</span><span id="line-331">    *    The template string associated with this swap.</span>
-<span class="source-line-no">332</span><span id="line-332">    * @return The transformed object.</span>
-<span class="source-line-no">333</span><span id="line-333">    * @throws Exception If a problem occurred trying to convert the output.</span>
-<span class="source-line-no">334</span><span id="line-334">    */</span>
-<span class="source-line-no">335</span><span id="line-335">   public T unswap(BeanSession session, S f, ClassMeta&lt;?&gt; hint, String template) throws Exception {</span>
-<span class="source-line-no">336</span><span id="line-336">      throw new ParseException("Unswap method not implemented on ObjectSwap ''{0}''", className(this));</span>
-<span class="source-line-no">337</span><span id="line-337">   }</span>
-<span class="source-line-no">338</span><span id="line-338"></span>
-<span class="source-line-no">339</span><span id="line-339">   /**</span>
-<span class="source-line-no">340</span><span id="line-340">    * Returns the T class, the normalized form of the class.</span>
-<span class="source-line-no">341</span><span id="line-341">    *</span>
-<span class="source-line-no">342</span><span id="line-342">    * @return The normal form of this class.</span>
-<span class="source-line-no">343</span><span id="line-343">    */</span>
-<span class="source-line-no">344</span><span id="line-344">   public ClassInfo getNormalClass() {</span>
-<span class="source-line-no">345</span><span id="line-345">      return normalClassInfo;</span>
-<span class="source-line-no">346</span><span id="line-346">   }</span>
-<span class="source-line-no">347</span><span id="line-347"></span>
-<span class="source-line-no">348</span><span id="line-348">   /**</span>
-<span class="source-line-no">349</span><span id="line-349">    * Returns the G class, the generalized form of the class.</span>
-<span class="source-line-no">350</span><span id="line-350">    *</span>
-<span class="source-line-no">351</span><span id="line-351">    * &lt;p&gt;</span>
-<span class="source-line-no">352</span><span id="line-352">    * Subclasses must override this method if the generalized class is {@code Object}, meaning it can produce multiple</span>
-<span class="source-line-no">353</span><span id="line-353">    * generalized forms.</span>
+<span class="source-line-no">269</span><span id="line-269">    *       {@link Map} containing anything on this list.</span>
+<span class="source-line-no">270</span><span id="line-270">    *    &lt;li&gt;</span>
+<span class="source-line-no">271</span><span id="line-271">    *       A java bean with properties of anything on this list.</span>
+<span class="source-line-no">272</span><span id="line-272">    *    &lt;li&gt;</span>
+<span class="source-line-no">273</span><span id="line-273">    *       An array of anything on this list.</span>
+<span class="source-line-no">274</span><span id="line-274">    * &lt;/ul&gt;</span>
+<span class="source-line-no">275</span><span id="line-275">    *</span>
+<span class="source-line-no">276</span><span id="line-276">    * @param session</span>
+<span class="source-line-no">277</span><span id="line-277">    *    The bean session to use to get the class meta.</span>
+<span class="source-line-no">278</span><span id="line-278">    *    This is always going to be the same bean context that created this swap.</span>
+<span class="source-line-no">279</span><span id="line-279">    * @param o The object to be transformed.</span>
+<span class="source-line-no">280</span><span id="line-280">    * @return The transformed object.</span>
+<span class="source-line-no">281</span><span id="line-281">    * @throws Exception If a problem occurred trying to convert the output.</span>
+<span class="source-line-no">282</span><span id="line-282">    */</span>
+<span class="source-line-no">283</span><span id="line-283">   public S swap(BeanSession session, T o) throws Exception {</span>
+<span class="source-line-no">284</span><span id="line-284">      return swap(session, o, template);</span>
+<span class="source-line-no">285</span><span id="line-285">   }</span>
+<span class="source-line-no">286</span><span id="line-286"></span>
+<span class="source-line-no">287</span><span id="line-287">   /**</span>
+<span class="source-line-no">288</span><span id="line-288">    * Same as {@link #swap(BeanSession, Object)}, but can be used if your swap has a template associated with it.</span>
+<span class="source-line-no">289</span><span id="line-289">    *</span>
+<span class="source-line-no">290</span><span id="line-290">    * @param session</span>
+<span class="source-line-no">291</span><span id="line-291">    *    The bean session to use to get the class meta.</span>
+<span class="source-line-no">292</span><span id="line-292">    *    This is always going to be the same bean context that created this swap.</span>
+<span class="source-line-no">293</span><span id="line-293">    * @param o The object to be transformed.</span>
+<span class="source-line-no">294</span><span id="line-294">    * @param template</span>
+<span class="source-line-no">295</span><span id="line-295">    *    The template string associated with this swap.</span>
+<span class="source-line-no">296</span><span id="line-296">    * @return The transformed object.</span>
+<span class="source-line-no">297</span><span id="line-297">    * @throws Exception If a problem occurred trying to convert the output.</span>
+<span class="source-line-no">298</span><span id="line-298">    */</span>
+<span class="source-line-no">299</span><span id="line-299">   public S swap(BeanSession session, T o, String template) throws Exception {</span>
+<span class="source-line-no">300</span><span id="line-300">      throw new SerializeException("Swap method not implemented on ObjectSwap ''{0}''", className(this));</span>
+<span class="source-line-no">301</span><span id="line-301">   }</span>
+<span class="source-line-no">302</span><span id="line-302"></span>
+<span class="source-line-no">303</span><span id="line-303">   /**</span>
+<span class="source-line-no">304</span><span id="line-304">    * If this transform is to be used to reconstitute objects that aren't true Java beans, it must implement this method.</span>
+<span class="source-line-no">305</span><span id="line-305">    *</span>
+<span class="source-line-no">306</span><span id="line-306">    * @param session</span>
+<span class="source-line-no">307</span><span id="line-307">    *    The bean session to use to get the class meta.</span>
+<span class="source-line-no">308</span><span id="line-308">    *    This is always going to be the same bean context that created this swap.</span>
+<span class="source-line-no">309</span><span id="line-309">    * @param f The transformed object.</span>
+<span class="source-line-no">310</span><span id="line-310">    * @param hint</span>
+<span class="source-line-no">311</span><span id="line-311">    *    If possible, the parser will try to tell you the object type being created.</span>
+<span class="source-line-no">312</span><span id="line-312">    *    For example, on a serialized date, this may tell you that the object being created must be of type</span>
+<span class="source-line-no">313</span><span id="line-313">    *    {@code GregorianCalendar}.</span>
+<span class="source-line-no">314</span><span id="line-314">    *    &lt;br&gt;This may be &lt;jk&gt;null&lt;/jk&gt; if the parser cannot make this determination.</span>
+<span class="source-line-no">315</span><span id="line-315">    * @return The narrowed object.</span>
+<span class="source-line-no">316</span><span id="line-316">    * @throws Exception If this method is not implemented.</span>
+<span class="source-line-no">317</span><span id="line-317">    */</span>
+<span class="source-line-no">318</span><span id="line-318">   public T unswap(BeanSession session, S f, ClassMeta&lt;?&gt; hint) throws Exception {</span>
+<span class="source-line-no">319</span><span id="line-319">      return unswap(session, f, hint, template);</span>
+<span class="source-line-no">320</span><span id="line-320">   }</span>
+<span class="source-line-no">321</span><span id="line-321"></span>
+<span class="source-line-no">322</span><span id="line-322">   /**</span>
+<span class="source-line-no">323</span><span id="line-323">    * Same as {@link #unswap(BeanSession, Object, ClassMeta)}, but can be used if your swap has a template associated with it.</span>
+<span class="source-line-no">324</span><span id="line-324">    *</span>
+<span class="source-line-no">325</span><span id="line-325">    * @param session</span>
+<span class="source-line-no">326</span><span id="line-326">    *    The bean session to use to get the class meta.</span>
+<span class="source-line-no">327</span><span id="line-327">    *    This is always going to be the same bean context that created this swap.</span>
+<span class="source-line-no">328</span><span id="line-328">    * @param f The transformed object.</span>
+<span class="source-line-no">329</span><span id="line-329">    * @param hint</span>
+<span class="source-line-no">330</span><span id="line-330">    *    If possible, the parser will try to tell you the object type being created.</span>
+<span class="source-line-no">331</span><span id="line-331">    *    For example, on a serialized date, this may tell you that the object being created must be of type</span>
+<span class="source-line-no">332</span><span id="line-332">    *    {@code GregorianCalendar}.</span>
+<span class="source-line-no">333</span><span id="line-333">    *    &lt;br&gt;This may be &lt;jk&gt;null&lt;/jk&gt; if the parser cannot make this determination.</span>
+<span class="source-line-no">334</span><span id="line-334">    * @param template</span>
+<span class="source-line-no">335</span><span id="line-335">    *    The template string associated with this swap.</span>
+<span class="source-line-no">336</span><span id="line-336">    * @return The transformed object.</span>
+<span class="source-line-no">337</span><span id="line-337">    * @throws Exception If a problem occurred trying to convert the output.</span>
+<span class="source-line-no">338</span><span id="line-338">    */</span>
+<span class="source-line-no">339</span><span id="line-339">   public T unswap(BeanSession session, S f, ClassMeta&lt;?&gt; hint, String template) throws Exception {</span>
+<span class="source-line-no">340</span><span id="line-340">      throw new ParseException("Unswap method not implemented on ObjectSwap ''{0}''", className(this));</span>
+<span class="source-line-no">341</span><span id="line-341">   }</span>
+<span class="source-line-no">342</span><span id="line-342"></span>
+<span class="source-line-no">343</span><span id="line-343">   /**</span>
+<span class="source-line-no">344</span><span id="line-344">    * Returns the T class, the normalized form of the class.</span>
+<span class="source-line-no">345</span><span id="line-345">    *</span>
+<span class="source-line-no">346</span><span id="line-346">    * @return The normal form of this class.</span>
+<span class="source-line-no">347</span><span id="line-347">    */</span>
+<span class="source-line-no">348</span><span id="line-348">   public ClassInfo getNormalClass() {</span>
+<span class="source-line-no">349</span><span id="line-349">      return normalClassInfo;</span>
+<span class="source-line-no">350</span><span id="line-350">   }</span>
+<span class="source-line-no">351</span><span id="line-351"></span>
+<span class="source-line-no">352</span><span id="line-352">   /**</span>
+<span class="source-line-no">353</span><span id="line-353">    * Returns the G class, the generalized form of the class.</span>
 <span class="source-line-no">354</span><span id="line-354">    *</span>
-<span class="source-line-no">355</span><span id="line-355">    * @return The transformed form of this class.</span>
-<span class="source-line-no">356</span><span id="line-356">    */</span>
-<span class="source-line-no">357</span><span id="line-357">   public ClassInfo getSwapClass() {</span>
-<span class="source-line-no">358</span><span id="line-358">      return swapClassInfo;</span>
-<span class="source-line-no">359</span><span id="line-359">   }</span>
-<span class="source-line-no">360</span><span id="line-360"></span>
-<span class="source-line-no">361</span><span id="line-361">   /**</span>
-<span class="source-line-no">362</span><span id="line-362">    * Returns the {@link ClassMeta} of the transformed class type.</span>
-<span class="source-line-no">363</span><span id="line-363">    *</span>
-<span class="source-line-no">364</span><span id="line-364">    * &lt;p&gt;</span>
-<span class="source-line-no">365</span><span id="line-365">    * This value is cached for quick lookup.</span>
-<span class="source-line-no">366</span><span id="line-366">    *</span>
-<span class="source-line-no">367</span><span id="line-367">    * @param session</span>
-<span class="source-line-no">368</span><span id="line-368">    *    The bean context to use to get the class meta.</span>
-<span class="source-line-no">369</span><span id="line-369">    *    This is always going to be the same bean context that created this swap.</span>
-<span class="source-line-no">370</span><span id="line-370">    * @return The {@link ClassMeta} of the transformed class type.</span>
-<span class="source-line-no">371</span><span id="line-371">    */</span>
-<span class="source-line-no">372</span><span id="line-372">   public ClassMeta&lt;?&gt; getSwapClassMeta(BeanSession session) {</span>
-<span class="source-line-no">373</span><span id="line-373">      if (swapClassMeta == null)</span>
-<span class="source-line-no">374</span><span id="line-374">         swapClassMeta = session.getClassMeta(swapClass);</span>
-<span class="source-line-no">375</span><span id="line-375">      return swapClassMeta;</span>
-<span class="source-line-no">376</span><span id="line-376">   }</span>
-<span class="source-line-no">377</span><span id="line-377"></span>
-<span class="source-line-no">378</span><span id="line-378">   /**</span>
-<span class="source-line-no">379</span><span id="line-379">    * Checks if the specified object is an instance of the normal class defined on this swap.</span>
-<span class="source-line-no">380</span><span id="line-380">    *</span>
-<span class="source-line-no">381</span><span id="line-381">    * @param o The object to check.</span>
-<span class="source-line-no">382</span><span id="line-382">    * @return</span>
-<span class="source-line-no">383</span><span id="line-383">    *    &lt;jk&gt;true&lt;/jk&gt; if the specified object is a subclass of the normal class defined on this transform.</span>
-<span class="source-line-no">384</span><span id="line-384">    *    &lt;jk&gt;null&lt;/jk&gt; always return &lt;jk&gt;false&lt;/jk&gt;.</span>
-<span class="source-line-no">385</span><span id="line-385">    */</span>
-<span class="source-line-no">386</span><span id="line-386">   public boolean isNormalObject(Object o) {</span>
-<span class="source-line-no">387</span><span id="line-387">      if (o == null)</span>
-<span class="source-line-no">388</span><span id="line-388">         return false;</span>
-<span class="source-line-no">389</span><span id="line-389">      return normalClassInfo.isParentOf(o.getClass());</span>
-<span class="source-line-no">390</span><span id="line-390">   }</span>
-<span class="source-line-no">391</span><span id="line-391"></span>
-<span class="source-line-no">392</span><span id="line-392">   /**</span>
-<span class="source-line-no">393</span><span id="line-393">    * Checks if the specified object is an instance of the swap class defined on this swap.</span>
-<span class="source-line-no">394</span><span id="line-394">    *</span>
-<span class="source-line-no">395</span><span id="line-395">    * @param o The object to check.</span>
-<span class="source-line-no">396</span><span id="line-396">    * @return</span>
-<span class="source-line-no">397</span><span id="line-397">    *    &lt;jk&gt;true&lt;/jk&gt; if the specified object is a subclass of the transformed class defined on this transform.</span>
-<span class="source-line-no">398</span><span id="line-398">    *    &lt;jk&gt;null&lt;/jk&gt; always return &lt;jk&gt;false&lt;/jk&gt;.</span>
-<span class="source-line-no">399</span><span id="line-399">    */</span>
-<span class="source-line-no">400</span><span id="line-400">   public boolean isSwappedObject(Object o) {</span>
-<span class="source-line-no">401</span><span id="line-401">      if (o == null)</span>
-<span class="source-line-no">402</span><span id="line-402">         return false;</span>
-<span class="source-line-no">403</span><span id="line-403">      return swapClassInfo.isParentOf(o.getClass());</span>
-<span class="source-line-no">404</span><span id="line-404">   }</span>
-<span class="source-line-no">405</span><span id="line-405"></span>
-<span class="source-line-no">406</span><span id="line-406">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">407</span><span id="line-407">   // Overridden methods</span>
-<span class="source-line-no">408</span><span id="line-408">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">355</span><span id="line-355">    * &lt;p&gt;</span>
+<span class="source-line-no">356</span><span id="line-356">    * Subclasses must override this method if the generalized class is {@code Object}, meaning it can produce multiple</span>
+<span class="source-line-no">357</span><span id="line-357">    * generalized forms.</span>
+<span class="source-line-no">358</span><span id="line-358">    *</span>
+<span class="source-line-no">359</span><span id="line-359">    * @return The transformed form of this class.</span>
+<span class="source-line-no">360</span><span id="line-360">    */</span>
+<span class="source-line-no">361</span><span id="line-361">   public ClassInfo getSwapClass() {</span>
+<span class="source-line-no">362</span><span id="line-362">      return swapClassInfo;</span>
+<span class="source-line-no">363</span><span id="line-363">   }</span>
+<span class="source-line-no">364</span><span id="line-364"></span>
+<span class="source-line-no">365</span><span id="line-365">   /**</span>
+<span class="source-line-no">366</span><span id="line-366">    * Returns the {@link ClassMeta} of the transformed class type.</span>
+<span class="source-line-no">367</span><span id="line-367">    *</span>
+<span class="source-line-no">368</span><span id="line-368">    * &lt;p&gt;</span>
+<span class="source-line-no">369</span><span id="line-369">    * This value is cached for quick lookup.</span>
+<span class="source-line-no">370</span><span id="line-370">    *</span>
+<span class="source-line-no">371</span><span id="line-371">    * @param session</span>
+<span class="source-line-no">372</span><span id="line-372">    *    The bean context to use to get the class meta.</span>
+<span class="source-line-no">373</span><span id="line-373">    *    This is always going to be the same bean context that created this swap.</span>
+<span class="source-line-no">374</span><span id="line-374">    * @return The {@link ClassMeta} of the transformed class type.</span>
+<span class="source-line-no">375</span><span id="line-375">    */</span>
+<span class="source-line-no">376</span><span id="line-376">   public ClassMeta&lt;?&gt; getSwapClassMeta(BeanSession session) {</span>
+<span class="source-line-no">377</span><span id="line-377">      if (swapClassMeta == null)</span>
+<span class="source-line-no">378</span><span id="line-378">         swapClassMeta = session.getClassMeta(swapClass);</span>
+<span class="source-line-no">379</span><span id="line-379">      return swapClassMeta;</span>
+<span class="source-line-no">380</span><span id="line-380">   }</span>
+<span class="source-line-no">381</span><span id="line-381"></span>
+<span class="source-line-no">382</span><span id="line-382">   /**</span>
+<span class="source-line-no">383</span><span id="line-383">    * Checks if the specified object is an instance of the normal class defined on this swap.</span>
+<span class="source-line-no">384</span><span id="line-384">    *</span>
+<span class="source-line-no">385</span><span id="line-385">    * @param o The object to check.</span>
+<span class="source-line-no">386</span><span id="line-386">    * @return</span>
+<span class="source-line-no">387</span><span id="line-387">    *    &lt;jk&gt;true&lt;/jk&gt; if the specified object is a subclass of the normal class defined on this transform.</span>
+<span class="source-line-no">388</span><span id="line-388">    *    &lt;jk&gt;null&lt;/jk&gt; always return &lt;jk&gt;false&lt;/jk&gt;.</span>
+<span class="source-line-no">389</span><span id="line-389">    */</span>
+<span class="source-line-no">390</span><span id="line-390">   public boolean isNormalObject(Object o) {</span>
+<span class="source-line-no">391</span><span id="line-391">      if (o == null)</span>
+<span class="source-line-no">392</span><span id="line-392">         return false;</span>
+<span class="source-line-no">393</span><span id="line-393">      return normalClassInfo.isParentOf(o.getClass());</span>
+<span class="source-line-no">394</span><span id="line-394">   }</span>
+<span class="source-line-no">395</span><span id="line-395"></span>
+<span class="source-line-no">396</span><span id="line-396">   /**</span>
+<span class="source-line-no">397</span><span id="line-397">    * Checks if the specified object is an instance of the swap class defined on this swap.</span>
+<span class="source-line-no">398</span><span id="line-398">    *</span>
+<span class="source-line-no">399</span><span id="line-399">    * @param o The object to check.</span>
+<span class="source-line-no">400</span><span id="line-400">    * @return</span>
+<span class="source-line-no">401</span><span id="line-401">    *    &lt;jk&gt;true&lt;/jk&gt; if the specified object is a subclass of the transformed class defined on this transform.</span>
+<span class="source-line-no">402</span><span id="line-402">    *    &lt;jk&gt;null&lt;/jk&gt; always return &lt;jk&gt;false&lt;/jk&gt;.</span>
+<span class="source-line-no">403</span><span id="line-403">    */</span>
+<span class="source-line-no">404</span><span id="line-404">   public boolean isSwappedObject(Object o) {</span>
+<span class="source-line-no">405</span><span id="line-405">      if (o == null)</span>
+<span class="source-line-no">406</span><span id="line-406">         return false;</span>
+<span class="source-line-no">407</span><span id="line-407">      return swapClassInfo.isParentOf(o.getClass());</span>
+<span class="source-line-no">408</span><span id="line-408">   }</span>
 <span class="source-line-no">409</span><span id="line-409"></span>
-<span class="source-line-no">410</span><span id="line-410">   @Override /* Object */</span>
-<span class="source-line-no">411</span><span id="line-411">   public String toString() {</span>
-<span class="source-line-no">412</span><span id="line-412">      return getClass().getSimpleName() + '&lt;' + getNormalClass().getSimpleName() + "," + getSwapClass().getSimpleName() + '&gt;';</span>
-<span class="source-line-no">413</span><span id="line-413">   }</span>
-<span class="source-line-no">414</span><span id="line-414">}</span>
+<span class="source-line-no">410</span><span id="line-410">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">411</span><span id="line-411">   // Overridden methods</span>
+<span class="source-line-no">412</span><span id="line-412">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">413</span><span id="line-413"></span>
+<span class="source-line-no">414</span><span id="line-414">   @Override /* Object */</span>
+<span class="source-line-no">415</span><span id="line-415">   public String toString() {</span>
+<span class="source-line-no">416</span><span id="line-416">      return getClass().getSimpleName() + '&lt;' + getNormalClass().getSimpleName() + "," + getSwapClass().getSimpleName() + '&gt;';</span>
+<span class="source-line-no">417</span><span id="line-417">   }</span>
+<span class="source-line-no">418</span><span id="line-418">}</span>
 
 
 

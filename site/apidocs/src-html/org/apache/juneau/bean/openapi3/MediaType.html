@@ -11,281 +11,285 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.bean.openapi3;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.common.utils.Utils.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import static org.apache.juneau.internal.CollectionUtils.*;</span>
-<span class="source-line-no">017</span><span id="line-17">import static org.apache.juneau.internal.ConverterUtils.*;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.bean.openapi3;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import java.util.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.annotation.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.internal.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">/**</span>
-<span class="source-line-no">025</span><span id="line-25"> * Provides schema and examples for the media type identified by its key.</span>
-<span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> * Each Media Type Object provides schema and examples for the media type identified by its key (e.g., &lt;js&gt;"application/json"&lt;/js&gt;).</span>
-<span class="source-line-no">029</span><span id="line-29"> * Media types are used in request bodies and response content to describe the structure and format of the data being sent or received.</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.common.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.internal.CollectionUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.internal.ConverterUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
+<span class="source-line-no">024</span><span id="line-24"></span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.annotation.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.internal.*;</span>
+<span class="source-line-no">027</span><span id="line-27"></span>
+<span class="source-line-no">028</span><span id="line-28">/**</span>
+<span class="source-line-no">029</span><span id="line-29"> * Provides schema and examples for the media type identified by its key.</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='section'&gt;OpenAPI Specification:&lt;/h5&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * The Media Type Object is composed of the following fields:</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;&lt;c&gt;schema&lt;/c&gt; ({@link SchemaInfo}) - The schema defining the content</span>
-<span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;&lt;c&gt;example&lt;/c&gt; (any) - Example of the media type (mutually exclusive with &lt;c&gt;examples&lt;/c&gt;)</span>
-<span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;&lt;c&gt;examples&lt;/c&gt; (map of {@link Example}) - Examples of the media type (mutually exclusive with &lt;c&gt;example&lt;/c&gt;)</span>
-<span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;&lt;c&gt;encoding&lt;/c&gt; (map of {@link Encoding}) - A map between a property name and its encoding information</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;/ul&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;jc&gt;// Create a MediaType for JSON content&lt;/jc&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> *    MediaType &lt;jv&gt;mediaType&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; MediaType()</span>
-<span class="source-line-no">045</span><span id="line-45"> *       .setSchema(</span>
-<span class="source-line-no">046</span><span id="line-46"> *          &lt;jk&gt;new&lt;/jk&gt; SchemaInfo()</span>
-<span class="source-line-no">047</span><span id="line-47"> *             .setType(&lt;js&gt;"object"&lt;/js&gt;)</span>
-<span class="source-line-no">048</span><span id="line-48"> *             .setProperties(</span>
-<span class="source-line-no">049</span><span id="line-49"> *                JsonMap.&lt;jsm&gt;of&lt;/jsm&gt;(</span>
-<span class="source-line-no">050</span><span id="line-50"> *                   &lt;js&gt;"id"&lt;/js&gt;, &lt;jk&gt;new&lt;/jk&gt; SchemaInfo().setType(&lt;js&gt;"integer"&lt;/js&gt;),</span>
-<span class="source-line-no">051</span><span id="line-51"> *                   &lt;js&gt;"name"&lt;/js&gt;, &lt;jk&gt;new&lt;/jk&gt; SchemaInfo().setType(&lt;js&gt;"string"&lt;/js&gt;)</span>
-<span class="source-line-no">052</span><span id="line-52"> *                )</span>
-<span class="source-line-no">053</span><span id="line-53"> *             )</span>
-<span class="source-line-no">054</span><span id="line-54"> *       )</span>
-<span class="source-line-no">055</span><span id="line-55"> *       .setExample(</span>
-<span class="source-line-no">056</span><span id="line-56"> *          JsonMap.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"id"&lt;/js&gt;, 123, &lt;js&gt;"name"&lt;/js&gt;, &lt;js&gt;"Fluffy"&lt;/js&gt;)</span>
-<span class="source-line-no">057</span><span id="line-57"> *       );</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;/p&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> *</span>
-<span class="source-line-no">060</span><span id="line-60"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">061</span><span id="line-61"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#media-type-object"&gt;OpenAPI Specification &amp;gt; Media Type Object&lt;/a&gt;</span>
-<span class="source-line-no">062</span><span id="line-62"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://swagger.io/docs/specification/media-types/"&gt;OpenAPI Media Types&lt;/a&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3"&gt;juneau-bean-openapi-v3&lt;/a&gt;</span>
-<span class="source-line-no">064</span><span id="line-64"> * &lt;/ul&gt;</span>
-<span class="source-line-no">065</span><span id="line-65"> */</span>
-<span class="source-line-no">066</span><span id="line-66">public class MediaType extends OpenApiElement{</span>
-<span class="source-line-no">067</span><span id="line-67">   private SchemaInfo schema;</span>
-<span class="source-line-no">068</span><span id="line-68">   private Object example;</span>
-<span class="source-line-no">069</span><span id="line-69">   private Map&lt;String,Example&gt; examples;</span>
-<span class="source-line-no">070</span><span id="line-70">   private Map&lt;String,Encoding&gt; encoding;</span>
-<span class="source-line-no">071</span><span id="line-71"></span>
-<span class="source-line-no">072</span><span id="line-72">   /**</span>
-<span class="source-line-no">073</span><span id="line-73">    * Default constructor.</span>
-<span class="source-line-no">074</span><span id="line-74">    */</span>
-<span class="source-line-no">075</span><span id="line-75">   public MediaType() { }</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">   /**</span>
-<span class="source-line-no">078</span><span id="line-78">    * Copy constructor.</span>
-<span class="source-line-no">079</span><span id="line-79">    *</span>
-<span class="source-line-no">080</span><span id="line-80">    * @param copyFrom The object to copy.</span>
-<span class="source-line-no">081</span><span id="line-81">    */</span>
-<span class="source-line-no">082</span><span id="line-82">   public MediaType(MediaType copyFrom) {</span>
-<span class="source-line-no">083</span><span id="line-83">      super(copyFrom);</span>
-<span class="source-line-no">084</span><span id="line-84"></span>
-<span class="source-line-no">085</span><span id="line-85">      this.schema = copyFrom.schema;</span>
-<span class="source-line-no">086</span><span id="line-86">      this.example = copyFrom.example;</span>
-<span class="source-line-no">087</span><span id="line-87">      this.examples = copyOf(copyFrom.examples, Example::copy);</span>
-<span class="source-line-no">088</span><span id="line-88">      this.encoding = copyOf(copyFrom.encoding, Encoding::copy);</span>
-<span class="source-line-no">089</span><span id="line-89">   }</span>
-<span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">   /**</span>
-<span class="source-line-no">092</span><span id="line-92">    * Make a deep copy of this object.</span>
-<span class="source-line-no">093</span><span id="line-93">    *</span>
-<span class="source-line-no">094</span><span id="line-94">    * @return A deep copy of this object.</span>
-<span class="source-line-no">095</span><span id="line-95">    */</span>
-<span class="source-line-no">096</span><span id="line-96">   public MediaType copy() {</span>
-<span class="source-line-no">097</span><span id="line-97">      return new MediaType(this);</span>
-<span class="source-line-no">098</span><span id="line-98">   }</span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">   @Override /* Overridden from OpenApiElement */</span>
-<span class="source-line-no">101</span><span id="line-101">   protected MediaType strict() {</span>
-<span class="source-line-no">102</span><span id="line-102">      super.strict();</span>
-<span class="source-line-no">103</span><span id="line-103">      return this;</span>
-<span class="source-line-no">104</span><span id="line-104">   }</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">   @Override /* Overridden from OpenApiElement */</span>
-<span class="source-line-no">107</span><span id="line-107">   public MediaType strict(Object value) {</span>
-<span class="source-line-no">108</span><span id="line-108">      super.strict(value);</span>
-<span class="source-line-no">109</span><span id="line-109">      return this;</span>
-<span class="source-line-no">110</span><span id="line-110">   }</span>
-<span class="source-line-no">111</span><span id="line-111"></span>
-<span class="source-line-no">112</span><span id="line-112">   /**</span>
-<span class="source-line-no">113</span><span id="line-113">    * Bean property getter:  &lt;property&gt;schema&lt;/property&gt;.</span>
-<span class="source-line-no">114</span><span id="line-114">    *</span>
-<span class="source-line-no">115</span><span id="line-115">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">116</span><span id="line-116">    */</span>
-<span class="source-line-no">117</span><span id="line-117">   public SchemaInfo getSchema() {</span>
-<span class="source-line-no">118</span><span id="line-118">      return schema;</span>
-<span class="source-line-no">119</span><span id="line-119">   }</span>
-<span class="source-line-no">120</span><span id="line-120"></span>
-<span class="source-line-no">121</span><span id="line-121">   /**</span>
-<span class="source-line-no">122</span><span id="line-122">    * Bean property setter:  &lt;property&gt;schema&lt;/property&gt;.</span>
-<span class="source-line-no">123</span><span id="line-123">    *</span>
-<span class="source-line-no">124</span><span id="line-124">    * @param value</span>
-<span class="source-line-no">125</span><span id="line-125">    *    The new value for this property.</span>
-<span class="source-line-no">126</span><span id="line-126">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">127</span><span id="line-127">    * @return This object</span>
-<span class="source-line-no">128</span><span id="line-128">    */</span>
-<span class="source-line-no">129</span><span id="line-129">   public MediaType setSchema(SchemaInfo value) {</span>
-<span class="source-line-no">130</span><span id="line-130">      schema = value;</span>
-<span class="source-line-no">131</span><span id="line-131">      return this;</span>
-<span class="source-line-no">132</span><span id="line-132">   }</span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">   /**</span>
-<span class="source-line-no">135</span><span id="line-135">    * Bean property getter:  &lt;property&gt;x-example&lt;/property&gt;.</span>
-<span class="source-line-no">136</span><span id="line-136">    *</span>
-<span class="source-line-no">137</span><span id="line-137">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">138</span><span id="line-138">    */</span>
-<span class="source-line-no">139</span><span id="line-139">   @Beanp("x-example")</span>
-<span class="source-line-no">140</span><span id="line-140">   public Object getExample() {</span>
-<span class="source-line-no">141</span><span id="line-141">      return example;</span>
-<span class="source-line-no">142</span><span id="line-142">   }</span>
-<span class="source-line-no">143</span><span id="line-143"></span>
-<span class="source-line-no">144</span><span id="line-144">   /**</span>
-<span class="source-line-no">145</span><span id="line-145">    * Bean property setter:  &lt;property&gt;examples&lt;/property&gt;.</span>
-<span class="source-line-no">146</span><span id="line-146">    *</span>
-<span class="source-line-no">147</span><span id="line-147">    * @param value</span>
-<span class="source-line-no">148</span><span id="line-148">    *    The new value for this property.</span>
-<span class="source-line-no">149</span><span id="line-149">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">150</span><span id="line-150">    * @return This object</span>
-<span class="source-line-no">151</span><span id="line-151">    */</span>
-<span class="source-line-no">152</span><span id="line-152">   @Beanp("x-example")</span>
-<span class="source-line-no">153</span><span id="line-153">   public MediaType setExample(Object value) {</span>
-<span class="source-line-no">154</span><span id="line-154">      example = value;</span>
-<span class="source-line-no">155</span><span id="line-155">      return this;</span>
-<span class="source-line-no">156</span><span id="line-156">   }</span>
-<span class="source-line-no">157</span><span id="line-157"></span>
-<span class="source-line-no">158</span><span id="line-158">   /**</span>
-<span class="source-line-no">159</span><span id="line-159">    * Bean property getter:  &lt;property&gt;variables&lt;/property&gt;.</span>
-<span class="source-line-no">160</span><span id="line-160">    *</span>
-<span class="source-line-no">161</span><span id="line-161">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">162</span><span id="line-162">    */</span>
-<span class="source-line-no">163</span><span id="line-163">   public Map&lt;String, Encoding&gt; getEncoding() {</span>
-<span class="source-line-no">164</span><span id="line-164">      return encoding;</span>
-<span class="source-line-no">165</span><span id="line-165">   }</span>
-<span class="source-line-no">166</span><span id="line-166"></span>
-<span class="source-line-no">167</span><span id="line-167">   /**</span>
-<span class="source-line-no">168</span><span id="line-168">    * Bean property setter:  &lt;property&gt;variables&lt;/property&gt;.</span>
-<span class="source-line-no">169</span><span id="line-169">    *</span>
-<span class="source-line-no">170</span><span id="line-170">    * @param value</span>
-<span class="source-line-no">171</span><span id="line-171">    *    The new value for this property.</span>
-<span class="source-line-no">172</span><span id="line-172">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">173</span><span id="line-173">    * @return This object</span>
-<span class="source-line-no">174</span><span id="line-174">    */</span>
-<span class="source-line-no">175</span><span id="line-175">   public MediaType setEncoding(Map&lt;String, Encoding&gt; value) {</span>
-<span class="source-line-no">176</span><span id="line-176">      encoding = copyOf(value);</span>
-<span class="source-line-no">177</span><span id="line-177">      return this;</span>
-<span class="source-line-no">178</span><span id="line-178">   }</span>
-<span class="source-line-no">179</span><span id="line-179"></span>
-<span class="source-line-no">180</span><span id="line-180">   /**</span>
-<span class="source-line-no">181</span><span id="line-181">    * Adds one or more values to the &lt;property&gt;variables&lt;/property&gt; property.</span>
-<span class="source-line-no">182</span><span id="line-182">    *</span>
-<span class="source-line-no">183</span><span id="line-183">    * @param key The mapping key.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">184</span><span id="line-184">    * @param value </span>
-<span class="source-line-no">185</span><span id="line-185">    *    The values to add to this property.</span>
-<span class="source-line-no">186</span><span id="line-186">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">187</span><span id="line-187">    * @return This object</span>
-<span class="source-line-no">188</span><span id="line-188">    */</span>
-<span class="source-line-no">189</span><span id="line-189">   public MediaType addEncoding(String key, Encoding value) {</span>
-<span class="source-line-no">190</span><span id="line-190">      assertArgNotNull("key", key);</span>
-<span class="source-line-no">191</span><span id="line-191">      assertArgNotNull("value", value);</span>
-<span class="source-line-no">192</span><span id="line-192">      encoding = mapBuilder(encoding).sparse().add(key, value).build();</span>
-<span class="source-line-no">193</span><span id="line-193">      return this;</span>
-<span class="source-line-no">194</span><span id="line-194">   }</span>
-<span class="source-line-no">195</span><span id="line-195"></span>
-<span class="source-line-no">196</span><span id="line-196">   /**</span>
-<span class="source-line-no">197</span><span id="line-197">    * Bean property getter:  &lt;property&gt;examples&lt;/property&gt;.</span>
-<span class="source-line-no">198</span><span id="line-198">    *</span>
-<span class="source-line-no">199</span><span id="line-199">    * &lt;p&gt;</span>
-<span class="source-line-no">200</span><span id="line-200">    * The list of possible responses as they are returned from executing this operation.</span>
-<span class="source-line-no">201</span><span id="line-201">    *</span>
-<span class="source-line-no">202</span><span id="line-202">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">203</span><span id="line-203">    */</span>
-<span class="source-line-no">204</span><span id="line-204">   public Map&lt;String,Example&gt; getExamples() {</span>
-<span class="source-line-no">205</span><span id="line-205">      return examples;</span>
-<span class="source-line-no">206</span><span id="line-206">   }</span>
-<span class="source-line-no">207</span><span id="line-207"></span>
-<span class="source-line-no">208</span><span id="line-208">   /**</span>
-<span class="source-line-no">209</span><span id="line-209">    * Bean property setter:  &lt;property&gt;headers&lt;/property&gt;.</span>
-<span class="source-line-no">210</span><span id="line-210">    *</span>
-<span class="source-line-no">211</span><span id="line-211">    * &lt;p&gt;</span>
-<span class="source-line-no">212</span><span id="line-212">    * A list of examples that are sent with the response.</span>
-<span class="source-line-no">213</span><span id="line-213">    *</span>
-<span class="source-line-no">214</span><span id="line-214">    * @param value</span>
-<span class="source-line-no">215</span><span id="line-215">    *    The new value for this property.</span>
-<span class="source-line-no">216</span><span id="line-216">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">217</span><span id="line-217">    * @return This object</span>
-<span class="source-line-no">218</span><span id="line-218">    */</span>
-<span class="source-line-no">219</span><span id="line-219">   public MediaType setExamples(Map&lt;String,Example&gt; value) {</span>
-<span class="source-line-no">220</span><span id="line-220">      examples = copyOf(value);</span>
-<span class="source-line-no">221</span><span id="line-221">      return this;</span>
-<span class="source-line-no">222</span><span id="line-222">   }</span>
-<span class="source-line-no">223</span><span id="line-223"></span>
-<span class="source-line-no">224</span><span id="line-224">   /**</span>
-<span class="source-line-no">225</span><span id="line-225">    * Adds a single value to the &lt;property&gt;examples&lt;/property&gt; property.</span>
-<span class="source-line-no">226</span><span id="line-226">    *</span>
-<span class="source-line-no">227</span><span id="line-227">    * @param name The example name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">228</span><span id="line-228">    * @param example The example.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">229</span><span id="line-229">    * @return This object</span>
-<span class="source-line-no">230</span><span id="line-230">    */</span>
-<span class="source-line-no">231</span><span id="line-231">   public MediaType addExample(String name, Example example) {</span>
-<span class="source-line-no">232</span><span id="line-232">      assertArgNotNull("name", name);</span>
-<span class="source-line-no">233</span><span id="line-233">      assertArgNotNull("example", example);</span>
-<span class="source-line-no">234</span><span id="line-234">      examples = mapBuilder(examples).add(name, example).build();</span>
-<span class="source-line-no">235</span><span id="line-235">      return this;</span>
-<span class="source-line-no">236</span><span id="line-236">   }</span>
-<span class="source-line-no">237</span><span id="line-237"></span>
-<span class="source-line-no">238</span><span id="line-238">   @Override /* Overridden from OpenApiElement */</span>
-<span class="source-line-no">239</span><span id="line-239">   public &lt;T&gt; T get(String property, Class&lt;T&gt; type) {</span>
-<span class="source-line-no">240</span><span id="line-240">      assertArgNotNull("property", property);</span>
-<span class="source-line-no">241</span><span id="line-241">      return switch (property) {</span>
-<span class="source-line-no">242</span><span id="line-242">         case "encoding" -&gt; toType(getEncoding(), type);</span>
-<span class="source-line-no">243</span><span id="line-243">         case "examples" -&gt; toType(getExamples(), type);</span>
-<span class="source-line-no">244</span><span id="line-244">         case "schema" -&gt; toType(getSchema(), type);</span>
-<span class="source-line-no">245</span><span id="line-245">         case "x-example" -&gt; toType(getExample(), type);</span>
-<span class="source-line-no">246</span><span id="line-246">         default -&gt; super.get(property, type);</span>
-<span class="source-line-no">247</span><span id="line-247">      };</span>
-<span class="source-line-no">248</span><span id="line-248">   }</span>
-<span class="source-line-no">249</span><span id="line-249"></span>
-<span class="source-line-no">250</span><span id="line-250">   @Override /* Overridden from OpenApiElement */</span>
-<span class="source-line-no">251</span><span id="line-251">   public MediaType set(String property, Object value) {</span>
-<span class="source-line-no">252</span><span id="line-252">      assertArgNotNull("property", property);</span>
-<span class="source-line-no">253</span><span id="line-253">      return switch (property) {</span>
-<span class="source-line-no">254</span><span id="line-254">         case "encoding" -&gt; setEncoding(mapBuilder(String.class,Encoding.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">255</span><span id="line-255">         case "examples" -&gt; setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">256</span><span id="line-256">         case "schema" -&gt; setSchema(toType(value, SchemaInfo.class));</span>
-<span class="source-line-no">257</span><span id="line-257">         case "x-example" -&gt; setExample(value);</span>
-<span class="source-line-no">258</span><span id="line-258">         default -&gt; {</span>
-<span class="source-line-no">259</span><span id="line-259">            super.set(property, value);</span>
-<span class="source-line-no">260</span><span id="line-260">            yield this;</span>
-<span class="source-line-no">261</span><span id="line-261">         }</span>
-<span class="source-line-no">262</span><span id="line-262">      };</span>
-<span class="source-line-no">263</span><span id="line-263">   }</span>
-<span class="source-line-no">264</span><span id="line-264"></span>
-<span class="source-line-no">265</span><span id="line-265">   @Override /* Overridden from OpenApiElement */</span>
-<span class="source-line-no">266</span><span id="line-266">   public Set&lt;String&gt; keySet() {</span>
-<span class="source-line-no">267</span><span id="line-267">      var s = setBuilder(String.class)</span>
-<span class="source-line-no">268</span><span id="line-268">         .addIf(schema != null, "schema")</span>
-<span class="source-line-no">269</span><span id="line-269">         .addIf(example != null, "x-example")</span>
-<span class="source-line-no">270</span><span id="line-270">         .addIf(encoding != null, "encoding")</span>
-<span class="source-line-no">271</span><span id="line-271">         .addIf(examples != null, "examples")</span>
-<span class="source-line-no">272</span><span id="line-272">         .build();</span>
-<span class="source-line-no">273</span><span id="line-273">      return new MultiSet&lt;&gt;(s, super.keySet());</span>
-<span class="source-line-no">274</span><span id="line-274">   }</span>
-<span class="source-line-no">275</span><span id="line-275">}</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * Each Media Type Object provides schema and examples for the media type identified by its key (e.g., &lt;js&gt;"application/json"&lt;/js&gt;).</span>
+<span class="source-line-no">033</span><span id="line-33"> * Media types are used in request bodies and response content to describe the structure and format of the data being sent or received.</span>
+<span class="source-line-no">034</span><span id="line-34"> *</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;OpenAPI Specification:&lt;/h5&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * The Media Type Object is composed of the following fields:</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;&lt;c&gt;schema&lt;/c&gt; ({@link SchemaInfo}) - The schema defining the content</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;&lt;c&gt;example&lt;/c&gt; (any) - Example of the media type (mutually exclusive with &lt;c&gt;examples&lt;/c&gt;)</span>
+<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;&lt;c&gt;examples&lt;/c&gt; (map of {@link Example}) - Examples of the media type (mutually exclusive with &lt;c&gt;example&lt;/c&gt;)</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;&lt;c&gt;encoding&lt;/c&gt; (map of {@link Encoding}) - A map between a property name and its encoding information</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;/ul&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> *</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *    &lt;jc&gt;// Create a MediaType for JSON content&lt;/jc&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> *    MediaType &lt;jv&gt;mediaType&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; MediaType()</span>
+<span class="source-line-no">049</span><span id="line-49"> *       .setSchema(</span>
+<span class="source-line-no">050</span><span id="line-50"> *          &lt;jk&gt;new&lt;/jk&gt; SchemaInfo()</span>
+<span class="source-line-no">051</span><span id="line-51"> *             .setType(&lt;js&gt;"object"&lt;/js&gt;)</span>
+<span class="source-line-no">052</span><span id="line-52"> *             .setProperties(</span>
+<span class="source-line-no">053</span><span id="line-53"> *                JsonMap.&lt;jsm&gt;of&lt;/jsm&gt;(</span>
+<span class="source-line-no">054</span><span id="line-54"> *                   &lt;js&gt;"id"&lt;/js&gt;, &lt;jk&gt;new&lt;/jk&gt; SchemaInfo().setType(&lt;js&gt;"integer"&lt;/js&gt;),</span>
+<span class="source-line-no">055</span><span id="line-55"> *                   &lt;js&gt;"name"&lt;/js&gt;, &lt;jk&gt;new&lt;/jk&gt; SchemaInfo().setType(&lt;js&gt;"string"&lt;/js&gt;)</span>
+<span class="source-line-no">056</span><span id="line-56"> *                )</span>
+<span class="source-line-no">057</span><span id="line-57"> *             )</span>
+<span class="source-line-no">058</span><span id="line-58"> *       )</span>
+<span class="source-line-no">059</span><span id="line-59"> *       .setExample(</span>
+<span class="source-line-no">060</span><span id="line-60"> *          JsonMap.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"id"&lt;/js&gt;, 123, &lt;js&gt;"name"&lt;/js&gt;, &lt;js&gt;"Fluffy"&lt;/js&gt;)</span>
+<span class="source-line-no">061</span><span id="line-61"> *       );</span>
+<span class="source-line-no">062</span><span id="line-62"> * &lt;/p&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> *</span>
+<span class="source-line-no">064</span><span id="line-64"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#media-type-object"&gt;OpenAPI Specification &amp;gt; Media Type Object&lt;/a&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://swagger.io/docs/specification/media-types/"&gt;OpenAPI Media Types&lt;/a&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3"&gt;juneau-bean-openapi-v3&lt;/a&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;/ul&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> */</span>
+<span class="source-line-no">070</span><span id="line-70">public class MediaType extends OpenApiElement{</span>
+<span class="source-line-no">071</span><span id="line-71">   private SchemaInfo schema;</span>
+<span class="source-line-no">072</span><span id="line-72">   private Object example;</span>
+<span class="source-line-no">073</span><span id="line-73">   private Map&lt;String,Example&gt; examples;</span>
+<span class="source-line-no">074</span><span id="line-74">   private Map&lt;String,Encoding&gt; encoding;</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">   /**</span>
+<span class="source-line-no">077</span><span id="line-77">    * Default constructor.</span>
+<span class="source-line-no">078</span><span id="line-78">    */</span>
+<span class="source-line-no">079</span><span id="line-79">   public MediaType() { }</span>
+<span class="source-line-no">080</span><span id="line-80"></span>
+<span class="source-line-no">081</span><span id="line-81">   /**</span>
+<span class="source-line-no">082</span><span id="line-82">    * Copy constructor.</span>
+<span class="source-line-no">083</span><span id="line-83">    *</span>
+<span class="source-line-no">084</span><span id="line-84">    * @param copyFrom The object to copy.</span>
+<span class="source-line-no">085</span><span id="line-85">    */</span>
+<span class="source-line-no">086</span><span id="line-86">   public MediaType(MediaType copyFrom) {</span>
+<span class="source-line-no">087</span><span id="line-87">      super(copyFrom);</span>
+<span class="source-line-no">088</span><span id="line-88"></span>
+<span class="source-line-no">089</span><span id="line-89">      this.schema = copyFrom.schema;</span>
+<span class="source-line-no">090</span><span id="line-90">      this.example = copyFrom.example;</span>
+<span class="source-line-no">091</span><span id="line-91">      this.examples = copyOf(copyFrom.examples, Example::copy);</span>
+<span class="source-line-no">092</span><span id="line-92">      this.encoding = copyOf(copyFrom.encoding, Encoding::copy);</span>
+<span class="source-line-no">093</span><span id="line-93">   }</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">   /**</span>
+<span class="source-line-no">096</span><span id="line-96">    * Make a deep copy of this object.</span>
+<span class="source-line-no">097</span><span id="line-97">    *</span>
+<span class="source-line-no">098</span><span id="line-98">    * @return A deep copy of this object.</span>
+<span class="source-line-no">099</span><span id="line-99">    */</span>
+<span class="source-line-no">100</span><span id="line-100">   public MediaType copy() {</span>
+<span class="source-line-no">101</span><span id="line-101">      return new MediaType(this);</span>
+<span class="source-line-no">102</span><span id="line-102">   }</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">   @Override /* Overridden from OpenApiElement */</span>
+<span class="source-line-no">105</span><span id="line-105">   protected MediaType strict() {</span>
+<span class="source-line-no">106</span><span id="line-106">      super.strict();</span>
+<span class="source-line-no">107</span><span id="line-107">      return this;</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   @Override /* Overridden from OpenApiElement */</span>
+<span class="source-line-no">111</span><span id="line-111">   public MediaType strict(Object value) {</span>
+<span class="source-line-no">112</span><span id="line-112">      super.strict(value);</span>
+<span class="source-line-no">113</span><span id="line-113">      return this;</span>
+<span class="source-line-no">114</span><span id="line-114">   }</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   /**</span>
+<span class="source-line-no">117</span><span id="line-117">    * Bean property getter:  &lt;property&gt;schema&lt;/property&gt;.</span>
+<span class="source-line-no">118</span><span id="line-118">    *</span>
+<span class="source-line-no">119</span><span id="line-119">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">120</span><span id="line-120">    */</span>
+<span class="source-line-no">121</span><span id="line-121">   public SchemaInfo getSchema() {</span>
+<span class="source-line-no">122</span><span id="line-122">      return schema;</span>
+<span class="source-line-no">123</span><span id="line-123">   }</span>
+<span class="source-line-no">124</span><span id="line-124"></span>
+<span class="source-line-no">125</span><span id="line-125">   /**</span>
+<span class="source-line-no">126</span><span id="line-126">    * Bean property setter:  &lt;property&gt;schema&lt;/property&gt;.</span>
+<span class="source-line-no">127</span><span id="line-127">    *</span>
+<span class="source-line-no">128</span><span id="line-128">    * @param value</span>
+<span class="source-line-no">129</span><span id="line-129">    *    The new value for this property.</span>
+<span class="source-line-no">130</span><span id="line-130">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">131</span><span id="line-131">    * @return This object</span>
+<span class="source-line-no">132</span><span id="line-132">    */</span>
+<span class="source-line-no">133</span><span id="line-133">   public MediaType setSchema(SchemaInfo value) {</span>
+<span class="source-line-no">134</span><span id="line-134">      schema = value;</span>
+<span class="source-line-no">135</span><span id="line-135">      return this;</span>
+<span class="source-line-no">136</span><span id="line-136">   }</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">   /**</span>
+<span class="source-line-no">139</span><span id="line-139">    * Bean property getter:  &lt;property&gt;x-example&lt;/property&gt;.</span>
+<span class="source-line-no">140</span><span id="line-140">    *</span>
+<span class="source-line-no">141</span><span id="line-141">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">142</span><span id="line-142">    */</span>
+<span class="source-line-no">143</span><span id="line-143">   @Beanp("x-example")</span>
+<span class="source-line-no">144</span><span id="line-144">   public Object getExample() {</span>
+<span class="source-line-no">145</span><span id="line-145">      return example;</span>
+<span class="source-line-no">146</span><span id="line-146">   }</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">   /**</span>
+<span class="source-line-no">149</span><span id="line-149">    * Bean property setter:  &lt;property&gt;examples&lt;/property&gt;.</span>
+<span class="source-line-no">150</span><span id="line-150">    *</span>
+<span class="source-line-no">151</span><span id="line-151">    * @param value</span>
+<span class="source-line-no">152</span><span id="line-152">    *    The new value for this property.</span>
+<span class="source-line-no">153</span><span id="line-153">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">154</span><span id="line-154">    * @return This object</span>
+<span class="source-line-no">155</span><span id="line-155">    */</span>
+<span class="source-line-no">156</span><span id="line-156">   @Beanp("x-example")</span>
+<span class="source-line-no">157</span><span id="line-157">   public MediaType setExample(Object value) {</span>
+<span class="source-line-no">158</span><span id="line-158">      example = value;</span>
+<span class="source-line-no">159</span><span id="line-159">      return this;</span>
+<span class="source-line-no">160</span><span id="line-160">   }</span>
+<span class="source-line-no">161</span><span id="line-161"></span>
+<span class="source-line-no">162</span><span id="line-162">   /**</span>
+<span class="source-line-no">163</span><span id="line-163">    * Bean property getter:  &lt;property&gt;variables&lt;/property&gt;.</span>
+<span class="source-line-no">164</span><span id="line-164">    *</span>
+<span class="source-line-no">165</span><span id="line-165">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">166</span><span id="line-166">    */</span>
+<span class="source-line-no">167</span><span id="line-167">   public Map&lt;String, Encoding&gt; getEncoding() {</span>
+<span class="source-line-no">168</span><span id="line-168">      return encoding;</span>
+<span class="source-line-no">169</span><span id="line-169">   }</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
+<span class="source-line-no">171</span><span id="line-171">   /**</span>
+<span class="source-line-no">172</span><span id="line-172">    * Bean property setter:  &lt;property&gt;variables&lt;/property&gt;.</span>
+<span class="source-line-no">173</span><span id="line-173">    *</span>
+<span class="source-line-no">174</span><span id="line-174">    * @param value</span>
+<span class="source-line-no">175</span><span id="line-175">    *    The new value for this property.</span>
+<span class="source-line-no">176</span><span id="line-176">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">177</span><span id="line-177">    * @return This object</span>
+<span class="source-line-no">178</span><span id="line-178">    */</span>
+<span class="source-line-no">179</span><span id="line-179">   public MediaType setEncoding(Map&lt;String, Encoding&gt; value) {</span>
+<span class="source-line-no">180</span><span id="line-180">      encoding = copyOf(value);</span>
+<span class="source-line-no">181</span><span id="line-181">      return this;</span>
+<span class="source-line-no">182</span><span id="line-182">   }</span>
+<span class="source-line-no">183</span><span id="line-183"></span>
+<span class="source-line-no">184</span><span id="line-184">   /**</span>
+<span class="source-line-no">185</span><span id="line-185">    * Adds one or more values to the &lt;property&gt;variables&lt;/property&gt; property.</span>
+<span class="source-line-no">186</span><span id="line-186">    *</span>
+<span class="source-line-no">187</span><span id="line-187">    * @param key The mapping key.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">188</span><span id="line-188">    * @param value </span>
+<span class="source-line-no">189</span><span id="line-189">    *    The values to add to this property.</span>
+<span class="source-line-no">190</span><span id="line-190">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">191</span><span id="line-191">    * @return This object</span>
+<span class="source-line-no">192</span><span id="line-192">    */</span>
+<span class="source-line-no">193</span><span id="line-193">   public MediaType addEncoding(String key, Encoding value) {</span>
+<span class="source-line-no">194</span><span id="line-194">      assertArgNotNull("key", key);</span>
+<span class="source-line-no">195</span><span id="line-195">      assertArgNotNull("value", value);</span>
+<span class="source-line-no">196</span><span id="line-196">      encoding = mapBuilder(encoding).sparse().add(key, value).build();</span>
+<span class="source-line-no">197</span><span id="line-197">      return this;</span>
+<span class="source-line-no">198</span><span id="line-198">   }</span>
+<span class="source-line-no">199</span><span id="line-199"></span>
+<span class="source-line-no">200</span><span id="line-200">   /**</span>
+<span class="source-line-no">201</span><span id="line-201">    * Bean property getter:  &lt;property&gt;examples&lt;/property&gt;.</span>
+<span class="source-line-no">202</span><span id="line-202">    *</span>
+<span class="source-line-no">203</span><span id="line-203">    * &lt;p&gt;</span>
+<span class="source-line-no">204</span><span id="line-204">    * The list of possible responses as they are returned from executing this operation.</span>
+<span class="source-line-no">205</span><span id="line-205">    *</span>
+<span class="source-line-no">206</span><span id="line-206">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">207</span><span id="line-207">    */</span>
+<span class="source-line-no">208</span><span id="line-208">   public Map&lt;String,Example&gt; getExamples() {</span>
+<span class="source-line-no">209</span><span id="line-209">      return examples;</span>
+<span class="source-line-no">210</span><span id="line-210">   }</span>
+<span class="source-line-no">211</span><span id="line-211"></span>
+<span class="source-line-no">212</span><span id="line-212">   /**</span>
+<span class="source-line-no">213</span><span id="line-213">    * Bean property setter:  &lt;property&gt;headers&lt;/property&gt;.</span>
+<span class="source-line-no">214</span><span id="line-214">    *</span>
+<span class="source-line-no">215</span><span id="line-215">    * &lt;p&gt;</span>
+<span class="source-line-no">216</span><span id="line-216">    * A list of examples that are sent with the response.</span>
+<span class="source-line-no">217</span><span id="line-217">    *</span>
+<span class="source-line-no">218</span><span id="line-218">    * @param value</span>
+<span class="source-line-no">219</span><span id="line-219">    *    The new value for this property.</span>
+<span class="source-line-no">220</span><span id="line-220">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">221</span><span id="line-221">    * @return This object</span>
+<span class="source-line-no">222</span><span id="line-222">    */</span>
+<span class="source-line-no">223</span><span id="line-223">   public MediaType setExamples(Map&lt;String,Example&gt; value) {</span>
+<span class="source-line-no">224</span><span id="line-224">      examples = copyOf(value);</span>
+<span class="source-line-no">225</span><span id="line-225">      return this;</span>
+<span class="source-line-no">226</span><span id="line-226">   }</span>
+<span class="source-line-no">227</span><span id="line-227"></span>
+<span class="source-line-no">228</span><span id="line-228">   /**</span>
+<span class="source-line-no">229</span><span id="line-229">    * Adds a single value to the &lt;property&gt;examples&lt;/property&gt; property.</span>
+<span class="source-line-no">230</span><span id="line-230">    *</span>
+<span class="source-line-no">231</span><span id="line-231">    * @param name The example name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">232</span><span id="line-232">    * @param example The example.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">233</span><span id="line-233">    * @return This object</span>
+<span class="source-line-no">234</span><span id="line-234">    */</span>
+<span class="source-line-no">235</span><span id="line-235">   public MediaType addExample(String name, Example example) {</span>
+<span class="source-line-no">236</span><span id="line-236">      assertArgNotNull("name", name);</span>
+<span class="source-line-no">237</span><span id="line-237">      assertArgNotNull("example", example);</span>
+<span class="source-line-no">238</span><span id="line-238">      examples = mapBuilder(examples).add(name, example).build();</span>
+<span class="source-line-no">239</span><span id="line-239">      return this;</span>
+<span class="source-line-no">240</span><span id="line-240">   }</span>
+<span class="source-line-no">241</span><span id="line-241"></span>
+<span class="source-line-no">242</span><span id="line-242">   @Override /* Overridden from OpenApiElement */</span>
+<span class="source-line-no">243</span><span id="line-243">   public &lt;T&gt; T get(String property, Class&lt;T&gt; type) {</span>
+<span class="source-line-no">244</span><span id="line-244">      assertArgNotNull("property", property);</span>
+<span class="source-line-no">245</span><span id="line-245">      return switch (property) {</span>
+<span class="source-line-no">246</span><span id="line-246">         case "encoding" -&gt; toType(getEncoding(), type);</span>
+<span class="source-line-no">247</span><span id="line-247">         case "examples" -&gt; toType(getExamples(), type);</span>
+<span class="source-line-no">248</span><span id="line-248">         case "schema" -&gt; toType(getSchema(), type);</span>
+<span class="source-line-no">249</span><span id="line-249">         case "x-example" -&gt; toType(getExample(), type);</span>
+<span class="source-line-no">250</span><span id="line-250">         default -&gt; super.get(property, type);</span>
+<span class="source-line-no">251</span><span id="line-251">      };</span>
+<span class="source-line-no">252</span><span id="line-252">   }</span>
+<span class="source-line-no">253</span><span id="line-253"></span>
+<span class="source-line-no">254</span><span id="line-254">   @Override /* Overridden from OpenApiElement */</span>
+<span class="source-line-no">255</span><span id="line-255">   public MediaType set(String property, Object value) {</span>
+<span class="source-line-no">256</span><span id="line-256">      assertArgNotNull("property", property);</span>
+<span class="source-line-no">257</span><span id="line-257">      return switch (property) {</span>
+<span class="source-line-no">258</span><span id="line-258">         case "encoding" -&gt; setEncoding(mapBuilder(String.class,Encoding.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">259</span><span id="line-259">         case "examples" -&gt; setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">260</span><span id="line-260">         case "schema" -&gt; setSchema(toType(value, SchemaInfo.class));</span>
+<span class="source-line-no">261</span><span id="line-261">         case "x-example" -&gt; setExample(value);</span>
+<span class="source-line-no">262</span><span id="line-262">         default -&gt; {</span>
+<span class="source-line-no">263</span><span id="line-263">            super.set(property, value);</span>
+<span class="source-line-no">264</span><span id="line-264">            yield this;</span>
+<span class="source-line-no">265</span><span id="line-265">         }</span>
+<span class="source-line-no">266</span><span id="line-266">      };</span>
+<span class="source-line-no">267</span><span id="line-267">   }</span>
+<span class="source-line-no">268</span><span id="line-268"></span>
+<span class="source-line-no">269</span><span id="line-269">   @Override /* Overridden from OpenApiElement */</span>
+<span class="source-line-no">270</span><span id="line-270">   public Set&lt;String&gt; keySet() {</span>
+<span class="source-line-no">271</span><span id="line-271">      var s = setBuilder(String.class)</span>
+<span class="source-line-no">272</span><span id="line-272">         .addIf(schema != null, "schema")</span>
+<span class="source-line-no">273</span><span id="line-273">         .addIf(example != null, "x-example")</span>
+<span class="source-line-no">274</span><span id="line-274">         .addIf(encoding != null, "encoding")</span>
+<span class="source-line-no">275</span><span id="line-275">         .addIf(examples != null, "examples")</span>
+<span class="source-line-no">276</span><span id="line-276">         .build();</span>
+<span class="source-line-no">277</span><span id="line-277">      return new MultiSet&lt;&gt;(s, super.keySet());</span>
+<span class="source-line-no">278</span><span id="line-278">   }</span>
+<span class="source-line-no">279</span><span id="line-279">}</span>
 
 
 

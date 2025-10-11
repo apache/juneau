@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - The HTTP part bean type.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/PartBeanMeta.html#line-64">PartBeanMeta</a>&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/PartBeanMeta.html#line-68">PartBeanMeta</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Holds metadata about http part beans (POJOs that get serialized as HTTP parts such as form data or query parameters).
 
@@ -174,7 +174,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.Class)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="PartBeanMeta.html" title="class in org.apache.juneau.http.part">PartBeanMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/PartBeanMeta.html#line-79">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="PartBeanMeta.html" title="class in org.apache.juneau.http.part">PartBeanMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/PartBeanMeta.html#line-83">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Finds the part bean meta for the specified type.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -189,7 +189,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSchema()">
 <h3>getSchema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../httppart/HttpPartSchema.html" title="class in org.apache.juneau.httppart">HttpPartSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/PartBeanMeta.html#line-122">getSchema</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../httppart/HttpPartSchema.html" title="class in org.apache.juneau.httppart">HttpPartSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/PartBeanMeta.html#line-126">getSchema</a></span>()</div>
 <div class="block">Returns schema information about this part.
 
  <p>
@@ -204,7 +204,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="construct(java.lang.Object)">
 <h3>construct</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PartBeanMeta.html" title="type parameter in PartBeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/PartBeanMeta.html#line-136">construct</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PartBeanMeta.html" title="type parameter in PartBeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/PartBeanMeta.html#line-140">construct</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Constructs a part bean with the specified name or value.
 
  <p>
@@ -220,7 +220,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="construct(java.lang.String,java.lang.Object)">
 <h3>construct</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PartBeanMeta.html" title="type parameter in PartBeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/PartBeanMeta.html#line-152">construct</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PartBeanMeta.html" title="type parameter in PartBeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/PartBeanMeta.html#line-156">construct</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Constructs a part bean with the specified name or value.</div>
 <dl class="notes">

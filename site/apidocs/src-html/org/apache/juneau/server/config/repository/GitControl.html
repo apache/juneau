@@ -11,105 +11,109 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.server.config.repository;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import java.io.File;</span>
-<span class="source-line-no">016</span><span id="line-16">import java.io.IOException;</span>
-<span class="source-line-no">017</span><span id="line-17">import java.util.Iterator;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.server.config.repository;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import org.eclipse.jgit.api.AddCommand;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.eclipse.jgit.api.Git;</span>
-<span class="source-line-no">021</span><span id="line-21">import org.eclipse.jgit.api.PushCommand;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.eclipse.jgit.api.errors.CanceledException;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.eclipse.jgit.api.errors.CheckoutConflictException;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.eclipse.jgit.api.errors.DetachedHeadException;</span>
-<span class="source-line-no">026</span><span id="line-26">import org.eclipse.jgit.api.errors.GitAPIException;</span>
-<span class="source-line-no">027</span><span id="line-27">import org.eclipse.jgit.api.errors.InvalidConfigurationException;</span>
-<span class="source-line-no">028</span><span id="line-28">import org.eclipse.jgit.api.errors.InvalidRefNameException;</span>
-<span class="source-line-no">029</span><span id="line-29">import org.eclipse.jgit.api.errors.InvalidRemoteException;</span>
-<span class="source-line-no">030</span><span id="line-30">import org.eclipse.jgit.api.errors.JGitInternalException;</span>
-<span class="source-line-no">031</span><span id="line-31">import org.eclipse.jgit.api.errors.NoFilepatternException;</span>
-<span class="source-line-no">032</span><span id="line-32">import org.eclipse.jgit.api.errors.NoHeadException;</span>
-<span class="source-line-no">033</span><span id="line-33">import org.eclipse.jgit.api.errors.NoMessageException;</span>
-<span class="source-line-no">034</span><span id="line-34">import org.eclipse.jgit.api.errors.RefAlreadyExistsException;</span>
-<span class="source-line-no">035</span><span id="line-35">import org.eclipse.jgit.api.errors.RefNotFoundException;</span>
-<span class="source-line-no">036</span><span id="line-36">import org.eclipse.jgit.api.errors.WrongRepositoryStateException;</span>
-<span class="source-line-no">037</span><span id="line-37">import org.eclipse.jgit.internal.storage.file.FileRepository;</span>
-<span class="source-line-no">038</span><span id="line-38">import org.eclipse.jgit.lib.Repository;</span>
-<span class="source-line-no">039</span><span id="line-39">import org.eclipse.jgit.transport.CredentialsProvider;</span>
-<span class="source-line-no">040</span><span id="line-40">import org.eclipse.jgit.transport.PushResult;</span>
-<span class="source-line-no">041</span><span id="line-41">import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;</span>
-<span class="source-line-no">042</span><span id="line-42"></span>
-<span class="source-line-no">043</span><span id="line-43">@SuppressWarnings({"javadoc","unused"})</span>
-<span class="source-line-no">044</span><span id="line-44">public class GitControl {</span>
-<span class="source-line-no">045</span><span id="line-45"></span>
-<span class="source-line-no">046</span><span id="line-46">   private String localPath, remotePath;</span>
-<span class="source-line-no">047</span><span id="line-47">   private Repository localRepo;</span>
-<span class="source-line-no">048</span><span id="line-48">   private Git git;</span>
-<span class="source-line-no">049</span><span id="line-49">   private CredentialsProvider cp;</span>
-<span class="source-line-no">050</span><span id="line-50">   private String name = "username";</span>
-<span class="source-line-no">051</span><span id="line-51">   private String password = "password";</span>
-<span class="source-line-no">052</span><span id="line-52"></span>
-<span class="source-line-no">053</span><span id="line-53">   public GitControl(String localPath, String remotePath) throws IOException {</span>
-<span class="source-line-no">054</span><span id="line-54">      this.localPath = localPath;</span>
-<span class="source-line-no">055</span><span id="line-55">      this.remotePath = remotePath;</span>
-<span class="source-line-no">056</span><span id="line-56">      this.localRepo = new FileRepository(localPath + "/.git");</span>
-<span class="source-line-no">057</span><span id="line-57">      cp = new UsernamePasswordCredentialsProvider(this.name, this.password);</span>
-<span class="source-line-no">058</span><span id="line-58">      git = new Git(localRepo);</span>
-<span class="source-line-no">059</span><span id="line-59">   }</span>
-<span class="source-line-no">060</span><span id="line-60"></span>
-<span class="source-line-no">061</span><span id="line-61">   public void cloneRepo() throws IOException, NoFilepatternException, GitAPIException {</span>
-<span class="source-line-no">062</span><span id="line-62">      Git.cloneRepository().setURI(remotePath).setDirectory(new File(localPath)).call();</span>
+<span class="source-line-no">019</span><span id="line-19">import java.io.File;</span>
+<span class="source-line-no">020</span><span id="line-20">import java.io.IOException;</span>
+<span class="source-line-no">021</span><span id="line-21">import java.util.Iterator;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import org.eclipse.jgit.api.AddCommand;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.eclipse.jgit.api.Git;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.eclipse.jgit.api.PushCommand;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.eclipse.jgit.api.errors.CanceledException;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.eclipse.jgit.api.errors.CheckoutConflictException;</span>
+<span class="source-line-no">028</span><span id="line-28">import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;</span>
+<span class="source-line-no">029</span><span id="line-29">import org.eclipse.jgit.api.errors.DetachedHeadException;</span>
+<span class="source-line-no">030</span><span id="line-30">import org.eclipse.jgit.api.errors.GitAPIException;</span>
+<span class="source-line-no">031</span><span id="line-31">import org.eclipse.jgit.api.errors.InvalidConfigurationException;</span>
+<span class="source-line-no">032</span><span id="line-32">import org.eclipse.jgit.api.errors.InvalidRefNameException;</span>
+<span class="source-line-no">033</span><span id="line-33">import org.eclipse.jgit.api.errors.InvalidRemoteException;</span>
+<span class="source-line-no">034</span><span id="line-34">import org.eclipse.jgit.api.errors.JGitInternalException;</span>
+<span class="source-line-no">035</span><span id="line-35">import org.eclipse.jgit.api.errors.NoFilepatternException;</span>
+<span class="source-line-no">036</span><span id="line-36">import org.eclipse.jgit.api.errors.NoHeadException;</span>
+<span class="source-line-no">037</span><span id="line-37">import org.eclipse.jgit.api.errors.NoMessageException;</span>
+<span class="source-line-no">038</span><span id="line-38">import org.eclipse.jgit.api.errors.RefAlreadyExistsException;</span>
+<span class="source-line-no">039</span><span id="line-39">import org.eclipse.jgit.api.errors.RefNotFoundException;</span>
+<span class="source-line-no">040</span><span id="line-40">import org.eclipse.jgit.api.errors.WrongRepositoryStateException;</span>
+<span class="source-line-no">041</span><span id="line-41">import org.eclipse.jgit.internal.storage.file.FileRepository;</span>
+<span class="source-line-no">042</span><span id="line-42">import org.eclipse.jgit.lib.Repository;</span>
+<span class="source-line-no">043</span><span id="line-43">import org.eclipse.jgit.transport.CredentialsProvider;</span>
+<span class="source-line-no">044</span><span id="line-44">import org.eclipse.jgit.transport.PushResult;</span>
+<span class="source-line-no">045</span><span id="line-45">import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;</span>
+<span class="source-line-no">046</span><span id="line-46"></span>
+<span class="source-line-no">047</span><span id="line-47">@SuppressWarnings({"javadoc","unused"})</span>
+<span class="source-line-no">048</span><span id="line-48">public class GitControl {</span>
+<span class="source-line-no">049</span><span id="line-49"></span>
+<span class="source-line-no">050</span><span id="line-50">   private String localPath, remotePath;</span>
+<span class="source-line-no">051</span><span id="line-51">   private Repository localRepo;</span>
+<span class="source-line-no">052</span><span id="line-52">   private Git git;</span>
+<span class="source-line-no">053</span><span id="line-53">   private CredentialsProvider cp;</span>
+<span class="source-line-no">054</span><span id="line-54">   private String name = "username";</span>
+<span class="source-line-no">055</span><span id="line-55">   private String password = "password";</span>
+<span class="source-line-no">056</span><span id="line-56"></span>
+<span class="source-line-no">057</span><span id="line-57">   public GitControl(String localPath, String remotePath) throws IOException {</span>
+<span class="source-line-no">058</span><span id="line-58">      this.localPath = localPath;</span>
+<span class="source-line-no">059</span><span id="line-59">      this.remotePath = remotePath;</span>
+<span class="source-line-no">060</span><span id="line-60">      this.localRepo = new FileRepository(localPath + "/.git");</span>
+<span class="source-line-no">061</span><span id="line-61">      cp = new UsernamePasswordCredentialsProvider(this.name, this.password);</span>
+<span class="source-line-no">062</span><span id="line-62">      git = new Git(localRepo);</span>
 <span class="source-line-no">063</span><span id="line-63">   }</span>
 <span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">   public void addToRepo() throws IOException, NoFilepatternException, GitAPIException {</span>
-<span class="source-line-no">066</span><span id="line-66">      AddCommand add = git.add();</span>
-<span class="source-line-no">067</span><span id="line-67">      add.addFilepattern(".").call();</span>
-<span class="source-line-no">068</span><span id="line-68">   }</span>
-<span class="source-line-no">069</span><span id="line-69"></span>
-<span class="source-line-no">070</span><span id="line-70">   public void commitToRepo(String message) throws IOException, NoHeadException, NoMessageException,</span>
-<span class="source-line-no">071</span><span id="line-71">         ConcurrentRefUpdateException, JGitInternalException, WrongRepositoryStateException, GitAPIException {</span>
-<span class="source-line-no">072</span><span id="line-72">      git.commit().setMessage(message).call();</span>
-<span class="source-line-no">073</span><span id="line-73">   }</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">   public void branch(String name) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException,</span>
-<span class="source-line-no">076</span><span id="line-76">         CheckoutConflictException, GitAPIException {</span>
-<span class="source-line-no">077</span><span id="line-77">      git.checkout().setName(name).setStartPoint("origin/".concat(name)).call();</span>
-<span class="source-line-no">078</span><span id="line-78">   }</span>
-<span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">   public void pushToRepo() throws IOException, JGitInternalException, InvalidRemoteException, GitAPIException {</span>
-<span class="source-line-no">081</span><span id="line-81">      PushCommand pc = git.push();</span>
-<span class="source-line-no">082</span><span id="line-82">      pc.setCredentialsProvider(cp).setForce(true).setPushAll();</span>
-<span class="source-line-no">083</span><span id="line-83">      try {</span>
-<span class="source-line-no">084</span><span id="line-84">         Iterator&lt;PushResult&gt; it = pc.call().iterator();</span>
-<span class="source-line-no">085</span><span id="line-85">         if (it.hasNext()) {</span>
-<span class="source-line-no">086</span><span id="line-86">            System.out.println(it.next().toString());</span>
-<span class="source-line-no">087</span><span id="line-87">         }</span>
-<span class="source-line-no">088</span><span id="line-88">      } catch (InvalidRemoteException e) {</span>
-<span class="source-line-no">089</span><span id="line-89">         e.printStackTrace();</span>
-<span class="source-line-no">090</span><span id="line-90">      }</span>
-<span class="source-line-no">091</span><span id="line-91">   }</span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   public void pullFromRepo()</span>
-<span class="source-line-no">094</span><span id="line-94">         throws IOException, WrongRepositoryStateException, InvalidConfigurationException, DetachedHeadException,</span>
-<span class="source-line-no">095</span><span id="line-95">         InvalidRemoteException, CanceledException, RefNotFoundException, NoHeadException, GitAPIException {</span>
-<span class="source-line-no">096</span><span id="line-96">      git.pull().call();</span>
-<span class="source-line-no">097</span><span id="line-97">   }</span>
-<span class="source-line-no">098</span><span id="line-98"></span>
-<span class="source-line-no">099</span><span id="line-99">}</span>
+<span class="source-line-no">065</span><span id="line-65">   public void cloneRepo() throws IOException, NoFilepatternException, GitAPIException {</span>
+<span class="source-line-no">066</span><span id="line-66">      Git.cloneRepository().setURI(remotePath).setDirectory(new File(localPath)).call();</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">   public void addToRepo() throws IOException, NoFilepatternException, GitAPIException {</span>
+<span class="source-line-no">070</span><span id="line-70">      AddCommand add = git.add();</span>
+<span class="source-line-no">071</span><span id="line-71">      add.addFilepattern(".").call();</span>
+<span class="source-line-no">072</span><span id="line-72">   }</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">   public void commitToRepo(String message) throws IOException, NoHeadException, NoMessageException,</span>
+<span class="source-line-no">075</span><span id="line-75">         ConcurrentRefUpdateException, JGitInternalException, WrongRepositoryStateException, GitAPIException {</span>
+<span class="source-line-no">076</span><span id="line-76">      git.commit().setMessage(message).call();</span>
+<span class="source-line-no">077</span><span id="line-77">   }</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   public void branch(String name) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException,</span>
+<span class="source-line-no">080</span><span id="line-80">         CheckoutConflictException, GitAPIException {</span>
+<span class="source-line-no">081</span><span id="line-81">      git.checkout().setName(name).setStartPoint("origin/".concat(name)).call();</span>
+<span class="source-line-no">082</span><span id="line-82">   }</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">   public void pushToRepo() throws IOException, JGitInternalException, InvalidRemoteException, GitAPIException {</span>
+<span class="source-line-no">085</span><span id="line-85">      PushCommand pc = git.push();</span>
+<span class="source-line-no">086</span><span id="line-86">      pc.setCredentialsProvider(cp).setForce(true).setPushAll();</span>
+<span class="source-line-no">087</span><span id="line-87">      try {</span>
+<span class="source-line-no">088</span><span id="line-88">         Iterator&lt;PushResult&gt; it = pc.call().iterator();</span>
+<span class="source-line-no">089</span><span id="line-89">         if (it.hasNext()) {</span>
+<span class="source-line-no">090</span><span id="line-90">            System.out.println(it.next().toString());</span>
+<span class="source-line-no">091</span><span id="line-91">         }</span>
+<span class="source-line-no">092</span><span id="line-92">      } catch (InvalidRemoteException e) {</span>
+<span class="source-line-no">093</span><span id="line-93">         e.printStackTrace();</span>
+<span class="source-line-no">094</span><span id="line-94">      }</span>
+<span class="source-line-no">095</span><span id="line-95">   }</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">   public void pullFromRepo()</span>
+<span class="source-line-no">098</span><span id="line-98">         throws IOException, WrongRepositoryStateException, InvalidConfigurationException, DetachedHeadException,</span>
+<span class="source-line-no">099</span><span id="line-99">         InvalidRemoteException, CanceledException, RefNotFoundException, NoHeadException, GitAPIException {</span>
+<span class="source-line-no">100</span><span id="line-100">      git.pull().call();</span>
+<span class="source-line-no">101</span><span id="line-101">   }</span>
+<span class="source-line-no">102</span><span id="line-102"></span>
+<span class="source-line-no">103</span><span id="line-103">}</span>
 
 
 

@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="vars/ArgsVar.html" title="class in org.apache.juneau.svl.vars">ArgsVar</a></code>, <code><a href="../config/vars/ConfigVar.html" title="class in org.apache.juneau.config.vars">ConfigVar</a></code>, <code><a href="vars/EnvVariablesVar.html" title="class in org.apache.juneau.svl.vars">EnvVariablesVar</a></code>, <code><a href="../rest/vars/FileVar.html" title="class in org.apache.juneau.rest.vars">FileVar</a></code>, <code><a href="vars/ManifestFileVar.html" title="class in org.apache.juneau.svl.vars">ManifestFileVar</a></code>, <code><a href="MapVar.html" title="class in org.apache.juneau.svl">MapVar</a></code>, <code><a href="../rest/vars/ServletInitParamVar.html" title="class in org.apache.juneau.rest.vars">ServletInitParamVar</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/DefaultingVar.html#line-33">DefaultingVar</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/DefaultingVar.html#line-37">DefaultingVar</a></span>
 <span class="extends-implements">extends <a href="SimpleVar.html" title="class in org.apache.juneau.svl">SimpleVar</a></span></div>
 <div class="block">Interface for the resolution of vars with a default value if the <c>resolve()</c> method returns <jk>null</jk>.
 
@@ -165,7 +165,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String)">
 <h3>DefaultingVar</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/DefaultingVar.html#line-40">DefaultingVar</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/DefaultingVar.html#line-44">DefaultingVar</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -184,7 +184,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="doResolve(org.apache.juneau.svl.VarResolverSession,java.lang.String)">
 <h3>doResolve</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/DefaultingVar.html#line-44">doResolve</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.svl">VarResolverSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/DefaultingVar.html#line-48">doResolve</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.svl">VarResolverSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Var.html#doResolve(org.apache.juneau.svl.VarResolverSession,java.lang.String)">Var</a></code></span></div>

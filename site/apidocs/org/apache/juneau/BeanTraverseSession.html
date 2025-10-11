@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="jsonschema/JsonSchemaGeneratorSession.html" title="class in org.apache.juneau.jsonschema">JsonSchemaGeneratorSession</a></code>, <code><a href="serializer/SerializerSession.html" title="class in org.apache.juneau.serializer">SerializerSession</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-47">BeanTraverseSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-51">BeanTraverseSession</a></span>
 <span class="extends-implements">extends <a href="BeanSession.html" title="class in org.apache.juneau">BeanSession</a></span></div>
 <div class="block">ContextSession that lives for the duration of a single use of <a href="BeanTraverseContext.html" title="class in org.apache.juneau"><code>BeanTraverseContext</code></a>.
 
@@ -295,7 +295,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="indent">
 <h3>indent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-158">indent</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-162">indent</a></span></div>
 <div class="block">The current indentation depth into the model.</div>
 </section>
 </li>
@@ -310,7 +310,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.BeanTraverseSession.Builder)">
 <h3>BeanTraverseSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-167">BeanTraverseSession</a></span><wbr><span class="parameters">(<a href="BeanTraverseSession.Builder.html" title="class in org.apache.juneau">BeanTraverseSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-171">BeanTraverseSession</a></span><wbr><span class="parameters">(<a href="BeanTraverseSession.Builder.html" title="class in org.apache.juneau">BeanTraverseSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -329,7 +329,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setCurrentProperty(org.apache.juneau.BeanPropertyMeta)">
 <h3>setCurrentProperty</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-183">setCurrentProperty</a></span><wbr><span class="parameters">(<a href="BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;currentProperty)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-187">setCurrentProperty</a></span><wbr><span class="parameters">(<a href="BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;currentProperty)</span></div>
 <div class="block">Sets the current bean property being traversed for proper error messages.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -340,7 +340,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setCurrentClass(org.apache.juneau.ClassMeta)">
 <h3>setCurrentClass</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-192">setCurrentClass</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;currentClass)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-196">setCurrentClass</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;currentClass)</span></div>
 <div class="block">Sets the current class being traversed for proper error messages.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -351,7 +351,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="push(java.lang.String,java.lang.Object,org.apache.juneau.ClassMeta)">
 <h3>push</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-207">push</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-211">push</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;eType)</span>
                            throws <span class="exceptions"><a href="BeanRecursionException.html" title="class in org.apache.juneau">BeanRecursionException</a></span></div>
@@ -372,7 +372,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isRoot()">
 <h3>isRoot</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-237">isRoot</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-241">isRoot</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if we're processing the root node.
 
  <p>
@@ -386,7 +386,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="willRecurse(java.lang.String,java.lang.Object,org.apache.juneau.ClassMeta)">
 <h3>willRecurse</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-251">willRecurse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-255">willRecurse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span>
                              throws <span class="exceptions"><a href="BeanRecursionException.html" title="class in org.apache.juneau">BeanRecursionException</a></span></div>
@@ -407,7 +407,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="willExceedDepth()">
 <h3>willExceedDepth</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-266">willExceedDepth</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-270">willExceedDepth</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if we're about to exceed the max depth for the document.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -418,14 +418,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="pop()">
 <h3>pop</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-273">pop</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-277">pop</a></span>()</div>
 <div class="block">Pop an object off the stack.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="isOptional(org.apache.juneau.ClassMeta)">
 <h3>isOptional</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-291">isOptional</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-295">isOptional</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Same as <a href="ClassMeta.html#isOptional()"><code>ClassMeta.isOptional()</code></a> but gracefully handles a null <a href="ClassMeta.html" title="class in org.apache.juneau"><code>ClassMeta</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -438,7 +438,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getOptionalType(org.apache.juneau.ClassMeta)">
 <h3>getOptionalType</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-301">getOptionalType</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-305">getOptionalType</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Returns the inner type of an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -451,7 +451,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getOptionalValue(java.lang.Object)">
 <h3>getOptionalValue</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-313">getOptionalValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-317">getOptionalValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">If the specified object is an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>, returns the inner object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -464,7 +464,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onError(java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>onError</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-328">onError</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-332">onError</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a warning message.</div>
@@ -479,7 +479,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStack(boolean)">
 <h3>getStack</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-362">getStack</a></span><wbr><span class="parameters">(boolean&nbsp;full)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-366">getStack</a></span><wbr><span class="parameters">(boolean&nbsp;full)</span></div>
 <div class="block">Returns the current stack trace.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -492,7 +492,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLastLocation()">
 <h3>getLastLocation</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-384">getLastLocation</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-388">getLastLocation</a></span>()</div>
 <div class="block">Returns information used to determine at what location in the parse a failure occurred.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -503,7 +503,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isDetectRecursions()">
 <h3>isDetectRecursions</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-404">isDetectRecursions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-408">isDetectRecursions</a></span>()</div>
 <div class="block">Automatically detect POJO recursions.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -520,7 +520,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isIgnoreRecursions()">
 <h3>isIgnoreRecursions</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-416">isIgnoreRecursions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-420">isIgnoreRecursions</a></span>()</div>
 <div class="block">Ignore recursion errors.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -538,7 +538,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getInitialDepth()">
 <h3>getInitialDepth</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-427">getInitialDepth</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-431">getInitialDepth</a></span>()</div>
 <div class="block">Initial depth.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -555,7 +555,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMaxDepth()">
 <h3>getMaxDepth</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-439">getMaxDepth</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-443">getMaxDepth</a></span>()</div>
 <div class="block">Max traversal depth.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -573,7 +573,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-447">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseSession.html#line-451">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="ContextSession.html#properties()">ContextSession</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

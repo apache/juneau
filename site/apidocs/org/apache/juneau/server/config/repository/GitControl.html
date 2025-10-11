@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-43">GitControl</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-47">GitControl</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 </section>
 <section class="summary">
@@ -146,7 +146,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String)">
 <h3>GitControl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-53">GitControl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;localPath,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-57">GitControl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;localPath,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;remotePath)</span>
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
@@ -166,7 +166,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cloneRepo()">
 <h3>cloneRepo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-61">cloneRepo</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-65">cloneRepo</a></span>()
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 org.eclipse.jgit.api.errors.NoFilepatternException,
 org.eclipse.jgit.api.errors.GitAPIException</span></div>
@@ -181,7 +181,7 @@ org.eclipse.jgit.api.errors.GitAPIException</span></div>
 <li>
 <section class="detail" id="addToRepo()">
 <h3>addToRepo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-65">addToRepo</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-69">addToRepo</a></span>()
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 org.eclipse.jgit.api.errors.NoFilepatternException,
 org.eclipse.jgit.api.errors.GitAPIException</span></div>
@@ -196,7 +196,7 @@ org.eclipse.jgit.api.errors.GitAPIException</span></div>
 <li>
 <section class="detail" id="commitToRepo(java.lang.String)">
 <h3>commitToRepo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-70">commitToRepo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-74">commitToRepo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</span>
                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 org.eclipse.jgit.api.errors.NoHeadException,
 org.eclipse.jgit.api.errors.NoMessageException,
@@ -219,7 +219,7 @@ org.eclipse.jgit.api.errors.GitAPIException</span></div>
 <li>
 <section class="detail" id="branch(java.lang.String)">
 <h3>branch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-75">branch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-79">branch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
             throws <span class="exceptions">org.eclipse.jgit.api.errors.RefAlreadyExistsException,
 org.eclipse.jgit.api.errors.RefNotFoundException,
 org.eclipse.jgit.api.errors.InvalidRefNameException,
@@ -238,7 +238,7 @@ org.eclipse.jgit.api.errors.GitAPIException</span></div>
 <li>
 <section class="detail" id="pushToRepo()">
 <h3>pushToRepo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-80">pushToRepo</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-84">pushToRepo</a></span>()
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 org.eclipse.jgit.api.errors.JGitInternalException,
 org.eclipse.jgit.api.errors.InvalidRemoteException,
@@ -255,7 +255,7 @@ org.eclipse.jgit.api.errors.GitAPIException</span></div>
 <li>
 <section class="detail" id="pullFromRepo()">
 <h3>pullFromRepo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-93">pullFromRepo</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-97">pullFromRepo</a></span>()
                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 org.eclipse.jgit.api.errors.WrongRepositoryStateException,
 org.eclipse.jgit.api.errors.InvalidConfigurationException,

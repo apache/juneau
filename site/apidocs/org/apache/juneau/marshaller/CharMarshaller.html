@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Csv.html" title="class in org.apache.juneau.marshaller">Csv</a></code>, <code><a href="Html.html" title="class in org.apache.juneau.marshaller">Html</a></code>, <code><a href="Json.html" title="class in org.apache.juneau.marshaller">Json</a></code>, <code><a href="Json5.html" title="class in org.apache.juneau.marshaller">Json5</a></code>, <code><a href="OpenApi.html" title="class in org.apache.juneau.marshaller">OpenApi</a></code>, <code><a href="PlainText.html" title="class in org.apache.juneau.marshaller">PlainText</a></code>, <code><a href="Uon.html" title="class in org.apache.juneau.marshaller">Uon</a></code>, <code><a href="UrlEncoding.html" title="class in org.apache.juneau.marshaller">UrlEncoding</a></code>, <code><a href="Xml.html" title="class in org.apache.juneau.marshaller">Xml</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/CharMarshaller.html#line-28">CharMarshaller</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/CharMarshaller.html#line-32">CharMarshaller</a></span>
 <span class="extends-implements">extends <a href="Marshaller.html" title="class in org.apache.juneau.marshaller">Marshaller</a></span></div>
 <div class="block">A subclass of <a href="Marshaller.html" title="class in org.apache.juneau.marshaller"><code>Marshaller</code></a> for character-based serializers and parsers.
 
@@ -162,7 +162,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.serializer.WriterSerializer,org.apache.juneau.parser.ReaderParser)">
 <h3>CharMarshaller</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/CharMarshaller.html#line-47">CharMarshaller</a></span><wbr><span class="parameters">(<a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.serializer">WriterSerializer</a>&nbsp;s,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/CharMarshaller.html#line-51">CharMarshaller</a></span><wbr><span class="parameters">(<a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.serializer">WriterSerializer</a>&nbsp;s,
  <a href="../parser/ReaderParser.html" title="class in org.apache.juneau.parser">ReaderParser</a>&nbsp;p)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="read(java.lang.String,java.lang.Class)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/CharMarshaller.html#line-85">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/CharMarshaller.html#line-89">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
                  throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Same as <a href="Marshaller.html#read(java.lang.Object,java.lang.Class)"><code>Marshaller.read(Object,Class)</code></a> but reads from a string and thus doesn't throw an <c>IOException</c>.
@@ -228,7 +228,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="read(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/CharMarshaller.html#line-105">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/CharMarshaller.html#line-109">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span>
                  throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
@@ -259,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="write(java.lang.Object)">
 <h3>write</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/CharMarshaller.html#line-117">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</span>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/CharMarshaller.html#line-121">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</span>
                    throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.serializer">SerializeException</a></span></div>
 <div class="block">Serializes a POJO directly to a <c>String</c>.</div>
 <dl class="notes">

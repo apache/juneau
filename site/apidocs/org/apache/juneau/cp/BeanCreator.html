@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - The bean type being created.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-114">BeanCreator</a>&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-118">BeanCreator</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Utility class for creating beans through constructors, creator methods, and builders.
 
@@ -278,7 +278,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class,org.apache.juneau.cp.BeanStore)">
 <h3>BeanCreator</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-147">BeanCreator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-151">BeanCreator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;&nbsp;type,
  <a href="BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;store)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -299,7 +299,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.Class)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-127">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-131">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType)</span></div>
 <div class="block">Shortcut for calling <c>BeanStore.INSTANCE.createBean(beanType)</c>.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -314,7 +314,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="type(java.lang.Class)">
 <h3>type</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-158">type</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-162">type</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;value)</span></div>
 <div class="block">Allows you to specify a subclass of the specified bean type to create.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -327,7 +327,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="type(org.apache.juneau.reflect.ClassInfo)">
 <h3>type</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-169">type</a></span><wbr><span class="parameters">(<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.reflect">ClassInfo</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-173">type</a></span><wbr><span class="parameters">(<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.reflect">ClassInfo</a>&nbsp;value)</span></div>
 <div class="block">Allows you to specify a subclass of the specified bean type to create.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -340,7 +340,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="impl(T)">
 <h3 id="impl(java.lang.Object)">impl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-179">impl</a></span><wbr><span class="parameters">(<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-183">impl</a></span><wbr><span class="parameters">(<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&nbsp;value)</span></div>
 <div class="block">Allows you to specify a specific instance for the build method to return.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -353,7 +353,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="arg(java.lang.Class,T2)">
 <h3 id="arg(java.lang.Class,java.lang.Object)">arg</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-192">arg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;beanType,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-196">arg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;beanType,
  T2&nbsp;bean)</span></div>
 <div class="block">Adds an argument to this creator.</div>
 <dl class="notes">
@@ -370,7 +370,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="silent()">
 <h3>silent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-203">silent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-207">silent</a></span>()</div>
 <div class="block">Suppresses throwing of <a href="../ExecutableException.html" title="class in org.apache.juneau"><code>ExecutableExceptions</code></a> from the <a href="#run()"><code>run()</code></a> method when
  a form of creation cannot be found.</div>
 <dl class="notes">
@@ -382,7 +382,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="builder(java.lang.Class,B)">
 <h3 id="builder(java.lang.Class,java.lang.Object)">builder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;B&gt;</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-220">builder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;B&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;B&gt;</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-224">builder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;B&gt;&nbsp;type,
  B&nbsp;value)</span></div>
 <div class="block">Specifies a builder object for the bean type.
 
@@ -403,7 +403,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="orElse(T)">
 <h3 id="orElse(java.lang.Object)">orElse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="type parameter in BeanCreator">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-237">orElse</a></span><wbr><span class="parameters">(<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&nbsp;other)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="type parameter in BeanCreator">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-241">orElse</a></span><wbr><span class="parameters">(<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&nbsp;other)</span></div>
 <div class="block">Same as <a href="#run()"><code>run()</code></a> but returns the alternate value if a method of creation could not be found.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -416,7 +416,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="execute()">
 <h3>execute</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-246">execute</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-250">execute</a></span>()</div>
 <div class="block">Same as <a href="#run()"><code>run()</code></a> but returns the value wrapped in an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -427,7 +427,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="run()">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="type parameter in BeanCreator">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-256">run</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanCreator.html" title="type parameter in BeanCreator">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-260">run</a></span>()</div>
 <div class="block">Creates the bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -440,7 +440,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="supplier()">
 <h3>supplier</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-380">supplier</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="BeanCreator.html" title="type parameter in BeanCreator">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/BeanCreator.html#line-384">supplier</a></span>()</div>
 <div class="block">Converts this creator into a supplier.</div>
 <dl class="notes">
 <dt>Returns:</dt>

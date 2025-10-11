@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="AnyAssertion.html" title="class in org.apache.juneau.assertions">AnyAssertion</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-135">FluentAnyAssertion</a>&lt;T,<wbr>R&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-139">FluentAnyAssertion</a>&lt;T,<wbr>R&gt;</span>
 <span class="extends-implements">extends <a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;T,<wbr>R&gt;</span></div>
 <div class="block">Used for assertion calls against generic POJOs.
 
@@ -421,7 +421,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="&lt;init&gt;(T,R)">
 <h3 id="&lt;init&gt;(java.lang.Object,java.lang.Object)">FluentAnyAssertion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-161">FluentAnyAssertion</a></span><wbr><span class="parameters">(<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-165">FluentAnyAssertion</a></span><wbr><span class="parameters">(<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>&nbsp;value,
  <a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&nbsp;returns)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -437,7 +437,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.assertions.Assertion,T,R)">
 <h3 id="&lt;init&gt;(org.apache.juneau.assertions.Assertion,java.lang.Object,java.lang.Object)">FluentAnyAssertion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-182">FluentAnyAssertion</a></span><wbr><span class="parameters">(<a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a>&nbsp;creator,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-186">FluentAnyAssertion</a></span><wbr><span class="parameters">(<a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a>&nbsp;creator,
  <a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>&nbsp;value,
  <a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&nbsp;returns)</span></div>
 <div class="block">Chained constructor.
@@ -467,7 +467,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asArray(java.lang.Class)">
 <h3>asArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="FluentArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentArrayAssertion</a>&lt;E,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-198">asArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;elementType)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="FluentArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentArrayAssertion</a>&lt;E,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-202">asArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;elementType)</span>
                                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Converts this object assertion into an array assertion.</div>
 <dl class="notes">
@@ -485,7 +485,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asIntArray()">
 <h3>asIntArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr>int[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-209">asIntArray</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr>int[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-213">asIntArray</a></span>()
                                                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Converts this object assertion into a primitive int array assertion.</div>
 <dl class="notes">
@@ -499,7 +499,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asLongArray()">
 <h3>asLongArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>long[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-219">asLongArray</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>long[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-223">asLongArray</a></span>()
                                                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Converts this object assertion into a primitive long array assertion.</div>
 <dl class="notes">
@@ -513,7 +513,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asShortArray()">
 <h3>asShortArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Short.html" title="class or interface in java.lang" class="external-link">Short</a>,<wbr>short[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-229">asShortArray</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Short.html" title="class or interface in java.lang" class="external-link">Short</a>,<wbr>short[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-233">asShortArray</a></span>()
                                                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Converts this object assertion into a primitive short array assertion.</div>
 <dl class="notes">
@@ -527,7 +527,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asFloatArray()">
 <h3>asFloatArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>,<wbr>float[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-239">asFloatArray</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>,<wbr>float[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-243">asFloatArray</a></span>()
                                                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Converts this object assertion into a primitive float array assertion.</div>
 <dl class="notes">
@@ -541,7 +541,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asDoubleArray()">
 <h3>asDoubleArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>,<wbr>double[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-249">asDoubleArray</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>,<wbr>double[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-253">asDoubleArray</a></span>()
                                                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Converts this object assertion into a primitive double array assertion.</div>
 <dl class="notes">
@@ -555,7 +555,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asCharArray()">
 <h3>asCharArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html" title="class or interface in java.lang" class="external-link">Character</a>,<wbr>char[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-259">asCharArray</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html" title="class or interface in java.lang" class="external-link">Character</a>,<wbr>char[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-263">asCharArray</a></span>()
                                                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Converts this object assertion into a primitive char array assertion.</div>
 <dl class="notes">
@@ -569,7 +569,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asByteArray()">
 <h3>asByteArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Byte.html" title="class or interface in java.lang" class="external-link">Byte</a>,<wbr>byte[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-269">asByteArray</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Byte.html" title="class or interface in java.lang" class="external-link">Byte</a>,<wbr>byte[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-273">asByteArray</a></span>()
                                                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Converts this object assertion into a primitive byte array assertion.</div>
 <dl class="notes">
@@ -583,7 +583,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asBooleanArray()">
 <h3>asBooleanArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>,<wbr>boolean[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-279">asBooleanArray</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentPrimitiveArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>,<wbr>boolean[],<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-283">asBooleanArray</a></span>()
                                                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Converts this object assertion into a primitive boolean array assertion.</div>
 <dl class="notes">
@@ -597,7 +597,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asBoolean()">
 <h3>asBoolean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentBooleanAssertion.html" title="class in org.apache.juneau.assertions">FluentBooleanAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-289">asBoolean</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentBooleanAssertion.html" title="class in org.apache.juneau.assertions">FluentBooleanAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-293">asBoolean</a></span>()</div>
 <div class="block">Converts this object assertion into a boolean assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -610,7 +610,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asBytes()">
 <h3>asBytes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentByteArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentByteArrayAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-299">asBytes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentByteArrayAssertion.html" title="class in org.apache.juneau.assertions">FluentByteArrayAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-303">asBytes</a></span>()</div>
 <div class="block">Converts this object assertion into a byte array assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -623,7 +623,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asCollection()">
 <h3>asCollection</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentCollectionAssertion.html" title="class in org.apache.juneau.assertions">FluentCollectionAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-309">asCollection</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentCollectionAssertion.html" title="class in org.apache.juneau.assertions">FluentCollectionAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-313">asCollection</a></span>()</div>
 <div class="block">Converts this object assertion into a collection assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -636,7 +636,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asCollection(java.lang.Class)">
 <h3>asCollection</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="FluentCollectionAssertion.html" title="class in org.apache.juneau.assertions">FluentCollectionAssertion</a>&lt;E,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-321">asCollection</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;elementType)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="FluentCollectionAssertion.html" title="class in org.apache.juneau.assertions">FluentCollectionAssertion</a>&lt;E,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-325">asCollection</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;elementType)</span></div>
 <div class="block">Converts this object assertion into a collection assertion.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -653,7 +653,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asStringList()">
 <h3>asStringList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentStringListAssertion.html" title="class in org.apache.juneau.assertions">FluentStringListAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-332">asStringList</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentStringListAssertion.html" title="class in org.apache.juneau.assertions">FluentStringListAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-336">asStringList</a></span>()</div>
 <div class="block">Converts this object assertion into a collection assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -667,7 +667,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <section class="detail" id="asComparable()">
 <h3>asComparable</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2 extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T2&gt;&gt;</span>
-<span class="return-type"><a href="FluentComparableAssertion.html" title="class in org.apache.juneau.assertions">FluentComparableAssertion</a>&lt;T2,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-343">asComparable</a></span>()</div>
+<span class="return-type"><a href="FluentComparableAssertion.html" title="class in org.apache.juneau.assertions">FluentComparableAssertion</a>&lt;T2,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-347">asComparable</a></span>()</div>
 <div class="block">Converts this object assertion into a comparable object assertion.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -682,7 +682,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asDate()">
 <h3>asDate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentDateAssertion.html" title="class in org.apache.juneau.assertions">FluentDateAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-353">asDate</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentDateAssertion.html" title="class in org.apache.juneau.assertions">FluentDateAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-357">asDate</a></span>()</div>
 <div class="block">Converts this object assertion into a date assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -695,7 +695,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asInteger()">
 <h3>asInteger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentIntegerAssertion.html" title="class in org.apache.juneau.assertions">FluentIntegerAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-363">asInteger</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentIntegerAssertion.html" title="class in org.apache.juneau.assertions">FluentIntegerAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-367">asInteger</a></span>()</div>
 <div class="block">Converts this object assertion into an integer assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -708,7 +708,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asLong()">
 <h3>asLong</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentLongAssertion.html" title="class in org.apache.juneau.assertions">FluentLongAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-373">asLong</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentLongAssertion.html" title="class in org.apache.juneau.assertions">FluentLongAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-377">asLong</a></span>()</div>
 <div class="block">Converts this object assertion into a long assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -721,7 +721,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asList()">
 <h3>asList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentListAssertion.html" title="class in org.apache.juneau.assertions">FluentListAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-383">asList</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentListAssertion.html" title="class in org.apache.juneau.assertions">FluentListAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-387">asList</a></span>()</div>
 <div class="block">Converts this object assertion into a list assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -734,7 +734,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asList(java.lang.Class)">
 <h3>asList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="FluentListAssertion.html" title="class in org.apache.juneau.assertions">FluentListAssertion</a>&lt;E,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-395">asList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;elementType)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="FluentListAssertion.html" title="class in org.apache.juneau.assertions">FluentListAssertion</a>&lt;E,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-399">asList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;elementType)</span></div>
 <div class="block">Converts this object assertion into a list assertion.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -751,7 +751,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <li>
 <section class="detail" id="asMap()">
 <h3>asMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentMapAssertion.html" title="class in org.apache.juneau.assertions">FluentMapAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-406">asMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentMapAssertion.html" title="class in org.apache.juneau.assertions">FluentMapAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-410">asMap</a></span>()</div>
 <div class="block">Converts this object assertion into a map assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -765,7 +765,7 @@ V&gt;&nbsp;<a href="FluentMapAssertion.html" title="class in org.apache.juneau.a
 <section class="detail" id="asMap(java.lang.Class,java.lang.Class)">
 <h3>asMap</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="FluentMapAssertion.html" title="class in org.apache.juneau.assertions">FluentMapAssertion</a>&lt;K,<wbr>V,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-420">asMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;K&gt;&nbsp;keyType,
+V&gt;</span>&nbsp;<span class="return-type"><a href="FluentMapAssertion.html" title="class in org.apache.juneau.assertions">FluentMapAssertion</a>&lt;K,<wbr>V,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-424">asMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;K&gt;&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;V&gt;&nbsp;valueType)</span></div>
 <div class="block">Converts this object assertion into a map assertion with the specified key and value types.</div>
 <dl class="notes">
@@ -785,7 +785,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FluentMapAssertion.html" ti
 <li>
 <section class="detail" id="asBean(java.lang.Class)">
 <h3>asBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="FluentBeanAssertion.html" title="class in org.apache.juneau.assertions">FluentBeanAssertion</a>&lt;T2,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-434">asBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;beanType)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="FluentBeanAssertion.html" title="class in org.apache.juneau.assertions">FluentBeanAssertion</a>&lt;T2,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-438">asBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;beanType)</span></div>
 <div class="block">Converts this object assertion into a bean assertion.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -802,7 +802,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FluentMapAssertion.html" ti
 <li>
 <section class="detail" id="asBean()">
 <h3>asBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentBeanAssertion.html" title="class in org.apache.juneau.assertions">FluentBeanAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-445">asBean</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentBeanAssertion.html" title="class in org.apache.juneau.assertions">FluentBeanAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-449">asBean</a></span>()</div>
 <div class="block">Converts this object assertion into a bean assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -815,7 +815,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FluentMapAssertion.html" ti
 <li>
 <section class="detail" id="asBeanList(java.lang.Class)">
 <h3>asBeanList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="FluentBeanListAssertion.html" title="class in org.apache.juneau.assertions">FluentBeanListAssertion</a>&lt;T2,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-457">asBeanList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;beanType)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="FluentBeanListAssertion.html" title="class in org.apache.juneau.assertions">FluentBeanListAssertion</a>&lt;T2,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-461">asBeanList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;beanType)</span></div>
 <div class="block">Converts this object assertion into a list-of-beans assertion.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -832,7 +832,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FluentMapAssertion.html" ti
 <li>
 <section class="detail" id="asZonedDateTime()">
 <h3>asZonedDateTime</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentZonedDateTimeAssertion.html" title="class in org.apache.juneau.assertions">FluentZonedDateTimeAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-468">asZonedDateTime</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentZonedDateTimeAssertion.html" title="class in org.apache.juneau.assertions">FluentZonedDateTimeAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-472">asZonedDateTime</a></span>()</div>
 <div class="block">Converts this object assertion into a zoned-datetime assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -845,7 +845,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FluentMapAssertion.html" ti
 <li>
 <section class="detail" id="setMsg(java.lang.String,java.lang.Object...)">
 <h3>setMsg</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-478">setMsg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-482">setMsg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setMsg(java.lang.String,java.lang.Object...)">Assertion</a></code></span></div>
 <div class="block">Allows you to override the assertion failure message.
@@ -876,7 +876,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FluentMapAssertion.html" ti
 <li>
 <section class="detail" id="setOut(java.io.PrintStream)">
 <h3>setOut</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-484">setOut</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintStream.html" title="class or interface in java.io" class="external-link">PrintStream</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-488">setOut</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintStream.html" title="class or interface in java.io" class="external-link">PrintStream</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setOut(java.io.PrintStream)">Assertion</a></code></span></div>
 <div class="block">If an error occurs, send the error message to the specified stream instead of STDERR.</div>
 <dl class="notes">
@@ -893,7 +893,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FluentMapAssertion.html" ti
 <li>
 <section class="detail" id="setSilent()">
 <h3>setSilent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-490">setSilent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-494">setSilent</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setSilent()">Assertion</a></code></span></div>
 <div class="block">Suppresses output to STDERR.
 
@@ -910,7 +910,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FluentMapAssertion.html" ti
 <li>
 <section class="detail" id="setStdOut()">
 <h3>setStdOut</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-496">setStdOut</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-500">setStdOut</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setStdOut()">Assertion</a></code></span></div>
 <div class="block">If an error occurs, send the error message to STDOUT instead of STDERR.</div>
 <dl class="notes">
@@ -924,7 +924,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FluentMapAssertion.html" ti
 <li>
 <section class="detail" id="setThrowable(java.lang.Class)">
 <h3>setThrowable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-502">setThrowable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;<a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">T</a>,<wbr><a href="FluentAnyAssertion.html" title="type parameter in FluentAnyAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentAnyAssertion.html#line-506">setThrowable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setThrowable(java.lang.Class)">Assertion</a></code></span></div>
 <div class="block">If an error occurs, throw this exception instead of the standard <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link"><code>AssertionError</code></a>.
 

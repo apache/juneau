@@ -11,129 +11,133 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.internal;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.internal.ArrayUtils.*;</span>
-<span class="source-line-no">016</span><span id="line-16"></span>
-<span class="source-line-no">017</span><span id="line-17">import java.lang.reflect.*;</span>
-<span class="source-line-no">018</span><span id="line-18">import java.util.*;</span>
-<span class="source-line-no">019</span><span id="line-19"></span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.common.utils.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">/**</span>
-<span class="source-line-no">023</span><span id="line-23"> * An instance of a &lt;c&gt;Map&lt;/c&gt; where the keys and values are simple arrays.</span>
-<span class="source-line-no">024</span><span id="line-24"> *</span>
-<span class="source-line-no">025</span><span id="line-25"> * &lt;p&gt;</span>
-<span class="source-line-no">026</span><span id="line-26"> * Typically more efficient than &lt;c&gt;HashMaps&lt;/c&gt; for small maps (e.g. &amp;lt;10 entries).</span>
-<span class="source-line-no">027</span><span id="line-27"> *</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> * Does not support adding or removing entries.</span>
-<span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> * Setting values overwrites the value on the underlying value array.</span>
-<span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"></span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;/ul&gt;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.internal;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.internal.ArrayUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import java.lang.reflect.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.common.utils.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">/**</span>
+<span class="source-line-no">027</span><span id="line-27"> * An instance of a &lt;c&gt;Map&lt;/c&gt; where the keys and values are simple arrays.</span>
+<span class="source-line-no">028</span><span id="line-28"> *</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * Typically more efficient than &lt;c&gt;HashMaps&lt;/c&gt; for small maps (e.g. &amp;lt;10 entries).</span>
+<span class="source-line-no">031</span><span id="line-31"> *</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * Does not support adding or removing entries.</span>
+<span class="source-line-no">034</span><span id="line-34"> *</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * Setting values overwrites the value on the underlying value array.</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * @param &lt;K&gt; The key type.</span>
-<span class="source-line-no">039</span><span id="line-39"> * @param &lt;V&gt; The value type.</span>
-<span class="source-line-no">040</span><span id="line-40"> */</span>
-<span class="source-line-no">041</span><span id="line-41">public class SimpleMap&lt;K,V&gt; extends AbstractMap&lt;K,V&gt; {</span>
-<span class="source-line-no">042</span><span id="line-42"></span>
-<span class="source-line-no">043</span><span id="line-43">   final K[] keys;</span>
-<span class="source-line-no">044</span><span id="line-44">   final V[] values;</span>
-<span class="source-line-no">045</span><span id="line-45">   final SimpleMapEntry[] entries;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"></span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;/ul&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> *</span>
+<span class="source-line-no">042</span><span id="line-42"> * @param &lt;K&gt; The key type.</span>
+<span class="source-line-no">043</span><span id="line-43"> * @param &lt;V&gt; The value type.</span>
+<span class="source-line-no">044</span><span id="line-44"> */</span>
+<span class="source-line-no">045</span><span id="line-45">public class SimpleMap&lt;K,V&gt; extends AbstractMap&lt;K,V&gt; {</span>
 <span class="source-line-no">046</span><span id="line-46"></span>
-<span class="source-line-no">047</span><span id="line-47">   /**</span>
-<span class="source-line-no">048</span><span id="line-48">    * Constructor.</span>
-<span class="source-line-no">049</span><span id="line-49">    *</span>
-<span class="source-line-no">050</span><span id="line-50">    * @param keys The map keys.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">051</span><span id="line-51">    * @param values The map values.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">052</span><span id="line-52">    */</span>
-<span class="source-line-no">053</span><span id="line-53">   @SuppressWarnings("unchecked")</span>
-<span class="source-line-no">054</span><span id="line-54">   public SimpleMap(K[] keys, V[] values) {</span>
-<span class="source-line-no">055</span><span id="line-55">      Utils.assertArgNotNull("keys", keys);</span>
-<span class="source-line-no">056</span><span id="line-56">      Utils.assertArgNotNull("values", values);</span>
-<span class="source-line-no">057</span><span id="line-57">      Utils.assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);</span>
-<span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">      this.keys = keys;</span>
-<span class="source-line-no">060</span><span id="line-60">      this.values = values;</span>
-<span class="source-line-no">061</span><span id="line-61">      entries = (SimpleMapEntry[]) Array.newInstance(SimpleMapEntry.class, keys.length);</span>
-<span class="source-line-no">062</span><span id="line-62">      for (int i = 0; i &lt; keys.length; i++) {</span>
-<span class="source-line-no">063</span><span id="line-63">         Utils.assertArg(keys[i] != null, "Keys array cannot contain a null value.");</span>
-<span class="source-line-no">064</span><span id="line-64">         entries[i] = new SimpleMapEntry(i);</span>
-<span class="source-line-no">065</span><span id="line-65">   }</span>
-<span class="source-line-no">066</span><span id="line-66">   }</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   @Override /* Map */</span>
-<span class="source-line-no">069</span><span id="line-69">   public Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet() {</span>
-<span class="source-line-no">070</span><span id="line-70">      return asSet(entries);</span>
-<span class="source-line-no">071</span><span id="line-71">   }</span>
-<span class="source-line-no">072</span><span id="line-72"></span>
-<span class="source-line-no">073</span><span id="line-73">   @Override /* Map */</span>
-<span class="source-line-no">074</span><span id="line-74">   public V get(Object key) {</span>
-<span class="source-line-no">075</span><span id="line-75">      for (int i = 0; i &lt; keys.length; i++)</span>
-<span class="source-line-no">076</span><span id="line-76">         if (keys[i].equals(key))</span>
-<span class="source-line-no">077</span><span id="line-77">            return values[i];</span>
-<span class="source-line-no">078</span><span id="line-78">      return null;</span>
-<span class="source-line-no">079</span><span id="line-79">   }</span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   @Override /* Map */</span>
-<span class="source-line-no">082</span><span id="line-82">   public Set&lt;K&gt; keySet() {</span>
-<span class="source-line-no">083</span><span id="line-83">      return asSet(keys);</span>
-<span class="source-line-no">084</span><span id="line-84">   }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   @Override /* Map */</span>
-<span class="source-line-no">087</span><span id="line-87">   public V put(K key, V value) {</span>
-<span class="source-line-no">088</span><span id="line-88">      for (int i = 0; i &lt; keys.length; i++) {</span>
-<span class="source-line-no">089</span><span id="line-89">         if (keys[i].equals(key)) {</span>
-<span class="source-line-no">090</span><span id="line-90">            V v = values[i];</span>
-<span class="source-line-no">091</span><span id="line-91">            values[i] = value;</span>
-<span class="source-line-no">092</span><span id="line-92">            return v;</span>
-<span class="source-line-no">093</span><span id="line-93">         }</span>
-<span class="source-line-no">094</span><span id="line-94">      }</span>
-<span class="source-line-no">095</span><span id="line-95">      throw new IllegalArgumentException("No key '"+key+"' defined in map");</span>
-<span class="source-line-no">096</span><span id="line-96">   }</span>
-<span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">   class SimpleMapEntry implements Map.Entry&lt;K,V&gt; {</span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">      private int index;</span>
+<span class="source-line-no">047</span><span id="line-47">   final K[] keys;</span>
+<span class="source-line-no">048</span><span id="line-48">   final V[] values;</span>
+<span class="source-line-no">049</span><span id="line-49">   final SimpleMapEntry[] entries;</span>
+<span class="source-line-no">050</span><span id="line-50"></span>
+<span class="source-line-no">051</span><span id="line-51">   /**</span>
+<span class="source-line-no">052</span><span id="line-52">    * Constructor.</span>
+<span class="source-line-no">053</span><span id="line-53">    *</span>
+<span class="source-line-no">054</span><span id="line-54">    * @param keys The map keys.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">055</span><span id="line-55">    * @param values The map values.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">056</span><span id="line-56">    */</span>
+<span class="source-line-no">057</span><span id="line-57">   @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">058</span><span id="line-58">   public SimpleMap(K[] keys, V[] values) {</span>
+<span class="source-line-no">059</span><span id="line-59">      Utils.assertArgNotNull("keys", keys);</span>
+<span class="source-line-no">060</span><span id="line-60">      Utils.assertArgNotNull("values", values);</span>
+<span class="source-line-no">061</span><span id="line-61">      Utils.assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);</span>
+<span class="source-line-no">062</span><span id="line-62"></span>
+<span class="source-line-no">063</span><span id="line-63">      this.keys = keys;</span>
+<span class="source-line-no">064</span><span id="line-64">      this.values = values;</span>
+<span class="source-line-no">065</span><span id="line-65">      entries = (SimpleMapEntry[]) Array.newInstance(SimpleMapEntry.class, keys.length);</span>
+<span class="source-line-no">066</span><span id="line-66">      for (int i = 0; i &lt; keys.length; i++) {</span>
+<span class="source-line-no">067</span><span id="line-67">         Utils.assertArg(keys[i] != null, "Keys array cannot contain a null value.");</span>
+<span class="source-line-no">068</span><span id="line-68">         entries[i] = new SimpleMapEntry(i);</span>
+<span class="source-line-no">069</span><span id="line-69">   }</span>
+<span class="source-line-no">070</span><span id="line-70">   }</span>
+<span class="source-line-no">071</span><span id="line-71"></span>
+<span class="source-line-no">072</span><span id="line-72">   @Override /* Map */</span>
+<span class="source-line-no">073</span><span id="line-73">   public Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet() {</span>
+<span class="source-line-no">074</span><span id="line-74">      return asSet(entries);</span>
+<span class="source-line-no">075</span><span id="line-75">   }</span>
+<span class="source-line-no">076</span><span id="line-76"></span>
+<span class="source-line-no">077</span><span id="line-77">   @Override /* Map */</span>
+<span class="source-line-no">078</span><span id="line-78">   public V get(Object key) {</span>
+<span class="source-line-no">079</span><span id="line-79">      for (int i = 0; i &lt; keys.length; i++)</span>
+<span class="source-line-no">080</span><span id="line-80">         if (keys[i].equals(key))</span>
+<span class="source-line-no">081</span><span id="line-81">            return values[i];</span>
+<span class="source-line-no">082</span><span id="line-82">      return null;</span>
+<span class="source-line-no">083</span><span id="line-83">   }</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">   @Override /* Map */</span>
+<span class="source-line-no">086</span><span id="line-86">   public Set&lt;K&gt; keySet() {</span>
+<span class="source-line-no">087</span><span id="line-87">      return asSet(keys);</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   @Override /* Map */</span>
+<span class="source-line-no">091</span><span id="line-91">   public V put(K key, V value) {</span>
+<span class="source-line-no">092</span><span id="line-92">      for (int i = 0; i &lt; keys.length; i++) {</span>
+<span class="source-line-no">093</span><span id="line-93">         if (keys[i].equals(key)) {</span>
+<span class="source-line-no">094</span><span id="line-94">            V v = values[i];</span>
+<span class="source-line-no">095</span><span id="line-95">            values[i] = value;</span>
+<span class="source-line-no">096</span><span id="line-96">            return v;</span>
+<span class="source-line-no">097</span><span id="line-97">         }</span>
+<span class="source-line-no">098</span><span id="line-98">      }</span>
+<span class="source-line-no">099</span><span id="line-99">      throw new IllegalArgumentException("No key '"+key+"' defined in map");</span>
+<span class="source-line-no">100</span><span id="line-100">   }</span>
 <span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">      SimpleMapEntry(int index) {</span>
-<span class="source-line-no">103</span><span id="line-103">         this.index = index;</span>
-<span class="source-line-no">104</span><span id="line-104">      }</span>
+<span class="source-line-no">102</span><span id="line-102">   class SimpleMapEntry implements Map.Entry&lt;K,V&gt; {</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">      private int index;</span>
 <span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">      @Override /* Map.Entry */</span>
-<span class="source-line-no">107</span><span id="line-107">      public K getKey() {</span>
-<span class="source-line-no">108</span><span id="line-108">         return keys[index];</span>
-<span class="source-line-no">109</span><span id="line-109">      }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">      @Override /* Map.Entry */</span>
-<span class="source-line-no">112</span><span id="line-112">      public V getValue() {</span>
-<span class="source-line-no">113</span><span id="line-113">         return values[index];</span>
-<span class="source-line-no">114</span><span id="line-114">      }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">      @Override /* Map.Entry */</span>
-<span class="source-line-no">117</span><span id="line-117">      public V setValue(V val) {</span>
-<span class="source-line-no">118</span><span id="line-118">         V v = values[index];</span>
-<span class="source-line-no">119</span><span id="line-119">         values[index] = val;</span>
-<span class="source-line-no">120</span><span id="line-120">         return v;</span>
-<span class="source-line-no">121</span><span id="line-121">      }</span>
-<span class="source-line-no">122</span><span id="line-122">   }</span>
-<span class="source-line-no">123</span><span id="line-123">}</span>
+<span class="source-line-no">106</span><span id="line-106">      SimpleMapEntry(int index) {</span>
+<span class="source-line-no">107</span><span id="line-107">         this.index = index;</span>
+<span class="source-line-no">108</span><span id="line-108">      }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">      @Override /* Map.Entry */</span>
+<span class="source-line-no">111</span><span id="line-111">      public K getKey() {</span>
+<span class="source-line-no">112</span><span id="line-112">         return keys[index];</span>
+<span class="source-line-no">113</span><span id="line-113">      }</span>
+<span class="source-line-no">114</span><span id="line-114"></span>
+<span class="source-line-no">115</span><span id="line-115">      @Override /* Map.Entry */</span>
+<span class="source-line-no">116</span><span id="line-116">      public V getValue() {</span>
+<span class="source-line-no">117</span><span id="line-117">         return values[index];</span>
+<span class="source-line-no">118</span><span id="line-118">      }</span>
+<span class="source-line-no">119</span><span id="line-119"></span>
+<span class="source-line-no">120</span><span id="line-120">      @Override /* Map.Entry */</span>
+<span class="source-line-no">121</span><span id="line-121">      public V setValue(V val) {</span>
+<span class="source-line-no">122</span><span id="line-122">         V v = values[index];</span>
+<span class="source-line-no">123</span><span id="line-123">         values[index] = val;</span>
+<span class="source-line-no">124</span><span id="line-124">         return v;</span>
+<span class="source-line-no">125</span><span id="line-125">      }</span>
+<span class="source-line-no">126</span><span id="line-126">   }</span>
+<span class="source-line-no">127</span><span id="line-127">}</span>
 
 
 

@@ -6,93 +6,97 @@
 </head>
 <body>
 <div id="overview"><a href="../../../../../testapidocs/org/apache/juneau/xml/XmlParser_Test.html">View Javadoc</a></div><pre>
-<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">// ***************************************************************************************************************************</em>
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</em>
-<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</em>
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment">// * with the License.  You may obtain a copy of the License at                                                              *</em>
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</em>
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</em>
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</em>
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment">// * specific language governing permissions and limitations under the License.                                              *</em>
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment">// ***************************************************************************************************************************</em>
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.xml;
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.xml;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">class</strong> <a name="XmlParser_Test" href="../../../../org/apache/juneau/xml/XmlParser_Test.html#XmlParser_Test">XmlParser_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  	@Test <strong class="jxr_keyword">void</strong> a01_genericAttributes() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  		<strong class="jxr_keyword">var</strong> xml = <span class="jxr_string">"&lt;A b='1'&gt;&lt;c&gt;2&lt;/c&gt;&lt;/A&gt;"</span>;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  		<strong class="jxr_keyword">var</strong> m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  		assertEquals(<span class="jxr_string">"{b:'1',c:'2'}"</span>, m.toString());
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  	}
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  	@Test <strong class="jxr_keyword">void</strong> a02_genericWithChildElements() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		<strong class="jxr_keyword">var</strong> xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C&gt;c&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		<strong class="jxr_keyword">var</strong> m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		assertEquals(<span class="jxr_string">"{B:{C:'c'}}"</span>, m.toString());
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">class</strong> <a name="XmlParser_Test" href="../../../../org/apache/juneau/xml/XmlParser_Test.html#XmlParser_Test">XmlParser_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  	@Test <strong class="jxr_keyword">void</strong> a01_genericAttributes() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  		<strong class="jxr_keyword">var</strong> xml = <span class="jxr_string">"&lt;A b='1'&gt;&lt;c&gt;2&lt;/c&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  		<strong class="jxr_keyword">var</strong> m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		assertEquals(<span class="jxr_string">"{b:'1',c:'2'}"</span>, m.toString());
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	}
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	@Test <strong class="jxr_keyword">void</strong> a02_genericWithChildElements() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C1&gt;c1&lt;/C1&gt;&lt;C2&gt;c2&lt;/C2&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		assertEquals(<span class="jxr_string">"{B:{C1:'c1',C2:'c2'}}"</span>, m.toString());
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">var</strong> xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C&gt;c&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">var</strong> m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		assertEquals(<span class="jxr_string">"{B:{C:'c'}}"</span>, m.toString());
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C&gt;&lt;D1&gt;d1&lt;/D1&gt;&lt;D2&gt;d2&lt;/D2&gt;&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C1&gt;c1&lt;/C1&gt;&lt;C2&gt;c2&lt;/C2&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		assertEquals(<span class="jxr_string">"{B:{C:{D1:'d1',D2:'d2'}}}"</span>, m.toString());
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		assertEquals(<span class="jxr_string">"{B:{C1:'c1',C2:'c2'}}"</span>, m.toString());
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C&gt;&lt;D1 d1a='d1av'&gt;&lt;E1&gt;e1&lt;/E1&gt;&lt;/D1&gt;&lt;D2 d2a='d2av'&gt;&lt;E2&gt;e2&lt;/E2&gt;&lt;/D2&gt;&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C&gt;&lt;D1&gt;d1&lt;/D1&gt;&lt;D2&gt;d2&lt;/D2&gt;&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assertEquals(<span class="jxr_string">"{B:{C:{D1:{d1a:'d1av',E1:'e1'},D2:{d2a:'d2av',E2:'e2'}}}}"</span>, m.toString());
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assertEquals(<span class="jxr_string">"{B:{C:{D1:'d1',D2:'d2'}}}"</span>, m.toString());
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B b='b'&gt;&lt;C&gt;c&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C&gt;&lt;D1 d1a='d1av'&gt;&lt;E1&gt;e1&lt;/E1&gt;&lt;/D1&gt;&lt;D2 d2a='d2av'&gt;&lt;E2&gt;e2&lt;/E2&gt;&lt;/D2&gt;&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		assertEquals(<span class="jxr_string">"{B:{b:'b',C:'c'}}"</span>, m.toString());
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		assertEquals(<span class="jxr_string">"{B:{C:{D1:{d1a:'d1av',E1:'e1'},D2:{d2a:'d2av',E2:'e2'}}}}"</span>, m.toString());
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B b='b'&gt;c&lt;/B&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B b='b'&gt;&lt;C&gt;c&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertEquals(<span class="jxr_string">"{B:{b:'b',contents:'c'}}"</span>, m.toString());
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertEquals(<span class="jxr_string">"{B:{b:'b',C:'c'}}"</span>, m.toString());
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;b1&lt;/B&gt;&lt;B&gt;b2&lt;/B&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B b='b'&gt;c&lt;/B&gt;&lt;/A&gt;"</span>;
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		assertEquals(<span class="jxr_string">"{B:['b1','b2']}"</span>, m.toString());
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		assertEquals(<span class="jxr_string">"{B:{b:'b',contents:'c'}}"</span>, m.toString());
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C&gt;c1&lt;/C&gt;&lt;C&gt;c2&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;b1&lt;/B&gt;&lt;B&gt;b2&lt;/B&gt;&lt;/A&gt;"</span>;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertEquals(<span class="jxr_string">"{B:{C:['c1','c2']}}"</span>, m.toString());
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertEquals(<span class="jxr_string">"{B:['b1','b2']}"</span>, m.toString());
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B v='v1'&gt;b1&lt;/B&gt;&lt;B v='v2'&gt;b2&lt;/B&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C&gt;c1&lt;/C&gt;&lt;C&gt;c2&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertEquals(<span class="jxr_string">"{B:[{v:'v1',contents:'b1'},{v:'v2',contents:'b2'}]}"</span>, m.toString());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertEquals(<span class="jxr_string">"{B:{C:['c1','c2']}}"</span>, m.toString());
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C v='v1'&gt;c1&lt;/C&gt;&lt;C v='v2'&gt;c2&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B v='v1'&gt;b1&lt;/B&gt;&lt;B v='v2'&gt;b2&lt;/B&gt;&lt;/A&gt;"</span>;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertEquals(<span class="jxr_string">"{B:{C:[{v:'v1',contents:'c1'},{v:'v2',contents:'c2'}]}}"</span>, m.toString());
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertEquals(<span class="jxr_string">"{B:[{v:'v1',contents:'b1'},{v:'v2',contents:'b2'}]}"</span>, m.toString());
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B c='c1'&gt;&lt;c&gt;c2&lt;/c&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C v='v1'&gt;c1&lt;/C&gt;&lt;C v='v2'&gt;c2&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertEquals(<span class="jxr_string">"{B:{c:['c1','c2']}}"</span>, m.toString());
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Test <strong class="jxr_keyword">void</strong> a03_preserveRootElement() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> p = XmlParser.create().preserveRootElement().build();
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C&gt;c&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> m = p.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertEquals(<span class="jxr_string">"{A:{B:{C:'c'}}}"</span>, m.toString());
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertEquals(<span class="jxr_string">"{B:{C:[{v:'v1',contents:'c1'},{v:'v2',contents:'c2'}]}}"</span>, m.toString());
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;B c='c1'&gt;&lt;c&gt;c2&lt;/c&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		m = XmlParser.DEFAULT.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(<span class="jxr_string">"{B:{c:['c1','c2']}}"</span>, m.toString());
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Test <strong class="jxr_keyword">void</strong> a03_preserveRootElement() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> p = XmlParser.create().preserveRootElement().build();
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;/A&gt;"</span>;
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		m = p.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertEquals(<span class="jxr_string">"{A:{}}"</span>, m.toString());
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  }
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> xml = <span class="jxr_string">"&lt;A&gt;&lt;B&gt;&lt;C&gt;c&lt;/C&gt;&lt;/B&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> m = p.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertEquals(<span class="jxr_string">"{A:{B:{C:'c'}}}"</span>, m.toString());
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		xml = <span class="jxr_string">"&lt;A&gt;&lt;/A&gt;"</span>;
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		m = p.parse(xml, JsonMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertEquals(<span class="jxr_string">"{A:{}}"</span>, m.toString());
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

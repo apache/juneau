@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Utils2.html#line-30">Utils2</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Utils2.html#line-34">Utils2</a></span>
 <span class="extends-implements">extends <a href="../common/utils/Utils.html" title="class in org.apache.juneau.common.utils">Utils</a></span></div>
 <div class="block">Various generic object utility methods.
 
@@ -151,7 +151,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Utils2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Utils2.html#line-30">Utils2</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Utils2.html#line-34">Utils2</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -165,7 +165,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unwrap(java.lang.Object)">
 <h3>unwrap</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Utils2.html#line-38">unwrap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Utils2.html#line-42">unwrap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">If the specified object is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a> or <a href="../Value.html" title="class in org.apache.juneau"><code>Value</code></a>, returns the inner value, otherwise the same value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -178,7 +178,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="identity(java.lang.Object)">
 <h3>identity</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Utils2.html#line-53">identity</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Utils2.html#line-57">identity</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Converts the specified object into an identifiable string of the form "Class[identityHashCode]"</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toPropertyMap(java.lang.Object)">
 <h3>toPropertyMap</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Utils2.html#line-69">toPropertyMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Utils2.html#line-73">toPropertyMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Searches for all <c>properties()</c> methods on the specified object and creates a combine map of them.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

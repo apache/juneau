@@ -11,79 +11,83 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.rest.stats;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import java.time.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import java.util.*;</span>
-<span class="source-line-no">017</span><span id="line-17"></span>
-<span class="source-line-no">018</span><span id="line-18">import org.apache.juneau.annotation.*;</span>
-<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.rest.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.swaps.*;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.stats;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import java.time.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import java.util.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">/**</span>
-<span class="source-line-no">023</span><span id="line-23"> * A snapshot of execution statistics for REST resource classes.</span>
-<span class="source-line-no">024</span><span id="line-24"> *</span>
-<span class="source-line-no">025</span><span id="line-25"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">026</span><span id="line-26"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics"&gt;REST method execution statistics&lt;/a&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;/ul&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> */</span>
-<span class="source-line-no">029</span><span id="line-29">@Bean(properties="startTime,upTime,methodStats")</span>
-<span class="source-line-no">030</span><span id="line-30">public class RestContextStats {</span>
-<span class="source-line-no">031</span><span id="line-31">   private final Instant startTime;</span>
-<span class="source-line-no">032</span><span id="line-32">   private final List&lt;MethodExecStats&gt; methodStats;</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">   /**</span>
-<span class="source-line-no">035</span><span id="line-35">    * Constructor.</span>
-<span class="source-line-no">036</span><span id="line-36">    *</span>
-<span class="source-line-no">037</span><span id="line-37">    * @param startTime The start time of the {@link RestContext} object.</span>
-<span class="source-line-no">038</span><span id="line-38">    * @param methodStats The execution statistics beans for the context.</span>
-<span class="source-line-no">039</span><span id="line-39">    */</span>
-<span class="source-line-no">040</span><span id="line-40">   public RestContextStats(Instant startTime, List&lt;MethodExecStats&gt; methodStats) {</span>
-<span class="source-line-no">041</span><span id="line-41">      this.startTime = startTime;</span>
-<span class="source-line-no">042</span><span id="line-42">      this.methodStats = methodStats;</span>
-<span class="source-line-no">043</span><span id="line-43">   }</span>
-<span class="source-line-no">044</span><span id="line-44"></span>
-<span class="source-line-no">045</span><span id="line-45">   /**</span>
-<span class="source-line-no">046</span><span id="line-46">    * Returns the time this REST resource class was started.</span>
-<span class="source-line-no">047</span><span id="line-47">    *</span>
-<span class="source-line-no">048</span><span id="line-48">    * @return The time this REST resource class was started.</span>
-<span class="source-line-no">049</span><span id="line-49">    */</span>
-<span class="source-line-no">050</span><span id="line-50">   @Swap(TemporalSwap.IsoInstant.class)</span>
-<span class="source-line-no">051</span><span id="line-51">   public Instant getStartTime() {</span>
-<span class="source-line-no">052</span><span id="line-52">      return startTime;</span>
-<span class="source-line-no">053</span><span id="line-53">   }</span>
-<span class="source-line-no">054</span><span id="line-54"></span>
-<span class="source-line-no">055</span><span id="line-55">   /**</span>
-<span class="source-line-no">056</span><span id="line-56">    * Returns the time in milliseconds that this REST resource class has been running.</span>
-<span class="source-line-no">057</span><span id="line-57">    *</span>
-<span class="source-line-no">058</span><span id="line-58">    * @return The time in milliseconds that this REST resource class has been running.</span>
-<span class="source-line-no">059</span><span id="line-59">    */</span>
-<span class="source-line-no">060</span><span id="line-60">   public String getUpTime() {</span>
-<span class="source-line-no">061</span><span id="line-61">      long s = Duration.between(startTime, Instant.now()).getSeconds();</span>
-<span class="source-line-no">062</span><span id="line-62">      return String.format("%dh:%02dm:%02ds", s / 3600, (s % 3600) / 60, (s % 60));</span>
-<span class="source-line-no">063</span><span id="line-63">   }</span>
-<span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">   /**</span>
-<span class="source-line-no">066</span><span id="line-66">    * Returns statistics on all method executions.</span>
-<span class="source-line-no">067</span><span id="line-67">    *</span>
-<span class="source-line-no">068</span><span id="line-68">    * @return Statistics on all method executions.</span>
-<span class="source-line-no">069</span><span id="line-69">    */</span>
-<span class="source-line-no">070</span><span id="line-70">   public Collection&lt;MethodExecStats&gt; getMethodStats() {</span>
-<span class="source-line-no">071</span><span id="line-71">      return methodStats;</span>
-<span class="source-line-no">072</span><span id="line-72">   }</span>
-<span class="source-line-no">073</span><span id="line-73">}</span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.annotation.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.rest.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.swaps.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">/**</span>
+<span class="source-line-no">027</span><span id="line-27"> * A snapshot of execution statistics for REST resource classes.</span>
+<span class="source-line-no">028</span><span id="line-28"> *</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics"&gt;REST method execution statistics&lt;/a&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;/ul&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> */</span>
+<span class="source-line-no">033</span><span id="line-33">@Bean(properties="startTime,upTime,methodStats")</span>
+<span class="source-line-no">034</span><span id="line-34">public class RestContextStats {</span>
+<span class="source-line-no">035</span><span id="line-35">   private final Instant startTime;</span>
+<span class="source-line-no">036</span><span id="line-36">   private final List&lt;MethodExecStats&gt; methodStats;</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38">   /**</span>
+<span class="source-line-no">039</span><span id="line-39">    * Constructor.</span>
+<span class="source-line-no">040</span><span id="line-40">    *</span>
+<span class="source-line-no">041</span><span id="line-41">    * @param startTime The start time of the {@link RestContext} object.</span>
+<span class="source-line-no">042</span><span id="line-42">    * @param methodStats The execution statistics beans for the context.</span>
+<span class="source-line-no">043</span><span id="line-43">    */</span>
+<span class="source-line-no">044</span><span id="line-44">   public RestContextStats(Instant startTime, List&lt;MethodExecStats&gt; methodStats) {</span>
+<span class="source-line-no">045</span><span id="line-45">      this.startTime = startTime;</span>
+<span class="source-line-no">046</span><span id="line-46">      this.methodStats = methodStats;</span>
+<span class="source-line-no">047</span><span id="line-47">   }</span>
+<span class="source-line-no">048</span><span id="line-48"></span>
+<span class="source-line-no">049</span><span id="line-49">   /**</span>
+<span class="source-line-no">050</span><span id="line-50">    * Returns the time this REST resource class was started.</span>
+<span class="source-line-no">051</span><span id="line-51">    *</span>
+<span class="source-line-no">052</span><span id="line-52">    * @return The time this REST resource class was started.</span>
+<span class="source-line-no">053</span><span id="line-53">    */</span>
+<span class="source-line-no">054</span><span id="line-54">   @Swap(TemporalSwap.IsoInstant.class)</span>
+<span class="source-line-no">055</span><span id="line-55">   public Instant getStartTime() {</span>
+<span class="source-line-no">056</span><span id="line-56">      return startTime;</span>
+<span class="source-line-no">057</span><span id="line-57">   }</span>
+<span class="source-line-no">058</span><span id="line-58"></span>
+<span class="source-line-no">059</span><span id="line-59">   /**</span>
+<span class="source-line-no">060</span><span id="line-60">    * Returns the time in milliseconds that this REST resource class has been running.</span>
+<span class="source-line-no">061</span><span id="line-61">    *</span>
+<span class="source-line-no">062</span><span id="line-62">    * @return The time in milliseconds that this REST resource class has been running.</span>
+<span class="source-line-no">063</span><span id="line-63">    */</span>
+<span class="source-line-no">064</span><span id="line-64">   public String getUpTime() {</span>
+<span class="source-line-no">065</span><span id="line-65">      long s = Duration.between(startTime, Instant.now()).getSeconds();</span>
+<span class="source-line-no">066</span><span id="line-66">      return String.format("%dh:%02dm:%02ds", s / 3600, (s % 3600) / 60, (s % 60));</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">   /**</span>
+<span class="source-line-no">070</span><span id="line-70">    * Returns statistics on all method executions.</span>
+<span class="source-line-no">071</span><span id="line-71">    *</span>
+<span class="source-line-no">072</span><span id="line-72">    * @return Statistics on all method executions.</span>
+<span class="source-line-no">073</span><span id="line-73">    */</span>
+<span class="source-line-no">074</span><span id="line-74">   public Collection&lt;MethodExecStats&gt; getMethodStats() {</span>
+<span class="source-line-no">075</span><span id="line-75">      return methodStats;</span>
+<span class="source-line-no">076</span><span id="line-76">   }</span>
+<span class="source-line-no">077</span><span id="line-77">}</span>
 
 
 

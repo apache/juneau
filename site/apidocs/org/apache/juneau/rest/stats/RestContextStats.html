@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations"><a href="../../annotation/Bean.html" title="annotation interface in org.apache.juneau.annotation">@Bean</a>(<a href="../../annotation/Bean.html#properties()">properties</a>="startTime,upTime,methodStats")
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/RestContextStats.html#line-29">RestContextStats</a></span>
+</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/RestContextStats.html#line-33">RestContextStats</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A snapshot of execution statistics for REST resource classes.
 
@@ -151,7 +151,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.time.Instant,java.util.List)">
 <h3>RestContextStats</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/RestContextStats.html#line-40">RestContextStats</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startTime,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/RestContextStats.html#line-44">RestContextStats</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startTime,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="MethodExecStats.html" title="class in org.apache.juneau.rest.stats">MethodExecStats</a>&gt;&nbsp;methodStats)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -173,7 +173,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getStartTime()">
 <h3>getStartTime</h3>
 <div class="member-signature"><span class="annotations"><a href="../../annotation/Swap.html" title="annotation interface in org.apache.juneau.annotation">@Swap</a>(<a href="../../swaps/TemporalSwap.IsoInstant.html" title="class in org.apache.juneau.swaps">IsoInstant.class</a>)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/RestContextStats.html#line-50">getStartTime</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/RestContextStats.html#line-54">getStartTime</a></span>()</div>
 <div class="block">Returns the time this REST resource class was started.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -184,7 +184,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getUpTime()">
 <h3>getUpTime</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/RestContextStats.html#line-60">getUpTime</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/RestContextStats.html#line-64">getUpTime</a></span>()</div>
 <div class="block">Returns the time in milliseconds that this REST resource class has been running.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -195,7 +195,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMethodStats()">
 <h3>getMethodStats</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="MethodExecStats.html" title="class in org.apache.juneau.rest.stats">MethodExecStats</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/RestContextStats.html#line-70">getMethodStats</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="MethodExecStats.html" title="class in org.apache.juneau.rest.stats">MethodExecStats</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/RestContextStats.html#line-74">getMethodStats</a></span>()</div>
 <div class="block">Returns statistics on all method executions.</div>
 <dl class="notes">
 <dt>Returns:</dt>

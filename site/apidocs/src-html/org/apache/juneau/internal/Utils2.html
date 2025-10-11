@@ -11,96 +11,100 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.internal;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import java.util.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import java.util.concurrent.*;</span>
-<span class="source-line-no">017</span><span id="line-17">import java.util.function.*;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.internal;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.collections.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.common.utils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.reflect.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">/**</span>
-<span class="source-line-no">025</span><span id="line-25"> * Various generic object utility methods.</span>
-<span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;/ul&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> */</span>
-<span class="source-line-no">030</span><span id="line-30">public class Utils2 extends Utils {</span>
-<span class="source-line-no">031</span><span id="line-31"></span>
-<span class="source-line-no">032</span><span id="line-32">   /**</span>
-<span class="source-line-no">033</span><span id="line-33">    * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.</span>
-<span class="source-line-no">034</span><span id="line-34">    *</span>
-<span class="source-line-no">035</span><span id="line-35">    * @param o The object to unwrap.</span>
-<span class="source-line-no">036</span><span id="line-36">    * @return The unwrapped object.</span>
-<span class="source-line-no">037</span><span id="line-37">    */</span>
-<span class="source-line-no">038</span><span id="line-38">   public static Object unwrap(Object o) {</span>
-<span class="source-line-no">039</span><span id="line-39">      if (o instanceof Supplier)</span>
-<span class="source-line-no">040</span><span id="line-40">         o = unwrap(((Supplier&lt;?&gt;)o).get());</span>
-<span class="source-line-no">041</span><span id="line-41">      if (o instanceof Value)</span>
-<span class="source-line-no">042</span><span id="line-42">         o = unwrap(((Value&lt;?&gt;)o).get());</span>
-<span class="source-line-no">043</span><span id="line-43">      if (o instanceof Optional)</span>
-<span class="source-line-no">044</span><span id="line-44">         o = unwrap(((Optional&lt;?&gt;)o).orElse(null));</span>
-<span class="source-line-no">045</span><span id="line-45">      return o;</span>
-<span class="source-line-no">046</span><span id="line-46">   }</span>
-<span class="source-line-no">047</span><span id="line-47"></span>
-<span class="source-line-no">048</span><span id="line-48">   /**</span>
-<span class="source-line-no">049</span><span id="line-49">    * Converts the specified object into an identifiable string of the form "Class[identityHashCode]"</span>
-<span class="source-line-no">050</span><span id="line-50">    * @param o The object to convert to a string.</span>
-<span class="source-line-no">051</span><span id="line-51">    * @return An identity string.</span>
-<span class="source-line-no">052</span><span id="line-52">    */</span>
-<span class="source-line-no">053</span><span id="line-53">   public static String identity(Object o) {</span>
-<span class="source-line-no">054</span><span id="line-54">      if (o instanceof Optional)</span>
-<span class="source-line-no">055</span><span id="line-55">         o = ((Optional&lt;?&gt;)o).orElse(null);</span>
-<span class="source-line-no">056</span><span id="line-56">      if (o == null)</span>
-<span class="source-line-no">057</span><span id="line-57">         return null;</span>
-<span class="source-line-no">058</span><span id="line-58">      return ClassInfo.of(o).getShortName() + "@" + System.identityHashCode(o);</span>
-<span class="source-line-no">059</span><span id="line-59">   }</span>
-<span class="source-line-no">060</span><span id="line-60"></span>
-<span class="source-line-no">061</span><span id="line-61">   private static final ConcurrentHashMap&lt;Class&lt;?&gt;,Map&lt;String,MethodInfo&gt;&gt; PROPERTIES_METHODS = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">062</span><span id="line-62"></span>
-<span class="source-line-no">063</span><span id="line-63">   /**</span>
-<span class="source-line-no">064</span><span id="line-64">    * Searches for all &lt;c&gt;properties()&lt;/c&gt; methods on the specified object and creates a combine map of them.</span>
-<span class="source-line-no">065</span><span id="line-65">    *</span>
-<span class="source-line-no">066</span><span id="line-66">    * @param o The object to return a property map of.</span>
-<span class="source-line-no">067</span><span id="line-67">    * @return A new property map.</span>
-<span class="source-line-no">068</span><span id="line-68">    */</span>
-<span class="source-line-no">069</span><span id="line-69">   public static JsonMap toPropertyMap(Object o) {</span>
-<span class="source-line-no">070</span><span id="line-70">      if (o == null)</span>
-<span class="source-line-no">071</span><span id="line-71">         return null;</span>
-<span class="source-line-no">072</span><span id="line-72">      Map&lt;String,MethodInfo&gt; methods = PROPERTIES_METHODS.get(o.getClass());</span>
-<span class="source-line-no">073</span><span id="line-73">      if (methods == null) {</span>
-<span class="source-line-no">074</span><span id="line-74">         ClassInfo ci = ClassInfo.of(o);</span>
-<span class="source-line-no">075</span><span id="line-75">         Map&lt;String,MethodInfo&gt; methods2 = new LinkedHashMap&lt;&gt;();</span>
-<span class="source-line-no">076</span><span id="line-76">         do {</span>
-<span class="source-line-no">077</span><span id="line-77">            String cname = ci.getShortName();</span>
-<span class="source-line-no">078</span><span id="line-78">            MethodInfo mi = ci.getDeclaredMethod(x -&gt; x.hasName("properties"));</span>
-<span class="source-line-no">079</span><span id="line-79">            if (mi != null)</span>
-<span class="source-line-no">080</span><span id="line-80">               methods2.put(cname, mi.accessible());</span>
-<span class="source-line-no">081</span><span id="line-81">            ci = ci.getSuperclass();</span>
-<span class="source-line-no">082</span><span id="line-82">         } while (ci != null);</span>
-<span class="source-line-no">083</span><span id="line-83">         methods = methods2;</span>
-<span class="source-line-no">084</span><span id="line-84">         PROPERTIES_METHODS.put(o.getClass(), methods);</span>
-<span class="source-line-no">085</span><span id="line-85">      }</span>
-<span class="source-line-no">086</span><span id="line-86">      JsonMap m = JsonMap.create().append("id", identity(o));</span>
-<span class="source-line-no">087</span><span id="line-87">      methods.forEach((k,v) -&gt; m.put(k, v.invoke(o)));</span>
-<span class="source-line-no">088</span><span id="line-88">      return m;</span>
-<span class="source-line-no">089</span><span id="line-89">   }</span>
-<span class="source-line-no">090</span><span id="line-90">}</span>
+<span class="source-line-no">019</span><span id="line-19">import java.util.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import java.util.concurrent.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import java.util.function.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.collections.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.common.utils.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.reflect.*;</span>
+<span class="source-line-no">027</span><span id="line-27"></span>
+<span class="source-line-no">028</span><span id="line-28">/**</span>
+<span class="source-line-no">029</span><span id="line-29"> * Various generic object utility methods.</span>
+<span class="source-line-no">030</span><span id="line-30"> *</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;/ul&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> */</span>
+<span class="source-line-no">034</span><span id="line-34">public class Utils2 extends Utils {</span>
+<span class="source-line-no">035</span><span id="line-35"></span>
+<span class="source-line-no">036</span><span id="line-36">   /**</span>
+<span class="source-line-no">037</span><span id="line-37">    * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.</span>
+<span class="source-line-no">038</span><span id="line-38">    *</span>
+<span class="source-line-no">039</span><span id="line-39">    * @param o The object to unwrap.</span>
+<span class="source-line-no">040</span><span id="line-40">    * @return The unwrapped object.</span>
+<span class="source-line-no">041</span><span id="line-41">    */</span>
+<span class="source-line-no">042</span><span id="line-42">   public static Object unwrap(Object o) {</span>
+<span class="source-line-no">043</span><span id="line-43">      if (o instanceof Supplier)</span>
+<span class="source-line-no">044</span><span id="line-44">         o = unwrap(((Supplier&lt;?&gt;)o).get());</span>
+<span class="source-line-no">045</span><span id="line-45">      if (o instanceof Value)</span>
+<span class="source-line-no">046</span><span id="line-46">         o = unwrap(((Value&lt;?&gt;)o).get());</span>
+<span class="source-line-no">047</span><span id="line-47">      if (o instanceof Optional)</span>
+<span class="source-line-no">048</span><span id="line-48">         o = unwrap(((Optional&lt;?&gt;)o).orElse(null));</span>
+<span class="source-line-no">049</span><span id="line-49">      return o;</span>
+<span class="source-line-no">050</span><span id="line-50">   }</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">   /**</span>
+<span class="source-line-no">053</span><span id="line-53">    * Converts the specified object into an identifiable string of the form "Class[identityHashCode]"</span>
+<span class="source-line-no">054</span><span id="line-54">    * @param o The object to convert to a string.</span>
+<span class="source-line-no">055</span><span id="line-55">    * @return An identity string.</span>
+<span class="source-line-no">056</span><span id="line-56">    */</span>
+<span class="source-line-no">057</span><span id="line-57">   public static String identity(Object o) {</span>
+<span class="source-line-no">058</span><span id="line-58">      if (o instanceof Optional)</span>
+<span class="source-line-no">059</span><span id="line-59">         o = ((Optional&lt;?&gt;)o).orElse(null);</span>
+<span class="source-line-no">060</span><span id="line-60">      if (o == null)</span>
+<span class="source-line-no">061</span><span id="line-61">         return null;</span>
+<span class="source-line-no">062</span><span id="line-62">      return ClassInfo.of(o).getShortName() + "@" + System.identityHashCode(o);</span>
+<span class="source-line-no">063</span><span id="line-63">   }</span>
+<span class="source-line-no">064</span><span id="line-64"></span>
+<span class="source-line-no">065</span><span id="line-65">   private static final ConcurrentHashMap&lt;Class&lt;?&gt;,Map&lt;String,MethodInfo&gt;&gt; PROPERTIES_METHODS = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">066</span><span id="line-66"></span>
+<span class="source-line-no">067</span><span id="line-67">   /**</span>
+<span class="source-line-no">068</span><span id="line-68">    * Searches for all &lt;c&gt;properties()&lt;/c&gt; methods on the specified object and creates a combine map of them.</span>
+<span class="source-line-no">069</span><span id="line-69">    *</span>
+<span class="source-line-no">070</span><span id="line-70">    * @param o The object to return a property map of.</span>
+<span class="source-line-no">071</span><span id="line-71">    * @return A new property map.</span>
+<span class="source-line-no">072</span><span id="line-72">    */</span>
+<span class="source-line-no">073</span><span id="line-73">   public static JsonMap toPropertyMap(Object o) {</span>
+<span class="source-line-no">074</span><span id="line-74">      if (o == null)</span>
+<span class="source-line-no">075</span><span id="line-75">         return null;</span>
+<span class="source-line-no">076</span><span id="line-76">      Map&lt;String,MethodInfo&gt; methods = PROPERTIES_METHODS.get(o.getClass());</span>
+<span class="source-line-no">077</span><span id="line-77">      if (methods == null) {</span>
+<span class="source-line-no">078</span><span id="line-78">         ClassInfo ci = ClassInfo.of(o);</span>
+<span class="source-line-no">079</span><span id="line-79">         Map&lt;String,MethodInfo&gt; methods2 = new LinkedHashMap&lt;&gt;();</span>
+<span class="source-line-no">080</span><span id="line-80">         do {</span>
+<span class="source-line-no">081</span><span id="line-81">            String cname = ci.getShortName();</span>
+<span class="source-line-no">082</span><span id="line-82">            MethodInfo mi = ci.getDeclaredMethod(x -&gt; x.hasName("properties"));</span>
+<span class="source-line-no">083</span><span id="line-83">            if (mi != null)</span>
+<span class="source-line-no">084</span><span id="line-84">               methods2.put(cname, mi.accessible());</span>
+<span class="source-line-no">085</span><span id="line-85">            ci = ci.getSuperclass();</span>
+<span class="source-line-no">086</span><span id="line-86">         } while (ci != null);</span>
+<span class="source-line-no">087</span><span id="line-87">         methods = methods2;</span>
+<span class="source-line-no">088</span><span id="line-88">         PROPERTIES_METHODS.put(o.getClass(), methods);</span>
+<span class="source-line-no">089</span><span id="line-89">      }</span>
+<span class="source-line-no">090</span><span id="line-90">      JsonMap m = JsonMap.create().append("id", identity(o));</span>
+<span class="source-line-no">091</span><span id="line-91">      methods.forEach((k,v) -&gt; m.put(k, v.invoke(o)));</span>
+<span class="source-line-no">092</span><span id="line-92">      return m;</span>
+<span class="source-line-no">093</span><span id="line-93">   }</span>
+<span class="source-line-no">094</span><span id="line-94">}</span>
 
 
 

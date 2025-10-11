@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/AnnotationWork.html#line-30">AnnotationWork</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/AnnotationWork.html#line-34">AnnotationWork</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A unit of work for applying an annotation to a context builder.
 
@@ -151,7 +151,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.reflect.AnnotationInfo,org.apache.juneau.AnnotationApplier)">
 <h3>AnnotationWork</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/AnnotationWork.html#line-41">AnnotationWork</a></span><wbr><span class="parameters">(<a href="reflect/AnnotationInfo.html" title="class in org.apache.juneau.reflect">AnnotationInfo</a>&nbsp;annotation,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/AnnotationWork.html#line-45">AnnotationWork</a></span><wbr><span class="parameters">(<a href="reflect/AnnotationInfo.html" title="class in org.apache.juneau.reflect">AnnotationInfo</a>&nbsp;annotation,
  <a href="AnnotationApplier.html" title="class in org.apache.juneau">AnnotationApplier</a>&nbsp;applier)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -172,7 +172,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="canApply(java.lang.Object)">
 <h3>canApply</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/AnnotationWork.html#line-52">canApply</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/AnnotationWork.html#line-56">canApply</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;builder)</span></div>
 <div class="block">Returns <jk>true</jk> if the annotation in this work can be applied to the specified builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="apply(java.lang.Object)">
 <h3>apply</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/AnnotationWork.html#line-64">apply</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/AnnotationWork.html#line-68">apply</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;builder)</span></div>
 <div class="block">Calls <a href="AnnotationApplier.html#apply(org.apache.juneau.reflect.AnnotationInfo,B)"><code>AnnotationApplier.apply(AnnotationInfo, Object)</code></a> on the specified builder.
 
  <p>

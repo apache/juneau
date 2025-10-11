@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/FunctionalInterface.html" title="class or interface in java.lang" class="external-link">@FunctionalInterface</a>
-</span><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/utils/Consumer3.html#line-24">Consumer3</a>&lt;A,<wbr>B,<wbr>C&gt;</span></div>
+</span><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/utils/Consumer3.html#line-28">Consumer3</a>&lt;A,<wbr>B,<wbr>C&gt;</span></div>
 <div class="block">Functional interface for consumers of 3-part arguments.</div>
 </section>
 <section class="summary">
@@ -131,7 +131,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="apply(A,B,C)">
 <h3 id="apply(java.lang.Object,java.lang.Object,java.lang.Object)">apply</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/utils/Consumer3.html#line-34">apply</a></span><wbr><span class="parameters">(<a href="Consumer3.html" title="type parameter in Consumer3">A</a>&nbsp;a,
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/utils/Consumer3.html#line-38">apply</a></span><wbr><span class="parameters">(<a href="Consumer3.html" title="type parameter in Consumer3">A</a>&nbsp;a,
  <a href="Consumer3.html" title="type parameter in Consumer3">B</a>&nbsp;b,
  <a href="Consumer3.html" title="type parameter in Consumer3">C</a>&nbsp;c)</span></div>
 <div class="block">Performs this operation on the given arguments.</div>
@@ -146,7 +146,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="andThen(org.apache.juneau.utils.Consumer3)">
 <h3>andThen</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;V&gt;</span>&nbsp;<span class="return-type"><a href="Consumer3.html" title="interface in org.apache.juneau.utils">Consumer3</a>&lt;<a href="Consumer3.html" title="type parameter in Consumer3">A</a>,<wbr><a href="Consumer3.html" title="type parameter in Consumer3">B</a>,<wbr><a href="Consumer3.html" title="type parameter in Consumer3">C</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/utils/Consumer3.html#line-43">andThen</a></span><wbr><span class="parameters">(<a href="Consumer3.html" title="interface in org.apache.juneau.utils">Consumer3</a>&lt;? super <a href="Consumer3.html" title="type parameter in Consumer3">A</a>,<wbr>? super <a href="Consumer3.html" title="type parameter in Consumer3">B</a>,<wbr>? super <a href="Consumer3.html" title="type parameter in Consumer3">C</a>&gt;&nbsp;after)</span></div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;V&gt;</span>&nbsp;<span class="return-type"><a href="Consumer3.html" title="interface in org.apache.juneau.utils">Consumer3</a>&lt;<a href="Consumer3.html" title="type parameter in Consumer3">A</a>,<wbr><a href="Consumer3.html" title="type parameter in Consumer3">B</a>,<wbr><a href="Consumer3.html" title="type parameter in Consumer3">C</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/utils/Consumer3.html#line-47">andThen</a></span><wbr><span class="parameters">(<a href="Consumer3.html" title="interface in org.apache.juneau.utils">Consumer3</a>&lt;? super <a href="Consumer3.html" title="type parameter in Consumer3">A</a>,<wbr>? super <a href="Consumer3.html" title="type parameter in Consumer3">B</a>,<wbr>? super <a href="Consumer3.html" title="type parameter in Consumer3">C</a>&gt;&nbsp;after)</span></div>
 <div class="block">Returns a composed <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link"><code>Consumer</code></a> that performs, in sequence, this operation followed by the <c>after</c> operation.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>

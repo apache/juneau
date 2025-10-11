@@ -11,151 +11,155 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.rest.beans;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import org.apache.juneau.annotation.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import org.apache.juneau.common.utils.*;</span>
-<span class="source-line-no">017</span><span id="line-17">import org.apache.juneau.html.annotation.*;</span>
-<span class="source-line-no">018</span><span id="line-18">import org.apache.juneau.http.annotation.*;</span>
-<span class="source-line-no">019</span><span id="line-19"></span>
-<span class="source-line-no">020</span><span id="line-20">/**</span>
-<span class="source-line-no">021</span><span id="line-21"> * Shortcut label for child resources.</span>
-<span class="source-line-no">022</span><span id="line-22"> *</span>
-<span class="source-line-no">023</span><span id="line-23"> * &lt;p&gt;</span>
-<span class="source-line-no">024</span><span id="line-24"> * Typically used in router resources.</span>
-<span class="source-line-no">025</span><span id="line-25"> *</span>
-<span class="source-line-no">026</span><span id="line-26"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> *    &lt;jk&gt;new&lt;/jk&gt; ResourceDescription(&lt;js&gt;"httpTool"&lt;/js&gt;, &lt;js&gt;"HTTP request test client"&lt;/js&gt;);</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;/p&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/UtilityBeans"&gt;Utility Beans&lt;/a&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;/ul&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> */</span>
-<span class="source-line-no">036</span><span id="line-36">@Bean(properties="name,description", findFluentSetters=true)</span>
-<span class="source-line-no">037</span><span id="line-37">@Response(schema=@Schema(ignore=true))</span>
-<span class="source-line-no">038</span><span id="line-38">public class ResourceDescription implements Comparable&lt;ResourceDescription&gt; {</span>
-<span class="source-line-no">039</span><span id="line-39"></span>
-<span class="source-line-no">040</span><span id="line-40">   private String name, uri, description;</span>
-<span class="source-line-no">041</span><span id="line-41"></span>
-<span class="source-line-no">042</span><span id="line-42">   /**</span>
-<span class="source-line-no">043</span><span id="line-43">    * Constructor for when the name and uri are the same.</span>
-<span class="source-line-no">044</span><span id="line-44">    *</span>
-<span class="source-line-no">045</span><span id="line-45">    * @param name The name of the child resource.</span>
-<span class="source-line-no">046</span><span id="line-46">    * @param description The description of the child resource.</span>
-<span class="source-line-no">047</span><span id="line-47">    */</span>
-<span class="source-line-no">048</span><span id="line-48">   public ResourceDescription(String name, String description) {</span>
-<span class="source-line-no">049</span><span id="line-49">      this.name = name;</span>
-<span class="source-line-no">050</span><span id="line-50">      this.uri = name;</span>
-<span class="source-line-no">051</span><span id="line-51">      this.description = description;</span>
-<span class="source-line-no">052</span><span id="line-52">   }</span>
-<span class="source-line-no">053</span><span id="line-53"></span>
-<span class="source-line-no">054</span><span id="line-54">   /**</span>
-<span class="source-line-no">055</span><span id="line-55">    * Constructor for when the name and uri are different.</span>
-<span class="source-line-no">056</span><span id="line-56">    *</span>
-<span class="source-line-no">057</span><span id="line-57">    * @param name The name of the child resource.</span>
-<span class="source-line-no">058</span><span id="line-58">    * @param uri The uri of the child resource.</span>
-<span class="source-line-no">059</span><span id="line-59">    * @param description The description of the child resource.</span>
-<span class="source-line-no">060</span><span id="line-60">    */</span>
-<span class="source-line-no">061</span><span id="line-61">   public ResourceDescription(String name, String uri, String description) {</span>
-<span class="source-line-no">062</span><span id="line-62">      this.name = name;</span>
-<span class="source-line-no">063</span><span id="line-63">      this.uri = uri;</span>
-<span class="source-line-no">064</span><span id="line-64">      this.description = description;</span>
-<span class="source-line-no">065</span><span id="line-65">   }</span>
-<span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">   /** No-arg constructor.  Used for JUnit testing of OPTIONS pages. */</span>
-<span class="source-line-no">068</span><span id="line-68">   public ResourceDescription() {}</span>
-<span class="source-line-no">069</span><span id="line-69"></span>
-<span class="source-line-no">070</span><span id="line-70">   /**</span>
-<span class="source-line-no">071</span><span id="line-71">    * Returns the name field on this label.</span>
-<span class="source-line-no">072</span><span id="line-72">    *</span>
-<span class="source-line-no">073</span><span id="line-73">    * @return The name.</span>
-<span class="source-line-no">074</span><span id="line-74">    */</span>
-<span class="source-line-no">075</span><span id="line-75">   @Html(link="servlet:/{uri}")</span>
-<span class="source-line-no">076</span><span id="line-76">   public String getName() {</span>
-<span class="source-line-no">077</span><span id="line-77">      return name;</span>
-<span class="source-line-no">078</span><span id="line-78">   }</span>
-<span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">   /**</span>
-<span class="source-line-no">081</span><span id="line-81">    * Returns the uri on this label.</span>
-<span class="source-line-no">082</span><span id="line-82">    *</span>
-<span class="source-line-no">083</span><span id="line-83">    * @return The name.</span>
-<span class="source-line-no">084</span><span id="line-84">    */</span>
-<span class="source-line-no">085</span><span id="line-85">   public String getUri() {</span>
-<span class="source-line-no">086</span><span id="line-86">      return uri == null ? name : uri;</span>
-<span class="source-line-no">087</span><span id="line-87">   }</span>
-<span class="source-line-no">088</span><span id="line-88"></span>
-<span class="source-line-no">089</span><span id="line-89">   /**</span>
-<span class="source-line-no">090</span><span id="line-90">    * Sets the name field on this label to a new value.</span>
-<span class="source-line-no">091</span><span id="line-91">    *</span>
-<span class="source-line-no">092</span><span id="line-92">    * @param name The new name.</span>
-<span class="source-line-no">093</span><span id="line-93">    * @return This object.</span>
-<span class="source-line-no">094</span><span id="line-94">    */</span>
-<span class="source-line-no">095</span><span id="line-95">   public ResourceDescription name(String name) {</span>
-<span class="source-line-no">096</span><span id="line-96">      this.name = name;</span>
-<span class="source-line-no">097</span><span id="line-97">      return this;</span>
-<span class="source-line-no">098</span><span id="line-98">   }</span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">   /**</span>
-<span class="source-line-no">101</span><span id="line-101">    * Returns the description field on this label.</span>
-<span class="source-line-no">102</span><span id="line-102">    *</span>
-<span class="source-line-no">103</span><span id="line-103">    * @return The description.</span>
-<span class="source-line-no">104</span><span id="line-104">    */</span>
-<span class="source-line-no">105</span><span id="line-105">   public String getDescription() {</span>
-<span class="source-line-no">106</span><span id="line-106">      return description;</span>
-<span class="source-line-no">107</span><span id="line-107">   }</span>
-<span class="source-line-no">108</span><span id="line-108"></span>
-<span class="source-line-no">109</span><span id="line-109">   /**</span>
-<span class="source-line-no">110</span><span id="line-110">    * Sets the description field on this label to a new value.</span>
-<span class="source-line-no">111</span><span id="line-111">    *</span>
-<span class="source-line-no">112</span><span id="line-112">    * @param description The new description.</span>
-<span class="source-line-no">113</span><span id="line-113">    * @return This object.</span>
-<span class="source-line-no">114</span><span id="line-114">    */</span>
-<span class="source-line-no">115</span><span id="line-115">   public ResourceDescription description(String description) {</span>
-<span class="source-line-no">116</span><span id="line-116">      this.description = description;</span>
-<span class="source-line-no">117</span><span id="line-117">      return this;</span>
-<span class="source-line-no">118</span><span id="line-118">   }</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   /**</span>
-<span class="source-line-no">121</span><span id="line-121">    * Sets the uri field on this label to a new value.</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * @param uri The new uri.</span>
-<span class="source-line-no">124</span><span id="line-124">    * @return This object.</span>
-<span class="source-line-no">125</span><span id="line-125">    */</span>
-<span class="source-line-no">126</span><span id="line-126">   public ResourceDescription uri(String uri) {</span>
-<span class="source-line-no">127</span><span id="line-127">      this.uri = uri;</span>
-<span class="source-line-no">128</span><span id="line-128">      return this;</span>
-<span class="source-line-no">129</span><span id="line-129">   }</span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">   @Override /* Comparable */</span>
-<span class="source-line-no">132</span><span id="line-132">   public int compareTo(ResourceDescription o) {</span>
-<span class="source-line-no">133</span><span id="line-133">      return getName().toString().compareTo(o.getName().toString());</span>
-<span class="source-line-no">134</span><span id="line-134">   }</span>
-<span class="source-line-no">135</span><span id="line-135"></span>
-<span class="source-line-no">136</span><span id="line-136">   @Override /* Object */</span>
-<span class="source-line-no">137</span><span id="line-137">   public boolean equals(Object o) {</span>
-<span class="source-line-no">138</span><span id="line-138">      return (o instanceof ResourceDescription) &amp;&amp; Utils.eq(this, (ResourceDescription)o, (x,y)-&gt;Utils.eq(x.getName(), y.getName()));</span>
-<span class="source-line-no">139</span><span id="line-139">   }</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   @Override /* Object */</span>
-<span class="source-line-no">142</span><span id="line-142">   public int hashCode() {</span>
-<span class="source-line-no">143</span><span id="line-143">      return getName().hashCode();</span>
-<span class="source-line-no">144</span><span id="line-144">   }</span>
-<span class="source-line-no">145</span><span id="line-145">}</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.beans;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.annotation.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.common.utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.html.annotation.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.http.annotation.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">/**</span>
+<span class="source-line-no">025</span><span id="line-25"> * Shortcut label for child resources.</span>
+<span class="source-line-no">026</span><span id="line-26"> *</span>
+<span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
+<span class="source-line-no">028</span><span id="line-28"> * Typically used in router resources.</span>
+<span class="source-line-no">029</span><span id="line-29"> *</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> *    &lt;jk&gt;new&lt;/jk&gt; ResourceDescription(&lt;js&gt;"httpTool"&lt;/js&gt;, &lt;js&gt;"HTTP request test client"&lt;/js&gt;);</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;/p&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> *</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/UtilityBeans"&gt;Utility Beans&lt;/a&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;/ul&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> */</span>
+<span class="source-line-no">040</span><span id="line-40">@Bean(properties="name,description", findFluentSetters=true)</span>
+<span class="source-line-no">041</span><span id="line-41">@Response(schema=@Schema(ignore=true))</span>
+<span class="source-line-no">042</span><span id="line-42">public class ResourceDescription implements Comparable&lt;ResourceDescription&gt; {</span>
+<span class="source-line-no">043</span><span id="line-43"></span>
+<span class="source-line-no">044</span><span id="line-44">   private String name, uri, description;</span>
+<span class="source-line-no">045</span><span id="line-45"></span>
+<span class="source-line-no">046</span><span id="line-46">   /**</span>
+<span class="source-line-no">047</span><span id="line-47">    * Constructor for when the name and uri are the same.</span>
+<span class="source-line-no">048</span><span id="line-48">    *</span>
+<span class="source-line-no">049</span><span id="line-49">    * @param name The name of the child resource.</span>
+<span class="source-line-no">050</span><span id="line-50">    * @param description The description of the child resource.</span>
+<span class="source-line-no">051</span><span id="line-51">    */</span>
+<span class="source-line-no">052</span><span id="line-52">   public ResourceDescription(String name, String description) {</span>
+<span class="source-line-no">053</span><span id="line-53">      this.name = name;</span>
+<span class="source-line-no">054</span><span id="line-54">      this.uri = name;</span>
+<span class="source-line-no">055</span><span id="line-55">      this.description = description;</span>
+<span class="source-line-no">056</span><span id="line-56">   }</span>
+<span class="source-line-no">057</span><span id="line-57"></span>
+<span class="source-line-no">058</span><span id="line-58">   /**</span>
+<span class="source-line-no">059</span><span id="line-59">    * Constructor for when the name and uri are different.</span>
+<span class="source-line-no">060</span><span id="line-60">    *</span>
+<span class="source-line-no">061</span><span id="line-61">    * @param name The name of the child resource.</span>
+<span class="source-line-no">062</span><span id="line-62">    * @param uri The uri of the child resource.</span>
+<span class="source-line-no">063</span><span id="line-63">    * @param description The description of the child resource.</span>
+<span class="source-line-no">064</span><span id="line-64">    */</span>
+<span class="source-line-no">065</span><span id="line-65">   public ResourceDescription(String name, String uri, String description) {</span>
+<span class="source-line-no">066</span><span id="line-66">      this.name = name;</span>
+<span class="source-line-no">067</span><span id="line-67">      this.uri = uri;</span>
+<span class="source-line-no">068</span><span id="line-68">      this.description = description;</span>
+<span class="source-line-no">069</span><span id="line-69">   }</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">   /** No-arg constructor.  Used for JUnit testing of OPTIONS pages. */</span>
+<span class="source-line-no">072</span><span id="line-72">   public ResourceDescription() {}</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">   /**</span>
+<span class="source-line-no">075</span><span id="line-75">    * Returns the name field on this label.</span>
+<span class="source-line-no">076</span><span id="line-76">    *</span>
+<span class="source-line-no">077</span><span id="line-77">    * @return The name.</span>
+<span class="source-line-no">078</span><span id="line-78">    */</span>
+<span class="source-line-no">079</span><span id="line-79">   @Html(link="servlet:/{uri}")</span>
+<span class="source-line-no">080</span><span id="line-80">   public String getName() {</span>
+<span class="source-line-no">081</span><span id="line-81">      return name;</span>
+<span class="source-line-no">082</span><span id="line-82">   }</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">   /**</span>
+<span class="source-line-no">085</span><span id="line-85">    * Returns the uri on this label.</span>
+<span class="source-line-no">086</span><span id="line-86">    *</span>
+<span class="source-line-no">087</span><span id="line-87">    * @return The name.</span>
+<span class="source-line-no">088</span><span id="line-88">    */</span>
+<span class="source-line-no">089</span><span id="line-89">   public String getUri() {</span>
+<span class="source-line-no">090</span><span id="line-90">      return uri == null ? name : uri;</span>
+<span class="source-line-no">091</span><span id="line-91">   }</span>
+<span class="source-line-no">092</span><span id="line-92"></span>
+<span class="source-line-no">093</span><span id="line-93">   /**</span>
+<span class="source-line-no">094</span><span id="line-94">    * Sets the name field on this label to a new value.</span>
+<span class="source-line-no">095</span><span id="line-95">    *</span>
+<span class="source-line-no">096</span><span id="line-96">    * @param name The new name.</span>
+<span class="source-line-no">097</span><span id="line-97">    * @return This object.</span>
+<span class="source-line-no">098</span><span id="line-98">    */</span>
+<span class="source-line-no">099</span><span id="line-99">   public ResourceDescription name(String name) {</span>
+<span class="source-line-no">100</span><span id="line-100">      this.name = name;</span>
+<span class="source-line-no">101</span><span id="line-101">      return this;</span>
+<span class="source-line-no">102</span><span id="line-102">   }</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">   /**</span>
+<span class="source-line-no">105</span><span id="line-105">    * Returns the description field on this label.</span>
+<span class="source-line-no">106</span><span id="line-106">    *</span>
+<span class="source-line-no">107</span><span id="line-107">    * @return The description.</span>
+<span class="source-line-no">108</span><span id="line-108">    */</span>
+<span class="source-line-no">109</span><span id="line-109">   public String getDescription() {</span>
+<span class="source-line-no">110</span><span id="line-110">      return description;</span>
+<span class="source-line-no">111</span><span id="line-111">   }</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">   /**</span>
+<span class="source-line-no">114</span><span id="line-114">    * Sets the description field on this label to a new value.</span>
+<span class="source-line-no">115</span><span id="line-115">    *</span>
+<span class="source-line-no">116</span><span id="line-116">    * @param description The new description.</span>
+<span class="source-line-no">117</span><span id="line-117">    * @return This object.</span>
+<span class="source-line-no">118</span><span id="line-118">    */</span>
+<span class="source-line-no">119</span><span id="line-119">   public ResourceDescription description(String description) {</span>
+<span class="source-line-no">120</span><span id="line-120">      this.description = description;</span>
+<span class="source-line-no">121</span><span id="line-121">      return this;</span>
+<span class="source-line-no">122</span><span id="line-122">   }</span>
+<span class="source-line-no">123</span><span id="line-123"></span>
+<span class="source-line-no">124</span><span id="line-124">   /**</span>
+<span class="source-line-no">125</span><span id="line-125">    * Sets the uri field on this label to a new value.</span>
+<span class="source-line-no">126</span><span id="line-126">    *</span>
+<span class="source-line-no">127</span><span id="line-127">    * @param uri The new uri.</span>
+<span class="source-line-no">128</span><span id="line-128">    * @return This object.</span>
+<span class="source-line-no">129</span><span id="line-129">    */</span>
+<span class="source-line-no">130</span><span id="line-130">   public ResourceDescription uri(String uri) {</span>
+<span class="source-line-no">131</span><span id="line-131">      this.uri = uri;</span>
+<span class="source-line-no">132</span><span id="line-132">      return this;</span>
+<span class="source-line-no">133</span><span id="line-133">   }</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">   @Override /* Comparable */</span>
+<span class="source-line-no">136</span><span id="line-136">   public int compareTo(ResourceDescription o) {</span>
+<span class="source-line-no">137</span><span id="line-137">      return getName().toString().compareTo(o.getName().toString());</span>
+<span class="source-line-no">138</span><span id="line-138">   }</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">   @Override /* Object */</span>
+<span class="source-line-no">141</span><span id="line-141">   public boolean equals(Object o) {</span>
+<span class="source-line-no">142</span><span id="line-142">      return (o instanceof ResourceDescription) &amp;&amp; Utils.eq(this, (ResourceDescription)o, (x,y)-&gt;Utils.eq(x.getName(), y.getName()));</span>
+<span class="source-line-no">143</span><span id="line-143">   }</span>
+<span class="source-line-no">144</span><span id="line-144"></span>
+<span class="source-line-no">145</span><span id="line-145">   @Override /* Object */</span>
+<span class="source-line-no">146</span><span id="line-146">   public int hashCode() {</span>
+<span class="source-line-no">147</span><span id="line-147">      return getName().hashCode();</span>
+<span class="source-line-no">148</span><span id="line-148">   }</span>
+<span class="source-line-no">149</span><span id="line-149">}</span>
 
 
 

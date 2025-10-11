@@ -73,7 +73,7 @@ loadScripts(document, 'script');</script>
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Inherited.html" title="class or interface in java.lang.annotation" class="external-link">@Inherited</a>
 <a href="../../annotation/ContextApply.html" title="annotation interface in org.apache.juneau.annotation">@ContextApply</a>({<a href="ParserConfigAnnotation.ParserApply.html" title="class in org.apache.juneau.parser.annotation">ParserApply.class</a>,<a href="ParserConfigAnnotation.InputStreamParserApply.html" title="class in org.apache.juneau.parser.annotation">InputStreamParserApply.class</a>,<a href="ParserConfigAnnotation.ReaderParserApply.html" title="class in org.apache.juneau.parser.annotation">ReaderParserApply.class</a>})
-</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-40">ParserConfig</a></span></div>
+</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-44">ParserConfig</a></span></div>
 <div class="block">Annotation for specifying config properties defined in <a href="../Parser.html" title="class in org.apache.juneau.parser"><code>Parser</code></a>, <a href="../InputStreamParser.html" title="class in org.apache.juneau.parser"><code>InputStreamParser</code></a>, and <a href="../ReaderParser.html" title="class in org.apache.juneau.parser"><code>ReaderParser</code></a>.
 
  <p>
@@ -159,7 +159,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rank()">
 <h3>rank</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-54">rank</a></span></div>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-58">rank</a></span></div>
 <div class="block">Optional rank for this config.
 
  <p>
@@ -177,7 +177,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="binaryFormat()">
 <h3>binaryFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-84">binaryFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-88">binaryFormat</a></span></div>
 <div class="block">Binary input format.
 
  <p>
@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="autoCloseStreams()">
 <h3>autoCloseStreams</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-113">autoCloseStreams</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-117">autoCloseStreams</a></span></div>
 <div class="block">Auto-close streams.
 
  <p>
@@ -244,7 +244,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="debugOutputLines()">
 <h3>debugOutputLines</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-137">debugOutputLines</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-141">debugOutputLines</a></span></div>
 <div class="block">Debug output lines.
 
  <p>
@@ -276,7 +276,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="listener()">
 <h3>listener</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../ParserListener.html" title="class in org.apache.juneau.parser">ParserListener</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-151">listener</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../ParserListener.html" title="class in org.apache.juneau.parser">ParserListener</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-155">listener</a></span></div>
 <div class="block">Parser listener.
 
  <p>
@@ -298,7 +298,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="strict()">
 <h3>strict</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-203">strict</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-207">strict</a></span></div>
 <div class="block">Strict mode.
 
  <p>
@@ -358,7 +358,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="trimStrings()">
 <h3>trimStrings</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-228">trimStrings</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-232">trimStrings</a></span></div>
 <div class="block">Trim parsed strings.
 
  <p>
@@ -391,7 +391,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unbuffered()">
 <h3>unbuffered</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-269">unbuffered</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-273">unbuffered</a></span></div>
 <div class="block">Unbuffered.
 
  <p>
@@ -440,7 +440,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fileCharset()">
 <h3>fileCharset</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-297">fileCharset</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-301">fileCharset</a></span></div>
 <div class="block">File charset.
 
  <p>
@@ -472,7 +472,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="streamCharset()">
 <h3>streamCharset</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-321">streamCharset</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/parser/annotation/ParserConfig.html#line-325">streamCharset</a></span></div>
 <div class="block">Input stream charset.
 
  <p>

@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="BasicStaticFiles.html" title="class in org.apache.juneau.rest.staticfile">BasicStaticFiles</a></code>, <code><a href="StaticFiles.Void.html" title="class in org.apache.juneau.rest.staticfile">StaticFiles.Void</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/staticfile/StaticFiles.html#line-37">StaticFiles</a></span><span class="extends-implements">
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/staticfile/StaticFiles.html#line-41">StaticFiles</a></span><span class="extends-implements">
 extends <a href="../../cp/FileFinder.html" title="interface in org.apache.juneau.cp">FileFinder</a></span></div>
 <div class="block">API for retrieving localized static files from either the classpath or file system.
 
@@ -157,7 +157,7 @@ extends <a href="../../cp/FileFinder.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="create(org.apache.juneau.cp.BeanStore)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/staticfile/StaticFiles.html#line-52">create</a></span><wbr><span class="parameters">(<a href="../../cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/staticfile/StaticFiles.html#line-56">create</a></span><wbr><span class="parameters">(<a href="../../cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -170,7 +170,7 @@ extends <a href="../../cp/FileFinder.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="resolve(java.lang.String,java.util.Locale)">
 <h3>resolve</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../http/resource/HttpResource.html" title="interface in org.apache.juneau.http.resource">HttpResource</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/staticfile/StaticFiles.html#line-236">resolve</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../http/resource/HttpResource.html" title="interface in org.apache.juneau.http.resource">HttpResource</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/staticfile/StaticFiles.html#line-240">resolve</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</span></div>
 <div class="block">Resolve the specified path.</div>
 <dl class="notes">

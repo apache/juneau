@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="BasicFileFinder.html" title="class in org.apache.juneau.cp">BasicFileFinder</a></code>, <code><a href="../rest/staticfile/BasicStaticFiles.html" title="class in org.apache.juneau.rest.staticfile">BasicStaticFiles</a></code>, <code><a href="FileFinder.Void.html" title="class in org.apache.juneau.cp">FileFinder.Void</a></code>, <code><a href="../rest/staticfile/StaticFiles.Void.html" title="class in org.apache.juneau.rest.staticfile">StaticFiles.Void</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/FileFinder.html#line-87">FileFinder</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/FileFinder.html#line-91">FileFinder</a></span></div>
 <div class="block">Utility class for finding regular or localized files on the classpath and file system.
 
  <h5 class='section'>Example:</h5>
@@ -218,7 +218,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.cp.BeanStore)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="FileFinder.Builder.html" title="class in org.apache.juneau.cp">FileFinder.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/FileFinder.html#line-102">create</a></span><wbr><span class="parameters">(<a href="BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="FileFinder.Builder.html" title="class in org.apache.juneau.cp">FileFinder.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/FileFinder.html#line-106">create</a></span><wbr><span class="parameters">(<a href="BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -231,7 +231,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="FileFinder.Builder.html" title="class in org.apache.juneau.cp">FileFinder.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/FileFinder.html#line-111">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="FileFinder.Builder.html" title="class in org.apache.juneau.cp">FileFinder.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/FileFinder.html#line-115">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -242,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStream(java.lang.String,java.util.Locale)">
 <h3>getStream</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/FileFinder.html#line-265">getStream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/FileFinder.html#line-269">getStream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</span>
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns the contents of the resource with the specified name.</div>
@@ -262,7 +262,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getString(java.lang.String,java.util.Locale)">
 <h3>getString</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/FileFinder.html#line-277">getString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/cp/FileFinder.html#line-281">getString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns the file with the specified name as a string.</div>

@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="ObjectTool.html" title="interface in org.apache.juneau.objecttools">ObjectTool</a>&lt;<a href="PageArgs.html" title="class in org.apache.juneau.objecttools">PageArgs</a>&gt;</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/ObjectPaginator.html#line-50">ObjectPaginator</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/ObjectPaginator.html#line-54">ObjectPaginator</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="ObjectTool.html" title="interface in org.apache.juneau.objecttools">ObjectTool</a>&lt;<a href="PageArgs.html" title="class in org.apache.juneau.objecttools">PageArgs</a>&gt;</span></div>
 <div class="block">POJO model paginator.
@@ -176,7 +176,7 @@ implements <a href="ObjectTool.html" title="interface in org.apache.juneau.objec
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ObjectPaginator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/ObjectPaginator.html#line-50">ObjectPaginator</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/ObjectPaginator.html#line-54">ObjectPaginator</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -190,7 +190,7 @@ implements <a href="ObjectTool.html" title="interface in org.apache.juneau.objec
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectPaginator.html" title="class in org.apache.juneau.objecttools">ObjectPaginator</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/ObjectPaginator.html#line-60">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectPaginator.html" title="class in org.apache.juneau.objecttools">ObjectPaginator</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/ObjectPaginator.html#line-64">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -201,7 +201,7 @@ implements <a href="ObjectTool.html" title="interface in org.apache.juneau.objec
 <li>
 <section class="detail" id="run(java.lang.Object,int,int)">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;R&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;R&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/ObjectPaginator.html#line-77">run</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;R&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;R&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/ObjectPaginator.html#line-81">run</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  int&nbsp;pos,
  int&nbsp;limit)</span></div>
 <div class="block">Convenience method for executing the paginator.</div>
@@ -220,7 +220,7 @@ implements <a href="ObjectTool.html" title="interface in org.apache.juneau.objec
 <li>
 <section class="detail" id="run(org.apache.juneau.BeanSession,java.lang.Object,org.apache.juneau.objecttools.PageArgs)">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/ObjectPaginator.html#line-86">run</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/ObjectPaginator.html#line-90">run</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  <a href="PageArgs.html" title="class in org.apache.juneau.objecttools">PageArgs</a>&nbsp;args)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ObjectTool.html#run(org.apache.juneau.BeanSession,java.lang.Object,T)">ObjectTool</a></code></span></div>

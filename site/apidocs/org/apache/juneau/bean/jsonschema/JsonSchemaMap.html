@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentMap.html" title="class or interface in java.util.concurrent" class="external-link">ConcurrentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>,<wbr><a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>,<wbr><a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaMap.html#line-39">JsonSchemaMap</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaMap.html#line-43">JsonSchemaMap</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html" title="class or interface in java.util.concurrent" class="external-link">ConcurrentHashMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>,<wbr><a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;</span></div>
 <div class="block">A container for retrieving JSON <a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema"><code>JsonSchema</code></a> objects by URI.
 
@@ -186,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>JsonSchemaMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaMap.html#line-39">JsonSchemaMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaMap.html#line-43">JsonSchemaMap</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.Object)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaMap.html#line-59">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaMap.html#line-63">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span></div>
 <div class="block">Return the <a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema"><code>JsonSchema</code></a> object at the specified URI.
 
  <p>
@@ -227,7 +227,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="add(org.apache.juneau.bean.jsonschema.JsonSchema...)">
 <h3>add</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchemaMap.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaMap.html#line-86">add</a></span><wbr><span class="parameters">(<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;schemas)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchemaMap.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaMap.html#line-90">add</a></span><wbr><span class="parameters">(<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;schemas)</span></div>
 <div class="block">Convenience method for pre-populating this map with the specified schemas.
 
  <p>
@@ -245,7 +245,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="load(java.net.URI)">
 <h3>load</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaMap.html#line-110">load</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaMap.html#line-114">load</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri)</span></div>
 <div class="block">Subclasses must implement either this method or <a href="#getReader(java.net.URI)"><code>getReader(URI)</code></a> to load the schema with the specified URI.
 
  <p>
@@ -266,7 +266,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getReader(java.net.URI)">
 <h3>getReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaMap.html#line-132">getReader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaMap.html#line-136">getReader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri)</span></div>
 <div class="block">Subclasses must implement either this method or <a href="#load(java.net.URI)"><code>load(URI)</code></a> to load the schema with the specified URI.
 
  <p>

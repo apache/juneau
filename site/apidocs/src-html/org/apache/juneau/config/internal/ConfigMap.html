@@ -11,963 +11,967 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.config.internal;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.common.utils.StringUtils.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import static org.apache.juneau.common.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">017</span><span id="line-17">import static org.apache.juneau.common.utils.Utils.*;</span>
-<span class="source-line-no">018</span><span id="line-18">import static org.apache.juneau.config.event.ConfigEventType.*;</span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.internal.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.internal.CollectionUtils.map;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import java.util.concurrent.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import java.util.stream.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.collections.*;</span>
-<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.common.utils.*;</span>
-<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.config.event.*;</span>
-<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.config.store.*;</span>
-<span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.internal.*;</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">/**</span>
-<span class="source-line-no">035</span><span id="line-35"> * Represents the parsed contents of a configuration.</span>
-<span class="source-line-no">036</span><span id="line-36"> */</span>
-<span class="source-line-no">037</span><span id="line-37">public class ConfigMap implements ConfigStoreListener {</span>
-<span class="source-line-no">038</span><span id="line-38"></span>
-<span class="source-line-no">039</span><span id="line-39">   private final ConfigStore store;         // The store that created this object.</span>
-<span class="source-line-no">040</span><span id="line-40">   private volatile String contents;        // The original contents of this object.</span>
-<span class="source-line-no">041</span><span id="line-41">   final String name;                       // The name  of this object.</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.config.internal;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.common.utils.StringUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.common.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.common.utils.Utils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.config.event.ConfigEventType.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.internal.CollectionUtils.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.internal.CollectionUtils.map;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">import java.io.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import java.util.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import java.util.concurrent.*;</span>
+<span class="source-line-no">029</span><span id="line-29">import java.util.stream.*;</span>
+<span class="source-line-no">030</span><span id="line-30"></span>
+<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.*;</span>
+<span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.collections.*;</span>
+<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.common.utils.*;</span>
+<span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.config.event.*;</span>
+<span class="source-line-no">035</span><span id="line-35">import org.apache.juneau.config.store.*;</span>
+<span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.internal.*;</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38">/**</span>
+<span class="source-line-no">039</span><span id="line-39"> * Represents the parsed contents of a configuration.</span>
+<span class="source-line-no">040</span><span id="line-40"> */</span>
+<span class="source-line-no">041</span><span id="line-41">public class ConfigMap implements ConfigStoreListener {</span>
 <span class="source-line-no">042</span><span id="line-42"></span>
-<span class="source-line-no">043</span><span id="line-43">   // Changes that have been applied since the last load.</span>
-<span class="source-line-no">044</span><span id="line-44">   private final List&lt;ConfigEvent&gt; changes = synced(new ConfigEvents());</span>
-<span class="source-line-no">045</span><span id="line-45"></span>
-<span class="source-line-no">046</span><span id="line-46">   // Registered listeners listening for changes during saves or reloads.</span>
-<span class="source-line-no">047</span><span id="line-47">   private final Set&lt;ConfigEventListener&gt; listeners = synced(Utils.set());</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   // The parsed entries of this map with all changes applied.</span>
-<span class="source-line-no">050</span><span id="line-50">   final Map&lt;String,ConfigSection&gt; entries = synced(map());</span>
-<span class="source-line-no">051</span><span id="line-51"></span>
-<span class="source-line-no">052</span><span id="line-52">   // The original entries of this map before any changes were applied.</span>
-<span class="source-line-no">053</span><span id="line-53">   final Map&lt;String,ConfigSection&gt; oentries = synced(map());</span>
-<span class="source-line-no">054</span><span id="line-54"></span>
-<span class="source-line-no">055</span><span id="line-55">   // Import statements in this config.</span>
-<span class="source-line-no">056</span><span id="line-56">   final List&lt;Import&gt; imports = new CopyOnWriteArrayList&lt;&gt;();</span>
-<span class="source-line-no">057</span><span id="line-57"></span>
-<span class="source-line-no">058</span><span id="line-58">   private final SimpleReadWriteLock lock = new SimpleReadWriteLock();</span>
-<span class="source-line-no">059</span><span id="line-59"></span>
-<span class="source-line-no">060</span><span id="line-60">   /**</span>
-<span class="source-line-no">061</span><span id="line-61">    * Constructor.</span>
-<span class="source-line-no">062</span><span id="line-62">    *</span>
-<span class="source-line-no">063</span><span id="line-63">    * @param store The config store.</span>
-<span class="source-line-no">064</span><span id="line-64">    * @param name The config name.</span>
-<span class="source-line-no">065</span><span id="line-65">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">066</span><span id="line-66">    */</span>
-<span class="source-line-no">067</span><span id="line-67">   public ConfigMap(ConfigStore store, String name) throws IOException {</span>
-<span class="source-line-no">068</span><span id="line-68">      this.store = store;</span>
-<span class="source-line-no">069</span><span id="line-69">      this.name = name;</span>
-<span class="source-line-no">070</span><span id="line-70">      load(store.read(name));</span>
-<span class="source-line-no">071</span><span id="line-71">   }</span>
-<span class="source-line-no">072</span><span id="line-72"></span>
-<span class="source-line-no">073</span><span id="line-73">   ConfigMap(ConfigStore store, String name, String contents) throws IOException {</span>
-<span class="source-line-no">074</span><span id="line-74">      this.store = store;</span>
-<span class="source-line-no">075</span><span id="line-75">      this.name = name;</span>
-<span class="source-line-no">076</span><span id="line-76">      load(contents);</span>
-<span class="source-line-no">077</span><span id="line-77">   }</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">   private ConfigMap load(String contents) throws IOException {</span>
-<span class="source-line-no">080</span><span id="line-80">      if (contents == null)</span>
-<span class="source-line-no">081</span><span id="line-81">         contents = "";</span>
-<span class="source-line-no">082</span><span id="line-82">      this.contents = contents;</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">      entries.clear();</span>
-<span class="source-line-no">085</span><span id="line-85">      oentries.clear();</span>
-<span class="source-line-no">086</span><span id="line-86">      imports.forEach(Import::unregisterAll);</span>
-<span class="source-line-no">087</span><span id="line-87">      imports.clear();</span>
-<span class="source-line-no">088</span><span id="line-88"></span>
-<span class="source-line-no">089</span><span id="line-89">      var imports2 = mapOf(String.class, ConfigMap.class);</span>
-<span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">      List&lt;String&gt; lines = new LinkedList&lt;&gt;();</span>
-<span class="source-line-no">092</span><span id="line-92">      try (var scanner = new Scanner(contents)) {</span>
-<span class="source-line-no">093</span><span id="line-93">         while (scanner.hasNextLine()) {</span>
-<span class="source-line-no">094</span><span id="line-94">            var line = scanner.nextLine();</span>
-<span class="source-line-no">095</span><span id="line-95">            var c = firstChar(line);</span>
-<span class="source-line-no">096</span><span id="line-96">            var c2 = StringUtils.lastNonWhitespaceChar(line);</span>
-<span class="source-line-no">097</span><span id="line-97">            if (c == '[') {</span>
-<span class="source-line-no">098</span><span id="line-98">               var l = line.trim();</span>
-<span class="source-line-no">099</span><span id="line-99">               if (c2 != ']' || ! isValidNewSectionName(l.substring(1, l.length()-1)))</span>
-<span class="source-line-no">100</span><span id="line-100">                  throw new ConfigException("Invalid section name found in configuration:  {0}", line);</span>
-<span class="source-line-no">101</span><span id="line-101">            } else if (c == '&lt;') {</span>
+<span class="source-line-no">043</span><span id="line-43">   private final ConfigStore store;         // The store that created this object.</span>
+<span class="source-line-no">044</span><span id="line-44">   private volatile String contents;        // The original contents of this object.</span>
+<span class="source-line-no">045</span><span id="line-45">   final String name;                       // The name  of this object.</span>
+<span class="source-line-no">046</span><span id="line-46"></span>
+<span class="source-line-no">047</span><span id="line-47">   // Changes that have been applied since the last load.</span>
+<span class="source-line-no">048</span><span id="line-48">   private final List&lt;ConfigEvent&gt; changes = synced(new ConfigEvents());</span>
+<span class="source-line-no">049</span><span id="line-49"></span>
+<span class="source-line-no">050</span><span id="line-50">   // Registered listeners listening for changes during saves or reloads.</span>
+<span class="source-line-no">051</span><span id="line-51">   private final Set&lt;ConfigEventListener&gt; listeners = synced(Utils.set());</span>
+<span class="source-line-no">052</span><span id="line-52"></span>
+<span class="source-line-no">053</span><span id="line-53">   // The parsed entries of this map with all changes applied.</span>
+<span class="source-line-no">054</span><span id="line-54">   final Map&lt;String,ConfigSection&gt; entries = synced(map());</span>
+<span class="source-line-no">055</span><span id="line-55"></span>
+<span class="source-line-no">056</span><span id="line-56">   // The original entries of this map before any changes were applied.</span>
+<span class="source-line-no">057</span><span id="line-57">   final Map&lt;String,ConfigSection&gt; oentries = synced(map());</span>
+<span class="source-line-no">058</span><span id="line-58"></span>
+<span class="source-line-no">059</span><span id="line-59">   // Import statements in this config.</span>
+<span class="source-line-no">060</span><span id="line-60">   final List&lt;Import&gt; imports = new CopyOnWriteArrayList&lt;&gt;();</span>
+<span class="source-line-no">061</span><span id="line-61"></span>
+<span class="source-line-no">062</span><span id="line-62">   private final SimpleReadWriteLock lock = new SimpleReadWriteLock();</span>
+<span class="source-line-no">063</span><span id="line-63"></span>
+<span class="source-line-no">064</span><span id="line-64">   /**</span>
+<span class="source-line-no">065</span><span id="line-65">    * Constructor.</span>
+<span class="source-line-no">066</span><span id="line-66">    *</span>
+<span class="source-line-no">067</span><span id="line-67">    * @param store The config store.</span>
+<span class="source-line-no">068</span><span id="line-68">    * @param name The config name.</span>
+<span class="source-line-no">069</span><span id="line-69">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">070</span><span id="line-70">    */</span>
+<span class="source-line-no">071</span><span id="line-71">   public ConfigMap(ConfigStore store, String name) throws IOException {</span>
+<span class="source-line-no">072</span><span id="line-72">      this.store = store;</span>
+<span class="source-line-no">073</span><span id="line-73">      this.name = name;</span>
+<span class="source-line-no">074</span><span id="line-74">      load(store.read(name));</span>
+<span class="source-line-no">075</span><span id="line-75">   }</span>
+<span class="source-line-no">076</span><span id="line-76"></span>
+<span class="source-line-no">077</span><span id="line-77">   ConfigMap(ConfigStore store, String name, String contents) throws IOException {</span>
+<span class="source-line-no">078</span><span id="line-78">      this.store = store;</span>
+<span class="source-line-no">079</span><span id="line-79">      this.name = name;</span>
+<span class="source-line-no">080</span><span id="line-80">      load(contents);</span>
+<span class="source-line-no">081</span><span id="line-81">   }</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">   private ConfigMap load(String contents) throws IOException {</span>
+<span class="source-line-no">084</span><span id="line-84">      if (contents == null)</span>
+<span class="source-line-no">085</span><span id="line-85">         contents = "";</span>
+<span class="source-line-no">086</span><span id="line-86">      this.contents = contents;</span>
+<span class="source-line-no">087</span><span id="line-87"></span>
+<span class="source-line-no">088</span><span id="line-88">      entries.clear();</span>
+<span class="source-line-no">089</span><span id="line-89">      oentries.clear();</span>
+<span class="source-line-no">090</span><span id="line-90">      imports.forEach(Import::unregisterAll);</span>
+<span class="source-line-no">091</span><span id="line-91">      imports.clear();</span>
+<span class="source-line-no">092</span><span id="line-92"></span>
+<span class="source-line-no">093</span><span id="line-93">      var imports2 = mapOf(String.class, ConfigMap.class);</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">      List&lt;String&gt; lines = new LinkedList&lt;&gt;();</span>
+<span class="source-line-no">096</span><span id="line-96">      try (var scanner = new Scanner(contents)) {</span>
+<span class="source-line-no">097</span><span id="line-97">         while (scanner.hasNextLine()) {</span>
+<span class="source-line-no">098</span><span id="line-98">            var line = scanner.nextLine();</span>
+<span class="source-line-no">099</span><span id="line-99">            var c = firstChar(line);</span>
+<span class="source-line-no">100</span><span id="line-100">            var c2 = StringUtils.lastNonWhitespaceChar(line);</span>
+<span class="source-line-no">101</span><span id="line-101">            if (c == '[') {</span>
 <span class="source-line-no">102</span><span id="line-102">               var l = line.trim();</span>
-<span class="source-line-no">103</span><span id="line-103">               var i = l.indexOf('&gt;');</span>
-<span class="source-line-no">104</span><span id="line-104">               if (i != -1) {</span>
-<span class="source-line-no">105</span><span id="line-105">                  var l2 = l.substring(1, i);</span>
-<span class="source-line-no">106</span><span id="line-106">                  if (! isValidConfigName(l2))</span>
-<span class="source-line-no">107</span><span id="line-107">                     throw new ConfigException("Invalid import config name found in configuration:  {0}", line);</span>
-<span class="source-line-no">108</span><span id="line-108">                  var l3 = l.substring(i+1);</span>
-<span class="source-line-no">109</span><span id="line-109">                  if (! (Utils.isEmpty(l3) || firstChar(l3) == '#'))</span>
-<span class="source-line-no">110</span><span id="line-110">                     throw new ConfigException("Invalid import config name found in configuration:  {0}", line);</span>
-<span class="source-line-no">111</span><span id="line-111">                  var importName = l2.trim();</span>
-<span class="source-line-no">112</span><span id="line-112">                  try {</span>
-<span class="source-line-no">113</span><span id="line-113">                     if (! imports2.containsKey(importName))</span>
-<span class="source-line-no">114</span><span id="line-114">                        imports2.put(importName, store.getMap(importName));</span>
-<span class="source-line-no">115</span><span id="line-115">                  } catch (StackOverflowError e) {</span>
-<span class="source-line-no">116</span><span id="line-116">                     throw new IOException("Import loop detected in configuration '"+name+"'-&gt;'"+importName+"'");</span>
-<span class="source-line-no">117</span><span id="line-117">                  }</span>
-<span class="source-line-no">118</span><span id="line-118">               }</span>
-<span class="source-line-no">119</span><span id="line-119">            }</span>
-<span class="source-line-no">120</span><span id="line-120">            lines.add(line);</span>
-<span class="source-line-no">121</span><span id="line-121">         }</span>
-<span class="source-line-no">122</span><span id="line-122">      }</span>
-<span class="source-line-no">123</span><span id="line-123"></span>
-<span class="source-line-no">124</span><span id="line-124">      List&lt;Import&gt; irl = Utils.listOfSize(imports2.size());</span>
-<span class="source-line-no">125</span><span id="line-125">      forEachReverse(listFrom(imports2.values()), x -&gt; irl.add(new Import(x).register(listeners)));</span>
-<span class="source-line-no">126</span><span id="line-126">      this.imports.addAll(irl);</span>
+<span class="source-line-no">103</span><span id="line-103">               if (c2 != ']' || ! isValidNewSectionName(l.substring(1, l.length()-1)))</span>
+<span class="source-line-no">104</span><span id="line-104">                  throw new ConfigException("Invalid section name found in configuration:  {0}", line);</span>
+<span class="source-line-no">105</span><span id="line-105">            } else if (c == '&lt;') {</span>
+<span class="source-line-no">106</span><span id="line-106">               var l = line.trim();</span>
+<span class="source-line-no">107</span><span id="line-107">               var i = l.indexOf('&gt;');</span>
+<span class="source-line-no">108</span><span id="line-108">               if (i != -1) {</span>
+<span class="source-line-no">109</span><span id="line-109">                  var l2 = l.substring(1, i);</span>
+<span class="source-line-no">110</span><span id="line-110">                  if (! isValidConfigName(l2))</span>
+<span class="source-line-no">111</span><span id="line-111">                     throw new ConfigException("Invalid import config name found in configuration:  {0}", line);</span>
+<span class="source-line-no">112</span><span id="line-112">                  var l3 = l.substring(i+1);</span>
+<span class="source-line-no">113</span><span id="line-113">                  if (! (Utils.isEmpty(l3) || firstChar(l3) == '#'))</span>
+<span class="source-line-no">114</span><span id="line-114">                     throw new ConfigException("Invalid import config name found in configuration:  {0}", line);</span>
+<span class="source-line-no">115</span><span id="line-115">                  var importName = l2.trim();</span>
+<span class="source-line-no">116</span><span id="line-116">                  try {</span>
+<span class="source-line-no">117</span><span id="line-117">                     if (! imports2.containsKey(importName))</span>
+<span class="source-line-no">118</span><span id="line-118">                        imports2.put(importName, store.getMap(importName));</span>
+<span class="source-line-no">119</span><span id="line-119">                  } catch (StackOverflowError e) {</span>
+<span class="source-line-no">120</span><span id="line-120">                     throw new IOException("Import loop detected in configuration '"+name+"'-&gt;'"+importName+"'");</span>
+<span class="source-line-no">121</span><span id="line-121">                  }</span>
+<span class="source-line-no">122</span><span id="line-122">               }</span>
+<span class="source-line-no">123</span><span id="line-123">            }</span>
+<span class="source-line-no">124</span><span id="line-124">            lines.add(line);</span>
+<span class="source-line-no">125</span><span id="line-125">         }</span>
+<span class="source-line-no">126</span><span id="line-126">      }</span>
 <span class="source-line-no">127</span><span id="line-127"></span>
-<span class="source-line-no">128</span><span id="line-128">      // Add [blank] section.</span>
-<span class="source-line-no">129</span><span id="line-129">      var inserted = false;</span>
-<span class="source-line-no">130</span><span id="line-130">      var foundComment = false;</span>
-<span class="source-line-no">131</span><span id="line-131">      for (var li = lines.listIterator(); li.hasNext();) {</span>
-<span class="source-line-no">132</span><span id="line-132">         var l = li.next();</span>
-<span class="source-line-no">133</span><span id="line-133">         var c = firstNonWhitespaceChar(l);</span>
-<span class="source-line-no">134</span><span id="line-134">         if (c != '#') {</span>
-<span class="source-line-no">135</span><span id="line-135">            if (c == 0 &amp;&amp; foundComment) {</span>
-<span class="source-line-no">136</span><span id="line-136">               li.set("[]");</span>
-<span class="source-line-no">137</span><span id="line-137">               inserted = true;</span>
-<span class="source-line-no">138</span><span id="line-138">            }</span>
-<span class="source-line-no">139</span><span id="line-139">            break;</span>
-<span class="source-line-no">140</span><span id="line-140">         }</span>
-<span class="source-line-no">141</span><span id="line-141">         foundComment = true;</span>
-<span class="source-line-no">142</span><span id="line-142">      }</span>
-<span class="source-line-no">143</span><span id="line-143">      if (! inserted)</span>
-<span class="source-line-no">144</span><span id="line-144">         lines.add(0, "[]");</span>
-<span class="source-line-no">145</span><span id="line-145"></span>
-<span class="source-line-no">146</span><span id="line-146">      // Collapse any multi-lines.</span>
-<span class="source-line-no">147</span><span id="line-147">      var li = lines.listIterator(lines.size());</span>
-<span class="source-line-no">148</span><span id="line-148">      String accumulator = null;</span>
-<span class="source-line-no">149</span><span id="line-149">      while (li.hasPrevious()) {</span>
-<span class="source-line-no">150</span><span id="line-150">         var l = li.previous();</span>
-<span class="source-line-no">151</span><span id="line-151">         var c = firstChar(l);</span>
-<span class="source-line-no">152</span><span id="line-152">         if (c == '\t') {</span>
-<span class="source-line-no">153</span><span id="line-153">            c = firstNonWhitespaceChar(l);</span>
-<span class="source-line-no">154</span><span id="line-154">            if (c != '#') {</span>
-<span class="source-line-no">155</span><span id="line-155">               if (accumulator == null)</span>
-<span class="source-line-no">156</span><span id="line-156">                  accumulator = l.substring(1);</span>
-<span class="source-line-no">157</span><span id="line-157">               else</span>
-<span class="source-line-no">158</span><span id="line-158">                  accumulator = l.substring(1) + "\n" + accumulator;  // NOSONAR - Intentionally not using StringBuilder.</span>
-<span class="source-line-no">159</span><span id="line-159">               li.remove();</span>
-<span class="source-line-no">160</span><span id="line-160">            }</span>
-<span class="source-line-no">161</span><span id="line-161">         } else if (accumulator != null) {</span>
-<span class="source-line-no">162</span><span id="line-162">            li.set(l + "\n" + accumulator);</span>
-<span class="source-line-no">163</span><span id="line-163">            accumulator = null;</span>
-<span class="source-line-no">164</span><span id="line-164">         }</span>
-<span class="source-line-no">165</span><span id="line-165">      }</span>
-<span class="source-line-no">166</span><span id="line-166"></span>
-<span class="source-line-no">167</span><span id="line-167">      lines = copyOf(lines);</span>
-<span class="source-line-no">168</span><span id="line-168">      var last = lines.size()-1;</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">      final int</span>
-<span class="source-line-no">171</span><span id="line-171">         S1 = 1, // Looking for section.</span>
-<span class="source-line-no">172</span><span id="line-172">         S2 = 2; // Found section, looking for start.</span>
+<span class="source-line-no">128</span><span id="line-128">      List&lt;Import&gt; irl = Utils.listOfSize(imports2.size());</span>
+<span class="source-line-no">129</span><span id="line-129">      forEachReverse(listFrom(imports2.values()), x -&gt; irl.add(new Import(x).register(listeners)));</span>
+<span class="source-line-no">130</span><span id="line-130">      this.imports.addAll(irl);</span>
+<span class="source-line-no">131</span><span id="line-131"></span>
+<span class="source-line-no">132</span><span id="line-132">      // Add [blank] section.</span>
+<span class="source-line-no">133</span><span id="line-133">      var inserted = false;</span>
+<span class="source-line-no">134</span><span id="line-134">      var foundComment = false;</span>
+<span class="source-line-no">135</span><span id="line-135">      for (var li = lines.listIterator(); li.hasNext();) {</span>
+<span class="source-line-no">136</span><span id="line-136">         var l = li.next();</span>
+<span class="source-line-no">137</span><span id="line-137">         var c = firstNonWhitespaceChar(l);</span>
+<span class="source-line-no">138</span><span id="line-138">         if (c != '#') {</span>
+<span class="source-line-no">139</span><span id="line-139">            if (c == 0 &amp;&amp; foundComment) {</span>
+<span class="source-line-no">140</span><span id="line-140">               li.set("[]");</span>
+<span class="source-line-no">141</span><span id="line-141">               inserted = true;</span>
+<span class="source-line-no">142</span><span id="line-142">            }</span>
+<span class="source-line-no">143</span><span id="line-143">            break;</span>
+<span class="source-line-no">144</span><span id="line-144">         }</span>
+<span class="source-line-no">145</span><span id="line-145">         foundComment = true;</span>
+<span class="source-line-no">146</span><span id="line-146">      }</span>
+<span class="source-line-no">147</span><span id="line-147">      if (! inserted)</span>
+<span class="source-line-no">148</span><span id="line-148">         lines.add(0, "[]");</span>
+<span class="source-line-no">149</span><span id="line-149"></span>
+<span class="source-line-no">150</span><span id="line-150">      // Collapse any multi-lines.</span>
+<span class="source-line-no">151</span><span id="line-151">      var li = lines.listIterator(lines.size());</span>
+<span class="source-line-no">152</span><span id="line-152">      String accumulator = null;</span>
+<span class="source-line-no">153</span><span id="line-153">      while (li.hasPrevious()) {</span>
+<span class="source-line-no">154</span><span id="line-154">         var l = li.previous();</span>
+<span class="source-line-no">155</span><span id="line-155">         var c = firstChar(l);</span>
+<span class="source-line-no">156</span><span id="line-156">         if (c == '\t') {</span>
+<span class="source-line-no">157</span><span id="line-157">            c = firstNonWhitespaceChar(l);</span>
+<span class="source-line-no">158</span><span id="line-158">            if (c != '#') {</span>
+<span class="source-line-no">159</span><span id="line-159">               if (accumulator == null)</span>
+<span class="source-line-no">160</span><span id="line-160">                  accumulator = l.substring(1);</span>
+<span class="source-line-no">161</span><span id="line-161">               else</span>
+<span class="source-line-no">162</span><span id="line-162">                  accumulator = l.substring(1) + "\n" + accumulator;  // NOSONAR - Intentionally not using StringBuilder.</span>
+<span class="source-line-no">163</span><span id="line-163">               li.remove();</span>
+<span class="source-line-no">164</span><span id="line-164">            }</span>
+<span class="source-line-no">165</span><span id="line-165">         } else if (accumulator != null) {</span>
+<span class="source-line-no">166</span><span id="line-166">            li.set(l + "\n" + accumulator);</span>
+<span class="source-line-no">167</span><span id="line-167">            accumulator = null;</span>
+<span class="source-line-no">168</span><span id="line-168">         }</span>
+<span class="source-line-no">169</span><span id="line-169">      }</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
+<span class="source-line-no">171</span><span id="line-171">      lines = copyOf(lines);</span>
+<span class="source-line-no">172</span><span id="line-172">      var last = lines.size()-1;</span>
 <span class="source-line-no">173</span><span id="line-173"></span>
-<span class="source-line-no">174</span><span id="line-174">      var state = S1;</span>
-<span class="source-line-no">175</span><span id="line-175"></span>
-<span class="source-line-no">176</span><span id="line-176">      var sections = listOf(ConfigSection.class);</span>
+<span class="source-line-no">174</span><span id="line-174">      final int</span>
+<span class="source-line-no">175</span><span id="line-175">         S1 = 1, // Looking for section.</span>
+<span class="source-line-no">176</span><span id="line-176">         S2 = 2; // Found section, looking for start.</span>
 <span class="source-line-no">177</span><span id="line-177"></span>
-<span class="source-line-no">178</span><span id="line-178">      for (var i = last; i &gt;= 0; i--) {</span>
-<span class="source-line-no">179</span><span id="line-179">         var l = lines.get(i);</span>
-<span class="source-line-no">180</span><span id="line-180">         var c = firstChar(l);</span>
+<span class="source-line-no">178</span><span id="line-178">      var state = S1;</span>
+<span class="source-line-no">179</span><span id="line-179"></span>
+<span class="source-line-no">180</span><span id="line-180">      var sections = listOf(ConfigSection.class);</span>
 <span class="source-line-no">181</span><span id="line-181"></span>
-<span class="source-line-no">182</span><span id="line-182">         if (state == S1) {</span>
-<span class="source-line-no">183</span><span id="line-183">            if (c == '[') {</span>
-<span class="source-line-no">184</span><span id="line-184">               state = S2;</span>
-<span class="source-line-no">185</span><span id="line-185">            }</span>
-<span class="source-line-no">186</span><span id="line-186">         } else {</span>
-<span class="source-line-no">187</span><span id="line-187">            if (c != '#' &amp;&amp; (c == '[' || l.indexOf('=') != -1)) {</span>
-<span class="source-line-no">188</span><span id="line-188">               sections.add(new ConfigSection(lines.subList(i+1, last+1)));</span>
-<span class="source-line-no">189</span><span id="line-189">               last = i + 1;</span>
-<span class="source-line-no">190</span><span id="line-190">               state = (c == '[' ? S2 : S1);</span>
-<span class="source-line-no">191</span><span id="line-191">            }</span>
-<span class="source-line-no">192</span><span id="line-192">         }</span>
-<span class="source-line-no">193</span><span id="line-193">      }</span>
-<span class="source-line-no">194</span><span id="line-194"></span>
-<span class="source-line-no">195</span><span id="line-195">      sections.add(new ConfigSection(lines.subList(0, last+1)));</span>
-<span class="source-line-no">196</span><span id="line-196"></span>
-<span class="source-line-no">197</span><span id="line-197">      for (var i = sections.size() - 1; i &gt;= 0; i--) {</span>
-<span class="source-line-no">198</span><span id="line-198">         var cs = sections.get(i);</span>
-<span class="source-line-no">199</span><span id="line-199">         if (entries.containsKey(cs.name))</span>
-<span class="source-line-no">200</span><span id="line-200">            throw new ConfigException("Duplicate section found in configuration:  [{0}]", cs.name);</span>
-<span class="source-line-no">201</span><span id="line-201">         entries.put(cs.name, cs);</span>
-<span class="source-line-no">202</span><span id="line-202">       }</span>
-<span class="source-line-no">203</span><span id="line-203"></span>
-<span class="source-line-no">204</span><span id="line-204">      oentries.putAll(entries);</span>
-<span class="source-line-no">205</span><span id="line-205">      return this;</span>
-<span class="source-line-no">206</span><span id="line-206">   }</span>
+<span class="source-line-no">182</span><span id="line-182">      for (var i = last; i &gt;= 0; i--) {</span>
+<span class="source-line-no">183</span><span id="line-183">         var l = lines.get(i);</span>
+<span class="source-line-no">184</span><span id="line-184">         var c = firstChar(l);</span>
+<span class="source-line-no">185</span><span id="line-185"></span>
+<span class="source-line-no">186</span><span id="line-186">         if (state == S1) {</span>
+<span class="source-line-no">187</span><span id="line-187">            if (c == '[') {</span>
+<span class="source-line-no">188</span><span id="line-188">               state = S2;</span>
+<span class="source-line-no">189</span><span id="line-189">            }</span>
+<span class="source-line-no">190</span><span id="line-190">         } else {</span>
+<span class="source-line-no">191</span><span id="line-191">            if (c != '#' &amp;&amp; (c == '[' || l.indexOf('=') != -1)) {</span>
+<span class="source-line-no">192</span><span id="line-192">               sections.add(new ConfigSection(lines.subList(i+1, last+1)));</span>
+<span class="source-line-no">193</span><span id="line-193">               last = i + 1;</span>
+<span class="source-line-no">194</span><span id="line-194">               state = (c == '[' ? S2 : S1);</span>
+<span class="source-line-no">195</span><span id="line-195">            }</span>
+<span class="source-line-no">196</span><span id="line-196">         }</span>
+<span class="source-line-no">197</span><span id="line-197">      }</span>
+<span class="source-line-no">198</span><span id="line-198"></span>
+<span class="source-line-no">199</span><span id="line-199">      sections.add(new ConfigSection(lines.subList(0, last+1)));</span>
+<span class="source-line-no">200</span><span id="line-200"></span>
+<span class="source-line-no">201</span><span id="line-201">      for (var i = sections.size() - 1; i &gt;= 0; i--) {</span>
+<span class="source-line-no">202</span><span id="line-202">         var cs = sections.get(i);</span>
+<span class="source-line-no">203</span><span id="line-203">         if (entries.containsKey(cs.name))</span>
+<span class="source-line-no">204</span><span id="line-204">            throw new ConfigException("Duplicate section found in configuration:  [{0}]", cs.name);</span>
+<span class="source-line-no">205</span><span id="line-205">         entries.put(cs.name, cs);</span>
+<span class="source-line-no">206</span><span id="line-206">       }</span>
 <span class="source-line-no">207</span><span id="line-207"></span>
-<span class="source-line-no">208</span><span id="line-208">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">209</span><span id="line-209">   // Getters</span>
-<span class="source-line-no">210</span><span id="line-210">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">208</span><span id="line-208">      oentries.putAll(entries);</span>
+<span class="source-line-no">209</span><span id="line-209">      return this;</span>
+<span class="source-line-no">210</span><span id="line-210">   }</span>
 <span class="source-line-no">211</span><span id="line-211"></span>
-<span class="source-line-no">212</span><span id="line-212">   /**</span>
-<span class="source-line-no">213</span><span id="line-213">    * Reads an entry from this map.</span>
-<span class="source-line-no">214</span><span id="line-214">    *</span>
-<span class="source-line-no">215</span><span id="line-215">    * @param section</span>
-<span class="source-line-no">216</span><span id="line-216">    *    The section name.</span>
-<span class="source-line-no">217</span><span id="line-217">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">218</span><span id="line-218">    *    &lt;br&gt;Use blank to refer to the default section.</span>
-<span class="source-line-no">219</span><span id="line-219">    * @param key</span>
-<span class="source-line-no">220</span><span id="line-220">    *    The entry key.</span>
+<span class="source-line-no">212</span><span id="line-212">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">213</span><span id="line-213">   // Getters</span>
+<span class="source-line-no">214</span><span id="line-214">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">215</span><span id="line-215"></span>
+<span class="source-line-no">216</span><span id="line-216">   /**</span>
+<span class="source-line-no">217</span><span id="line-217">    * Reads an entry from this map.</span>
+<span class="source-line-no">218</span><span id="line-218">    *</span>
+<span class="source-line-no">219</span><span id="line-219">    * @param section</span>
+<span class="source-line-no">220</span><span id="line-220">    *    The section name.</span>
 <span class="source-line-no">221</span><span id="line-221">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">222</span><span id="line-222">    * @return The entry, or &lt;jk&gt;null&lt;/jk&gt; if the entry doesn't exist.</span>
-<span class="source-line-no">223</span><span id="line-223">    */</span>
-<span class="source-line-no">224</span><span id="line-224">   public ConfigMapEntry getEntry(String section, String key) {</span>
-<span class="source-line-no">225</span><span id="line-225">      checkSectionName(section);</span>
-<span class="source-line-no">226</span><span id="line-226">      checkKeyName(key);</span>
-<span class="source-line-no">227</span><span id="line-227">      try (var x = lock.read()) {</span>
-<span class="source-line-no">228</span><span id="line-228">         var cs = entries.get(section);</span>
-<span class="source-line-no">229</span><span id="line-229">         var ce = cs == null ? null : cs.entries.get(key);</span>
-<span class="source-line-no">230</span><span id="line-230"></span>
-<span class="source-line-no">231</span><span id="line-231">         if (ce == null)</span>
-<span class="source-line-no">232</span><span id="line-232">            ce = imports.stream().map(y -&gt; y.getConfigMap().getEntry(section, key)).filter(y -&gt; y != null).findFirst().orElse(null);</span>
-<span class="source-line-no">233</span><span id="line-233"></span>
-<span class="source-line-no">234</span><span id="line-234">         return ce;</span>
-<span class="source-line-no">235</span><span id="line-235">      }</span>
-<span class="source-line-no">236</span><span id="line-236">   }</span>
+<span class="source-line-no">222</span><span id="line-222">    *    &lt;br&gt;Use blank to refer to the default section.</span>
+<span class="source-line-no">223</span><span id="line-223">    * @param key</span>
+<span class="source-line-no">224</span><span id="line-224">    *    The entry key.</span>
+<span class="source-line-no">225</span><span id="line-225">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">226</span><span id="line-226">    * @return The entry, or &lt;jk&gt;null&lt;/jk&gt; if the entry doesn't exist.</span>
+<span class="source-line-no">227</span><span id="line-227">    */</span>
+<span class="source-line-no">228</span><span id="line-228">   public ConfigMapEntry getEntry(String section, String key) {</span>
+<span class="source-line-no">229</span><span id="line-229">      checkSectionName(section);</span>
+<span class="source-line-no">230</span><span id="line-230">      checkKeyName(key);</span>
+<span class="source-line-no">231</span><span id="line-231">      try (var x = lock.read()) {</span>
+<span class="source-line-no">232</span><span id="line-232">         var cs = entries.get(section);</span>
+<span class="source-line-no">233</span><span id="line-233">         var ce = cs == null ? null : cs.entries.get(key);</span>
+<span class="source-line-no">234</span><span id="line-234"></span>
+<span class="source-line-no">235</span><span id="line-235">         if (ce == null)</span>
+<span class="source-line-no">236</span><span id="line-236">            ce = imports.stream().map(y -&gt; y.getConfigMap().getEntry(section, key)).filter(y -&gt; y != null).findFirst().orElse(null);</span>
 <span class="source-line-no">237</span><span id="line-237"></span>
-<span class="source-line-no">238</span><span id="line-238">   /**</span>
-<span class="source-line-no">239</span><span id="line-239">    * Returns the pre-lines on the specified section.</span>
-<span class="source-line-no">240</span><span id="line-240">    *</span>
-<span class="source-line-no">241</span><span id="line-241">    * &lt;p&gt;</span>
-<span class="source-line-no">242</span><span id="line-242">    * The pre-lines are all lines such as blank lines and comments that preceed a section.</span>
-<span class="source-line-no">243</span><span id="line-243">    *</span>
-<span class="source-line-no">244</span><span id="line-244">    * @param section</span>
-<span class="source-line-no">245</span><span id="line-245">    *    The section name.</span>
-<span class="source-line-no">246</span><span id="line-246">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">247</span><span id="line-247">    *    &lt;br&gt;Use blank to refer to the default section.</span>
-<span class="source-line-no">248</span><span id="line-248">    * @return</span>
-<span class="source-line-no">249</span><span id="line-249">    *    An unmodifiable list of lines, or &lt;jk&gt;null&lt;/jk&gt; if the section doesn't exist.</span>
-<span class="source-line-no">250</span><span id="line-250">    */</span>
-<span class="source-line-no">251</span><span id="line-251">   public List&lt;String&gt; getPreLines(String section) {</span>
-<span class="source-line-no">252</span><span id="line-252">      checkSectionName(section);</span>
-<span class="source-line-no">253</span><span id="line-253">      try (var x = lock.read()) {</span>
-<span class="source-line-no">254</span><span id="line-254">         var cs = entries.get(section);</span>
-<span class="source-line-no">255</span><span id="line-255">         return cs == null ? null : cs.preLines;</span>
-<span class="source-line-no">256</span><span id="line-256">      }</span>
-<span class="source-line-no">257</span><span id="line-257">   }</span>
-<span class="source-line-no">258</span><span id="line-258"></span>
-<span class="source-line-no">259</span><span id="line-259">   /**</span>
-<span class="source-line-no">260</span><span id="line-260">    * Returns the keys of the entries in the specified section.</span>
-<span class="source-line-no">261</span><span id="line-261">    *</span>
-<span class="source-line-no">262</span><span id="line-262">    * @return</span>
-<span class="source-line-no">263</span><span id="line-263">    *    An unmodifiable set of keys.</span>
-<span class="source-line-no">264</span><span id="line-264">    */</span>
-<span class="source-line-no">265</span><span id="line-265">   public Set&lt;String&gt; getSections() {</span>
-<span class="source-line-no">266</span><span id="line-266">      var s = imports.isEmpty() ? entries.keySet() : setOf(String.class);</span>
-<span class="source-line-no">267</span><span id="line-267">      if (! imports.isEmpty()) {</span>
-<span class="source-line-no">268</span><span id="line-268">         imports.forEach(x -&gt; s.addAll(x.getConfigMap().getSections()));</span>
-<span class="source-line-no">269</span><span id="line-269">         s.addAll(entries.keySet());</span>
-<span class="source-line-no">270</span><span id="line-270">      }</span>
-<span class="source-line-no">271</span><span id="line-271">      return u(s);</span>
-<span class="source-line-no">272</span><span id="line-272">   }</span>
-<span class="source-line-no">273</span><span id="line-273"></span>
-<span class="source-line-no">274</span><span id="line-274">   /**</span>
-<span class="source-line-no">275</span><span id="line-275">    * Returns the keys of the entries in the specified section.</span>
-<span class="source-line-no">276</span><span id="line-276">    *</span>
-<span class="source-line-no">277</span><span id="line-277">    * @param section</span>
-<span class="source-line-no">278</span><span id="line-278">    *    The section name.</span>
-<span class="source-line-no">279</span><span id="line-279">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">280</span><span id="line-280">    *    &lt;br&gt;Use blank to refer to the default section.</span>
-<span class="source-line-no">281</span><span id="line-281">    * @return</span>
-<span class="source-line-no">282</span><span id="line-282">    *    An unmodifiable set of keys, or an empty set if the section doesn't exist.</span>
-<span class="source-line-no">283</span><span id="line-283">    */</span>
-<span class="source-line-no">284</span><span id="line-284">   public Set&lt;String&gt; getKeys(String section) {</span>
-<span class="source-line-no">285</span><span id="line-285">      checkSectionName(section);</span>
-<span class="source-line-no">286</span><span id="line-286">      var cs = entries.get(section);</span>
-<span class="source-line-no">287</span><span id="line-287">      var s = imports.isEmpty() &amp;&amp; cs != null ? cs.entries.keySet() : Utils.&lt;String&gt;set();</span>
-<span class="source-line-no">288</span><span id="line-288">      if (! imports.isEmpty()) {</span>
-<span class="source-line-no">289</span><span id="line-289">         imports.forEach(x -&gt; s.addAll(x.getConfigMap().getKeys(section)));</span>
-<span class="source-line-no">290</span><span id="line-290">         if (cs != null)</span>
-<span class="source-line-no">291</span><span id="line-291">            s.addAll(cs.entries.keySet());</span>
-<span class="source-line-no">292</span><span id="line-292">      }</span>
-<span class="source-line-no">293</span><span id="line-293">      return u(s);</span>
-<span class="source-line-no">294</span><span id="line-294">   }</span>
-<span class="source-line-no">295</span><span id="line-295"></span>
-<span class="source-line-no">296</span><span id="line-296">   /**</span>
-<span class="source-line-no">297</span><span id="line-297">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this config has the specified section.</span>
-<span class="source-line-no">298</span><span id="line-298">    *</span>
-<span class="source-line-no">299</span><span id="line-299">    * @param section</span>
-<span class="source-line-no">300</span><span id="line-300">    *    The section name.</span>
-<span class="source-line-no">301</span><span id="line-301">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">302</span><span id="line-302">    *    &lt;br&gt;Use blank to refer to the default section.</span>
-<span class="source-line-no">303</span><span id="line-303">    * @return &lt;jk&gt;true&lt;/jk&gt; if this config has the specified section.</span>
-<span class="source-line-no">304</span><span id="line-304">    */</span>
-<span class="source-line-no">305</span><span id="line-305">   public boolean hasSection(String section) {</span>
-<span class="source-line-no">306</span><span id="line-306">      checkSectionName(section);</span>
-<span class="source-line-no">307</span><span id="line-307">      return entries.get(section) != null || imports.stream().anyMatch(x -&gt; x.getConfigMap().hasSection(section));</span>
-<span class="source-line-no">308</span><span id="line-308">   }</span>
-<span class="source-line-no">309</span><span id="line-309"></span>
-<span class="source-line-no">310</span><span id="line-310">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">311</span><span id="line-311">   // Setters</span>
-<span class="source-line-no">312</span><span id="line-312">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">238</span><span id="line-238">         return ce;</span>
+<span class="source-line-no">239</span><span id="line-239">      }</span>
+<span class="source-line-no">240</span><span id="line-240">   }</span>
+<span class="source-line-no">241</span><span id="line-241"></span>
+<span class="source-line-no">242</span><span id="line-242">   /**</span>
+<span class="source-line-no">243</span><span id="line-243">    * Returns the pre-lines on the specified section.</span>
+<span class="source-line-no">244</span><span id="line-244">    *</span>
+<span class="source-line-no">245</span><span id="line-245">    * &lt;p&gt;</span>
+<span class="source-line-no">246</span><span id="line-246">    * The pre-lines are all lines such as blank lines and comments that preceed a section.</span>
+<span class="source-line-no">247</span><span id="line-247">    *</span>
+<span class="source-line-no">248</span><span id="line-248">    * @param section</span>
+<span class="source-line-no">249</span><span id="line-249">    *    The section name.</span>
+<span class="source-line-no">250</span><span id="line-250">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">251</span><span id="line-251">    *    &lt;br&gt;Use blank to refer to the default section.</span>
+<span class="source-line-no">252</span><span id="line-252">    * @return</span>
+<span class="source-line-no">253</span><span id="line-253">    *    An unmodifiable list of lines, or &lt;jk&gt;null&lt;/jk&gt; if the section doesn't exist.</span>
+<span class="source-line-no">254</span><span id="line-254">    */</span>
+<span class="source-line-no">255</span><span id="line-255">   public List&lt;String&gt; getPreLines(String section) {</span>
+<span class="source-line-no">256</span><span id="line-256">      checkSectionName(section);</span>
+<span class="source-line-no">257</span><span id="line-257">      try (var x = lock.read()) {</span>
+<span class="source-line-no">258</span><span id="line-258">         var cs = entries.get(section);</span>
+<span class="source-line-no">259</span><span id="line-259">         return cs == null ? null : cs.preLines;</span>
+<span class="source-line-no">260</span><span id="line-260">      }</span>
+<span class="source-line-no">261</span><span id="line-261">   }</span>
+<span class="source-line-no">262</span><span id="line-262"></span>
+<span class="source-line-no">263</span><span id="line-263">   /**</span>
+<span class="source-line-no">264</span><span id="line-264">    * Returns the keys of the entries in the specified section.</span>
+<span class="source-line-no">265</span><span id="line-265">    *</span>
+<span class="source-line-no">266</span><span id="line-266">    * @return</span>
+<span class="source-line-no">267</span><span id="line-267">    *    An unmodifiable set of keys.</span>
+<span class="source-line-no">268</span><span id="line-268">    */</span>
+<span class="source-line-no">269</span><span id="line-269">   public Set&lt;String&gt; getSections() {</span>
+<span class="source-line-no">270</span><span id="line-270">      var s = imports.isEmpty() ? entries.keySet() : setOf(String.class);</span>
+<span class="source-line-no">271</span><span id="line-271">      if (! imports.isEmpty()) {</span>
+<span class="source-line-no">272</span><span id="line-272">         imports.forEach(x -&gt; s.addAll(x.getConfigMap().getSections()));</span>
+<span class="source-line-no">273</span><span id="line-273">         s.addAll(entries.keySet());</span>
+<span class="source-line-no">274</span><span id="line-274">      }</span>
+<span class="source-line-no">275</span><span id="line-275">      return u(s);</span>
+<span class="source-line-no">276</span><span id="line-276">   }</span>
+<span class="source-line-no">277</span><span id="line-277"></span>
+<span class="source-line-no">278</span><span id="line-278">   /**</span>
+<span class="source-line-no">279</span><span id="line-279">    * Returns the keys of the entries in the specified section.</span>
+<span class="source-line-no">280</span><span id="line-280">    *</span>
+<span class="source-line-no">281</span><span id="line-281">    * @param section</span>
+<span class="source-line-no">282</span><span id="line-282">    *    The section name.</span>
+<span class="source-line-no">283</span><span id="line-283">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">284</span><span id="line-284">    *    &lt;br&gt;Use blank to refer to the default section.</span>
+<span class="source-line-no">285</span><span id="line-285">    * @return</span>
+<span class="source-line-no">286</span><span id="line-286">    *    An unmodifiable set of keys, or an empty set if the section doesn't exist.</span>
+<span class="source-line-no">287</span><span id="line-287">    */</span>
+<span class="source-line-no">288</span><span id="line-288">   public Set&lt;String&gt; getKeys(String section) {</span>
+<span class="source-line-no">289</span><span id="line-289">      checkSectionName(section);</span>
+<span class="source-line-no">290</span><span id="line-290">      var cs = entries.get(section);</span>
+<span class="source-line-no">291</span><span id="line-291">      var s = imports.isEmpty() &amp;&amp; cs != null ? cs.entries.keySet() : Utils.&lt;String&gt;set();</span>
+<span class="source-line-no">292</span><span id="line-292">      if (! imports.isEmpty()) {</span>
+<span class="source-line-no">293</span><span id="line-293">         imports.forEach(x -&gt; s.addAll(x.getConfigMap().getKeys(section)));</span>
+<span class="source-line-no">294</span><span id="line-294">         if (cs != null)</span>
+<span class="source-line-no">295</span><span id="line-295">            s.addAll(cs.entries.keySet());</span>
+<span class="source-line-no">296</span><span id="line-296">      }</span>
+<span class="source-line-no">297</span><span id="line-297">      return u(s);</span>
+<span class="source-line-no">298</span><span id="line-298">   }</span>
+<span class="source-line-no">299</span><span id="line-299"></span>
+<span class="source-line-no">300</span><span id="line-300">   /**</span>
+<span class="source-line-no">301</span><span id="line-301">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this config has the specified section.</span>
+<span class="source-line-no">302</span><span id="line-302">    *</span>
+<span class="source-line-no">303</span><span id="line-303">    * @param section</span>
+<span class="source-line-no">304</span><span id="line-304">    *    The section name.</span>
+<span class="source-line-no">305</span><span id="line-305">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">306</span><span id="line-306">    *    &lt;br&gt;Use blank to refer to the default section.</span>
+<span class="source-line-no">307</span><span id="line-307">    * @return &lt;jk&gt;true&lt;/jk&gt; if this config has the specified section.</span>
+<span class="source-line-no">308</span><span id="line-308">    */</span>
+<span class="source-line-no">309</span><span id="line-309">   public boolean hasSection(String section) {</span>
+<span class="source-line-no">310</span><span id="line-310">      checkSectionName(section);</span>
+<span class="source-line-no">311</span><span id="line-311">      return entries.get(section) != null || imports.stream().anyMatch(x -&gt; x.getConfigMap().hasSection(section));</span>
+<span class="source-line-no">312</span><span id="line-312">   }</span>
 <span class="source-line-no">313</span><span id="line-313"></span>
-<span class="source-line-no">314</span><span id="line-314">   /**</span>
-<span class="source-line-no">315</span><span id="line-315">    * Adds a new section or replaces the pre-lines on an existing section.</span>
-<span class="source-line-no">316</span><span id="line-316">    *</span>
-<span class="source-line-no">317</span><span id="line-317">    * @param section</span>
-<span class="source-line-no">318</span><span id="line-318">    *    The section name.</span>
-<span class="source-line-no">319</span><span id="line-319">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">320</span><span id="line-320">    *    &lt;br&gt;Use blank to refer to the default section.</span>
-<span class="source-line-no">321</span><span id="line-321">    * @param preLines</span>
-<span class="source-line-no">322</span><span id="line-322">    *    The pre-lines on the section.</span>
-<span class="source-line-no">323</span><span id="line-323">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the previous value will not be overwritten.</span>
-<span class="source-line-no">324</span><span id="line-324">    * @return This object.</span>
-<span class="source-line-no">325</span><span id="line-325">    */</span>
-<span class="source-line-no">326</span><span id="line-326">   public ConfigMap setSection(String section, List&lt;String&gt; preLines) {</span>
-<span class="source-line-no">327</span><span id="line-327">      checkSectionName(section);</span>
-<span class="source-line-no">328</span><span id="line-328">      return applyChange(true, ConfigEvent.setSection(name, section, preLines));</span>
-<span class="source-line-no">329</span><span id="line-329">   }</span>
-<span class="source-line-no">330</span><span id="line-330"></span>
-<span class="source-line-no">331</span><span id="line-331">   /**</span>
-<span class="source-line-no">332</span><span id="line-332">    * Adds or overwrites an existing entry.</span>
-<span class="source-line-no">333</span><span id="line-333">    *</span>
-<span class="source-line-no">334</span><span id="line-334">    * @param section</span>
-<span class="source-line-no">335</span><span id="line-335">    *    The section name.</span>
-<span class="source-line-no">336</span><span id="line-336">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">337</span><span id="line-337">    *    &lt;br&gt;Use blank to refer to the default section.</span>
-<span class="source-line-no">338</span><span id="line-338">    * @param key</span>
-<span class="source-line-no">339</span><span id="line-339">    *    The entry key.</span>
+<span class="source-line-no">314</span><span id="line-314">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">315</span><span id="line-315">   // Setters</span>
+<span class="source-line-no">316</span><span id="line-316">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">317</span><span id="line-317"></span>
+<span class="source-line-no">318</span><span id="line-318">   /**</span>
+<span class="source-line-no">319</span><span id="line-319">    * Adds a new section or replaces the pre-lines on an existing section.</span>
+<span class="source-line-no">320</span><span id="line-320">    *</span>
+<span class="source-line-no">321</span><span id="line-321">    * @param section</span>
+<span class="source-line-no">322</span><span id="line-322">    *    The section name.</span>
+<span class="source-line-no">323</span><span id="line-323">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">324</span><span id="line-324">    *    &lt;br&gt;Use blank to refer to the default section.</span>
+<span class="source-line-no">325</span><span id="line-325">    * @param preLines</span>
+<span class="source-line-no">326</span><span id="line-326">    *    The pre-lines on the section.</span>
+<span class="source-line-no">327</span><span id="line-327">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the previous value will not be overwritten.</span>
+<span class="source-line-no">328</span><span id="line-328">    * @return This object.</span>
+<span class="source-line-no">329</span><span id="line-329">    */</span>
+<span class="source-line-no">330</span><span id="line-330">   public ConfigMap setSection(String section, List&lt;String&gt; preLines) {</span>
+<span class="source-line-no">331</span><span id="line-331">      checkSectionName(section);</span>
+<span class="source-line-no">332</span><span id="line-332">      return applyChange(true, ConfigEvent.setSection(name, section, preLines));</span>
+<span class="source-line-no">333</span><span id="line-333">   }</span>
+<span class="source-line-no">334</span><span id="line-334"></span>
+<span class="source-line-no">335</span><span id="line-335">   /**</span>
+<span class="source-line-no">336</span><span id="line-336">    * Adds or overwrites an existing entry.</span>
+<span class="source-line-no">337</span><span id="line-337">    *</span>
+<span class="source-line-no">338</span><span id="line-338">    * @param section</span>
+<span class="source-line-no">339</span><span id="line-339">    *    The section name.</span>
 <span class="source-line-no">340</span><span id="line-340">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">341</span><span id="line-341">    * @param value</span>
-<span class="source-line-no">342</span><span id="line-342">    *    The entry value.</span>
-<span class="source-line-no">343</span><span id="line-343">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the previous value will not be overwritten.</span>
-<span class="source-line-no">344</span><span id="line-344">    * @param modifiers</span>
-<span class="source-line-no">345</span><span id="line-345">    *    Optional modifiers.</span>
-<span class="source-line-no">346</span><span id="line-346">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the previous value will not be overwritten.</span>
-<span class="source-line-no">347</span><span id="line-347">    * @param comment</span>
-<span class="source-line-no">348</span><span id="line-348">    *    Optional comment.</span>
-<span class="source-line-no">349</span><span id="line-349">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the previous value will not be overwritten.</span>
-<span class="source-line-no">350</span><span id="line-350">    * @param preLines</span>
-<span class="source-line-no">351</span><span id="line-351">    *    Optional pre-lines.</span>
-<span class="source-line-no">352</span><span id="line-352">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the previous value will not be overwritten.</span>
-<span class="source-line-no">353</span><span id="line-353">    * @return This object.</span>
-<span class="source-line-no">354</span><span id="line-354">    */</span>
-<span class="source-line-no">355</span><span id="line-355">   public ConfigMap setEntry(String section, String key, String value, String modifiers, String comment, List&lt;String&gt; preLines) {</span>
-<span class="source-line-no">356</span><span id="line-356">      checkSectionName(section);</span>
-<span class="source-line-no">357</span><span id="line-357">      checkKeyName(key);</span>
-<span class="source-line-no">358</span><span id="line-358">      return applyChange(true, ConfigEvent.setEntry(name, section, key, value, modifiers, comment, preLines));</span>
-<span class="source-line-no">359</span><span id="line-359">   }</span>
-<span class="source-line-no">360</span><span id="line-360"></span>
-<span class="source-line-no">361</span><span id="line-361"></span>
-<span class="source-line-no">362</span><span id="line-362">   /**</span>
-<span class="source-line-no">363</span><span id="line-363">    * Not implemented.</span>
-<span class="source-line-no">364</span><span id="line-364">    *</span>
-<span class="source-line-no">365</span><span id="line-365">    * @param section</span>
-<span class="source-line-no">366</span><span id="line-366">    *    The section name where to place the import statement.</span>
-<span class="source-line-no">367</span><span id="line-367">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">368</span><span id="line-368">    *    &lt;br&gt;Use blank for the default section.</span>
-<span class="source-line-no">369</span><span id="line-369">    * @param importName</span>
-<span class="source-line-no">370</span><span id="line-370">    *    The import name.</span>
+<span class="source-line-no">341</span><span id="line-341">    *    &lt;br&gt;Use blank to refer to the default section.</span>
+<span class="source-line-no">342</span><span id="line-342">    * @param key</span>
+<span class="source-line-no">343</span><span id="line-343">    *    The entry key.</span>
+<span class="source-line-no">344</span><span id="line-344">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">345</span><span id="line-345">    * @param value</span>
+<span class="source-line-no">346</span><span id="line-346">    *    The entry value.</span>
+<span class="source-line-no">347</span><span id="line-347">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the previous value will not be overwritten.</span>
+<span class="source-line-no">348</span><span id="line-348">    * @param modifiers</span>
+<span class="source-line-no">349</span><span id="line-349">    *    Optional modifiers.</span>
+<span class="source-line-no">350</span><span id="line-350">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the previous value will not be overwritten.</span>
+<span class="source-line-no">351</span><span id="line-351">    * @param comment</span>
+<span class="source-line-no">352</span><span id="line-352">    *    Optional comment.</span>
+<span class="source-line-no">353</span><span id="line-353">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the previous value will not be overwritten.</span>
+<span class="source-line-no">354</span><span id="line-354">    * @param preLines</span>
+<span class="source-line-no">355</span><span id="line-355">    *    Optional pre-lines.</span>
+<span class="source-line-no">356</span><span id="line-356">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the previous value will not be overwritten.</span>
+<span class="source-line-no">357</span><span id="line-357">    * @return This object.</span>
+<span class="source-line-no">358</span><span id="line-358">    */</span>
+<span class="source-line-no">359</span><span id="line-359">   public ConfigMap setEntry(String section, String key, String value, String modifiers, String comment, List&lt;String&gt; preLines) {</span>
+<span class="source-line-no">360</span><span id="line-360">      checkSectionName(section);</span>
+<span class="source-line-no">361</span><span id="line-361">      checkKeyName(key);</span>
+<span class="source-line-no">362</span><span id="line-362">      return applyChange(true, ConfigEvent.setEntry(name, section, key, value, modifiers, comment, preLines));</span>
+<span class="source-line-no">363</span><span id="line-363">   }</span>
+<span class="source-line-no">364</span><span id="line-364"></span>
+<span class="source-line-no">365</span><span id="line-365"></span>
+<span class="source-line-no">366</span><span id="line-366">   /**</span>
+<span class="source-line-no">367</span><span id="line-367">    * Not implemented.</span>
+<span class="source-line-no">368</span><span id="line-368">    *</span>
+<span class="source-line-no">369</span><span id="line-369">    * @param section</span>
+<span class="source-line-no">370</span><span id="line-370">    *    The section name where to place the import statement.</span>
 <span class="source-line-no">371</span><span id="line-371">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">372</span><span id="line-372">    * @param preLines</span>
-<span class="source-line-no">373</span><span id="line-373">    *    Optional comment and blank lines to add immediately before the import statement.</span>
-<span class="source-line-no">374</span><span id="line-374">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, previous pre-lines will not be replaced.</span>
-<span class="source-line-no">375</span><span id="line-375">    * @return This object.</span>
-<span class="source-line-no">376</span><span id="line-376">    */</span>
-<span class="source-line-no">377</span><span id="line-377">   public ConfigMap setImport(String section, String importName, List&lt;String&gt; preLines) {</span>
-<span class="source-line-no">378</span><span id="line-378">      throw new UnsupportedOperationException("Not implemented.");</span>
-<span class="source-line-no">379</span><span id="line-379">   }</span>
-<span class="source-line-no">380</span><span id="line-380"></span>
-<span class="source-line-no">381</span><span id="line-381">   /**</span>
-<span class="source-line-no">382</span><span id="line-382">    * Removes a section.</span>
-<span class="source-line-no">383</span><span id="line-383">    *</span>
-<span class="source-line-no">384</span><span id="line-384">    * &lt;p&gt;</span>
-<span class="source-line-no">385</span><span id="line-385">    * This eliminates all entries in the section as well.</span>
-<span class="source-line-no">386</span><span id="line-386">    *</span>
-<span class="source-line-no">387</span><span id="line-387">    * @param section</span>
-<span class="source-line-no">388</span><span id="line-388">    *    The section name.</span>
-<span class="source-line-no">389</span><span id="line-389">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">390</span><span id="line-390">    *    &lt;br&gt;Use blank to refer to the default section.</span>
-<span class="source-line-no">391</span><span id="line-391">    * @return This object.</span>
-<span class="source-line-no">392</span><span id="line-392">    */</span>
-<span class="source-line-no">393</span><span id="line-393">   public ConfigMap removeSection(String section) {</span>
-<span class="source-line-no">394</span><span id="line-394">      checkSectionName(section);</span>
-<span class="source-line-no">395</span><span id="line-395">      return applyChange(true, ConfigEvent.removeSection(name, section));</span>
-<span class="source-line-no">396</span><span id="line-396">   }</span>
-<span class="source-line-no">397</span><span id="line-397"></span>
-<span class="source-line-no">398</span><span id="line-398">   /**</span>
-<span class="source-line-no">399</span><span id="line-399">    * Removes an entry.</span>
-<span class="source-line-no">400</span><span id="line-400">    *</span>
-<span class="source-line-no">401</span><span id="line-401">    * @param section</span>
-<span class="source-line-no">402</span><span id="line-402">    *    The section name.</span>
-<span class="source-line-no">403</span><span id="line-403">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">404</span><span id="line-404">    *    &lt;br&gt;Use blank to refer to the default section.</span>
-<span class="source-line-no">405</span><span id="line-405">    * @param key</span>
-<span class="source-line-no">406</span><span id="line-406">    *    The entry key.</span>
+<span class="source-line-no">372</span><span id="line-372">    *    &lt;br&gt;Use blank for the default section.</span>
+<span class="source-line-no">373</span><span id="line-373">    * @param importName</span>
+<span class="source-line-no">374</span><span id="line-374">    *    The import name.</span>
+<span class="source-line-no">375</span><span id="line-375">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">376</span><span id="line-376">    * @param preLines</span>
+<span class="source-line-no">377</span><span id="line-377">    *    Optional comment and blank lines to add immediately before the import statement.</span>
+<span class="source-line-no">378</span><span id="line-378">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, previous pre-lines will not be replaced.</span>
+<span class="source-line-no">379</span><span id="line-379">    * @return This object.</span>
+<span class="source-line-no">380</span><span id="line-380">    */</span>
+<span class="source-line-no">381</span><span id="line-381">   public ConfigMap setImport(String section, String importName, List&lt;String&gt; preLines) {</span>
+<span class="source-line-no">382</span><span id="line-382">      throw new UnsupportedOperationException("Not implemented.");</span>
+<span class="source-line-no">383</span><span id="line-383">   }</span>
+<span class="source-line-no">384</span><span id="line-384"></span>
+<span class="source-line-no">385</span><span id="line-385">   /**</span>
+<span class="source-line-no">386</span><span id="line-386">    * Removes a section.</span>
+<span class="source-line-no">387</span><span id="line-387">    *</span>
+<span class="source-line-no">388</span><span id="line-388">    * &lt;p&gt;</span>
+<span class="source-line-no">389</span><span id="line-389">    * This eliminates all entries in the section as well.</span>
+<span class="source-line-no">390</span><span id="line-390">    *</span>
+<span class="source-line-no">391</span><span id="line-391">    * @param section</span>
+<span class="source-line-no">392</span><span id="line-392">    *    The section name.</span>
+<span class="source-line-no">393</span><span id="line-393">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">394</span><span id="line-394">    *    &lt;br&gt;Use blank to refer to the default section.</span>
+<span class="source-line-no">395</span><span id="line-395">    * @return This object.</span>
+<span class="source-line-no">396</span><span id="line-396">    */</span>
+<span class="source-line-no">397</span><span id="line-397">   public ConfigMap removeSection(String section) {</span>
+<span class="source-line-no">398</span><span id="line-398">      checkSectionName(section);</span>
+<span class="source-line-no">399</span><span id="line-399">      return applyChange(true, ConfigEvent.removeSection(name, section));</span>
+<span class="source-line-no">400</span><span id="line-400">   }</span>
+<span class="source-line-no">401</span><span id="line-401"></span>
+<span class="source-line-no">402</span><span id="line-402">   /**</span>
+<span class="source-line-no">403</span><span id="line-403">    * Removes an entry.</span>
+<span class="source-line-no">404</span><span id="line-404">    *</span>
+<span class="source-line-no">405</span><span id="line-405">    * @param section</span>
+<span class="source-line-no">406</span><span id="line-406">    *    The section name.</span>
 <span class="source-line-no">407</span><span id="line-407">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">408</span><span id="line-408">    * @return This object.</span>
-<span class="source-line-no">409</span><span id="line-409">    */</span>
-<span class="source-line-no">410</span><span id="line-410">   public ConfigMap removeEntry(String section, String key) {</span>
-<span class="source-line-no">411</span><span id="line-411">      checkSectionName(section);</span>
-<span class="source-line-no">412</span><span id="line-412">      checkKeyName(key);</span>
-<span class="source-line-no">413</span><span id="line-413">      return applyChange(true, ConfigEvent.removeEntry(name, section, key));</span>
-<span class="source-line-no">414</span><span id="line-414">   }</span>
-<span class="source-line-no">415</span><span id="line-415"></span>
-<span class="source-line-no">416</span><span id="line-416">   /**</span>
-<span class="source-line-no">417</span><span id="line-417">    * Not implemented.</span>
-<span class="source-line-no">418</span><span id="line-418">    *</span>
-<span class="source-line-no">419</span><span id="line-419">    * @param section</span>
-<span class="source-line-no">420</span><span id="line-420">    *    The section name where to place the import statement.</span>
-<span class="source-line-no">421</span><span id="line-421">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">422</span><span id="line-422">    *    &lt;br&gt;Use blank for the default section.</span>
-<span class="source-line-no">423</span><span id="line-423">    * @param importName</span>
-<span class="source-line-no">424</span><span id="line-424">    *    The import name.</span>
+<span class="source-line-no">408</span><span id="line-408">    *    &lt;br&gt;Use blank to refer to the default section.</span>
+<span class="source-line-no">409</span><span id="line-409">    * @param key</span>
+<span class="source-line-no">410</span><span id="line-410">    *    The entry key.</span>
+<span class="source-line-no">411</span><span id="line-411">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">412</span><span id="line-412">    * @return This object.</span>
+<span class="source-line-no">413</span><span id="line-413">    */</span>
+<span class="source-line-no">414</span><span id="line-414">   public ConfigMap removeEntry(String section, String key) {</span>
+<span class="source-line-no">415</span><span id="line-415">      checkSectionName(section);</span>
+<span class="source-line-no">416</span><span id="line-416">      checkKeyName(key);</span>
+<span class="source-line-no">417</span><span id="line-417">      return applyChange(true, ConfigEvent.removeEntry(name, section, key));</span>
+<span class="source-line-no">418</span><span id="line-418">   }</span>
+<span class="source-line-no">419</span><span id="line-419"></span>
+<span class="source-line-no">420</span><span id="line-420">   /**</span>
+<span class="source-line-no">421</span><span id="line-421">    * Not implemented.</span>
+<span class="source-line-no">422</span><span id="line-422">    *</span>
+<span class="source-line-no">423</span><span id="line-423">    * @param section</span>
+<span class="source-line-no">424</span><span id="line-424">    *    The section name where to place the import statement.</span>
 <span class="source-line-no">425</span><span id="line-425">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">426</span><span id="line-426">    * @return This object.</span>
-<span class="source-line-no">427</span><span id="line-427">    */</span>
-<span class="source-line-no">428</span><span id="line-428">   public ConfigMap removeImport(String section, String importName) {</span>
-<span class="source-line-no">429</span><span id="line-429">      throw new UnsupportedOperationException("Not implemented.");</span>
-<span class="source-line-no">430</span><span id="line-430">   }</span>
-<span class="source-line-no">431</span><span id="line-431"></span>
-<span class="source-line-no">432</span><span id="line-432">   private ConfigMap applyChange(boolean addToChangeList, ConfigEvent ce) {</span>
-<span class="source-line-no">433</span><span id="line-433">      if (ce == null)</span>
-<span class="source-line-no">434</span><span id="line-434">         return this;</span>
-<span class="source-line-no">435</span><span id="line-435">      try (var x = lock.write()) {</span>
-<span class="source-line-no">436</span><span id="line-436">         var section = ce.getSection();</span>
-<span class="source-line-no">437</span><span id="line-437">         var cs = entries.get(section);</span>
-<span class="source-line-no">438</span><span id="line-438">         if (ce.getType() == SET_ENTRY) {</span>
-<span class="source-line-no">439</span><span id="line-439">            if (cs == null) {</span>
-<span class="source-line-no">440</span><span id="line-440">               cs = new ConfigSection(section);</span>
-<span class="source-line-no">441</span><span id="line-441">               entries.put(section, cs);</span>
-<span class="source-line-no">442</span><span id="line-442">            }</span>
-<span class="source-line-no">443</span><span id="line-443">            var oe = cs.entries.get(ce.getKey());</span>
-<span class="source-line-no">444</span><span id="line-444">            if (oe == null)</span>
-<span class="source-line-no">445</span><span id="line-445">               oe = ConfigMapEntry.NULL;</span>
-<span class="source-line-no">446</span><span id="line-446">            cs.addEntry(</span>
-<span class="source-line-no">447</span><span id="line-447">               ce.getKey(),</span>
-<span class="source-line-no">448</span><span id="line-448">               ce.getValue() == null ? oe.value : ce.getValue(),</span>
-<span class="source-line-no">449</span><span id="line-449">               ce.getModifiers() == null ? oe.modifiers : ce.getModifiers(),</span>
-<span class="source-line-no">450</span><span id="line-450">               ce.getComment() == null ? oe.comment : ce.getComment(),</span>
-<span class="source-line-no">451</span><span id="line-451">               ce.getPreLines() == null ? oe.preLines : ce.getPreLines()</span>
-<span class="source-line-no">452</span><span id="line-452">            );</span>
-<span class="source-line-no">453</span><span id="line-453">         } else if (ce.getType() == SET_SECTION) {</span>
-<span class="source-line-no">454</span><span id="line-454">            if (cs == null) {</span>
-<span class="source-line-no">455</span><span id="line-455">               cs = new ConfigSection(section);</span>
-<span class="source-line-no">456</span><span id="line-456">               entries.put(section, cs);</span>
-<span class="source-line-no">457</span><span id="line-457">            }</span>
-<span class="source-line-no">458</span><span id="line-458">            if (ce.getPreLines() != null)</span>
-<span class="source-line-no">459</span><span id="line-459">               cs.setPreLines(ce.getPreLines());</span>
-<span class="source-line-no">460</span><span id="line-460">         } else if (ce.getType() == REMOVE_ENTRY) {</span>
-<span class="source-line-no">461</span><span id="line-461">            if (cs != null)</span>
-<span class="source-line-no">462</span><span id="line-462">               cs.entries.remove(ce.getKey());</span>
-<span class="source-line-no">463</span><span id="line-463">         } else if (ce.getType() == REMOVE_SECTION) {</span>
-<span class="source-line-no">464</span><span id="line-464">            if (cs != null)  // NOSONAR - Intentional.</span>
-<span class="source-line-no">465</span><span id="line-465">               entries.remove(section);</span>
-<span class="source-line-no">466</span><span id="line-466">         }</span>
-<span class="source-line-no">467</span><span id="line-467">         if (addToChangeList)</span>
-<span class="source-line-no">468</span><span id="line-468">            changes.add(ce);</span>
-<span class="source-line-no">469</span><span id="line-469">      }</span>
-<span class="source-line-no">470</span><span id="line-470">      return this;</span>
-<span class="source-line-no">471</span><span id="line-471">   }</span>
-<span class="source-line-no">472</span><span id="line-472"></span>
-<span class="source-line-no">473</span><span id="line-473">   /**</span>
-<span class="source-line-no">474</span><span id="line-474">    * Overwrites the contents of the config file.</span>
-<span class="source-line-no">475</span><span id="line-475">    *</span>
-<span class="source-line-no">476</span><span id="line-476">    * @param contents The new contents of the config file.</span>
-<span class="source-line-no">477</span><span id="line-477">    * @param synchronous Wait until the change has been persisted before returning this map.</span>
-<span class="source-line-no">478</span><span id="line-478">    * @return This object.</span>
-<span class="source-line-no">479</span><span id="line-479">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">480</span><span id="line-480">    * @throws InterruptedException Thread was interrupted.</span>
-<span class="source-line-no">481</span><span id="line-481">    */</span>
-<span class="source-line-no">482</span><span id="line-482">   public ConfigMap load(String contents, boolean synchronous) throws IOException, InterruptedException {</span>
-<span class="source-line-no">483</span><span id="line-483"></span>
-<span class="source-line-no">484</span><span id="line-484">      if (synchronous) {</span>
-<span class="source-line-no">485</span><span id="line-485">         final var latch = new CountDownLatch(1);</span>
-<span class="source-line-no">486</span><span id="line-486">         var listener = (ConfigStoreListener) x -&gt; latch.countDown();</span>
-<span class="source-line-no">487</span><span id="line-487">         store.register(name, listener);</span>
-<span class="source-line-no">488</span><span id="line-488">         store.write(name, null, contents);</span>
-<span class="source-line-no">489</span><span id="line-489">         if (latch.await(30, TimeUnit.SECONDS)) {</span>
-<span class="source-line-no">490</span><span id="line-490">            store.unregister(name, listener);</span>
-<span class="source-line-no">491</span><span id="line-491">         } else {</span>
-<span class="source-line-no">492</span><span id="line-492">            throw new ConfigException("Unable to store contents of config to store.");</span>
-<span class="source-line-no">493</span><span id="line-493">         }</span>
-<span class="source-line-no">494</span><span id="line-494">      } else {</span>
-<span class="source-line-no">495</span><span id="line-495">         store.write(name, null, contents);</span>
-<span class="source-line-no">496</span><span id="line-496">      }</span>
-<span class="source-line-no">497</span><span id="line-497">      return this;</span>
-<span class="source-line-no">498</span><span id="line-498">   }</span>
-<span class="source-line-no">499</span><span id="line-499"></span>
-<span class="source-line-no">500</span><span id="line-500">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">501</span><span id="line-501">   // Lifecycle events</span>
-<span class="source-line-no">502</span><span id="line-502">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">426</span><span id="line-426">    *    &lt;br&gt;Use blank for the default section.</span>
+<span class="source-line-no">427</span><span id="line-427">    * @param importName</span>
+<span class="source-line-no">428</span><span id="line-428">    *    The import name.</span>
+<span class="source-line-no">429</span><span id="line-429">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">430</span><span id="line-430">    * @return This object.</span>
+<span class="source-line-no">431</span><span id="line-431">    */</span>
+<span class="source-line-no">432</span><span id="line-432">   public ConfigMap removeImport(String section, String importName) {</span>
+<span class="source-line-no">433</span><span id="line-433">      throw new UnsupportedOperationException("Not implemented.");</span>
+<span class="source-line-no">434</span><span id="line-434">   }</span>
+<span class="source-line-no">435</span><span id="line-435"></span>
+<span class="source-line-no">436</span><span id="line-436">   private ConfigMap applyChange(boolean addToChangeList, ConfigEvent ce) {</span>
+<span class="source-line-no">437</span><span id="line-437">      if (ce == null)</span>
+<span class="source-line-no">438</span><span id="line-438">         return this;</span>
+<span class="source-line-no">439</span><span id="line-439">      try (var x = lock.write()) {</span>
+<span class="source-line-no">440</span><span id="line-440">         var section = ce.getSection();</span>
+<span class="source-line-no">441</span><span id="line-441">         var cs = entries.get(section);</span>
+<span class="source-line-no">442</span><span id="line-442">         if (ce.getType() == SET_ENTRY) {</span>
+<span class="source-line-no">443</span><span id="line-443">            if (cs == null) {</span>
+<span class="source-line-no">444</span><span id="line-444">               cs = new ConfigSection(section);</span>
+<span class="source-line-no">445</span><span id="line-445">               entries.put(section, cs);</span>
+<span class="source-line-no">446</span><span id="line-446">            }</span>
+<span class="source-line-no">447</span><span id="line-447">            var oe = cs.entries.get(ce.getKey());</span>
+<span class="source-line-no">448</span><span id="line-448">            if (oe == null)</span>
+<span class="source-line-no">449</span><span id="line-449">               oe = ConfigMapEntry.NULL;</span>
+<span class="source-line-no">450</span><span id="line-450">            cs.addEntry(</span>
+<span class="source-line-no">451</span><span id="line-451">               ce.getKey(),</span>
+<span class="source-line-no">452</span><span id="line-452">               ce.getValue() == null ? oe.value : ce.getValue(),</span>
+<span class="source-line-no">453</span><span id="line-453">               ce.getModifiers() == null ? oe.modifiers : ce.getModifiers(),</span>
+<span class="source-line-no">454</span><span id="line-454">               ce.getComment() == null ? oe.comment : ce.getComment(),</span>
+<span class="source-line-no">455</span><span id="line-455">               ce.getPreLines() == null ? oe.preLines : ce.getPreLines()</span>
+<span class="source-line-no">456</span><span id="line-456">            );</span>
+<span class="source-line-no">457</span><span id="line-457">         } else if (ce.getType() == SET_SECTION) {</span>
+<span class="source-line-no">458</span><span id="line-458">            if (cs == null) {</span>
+<span class="source-line-no">459</span><span id="line-459">               cs = new ConfigSection(section);</span>
+<span class="source-line-no">460</span><span id="line-460">               entries.put(section, cs);</span>
+<span class="source-line-no">461</span><span id="line-461">            }</span>
+<span class="source-line-no">462</span><span id="line-462">            if (ce.getPreLines() != null)</span>
+<span class="source-line-no">463</span><span id="line-463">               cs.setPreLines(ce.getPreLines());</span>
+<span class="source-line-no">464</span><span id="line-464">         } else if (ce.getType() == REMOVE_ENTRY) {</span>
+<span class="source-line-no">465</span><span id="line-465">            if (cs != null)</span>
+<span class="source-line-no">466</span><span id="line-466">               cs.entries.remove(ce.getKey());</span>
+<span class="source-line-no">467</span><span id="line-467">         } else if (ce.getType() == REMOVE_SECTION) {</span>
+<span class="source-line-no">468</span><span id="line-468">            if (cs != null)  // NOSONAR - Intentional.</span>
+<span class="source-line-no">469</span><span id="line-469">               entries.remove(section);</span>
+<span class="source-line-no">470</span><span id="line-470">         }</span>
+<span class="source-line-no">471</span><span id="line-471">         if (addToChangeList)</span>
+<span class="source-line-no">472</span><span id="line-472">            changes.add(ce);</span>
+<span class="source-line-no">473</span><span id="line-473">      }</span>
+<span class="source-line-no">474</span><span id="line-474">      return this;</span>
+<span class="source-line-no">475</span><span id="line-475">   }</span>
+<span class="source-line-no">476</span><span id="line-476"></span>
+<span class="source-line-no">477</span><span id="line-477">   /**</span>
+<span class="source-line-no">478</span><span id="line-478">    * Overwrites the contents of the config file.</span>
+<span class="source-line-no">479</span><span id="line-479">    *</span>
+<span class="source-line-no">480</span><span id="line-480">    * @param contents The new contents of the config file.</span>
+<span class="source-line-no">481</span><span id="line-481">    * @param synchronous Wait until the change has been persisted before returning this map.</span>
+<span class="source-line-no">482</span><span id="line-482">    * @return This object.</span>
+<span class="source-line-no">483</span><span id="line-483">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">484</span><span id="line-484">    * @throws InterruptedException Thread was interrupted.</span>
+<span class="source-line-no">485</span><span id="line-485">    */</span>
+<span class="source-line-no">486</span><span id="line-486">   public ConfigMap load(String contents, boolean synchronous) throws IOException, InterruptedException {</span>
+<span class="source-line-no">487</span><span id="line-487"></span>
+<span class="source-line-no">488</span><span id="line-488">      if (synchronous) {</span>
+<span class="source-line-no">489</span><span id="line-489">         final var latch = new CountDownLatch(1);</span>
+<span class="source-line-no">490</span><span id="line-490">         var listener = (ConfigStoreListener) x -&gt; latch.countDown();</span>
+<span class="source-line-no">491</span><span id="line-491">         store.register(name, listener);</span>
+<span class="source-line-no">492</span><span id="line-492">         store.write(name, null, contents);</span>
+<span class="source-line-no">493</span><span id="line-493">         if (latch.await(30, TimeUnit.SECONDS)) {</span>
+<span class="source-line-no">494</span><span id="line-494">            store.unregister(name, listener);</span>
+<span class="source-line-no">495</span><span id="line-495">         } else {</span>
+<span class="source-line-no">496</span><span id="line-496">            throw new ConfigException("Unable to store contents of config to store.");</span>
+<span class="source-line-no">497</span><span id="line-497">         }</span>
+<span class="source-line-no">498</span><span id="line-498">      } else {</span>
+<span class="source-line-no">499</span><span id="line-499">         store.write(name, null, contents);</span>
+<span class="source-line-no">500</span><span id="line-500">      }</span>
+<span class="source-line-no">501</span><span id="line-501">      return this;</span>
+<span class="source-line-no">502</span><span id="line-502">   }</span>
 <span class="source-line-no">503</span><span id="line-503"></span>
-<span class="source-line-no">504</span><span id="line-504">   /**</span>
-<span class="source-line-no">505</span><span id="line-505">    * Persist any changes made to this map and signal all listeners.</span>
-<span class="source-line-no">506</span><span id="line-506">    *</span>
-<span class="source-line-no">507</span><span id="line-507">    * &lt;p&gt;</span>
-<span class="source-line-no">508</span><span id="line-508">    * If the underlying contents of the file have changed, this will reload it and apply the changes</span>
-<span class="source-line-no">509</span><span id="line-509">    * on top of the modified file.</span>
+<span class="source-line-no">504</span><span id="line-504">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">505</span><span id="line-505">   // Lifecycle events</span>
+<span class="source-line-no">506</span><span id="line-506">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">507</span><span id="line-507"></span>
+<span class="source-line-no">508</span><span id="line-508">   /**</span>
+<span class="source-line-no">509</span><span id="line-509">    * Persist any changes made to this map and signal all listeners.</span>
 <span class="source-line-no">510</span><span id="line-510">    *</span>
 <span class="source-line-no">511</span><span id="line-511">    * &lt;p&gt;</span>
-<span class="source-line-no">512</span><span id="line-512">    * Subsequent changes made to the underlying file will also be signaled to all listeners.</span>
-<span class="source-line-no">513</span><span id="line-513">    *</span>
-<span class="source-line-no">514</span><span id="line-514">    * &lt;p&gt;</span>
-<span class="source-line-no">515</span><span id="line-515">    * We try saving the file up to 10 times.</span>
-<span class="source-line-no">516</span><span id="line-516">    * &lt;br&gt;If the file keeps changing on the file system, we throw an exception.</span>
+<span class="source-line-no">512</span><span id="line-512">    * If the underlying contents of the file have changed, this will reload it and apply the changes</span>
+<span class="source-line-no">513</span><span id="line-513">    * on top of the modified file.</span>
+<span class="source-line-no">514</span><span id="line-514">    *</span>
+<span class="source-line-no">515</span><span id="line-515">    * &lt;p&gt;</span>
+<span class="source-line-no">516</span><span id="line-516">    * Subsequent changes made to the underlying file will also be signaled to all listeners.</span>
 <span class="source-line-no">517</span><span id="line-517">    *</span>
-<span class="source-line-no">518</span><span id="line-518">    * @return This object.</span>
-<span class="source-line-no">519</span><span id="line-519">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">520</span><span id="line-520">    */</span>
-<span class="source-line-no">521</span><span id="line-521">   public ConfigMap commit() throws IOException {</span>
-<span class="source-line-no">522</span><span id="line-522">      try (var x = lock.write()) {</span>
-<span class="source-line-no">523</span><span id="line-523">         var newContents = asString();</span>
-<span class="source-line-no">524</span><span id="line-524">         for (var i = 0; i &lt;= 10; i++) {</span>
-<span class="source-line-no">525</span><span id="line-525">            if (i == 10)</span>
-<span class="source-line-no">526</span><span id="line-526">               throw new ConfigException("Unable to store contents of config to store.");</span>
-<span class="source-line-no">527</span><span id="line-527">            var currentContents = store.write(name, contents, newContents);</span>
-<span class="source-line-no">528</span><span id="line-528">            if (currentContents == null)</span>
-<span class="source-line-no">529</span><span id="line-529">               break;</span>
-<span class="source-line-no">530</span><span id="line-530">            onChange(currentContents);</span>
-<span class="source-line-no">531</span><span id="line-531">         }</span>
-<span class="source-line-no">532</span><span id="line-532">         this.changes.clear();</span>
-<span class="source-line-no">533</span><span id="line-533">      }</span>
-<span class="source-line-no">534</span><span id="line-534">      return this;</span>
-<span class="source-line-no">535</span><span id="line-535">   }</span>
-<span class="source-line-no">536</span><span id="line-536"></span>
-<span class="source-line-no">537</span><span id="line-537">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">538</span><span id="line-538">   // Listeners</span>
-<span class="source-line-no">539</span><span id="line-539">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">518</span><span id="line-518">    * &lt;p&gt;</span>
+<span class="source-line-no">519</span><span id="line-519">    * We try saving the file up to 10 times.</span>
+<span class="source-line-no">520</span><span id="line-520">    * &lt;br&gt;If the file keeps changing on the file system, we throw an exception.</span>
+<span class="source-line-no">521</span><span id="line-521">    *</span>
+<span class="source-line-no">522</span><span id="line-522">    * @return This object.</span>
+<span class="source-line-no">523</span><span id="line-523">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">524</span><span id="line-524">    */</span>
+<span class="source-line-no">525</span><span id="line-525">   public ConfigMap commit() throws IOException {</span>
+<span class="source-line-no">526</span><span id="line-526">      try (var x = lock.write()) {</span>
+<span class="source-line-no">527</span><span id="line-527">         var newContents = asString();</span>
+<span class="source-line-no">528</span><span id="line-528">         for (var i = 0; i &lt;= 10; i++) {</span>
+<span class="source-line-no">529</span><span id="line-529">            if (i == 10)</span>
+<span class="source-line-no">530</span><span id="line-530">               throw new ConfigException("Unable to store contents of config to store.");</span>
+<span class="source-line-no">531</span><span id="line-531">            var currentContents = store.write(name, contents, newContents);</span>
+<span class="source-line-no">532</span><span id="line-532">            if (currentContents == null)</span>
+<span class="source-line-no">533</span><span id="line-533">               break;</span>
+<span class="source-line-no">534</span><span id="line-534">            onChange(currentContents);</span>
+<span class="source-line-no">535</span><span id="line-535">         }</span>
+<span class="source-line-no">536</span><span id="line-536">         this.changes.clear();</span>
+<span class="source-line-no">537</span><span id="line-537">      }</span>
+<span class="source-line-no">538</span><span id="line-538">      return this;</span>
+<span class="source-line-no">539</span><span id="line-539">   }</span>
 <span class="source-line-no">540</span><span id="line-540"></span>
-<span class="source-line-no">541</span><span id="line-541">   /**</span>
-<span class="source-line-no">542</span><span id="line-542">    * Registers an event listener on this map.</span>
-<span class="source-line-no">543</span><span id="line-543">    *</span>
-<span class="source-line-no">544</span><span id="line-544">    * @param listener The new listener.</span>
-<span class="source-line-no">545</span><span id="line-545">    * @return This object.</span>
-<span class="source-line-no">546</span><span id="line-546">    */</span>
-<span class="source-line-no">547</span><span id="line-547">   public ConfigMap register(ConfigEventListener listener) {</span>
-<span class="source-line-no">548</span><span id="line-548">      listeners.add(listener);</span>
-<span class="source-line-no">549</span><span id="line-549">      imports.forEach(x -&gt; x.register(listener));</span>
-<span class="source-line-no">550</span><span id="line-550">      return this;</span>
-<span class="source-line-no">551</span><span id="line-551">   }</span>
-<span class="source-line-no">552</span><span id="line-552"></span>
-<span class="source-line-no">553</span><span id="line-553">   boolean hasEntry(String section, String key) {</span>
-<span class="source-line-no">554</span><span id="line-554">      var cs = entries.get(section);</span>
-<span class="source-line-no">555</span><span id="line-555">      var ce = cs == null ? null : cs.entries.get(key);</span>
-<span class="source-line-no">556</span><span id="line-556">      return ce != null;</span>
-<span class="source-line-no">557</span><span id="line-557">   }</span>
-<span class="source-line-no">558</span><span id="line-558"></span>
-<span class="source-line-no">559</span><span id="line-559">   /**</span>
-<span class="source-line-no">560</span><span id="line-560">    * Unregisters an event listener from this map.</span>
-<span class="source-line-no">561</span><span id="line-561">    *</span>
-<span class="source-line-no">562</span><span id="line-562">    * @param listener The listener to remove.</span>
-<span class="source-line-no">563</span><span id="line-563">    * @return This object.</span>
-<span class="source-line-no">564</span><span id="line-564">    */</span>
-<span class="source-line-no">565</span><span id="line-565">   public ConfigMap unregister(ConfigEventListener listener) {</span>
-<span class="source-line-no">566</span><span id="line-566">      listeners.remove(listener);</span>
-<span class="source-line-no">567</span><span id="line-567">      imports.forEach(x -&gt; x.register(listener));</span>
-<span class="source-line-no">568</span><span id="line-568">      return this;</span>
-<span class="source-line-no">569</span><span id="line-569">   }</span>
-<span class="source-line-no">570</span><span id="line-570"></span>
-<span class="source-line-no">571</span><span id="line-571">   /**</span>
-<span class="source-line-no">572</span><span id="line-572">    * Returns the listeners currently associated with this config map.</span>
-<span class="source-line-no">573</span><span id="line-573">    *</span>
-<span class="source-line-no">574</span><span id="line-574">    * @return The listeners currently associated with this config map.</span>
-<span class="source-line-no">575</span><span id="line-575">    */</span>
-<span class="source-line-no">576</span><span id="line-576">   public Set&lt;ConfigEventListener&gt; getListeners() {</span>
-<span class="source-line-no">577</span><span id="line-577">      return u(listeners);</span>
-<span class="source-line-no">578</span><span id="line-578">   }</span>
-<span class="source-line-no">579</span><span id="line-579"></span>
-<span class="source-line-no">580</span><span id="line-580">   @Override /* ConfigStoreListener */</span>
-<span class="source-line-no">581</span><span id="line-581">   public void onChange(String newContents) {</span>
-<span class="source-line-no">582</span><span id="line-582">      ConfigEvents changes2 = null;</span>
-<span class="source-line-no">583</span><span id="line-583">      try (var x = lock.write()) {</span>
-<span class="source-line-no">584</span><span id="line-584">         if (Utils.ne(contents, newContents)) {</span>
-<span class="source-line-no">585</span><span id="line-585">            changes2 = findDiffs(newContents);</span>
-<span class="source-line-no">586</span><span id="line-586">            load(newContents);</span>
-<span class="source-line-no">587</span><span id="line-587"></span>
-<span class="source-line-no">588</span><span id="line-588">            // Reapply our changes on top of the modifications.</span>
-<span class="source-line-no">589</span><span id="line-589">            this.changes.forEach(y -&gt; applyChange(false, y));</span>
-<span class="source-line-no">590</span><span id="line-590">         }</span>
-<span class="source-line-no">591</span><span id="line-591">      } catch (IOException e) {</span>
-<span class="source-line-no">592</span><span id="line-592">         throw asRuntimeException(e);</span>
-<span class="source-line-no">593</span><span id="line-593">      }</span>
-<span class="source-line-no">594</span><span id="line-594">      if (changes2 != null &amp;&amp; ! changes2.isEmpty())</span>
-<span class="source-line-no">595</span><span id="line-595">         signal(changes2);</span>
-<span class="source-line-no">596</span><span id="line-596">   }</span>
-<span class="source-line-no">597</span><span id="line-597"></span>
-<span class="source-line-no">598</span><span id="line-598">   @Override /* Object */</span>
-<span class="source-line-no">599</span><span id="line-599">   public String toString() {</span>
-<span class="source-line-no">600</span><span id="line-600">      try (var x = lock.read()) {</span>
-<span class="source-line-no">601</span><span id="line-601">         return asString();</span>
-<span class="source-line-no">602</span><span id="line-602">      }</span>
-<span class="source-line-no">603</span><span id="line-603">   }</span>
-<span class="source-line-no">604</span><span id="line-604"></span>
-<span class="source-line-no">605</span><span id="line-605">   /**</span>
-<span class="source-line-no">606</span><span id="line-606">    * Returns the values in this config map as a map of maps.</span>
-<span class="source-line-no">607</span><span id="line-607">    *</span>
-<span class="source-line-no">608</span><span id="line-608">    * &lt;p&gt;</span>
-<span class="source-line-no">609</span><span id="line-609">    * This is considered a snapshot copy of the config map.</span>
-<span class="source-line-no">610</span><span id="line-610">    *</span>
-<span class="source-line-no">611</span><span id="line-611">    * &lt;p&gt;</span>
-<span class="source-line-no">612</span><span id="line-612">    * The returned map is modifiable, but modifications to the returned map are not reflected in the config map.</span>
-<span class="source-line-no">613</span><span id="line-613">    *</span>
-<span class="source-line-no">614</span><span id="line-614">    * @return A copy of this config as a map of maps.</span>
-<span class="source-line-no">615</span><span id="line-615">    */</span>
-<span class="source-line-no">616</span><span id="line-616">   public JsonMap asMap() {</span>
-<span class="source-line-no">617</span><span id="line-617">      var m = new JsonMap();</span>
-<span class="source-line-no">618</span><span id="line-618">      try (var x = lock.read()) {</span>
-<span class="source-line-no">619</span><span id="line-619">         imports.forEach(y -&gt; m.putAll(y.getConfigMap().asMap()));</span>
-<span class="source-line-no">620</span><span id="line-620">         entries.values().forEach(z -&gt; {</span>
-<span class="source-line-no">621</span><span id="line-621">            var m2 = mapOf(String.class, String.class);</span>
-<span class="source-line-no">622</span><span id="line-622">            z.entries.values().forEach(y -&gt; m2.put(y.key, y.value));</span>
-<span class="source-line-no">623</span><span id="line-623">            m.put(z.name, m2);</span>
-<span class="source-line-no">624</span><span id="line-624">         });</span>
-<span class="source-line-no">625</span><span id="line-625">      }</span>
-<span class="source-line-no">626</span><span id="line-626">      return m;</span>
-<span class="source-line-no">627</span><span id="line-627">   }</span>
-<span class="source-line-no">628</span><span id="line-628"></span>
-<span class="source-line-no">629</span><span id="line-629">   /**</span>
-<span class="source-line-no">630</span><span id="line-630">    * Serializes this map to the specified writer.</span>
-<span class="source-line-no">631</span><span id="line-631">    *</span>
-<span class="source-line-no">632</span><span id="line-632">    * @param w The writer to serialize to.</span>
-<span class="source-line-no">633</span><span id="line-633">    * @return The same writer passed in.</span>
-<span class="source-line-no">634</span><span id="line-634">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">635</span><span id="line-635">    */</span>
-<span class="source-line-no">636</span><span id="line-636">   public Writer writeTo(Writer w) throws IOException {</span>
-<span class="source-line-no">637</span><span id="line-637">      try (var x = lock.read()) {</span>
-<span class="source-line-no">638</span><span id="line-638">         for (var cs : entries.values())</span>
-<span class="source-line-no">639</span><span id="line-639">            cs.writeTo(w);</span>
-<span class="source-line-no">640</span><span id="line-640">      }</span>
-<span class="source-line-no">641</span><span id="line-641">      return w;</span>
-<span class="source-line-no">642</span><span id="line-642">   }</span>
-<span class="source-line-no">643</span><span id="line-643"></span>
-<span class="source-line-no">644</span><span id="line-644">   /**</span>
-<span class="source-line-no">645</span><span id="line-645">    * Does a rollback of any changes on this map currently in memory.</span>
-<span class="source-line-no">646</span><span id="line-646">    *</span>
-<span class="source-line-no">647</span><span id="line-647">    * @return This object.</span>
-<span class="source-line-no">648</span><span id="line-648">    */</span>
-<span class="source-line-no">649</span><span id="line-649">   public ConfigMap rollback() {</span>
-<span class="source-line-no">650</span><span id="line-650">      if (!changes.isEmpty()) {</span>
-<span class="source-line-no">651</span><span id="line-651">         try (var x = lock.write()) {</span>
-<span class="source-line-no">652</span><span id="line-652">            changes.clear();</span>
-<span class="source-line-no">653</span><span id="line-653">            load(contents);</span>
-<span class="source-line-no">654</span><span id="line-654">         } catch (IOException e) {</span>
-<span class="source-line-no">655</span><span id="line-655">            throw asRuntimeException(e);</span>
-<span class="source-line-no">656</span><span id="line-656">         }</span>
-<span class="source-line-no">657</span><span id="line-657">      }</span>
-<span class="source-line-no">658</span><span id="line-658">      return this;</span>
-<span class="source-line-no">659</span><span id="line-659">   }</span>
-<span class="source-line-no">660</span><span id="line-660"></span>
-<span class="source-line-no">661</span><span id="line-661">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">662</span><span id="line-662">   // Private methods</span>
-<span class="source-line-no">663</span><span id="line-663">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">541</span><span id="line-541">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">542</span><span id="line-542">   // Listeners</span>
+<span class="source-line-no">543</span><span id="line-543">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">544</span><span id="line-544"></span>
+<span class="source-line-no">545</span><span id="line-545">   /**</span>
+<span class="source-line-no">546</span><span id="line-546">    * Registers an event listener on this map.</span>
+<span class="source-line-no">547</span><span id="line-547">    *</span>
+<span class="source-line-no">548</span><span id="line-548">    * @param listener The new listener.</span>
+<span class="source-line-no">549</span><span id="line-549">    * @return This object.</span>
+<span class="source-line-no">550</span><span id="line-550">    */</span>
+<span class="source-line-no">551</span><span id="line-551">   public ConfigMap register(ConfigEventListener listener) {</span>
+<span class="source-line-no">552</span><span id="line-552">      listeners.add(listener);</span>
+<span class="source-line-no">553</span><span id="line-553">      imports.forEach(x -&gt; x.register(listener));</span>
+<span class="source-line-no">554</span><span id="line-554">      return this;</span>
+<span class="source-line-no">555</span><span id="line-555">   }</span>
+<span class="source-line-no">556</span><span id="line-556"></span>
+<span class="source-line-no">557</span><span id="line-557">   boolean hasEntry(String section, String key) {</span>
+<span class="source-line-no">558</span><span id="line-558">      var cs = entries.get(section);</span>
+<span class="source-line-no">559</span><span id="line-559">      var ce = cs == null ? null : cs.entries.get(key);</span>
+<span class="source-line-no">560</span><span id="line-560">      return ce != null;</span>
+<span class="source-line-no">561</span><span id="line-561">   }</span>
+<span class="source-line-no">562</span><span id="line-562"></span>
+<span class="source-line-no">563</span><span id="line-563">   /**</span>
+<span class="source-line-no">564</span><span id="line-564">    * Unregisters an event listener from this map.</span>
+<span class="source-line-no">565</span><span id="line-565">    *</span>
+<span class="source-line-no">566</span><span id="line-566">    * @param listener The listener to remove.</span>
+<span class="source-line-no">567</span><span id="line-567">    * @return This object.</span>
+<span class="source-line-no">568</span><span id="line-568">    */</span>
+<span class="source-line-no">569</span><span id="line-569">   public ConfigMap unregister(ConfigEventListener listener) {</span>
+<span class="source-line-no">570</span><span id="line-570">      listeners.remove(listener);</span>
+<span class="source-line-no">571</span><span id="line-571">      imports.forEach(x -&gt; x.register(listener));</span>
+<span class="source-line-no">572</span><span id="line-572">      return this;</span>
+<span class="source-line-no">573</span><span id="line-573">   }</span>
+<span class="source-line-no">574</span><span id="line-574"></span>
+<span class="source-line-no">575</span><span id="line-575">   /**</span>
+<span class="source-line-no">576</span><span id="line-576">    * Returns the listeners currently associated with this config map.</span>
+<span class="source-line-no">577</span><span id="line-577">    *</span>
+<span class="source-line-no">578</span><span id="line-578">    * @return The listeners currently associated with this config map.</span>
+<span class="source-line-no">579</span><span id="line-579">    */</span>
+<span class="source-line-no">580</span><span id="line-580">   public Set&lt;ConfigEventListener&gt; getListeners() {</span>
+<span class="source-line-no">581</span><span id="line-581">      return u(listeners);</span>
+<span class="source-line-no">582</span><span id="line-582">   }</span>
+<span class="source-line-no">583</span><span id="line-583"></span>
+<span class="source-line-no">584</span><span id="line-584">   @Override /* ConfigStoreListener */</span>
+<span class="source-line-no">585</span><span id="line-585">   public void onChange(String newContents) {</span>
+<span class="source-line-no">586</span><span id="line-586">      ConfigEvents changes2 = null;</span>
+<span class="source-line-no">587</span><span id="line-587">      try (var x = lock.write()) {</span>
+<span class="source-line-no">588</span><span id="line-588">         if (Utils.ne(contents, newContents)) {</span>
+<span class="source-line-no">589</span><span id="line-589">            changes2 = findDiffs(newContents);</span>
+<span class="source-line-no">590</span><span id="line-590">            load(newContents);</span>
+<span class="source-line-no">591</span><span id="line-591"></span>
+<span class="source-line-no">592</span><span id="line-592">            // Reapply our changes on top of the modifications.</span>
+<span class="source-line-no">593</span><span id="line-593">            this.changes.forEach(y -&gt; applyChange(false, y));</span>
+<span class="source-line-no">594</span><span id="line-594">         }</span>
+<span class="source-line-no">595</span><span id="line-595">      } catch (IOException e) {</span>
+<span class="source-line-no">596</span><span id="line-596">         throw asRuntimeException(e);</span>
+<span class="source-line-no">597</span><span id="line-597">      }</span>
+<span class="source-line-no">598</span><span id="line-598">      if (changes2 != null &amp;&amp; ! changes2.isEmpty())</span>
+<span class="source-line-no">599</span><span id="line-599">         signal(changes2);</span>
+<span class="source-line-no">600</span><span id="line-600">   }</span>
+<span class="source-line-no">601</span><span id="line-601"></span>
+<span class="source-line-no">602</span><span id="line-602">   @Override /* Object */</span>
+<span class="source-line-no">603</span><span id="line-603">   public String toString() {</span>
+<span class="source-line-no">604</span><span id="line-604">      try (var x = lock.read()) {</span>
+<span class="source-line-no">605</span><span id="line-605">         return asString();</span>
+<span class="source-line-no">606</span><span id="line-606">      }</span>
+<span class="source-line-no">607</span><span id="line-607">   }</span>
+<span class="source-line-no">608</span><span id="line-608"></span>
+<span class="source-line-no">609</span><span id="line-609">   /**</span>
+<span class="source-line-no">610</span><span id="line-610">    * Returns the values in this config map as a map of maps.</span>
+<span class="source-line-no">611</span><span id="line-611">    *</span>
+<span class="source-line-no">612</span><span id="line-612">    * &lt;p&gt;</span>
+<span class="source-line-no">613</span><span id="line-613">    * This is considered a snapshot copy of the config map.</span>
+<span class="source-line-no">614</span><span id="line-614">    *</span>
+<span class="source-line-no">615</span><span id="line-615">    * &lt;p&gt;</span>
+<span class="source-line-no">616</span><span id="line-616">    * The returned map is modifiable, but modifications to the returned map are not reflected in the config map.</span>
+<span class="source-line-no">617</span><span id="line-617">    *</span>
+<span class="source-line-no">618</span><span id="line-618">    * @return A copy of this config as a map of maps.</span>
+<span class="source-line-no">619</span><span id="line-619">    */</span>
+<span class="source-line-no">620</span><span id="line-620">   public JsonMap asMap() {</span>
+<span class="source-line-no">621</span><span id="line-621">      var m = new JsonMap();</span>
+<span class="source-line-no">622</span><span id="line-622">      try (var x = lock.read()) {</span>
+<span class="source-line-no">623</span><span id="line-623">         imports.forEach(y -&gt; m.putAll(y.getConfigMap().asMap()));</span>
+<span class="source-line-no">624</span><span id="line-624">         entries.values().forEach(z -&gt; {</span>
+<span class="source-line-no">625</span><span id="line-625">            var m2 = mapOf(String.class, String.class);</span>
+<span class="source-line-no">626</span><span id="line-626">            z.entries.values().forEach(y -&gt; m2.put(y.key, y.value));</span>
+<span class="source-line-no">627</span><span id="line-627">            m.put(z.name, m2);</span>
+<span class="source-line-no">628</span><span id="line-628">         });</span>
+<span class="source-line-no">629</span><span id="line-629">      }</span>
+<span class="source-line-no">630</span><span id="line-630">      return m;</span>
+<span class="source-line-no">631</span><span id="line-631">   }</span>
+<span class="source-line-no">632</span><span id="line-632"></span>
+<span class="source-line-no">633</span><span id="line-633">   /**</span>
+<span class="source-line-no">634</span><span id="line-634">    * Serializes this map to the specified writer.</span>
+<span class="source-line-no">635</span><span id="line-635">    *</span>
+<span class="source-line-no">636</span><span id="line-636">    * @param w The writer to serialize to.</span>
+<span class="source-line-no">637</span><span id="line-637">    * @return The same writer passed in.</span>
+<span class="source-line-no">638</span><span id="line-638">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">639</span><span id="line-639">    */</span>
+<span class="source-line-no">640</span><span id="line-640">   public Writer writeTo(Writer w) throws IOException {</span>
+<span class="source-line-no">641</span><span id="line-641">      try (var x = lock.read()) {</span>
+<span class="source-line-no">642</span><span id="line-642">         for (var cs : entries.values())</span>
+<span class="source-line-no">643</span><span id="line-643">            cs.writeTo(w);</span>
+<span class="source-line-no">644</span><span id="line-644">      }</span>
+<span class="source-line-no">645</span><span id="line-645">      return w;</span>
+<span class="source-line-no">646</span><span id="line-646">   }</span>
+<span class="source-line-no">647</span><span id="line-647"></span>
+<span class="source-line-no">648</span><span id="line-648">   /**</span>
+<span class="source-line-no">649</span><span id="line-649">    * Does a rollback of any changes on this map currently in memory.</span>
+<span class="source-line-no">650</span><span id="line-650">    *</span>
+<span class="source-line-no">651</span><span id="line-651">    * @return This object.</span>
+<span class="source-line-no">652</span><span id="line-652">    */</span>
+<span class="source-line-no">653</span><span id="line-653">   public ConfigMap rollback() {</span>
+<span class="source-line-no">654</span><span id="line-654">      if (!changes.isEmpty()) {</span>
+<span class="source-line-no">655</span><span id="line-655">         try (var x = lock.write()) {</span>
+<span class="source-line-no">656</span><span id="line-656">            changes.clear();</span>
+<span class="source-line-no">657</span><span id="line-657">            load(contents);</span>
+<span class="source-line-no">658</span><span id="line-658">         } catch (IOException e) {</span>
+<span class="source-line-no">659</span><span id="line-659">            throw asRuntimeException(e);</span>
+<span class="source-line-no">660</span><span id="line-660">         }</span>
+<span class="source-line-no">661</span><span id="line-661">      }</span>
+<span class="source-line-no">662</span><span id="line-662">      return this;</span>
+<span class="source-line-no">663</span><span id="line-663">   }</span>
 <span class="source-line-no">664</span><span id="line-664"></span>
-<span class="source-line-no">665</span><span id="line-665">   private void checkSectionName(String s) {</span>
-<span class="source-line-no">666</span><span id="line-666">      if (! ("".equals(s) || isValidNewSectionName(s)))</span>
-<span class="source-line-no">667</span><span id="line-667">         throw new IllegalArgumentException("Invalid section name: '"+s+"'");</span>
-<span class="source-line-no">668</span><span id="line-668">   }</span>
-<span class="source-line-no">669</span><span id="line-669"></span>
-<span class="source-line-no">670</span><span id="line-670">   private void checkKeyName(String s) {</span>
-<span class="source-line-no">671</span><span id="line-671">      if (! isValidKeyName(s))</span>
-<span class="source-line-no">672</span><span id="line-672">         throw new IllegalArgumentException("Invalid key name: '"+s+"'");</span>
-<span class="source-line-no">673</span><span id="line-673">   }</span>
-<span class="source-line-no">674</span><span id="line-674"></span>
-<span class="source-line-no">675</span><span id="line-675">   private boolean isValidKeyName(String s) {</span>
-<span class="source-line-no">676</span><span id="line-676">      if (s == null)</span>
-<span class="source-line-no">677</span><span id="line-677">         return false;</span>
-<span class="source-line-no">678</span><span id="line-678">      s = s.trim();</span>
-<span class="source-line-no">679</span><span id="line-679">      if (s.isEmpty())</span>
-<span class="source-line-no">680</span><span id="line-680">         return false;</span>
-<span class="source-line-no">681</span><span id="line-681">      for (var i = 0; i &lt; s.length(); i++) {</span>
-<span class="source-line-no">682</span><span id="line-682">         var c = s.charAt(i);</span>
-<span class="source-line-no">683</span><span id="line-683">         if (c == '/' || c == '\\' || c == '[' || c == ']' || c == '=' || c == '#')</span>
-<span class="source-line-no">684</span><span id="line-684">            return false;</span>
-<span class="source-line-no">685</span><span id="line-685">      }</span>
-<span class="source-line-no">686</span><span id="line-686">      return true;</span>
-<span class="source-line-no">687</span><span id="line-687">   }</span>
-<span class="source-line-no">688</span><span id="line-688"></span>
-<span class="source-line-no">689</span><span id="line-689">   private boolean isValidNewSectionName(String s) {</span>
-<span class="source-line-no">690</span><span id="line-690">      if (s == null)</span>
-<span class="source-line-no">691</span><span id="line-691">         return false;</span>
-<span class="source-line-no">692</span><span id="line-692">      s = s.trim();</span>
-<span class="source-line-no">693</span><span id="line-693">      if (s.isEmpty())</span>
-<span class="source-line-no">694</span><span id="line-694">         return false;</span>
-<span class="source-line-no">695</span><span id="line-695">      for (var i = 0; i &lt; s.length(); i++) {</span>
-<span class="source-line-no">696</span><span id="line-696">         var c = s.charAt(i);</span>
-<span class="source-line-no">697</span><span id="line-697">         if (c == '/' || c == '\\' || c == '[' || c == ']')</span>
-<span class="source-line-no">698</span><span id="line-698">            return false;</span>
-<span class="source-line-no">699</span><span id="line-699">      }</span>
-<span class="source-line-no">700</span><span id="line-700">      return true;</span>
-<span class="source-line-no">701</span><span id="line-701">   }</span>
-<span class="source-line-no">702</span><span id="line-702"></span>
-<span class="source-line-no">703</span><span id="line-703">   private boolean isValidConfigName(String s) {</span>
-<span class="source-line-no">704</span><span id="line-704">      if (s == null)</span>
-<span class="source-line-no">705</span><span id="line-705">         return false;</span>
-<span class="source-line-no">706</span><span id="line-706">      s = s.trim();</span>
-<span class="source-line-no">707</span><span id="line-707">      if (s.isEmpty())</span>
-<span class="source-line-no">708</span><span id="line-708">         return false;</span>
-<span class="source-line-no">709</span><span id="line-709">      for (var i = 0; i &lt; s.length(); i++) {</span>
-<span class="source-line-no">710</span><span id="line-710">         var c = s.charAt(i);</span>
-<span class="source-line-no">711</span><span id="line-711">         if (i == 0) {</span>
-<span class="source-line-no">712</span><span id="line-712">            if (! Character.isJavaIdentifierStart(c))</span>
-<span class="source-line-no">713</span><span id="line-713">               return false;</span>
-<span class="source-line-no">714</span><span id="line-714">         } else {</span>
-<span class="source-line-no">715</span><span id="line-715">            if (! Character.isJavaIdentifierPart(c))</span>
-<span class="source-line-no">716</span><span id="line-716">               return false;</span>
-<span class="source-line-no">717</span><span id="line-717">         }</span>
-<span class="source-line-no">718</span><span id="line-718">      }</span>
-<span class="source-line-no">719</span><span id="line-719">      return true;</span>
-<span class="source-line-no">720</span><span id="line-720">   }</span>
-<span class="source-line-no">721</span><span id="line-721"></span>
-<span class="source-line-no">722</span><span id="line-722">   private void signal(ConfigEvents changes) {</span>
-<span class="source-line-no">723</span><span id="line-723">      if (Utils.isNotEmpty(changes))</span>
-<span class="source-line-no">724</span><span id="line-724">         listeners.forEach(x -&gt; x.onConfigChange(changes));</span>
-<span class="source-line-no">725</span><span id="line-725">   }</span>
-<span class="source-line-no">726</span><span id="line-726"></span>
-<span class="source-line-no">727</span><span id="line-727">   private ConfigEvents findDiffs(String updatedContents) throws IOException {</span>
-<span class="source-line-no">728</span><span id="line-728">      var changes2 = new ConfigEvents();</span>
-<span class="source-line-no">729</span><span id="line-729">      var newMap = new ConfigMap(store, name, updatedContents);</span>
+<span class="source-line-no">665</span><span id="line-665">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">666</span><span id="line-666">   // Private methods</span>
+<span class="source-line-no">667</span><span id="line-667">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">668</span><span id="line-668"></span>
+<span class="source-line-no">669</span><span id="line-669">   private void checkSectionName(String s) {</span>
+<span class="source-line-no">670</span><span id="line-670">      if (! ("".equals(s) || isValidNewSectionName(s)))</span>
+<span class="source-line-no">671</span><span id="line-671">         throw new IllegalArgumentException("Invalid section name: '"+s+"'");</span>
+<span class="source-line-no">672</span><span id="line-672">   }</span>
+<span class="source-line-no">673</span><span id="line-673"></span>
+<span class="source-line-no">674</span><span id="line-674">   private void checkKeyName(String s) {</span>
+<span class="source-line-no">675</span><span id="line-675">      if (! isValidKeyName(s))</span>
+<span class="source-line-no">676</span><span id="line-676">         throw new IllegalArgumentException("Invalid key name: '"+s+"'");</span>
+<span class="source-line-no">677</span><span id="line-677">   }</span>
+<span class="source-line-no">678</span><span id="line-678"></span>
+<span class="source-line-no">679</span><span id="line-679">   private boolean isValidKeyName(String s) {</span>
+<span class="source-line-no">680</span><span id="line-680">      if (s == null)</span>
+<span class="source-line-no">681</span><span id="line-681">         return false;</span>
+<span class="source-line-no">682</span><span id="line-682">      s = s.trim();</span>
+<span class="source-line-no">683</span><span id="line-683">      if (s.isEmpty())</span>
+<span class="source-line-no">684</span><span id="line-684">         return false;</span>
+<span class="source-line-no">685</span><span id="line-685">      for (var i = 0; i &lt; s.length(); i++) {</span>
+<span class="source-line-no">686</span><span id="line-686">         var c = s.charAt(i);</span>
+<span class="source-line-no">687</span><span id="line-687">         if (c == '/' || c == '\\' || c == '[' || c == ']' || c == '=' || c == '#')</span>
+<span class="source-line-no">688</span><span id="line-688">            return false;</span>
+<span class="source-line-no">689</span><span id="line-689">      }</span>
+<span class="source-line-no">690</span><span id="line-690">      return true;</span>
+<span class="source-line-no">691</span><span id="line-691">   }</span>
+<span class="source-line-no">692</span><span id="line-692"></span>
+<span class="source-line-no">693</span><span id="line-693">   private boolean isValidNewSectionName(String s) {</span>
+<span class="source-line-no">694</span><span id="line-694">      if (s == null)</span>
+<span class="source-line-no">695</span><span id="line-695">         return false;</span>
+<span class="source-line-no">696</span><span id="line-696">      s = s.trim();</span>
+<span class="source-line-no">697</span><span id="line-697">      if (s.isEmpty())</span>
+<span class="source-line-no">698</span><span id="line-698">         return false;</span>
+<span class="source-line-no">699</span><span id="line-699">      for (var i = 0; i &lt; s.length(); i++) {</span>
+<span class="source-line-no">700</span><span id="line-700">         var c = s.charAt(i);</span>
+<span class="source-line-no">701</span><span id="line-701">         if (c == '/' || c == '\\' || c == '[' || c == ']')</span>
+<span class="source-line-no">702</span><span id="line-702">            return false;</span>
+<span class="source-line-no">703</span><span id="line-703">      }</span>
+<span class="source-line-no">704</span><span id="line-704">      return true;</span>
+<span class="source-line-no">705</span><span id="line-705">   }</span>
+<span class="source-line-no">706</span><span id="line-706"></span>
+<span class="source-line-no">707</span><span id="line-707">   private boolean isValidConfigName(String s) {</span>
+<span class="source-line-no">708</span><span id="line-708">      if (s == null)</span>
+<span class="source-line-no">709</span><span id="line-709">         return false;</span>
+<span class="source-line-no">710</span><span id="line-710">      s = s.trim();</span>
+<span class="source-line-no">711</span><span id="line-711">      if (s.isEmpty())</span>
+<span class="source-line-no">712</span><span id="line-712">         return false;</span>
+<span class="source-line-no">713</span><span id="line-713">      for (var i = 0; i &lt; s.length(); i++) {</span>
+<span class="source-line-no">714</span><span id="line-714">         var c = s.charAt(i);</span>
+<span class="source-line-no">715</span><span id="line-715">         if (i == 0) {</span>
+<span class="source-line-no">716</span><span id="line-716">            if (! Character.isJavaIdentifierStart(c))</span>
+<span class="source-line-no">717</span><span id="line-717">               return false;</span>
+<span class="source-line-no">718</span><span id="line-718">         } else {</span>
+<span class="source-line-no">719</span><span id="line-719">            if (! Character.isJavaIdentifierPart(c))</span>
+<span class="source-line-no">720</span><span id="line-720">               return false;</span>
+<span class="source-line-no">721</span><span id="line-721">         }</span>
+<span class="source-line-no">722</span><span id="line-722">      }</span>
+<span class="source-line-no">723</span><span id="line-723">      return true;</span>
+<span class="source-line-no">724</span><span id="line-724">   }</span>
+<span class="source-line-no">725</span><span id="line-725"></span>
+<span class="source-line-no">726</span><span id="line-726">   private void signal(ConfigEvents changes) {</span>
+<span class="source-line-no">727</span><span id="line-727">      if (Utils.isNotEmpty(changes))</span>
+<span class="source-line-no">728</span><span id="line-728">         listeners.forEach(x -&gt; x.onConfigChange(changes));</span>
+<span class="source-line-no">729</span><span id="line-729">   }</span>
 <span class="source-line-no">730</span><span id="line-730"></span>
-<span class="source-line-no">731</span><span id="line-731">      // Imports added.</span>
-<span class="source-line-no">732</span><span id="line-732">      for (var i : newMap.imports) {</span>
-<span class="source-line-no">733</span><span id="line-733">         if (! imports.contains(i)) {</span>
-<span class="source-line-no">734</span><span id="line-734">            for (var s : i.getConfigMap().entries.values()) {</span>
-<span class="source-line-no">735</span><span id="line-735">               for (var e : s.oentries.values()) {</span>
-<span class="source-line-no">736</span><span id="line-736">                  if (! newMap.hasEntry(s.name, e.key)) {</span>
-<span class="source-line-no">737</span><span id="line-737">                     changes2.add(ConfigEvent.setEntry(name, s.name, e.key, e.value, e.modifiers, e.comment, e.preLines));</span>
-<span class="source-line-no">738</span><span id="line-738">                  }</span>
-<span class="source-line-no">739</span><span id="line-739">               }</span>
-<span class="source-line-no">740</span><span id="line-740">            }</span>
-<span class="source-line-no">741</span><span id="line-741">         }</span>
-<span class="source-line-no">742</span><span id="line-742">      }</span>
-<span class="source-line-no">743</span><span id="line-743"></span>
-<span class="source-line-no">744</span><span id="line-744">      // Imports removed.</span>
-<span class="source-line-no">745</span><span id="line-745">      for (var i : imports) {</span>
-<span class="source-line-no">746</span><span id="line-746">         if (! newMap.imports.contains(i)) {</span>
-<span class="source-line-no">747</span><span id="line-747">            for (var s : i.getConfigMap().entries.values()) {</span>
-<span class="source-line-no">748</span><span id="line-748">               for (var e : s.oentries.values()) {</span>
-<span class="source-line-no">749</span><span id="line-749">                  if (! newMap.hasEntry(s.name, e.key)) {</span>
-<span class="source-line-no">750</span><span id="line-750">                     changes2.add(ConfigEvent.removeEntry(name, s.name, e.key));</span>
-<span class="source-line-no">751</span><span id="line-751">                  }</span>
-<span class="source-line-no">752</span><span id="line-752">               }</span>
-<span class="source-line-no">753</span><span id="line-753">            }</span>
-<span class="source-line-no">754</span><span id="line-754">         }</span>
-<span class="source-line-no">755</span><span id="line-755">      }</span>
-<span class="source-line-no">756</span><span id="line-756"></span>
-<span class="source-line-no">757</span><span id="line-757">      for (var ns : newMap.oentries.values()) {</span>
-<span class="source-line-no">758</span><span id="line-758">         var s = oentries.get(ns.name);</span>
-<span class="source-line-no">759</span><span id="line-759">         if (s == null) {</span>
-<span class="source-line-no">760</span><span id="line-760">            for (var ne : ns.entries.values()) {</span>
-<span class="source-line-no">761</span><span id="line-761">               changes2.add(ConfigEvent.setEntry(name, ns.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));</span>
-<span class="source-line-no">762</span><span id="line-762">            }</span>
-<span class="source-line-no">763</span><span id="line-763">         } else {</span>
-<span class="source-line-no">764</span><span id="line-764">            for (var ne : ns.oentries.values()) {</span>
-<span class="source-line-no">765</span><span id="line-765">               var e = s.oentries.get(ne.key);</span>
-<span class="source-line-no">766</span><span id="line-766">               if (e == null || Utils.ne(e.value, ne.value)) {</span>
-<span class="source-line-no">767</span><span id="line-767">                  changes2.add(ConfigEvent.setEntry(name, s.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));</span>
-<span class="source-line-no">768</span><span id="line-768">               }</span>
-<span class="source-line-no">769</span><span id="line-769">            }</span>
-<span class="source-line-no">770</span><span id="line-770">            for (var e : s.oentries.values()) {</span>
-<span class="source-line-no">771</span><span id="line-771">               var ne = ns.oentries.get(e.key);</span>
-<span class="source-line-no">772</span><span id="line-772">               if (ne == null) {</span>
-<span class="source-line-no">773</span><span id="line-773">                  changes2.add(ConfigEvent.removeEntry(name, s.name, e.key));</span>
-<span class="source-line-no">774</span><span id="line-774">               }</span>
-<span class="source-line-no">775</span><span id="line-775">            }</span>
-<span class="source-line-no">776</span><span id="line-776">         }</span>
-<span class="source-line-no">777</span><span id="line-777">      }</span>
-<span class="source-line-no">778</span><span id="line-778"></span>
-<span class="source-line-no">779</span><span id="line-779">      for (var s : oentries.values()) {</span>
-<span class="source-line-no">780</span><span id="line-780">         var ns = newMap.oentries.get(s.name);</span>
-<span class="source-line-no">781</span><span id="line-781">         if (ns == null) {</span>
-<span class="source-line-no">782</span><span id="line-782">            for (var e : s.oentries.values())</span>
-<span class="source-line-no">783</span><span id="line-783">               changes2.add(ConfigEvent.removeEntry(name, s.name, e.key));</span>
-<span class="source-line-no">784</span><span id="line-784">         }</span>
-<span class="source-line-no">785</span><span id="line-785">      }</span>
-<span class="source-line-no">786</span><span id="line-786"></span>
-<span class="source-line-no">787</span><span id="line-787">      return changes2;</span>
-<span class="source-line-no">788</span><span id="line-788">   }</span>
-<span class="source-line-no">789</span><span id="line-789"></span>
-<span class="source-line-no">790</span><span id="line-790">   // This method should only be called from behind a lock.</span>
-<span class="source-line-no">791</span><span id="line-791">   private String asString() {</span>
-<span class="source-line-no">792</span><span id="line-792">      try {</span>
-<span class="source-line-no">793</span><span id="line-793">         var sw = new StringWriter();</span>
-<span class="source-line-no">794</span><span id="line-794">         for (var cs : entries.values())</span>
-<span class="source-line-no">795</span><span id="line-795">            cs.writeTo(sw);</span>
-<span class="source-line-no">796</span><span id="line-796">         return sw.toString();</span>
-<span class="source-line-no">797</span><span id="line-797">      } catch (IOException e) {</span>
-<span class="source-line-no">798</span><span id="line-798">         throw asRuntimeException(e);  // Not possible.</span>
-<span class="source-line-no">799</span><span id="line-799">      }</span>
-<span class="source-line-no">800</span><span id="line-800">   }</span>
-<span class="source-line-no">801</span><span id="line-801"></span>
-<span class="source-line-no">802</span><span id="line-802">   //---------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">803</span><span id="line-803">   // ConfigSection</span>
-<span class="source-line-no">804</span><span id="line-804">   //---------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">731</span><span id="line-731">   private ConfigEvents findDiffs(String updatedContents) throws IOException {</span>
+<span class="source-line-no">732</span><span id="line-732">      var changes2 = new ConfigEvents();</span>
+<span class="source-line-no">733</span><span id="line-733">      var newMap = new ConfigMap(store, name, updatedContents);</span>
+<span class="source-line-no">734</span><span id="line-734"></span>
+<span class="source-line-no">735</span><span id="line-735">      // Imports added.</span>
+<span class="source-line-no">736</span><span id="line-736">      for (var i : newMap.imports) {</span>
+<span class="source-line-no">737</span><span id="line-737">         if (! imports.contains(i)) {</span>
+<span class="source-line-no">738</span><span id="line-738">            for (var s : i.getConfigMap().entries.values()) {</span>
+<span class="source-line-no">739</span><span id="line-739">               for (var e : s.oentries.values()) {</span>
+<span class="source-line-no">740</span><span id="line-740">                  if (! newMap.hasEntry(s.name, e.key)) {</span>
+<span class="source-line-no">741</span><span id="line-741">                     changes2.add(ConfigEvent.setEntry(name, s.name, e.key, e.value, e.modifiers, e.comment, e.preLines));</span>
+<span class="source-line-no">742</span><span id="line-742">                  }</span>
+<span class="source-line-no">743</span><span id="line-743">               }</span>
+<span class="source-line-no">744</span><span id="line-744">            }</span>
+<span class="source-line-no">745</span><span id="line-745">         }</span>
+<span class="source-line-no">746</span><span id="line-746">      }</span>
+<span class="source-line-no">747</span><span id="line-747"></span>
+<span class="source-line-no">748</span><span id="line-748">      // Imports removed.</span>
+<span class="source-line-no">749</span><span id="line-749">      for (var i : imports) {</span>
+<span class="source-line-no">750</span><span id="line-750">         if (! newMap.imports.contains(i)) {</span>
+<span class="source-line-no">751</span><span id="line-751">            for (var s : i.getConfigMap().entries.values()) {</span>
+<span class="source-line-no">752</span><span id="line-752">               for (var e : s.oentries.values()) {</span>
+<span class="source-line-no">753</span><span id="line-753">                  if (! newMap.hasEntry(s.name, e.key)) {</span>
+<span class="source-line-no">754</span><span id="line-754">                     changes2.add(ConfigEvent.removeEntry(name, s.name, e.key));</span>
+<span class="source-line-no">755</span><span id="line-755">                  }</span>
+<span class="source-line-no">756</span><span id="line-756">               }</span>
+<span class="source-line-no">757</span><span id="line-757">            }</span>
+<span class="source-line-no">758</span><span id="line-758">         }</span>
+<span class="source-line-no">759</span><span id="line-759">      }</span>
+<span class="source-line-no">760</span><span id="line-760"></span>
+<span class="source-line-no">761</span><span id="line-761">      for (var ns : newMap.oentries.values()) {</span>
+<span class="source-line-no">762</span><span id="line-762">         var s = oentries.get(ns.name);</span>
+<span class="source-line-no">763</span><span id="line-763">         if (s == null) {</span>
+<span class="source-line-no">764</span><span id="line-764">            for (var ne : ns.entries.values()) {</span>
+<span class="source-line-no">765</span><span id="line-765">               changes2.add(ConfigEvent.setEntry(name, ns.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));</span>
+<span class="source-line-no">766</span><span id="line-766">            }</span>
+<span class="source-line-no">767</span><span id="line-767">         } else {</span>
+<span class="source-line-no">768</span><span id="line-768">            for (var ne : ns.oentries.values()) {</span>
+<span class="source-line-no">769</span><span id="line-769">               var e = s.oentries.get(ne.key);</span>
+<span class="source-line-no">770</span><span id="line-770">               if (e == null || Utils.ne(e.value, ne.value)) {</span>
+<span class="source-line-no">771</span><span id="line-771">                  changes2.add(ConfigEvent.setEntry(name, s.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));</span>
+<span class="source-line-no">772</span><span id="line-772">               }</span>
+<span class="source-line-no">773</span><span id="line-773">            }</span>
+<span class="source-line-no">774</span><span id="line-774">            for (var e : s.oentries.values()) {</span>
+<span class="source-line-no">775</span><span id="line-775">               var ne = ns.oentries.get(e.key);</span>
+<span class="source-line-no">776</span><span id="line-776">               if (ne == null) {</span>
+<span class="source-line-no">777</span><span id="line-777">                  changes2.add(ConfigEvent.removeEntry(name, s.name, e.key));</span>
+<span class="source-line-no">778</span><span id="line-778">               }</span>
+<span class="source-line-no">779</span><span id="line-779">            }</span>
+<span class="source-line-no">780</span><span id="line-780">         }</span>
+<span class="source-line-no">781</span><span id="line-781">      }</span>
+<span class="source-line-no">782</span><span id="line-782"></span>
+<span class="source-line-no">783</span><span id="line-783">      for (var s : oentries.values()) {</span>
+<span class="source-line-no">784</span><span id="line-784">         var ns = newMap.oentries.get(s.name);</span>
+<span class="source-line-no">785</span><span id="line-785">         if (ns == null) {</span>
+<span class="source-line-no">786</span><span id="line-786">            for (var e : s.oentries.values())</span>
+<span class="source-line-no">787</span><span id="line-787">               changes2.add(ConfigEvent.removeEntry(name, s.name, e.key));</span>
+<span class="source-line-no">788</span><span id="line-788">         }</span>
+<span class="source-line-no">789</span><span id="line-789">      }</span>
+<span class="source-line-no">790</span><span id="line-790"></span>
+<span class="source-line-no">791</span><span id="line-791">      return changes2;</span>
+<span class="source-line-no">792</span><span id="line-792">   }</span>
+<span class="source-line-no">793</span><span id="line-793"></span>
+<span class="source-line-no">794</span><span id="line-794">   // This method should only be called from behind a lock.</span>
+<span class="source-line-no">795</span><span id="line-795">   private String asString() {</span>
+<span class="source-line-no">796</span><span id="line-796">      try {</span>
+<span class="source-line-no">797</span><span id="line-797">         var sw = new StringWriter();</span>
+<span class="source-line-no">798</span><span id="line-798">         for (var cs : entries.values())</span>
+<span class="source-line-no">799</span><span id="line-799">            cs.writeTo(sw);</span>
+<span class="source-line-no">800</span><span id="line-800">         return sw.toString();</span>
+<span class="source-line-no">801</span><span id="line-801">      } catch (IOException e) {</span>
+<span class="source-line-no">802</span><span id="line-802">         throw asRuntimeException(e);  // Not possible.</span>
+<span class="source-line-no">803</span><span id="line-803">      }</span>
+<span class="source-line-no">804</span><span id="line-804">   }</span>
 <span class="source-line-no">805</span><span id="line-805"></span>
-<span class="source-line-no">806</span><span id="line-806">   class ConfigSection {</span>
-<span class="source-line-no">807</span><span id="line-807"></span>
-<span class="source-line-no">808</span><span id="line-808">      final String name;   // The config section name, or blank if the default section.  Never null.</span>
+<span class="source-line-no">806</span><span id="line-806">   //---------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">807</span><span id="line-807">   // ConfigSection</span>
+<span class="source-line-no">808</span><span id="line-808">   //---------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">809</span><span id="line-809"></span>
-<span class="source-line-no">810</span><span id="line-810">      final List&lt;String&gt; preLines = synced(Utils.list());</span>
-<span class="source-line-no">811</span><span id="line-811">      private final String rawLine;</span>
-<span class="source-line-no">812</span><span id="line-812"></span>
-<span class="source-line-no">813</span><span id="line-813">      final Map&lt;String,ConfigMapEntry&gt; oentries = synced(map());</span>
-<span class="source-line-no">814</span><span id="line-814">      final Map&lt;String,ConfigMapEntry&gt; entries = synced(map());</span>
-<span class="source-line-no">815</span><span id="line-815"></span>
-<span class="source-line-no">816</span><span id="line-816">      /**</span>
-<span class="source-line-no">817</span><span id="line-817">       * Constructor.</span>
-<span class="source-line-no">818</span><span id="line-818">       */</span>
-<span class="source-line-no">819</span><span id="line-819">      ConfigSection(String name) {</span>
-<span class="source-line-no">820</span><span id="line-820">         this.name = name;</span>
-<span class="source-line-no">821</span><span id="line-821">         this.rawLine = "[" + name + "]";</span>
-<span class="source-line-no">822</span><span id="line-822">      }</span>
-<span class="source-line-no">823</span><span id="line-823"></span>
-<span class="source-line-no">824</span><span id="line-824">      /**</span>
-<span class="source-line-no">825</span><span id="line-825">       * Constructor.</span>
-<span class="source-line-no">826</span><span id="line-826">       */</span>
-<span class="source-line-no">827</span><span id="line-827">      ConfigSection(List&lt;String&gt; lines) {</span>
-<span class="source-line-no">828</span><span id="line-828"></span>
-<span class="source-line-no">829</span><span id="line-829">         String name2 = null, rawLine2 = null;</span>
-<span class="source-line-no">830</span><span id="line-830"></span>
-<span class="source-line-no">831</span><span id="line-831">         final int</span>
-<span class="source-line-no">832</span><span id="line-832">            S1 = 1, // Looking for section.</span>
-<span class="source-line-no">833</span><span id="line-833">            S2 = 2; // Found section, looking for end.</span>
+<span class="source-line-no">810</span><span id="line-810">   class ConfigSection {</span>
+<span class="source-line-no">811</span><span id="line-811"></span>
+<span class="source-line-no">812</span><span id="line-812">      final String name;   // The config section name, or blank if the default section.  Never null.</span>
+<span class="source-line-no">813</span><span id="line-813"></span>
+<span class="source-line-no">814</span><span id="line-814">      final List&lt;String&gt; preLines = synced(Utils.list());</span>
+<span class="source-line-no">815</span><span id="line-815">      private final String rawLine;</span>
+<span class="source-line-no">816</span><span id="line-816"></span>
+<span class="source-line-no">817</span><span id="line-817">      final Map&lt;String,ConfigMapEntry&gt; oentries = synced(map());</span>
+<span class="source-line-no">818</span><span id="line-818">      final Map&lt;String,ConfigMapEntry&gt; entries = synced(map());</span>
+<span class="source-line-no">819</span><span id="line-819"></span>
+<span class="source-line-no">820</span><span id="line-820">      /**</span>
+<span class="source-line-no">821</span><span id="line-821">       * Constructor.</span>
+<span class="source-line-no">822</span><span id="line-822">       */</span>
+<span class="source-line-no">823</span><span id="line-823">      ConfigSection(String name) {</span>
+<span class="source-line-no">824</span><span id="line-824">         this.name = name;</span>
+<span class="source-line-no">825</span><span id="line-825">         this.rawLine = "[" + name + "]";</span>
+<span class="source-line-no">826</span><span id="line-826">      }</span>
+<span class="source-line-no">827</span><span id="line-827"></span>
+<span class="source-line-no">828</span><span id="line-828">      /**</span>
+<span class="source-line-no">829</span><span id="line-829">       * Constructor.</span>
+<span class="source-line-no">830</span><span id="line-830">       */</span>
+<span class="source-line-no">831</span><span id="line-831">      ConfigSection(List&lt;String&gt; lines) {</span>
+<span class="source-line-no">832</span><span id="line-832"></span>
+<span class="source-line-no">833</span><span id="line-833">         String name2 = null, rawLine2 = null;</span>
 <span class="source-line-no">834</span><span id="line-834"></span>
-<span class="source-line-no">835</span><span id="line-835">         var state = S1;</span>
-<span class="source-line-no">836</span><span id="line-836">         var start = 0;</span>
-<span class="source-line-no">837</span><span id="line-837"></span>
-<span class="source-line-no">838</span><span id="line-838">         for (var i = 0; i &lt; lines.size(); i++) {</span>
-<span class="source-line-no">839</span><span id="line-839">            var l = lines.get(i);</span>
-<span class="source-line-no">840</span><span id="line-840">            var c = StringUtils.firstNonWhitespaceChar(l);</span>
-<span class="source-line-no">841</span><span id="line-841">            if (state == S1) {</span>
-<span class="source-line-no">842</span><span id="line-842">               if (c == '[') {</span>
-<span class="source-line-no">843</span><span id="line-843">                  var i1 = l.indexOf('[');</span>
-<span class="source-line-no">844</span><span id="line-844">                  var i2 = l.indexOf(']');</span>
-<span class="source-line-no">845</span><span id="line-845">                  name2 = l.substring(i1+1, i2).trim();</span>
-<span class="source-line-no">846</span><span id="line-846">                  rawLine2 = l;</span>
-<span class="source-line-no">847</span><span id="line-847">                  state = S2;</span>
-<span class="source-line-no">848</span><span id="line-848">                  start = i+1;</span>
-<span class="source-line-no">849</span><span id="line-849">               } else {</span>
-<span class="source-line-no">850</span><span id="line-850">                  preLines.add(l);</span>
-<span class="source-line-no">851</span><span id="line-851">               }</span>
-<span class="source-line-no">852</span><span id="line-852">            } else {</span>
-<span class="source-line-no">853</span><span id="line-853">               if (c != '#' &amp;&amp; l.indexOf('=') != -1) {</span>
-<span class="source-line-no">854</span><span id="line-854">                  var e = new ConfigMapEntry(l, lines.subList(start, i));</span>
-<span class="source-line-no">855</span><span id="line-855">                  if (entries.containsKey(e.key))</span>
-<span class="source-line-no">856</span><span id="line-856">                     throw new ConfigException("Duplicate entry found in section [{0}] of configuration:  {1}", name2, e.key);</span>
-<span class="source-line-no">857</span><span id="line-857">                  entries.put(e.key, e);</span>
-<span class="source-line-no">858</span><span id="line-858">                  start = i+1;</span>
-<span class="source-line-no">859</span><span id="line-859">               }</span>
-<span class="source-line-no">860</span><span id="line-860">            }</span>
-<span class="source-line-no">861</span><span id="line-861">         }</span>
-<span class="source-line-no">862</span><span id="line-862"></span>
-<span class="source-line-no">863</span><span id="line-863">         this.name = name2;</span>
-<span class="source-line-no">864</span><span id="line-864">         this.rawLine = rawLine2;</span>
-<span class="source-line-no">865</span><span id="line-865">         this.oentries.putAll(entries);</span>
-<span class="source-line-no">866</span><span id="line-866">      }</span>
-<span class="source-line-no">867</span><span id="line-867"></span>
-<span class="source-line-no">868</span><span id="line-868">      ConfigSection addEntry(String key, String value, String modifiers, String comment, List&lt;String&gt; preLines) {</span>
-<span class="source-line-no">869</span><span id="line-869">         var e = new ConfigMapEntry(key, value, modifiers, comment, preLines);</span>
-<span class="source-line-no">870</span><span id="line-870">         this.entries.put(e.key, e);</span>
-<span class="source-line-no">871</span><span id="line-871">         return this;</span>
-<span class="source-line-no">872</span><span id="line-872">      }</span>
-<span class="source-line-no">873</span><span id="line-873"></span>
-<span class="source-line-no">874</span><span id="line-874">      ConfigSection setPreLines(List&lt;String&gt; preLines) {</span>
-<span class="source-line-no">875</span><span id="line-875">         this.preLines.clear();</span>
-<span class="source-line-no">876</span><span id="line-876">         this.preLines.addAll(preLines);</span>
-<span class="source-line-no">877</span><span id="line-877">         return this;</span>
-<span class="source-line-no">878</span><span id="line-878">      }</span>
-<span class="source-line-no">879</span><span id="line-879"></span>
-<span class="source-line-no">880</span><span id="line-880">      Writer writeTo(Writer w) throws IOException {</span>
-<span class="source-line-no">881</span><span id="line-881">         for (var s : preLines)</span>
-<span class="source-line-no">882</span><span id="line-882">            w.append(s).append('\n');</span>
+<span class="source-line-no">835</span><span id="line-835">         final int</span>
+<span class="source-line-no">836</span><span id="line-836">            S1 = 1, // Looking for section.</span>
+<span class="source-line-no">837</span><span id="line-837">            S2 = 2; // Found section, looking for end.</span>
+<span class="source-line-no">838</span><span id="line-838"></span>
+<span class="source-line-no">839</span><span id="line-839">         var state = S1;</span>
+<span class="source-line-no">840</span><span id="line-840">         var start = 0;</span>
+<span class="source-line-no">841</span><span id="line-841"></span>
+<span class="source-line-no">842</span><span id="line-842">         for (var i = 0; i &lt; lines.size(); i++) {</span>
+<span class="source-line-no">843</span><span id="line-843">            var l = lines.get(i);</span>
+<span class="source-line-no">844</span><span id="line-844">            var c = StringUtils.firstNonWhitespaceChar(l);</span>
+<span class="source-line-no">845</span><span id="line-845">            if (state == S1) {</span>
+<span class="source-line-no">846</span><span id="line-846">               if (c == '[') {</span>
+<span class="source-line-no">847</span><span id="line-847">                  var i1 = l.indexOf('[');</span>
+<span class="source-line-no">848</span><span id="line-848">                  var i2 = l.indexOf(']');</span>
+<span class="source-line-no">849</span><span id="line-849">                  name2 = l.substring(i1+1, i2).trim();</span>
+<span class="source-line-no">850</span><span id="line-850">                  rawLine2 = l;</span>
+<span class="source-line-no">851</span><span id="line-851">                  state = S2;</span>
+<span class="source-line-no">852</span><span id="line-852">                  start = i+1;</span>
+<span class="source-line-no">853</span><span id="line-853">               } else {</span>
+<span class="source-line-no">854</span><span id="line-854">                  preLines.add(l);</span>
+<span class="source-line-no">855</span><span id="line-855">               }</span>
+<span class="source-line-no">856</span><span id="line-856">            } else {</span>
+<span class="source-line-no">857</span><span id="line-857">               if (c != '#' &amp;&amp; l.indexOf('=') != -1) {</span>
+<span class="source-line-no">858</span><span id="line-858">                  var e = new ConfigMapEntry(l, lines.subList(start, i));</span>
+<span class="source-line-no">859</span><span id="line-859">                  if (entries.containsKey(e.key))</span>
+<span class="source-line-no">860</span><span id="line-860">                     throw new ConfigException("Duplicate entry found in section [{0}] of configuration:  {1}", name2, e.key);</span>
+<span class="source-line-no">861</span><span id="line-861">                  entries.put(e.key, e);</span>
+<span class="source-line-no">862</span><span id="line-862">                  start = i+1;</span>
+<span class="source-line-no">863</span><span id="line-863">               }</span>
+<span class="source-line-no">864</span><span id="line-864">            }</span>
+<span class="source-line-no">865</span><span id="line-865">         }</span>
+<span class="source-line-no">866</span><span id="line-866"></span>
+<span class="source-line-no">867</span><span id="line-867">         this.name = name2;</span>
+<span class="source-line-no">868</span><span id="line-868">         this.rawLine = rawLine2;</span>
+<span class="source-line-no">869</span><span id="line-869">         this.oentries.putAll(entries);</span>
+<span class="source-line-no">870</span><span id="line-870">      }</span>
+<span class="source-line-no">871</span><span id="line-871"></span>
+<span class="source-line-no">872</span><span id="line-872">      ConfigSection addEntry(String key, String value, String modifiers, String comment, List&lt;String&gt; preLines) {</span>
+<span class="source-line-no">873</span><span id="line-873">         var e = new ConfigMapEntry(key, value, modifiers, comment, preLines);</span>
+<span class="source-line-no">874</span><span id="line-874">         this.entries.put(e.key, e);</span>
+<span class="source-line-no">875</span><span id="line-875">         return this;</span>
+<span class="source-line-no">876</span><span id="line-876">      }</span>
+<span class="source-line-no">877</span><span id="line-877"></span>
+<span class="source-line-no">878</span><span id="line-878">      ConfigSection setPreLines(List&lt;String&gt; preLines) {</span>
+<span class="source-line-no">879</span><span id="line-879">         this.preLines.clear();</span>
+<span class="source-line-no">880</span><span id="line-880">         this.preLines.addAll(preLines);</span>
+<span class="source-line-no">881</span><span id="line-881">         return this;</span>
+<span class="source-line-no">882</span><span id="line-882">      }</span>
 <span class="source-line-no">883</span><span id="line-883"></span>
-<span class="source-line-no">884</span><span id="line-884">         if (! name.isEmpty())</span>
-<span class="source-line-no">885</span><span id="line-885">            w.append(rawLine).append('\n');</span>
-<span class="source-line-no">886</span><span id="line-886">         else {</span>
-<span class="source-line-no">887</span><span id="line-887">            // Need separation between default prelines and first-entry prelines.</span>
-<span class="source-line-no">888</span><span id="line-888">            if (! preLines.isEmpty())</span>
-<span class="source-line-no">889</span><span id="line-889">               w.append('\n');</span>
-<span class="source-line-no">890</span><span id="line-890">         }</span>
-<span class="source-line-no">891</span><span id="line-891"></span>
-<span class="source-line-no">892</span><span id="line-892">         for (var e : entries.values())</span>
-<span class="source-line-no">893</span><span id="line-893">            e.writeTo(w);</span>
-<span class="source-line-no">894</span><span id="line-894"></span>
-<span class="source-line-no">895</span><span id="line-895">         return w;</span>
-<span class="source-line-no">896</span><span id="line-896">      }</span>
-<span class="source-line-no">897</span><span id="line-897">   }</span>
+<span class="source-line-no">884</span><span id="line-884">      Writer writeTo(Writer w) throws IOException {</span>
+<span class="source-line-no">885</span><span id="line-885">         for (var s : preLines)</span>
+<span class="source-line-no">886</span><span id="line-886">            w.append(s).append('\n');</span>
+<span class="source-line-no">887</span><span id="line-887"></span>
+<span class="source-line-no">888</span><span id="line-888">         if (! name.isEmpty())</span>
+<span class="source-line-no">889</span><span id="line-889">            w.append(rawLine).append('\n');</span>
+<span class="source-line-no">890</span><span id="line-890">         else {</span>
+<span class="source-line-no">891</span><span id="line-891">            // Need separation between default prelines and first-entry prelines.</span>
+<span class="source-line-no">892</span><span id="line-892">            if (! preLines.isEmpty())</span>
+<span class="source-line-no">893</span><span id="line-893">               w.append('\n');</span>
+<span class="source-line-no">894</span><span id="line-894">         }</span>
+<span class="source-line-no">895</span><span id="line-895"></span>
+<span class="source-line-no">896</span><span id="line-896">         for (var e : entries.values())</span>
+<span class="source-line-no">897</span><span id="line-897">            e.writeTo(w);</span>
 <span class="source-line-no">898</span><span id="line-898"></span>
-<span class="source-line-no">899</span><span id="line-899">   //---------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">900</span><span id="line-900">   // Import</span>
-<span class="source-line-no">901</span><span id="line-901">   //---------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">899</span><span id="line-899">         return w;</span>
+<span class="source-line-no">900</span><span id="line-900">      }</span>
+<span class="source-line-no">901</span><span id="line-901">   }</span>
 <span class="source-line-no">902</span><span id="line-902"></span>
-<span class="source-line-no">903</span><span id="line-903">   class Import {</span>
-<span class="source-line-no">904</span><span id="line-904"></span>
-<span class="source-line-no">905</span><span id="line-905">      private final ConfigMap configMap;</span>
-<span class="source-line-no">906</span><span id="line-906">      private final Map&lt;ConfigEventListener,ConfigEventListener&gt; listenerMap = synced(map());</span>
-<span class="source-line-no">907</span><span id="line-907"></span>
-<span class="source-line-no">908</span><span id="line-908">      Import(ConfigMap configMap) {</span>
-<span class="source-line-no">909</span><span id="line-909">         this.configMap = configMap;</span>
-<span class="source-line-no">910</span><span id="line-910">      }</span>
+<span class="source-line-no">903</span><span id="line-903">   //---------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">904</span><span id="line-904">   // Import</span>
+<span class="source-line-no">905</span><span id="line-905">   //---------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">906</span><span id="line-906"></span>
+<span class="source-line-no">907</span><span id="line-907">   class Import {</span>
+<span class="source-line-no">908</span><span id="line-908"></span>
+<span class="source-line-no">909</span><span id="line-909">      private final ConfigMap configMap;</span>
+<span class="source-line-no">910</span><span id="line-910">      private final Map&lt;ConfigEventListener,ConfigEventListener&gt; listenerMap = synced(map());</span>
 <span class="source-line-no">911</span><span id="line-911"></span>
-<span class="source-line-no">912</span><span id="line-912">      synchronized Import register(Collection&lt;ConfigEventListener&gt; listeners) {</span>
-<span class="source-line-no">913</span><span id="line-913">         listeners.forEach(this::register);</span>
-<span class="source-line-no">914</span><span id="line-914">         return this;</span>
-<span class="source-line-no">915</span><span id="line-915">      }</span>
-<span class="source-line-no">916</span><span id="line-916"></span>
-<span class="source-line-no">917</span><span id="line-917">      synchronized Import register(final ConfigEventListener listener) {</span>
-<span class="source-line-no">918</span><span id="line-918">         var l2 = (ConfigEventListener) events -&gt; {</span>
-<span class="source-line-no">919</span><span id="line-919">            var events2 = events.stream().filter(x -&gt; ! hasEntry(x.getSection(), x.getKey())).collect(Collectors.toCollection(ConfigEvents::new));</span>
-<span class="source-line-no">920</span><span id="line-920">            if (!events2.isEmpty())</span>
-<span class="source-line-no">921</span><span id="line-921">               listener.onConfigChange(events2);</span>
-<span class="source-line-no">922</span><span id="line-922">         };</span>
-<span class="source-line-no">923</span><span id="line-923">         listenerMap.put(listener, l2);</span>
-<span class="source-line-no">924</span><span id="line-924">         configMap.register(l2);</span>
-<span class="source-line-no">925</span><span id="line-925">         return this;</span>
-<span class="source-line-no">926</span><span id="line-926">      }</span>
-<span class="source-line-no">927</span><span id="line-927"></span>
-<span class="source-line-no">928</span><span id="line-928">      synchronized Import unregister(final ConfigEventListener listener) {</span>
-<span class="source-line-no">929</span><span id="line-929">         configMap.unregister(listenerMap.remove(listener));</span>
-<span class="source-line-no">930</span><span id="line-930">         return this;</span>
-<span class="source-line-no">931</span><span id="line-931">      }</span>
-<span class="source-line-no">932</span><span id="line-932"></span>
-<span class="source-line-no">933</span><span id="line-933">      synchronized Import unregisterAll() {</span>
-<span class="source-line-no">934</span><span id="line-934">         listenerMap.values().forEach(configMap::unregister);</span>
-<span class="source-line-no">935</span><span id="line-935">         listenerMap.clear();</span>
-<span class="source-line-no">936</span><span id="line-936">         return this;</span>
-<span class="source-line-no">937</span><span id="line-937">      }</span>
-<span class="source-line-no">938</span><span id="line-938"></span>
-<span class="source-line-no">939</span><span id="line-939">      String getConfigName() {</span>
-<span class="source-line-no">940</span><span id="line-940">         return configMap.name;</span>
+<span class="source-line-no">912</span><span id="line-912">      Import(ConfigMap configMap) {</span>
+<span class="source-line-no">913</span><span id="line-913">         this.configMap = configMap;</span>
+<span class="source-line-no">914</span><span id="line-914">      }</span>
+<span class="source-line-no">915</span><span id="line-915"></span>
+<span class="source-line-no">916</span><span id="line-916">      synchronized Import register(Collection&lt;ConfigEventListener&gt; listeners) {</span>
+<span class="source-line-no">917</span><span id="line-917">         listeners.forEach(this::register);</span>
+<span class="source-line-no">918</span><span id="line-918">         return this;</span>
+<span class="source-line-no">919</span><span id="line-919">      }</span>
+<span class="source-line-no">920</span><span id="line-920"></span>
+<span class="source-line-no">921</span><span id="line-921">      synchronized Import register(final ConfigEventListener listener) {</span>
+<span class="source-line-no">922</span><span id="line-922">         var l2 = (ConfigEventListener) events -&gt; {</span>
+<span class="source-line-no">923</span><span id="line-923">            var events2 = events.stream().filter(x -&gt; ! hasEntry(x.getSection(), x.getKey())).collect(Collectors.toCollection(ConfigEvents::new));</span>
+<span class="source-line-no">924</span><span id="line-924">            if (!events2.isEmpty())</span>
+<span class="source-line-no">925</span><span id="line-925">               listener.onConfigChange(events2);</span>
+<span class="source-line-no">926</span><span id="line-926">         };</span>
+<span class="source-line-no">927</span><span id="line-927">         listenerMap.put(listener, l2);</span>
+<span class="source-line-no">928</span><span id="line-928">         configMap.register(l2);</span>
+<span class="source-line-no">929</span><span id="line-929">         return this;</span>
+<span class="source-line-no">930</span><span id="line-930">      }</span>
+<span class="source-line-no">931</span><span id="line-931"></span>
+<span class="source-line-no">932</span><span id="line-932">      synchronized Import unregister(final ConfigEventListener listener) {</span>
+<span class="source-line-no">933</span><span id="line-933">         configMap.unregister(listenerMap.remove(listener));</span>
+<span class="source-line-no">934</span><span id="line-934">         return this;</span>
+<span class="source-line-no">935</span><span id="line-935">      }</span>
+<span class="source-line-no">936</span><span id="line-936"></span>
+<span class="source-line-no">937</span><span id="line-937">      synchronized Import unregisterAll() {</span>
+<span class="source-line-no">938</span><span id="line-938">         listenerMap.values().forEach(configMap::unregister);</span>
+<span class="source-line-no">939</span><span id="line-939">         listenerMap.clear();</span>
+<span class="source-line-no">940</span><span id="line-940">         return this;</span>
 <span class="source-line-no">941</span><span id="line-941">      }</span>
 <span class="source-line-no">942</span><span id="line-942"></span>
-<span class="source-line-no">943</span><span id="line-943">      ConfigMap getConfigMap() {</span>
-<span class="source-line-no">944</span><span id="line-944">         return configMap;</span>
+<span class="source-line-no">943</span><span id="line-943">      String getConfigName() {</span>
+<span class="source-line-no">944</span><span id="line-944">         return configMap.name;</span>
 <span class="source-line-no">945</span><span id="line-945">      }</span>
 <span class="source-line-no">946</span><span id="line-946"></span>
-<span class="source-line-no">947</span><span id="line-947">      @Override</span>
-<span class="source-line-no">948</span><span id="line-948">      public boolean equals(Object o) {</span>
-<span class="source-line-no">949</span><span id="line-949">         return o instanceof Import ir &amp;&amp; ir.getConfigName().equals(getConfigName());</span>
-<span class="source-line-no">950</span><span id="line-950">      }</span>
-<span class="source-line-no">951</span><span id="line-951"></span>
-<span class="source-line-no">952</span><span id="line-952">      @Override</span>
-<span class="source-line-no">953</span><span id="line-953">      public int hashCode() {</span>
-<span class="source-line-no">954</span><span id="line-954">         return getConfigName().hashCode();</span>
-<span class="source-line-no">955</span><span id="line-955">      }</span>
-<span class="source-line-no">956</span><span id="line-956">   }</span>
-<span class="source-line-no">957</span><span id="line-957">}</span>
+<span class="source-line-no">947</span><span id="line-947">      ConfigMap getConfigMap() {</span>
+<span class="source-line-no">948</span><span id="line-948">         return configMap;</span>
+<span class="source-line-no">949</span><span id="line-949">      }</span>
+<span class="source-line-no">950</span><span id="line-950"></span>
+<span class="source-line-no">951</span><span id="line-951">      @Override</span>
+<span class="source-line-no">952</span><span id="line-952">      public boolean equals(Object o) {</span>
+<span class="source-line-no">953</span><span id="line-953">         return o instanceof Import ir &amp;&amp; ir.getConfigName().equals(getConfigName());</span>
+<span class="source-line-no">954</span><span id="line-954">      }</span>
+<span class="source-line-no">955</span><span id="line-955"></span>
+<span class="source-line-no">956</span><span id="line-956">      @Override</span>
+<span class="source-line-no">957</span><span id="line-957">      public int hashCode() {</span>
+<span class="source-line-no">958</span><span id="line-958">         return getConfigName().hashCode();</span>
+<span class="source-line-no">959</span><span id="line-959">      }</span>
+<span class="source-line-no">960</span><span id="line-960">   }</span>
+<span class="source-line-no">961</span><span id="line-961">}</span>
 
 
 

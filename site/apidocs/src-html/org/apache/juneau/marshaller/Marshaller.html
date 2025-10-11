@@ -11,258 +11,262 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">package org.apache.juneau.marshaller;</span>
-<span class="source-line-no">002</span><span id="line-2">// ***************************************************************************************************************************</span>
-<span class="source-line-no">003</span><span id="line-3">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">004</span><span id="line-4">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">005</span><span id="line-5">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">006</span><span id="line-6">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">007</span><span id="line-7">// *                                                                                                                         *</span>
-<span class="source-line-no">008</span><span id="line-8">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">009</span><span id="line-9">// *                                                                                                                         *</span>
-<span class="source-line-no">010</span><span id="line-10">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">011</span><span id="line-11">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">012</span><span id="line-12">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">013</span><span id="line-13">// ***************************************************************************************************************************</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import java.io.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import java.lang.reflect.*;</span>
-<span class="source-line-no">017</span><span id="line-17">import java.nio.charset.*;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshaller;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.parser.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.serializer.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import java.io.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import java.lang.reflect.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import java.nio.charset.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">/**</span>
-<span class="source-line-no">024</span><span id="line-24"> * Top-level class for a pairing of a {@link Serializer} and {@link Parser} into a single class with convenience read/write methods.</span>
-<span class="source-line-no">025</span><span id="line-25"> *</span>
-<span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> *    The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.</span>
-<span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;h5 class='figure'&gt;Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> *    &lt;jc&gt;// Using instance.&lt;/jc&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> *    Marshaller &lt;jv&gt;json&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Json();</span>
-<span class="source-line-no">033</span><span id="line-33"> *    MyPojo &lt;jv&gt;myPojo&lt;/jv&gt; = &lt;jv&gt;json&lt;/jv&gt;.read(&lt;jv&gt;string&lt;/jv&gt;, MyPojo.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">034</span><span id="line-34"> *    String &lt;jv&gt;string&lt;/jv&gt; = &lt;jv&gt;json&lt;/jv&gt;.write(&lt;jv&gt;myPojo&lt;/jv&gt;);</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;/p&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;jc&gt;// Using DEFAULT instance.&lt;/jc&gt;</span>
-<span class="source-line-no">038</span><span id="line-38"> *    MyPojo &lt;jv&gt;myPojo&lt;/jv&gt; = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.read(&lt;jv&gt;string&lt;/jv&gt;, MyPojo.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">039</span><span id="line-39"> *    String &lt;jv&gt;string&lt;/jv&gt; = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;myPojo&lt;/jv&gt;);</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;/p&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers"&gt;Marshallers&lt;/a&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> */</span>
-<span class="source-line-no">046</span><span id="line-46">public abstract class Marshaller {</span>
-<span class="source-line-no">047</span><span id="line-47"></span>
-<span class="source-line-no">048</span><span id="line-48">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">049</span><span id="line-49">   // Instance</span>
-<span class="source-line-no">050</span><span id="line-50">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.parser.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.serializer.*;</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">/**</span>
+<span class="source-line-no">028</span><span id="line-28"> * Top-level class for a pairing of a {@link Serializer} and {@link Parser} into a single class with convenience read/write methods.</span>
+<span class="source-line-no">029</span><span id="line-29"> *</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> *    The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='figure'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> *    &lt;jc&gt;// Using instance.&lt;/jc&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> *    Marshaller &lt;jv&gt;json&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Json();</span>
+<span class="source-line-no">037</span><span id="line-37"> *    MyPojo &lt;jv&gt;myPojo&lt;/jv&gt; = &lt;jv&gt;json&lt;/jv&gt;.read(&lt;jv&gt;string&lt;/jv&gt;, MyPojo.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">038</span><span id="line-38"> *    String &lt;jv&gt;string&lt;/jv&gt; = &lt;jv&gt;json&lt;/jv&gt;.write(&lt;jv&gt;myPojo&lt;/jv&gt;);</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;/p&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;jc&gt;// Using DEFAULT instance.&lt;/jc&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *    MyPojo &lt;jv&gt;myPojo&lt;/jv&gt; = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.read(&lt;jv&gt;string&lt;/jv&gt;, MyPojo.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">043</span><span id="line-43"> *    String &lt;jv&gt;string&lt;/jv&gt; = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;myPojo&lt;/jv&gt;);</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;/p&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> *</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers"&gt;Marshallers&lt;/a&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;/ul&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> */</span>
+<span class="source-line-no">050</span><span id="line-50">public abstract class Marshaller {</span>
 <span class="source-line-no">051</span><span id="line-51"></span>
-<span class="source-line-no">052</span><span id="line-52">   private final Serializer s;</span>
-<span class="source-line-no">053</span><span id="line-53">   private final Parser p;</span>
-<span class="source-line-no">054</span><span id="line-54"></span>
-<span class="source-line-no">055</span><span id="line-55">   /**</span>
-<span class="source-line-no">056</span><span id="line-56">    * Constructor.</span>
-<span class="source-line-no">057</span><span id="line-57">    *</span>
-<span class="source-line-no">058</span><span id="line-58">    * @param s</span>
-<span class="source-line-no">059</span><span id="line-59">    *    The serializer to use for serializing output.</span>
-<span class="source-line-no">060</span><span id="line-60">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">061</span><span id="line-61">    * @param p</span>
-<span class="source-line-no">062</span><span id="line-62">    *    The parser to use for parsing input.</span>
-<span class="source-line-no">063</span><span id="line-63">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">064</span><span id="line-64">    */</span>
-<span class="source-line-no">065</span><span id="line-65">   protected Marshaller(Serializer s, Parser p) {</span>
-<span class="source-line-no">066</span><span id="line-66">      this.s = s;</span>
-<span class="source-line-no">067</span><span id="line-67">      this.p = p;</span>
-<span class="source-line-no">068</span><span id="line-68">   }</span>
-<span class="source-line-no">069</span><span id="line-69"></span>
-<span class="source-line-no">070</span><span id="line-70">   /**</span>
-<span class="source-line-no">071</span><span id="line-71">    * Returns the serializer associated with this marshaller.</span>
-<span class="source-line-no">072</span><span id="line-72">    *</span>
-<span class="source-line-no">073</span><span id="line-73">    * @return The serializer associated with this marshaller.</span>
-<span class="source-line-no">074</span><span id="line-74">    */</span>
-<span class="source-line-no">075</span><span id="line-75">   public Serializer getSerializer() {</span>
-<span class="source-line-no">076</span><span id="line-76">      return s;</span>
-<span class="source-line-no">077</span><span id="line-77">   }</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">   /**</span>
-<span class="source-line-no">080</span><span id="line-80">    * Returns the parser associated with this marshaller.</span>
-<span class="source-line-no">081</span><span id="line-81">    *</span>
-<span class="source-line-no">082</span><span id="line-82">    * @return The parser associated with this marshaller.</span>
-<span class="source-line-no">083</span><span id="line-83">    */</span>
-<span class="source-line-no">084</span><span id="line-84">   public Parser getParser() {</span>
-<span class="source-line-no">085</span><span id="line-85">      return p;</span>
-<span class="source-line-no">086</span><span id="line-86">   }</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">   /**</span>
-<span class="source-line-no">089</span><span id="line-89">    * Serializes a POJO to the specified output stream or writer.</span>
-<span class="source-line-no">090</span><span id="line-90">    *</span>
-<span class="source-line-no">091</span><span id="line-91">    * &lt;p&gt;</span>
-<span class="source-line-no">092</span><span id="line-92">    * Equivalent to calling &lt;c&gt;serializer.createSession().serialize(o, output);&lt;/c&gt;</span>
-<span class="source-line-no">093</span><span id="line-93">    *</span>
-<span class="source-line-no">094</span><span id="line-94">    * @param object The object to serialize.</span>
-<span class="source-line-no">095</span><span id="line-95">    * @param output</span>
-<span class="source-line-no">096</span><span id="line-96">    *    The output object.</span>
-<span class="source-line-no">097</span><span id="line-97">    *    &lt;br&gt;Character-based serializers can handle the following output class types:</span>
-<span class="source-line-no">098</span><span id="line-98">    *    &lt;ul&gt;</span>
-<span class="source-line-no">099</span><span id="line-99">    *       &lt;li&gt;{@link Writer}</span>
-<span class="source-line-no">100</span><span id="line-100">    *       &lt;li&gt;{@link OutputStream} - Output will be written as UTF-8 encoded stream.</span>
-<span class="source-line-no">101</span><span id="line-101">    *       &lt;li&gt;{@link File} - Output will be written as system-default encoded stream.</span>
-<span class="source-line-no">102</span><span id="line-102">    *       &lt;li&gt;{@link StringBuilder} - Output will be written to the specified string builder.</span>
-<span class="source-line-no">103</span><span id="line-103">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">104</span><span id="line-104">    *    &lt;br&gt;Stream-based serializers can handle the following output class types:</span>
-<span class="source-line-no">105</span><span id="line-105">    *    &lt;ul&gt;</span>
-<span class="source-line-no">106</span><span id="line-106">    *       &lt;li&gt;{@link OutputStream}</span>
-<span class="source-line-no">107</span><span id="line-107">    *       &lt;li&gt;{@link File}</span>
-<span class="source-line-no">108</span><span id="line-108">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">109</span><span id="line-109">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
-<span class="source-line-no">110</span><span id="line-110">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">111</span><span id="line-111">    */</span>
-<span class="source-line-no">112</span><span id="line-112">   public final void write(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">113</span><span id="line-113">      s.serialize(object, output);</span>
-<span class="source-line-no">114</span><span id="line-114">   }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   /**</span>
-<span class="source-line-no">117</span><span id="line-117">    * Parses input into the specified object type.</span>
-<span class="source-line-no">118</span><span id="line-118">    *</span>
-<span class="source-line-no">119</span><span id="line-119">    * &lt;p&gt;</span>
-<span class="source-line-no">120</span><span id="line-120">    * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).</span>
-<span class="source-line-no">121</span><span id="line-121">    *</span>
-<span class="source-line-no">122</span><span id="line-122">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">123</span><span id="line-123">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">124</span><span id="line-124">    *    Marshaller &lt;jv&gt;marshaller&lt;/jv&gt; = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;;</span>
+<span class="source-line-no">052</span><span id="line-52">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">053</span><span id="line-53">   // Instance</span>
+<span class="source-line-no">054</span><span id="line-54">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">055</span><span id="line-55"></span>
+<span class="source-line-no">056</span><span id="line-56">   private final Serializer s;</span>
+<span class="source-line-no">057</span><span id="line-57">   private final Parser p;</span>
+<span class="source-line-no">058</span><span id="line-58"></span>
+<span class="source-line-no">059</span><span id="line-59">   /**</span>
+<span class="source-line-no">060</span><span id="line-60">    * Constructor.</span>
+<span class="source-line-no">061</span><span id="line-61">    *</span>
+<span class="source-line-no">062</span><span id="line-62">    * @param s</span>
+<span class="source-line-no">063</span><span id="line-63">    *    The serializer to use for serializing output.</span>
+<span class="source-line-no">064</span><span id="line-64">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">065</span><span id="line-65">    * @param p</span>
+<span class="source-line-no">066</span><span id="line-66">    *    The parser to use for parsing input.</span>
+<span class="source-line-no">067</span><span id="line-67">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">068</span><span id="line-68">    */</span>
+<span class="source-line-no">069</span><span id="line-69">   protected Marshaller(Serializer s, Parser p) {</span>
+<span class="source-line-no">070</span><span id="line-70">      this.s = s;</span>
+<span class="source-line-no">071</span><span id="line-71">      this.p = p;</span>
+<span class="source-line-no">072</span><span id="line-72">   }</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">   /**</span>
+<span class="source-line-no">075</span><span id="line-75">    * Returns the serializer associated with this marshaller.</span>
+<span class="source-line-no">076</span><span id="line-76">    *</span>
+<span class="source-line-no">077</span><span id="line-77">    * @return The serializer associated with this marshaller.</span>
+<span class="source-line-no">078</span><span id="line-78">    */</span>
+<span class="source-line-no">079</span><span id="line-79">   public Serializer getSerializer() {</span>
+<span class="source-line-no">080</span><span id="line-80">      return s;</span>
+<span class="source-line-no">081</span><span id="line-81">   }</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">   /**</span>
+<span class="source-line-no">084</span><span id="line-84">    * Returns the parser associated with this marshaller.</span>
+<span class="source-line-no">085</span><span id="line-85">    *</span>
+<span class="source-line-no">086</span><span id="line-86">    * @return The parser associated with this marshaller.</span>
+<span class="source-line-no">087</span><span id="line-87">    */</span>
+<span class="source-line-no">088</span><span id="line-88">   public Parser getParser() {</span>
+<span class="source-line-no">089</span><span id="line-89">      return p;</span>
+<span class="source-line-no">090</span><span id="line-90">   }</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">   /**</span>
+<span class="source-line-no">093</span><span id="line-93">    * Serializes a POJO to the specified output stream or writer.</span>
+<span class="source-line-no">094</span><span id="line-94">    *</span>
+<span class="source-line-no">095</span><span id="line-95">    * &lt;p&gt;</span>
+<span class="source-line-no">096</span><span id="line-96">    * Equivalent to calling &lt;c&gt;serializer.createSession().serialize(o, output);&lt;/c&gt;</span>
+<span class="source-line-no">097</span><span id="line-97">    *</span>
+<span class="source-line-no">098</span><span id="line-98">    * @param object The object to serialize.</span>
+<span class="source-line-no">099</span><span id="line-99">    * @param output</span>
+<span class="source-line-no">100</span><span id="line-100">    *    The output object.</span>
+<span class="source-line-no">101</span><span id="line-101">    *    &lt;br&gt;Character-based serializers can handle the following output class types:</span>
+<span class="source-line-no">102</span><span id="line-102">    *    &lt;ul&gt;</span>
+<span class="source-line-no">103</span><span id="line-103">    *       &lt;li&gt;{@link Writer}</span>
+<span class="source-line-no">104</span><span id="line-104">    *       &lt;li&gt;{@link OutputStream} - Output will be written as UTF-8 encoded stream.</span>
+<span class="source-line-no">105</span><span id="line-105">    *       &lt;li&gt;{@link File} - Output will be written as system-default encoded stream.</span>
+<span class="source-line-no">106</span><span id="line-106">    *       &lt;li&gt;{@link StringBuilder} - Output will be written to the specified string builder.</span>
+<span class="source-line-no">107</span><span id="line-107">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">108</span><span id="line-108">    *    &lt;br&gt;Stream-based serializers can handle the following output class types:</span>
+<span class="source-line-no">109</span><span id="line-109">    *    &lt;ul&gt;</span>
+<span class="source-line-no">110</span><span id="line-110">    *       &lt;li&gt;{@link OutputStream}</span>
+<span class="source-line-no">111</span><span id="line-111">    *       &lt;li&gt;{@link File}</span>
+<span class="source-line-no">112</span><span id="line-112">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">113</span><span id="line-113">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
+<span class="source-line-no">114</span><span id="line-114">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">115</span><span id="line-115">    */</span>
+<span class="source-line-no">116</span><span id="line-116">   public final void write(Object object, Object output) throws SerializeException, IOException {</span>
+<span class="source-line-no">117</span><span id="line-117">      s.serialize(object, output);</span>
+<span class="source-line-no">118</span><span id="line-118">   }</span>
+<span class="source-line-no">119</span><span id="line-119"></span>
+<span class="source-line-no">120</span><span id="line-120">   /**</span>
+<span class="source-line-no">121</span><span id="line-121">    * Parses input into the specified object type.</span>
+<span class="source-line-no">122</span><span id="line-122">    *</span>
+<span class="source-line-no">123</span><span id="line-123">    * &lt;p&gt;</span>
+<span class="source-line-no">124</span><span id="line-124">    * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).</span>
 <span class="source-line-no">125</span><span id="line-125">    *</span>
-<span class="source-line-no">126</span><span id="line-126">    *    &lt;jc&gt;// Parse into a linked-list of strings.&lt;/jc&gt;</span>
-<span class="source-line-no">127</span><span id="line-127">    *    List &lt;jv&gt;list1&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">128</span><span id="line-128">    *</span>
-<span class="source-line-no">129</span><span id="line-129">    *    &lt;jc&gt;// Parse into a linked-list of beans.&lt;/jc&gt;</span>
-<span class="source-line-no">130</span><span id="line-130">    *    List &lt;jv&gt;list2&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">131</span><span id="line-131">    *</span>
-<span class="source-line-no">132</span><span id="line-132">    *    &lt;jc&gt;// Parse into a linked-list of linked-lists of strings.&lt;/jc&gt;</span>
-<span class="source-line-no">133</span><span id="line-133">    *    List &lt;jv&gt;list3&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    *    &lt;jc&gt;// Parse into a map of string keys/values.&lt;/jc&gt;</span>
-<span class="source-line-no">136</span><span id="line-136">    *    Map &lt;jv&gt;map1&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, TreeMap.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">137</span><span id="line-137">    *</span>
-<span class="source-line-no">138</span><span id="line-138">    *    &lt;jc&gt;// Parse into a map containing string keys and values of lists containing beans.&lt;/jc&gt;</span>
-<span class="source-line-no">139</span><span id="line-139">    *    Map &lt;jv&gt;map2&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, TreeMap.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;, List.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">140</span><span id="line-140">    * &lt;/p&gt;</span>
+<span class="source-line-no">126</span><span id="line-126">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">127</span><span id="line-127">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">128</span><span id="line-128">    *    Marshaller &lt;jv&gt;marshaller&lt;/jv&gt; = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;;</span>
+<span class="source-line-no">129</span><span id="line-129">    *</span>
+<span class="source-line-no">130</span><span id="line-130">    *    &lt;jc&gt;// Parse into a linked-list of strings.&lt;/jc&gt;</span>
+<span class="source-line-no">131</span><span id="line-131">    *    List &lt;jv&gt;list1&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">132</span><span id="line-132">    *</span>
+<span class="source-line-no">133</span><span id="line-133">    *    &lt;jc&gt;// Parse into a linked-list of beans.&lt;/jc&gt;</span>
+<span class="source-line-no">134</span><span id="line-134">    *    List &lt;jv&gt;list2&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">135</span><span id="line-135">    *</span>
+<span class="source-line-no">136</span><span id="line-136">    *    &lt;jc&gt;// Parse into a linked-list of linked-lists of strings.&lt;/jc&gt;</span>
+<span class="source-line-no">137</span><span id="line-137">    *    List &lt;jv&gt;list3&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">138</span><span id="line-138">    *</span>
+<span class="source-line-no">139</span><span id="line-139">    *    &lt;jc&gt;// Parse into a map of string keys/values.&lt;/jc&gt;</span>
+<span class="source-line-no">140</span><span id="line-140">    *    Map &lt;jv&gt;map1&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, TreeMap.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">141</span><span id="line-141">    *</span>
-<span class="source-line-no">142</span><span id="line-142">    * &lt;p&gt;</span>
-<span class="source-line-no">143</span><span id="line-143">    * &lt;c&gt;Collection&lt;/c&gt; classes are assumed to be followed by zero or one objects indicating the element type.</span>
-<span class="source-line-no">144</span><span id="line-144">    *</span>
-<span class="source-line-no">145</span><span id="line-145">    * &lt;p&gt;</span>
-<span class="source-line-no">146</span><span id="line-146">    * &lt;c&gt;Map&lt;/c&gt; classes are assumed to be followed by zero or two meta objects indicating the key and value types.</span>
-<span class="source-line-no">147</span><span id="line-147">    *</span>
-<span class="source-line-no">148</span><span id="line-148">    * &lt;p&gt;</span>
-<span class="source-line-no">149</span><span id="line-149">    * The array can be arbitrarily long to indicate arbitrarily complex data structures.</span>
-<span class="source-line-no">150</span><span id="line-150">    *</span>
-<span class="source-line-no">151</span><span id="line-151">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">152</span><span id="line-152">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">153</span><span id="line-153">    *       Use the {@link #read(Object, Class)} method instead if you don't need a parameterized map/collection.</span>
-<span class="source-line-no">154</span><span id="line-154">    * &lt;/ul&gt;</span>
-<span class="source-line-no">155</span><span id="line-155">    *</span>
-<span class="source-line-no">156</span><span id="line-156">    * @param &lt;T&gt; The class type of the object to create.</span>
-<span class="source-line-no">157</span><span id="line-157">    * @param input</span>
-<span class="source-line-no">158</span><span id="line-158">    *    The input.</span>
-<span class="source-line-no">159</span><span id="line-159">    *    &lt;br&gt;Character-based parsers can handle the following input class types:</span>
-<span class="source-line-no">160</span><span id="line-160">    *    &lt;ul&gt;</span>
-<span class="source-line-no">161</span><span id="line-161">    *       &lt;li&gt;&lt;jk&gt;null&lt;/jk&gt;</span>
-<span class="source-line-no">162</span><span id="line-162">    *       &lt;li&gt;{@link Reader}</span>
-<span class="source-line-no">163</span><span id="line-163">    *       &lt;li&gt;{@link CharSequence}</span>
-<span class="source-line-no">164</span><span id="line-164">    *       &lt;li&gt;{@link InputStream} containing UTF-8 encoded text (or charset defined by</span>
-<span class="source-line-no">165</span><span id="line-165">    *          {@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).</span>
-<span class="source-line-no">166</span><span id="line-166">    *       &lt;li&gt;&lt;code&gt;&lt;jk&gt;byte&lt;/jk&gt;[]&lt;/code&gt; containing UTF-8 encoded text (or charset defined by</span>
-<span class="source-line-no">167</span><span id="line-167">    *          {@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).</span>
-<span class="source-line-no">168</span><span id="line-168">    *       &lt;li&gt;{@link File} containing system encoded text (or charset defined by</span>
-<span class="source-line-no">169</span><span id="line-169">    *          {@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).</span>
-<span class="source-line-no">170</span><span id="line-170">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">171</span><span id="line-171">    *    &lt;br&gt;Stream-based parsers can handle the following input class types:</span>
-<span class="source-line-no">172</span><span id="line-172">    *    &lt;ul&gt;</span>
-<span class="source-line-no">173</span><span id="line-173">    *       &lt;li&gt;&lt;jk&gt;null&lt;/jk&gt;</span>
-<span class="source-line-no">174</span><span id="line-174">    *       &lt;li&gt;{@link InputStream}</span>
-<span class="source-line-no">175</span><span id="line-175">    *       &lt;li&gt;&lt;code&gt;&lt;jk&gt;byte&lt;/jk&gt;[]&lt;/code&gt;</span>
-<span class="source-line-no">176</span><span id="line-176">    *       &lt;li&gt;{@link File}</span>
-<span class="source-line-no">177</span><span id="line-177">    *       &lt;li&gt;{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.</span>
-<span class="source-line-no">178</span><span id="line-178">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">179</span><span id="line-179">    * @param type</span>
-<span class="source-line-no">180</span><span id="line-180">    *    The object type to create.</span>
-<span class="source-line-no">181</span><span id="line-181">    *    &lt;br&gt;Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}</span>
-<span class="source-line-no">182</span><span id="line-182">    * @param args</span>
-<span class="source-line-no">183</span><span id="line-183">    *    The type arguments of the class if it's a collection or map.</span>
-<span class="source-line-no">184</span><span id="line-184">    *    &lt;br&gt;Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}</span>
-<span class="source-line-no">185</span><span id="line-185">    *    &lt;br&gt;Ignored if the main type is not a map or collection.</span>
-<span class="source-line-no">186</span><span id="line-186">    * @return The parsed object.</span>
-<span class="source-line-no">187</span><span id="line-187">    * @throws ParseException Malformed input encountered.</span>
-<span class="source-line-no">188</span><span id="line-188">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">189</span><span id="line-189">    * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.</span>
-<span class="source-line-no">190</span><span id="line-190">    */</span>
-<span class="source-line-no">191</span><span id="line-191">   public final &lt;T&gt; T read(Object input, Type type, Type...args) throws ParseException, IOException {</span>
-<span class="source-line-no">192</span><span id="line-192">      return p.parse(input, type, args);</span>
-<span class="source-line-no">193</span><span id="line-193">   }</span>
-<span class="source-line-no">194</span><span id="line-194"></span>
-<span class="source-line-no">195</span><span id="line-195">   /**</span>
-<span class="source-line-no">196</span><span id="line-196">    * Same as {@link #read(Object, Type, Type...)} except optimized for a non-parameterized class.</span>
-<span class="source-line-no">197</span><span id="line-197">    *</span>
-<span class="source-line-no">198</span><span id="line-198">    * &lt;p&gt;</span>
-<span class="source-line-no">199</span><span id="line-199">    * This is the preferred parse method for simple types since you don't need to cast the results.</span>
-<span class="source-line-no">200</span><span id="line-200">    *</span>
-<span class="source-line-no">201</span><span id="line-201">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">202</span><span id="line-202">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">203</span><span id="line-203">    *    Marshaller &lt;jv&gt;marshaller&lt;/jv&gt;  = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;;</span>
+<span class="source-line-no">142</span><span id="line-142">    *    &lt;jc&gt;// Parse into a map containing string keys and values of lists containing beans.&lt;/jc&gt;</span>
+<span class="source-line-no">143</span><span id="line-143">    *    Map &lt;jv&gt;map2&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, TreeMap.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;, List.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">144</span><span id="line-144">    * &lt;/p&gt;</span>
+<span class="source-line-no">145</span><span id="line-145">    *</span>
+<span class="source-line-no">146</span><span id="line-146">    * &lt;p&gt;</span>
+<span class="source-line-no">147</span><span id="line-147">    * &lt;c&gt;Collection&lt;/c&gt; classes are assumed to be followed by zero or one objects indicating the element type.</span>
+<span class="source-line-no">148</span><span id="line-148">    *</span>
+<span class="source-line-no">149</span><span id="line-149">    * &lt;p&gt;</span>
+<span class="source-line-no">150</span><span id="line-150">    * &lt;c&gt;Map&lt;/c&gt; classes are assumed to be followed by zero or two meta objects indicating the key and value types.</span>
+<span class="source-line-no">151</span><span id="line-151">    *</span>
+<span class="source-line-no">152</span><span id="line-152">    * &lt;p&gt;</span>
+<span class="source-line-no">153</span><span id="line-153">    * The array can be arbitrarily long to indicate arbitrarily complex data structures.</span>
+<span class="source-line-no">154</span><span id="line-154">    *</span>
+<span class="source-line-no">155</span><span id="line-155">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">156</span><span id="line-156">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">157</span><span id="line-157">    *       Use the {@link #read(Object, Class)} method instead if you don't need a parameterized map/collection.</span>
+<span class="source-line-no">158</span><span id="line-158">    * &lt;/ul&gt;</span>
+<span class="source-line-no">159</span><span id="line-159">    *</span>
+<span class="source-line-no">160</span><span id="line-160">    * @param &lt;T&gt; The class type of the object to create.</span>
+<span class="source-line-no">161</span><span id="line-161">    * @param input</span>
+<span class="source-line-no">162</span><span id="line-162">    *    The input.</span>
+<span class="source-line-no">163</span><span id="line-163">    *    &lt;br&gt;Character-based parsers can handle the following input class types:</span>
+<span class="source-line-no">164</span><span id="line-164">    *    &lt;ul&gt;</span>
+<span class="source-line-no">165</span><span id="line-165">    *       &lt;li&gt;&lt;jk&gt;null&lt;/jk&gt;</span>
+<span class="source-line-no">166</span><span id="line-166">    *       &lt;li&gt;{@link Reader}</span>
+<span class="source-line-no">167</span><span id="line-167">    *       &lt;li&gt;{@link CharSequence}</span>
+<span class="source-line-no">168</span><span id="line-168">    *       &lt;li&gt;{@link InputStream} containing UTF-8 encoded text (or charset defined by</span>
+<span class="source-line-no">169</span><span id="line-169">    *          {@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).</span>
+<span class="source-line-no">170</span><span id="line-170">    *       &lt;li&gt;&lt;code&gt;&lt;jk&gt;byte&lt;/jk&gt;[]&lt;/code&gt; containing UTF-8 encoded text (or charset defined by</span>
+<span class="source-line-no">171</span><span id="line-171">    *          {@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).</span>
+<span class="source-line-no">172</span><span id="line-172">    *       &lt;li&gt;{@link File} containing system encoded text (or charset defined by</span>
+<span class="source-line-no">173</span><span id="line-173">    *          {@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).</span>
+<span class="source-line-no">174</span><span id="line-174">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">175</span><span id="line-175">    *    &lt;br&gt;Stream-based parsers can handle the following input class types:</span>
+<span class="source-line-no">176</span><span id="line-176">    *    &lt;ul&gt;</span>
+<span class="source-line-no">177</span><span id="line-177">    *       &lt;li&gt;&lt;jk&gt;null&lt;/jk&gt;</span>
+<span class="source-line-no">178</span><span id="line-178">    *       &lt;li&gt;{@link InputStream}</span>
+<span class="source-line-no">179</span><span id="line-179">    *       &lt;li&gt;&lt;code&gt;&lt;jk&gt;byte&lt;/jk&gt;[]&lt;/code&gt;</span>
+<span class="source-line-no">180</span><span id="line-180">    *       &lt;li&gt;{@link File}</span>
+<span class="source-line-no">181</span><span id="line-181">    *       &lt;li&gt;{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.</span>
+<span class="source-line-no">182</span><span id="line-182">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">183</span><span id="line-183">    * @param type</span>
+<span class="source-line-no">184</span><span id="line-184">    *    The object type to create.</span>
+<span class="source-line-no">185</span><span id="line-185">    *    &lt;br&gt;Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}</span>
+<span class="source-line-no">186</span><span id="line-186">    * @param args</span>
+<span class="source-line-no">187</span><span id="line-187">    *    The type arguments of the class if it's a collection or map.</span>
+<span class="source-line-no">188</span><span id="line-188">    *    &lt;br&gt;Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}</span>
+<span class="source-line-no">189</span><span id="line-189">    *    &lt;br&gt;Ignored if the main type is not a map or collection.</span>
+<span class="source-line-no">190</span><span id="line-190">    * @return The parsed object.</span>
+<span class="source-line-no">191</span><span id="line-191">    * @throws ParseException Malformed input encountered.</span>
+<span class="source-line-no">192</span><span id="line-192">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">193</span><span id="line-193">    * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.</span>
+<span class="source-line-no">194</span><span id="line-194">    */</span>
+<span class="source-line-no">195</span><span id="line-195">   public final &lt;T&gt; T read(Object input, Type type, Type...args) throws ParseException, IOException {</span>
+<span class="source-line-no">196</span><span id="line-196">      return p.parse(input, type, args);</span>
+<span class="source-line-no">197</span><span id="line-197">   }</span>
+<span class="source-line-no">198</span><span id="line-198"></span>
+<span class="source-line-no">199</span><span id="line-199">   /**</span>
+<span class="source-line-no">200</span><span id="line-200">    * Same as {@link #read(Object, Type, Type...)} except optimized for a non-parameterized class.</span>
+<span class="source-line-no">201</span><span id="line-201">    *</span>
+<span class="source-line-no">202</span><span id="line-202">    * &lt;p&gt;</span>
+<span class="source-line-no">203</span><span id="line-203">    * This is the preferred parse method for simple types since you don't need to cast the results.</span>
 <span class="source-line-no">204</span><span id="line-204">    *</span>
-<span class="source-line-no">205</span><span id="line-205">    *    &lt;jc&gt;// Parse into a string.&lt;/jc&gt;</span>
-<span class="source-line-no">206</span><span id="line-206">    *    String &lt;jv&gt;string&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">207</span><span id="line-207">    *</span>
-<span class="source-line-no">208</span><span id="line-208">    *    &lt;jc&gt;// Parse into a bean.&lt;/jc&gt;</span>
-<span class="source-line-no">209</span><span id="line-209">    *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">210</span><span id="line-210">    *</span>
-<span class="source-line-no">211</span><span id="line-211">    *    &lt;jc&gt;// Parse into a bean array.&lt;/jc&gt;</span>
-<span class="source-line-no">212</span><span id="line-212">    *    MyBean[] &lt;jv&gt;beanArray&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, MyBean[].&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">213</span><span id="line-213">    *</span>
-<span class="source-line-no">214</span><span id="line-214">    *    &lt;jc&gt;// Parse into a linked-list of objects.&lt;/jc&gt;</span>
-<span class="source-line-no">215</span><span id="line-215">    *    List &lt;jv&gt;list&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">216</span><span id="line-216">    *</span>
-<span class="source-line-no">217</span><span id="line-217">    *    &lt;jc&gt;// Parse into a map of object keys/values.&lt;/jc&gt;</span>
-<span class="source-line-no">218</span><span id="line-218">    *    Map &lt;jv&gt;map&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, TreeMap.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">219</span><span id="line-219">    * &lt;/p&gt;</span>
+<span class="source-line-no">205</span><span id="line-205">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">206</span><span id="line-206">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">207</span><span id="line-207">    *    Marshaller &lt;jv&gt;marshaller&lt;/jv&gt;  = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;;</span>
+<span class="source-line-no">208</span><span id="line-208">    *</span>
+<span class="source-line-no">209</span><span id="line-209">    *    &lt;jc&gt;// Parse into a string.&lt;/jc&gt;</span>
+<span class="source-line-no">210</span><span id="line-210">    *    String &lt;jv&gt;string&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">211</span><span id="line-211">    *</span>
+<span class="source-line-no">212</span><span id="line-212">    *    &lt;jc&gt;// Parse into a bean.&lt;/jc&gt;</span>
+<span class="source-line-no">213</span><span id="line-213">    *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">214</span><span id="line-214">    *</span>
+<span class="source-line-no">215</span><span id="line-215">    *    &lt;jc&gt;// Parse into a bean array.&lt;/jc&gt;</span>
+<span class="source-line-no">216</span><span id="line-216">    *    MyBean[] &lt;jv&gt;beanArray&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, MyBean[].&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">217</span><span id="line-217">    *</span>
+<span class="source-line-no">218</span><span id="line-218">    *    &lt;jc&gt;// Parse into a linked-list of objects.&lt;/jc&gt;</span>
+<span class="source-line-no">219</span><span id="line-219">    *    List &lt;jv&gt;list&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">220</span><span id="line-220">    *</span>
-<span class="source-line-no">221</span><span id="line-221">    * @param &lt;T&gt; The class type of the object being created.</span>
-<span class="source-line-no">222</span><span id="line-222">    * @param input</span>
-<span class="source-line-no">223</span><span id="line-223">    *    The input.</span>
-<span class="source-line-no">224</span><span id="line-224">    *    &lt;br&gt;Character-based parsers can handle the following input class types:</span>
-<span class="source-line-no">225</span><span id="line-225">    *    &lt;ul&gt;</span>
-<span class="source-line-no">226</span><span id="line-226">    *       &lt;li&gt;&lt;jk&gt;null&lt;/jk&gt;</span>
-<span class="source-line-no">227</span><span id="line-227">    *       &lt;li&gt;{@link Reader}</span>
-<span class="source-line-no">228</span><span id="line-228">    *       &lt;li&gt;{@link CharSequence}</span>
-<span class="source-line-no">229</span><span id="line-229">    *       &lt;li&gt;{@link InputStream} containing UTF-8 encoded text (or charset defined by</span>
-<span class="source-line-no">230</span><span id="line-230">    *          {@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).</span>
-<span class="source-line-no">231</span><span id="line-231">    *       &lt;li&gt;&lt;code&gt;&lt;jk&gt;byte&lt;/jk&gt;[]&lt;/code&gt; containing UTF-8 encoded text (or charset defined by</span>
-<span class="source-line-no">232</span><span id="line-232">    *          {@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).</span>
-<span class="source-line-no">233</span><span id="line-233">    *       &lt;li&gt;{@link File} containing system encoded text (or charset defined by</span>
-<span class="source-line-no">234</span><span id="line-234">    *          {@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).</span>
-<span class="source-line-no">235</span><span id="line-235">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">236</span><span id="line-236">    *    &lt;br&gt;Stream-based parsers can handle the following input class types:</span>
-<span class="source-line-no">237</span><span id="line-237">    *    &lt;ul&gt;</span>
-<span class="source-line-no">238</span><span id="line-238">    *       &lt;li&gt;&lt;jk&gt;null&lt;/jk&gt;</span>
-<span class="source-line-no">239</span><span id="line-239">    *       &lt;li&gt;{@link InputStream}</span>
-<span class="source-line-no">240</span><span id="line-240">    *       &lt;li&gt;&lt;code&gt;&lt;jk&gt;byte&lt;/jk&gt;[]&lt;/code&gt;</span>
-<span class="source-line-no">241</span><span id="line-241">    *       &lt;li&gt;{@link File}</span>
-<span class="source-line-no">242</span><span id="line-242">    *       &lt;li&gt;{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.</span>
-<span class="source-line-no">243</span><span id="line-243">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">244</span><span id="line-244">    * @param type The object type to create.</span>
-<span class="source-line-no">245</span><span id="line-245">    * @return The parsed object.</span>
-<span class="source-line-no">246</span><span id="line-246">    * @throws ParseException Malformed input encountered.</span>
-<span class="source-line-no">247</span><span id="line-247">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">248</span><span id="line-248">    */</span>
-<span class="source-line-no">249</span><span id="line-249">   public final &lt;T&gt; T read(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">250</span><span id="line-250">      return p.parse(input, type);</span>
-<span class="source-line-no">251</span><span id="line-251">   }</span>
-<span class="source-line-no">252</span><span id="line-252">}</span>
+<span class="source-line-no">221</span><span id="line-221">    *    &lt;jc&gt;// Parse into a map of object keys/values.&lt;/jc&gt;</span>
+<span class="source-line-no">222</span><span id="line-222">    *    Map &lt;jv&gt;map&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, TreeMap.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">223</span><span id="line-223">    * &lt;/p&gt;</span>
+<span class="source-line-no">224</span><span id="line-224">    *</span>
+<span class="source-line-no">225</span><span id="line-225">    * @param &lt;T&gt; The class type of the object being created.</span>
+<span class="source-line-no">226</span><span id="line-226">    * @param input</span>
+<span class="source-line-no">227</span><span id="line-227">    *    The input.</span>
+<span class="source-line-no">228</span><span id="line-228">    *    &lt;br&gt;Character-based parsers can handle the following input class types:</span>
+<span class="source-line-no">229</span><span id="line-229">    *    &lt;ul&gt;</span>
+<span class="source-line-no">230</span><span id="line-230">    *       &lt;li&gt;&lt;jk&gt;null&lt;/jk&gt;</span>
+<span class="source-line-no">231</span><span id="line-231">    *       &lt;li&gt;{@link Reader}</span>
+<span class="source-line-no">232</span><span id="line-232">    *       &lt;li&gt;{@link CharSequence}</span>
+<span class="source-line-no">233</span><span id="line-233">    *       &lt;li&gt;{@link InputStream} containing UTF-8 encoded text (or charset defined by</span>
+<span class="source-line-no">234</span><span id="line-234">    *          {@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).</span>
+<span class="source-line-no">235</span><span id="line-235">    *       &lt;li&gt;&lt;code&gt;&lt;jk&gt;byte&lt;/jk&gt;[]&lt;/code&gt; containing UTF-8 encoded text (or charset defined by</span>
+<span class="source-line-no">236</span><span id="line-236">    *          {@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).</span>
+<span class="source-line-no">237</span><span id="line-237">    *       &lt;li&gt;{@link File} containing system encoded text (or charset defined by</span>
+<span class="source-line-no">238</span><span id="line-238">    *          {@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).</span>
+<span class="source-line-no">239</span><span id="line-239">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">240</span><span id="line-240">    *    &lt;br&gt;Stream-based parsers can handle the following input class types:</span>
+<span class="source-line-no">241</span><span id="line-241">    *    &lt;ul&gt;</span>
+<span class="source-line-no">242</span><span id="line-242">    *       &lt;li&gt;&lt;jk&gt;null&lt;/jk&gt;</span>
+<span class="source-line-no">243</span><span id="line-243">    *       &lt;li&gt;{@link InputStream}</span>
+<span class="source-line-no">244</span><span id="line-244">    *       &lt;li&gt;&lt;code&gt;&lt;jk&gt;byte&lt;/jk&gt;[]&lt;/code&gt;</span>
+<span class="source-line-no">245</span><span id="line-245">    *       &lt;li&gt;{@link File}</span>
+<span class="source-line-no">246</span><span id="line-246">    *       &lt;li&gt;{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.</span>
+<span class="source-line-no">247</span><span id="line-247">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">248</span><span id="line-248">    * @param type The object type to create.</span>
+<span class="source-line-no">249</span><span id="line-249">    * @return The parsed object.</span>
+<span class="source-line-no">250</span><span id="line-250">    * @throws ParseException Malformed input encountered.</span>
+<span class="source-line-no">251</span><span id="line-251">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">252</span><span id="line-252">    */</span>
+<span class="source-line-no">253</span><span id="line-253">   public final &lt;T&gt; T read(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
+<span class="source-line-no">254</span><span id="line-254">      return p.parse(input, type);</span>
+<span class="source-line-no">255</span><span id="line-255">   }</span>
+<span class="source-line-no">256</span><span id="line-256">}</span>
 
 
 

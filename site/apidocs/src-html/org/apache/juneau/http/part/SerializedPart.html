@@ -11,243 +11,247 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.http.part;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import java.util.function.*;</span>
-<span class="source-line-no">016</span><span id="line-16"></span>
-<span class="source-line-no">017</span><span id="line-17">import org.apache.http.*;</span>
-<span class="source-line-no">018</span><span id="line-18">import org.apache.juneau.*;</span>
-<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.common.utils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.http.header.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.httppart.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.oapi.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.serializer.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.urlencoding.*;</span>
-<span class="source-line-no">025</span><span id="line-25"></span>
-<span class="source-line-no">026</span><span id="line-26">/**</span>
-<span class="source-line-no">027</span><span id="line-27"> * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries using the</span>
-<span class="source-line-no">028</span><span id="line-28"> * {@link UrlEncodingSerializer class}.</span>
-<span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> *    NameValuePairs &lt;jv&gt;params&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; NameValuePairs()</span>
-<span class="source-line-no">033</span><span id="line-33"> *       .append(&lt;jk&gt;new&lt;/jk&gt; SerializedNameValuePair(&lt;js&gt;"myPojo"&lt;/js&gt;, &lt;jv&gt;pojo&lt;/jv&gt;, UrlEncodingSerializer.&lt;jsf&gt;DEFAULT_SIMPLE&lt;/jsf&gt;))</span>
-<span class="source-line-no">034</span><span id="line-34"> *       .append(&lt;jk&gt;new&lt;/jk&gt; BasicNameValuePair(&lt;js&gt;"someOtherParam"&lt;/js&gt;, &lt;js&gt;"foobar"&lt;/js&gt;));</span>
-<span class="source-line-no">035</span><span id="line-35"> *    &lt;jv&gt;request&lt;/jv&gt;.setEntity(&lt;jk&gt;new&lt;/jk&gt; UrlEncodedFormEntity(&lt;jv&gt;params&lt;/jv&gt;));</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;/p&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;/ul&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> */</span>
-<span class="source-line-no">042</span><span id="line-42">public class SerializedPart extends BasicPart {</span>
-<span class="source-line-no">043</span><span id="line-43">   private final Object value;</span>
-<span class="source-line-no">044</span><span id="line-44">   private HttpPartType type;</span>
-<span class="source-line-no">045</span><span id="line-45">   private HttpPartSerializerSession serializer;</span>
-<span class="source-line-no">046</span><span id="line-46">   private HttpPartSchema schema = HttpPartSchema.DEFAULT;</span>
-<span class="source-line-no">047</span><span id="line-47">   private boolean skipIfEmpty;</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   /**</span>
-<span class="source-line-no">050</span><span id="line-50">    * Instantiates a new instance of this object.</span>
-<span class="source-line-no">051</span><span id="line-51">    *</span>
-<span class="source-line-no">052</span><span id="line-52">    * @param name The part name.</span>
-<span class="source-line-no">053</span><span id="line-53">    * @param value</span>
-<span class="source-line-no">054</span><span id="line-54">    *    The part value.</span>
-<span class="source-line-no">055</span><span id="line-55">    *    &lt;br&gt;Can be any POJO.</span>
-<span class="source-line-no">056</span><span id="line-56">    * @return A new {@link SerializedPart} object, never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">057</span><span id="line-57">    */</span>
-<span class="source-line-no">058</span><span id="line-58">   public static SerializedPart of(String name, Object value) {</span>
-<span class="source-line-no">059</span><span id="line-59">      return new SerializedPart(name, value, null, null, null, false);</span>
-<span class="source-line-no">060</span><span id="line-60">   }</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">   /**</span>
-<span class="source-line-no">063</span><span id="line-63">    * Instantiates a new instance of this object.</span>
-<span class="source-line-no">064</span><span id="line-64">    *</span>
-<span class="source-line-no">065</span><span id="line-65">    * @param name The part name.</span>
-<span class="source-line-no">066</span><span id="line-66">    * @param value</span>
-<span class="source-line-no">067</span><span id="line-67">    *    The part value supplier.</span>
-<span class="source-line-no">068</span><span id="line-68">    *    &lt;br&gt;Can be a supplier of any POJO.</span>
-<span class="source-line-no">069</span><span id="line-69">    * @return A new {@link SerializedPart} object, never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">070</span><span id="line-70">    */</span>
-<span class="source-line-no">071</span><span id="line-71">   public static SerializedPart of(String name, Supplier&lt;?&gt; value) {</span>
-<span class="source-line-no">072</span><span id="line-72">      return new SerializedPart(name, value, null, null, null, false);</span>
-<span class="source-line-no">073</span><span id="line-73">   }</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">   /**</span>
-<span class="source-line-no">076</span><span id="line-76">    * Constructor.</span>
-<span class="source-line-no">077</span><span id="line-77">    *</span>
-<span class="source-line-no">078</span><span id="line-78">    * @param name The part name.</span>
-<span class="source-line-no">079</span><span id="line-79">    * @param value The POJO to serialize to The part value.</span>
-<span class="source-line-no">080</span><span id="line-80">    * @param type The HTTP part type.</span>
-<span class="source-line-no">081</span><span id="line-81">    * @param serializer</span>
-<span class="source-line-no">082</span><span id="line-82">    *    The serializer to use for serializing the value to a string value.</span>
-<span class="source-line-no">083</span><span id="line-83">    * @param schema</span>
-<span class="source-line-no">084</span><span id="line-84">    *    The schema object that defines the format of the output.</span>
-<span class="source-line-no">085</span><span id="line-85">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, defaults to the schema defined on the serializer.</span>
-<span class="source-line-no">086</span><span id="line-86">    *    &lt;br&gt;If that's also &lt;jk&gt;null&lt;/jk&gt;, defaults to {@link HttpPartSchema#DEFAULT}.</span>
-<span class="source-line-no">087</span><span id="line-87">    *    &lt;br&gt;Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).</span>
-<span class="source-line-no">088</span><span id="line-88">    * @param skipIfEmpty If value is a blank string, the value should return as &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">089</span><span id="line-89">    */</span>
-<span class="source-line-no">090</span><span id="line-90">   public SerializedPart(String name, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {</span>
-<span class="source-line-no">091</span><span id="line-91">      super(name, value);</span>
-<span class="source-line-no">092</span><span id="line-92">      this.value = value;</span>
-<span class="source-line-no">093</span><span id="line-93">      this.type = type;</span>
-<span class="source-line-no">094</span><span id="line-94">      this.serializer = serializer;</span>
-<span class="source-line-no">095</span><span id="line-95">      this.schema = schema;</span>
-<span class="source-line-no">096</span><span id="line-96">      this.skipIfEmpty = skipIfEmpty;</span>
-<span class="source-line-no">097</span><span id="line-97">   }</span>
-<span class="source-line-no">098</span><span id="line-98"></span>
-<span class="source-line-no">099</span><span id="line-99">   /**</span>
-<span class="source-line-no">100</span><span id="line-100">    * Copy constructor.</span>
-<span class="source-line-no">101</span><span id="line-101">    *</span>
-<span class="source-line-no">102</span><span id="line-102">    * @param copyFrom The object to copy.</span>
-<span class="source-line-no">103</span><span id="line-103">    */</span>
-<span class="source-line-no">104</span><span id="line-104">   protected SerializedPart(SerializedPart copyFrom) {</span>
-<span class="source-line-no">105</span><span id="line-105">      super(copyFrom);</span>
-<span class="source-line-no">106</span><span id="line-106">      this.value = copyFrom.value;</span>
-<span class="source-line-no">107</span><span id="line-107">      this.type = copyFrom.type;</span>
-<span class="source-line-no">108</span><span id="line-108">      this.serializer = copyFrom.serializer == null ? serializer : copyFrom.serializer;</span>
-<span class="source-line-no">109</span><span id="line-109">      this.schema = copyFrom.schema == null ? schema : copyFrom.schema;</span>
-<span class="source-line-no">110</span><span id="line-110">      this.skipIfEmpty = copyFrom.skipIfEmpty;</span>
-<span class="source-line-no">111</span><span id="line-111">   }</span>
-<span class="source-line-no">112</span><span id="line-112"></span>
-<span class="source-line-no">113</span><span id="line-113">   /**</span>
-<span class="source-line-no">114</span><span id="line-114">    * Creates a copy of this object.</span>
-<span class="source-line-no">115</span><span id="line-115">    *</span>
-<span class="source-line-no">116</span><span id="line-116">    * @return A new copy of this object.</span>
-<span class="source-line-no">117</span><span id="line-117">    */</span>
-<span class="source-line-no">118</span><span id="line-118">   public SerializedPart copy() {</span>
-<span class="source-line-no">119</span><span id="line-119">      return new SerializedPart(this);</span>
-<span class="source-line-no">120</span><span id="line-120">   }</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">   /**</span>
-<span class="source-line-no">123</span><span id="line-123">    * Sets the HTTP part type.</span>
-<span class="source-line-no">124</span><span id="line-124">    *</span>
-<span class="source-line-no">125</span><span id="line-125">    * @param value The new value for this property.</span>
-<span class="source-line-no">126</span><span id="line-126">    * @return This object.</span>
-<span class="source-line-no">127</span><span id="line-127">    */</span>
-<span class="source-line-no">128</span><span id="line-128">   public SerializedPart type(HttpPartType value) {</span>
-<span class="source-line-no">129</span><span id="line-129">      type = value;</span>
-<span class="source-line-no">130</span><span id="line-130">      return this;</span>
-<span class="source-line-no">131</span><span id="line-131">   }</span>
-<span class="source-line-no">132</span><span id="line-132"></span>
-<span class="source-line-no">133</span><span id="line-133">   /**</span>
-<span class="source-line-no">134</span><span id="line-134">    * Sets the serializer to use for serializing the value to a string value.</span>
-<span class="source-line-no">135</span><span id="line-135">    *</span>
-<span class="source-line-no">136</span><span id="line-136">    * @param value The new value for this property.</span>
-<span class="source-line-no">137</span><span id="line-137">    * @return This object.</span>
-<span class="source-line-no">138</span><span id="line-138">    */</span>
-<span class="source-line-no">139</span><span id="line-139">   public SerializedPart serializer(HttpPartSerializer value) {</span>
-<span class="source-line-no">140</span><span id="line-140">      if (value != null)</span>
-<span class="source-line-no">141</span><span id="line-141">         return serializer(value.getPartSession());</span>
-<span class="source-line-no">142</span><span id="line-142">      return this;</span>
-<span class="source-line-no">143</span><span id="line-143">   }</span>
-<span class="source-line-no">144</span><span id="line-144"></span>
-<span class="source-line-no">145</span><span id="line-145">   /**</span>
-<span class="source-line-no">146</span><span id="line-146">    * Sets the serializer to use for serializing the value to a string value.</span>
-<span class="source-line-no">147</span><span id="line-147">    *</span>
-<span class="source-line-no">148</span><span id="line-148">    * @param value The new value for this property.</span>
-<span class="source-line-no">149</span><span id="line-149">    * @return This object.</span>
-<span class="source-line-no">150</span><span id="line-150">    */</span>
-<span class="source-line-no">151</span><span id="line-151">   public SerializedPart serializer(HttpPartSerializerSession value) {</span>
-<span class="source-line-no">152</span><span id="line-152">      serializer = value;</span>
-<span class="source-line-no">153</span><span id="line-153">      return this;</span>
-<span class="source-line-no">154</span><span id="line-154">   }</span>
-<span class="source-line-no">155</span><span id="line-155"></span>
-<span class="source-line-no">156</span><span id="line-156">   /**</span>
-<span class="source-line-no">157</span><span id="line-157">    * Sets the schema object that defines the format of the output.</span>
-<span class="source-line-no">158</span><span id="line-158">    *</span>
-<span class="source-line-no">159</span><span id="line-159">    * @param value The new value for this property.</span>
-<span class="source-line-no">160</span><span id="line-160">    * @return This object.</span>
-<span class="source-line-no">161</span><span id="line-161">    */</span>
-<span class="source-line-no">162</span><span id="line-162">   public SerializedPart schema(HttpPartSchema value) {</span>
-<span class="source-line-no">163</span><span id="line-163">      this.schema = value;</span>
-<span class="source-line-no">164</span><span id="line-164">      return this;</span>
-<span class="source-line-no">165</span><span id="line-165">   }</span>
-<span class="source-line-no">166</span><span id="line-166"></span>
-<span class="source-line-no">167</span><span id="line-167">   /**</span>
-<span class="source-line-no">168</span><span id="line-168">    * Copies this bean and sets the serializer and schema on it.</span>
-<span class="source-line-no">169</span><span id="line-169">    *</span>
-<span class="source-line-no">170</span><span id="line-170">    * @param serializer The new serializer for the bean.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">171</span><span id="line-171">    * @param schema The new schema for the bean.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">172</span><span id="line-172">    * @return Either a new bean with the serializer set, or this bean if</span>
-<span class="source-line-no">173</span><span id="line-173">    *    both values are &lt;jk&gt;null&lt;/jk&gt; or the serializer and schema were already set.</span>
-<span class="source-line-no">174</span><span id="line-174">    */</span>
-<span class="source-line-no">175</span><span id="line-175">   public SerializedPart copyWith(HttpPartSerializerSession serializer, HttpPartSchema schema) {</span>
-<span class="source-line-no">176</span><span id="line-176">      if ((this.serializer == null &amp;&amp; serializer != null) || (this.schema == null &amp;&amp; schema != null)) {</span>
-<span class="source-line-no">177</span><span id="line-177">         SerializedPart p = copy();</span>
-<span class="source-line-no">178</span><span id="line-178">         if (serializer != null)</span>
-<span class="source-line-no">179</span><span id="line-179">            p.serializer(serializer);</span>
-<span class="source-line-no">180</span><span id="line-180">         if (schema != null)</span>
-<span class="source-line-no">181</span><span id="line-181">            p.schema(schema);</span>
-<span class="source-line-no">182</span><span id="line-182">         return p;</span>
-<span class="source-line-no">183</span><span id="line-183">      }</span>
-<span class="source-line-no">184</span><span id="line-184">      return this;</span>
-<span class="source-line-no">185</span><span id="line-185">   }</span>
-<span class="source-line-no">186</span><span id="line-186"></span>
-<span class="source-line-no">187</span><span id="line-187">   /**</span>
-<span class="source-line-no">188</span><span id="line-188">    * Don't serialize this pair if the value is &lt;jk&gt;null&lt;/jk&gt; or an empty string.</span>
-<span class="source-line-no">189</span><span id="line-189">    *</span>
-<span class="source-line-no">190</span><span id="line-190">    * @return This object.</span>
-<span class="source-line-no">191</span><span id="line-191">    */</span>
-<span class="source-line-no">192</span><span id="line-192">   public SerializedPart skipIfEmpty() {</span>
-<span class="source-line-no">193</span><span id="line-193">      return skipIfEmpty(true);</span>
-<span class="source-line-no">194</span><span id="line-194">   }</span>
-<span class="source-line-no">195</span><span id="line-195"></span>
-<span class="source-line-no">196</span><span id="line-196">   /**</span>
-<span class="source-line-no">197</span><span id="line-197">    * Don't serialize this pair if the value is &lt;jk&gt;null&lt;/jk&gt; or an empty string.</span>
-<span class="source-line-no">198</span><span id="line-198">    *</span>
-<span class="source-line-no">199</span><span id="line-199">    * @param value The new value of this setting.</span>
-<span class="source-line-no">200</span><span id="line-200">    * @return This object.</span>
-<span class="source-line-no">201</span><span id="line-201">    */</span>
-<span class="source-line-no">202</span><span id="line-202">   public SerializedPart skipIfEmpty(boolean value) {</span>
-<span class="source-line-no">203</span><span id="line-203">      this.skipIfEmpty = value;</span>
-<span class="source-line-no">204</span><span id="line-204">      return this;</span>
-<span class="source-line-no">205</span><span id="line-205">   }</span>
-<span class="source-line-no">206</span><span id="line-206"></span>
-<span class="source-line-no">207</span><span id="line-207">   @Override /* Headerable */</span>
-<span class="source-line-no">208</span><span id="line-208">   public SerializedHeader asHeader() {</span>
-<span class="source-line-no">209</span><span id="line-209">      return new SerializedHeader(getName(), value, serializer, schema, skipIfEmpty);</span>
-<span class="source-line-no">210</span><span id="line-210">   }</span>
-<span class="source-line-no">211</span><span id="line-211"></span>
-<span class="source-line-no">212</span><span id="line-212">   @Override /* NameValuePair */</span>
-<span class="source-line-no">213</span><span id="line-213">   public String getValue() {</span>
-<span class="source-line-no">214</span><span id="line-214">      try {</span>
-<span class="source-line-no">215</span><span id="line-215">         Object v = unwrap(value);</span>
-<span class="source-line-no">216</span><span id="line-216">         HttpPartSchema schema = this.schema == null ? HttpPartSchema.DEFAULT : this.schema;</span>
-<span class="source-line-no">217</span><span id="line-217">         String def = schema.getDefault();</span>
-<span class="source-line-no">218</span><span id="line-218">         if (v == null) {</span>
-<span class="source-line-no">219</span><span id="line-219">            if ((def == null &amp;&amp; ! schema.isRequired()) || (def == null &amp;&amp; schema.isAllowEmptyValue()))</span>
-<span class="source-line-no">220</span><span id="line-220">               return null;</span>
-<span class="source-line-no">221</span><span id="line-221">         }</span>
-<span class="source-line-no">222</span><span id="line-222">         if (Utils.isEmpty(Utils.s(v)) &amp;&amp; skipIfEmpty &amp;&amp; def == null)</span>
-<span class="source-line-no">223</span><span id="line-223">            return null;</span>
-<span class="source-line-no">224</span><span id="line-224">         return serializer == null ? Utils.s(v) : serializer.serialize(type, schema, v);</span>
-<span class="source-line-no">225</span><span id="line-225">      } catch (SchemaValidationException e) {</span>
-<span class="source-line-no">226</span><span id="line-226">         throw new BasicRuntimeException(e, "Validation error on request {0} part ''{1}''=''{2}''", type, getName(), value);</span>
-<span class="source-line-no">227</span><span id="line-227">      } catch (SerializeException e) {</span>
-<span class="source-line-no">228</span><span id="line-228">         throw new BasicRuntimeException(e, "Serialization error on request {0} part ''{1}''", type, getName());</span>
-<span class="source-line-no">229</span><span id="line-229">      }</span>
-<span class="source-line-no">230</span><span id="line-230">   }</span>
-<span class="source-line-no">231</span><span id="line-231"></span>
-<span class="source-line-no">232</span><span id="line-232">   private Object unwrap(Object o) {</span>
-<span class="source-line-no">233</span><span id="line-233">      if (o instanceof Supplier)</span>
-<span class="source-line-no">234</span><span id="line-234">         return ((Supplier&lt;?&gt;)o).get();</span>
-<span class="source-line-no">235</span><span id="line-235">      return o;</span>
-<span class="source-line-no">236</span><span id="line-236">   }</span>
-<span class="source-line-no">237</span><span id="line-237">}</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.part;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import java.util.function.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import org.apache.http.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.common.utils.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.http.header.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.httppart.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.oapi.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.serializer.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.urlencoding.*;</span>
+<span class="source-line-no">029</span><span id="line-29"></span>
+<span class="source-line-no">030</span><span id="line-30">/**</span>
+<span class="source-line-no">031</span><span id="line-31"> * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries using the</span>
+<span class="source-line-no">032</span><span id="line-32"> * {@link UrlEncodingSerializer class}.</span>
+<span class="source-line-no">033</span><span id="line-33"> *</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> *    NameValuePairs &lt;jv&gt;params&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; NameValuePairs()</span>
+<span class="source-line-no">037</span><span id="line-37"> *       .append(&lt;jk&gt;new&lt;/jk&gt; SerializedNameValuePair(&lt;js&gt;"myPojo"&lt;/js&gt;, &lt;jv&gt;pojo&lt;/jv&gt;, UrlEncodingSerializer.&lt;jsf&gt;DEFAULT_SIMPLE&lt;/jsf&gt;))</span>
+<span class="source-line-no">038</span><span id="line-38"> *       .append(&lt;jk&gt;new&lt;/jk&gt; BasicNameValuePair(&lt;js&gt;"someOtherParam"&lt;/js&gt;, &lt;js&gt;"foobar"&lt;/js&gt;));</span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;jv&gt;request&lt;/jv&gt;.setEntity(&lt;jk&gt;new&lt;/jk&gt; UrlEncodedFormEntity(&lt;jv&gt;params&lt;/jv&gt;));</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;/p&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> *</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> */</span>
+<span class="source-line-no">046</span><span id="line-46">public class SerializedPart extends BasicPart {</span>
+<span class="source-line-no">047</span><span id="line-47">   private final Object value;</span>
+<span class="source-line-no">048</span><span id="line-48">   private HttpPartType type;</span>
+<span class="source-line-no">049</span><span id="line-49">   private HttpPartSerializerSession serializer;</span>
+<span class="source-line-no">050</span><span id="line-50">   private HttpPartSchema schema = HttpPartSchema.DEFAULT;</span>
+<span class="source-line-no">051</span><span id="line-51">   private boolean skipIfEmpty;</span>
+<span class="source-line-no">052</span><span id="line-52"></span>
+<span class="source-line-no">053</span><span id="line-53">   /**</span>
+<span class="source-line-no">054</span><span id="line-54">    * Instantiates a new instance of this object.</span>
+<span class="source-line-no">055</span><span id="line-55">    *</span>
+<span class="source-line-no">056</span><span id="line-56">    * @param name The part name.</span>
+<span class="source-line-no">057</span><span id="line-57">    * @param value</span>
+<span class="source-line-no">058</span><span id="line-58">    *    The part value.</span>
+<span class="source-line-no">059</span><span id="line-59">    *    &lt;br&gt;Can be any POJO.</span>
+<span class="source-line-no">060</span><span id="line-60">    * @return A new {@link SerializedPart} object, never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">061</span><span id="line-61">    */</span>
+<span class="source-line-no">062</span><span id="line-62">   public static SerializedPart of(String name, Object value) {</span>
+<span class="source-line-no">063</span><span id="line-63">      return new SerializedPart(name, value, null, null, null, false);</span>
+<span class="source-line-no">064</span><span id="line-64">   }</span>
+<span class="source-line-no">065</span><span id="line-65"></span>
+<span class="source-line-no">066</span><span id="line-66">   /**</span>
+<span class="source-line-no">067</span><span id="line-67">    * Instantiates a new instance of this object.</span>
+<span class="source-line-no">068</span><span id="line-68">    *</span>
+<span class="source-line-no">069</span><span id="line-69">    * @param name The part name.</span>
+<span class="source-line-no">070</span><span id="line-70">    * @param value</span>
+<span class="source-line-no">071</span><span id="line-71">    *    The part value supplier.</span>
+<span class="source-line-no">072</span><span id="line-72">    *    &lt;br&gt;Can be a supplier of any POJO.</span>
+<span class="source-line-no">073</span><span id="line-73">    * @return A new {@link SerializedPart} object, never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">074</span><span id="line-74">    */</span>
+<span class="source-line-no">075</span><span id="line-75">   public static SerializedPart of(String name, Supplier&lt;?&gt; value) {</span>
+<span class="source-line-no">076</span><span id="line-76">      return new SerializedPart(name, value, null, null, null, false);</span>
+<span class="source-line-no">077</span><span id="line-77">   }</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   /**</span>
+<span class="source-line-no">080</span><span id="line-80">    * Constructor.</span>
+<span class="source-line-no">081</span><span id="line-81">    *</span>
+<span class="source-line-no">082</span><span id="line-82">    * @param name The part name.</span>
+<span class="source-line-no">083</span><span id="line-83">    * @param value The POJO to serialize to The part value.</span>
+<span class="source-line-no">084</span><span id="line-84">    * @param type The HTTP part type.</span>
+<span class="source-line-no">085</span><span id="line-85">    * @param serializer</span>
+<span class="source-line-no">086</span><span id="line-86">    *    The serializer to use for serializing the value to a string value.</span>
+<span class="source-line-no">087</span><span id="line-87">    * @param schema</span>
+<span class="source-line-no">088</span><span id="line-88">    *    The schema object that defines the format of the output.</span>
+<span class="source-line-no">089</span><span id="line-89">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, defaults to the schema defined on the serializer.</span>
+<span class="source-line-no">090</span><span id="line-90">    *    &lt;br&gt;If that's also &lt;jk&gt;null&lt;/jk&gt;, defaults to {@link HttpPartSchema#DEFAULT}.</span>
+<span class="source-line-no">091</span><span id="line-91">    *    &lt;br&gt;Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).</span>
+<span class="source-line-no">092</span><span id="line-92">    * @param skipIfEmpty If value is a blank string, the value should return as &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">093</span><span id="line-93">    */</span>
+<span class="source-line-no">094</span><span id="line-94">   public SerializedPart(String name, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {</span>
+<span class="source-line-no">095</span><span id="line-95">      super(name, value);</span>
+<span class="source-line-no">096</span><span id="line-96">      this.value = value;</span>
+<span class="source-line-no">097</span><span id="line-97">      this.type = type;</span>
+<span class="source-line-no">098</span><span id="line-98">      this.serializer = serializer;</span>
+<span class="source-line-no">099</span><span id="line-99">      this.schema = schema;</span>
+<span class="source-line-no">100</span><span id="line-100">      this.skipIfEmpty = skipIfEmpty;</span>
+<span class="source-line-no">101</span><span id="line-101">   }</span>
+<span class="source-line-no">102</span><span id="line-102"></span>
+<span class="source-line-no">103</span><span id="line-103">   /**</span>
+<span class="source-line-no">104</span><span id="line-104">    * Copy constructor.</span>
+<span class="source-line-no">105</span><span id="line-105">    *</span>
+<span class="source-line-no">106</span><span id="line-106">    * @param copyFrom The object to copy.</span>
+<span class="source-line-no">107</span><span id="line-107">    */</span>
+<span class="source-line-no">108</span><span id="line-108">   protected SerializedPart(SerializedPart copyFrom) {</span>
+<span class="source-line-no">109</span><span id="line-109">      super(copyFrom);</span>
+<span class="source-line-no">110</span><span id="line-110">      this.value = copyFrom.value;</span>
+<span class="source-line-no">111</span><span id="line-111">      this.type = copyFrom.type;</span>
+<span class="source-line-no">112</span><span id="line-112">      this.serializer = copyFrom.serializer == null ? serializer : copyFrom.serializer;</span>
+<span class="source-line-no">113</span><span id="line-113">      this.schema = copyFrom.schema == null ? schema : copyFrom.schema;</span>
+<span class="source-line-no">114</span><span id="line-114">      this.skipIfEmpty = copyFrom.skipIfEmpty;</span>
+<span class="source-line-no">115</span><span id="line-115">   }</span>
+<span class="source-line-no">116</span><span id="line-116"></span>
+<span class="source-line-no">117</span><span id="line-117">   /**</span>
+<span class="source-line-no">118</span><span id="line-118">    * Creates a copy of this object.</span>
+<span class="source-line-no">119</span><span id="line-119">    *</span>
+<span class="source-line-no">120</span><span id="line-120">    * @return A new copy of this object.</span>
+<span class="source-line-no">121</span><span id="line-121">    */</span>
+<span class="source-line-no">122</span><span id="line-122">   public SerializedPart copy() {</span>
+<span class="source-line-no">123</span><span id="line-123">      return new SerializedPart(this);</span>
+<span class="source-line-no">124</span><span id="line-124">   }</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">   /**</span>
+<span class="source-line-no">127</span><span id="line-127">    * Sets the HTTP part type.</span>
+<span class="source-line-no">128</span><span id="line-128">    *</span>
+<span class="source-line-no">129</span><span id="line-129">    * @param value The new value for this property.</span>
+<span class="source-line-no">130</span><span id="line-130">    * @return This object.</span>
+<span class="source-line-no">131</span><span id="line-131">    */</span>
+<span class="source-line-no">132</span><span id="line-132">   public SerializedPart type(HttpPartType value) {</span>
+<span class="source-line-no">133</span><span id="line-133">      type = value;</span>
+<span class="source-line-no">134</span><span id="line-134">      return this;</span>
+<span class="source-line-no">135</span><span id="line-135">   }</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">   /**</span>
+<span class="source-line-no">138</span><span id="line-138">    * Sets the serializer to use for serializing the value to a string value.</span>
+<span class="source-line-no">139</span><span id="line-139">    *</span>
+<span class="source-line-no">140</span><span id="line-140">    * @param value The new value for this property.</span>
+<span class="source-line-no">141</span><span id="line-141">    * @return This object.</span>
+<span class="source-line-no">142</span><span id="line-142">    */</span>
+<span class="source-line-no">143</span><span id="line-143">   public SerializedPart serializer(HttpPartSerializer value) {</span>
+<span class="source-line-no">144</span><span id="line-144">      if (value != null)</span>
+<span class="source-line-no">145</span><span id="line-145">         return serializer(value.getPartSession());</span>
+<span class="source-line-no">146</span><span id="line-146">      return this;</span>
+<span class="source-line-no">147</span><span id="line-147">   }</span>
+<span class="source-line-no">148</span><span id="line-148"></span>
+<span class="source-line-no">149</span><span id="line-149">   /**</span>
+<span class="source-line-no">150</span><span id="line-150">    * Sets the serializer to use for serializing the value to a string value.</span>
+<span class="source-line-no">151</span><span id="line-151">    *</span>
+<span class="source-line-no">152</span><span id="line-152">    * @param value The new value for this property.</span>
+<span class="source-line-no">153</span><span id="line-153">    * @return This object.</span>
+<span class="source-line-no">154</span><span id="line-154">    */</span>
+<span class="source-line-no">155</span><span id="line-155">   public SerializedPart serializer(HttpPartSerializerSession value) {</span>
+<span class="source-line-no">156</span><span id="line-156">      serializer = value;</span>
+<span class="source-line-no">157</span><span id="line-157">      return this;</span>
+<span class="source-line-no">158</span><span id="line-158">   }</span>
+<span class="source-line-no">159</span><span id="line-159"></span>
+<span class="source-line-no">160</span><span id="line-160">   /**</span>
+<span class="source-line-no">161</span><span id="line-161">    * Sets the schema object that defines the format of the output.</span>
+<span class="source-line-no">162</span><span id="line-162">    *</span>
+<span class="source-line-no">163</span><span id="line-163">    * @param value The new value for this property.</span>
+<span class="source-line-no">164</span><span id="line-164">    * @return This object.</span>
+<span class="source-line-no">165</span><span id="line-165">    */</span>
+<span class="source-line-no">166</span><span id="line-166">   public SerializedPart schema(HttpPartSchema value) {</span>
+<span class="source-line-no">167</span><span id="line-167">      this.schema = value;</span>
+<span class="source-line-no">168</span><span id="line-168">      return this;</span>
+<span class="source-line-no">169</span><span id="line-169">   }</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
+<span class="source-line-no">171</span><span id="line-171">   /**</span>
+<span class="source-line-no">172</span><span id="line-172">    * Copies this bean and sets the serializer and schema on it.</span>
+<span class="source-line-no">173</span><span id="line-173">    *</span>
+<span class="source-line-no">174</span><span id="line-174">    * @param serializer The new serializer for the bean.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">175</span><span id="line-175">    * @param schema The new schema for the bean.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">176</span><span id="line-176">    * @return Either a new bean with the serializer set, or this bean if</span>
+<span class="source-line-no">177</span><span id="line-177">    *    both values are &lt;jk&gt;null&lt;/jk&gt; or the serializer and schema were already set.</span>
+<span class="source-line-no">178</span><span id="line-178">    */</span>
+<span class="source-line-no">179</span><span id="line-179">   public SerializedPart copyWith(HttpPartSerializerSession serializer, HttpPartSchema schema) {</span>
+<span class="source-line-no">180</span><span id="line-180">      if ((this.serializer == null &amp;&amp; serializer != null) || (this.schema == null &amp;&amp; schema != null)) {</span>
+<span class="source-line-no">181</span><span id="line-181">         SerializedPart p = copy();</span>
+<span class="source-line-no">182</span><span id="line-182">         if (serializer != null)</span>
+<span class="source-line-no">183</span><span id="line-183">            p.serializer(serializer);</span>
+<span class="source-line-no">184</span><span id="line-184">         if (schema != null)</span>
+<span class="source-line-no">185</span><span id="line-185">            p.schema(schema);</span>
+<span class="source-line-no">186</span><span id="line-186">         return p;</span>
+<span class="source-line-no">187</span><span id="line-187">      }</span>
+<span class="source-line-no">188</span><span id="line-188">      return this;</span>
+<span class="source-line-no">189</span><span id="line-189">   }</span>
+<span class="source-line-no">190</span><span id="line-190"></span>
+<span class="source-line-no">191</span><span id="line-191">   /**</span>
+<span class="source-line-no">192</span><span id="line-192">    * Don't serialize this pair if the value is &lt;jk&gt;null&lt;/jk&gt; or an empty string.</span>
+<span class="source-line-no">193</span><span id="line-193">    *</span>
+<span class="source-line-no">194</span><span id="line-194">    * @return This object.</span>
+<span class="source-line-no">195</span><span id="line-195">    */</span>
+<span class="source-line-no">196</span><span id="line-196">   public SerializedPart skipIfEmpty() {</span>
+<span class="source-line-no">197</span><span id="line-197">      return skipIfEmpty(true);</span>
+<span class="source-line-no">198</span><span id="line-198">   }</span>
+<span class="source-line-no">199</span><span id="line-199"></span>
+<span class="source-line-no">200</span><span id="line-200">   /**</span>
+<span class="source-line-no">201</span><span id="line-201">    * Don't serialize this pair if the value is &lt;jk&gt;null&lt;/jk&gt; or an empty string.</span>
+<span class="source-line-no">202</span><span id="line-202">    *</span>
+<span class="source-line-no">203</span><span id="line-203">    * @param value The new value of this setting.</span>
+<span class="source-line-no">204</span><span id="line-204">    * @return This object.</span>
+<span class="source-line-no">205</span><span id="line-205">    */</span>
+<span class="source-line-no">206</span><span id="line-206">   public SerializedPart skipIfEmpty(boolean value) {</span>
+<span class="source-line-no">207</span><span id="line-207">      this.skipIfEmpty = value;</span>
+<span class="source-line-no">208</span><span id="line-208">      return this;</span>
+<span class="source-line-no">209</span><span id="line-209">   }</span>
+<span class="source-line-no">210</span><span id="line-210"></span>
+<span class="source-line-no">211</span><span id="line-211">   @Override /* Headerable */</span>
+<span class="source-line-no">212</span><span id="line-212">   public SerializedHeader asHeader() {</span>
+<span class="source-line-no">213</span><span id="line-213">      return new SerializedHeader(getName(), value, serializer, schema, skipIfEmpty);</span>
+<span class="source-line-no">214</span><span id="line-214">   }</span>
+<span class="source-line-no">215</span><span id="line-215"></span>
+<span class="source-line-no">216</span><span id="line-216">   @Override /* NameValuePair */</span>
+<span class="source-line-no">217</span><span id="line-217">   public String getValue() {</span>
+<span class="source-line-no">218</span><span id="line-218">      try {</span>
+<span class="source-line-no">219</span><span id="line-219">         Object v = unwrap(value);</span>
+<span class="source-line-no">220</span><span id="line-220">         HttpPartSchema schema = this.schema == null ? HttpPartSchema.DEFAULT : this.schema;</span>
+<span class="source-line-no">221</span><span id="line-221">         String def = schema.getDefault();</span>
+<span class="source-line-no">222</span><span id="line-222">         if (v == null) {</span>
+<span class="source-line-no">223</span><span id="line-223">            if ((def == null &amp;&amp; ! schema.isRequired()) || (def == null &amp;&amp; schema.isAllowEmptyValue()))</span>
+<span class="source-line-no">224</span><span id="line-224">               return null;</span>
+<span class="source-line-no">225</span><span id="line-225">         }</span>
+<span class="source-line-no">226</span><span id="line-226">         if (Utils.isEmpty(Utils.s(v)) &amp;&amp; skipIfEmpty &amp;&amp; def == null)</span>
+<span class="source-line-no">227</span><span id="line-227">            return null;</span>
+<span class="source-line-no">228</span><span id="line-228">         return serializer == null ? Utils.s(v) : serializer.serialize(type, schema, v);</span>
+<span class="source-line-no">229</span><span id="line-229">      } catch (SchemaValidationException e) {</span>
+<span class="source-line-no">230</span><span id="line-230">         throw new BasicRuntimeException(e, "Validation error on request {0} part ''{1}''=''{2}''", type, getName(), value);</span>
+<span class="source-line-no">231</span><span id="line-231">      } catch (SerializeException e) {</span>
+<span class="source-line-no">232</span><span id="line-232">         throw new BasicRuntimeException(e, "Serialization error on request {0} part ''{1}''", type, getName());</span>
+<span class="source-line-no">233</span><span id="line-233">      }</span>
+<span class="source-line-no">234</span><span id="line-234">   }</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">   private Object unwrap(Object o) {</span>
+<span class="source-line-no">237</span><span id="line-237">      if (o instanceof Supplier)</span>
+<span class="source-line-no">238</span><span id="line-238">         return ((Supplier&lt;?&gt;)o).get();</span>
+<span class="source-line-no">239</span><span id="line-239">      return o;</span>
+<span class="source-line-no">240</span><span id="line-240">   }</span>
+<span class="source-line-no">241</span><span id="line-241">}</span>
 
 
 

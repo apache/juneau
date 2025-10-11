@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-111">AssertionArgs</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-115">AssertionArgs</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Configuration and context object for advanced assertion operations.
 
@@ -254,7 +254,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>AssertionArgs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-122">AssertionArgs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-126">AssertionArgs</a></span>()</div>
 <div class="block">Creates a new instance with default settings.
 
  <p>Instances start with no custom bean converter and no custom error message.
@@ -272,7 +272,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setBeanConverter(org.apache.juneau.junit.bct.BeanConverter)">
 <h3>setBeanConverter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-154">setBeanConverter</a></span><wbr><span class="parameters">(<a href="BeanConverter.html" title="interface in org.apache.juneau.junit.bct">BeanConverter</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-158">setBeanConverter</a></span><wbr><span class="parameters">(<a href="BeanConverter.html" title="interface in org.apache.juneau.junit.bct">BeanConverter</a>&nbsp;value)</span></div>
 <div class="block">Sets a custom <a href="BeanConverter.html" title="interface in org.apache.juneau.junit.bct"><code>BeanConverter</code></a> for object introspection and property access.
 
  <p>The custom converter allows fine-tuned control over how objects are converted to strings,
@@ -309,7 +309,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanConverter()">
 <h3>getBeanConverter</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="BeanConverter.html" title="interface in org.apache.juneau.junit.bct">BeanConverter</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-164">getBeanConverter</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="BeanConverter.html" title="interface in org.apache.juneau.junit.bct">BeanConverter</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-168">getBeanConverter</a></span>()</div>
 <div class="block">Gets the configured bean converter, if any.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -320,7 +320,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setMessage(java.util.function.Supplier)">
 <h3>setMessage</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-194">setMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-198">setMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Sets a custom error message supplier for assertion failures.
 
  <p>The supplier allows for dynamic message generation, including context that may only
@@ -353,7 +353,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setMessage(java.lang.String,java.lang.Object...)">
 <h3>setMessage</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-233">setMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AssertionArgs.html" title="class in org.apache.juneau.junit.bct">AssertionArgs</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-237">setMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Sets a parameterized error message for assertion failures.
 
@@ -395,7 +395,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMessage()">
 <h3>getMessage</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-243">getMessage</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-247">getMessage</a></span>()</div>
 <div class="block">Gets the base message supplier for composition with assertion-specific messages.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -406,7 +406,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMessage(java.lang.String,java.lang.Object...)">
 <h3>getMessage</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-263">getMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/AssertionArgs.html#line-267">getMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Composes the final error message by combining custom and assertion-specific messages.
 

@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Flushable.html" title="class or interface in java.io" class="external-link">Flushable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code>, <code><a href="../../encoders/Finishable.html" title="interface in org.apache.juneau.encoders">Finishable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-27">FinishableServletOutputStream</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-31">FinishableServletOutputStream</a></span>
 <span class="extends-implements">extends jakarta.servlet.ServletOutputStream
 implements <a href="../../encoders/Finishable.html" title="interface in org.apache.juneau.encoders">Finishable</a></span></div>
 <div class="block">A wrapped <code>ServletOutputStream</code> with an added <c>finish()</c> method.
@@ -173,7 +173,7 @@ implements <a href="../../encoders/Finishable.html" title="interface in org.apac
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.OutputStream)">
 <h3>FinishableServletOutputStream</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-38">FinishableServletOutputStream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;os)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-42">FinishableServletOutputStream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;os)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -192,7 +192,7 @@ implements <a href="../../encoders/Finishable.html" title="interface in org.apac
 <li>
 <section class="detail" id="write(byte[],int,int)">
 <h3>write</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-44">write</a></span><wbr><span class="parameters">(byte[]&nbsp;b,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-48">write</a></span><wbr><span class="parameters">(byte[]&nbsp;b,
  int&nbsp;off,
  int&nbsp;len)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -207,7 +207,7 @@ implements <a href="../../encoders/Finishable.html" title="interface in org.apac
 <li>
 <section class="detail" id="write(int)">
 <h3>write</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-49">write</a></span><wbr><span class="parameters">(int&nbsp;b)</span>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-53">write</a></span><wbr><span class="parameters">(int&nbsp;b)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -220,7 +220,7 @@ implements <a href="../../encoders/Finishable.html" title="interface in org.apac
 <li>
 <section class="detail" id="flush()">
 <h3>flush</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-54">flush</a></span>()
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-58">flush</a></span>()
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -235,7 +235,7 @@ implements <a href="../../encoders/Finishable.html" title="interface in org.apac
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-59">close</a></span>()
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-63">close</a></span>()
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -252,7 +252,7 @@ implements <a href="../../encoders/Finishable.html" title="interface in org.apac
 <li>
 <section class="detail" id="isReady()">
 <h3>isReady</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-64">isReady</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-68">isReady</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>isReady</code>&nbsp;in class&nbsp;<code>jakarta.servlet.ServletOutputStream</code></dd>
@@ -262,7 +262,7 @@ implements <a href="../../encoders/Finishable.html" title="interface in org.apac
 <li>
 <section class="detail" id="setWriteListener(jakarta.servlet.WriteListener)">
 <h3>setWriteListener</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-69">setWriteListener</a></span><wbr><span class="parameters">(jakarta.servlet.WriteListener&nbsp;arg0)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-73">setWriteListener</a></span><wbr><span class="parameters">(jakarta.servlet.WriteListener&nbsp;arg0)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>setWriteListener</code>&nbsp;in class&nbsp;<code>jakarta.servlet.ServletOutputStream</code></dd>
@@ -272,7 +272,7 @@ implements <a href="../../encoders/Finishable.html" title="interface in org.apac
 <li>
 <section class="detail" id="finish()">
 <h3>finish</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-81">finish</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishableServletOutputStream.html#line-85">finish</a></span>()
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Calls <a href="../../encoders/Finishable.html#finish()"><code>Finishable.finish()</code></a> on the underlying output stream.
 

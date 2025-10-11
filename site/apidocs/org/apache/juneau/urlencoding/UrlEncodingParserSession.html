@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.httppart">HttpPartParserSession</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-41">UrlEncodingParserSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-45">UrlEncodingParserSession</a></span>
 <span class="extends-implements">extends <a href="../uon/UonParserSession.html" title="class in org.apache.juneau.uon">UonParserSession</a></span></div>
 <div class="block">Session object that lives for the duration of a single use of <a href="UrlEncodingParser.html" title="class in org.apache.juneau.urlencoding"><code>UrlEncodingParser</code></a>.
 
@@ -219,7 +219,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.urlencoding.UrlEncodingParserSession.Builder)">
 <h3>UrlEncodingParserSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-209">UrlEncodingParserSession</a></span><wbr><span class="parameters">(<a href="UrlEncodingParserSession.Builder.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParserSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-213">UrlEncodingParserSession</a></span><wbr><span class="parameters">(<a href="UrlEncodingParserSession.Builder.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParserSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -238,7 +238,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="create(org.apache.juneau.urlencoding.UrlEncodingParser)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="UrlEncodingParserSession.Builder.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-54">create</a></span><wbr><span class="parameters">(<a href="UrlEncodingParser.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParser</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="UrlEncodingParserSession.Builder.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-58">create</a></span><wbr><span class="parameters">(<a href="UrlEncodingParser.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParser</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -251,7 +251,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="shouldUseExpandedParams(org.apache.juneau.BeanPropertyMeta)">
 <h3>shouldUseExpandedParams</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-220">shouldUseExpandedParams</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;pMeta)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-224">shouldUseExpandedParams</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;pMeta)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -264,7 +264,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="doParse(org.apache.juneau.parser.ParserPipe,org.apache.juneau.ClassMeta)">
 <h3>doParse</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-229">doParse</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-233">doParse</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a>,
@@ -301,7 +301,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <section class="detail" id="doParseIntoMap(org.apache.juneau.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">
 <h3>doParseIntoMap</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-236">doParseIntoMap</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe,
+V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-240">doParseIntoMap</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;valueType)</span>
@@ -332,7 +332,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isExpandedParams()">
 <h3>isExpandedParams</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-548">isExpandedParams</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-552">isExpandedParams</a></span>()</div>
 <div class="block">Parser bean property collections/arrays as separate key/value pairs.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -350,7 +350,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getUrlEncodingClassMeta(org.apache.juneau.ClassMeta)">
 <h3>getUrlEncodingClassMeta</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="UrlEncodingClassMeta.html" title="class in org.apache.juneau.urlencoding">UrlEncodingClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-562">getUrlEncodingClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="UrlEncodingClassMeta.html" title="class in org.apache.juneau.urlencoding">UrlEncodingClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/urlencoding/UrlEncodingParserSession.html#line-566">getUrlEncodingClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

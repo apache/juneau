@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/DefaultingTemporalAccessor.html#line-33">DefaultingTemporalAccessor</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/DefaultingTemporalAccessor.html#line-37">DefaultingTemporalAccessor</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a></span></div>
 <div class="block">Wraps a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link"><code>TemporalAccessor</code></a> to provide default values wherever possible instead of throwing unsupported field exceptions.
@@ -159,7 +159,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.time.temporal.TemporalAccessor,java.time.ZoneId)">
 <h3>DefaultingTemporalAccessor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/DefaultingTemporalAccessor.html#line-45">DefaultingTemporalAccessor</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a>&nbsp;inner,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/DefaultingTemporalAccessor.html#line-49">DefaultingTemporalAccessor</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a>&nbsp;inner,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZoneId.html" title="class or interface in java.time" class="external-link">ZoneId</a>&nbsp;zoneId)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -180,7 +180,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isSupported(java.time.temporal.TemporalField)">
 <h3>isSupported</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/DefaultingTemporalAccessor.html#line-50">isSupported</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalField.html" title="class or interface in java.time.temporal" class="external-link">TemporalField</a>&nbsp;field)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/DefaultingTemporalAccessor.html#line-54">isSupported</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalField.html" title="class or interface in java.time.temporal" class="external-link">TemporalField</a>&nbsp;field)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html#isSupported(java.time.temporal.TemporalField)" title="class or interface in java.time.temporal" class="external-link">isSupported</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a></code></dd>
@@ -190,7 +190,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="query(java.time.temporal.TemporalQuery)">
 <h3>query</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;R&gt;</span>&nbsp;<span class="return-type">R</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/DefaultingTemporalAccessor.html#line-55">query</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalQuery.html" title="class or interface in java.time.temporal" class="external-link">TemporalQuery</a>&lt;R&gt;&nbsp;query)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;R&gt;</span>&nbsp;<span class="return-type">R</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/DefaultingTemporalAccessor.html#line-59">query</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalQuery.html" title="class or interface in java.time.temporal" class="external-link">TemporalQuery</a>&lt;R&gt;&nbsp;query)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html#query(java.time.temporal.TemporalQuery)" title="class or interface in java.time.temporal" class="external-link">query</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a></code></dd>
@@ -200,7 +200,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getLong(java.time.temporal.TemporalField)">
 <h3>getLong</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/DefaultingTemporalAccessor.html#line-103">getLong</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalField.html" title="class or interface in java.time.temporal" class="external-link">TemporalField</a>&nbsp;field)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/DefaultingTemporalAccessor.html#line-107">getLong</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalField.html" title="class or interface in java.time.temporal" class="external-link">TemporalField</a>&nbsp;field)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html#getLong(java.time.temporal.TemporalField)" title="class or interface in java.time.temporal" class="external-link">getLong</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a></code></dd>
@@ -210,7 +210,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="get(java.time.temporal.TemporalField)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/DefaultingTemporalAccessor.html#line-130">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalField.html" title="class or interface in java.time.temporal" class="external-link">TemporalField</a>&nbsp;field)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/DefaultingTemporalAccessor.html#line-134">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalField.html" title="class or interface in java.time.temporal" class="external-link">TemporalField</a>&nbsp;field)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html#get(java.time.temporal.TemporalField)" title="class or interface in java.time.temporal" class="external-link">get</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a></code></dd>

@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="UrlPathMatcher.html" title="class in org.apache.juneau.rest.util">UrlPathMatcher</a>&gt;</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-33">UrlPathMatcher</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-37">UrlPathMatcher</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="UrlPathMatcher.html" title="class in org.apache.juneau.rest.util">UrlPathMatcher</a>&gt;</span></div>
 <div class="block">A parsed path pattern constructed from a <a href="../annotation/RestOp.html#path()"><code>@RestOp(path)</code></a> value.
@@ -161,7 +161,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="of(java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="UrlPathMatcher.html" title="class in org.apache.juneau.rest.util">UrlPathMatcher</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-41">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="UrlPathMatcher.html" title="class in org.apache.juneau.rest.util">UrlPathMatcher</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-45">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern)</span></div>
 <div class="block">Constructs a matcher from the specified pattern string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -174,7 +174,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="match(org.apache.juneau.rest.util.UrlPath)">
 <h3>match</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="UrlPathMatch.html" title="class in org.apache.juneau.rest.util">UrlPathMatch</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-190">match</a></span><wbr><span class="parameters">(<a href="UrlPath.html" title="class in org.apache.juneau.rest.util">UrlPath</a>&nbsp;pathInfo)</span></div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="UrlPathMatch.html" title="class in org.apache.juneau.rest.util">UrlPathMatch</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-194">match</a></span><wbr><span class="parameters">(<a href="UrlPath.html" title="class in org.apache.juneau.rest.util">UrlPath</a>&nbsp;pathInfo)</span></div>
 <div class="block">Returns a non-<jk>null</jk> value if the specified path matches this pattern.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -187,7 +187,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getComparator()">
 <h3>getComparator</h3>
-<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-198">getComparator</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-202">getComparator</a></span>()</div>
 <div class="block">Returns a string that can be used to compare this matcher with other matchers to provide the ability to
  order URL patterns from most-specific to least-specific.</div>
 <dl class="notes">
@@ -199,7 +199,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getVars()">
 <h3>getVars</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-207">getVars</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-211">getVars</a></span>()</div>
 <div class="block">Returns the variable names found in the pattern.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -211,7 +211,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hasVars()">
 <h3>hasVars</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-216">hasVars</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-220">hasVars</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this path pattern contains variables.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -222,7 +222,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="compareTo(org.apache.juneau.rest.util.UrlPathMatcher)">
 <h3>compareTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-239">compareTo</a></span><wbr><span class="parameters">(<a href="UrlPathMatcher.html" title="class in org.apache.juneau.rest.util">UrlPathMatcher</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-243">compareTo</a></span><wbr><span class="parameters">(<a href="UrlPathMatcher.html" title="class in org.apache.juneau.rest.util">UrlPathMatcher</a>&nbsp;o)</span></div>
 <div class="block">Comparator for this object.
 
  <p>
@@ -249,7 +249,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-244">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/UrlPathMatcher.html#line-248">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

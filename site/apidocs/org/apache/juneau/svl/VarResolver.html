@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-66">VarResolver</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-70">VarResolver</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Utility class for resolving variables of the form <js>"$X{key}"</js> in strings.
 
@@ -268,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="VarResolver.html" title="class in org.apache.juneau.svl">VarResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-93">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="VarResolver.html" title="class in org.apache.juneau.svl">VarResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-97">DEFAULT</a></span></div>
 <div class="block">Default string variable resolver with support for system properties and environment variables:
 
  <ul>
@@ -301,7 +301,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.svl.VarResolver.Builder)">
 <h3>VarResolver</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-256">VarResolver</a></span><wbr><span class="parameters">(<a href="VarResolver.Builder.html" title="class in org.apache.juneau.svl">VarResolver.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-260">VarResolver</a></span><wbr><span class="parameters">(<a href="VarResolver.Builder.html" title="class in org.apache.juneau.svl">VarResolver.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -320,7 +320,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-100">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-104">create</a></span>()</div>
 <div class="block">Instantiates a new clean-slate <a href="VarResolver.Builder.html" title="class in org.apache.juneau.svl"><code>VarResolver.Builder</code></a> object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -331,7 +331,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-278">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-282">copy</a></span>()</div>
 <div class="block">Returns a new builder object using the settings in this resolver as a base.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -342,7 +342,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getVarMap()">
 <h3>getVarMap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="Var.html" title="class in org.apache.juneau.svl">Var</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-287">getVarMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="Var.html" title="class in org.apache.juneau.svl">Var</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-291">getVarMap</a></span>()</div>
 <div class="block">Returns an unmodifiable map of <a href="Var.html" title="class in org.apache.juneau.svl"><code>Vars</code></a> associated with this context.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -353,7 +353,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getVars()">
 <h3>getVars</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="Var.html" title="class in org.apache.juneau.svl">Var</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-296">getVars</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="Var.html" title="class in org.apache.juneau.svl">Var</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-300">getVars</a></span>()</div>
 <div class="block">Returns an array of variables define in this variable resolver context.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -364,7 +364,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addBean(java.lang.Class,T)">
 <h3 id="addBean(java.lang.Class,java.lang.Object)">addBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="VarResolver.html" title="class in org.apache.juneau.svl">VarResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-308">addBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="VarResolver.html" title="class in org.apache.juneau.svl">VarResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-312">addBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c,
  T&nbsp;value)</span></div>
 <div class="block">Adds a bean to this session.</div>
 <dl class="notes">
@@ -381,7 +381,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolverSession.html" title="class in org.apache.juneau.svl">VarResolverSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-318">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolverSession.html" title="class in org.apache.juneau.svl">VarResolverSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-322">createSession</a></span>()</div>
 <div class="block">Creates a new resolver session with no session objects.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -392,7 +392,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createSession(org.apache.juneau.cp.BeanStore)">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolverSession.html" title="class in org.apache.juneau.svl">VarResolverSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-328">createSession</a></span><wbr><span class="parameters">(<a href="../cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolverSession.html" title="class in org.apache.juneau.svl">VarResolverSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-332">createSession</a></span><wbr><span class="parameters">(<a href="../cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Same as <a href="#createSession()"><code>createSession()</code></a> except allows you to specify a bean store for resolving beans.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -405,7 +405,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolve(java.lang.String)">
 <h3>resolve</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-343">resolve</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-347">resolve</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
 <div class="block">Resolve variables in the specified string.
 
  <p>
@@ -423,7 +423,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolveTo(java.lang.String,java.io.Writer)">
 <h3>resolveTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-359">resolveTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarResolver.html#line-363">resolveTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w)</span>
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Resolve variables in the specified string and sends the results to the specified writer.

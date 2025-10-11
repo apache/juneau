@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - The exception class.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/ExceptionBuilder.html#line-26">ExceptionBuilder</a>&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/ExceptionBuilder.html#line-30">ExceptionBuilder</a>&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder class for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link"><code>Exception</code></a> objects.
 
@@ -153,7 +153,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class)">
 <h3>ExceptionBuilder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/ExceptionBuilder.html#line-37">ExceptionBuilder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="ExceptionBuilder.html" title="type parameter in ExceptionBuilder">T</a>&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/ExceptionBuilder.html#line-41">ExceptionBuilder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="ExceptionBuilder.html" title="type parameter in ExceptionBuilder">T</a>&gt;&nbsp;type)</span></div>
 <div class="block">Default constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -172,7 +172,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="message(java.lang.String,java.lang.Object...)">
 <h3>message</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ExceptionBuilder.html" title="class in org.apache.juneau.internal">ExceptionBuilder</a>&lt;<a href="ExceptionBuilder.html" title="type parameter in ExceptionBuilder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/ExceptionBuilder.html#line-49">message</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ExceptionBuilder.html" title="class in org.apache.juneau.internal">ExceptionBuilder</a>&lt;<a href="ExceptionBuilder.html" title="type parameter in ExceptionBuilder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/ExceptionBuilder.html#line-53">message</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Specifies the exception message.</div>
 <dl class="notes">
@@ -188,7 +188,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="causedBy(java.lang.Throwable)">
 <h3>causedBy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ExceptionBuilder.html" title="class in org.apache.juneau.internal">ExceptionBuilder</a>&lt;<a href="ExceptionBuilder.html" title="type parameter in ExceptionBuilder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/ExceptionBuilder.html#line-61">causedBy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ExceptionBuilder.html" title="class in org.apache.juneau.internal">ExceptionBuilder</a>&lt;<a href="ExceptionBuilder.html" title="type parameter in ExceptionBuilder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/ExceptionBuilder.html#line-65">causedBy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;value)</span></div>
 <div class="block">Specifies the caused-by exception.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -201,7 +201,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ExceptionBuilder.html" title="type parameter in ExceptionBuilder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/ExceptionBuilder.html#line-76">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ExceptionBuilder.html" title="type parameter in ExceptionBuilder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/ExceptionBuilder.html#line-80">build</a></span>()</div>
 <div class="block">Creates the exception.</div>
 <dl class="notes">
 <dt>Returns:</dt>

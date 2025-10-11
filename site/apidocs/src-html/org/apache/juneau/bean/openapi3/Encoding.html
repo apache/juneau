@@ -11,318 +11,322 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.bean.openapi3;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.common.utils.Utils.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import static org.apache.juneau.internal.CollectionUtils.*;</span>
-<span class="source-line-no">017</span><span id="line-17">import static org.apache.juneau.internal.ConverterUtils.*;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.bean.openapi3;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import java.net.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import java.util.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.common.utils.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.internal.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.common.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.internal.CollectionUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.internal.ConverterUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import java.net.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
 <span class="source-line-no">025</span><span id="line-25"></span>
-<span class="source-line-no">026</span><span id="line-26">/**</span>
-<span class="source-line-no">027</span><span id="line-27"> * A single encoding definition applied to a single schema property.</span>
-<span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> * The Encoding Object is a single encoding definition applied to a single schema property. It allows you to define </span>
-<span class="source-line-no">031</span><span id="line-31"> * how a property should be serialized when it's part of a request or response body with a specific media type.</span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.common.utils.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.internal.*;</span>
+<span class="source-line-no">029</span><span id="line-29"></span>
+<span class="source-line-no">030</span><span id="line-30">/**</span>
+<span class="source-line-no">031</span><span id="line-31"> * A single encoding definition applied to a single schema property.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;OpenAPI Specification:&lt;/h5&gt;</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> * The Encoding Object is composed of the following fields:</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;&lt;c&gt;contentType&lt;/c&gt; (string) - The Content-Type for encoding a specific property. Default value depends on the property type</span>
-<span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;&lt;c&gt;headers&lt;/c&gt; (map of {@link HeaderInfo}) - A map allowing additional information to be provided as headers</span>
-<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;&lt;c&gt;style&lt;/c&gt; (string) - Describes how a specific property value will be serialized depending on its type</span>
-<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;&lt;c&gt;explode&lt;/c&gt; (boolean) - When this is true, property values of type array or object generate separate parameters for each value</span>
-<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;&lt;c&gt;allowReserved&lt;/c&gt; (boolean) - Determines whether the parameter value should allow reserved characters</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;/ul&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;p class='bcode'&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> *    &lt;jc&gt;// Construct using SwaggerBuilder.&lt;/jc&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> *    Encoding &lt;jv&gt;x&lt;/jv&gt; = &lt;jsm&gt;encoding&lt;/jsm&gt;()</span>
-<span class="source-line-no">048</span><span id="line-48"> *       .setContentType(&lt;js&gt;"application/x-www-form-urlencoded"&lt;/js&gt;)</span>
-<span class="source-line-no">049</span><span id="line-49"> *       .setStyle(&lt;js&gt;"form"&lt;/js&gt;)</span>
-<span class="source-line-no">050</span><span id="line-50"> *       .setExplode(&lt;jk&gt;true&lt;/jk&gt;);</span>
-<span class="source-line-no">051</span><span id="line-51"> *</span>
-<span class="source-line-no">052</span><span id="line-52"> *    &lt;jc&gt;// Serialize using JsonSerializer.&lt;/jc&gt;</span>
-<span class="source-line-no">053</span><span id="line-53"> *    String &lt;jv&gt;json&lt;/jv&gt; = Json.&lt;jsm&gt;from&lt;/jsm&gt;(&lt;jv&gt;x&lt;/jv&gt;);</span>
-<span class="source-line-no">054</span><span id="line-54"> *</span>
-<span class="source-line-no">055</span><span id="line-55"> *    &lt;jc&gt;// Or just use toString() which does the same as above.&lt;/jc&gt;</span>
-<span class="source-line-no">056</span><span id="line-56"> *    &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;x&lt;/jv&gt;.toString();</span>
-<span class="source-line-no">057</span><span id="line-57"> * &lt;/p&gt;</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;p class='bcode'&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> *    &lt;jc&gt;// Output&lt;/jc&gt;</span>
-<span class="source-line-no">060</span><span id="line-60"> *    {</span>
-<span class="source-line-no">061</span><span id="line-61"> *       &lt;js&gt;"contentType"&lt;/js&gt;: &lt;js&gt;"application/x-www-form-urlencoded"&lt;/js&gt;,</span>
-<span class="source-line-no">062</span><span id="line-62"> *       &lt;js&gt;"style"&lt;/js&gt;: &lt;js&gt;"form"&lt;/js&gt;,</span>
-<span class="source-line-no">063</span><span id="line-63"> *       &lt;js&gt;"explode"&lt;/js&gt;: &lt;jk&gt;true&lt;/jk&gt;</span>
-<span class="source-line-no">064</span><span id="line-64"> *    }</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;/p&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> *</span>
-<span class="source-line-no">067</span><span id="line-67"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#encoding-object"&gt;OpenAPI Specification &amp;gt; Encoding Object&lt;/a&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://swagger.io/docs/specification/describing-request-body/"&gt;OpenAPI Describing Request Body&lt;/a&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3"&gt;juneau-bean-openapi-v3&lt;/a&gt;</span>
-<span class="source-line-no">071</span><span id="line-71"> * &lt;/ul&gt;</span>
-<span class="source-line-no">072</span><span id="line-72"> */</span>
-<span class="source-line-no">073</span><span id="line-73">public class Encoding extends OpenApiElement{</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">   private String contentType,</span>
-<span class="source-line-no">076</span><span id="line-76">         style;</span>
-<span class="source-line-no">077</span><span id="line-77">   private Map&lt;String,HeaderInfo&gt; headers;</span>
-<span class="source-line-no">078</span><span id="line-78">   private Boolean explode,</span>
-<span class="source-line-no">079</span><span id="line-79">         allowReserved;</span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   /**</span>
-<span class="source-line-no">082</span><span id="line-82">    * Default constructor.</span>
-<span class="source-line-no">083</span><span id="line-83">    */</span>
-<span class="source-line-no">084</span><span id="line-84">   public Encoding() { }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   /**</span>
-<span class="source-line-no">087</span><span id="line-87">    * Copy constructor.</span>
-<span class="source-line-no">088</span><span id="line-88">    *</span>
-<span class="source-line-no">089</span><span id="line-89">    * @param copyFrom The object to copy.</span>
-<span class="source-line-no">090</span><span id="line-90">    */</span>
-<span class="source-line-no">091</span><span id="line-91">   public Encoding(Encoding copyFrom) {</span>
-<span class="source-line-no">092</span><span id="line-92">      super(copyFrom);</span>
-<span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94">      this.contentType = copyFrom.contentType;</span>
-<span class="source-line-no">095</span><span id="line-95">      this.style = copyFrom.style;</span>
-<span class="source-line-no">096</span><span id="line-96">      this.explode = copyFrom.explode;</span>
-<span class="source-line-no">097</span><span id="line-97">      this.allowReserved = copyFrom.allowReserved;</span>
-<span class="source-line-no">098</span><span id="line-98">      this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);</span>
-<span class="source-line-no">099</span><span id="line-99">   }</span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">   /**</span>
-<span class="source-line-no">102</span><span id="line-102">    * Make a deep copy of this object.</span>
-<span class="source-line-no">103</span><span id="line-103">    *</span>
-<span class="source-line-no">104</span><span id="line-104">    * @return A deep copy of this object.</span>
-<span class="source-line-no">105</span><span id="line-105">    */</span>
-<span class="source-line-no">106</span><span id="line-106">   public Encoding copy() {</span>
-<span class="source-line-no">107</span><span id="line-107">      return new Encoding(this);</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   @Override /* Overridden from OpenApiElement */</span>
-<span class="source-line-no">111</span><span id="line-111">   protected Encoding strict() {</span>
-<span class="source-line-no">112</span><span id="line-112">      super.strict();</span>
-<span class="source-line-no">113</span><span id="line-113">      return this;</span>
-<span class="source-line-no">114</span><span id="line-114">   }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   @Override /* Overridden from OpenApiElement */</span>
-<span class="source-line-no">117</span><span id="line-117">   public Encoding strict(Object value) {</span>
-<span class="source-line-no">118</span><span id="line-118">      super.strict(value);</span>
-<span class="source-line-no">119</span><span id="line-119">      return this;</span>
-<span class="source-line-no">120</span><span id="line-120">   }</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">   /**</span>
-<span class="source-line-no">123</span><span id="line-123">    * Bean property getter:  &lt;property&gt;contentType&lt;/property&gt;.</span>
-<span class="source-line-no">124</span><span id="line-124">    *</span>
-<span class="source-line-no">125</span><span id="line-125">    * &lt;p&gt;</span>
-<span class="source-line-no">126</span><span id="line-126">    * The URL pointing to the contact information.</span>
-<span class="source-line-no">127</span><span id="line-127">    *</span>
-<span class="source-line-no">128</span><span id="line-128">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">129</span><span id="line-129">    */</span>
-<span class="source-line-no">130</span><span id="line-130">   public String getContentType() {</span>
-<span class="source-line-no">131</span><span id="line-131">      return contentType;</span>
-<span class="source-line-no">132</span><span id="line-132">   }</span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">   /**</span>
-<span class="source-line-no">135</span><span id="line-135">    * Bean property setter:  &lt;property&gt;url&lt;/property&gt;.</span>
-<span class="source-line-no">136</span><span id="line-136">    *</span>
-<span class="source-line-no">137</span><span id="line-137">    * &lt;p&gt;</span>
-<span class="source-line-no">138</span><span id="line-138">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
-<span class="source-line-no">139</span><span id="line-139">    * &lt;br&gt;Strings must be valid URIs.</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * The Encoding Object is a single encoding definition applied to a single schema property. It allows you to define </span>
+<span class="source-line-no">035</span><span id="line-35"> * how a property should be serialized when it's part of a request or response body with a specific media type.</span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='section'&gt;OpenAPI Specification:&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * The Encoding Object is composed of the following fields:</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;&lt;c&gt;contentType&lt;/c&gt; (string) - The Content-Type for encoding a specific property. Default value depends on the property type</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;&lt;c&gt;headers&lt;/c&gt; (map of {@link HeaderInfo}) - A map allowing additional information to be provided as headers</span>
+<span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;&lt;c&gt;style&lt;/c&gt; (string) - Describes how a specific property value will be serialized depending on its type</span>
+<span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;&lt;c&gt;explode&lt;/c&gt; (boolean) - When this is true, property values of type array or object generate separate parameters for each value</span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;&lt;c&gt;allowReserved&lt;/c&gt; (boolean) - Determines whether the parameter value should allow reserved characters</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;/ul&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;p class='bcode'&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;jc&gt;// Construct using SwaggerBuilder.&lt;/jc&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *    Encoding &lt;jv&gt;x&lt;/jv&gt; = &lt;jsm&gt;encoding&lt;/jsm&gt;()</span>
+<span class="source-line-no">052</span><span id="line-52"> *       .setContentType(&lt;js&gt;"application/x-www-form-urlencoded"&lt;/js&gt;)</span>
+<span class="source-line-no">053</span><span id="line-53"> *       .setStyle(&lt;js&gt;"form"&lt;/js&gt;)</span>
+<span class="source-line-no">054</span><span id="line-54"> *       .setExplode(&lt;jk&gt;true&lt;/jk&gt;);</span>
+<span class="source-line-no">055</span><span id="line-55"> *</span>
+<span class="source-line-no">056</span><span id="line-56"> *    &lt;jc&gt;// Serialize using JsonSerializer.&lt;/jc&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> *    String &lt;jv&gt;json&lt;/jv&gt; = Json.&lt;jsm&gt;from&lt;/jsm&gt;(&lt;jv&gt;x&lt;/jv&gt;);</span>
+<span class="source-line-no">058</span><span id="line-58"> *</span>
+<span class="source-line-no">059</span><span id="line-59"> *    &lt;jc&gt;// Or just use toString() which does the same as above.&lt;/jc&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> *    &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;x&lt;/jv&gt;.toString();</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;/p&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> * &lt;p class='bcode'&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> *    &lt;jc&gt;// Output&lt;/jc&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> *    {</span>
+<span class="source-line-no">065</span><span id="line-65"> *       &lt;js&gt;"contentType"&lt;/js&gt;: &lt;js&gt;"application/x-www-form-urlencoded"&lt;/js&gt;,</span>
+<span class="source-line-no">066</span><span id="line-66"> *       &lt;js&gt;"style"&lt;/js&gt;: &lt;js&gt;"form"&lt;/js&gt;,</span>
+<span class="source-line-no">067</span><span id="line-67"> *       &lt;js&gt;"explode"&lt;/js&gt;: &lt;jk&gt;true&lt;/jk&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *    }</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;/p&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> *</span>
+<span class="source-line-no">071</span><span id="line-71"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#encoding-object"&gt;OpenAPI Specification &amp;gt; Encoding Object&lt;/a&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://swagger.io/docs/specification/describing-request-body/"&gt;OpenAPI Describing Request Body&lt;/a&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3"&gt;juneau-bean-openapi-v3&lt;/a&gt;</span>
+<span class="source-line-no">075</span><span id="line-75"> * &lt;/ul&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> */</span>
+<span class="source-line-no">077</span><span id="line-77">public class Encoding extends OpenApiElement{</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   private String contentType,</span>
+<span class="source-line-no">080</span><span id="line-80">         style;</span>
+<span class="source-line-no">081</span><span id="line-81">   private Map&lt;String,HeaderInfo&gt; headers;</span>
+<span class="source-line-no">082</span><span id="line-82">   private Boolean explode,</span>
+<span class="source-line-no">083</span><span id="line-83">         allowReserved;</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">   /**</span>
+<span class="source-line-no">086</span><span id="line-86">    * Default constructor.</span>
+<span class="source-line-no">087</span><span id="line-87">    */</span>
+<span class="source-line-no">088</span><span id="line-88">   public Encoding() { }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   /**</span>
+<span class="source-line-no">091</span><span id="line-91">    * Copy constructor.</span>
+<span class="source-line-no">092</span><span id="line-92">    *</span>
+<span class="source-line-no">093</span><span id="line-93">    * @param copyFrom The object to copy.</span>
+<span class="source-line-no">094</span><span id="line-94">    */</span>
+<span class="source-line-no">095</span><span id="line-95">   public Encoding(Encoding copyFrom) {</span>
+<span class="source-line-no">096</span><span id="line-96">      super(copyFrom);</span>
+<span class="source-line-no">097</span><span id="line-97"></span>
+<span class="source-line-no">098</span><span id="line-98">      this.contentType = copyFrom.contentType;</span>
+<span class="source-line-no">099</span><span id="line-99">      this.style = copyFrom.style;</span>
+<span class="source-line-no">100</span><span id="line-100">      this.explode = copyFrom.explode;</span>
+<span class="source-line-no">101</span><span id="line-101">      this.allowReserved = copyFrom.allowReserved;</span>
+<span class="source-line-no">102</span><span id="line-102">      this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);</span>
+<span class="source-line-no">103</span><span id="line-103">   }</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">   /**</span>
+<span class="source-line-no">106</span><span id="line-106">    * Make a deep copy of this object.</span>
+<span class="source-line-no">107</span><span id="line-107">    *</span>
+<span class="source-line-no">108</span><span id="line-108">    * @return A deep copy of this object.</span>
+<span class="source-line-no">109</span><span id="line-109">    */</span>
+<span class="source-line-no">110</span><span id="line-110">   public Encoding copy() {</span>
+<span class="source-line-no">111</span><span id="line-111">      return new Encoding(this);</span>
+<span class="source-line-no">112</span><span id="line-112">   }</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">   @Override /* Overridden from OpenApiElement */</span>
+<span class="source-line-no">115</span><span id="line-115">   protected Encoding strict() {</span>
+<span class="source-line-no">116</span><span id="line-116">      super.strict();</span>
+<span class="source-line-no">117</span><span id="line-117">      return this;</span>
+<span class="source-line-no">118</span><span id="line-118">   }</span>
+<span class="source-line-no">119</span><span id="line-119"></span>
+<span class="source-line-no">120</span><span id="line-120">   @Override /* Overridden from OpenApiElement */</span>
+<span class="source-line-no">121</span><span id="line-121">   public Encoding strict(Object value) {</span>
+<span class="source-line-no">122</span><span id="line-122">      super.strict(value);</span>
+<span class="source-line-no">123</span><span id="line-123">      return this;</span>
+<span class="source-line-no">124</span><span id="line-124">   }</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">   /**</span>
+<span class="source-line-no">127</span><span id="line-127">    * Bean property getter:  &lt;property&gt;contentType&lt;/property&gt;.</span>
+<span class="source-line-no">128</span><span id="line-128">    *</span>
+<span class="source-line-no">129</span><span id="line-129">    * &lt;p&gt;</span>
+<span class="source-line-no">130</span><span id="line-130">    * The URL pointing to the contact information.</span>
+<span class="source-line-no">131</span><span id="line-131">    *</span>
+<span class="source-line-no">132</span><span id="line-132">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">133</span><span id="line-133">    */</span>
+<span class="source-line-no">134</span><span id="line-134">   public String getContentType() {</span>
+<span class="source-line-no">135</span><span id="line-135">      return contentType;</span>
+<span class="source-line-no">136</span><span id="line-136">   }</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">   /**</span>
+<span class="source-line-no">139</span><span id="line-139">    * Bean property setter:  &lt;property&gt;url&lt;/property&gt;.</span>
 <span class="source-line-no">140</span><span id="line-140">    *</span>
 <span class="source-line-no">141</span><span id="line-141">    * &lt;p&gt;</span>
-<span class="source-line-no">142</span><span id="line-142">    * URIs defined by {@link UriResolver} can be used for values.</span>
-<span class="source-line-no">143</span><span id="line-143">    *</span>
-<span class="source-line-no">144</span><span id="line-144">    * @param value</span>
-<span class="source-line-no">145</span><span id="line-145">    *    The new value for this property.</span>
-<span class="source-line-no">146</span><span id="line-146">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">147</span><span id="line-147">    * @return This object</span>
-<span class="source-line-no">148</span><span id="line-148">    */</span>
-<span class="source-line-no">149</span><span id="line-149">   public Encoding setContentType(String value) {</span>
-<span class="source-line-no">150</span><span id="line-150">      contentType = value;</span>
-<span class="source-line-no">151</span><span id="line-151">      return this;</span>
-<span class="source-line-no">152</span><span id="line-152">   }</span>
-<span class="source-line-no">153</span><span id="line-153"></span>
-<span class="source-line-no">154</span><span id="line-154">   /**</span>
-<span class="source-line-no">155</span><span id="line-155">    * Bean property getter:  &lt;property&gt;style&lt;/property&gt;.</span>
-<span class="source-line-no">156</span><span id="line-156">    *</span>
-<span class="source-line-no">157</span><span id="line-157">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">158</span><span id="line-158">    */</span>
-<span class="source-line-no">159</span><span id="line-159">   public String getStyle() {</span>
-<span class="source-line-no">160</span><span id="line-160">      return style;</span>
-<span class="source-line-no">161</span><span id="line-161">   }</span>
-<span class="source-line-no">162</span><span id="line-162"></span>
-<span class="source-line-no">163</span><span id="line-163">   /**</span>
-<span class="source-line-no">164</span><span id="line-164">    * Bean property setter:  &lt;property&gt;description&lt;/property&gt;.</span>
-<span class="source-line-no">165</span><span id="line-165">    *</span>
-<span class="source-line-no">166</span><span id="line-166">    * @param value</span>
-<span class="source-line-no">167</span><span id="line-167">    *    The new value for this property.</span>
-<span class="source-line-no">168</span><span id="line-168">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">169</span><span id="line-169">    * @return This object</span>
-<span class="source-line-no">170</span><span id="line-170">    */</span>
-<span class="source-line-no">171</span><span id="line-171">   public Encoding setStyle(String value) {</span>
-<span class="source-line-no">172</span><span id="line-172">      style = value;</span>
-<span class="source-line-no">173</span><span id="line-173">      return this;</span>
-<span class="source-line-no">174</span><span id="line-174">   }</span>
-<span class="source-line-no">175</span><span id="line-175"></span>
-<span class="source-line-no">176</span><span id="line-176">   /**</span>
-<span class="source-line-no">177</span><span id="line-177">    * Bean property getter:  &lt;property&gt;variables&lt;/property&gt;.</span>
-<span class="source-line-no">178</span><span id="line-178">    *</span>
-<span class="source-line-no">179</span><span id="line-179">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">180</span><span id="line-180">    */</span>
-<span class="source-line-no">181</span><span id="line-181">   public Map&lt;String, HeaderInfo&gt; getHeaders() {</span>
-<span class="source-line-no">182</span><span id="line-182">      return headers;</span>
-<span class="source-line-no">183</span><span id="line-183">   }</span>
-<span class="source-line-no">184</span><span id="line-184"></span>
-<span class="source-line-no">185</span><span id="line-185">   /**</span>
-<span class="source-line-no">186</span><span id="line-186">    * Bean property setter:  &lt;property&gt;variables&lt;/property&gt;.</span>
-<span class="source-line-no">187</span><span id="line-187">    *</span>
-<span class="source-line-no">188</span><span id="line-188">    * @param value</span>
-<span class="source-line-no">189</span><span id="line-189">    *    The new value for this property.</span>
-<span class="source-line-no">190</span><span id="line-190">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">191</span><span id="line-191">    * @return This object</span>
-<span class="source-line-no">192</span><span id="line-192">    */</span>
-<span class="source-line-no">193</span><span id="line-193">   public Encoding setHeaders(Map&lt;String, HeaderInfo&gt; value) {</span>
-<span class="source-line-no">194</span><span id="line-194">      headers = copyOf(value);</span>
-<span class="source-line-no">195</span><span id="line-195">      return this;</span>
-<span class="source-line-no">196</span><span id="line-196">   }</span>
-<span class="source-line-no">197</span><span id="line-197"></span>
-<span class="source-line-no">198</span><span id="line-198">   /**</span>
-<span class="source-line-no">199</span><span id="line-199">    * Adds one or more values to the &lt;property&gt;headers&lt;/property&gt; property.</span>
-<span class="source-line-no">200</span><span id="line-200">    *</span>
-<span class="source-line-no">201</span><span id="line-201">    * @param key The mapping key.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">202</span><span id="line-202">    * @param value</span>
-<span class="source-line-no">203</span><span id="line-203">    *    The values to add to this property.</span>
-<span class="source-line-no">204</span><span id="line-204">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">205</span><span id="line-205">    * @return This object</span>
-<span class="source-line-no">206</span><span id="line-206">    */</span>
-<span class="source-line-no">207</span><span id="line-207">   public Encoding addHeader(String key, HeaderInfo value) {</span>
-<span class="source-line-no">208</span><span id="line-208">      assertArgNotNull("key", key);</span>
-<span class="source-line-no">209</span><span id="line-209">      assertArgNotNull("value", value);</span>
-<span class="source-line-no">210</span><span id="line-210">      headers = mapBuilder(headers).sparse().add(key, value).build();</span>
-<span class="source-line-no">211</span><span id="line-211">      return this;</span>
-<span class="source-line-no">212</span><span id="line-212">   }</span>
-<span class="source-line-no">213</span><span id="line-213"></span>
-<span class="source-line-no">214</span><span id="line-214">   /**</span>
-<span class="source-line-no">215</span><span id="line-215">    * Bean property getter:  &lt;property&gt;required&lt;/property&gt;.</span>
-<span class="source-line-no">216</span><span id="line-216">    *</span>
-<span class="source-line-no">217</span><span id="line-217">    * &lt;p&gt;</span>
-<span class="source-line-no">218</span><span id="line-218">    * The type of the object.</span>
-<span class="source-line-no">219</span><span id="line-219">    *</span>
-<span class="source-line-no">220</span><span id="line-220">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">221</span><span id="line-221">    */</span>
-<span class="source-line-no">222</span><span id="line-222">   public Boolean getExplode() {</span>
-<span class="source-line-no">223</span><span id="line-223">      return explode;</span>
-<span class="source-line-no">224</span><span id="line-224">   }</span>
-<span class="source-line-no">225</span><span id="line-225"></span>
-<span class="source-line-no">226</span><span id="line-226">   /**</span>
-<span class="source-line-no">227</span><span id="line-227">    * Bean property setter:  &lt;property&gt;explode&lt;/property&gt;.</span>
-<span class="source-line-no">228</span><span id="line-228">    *</span>
-<span class="source-line-no">229</span><span id="line-229">    * &lt;p&gt;</span>
-<span class="source-line-no">230</span><span id="line-230">    * The type of the object.</span>
-<span class="source-line-no">231</span><span id="line-231">    *</span>
-<span class="source-line-no">232</span><span id="line-232">    * @param value</span>
-<span class="source-line-no">233</span><span id="line-233">    *    The new value for this property.</span>
-<span class="source-line-no">234</span><span id="line-234">    *    &lt;br&gt;Property value is required.</span>
-<span class="source-line-no">235</span><span id="line-235">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">236</span><span id="line-236">    * @return This object</span>
-<span class="source-line-no">237</span><span id="line-237">    */</span>
-<span class="source-line-no">238</span><span id="line-238">   public Encoding setExplode(Boolean value) {</span>
-<span class="source-line-no">239</span><span id="line-239">      explode = value;</span>
-<span class="source-line-no">240</span><span id="line-240">      return this;</span>
-<span class="source-line-no">241</span><span id="line-241">   }</span>
-<span class="source-line-no">242</span><span id="line-242"></span>
-<span class="source-line-no">243</span><span id="line-243">   /**</span>
-<span class="source-line-no">244</span><span id="line-244">    * Bean property getter:  &lt;property&gt;required&lt;/property&gt;.</span>
-<span class="source-line-no">245</span><span id="line-245">    *</span>
-<span class="source-line-no">246</span><span id="line-246">    * &lt;p&gt;</span>
-<span class="source-line-no">247</span><span id="line-247">    * The type of the object.</span>
-<span class="source-line-no">248</span><span id="line-248">    *</span>
-<span class="source-line-no">249</span><span id="line-249">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">250</span><span id="line-250">    */</span>
-<span class="source-line-no">251</span><span id="line-251">   public Boolean getAllowReserved() {</span>
-<span class="source-line-no">252</span><span id="line-252">      return allowReserved;</span>
-<span class="source-line-no">253</span><span id="line-253">   }</span>
-<span class="source-line-no">254</span><span id="line-254"></span>
-<span class="source-line-no">255</span><span id="line-255">   /**</span>
-<span class="source-line-no">256</span><span id="line-256">    * Bean property setter:  &lt;property&gt;explode&lt;/property&gt;.</span>
-<span class="source-line-no">257</span><span id="line-257">    *</span>
-<span class="source-line-no">258</span><span id="line-258">    * &lt;p&gt;</span>
-<span class="source-line-no">259</span><span id="line-259">    * The type of the object.</span>
-<span class="source-line-no">260</span><span id="line-260">    *</span>
-<span class="source-line-no">261</span><span id="line-261">    * @param value</span>
-<span class="source-line-no">262</span><span id="line-262">    *    The new value for this property.</span>
-<span class="source-line-no">263</span><span id="line-263">    *    &lt;br&gt;Property value is required.</span>
-<span class="source-line-no">264</span><span id="line-264">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">265</span><span id="line-265">    * @return This object</span>
-<span class="source-line-no">266</span><span id="line-266">    */</span>
-<span class="source-line-no">267</span><span id="line-267">   public Encoding setAllowReserved(Boolean value) {</span>
-<span class="source-line-no">268</span><span id="line-268">      allowReserved = value;</span>
-<span class="source-line-no">269</span><span id="line-269">      return this;</span>
-<span class="source-line-no">270</span><span id="line-270">   }</span>
-<span class="source-line-no">271</span><span id="line-271"></span>
-<span class="source-line-no">272</span><span id="line-272">   @Override /* Overridden from OpenApiElement */</span>
-<span class="source-line-no">273</span><span id="line-273">   public &lt;T&gt; T get(String property, Class&lt;T&gt; type) {</span>
-<span class="source-line-no">274</span><span id="line-274">      assertArgNotNull("property", property);</span>
-<span class="source-line-no">275</span><span id="line-275">      return switch (property) {</span>
-<span class="source-line-no">276</span><span id="line-276">         case "contentType" -&gt; toType(getContentType(), type);</span>
-<span class="source-line-no">277</span><span id="line-277">         case "style" -&gt; toType(getStyle(), type);</span>
-<span class="source-line-no">278</span><span id="line-278">         case "headers" -&gt; toType(getHeaders(), type);</span>
-<span class="source-line-no">279</span><span id="line-279">         case "explode" -&gt; toType(getExplode(), type);</span>
-<span class="source-line-no">280</span><span id="line-280">         case "allowReserved" -&gt; toType(getAllowReserved(), type);</span>
-<span class="source-line-no">281</span><span id="line-281">         default -&gt; super.get(property, type);</span>
-<span class="source-line-no">282</span><span id="line-282">      };</span>
-<span class="source-line-no">283</span><span id="line-283">   }</span>
-<span class="source-line-no">284</span><span id="line-284"></span>
-<span class="source-line-no">285</span><span id="line-285">   @Override /* Overridden from OpenApiElement */</span>
-<span class="source-line-no">286</span><span id="line-286">   public Encoding set(String property, Object value) {</span>
-<span class="source-line-no">287</span><span id="line-287">      assertArgNotNull("property", property);</span>
-<span class="source-line-no">288</span><span id="line-288">      return switch (property) {</span>
-<span class="source-line-no">289</span><span id="line-289">         case "allowReserved" -&gt; setAllowReserved(toBoolean(value));</span>
-<span class="source-line-no">290</span><span id="line-290">         case "contentType" -&gt; setContentType(Utils.s(value));</span>
-<span class="source-line-no">291</span><span id="line-291">         case "explode" -&gt; setExplode(toBoolean(value));</span>
-<span class="source-line-no">292</span><span id="line-292">         case "headers" -&gt; setHeaders(mapBuilder(String.class, HeaderInfo.class).sparse().addAny(value).build());</span>
-<span class="source-line-no">293</span><span id="line-293">         case "style" -&gt; setStyle(Utils.s(value));</span>
-<span class="source-line-no">294</span><span id="line-294">         default -&gt; {</span>
-<span class="source-line-no">295</span><span id="line-295">            super.set(property, value);</span>
-<span class="source-line-no">296</span><span id="line-296">            yield this;</span>
-<span class="source-line-no">297</span><span id="line-297">         }</span>
-<span class="source-line-no">298</span><span id="line-298">      };</span>
-<span class="source-line-no">299</span><span id="line-299">   }</span>
-<span class="source-line-no">300</span><span id="line-300"></span>
-<span class="source-line-no">301</span><span id="line-301">   @Override /* Overridden from OpenApiElement */</span>
-<span class="source-line-no">302</span><span id="line-302">   public Set&lt;String&gt; keySet() {</span>
-<span class="source-line-no">303</span><span id="line-303">      var s = setBuilder(String.class)</span>
-<span class="source-line-no">304</span><span id="line-304">         .addIf(allowReserved != null, "allowReserved")</span>
-<span class="source-line-no">305</span><span id="line-305">         .addIf(contentType != null, "contentType")</span>
-<span class="source-line-no">306</span><span id="line-306">         .addIf(explode != null, "explode")</span>
-<span class="source-line-no">307</span><span id="line-307">         .addIf(headers != null, "headers")</span>
-<span class="source-line-no">308</span><span id="line-308">         .addIf(style != null, "style")</span>
-<span class="source-line-no">309</span><span id="line-309">         .build();</span>
-<span class="source-line-no">310</span><span id="line-310">      return new MultiSet&lt;&gt;(s, super.keySet());</span>
-<span class="source-line-no">311</span><span id="line-311">   }</span>
-<span class="source-line-no">312</span><span id="line-312">}</span>
+<span class="source-line-no">142</span><span id="line-142">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
+<span class="source-line-no">143</span><span id="line-143">    * &lt;br&gt;Strings must be valid URIs.</span>
+<span class="source-line-no">144</span><span id="line-144">    *</span>
+<span class="source-line-no">145</span><span id="line-145">    * &lt;p&gt;</span>
+<span class="source-line-no">146</span><span id="line-146">    * URIs defined by {@link UriResolver} can be used for values.</span>
+<span class="source-line-no">147</span><span id="line-147">    *</span>
+<span class="source-line-no">148</span><span id="line-148">    * @param value</span>
+<span class="source-line-no">149</span><span id="line-149">    *    The new value for this property.</span>
+<span class="source-line-no">150</span><span id="line-150">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">151</span><span id="line-151">    * @return This object</span>
+<span class="source-line-no">152</span><span id="line-152">    */</span>
+<span class="source-line-no">153</span><span id="line-153">   public Encoding setContentType(String value) {</span>
+<span class="source-line-no">154</span><span id="line-154">      contentType = value;</span>
+<span class="source-line-no">155</span><span id="line-155">      return this;</span>
+<span class="source-line-no">156</span><span id="line-156">   }</span>
+<span class="source-line-no">157</span><span id="line-157"></span>
+<span class="source-line-no">158</span><span id="line-158">   /**</span>
+<span class="source-line-no">159</span><span id="line-159">    * Bean property getter:  &lt;property&gt;style&lt;/property&gt;.</span>
+<span class="source-line-no">160</span><span id="line-160">    *</span>
+<span class="source-line-no">161</span><span id="line-161">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">162</span><span id="line-162">    */</span>
+<span class="source-line-no">163</span><span id="line-163">   public String getStyle() {</span>
+<span class="source-line-no">164</span><span id="line-164">      return style;</span>
+<span class="source-line-no">165</span><span id="line-165">   }</span>
+<span class="source-line-no">166</span><span id="line-166"></span>
+<span class="source-line-no">167</span><span id="line-167">   /**</span>
+<span class="source-line-no">168</span><span id="line-168">    * Bean property setter:  &lt;property&gt;description&lt;/property&gt;.</span>
+<span class="source-line-no">169</span><span id="line-169">    *</span>
+<span class="source-line-no">170</span><span id="line-170">    * @param value</span>
+<span class="source-line-no">171</span><span id="line-171">    *    The new value for this property.</span>
+<span class="source-line-no">172</span><span id="line-172">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">173</span><span id="line-173">    * @return This object</span>
+<span class="source-line-no">174</span><span id="line-174">    */</span>
+<span class="source-line-no">175</span><span id="line-175">   public Encoding setStyle(String value) {</span>
+<span class="source-line-no">176</span><span id="line-176">      style = value;</span>
+<span class="source-line-no">177</span><span id="line-177">      return this;</span>
+<span class="source-line-no">178</span><span id="line-178">   }</span>
+<span class="source-line-no">179</span><span id="line-179"></span>
+<span class="source-line-no">180</span><span id="line-180">   /**</span>
+<span class="source-line-no">181</span><span id="line-181">    * Bean property getter:  &lt;property&gt;variables&lt;/property&gt;.</span>
+<span class="source-line-no">182</span><span id="line-182">    *</span>
+<span class="source-line-no">183</span><span id="line-183">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">184</span><span id="line-184">    */</span>
+<span class="source-line-no">185</span><span id="line-185">   public Map&lt;String, HeaderInfo&gt; getHeaders() {</span>
+<span class="source-line-no">186</span><span id="line-186">      return headers;</span>
+<span class="source-line-no">187</span><span id="line-187">   }</span>
+<span class="source-line-no">188</span><span id="line-188"></span>
+<span class="source-line-no">189</span><span id="line-189">   /**</span>
+<span class="source-line-no">190</span><span id="line-190">    * Bean property setter:  &lt;property&gt;variables&lt;/property&gt;.</span>
+<span class="source-line-no">191</span><span id="line-191">    *</span>
+<span class="source-line-no">192</span><span id="line-192">    * @param value</span>
+<span class="source-line-no">193</span><span id="line-193">    *    The new value for this property.</span>
+<span class="source-line-no">194</span><span id="line-194">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">195</span><span id="line-195">    * @return This object</span>
+<span class="source-line-no">196</span><span id="line-196">    */</span>
+<span class="source-line-no">197</span><span id="line-197">   public Encoding setHeaders(Map&lt;String, HeaderInfo&gt; value) {</span>
+<span class="source-line-no">198</span><span id="line-198">      headers = copyOf(value);</span>
+<span class="source-line-no">199</span><span id="line-199">      return this;</span>
+<span class="source-line-no">200</span><span id="line-200">   }</span>
+<span class="source-line-no">201</span><span id="line-201"></span>
+<span class="source-line-no">202</span><span id="line-202">   /**</span>
+<span class="source-line-no">203</span><span id="line-203">    * Adds one or more values to the &lt;property&gt;headers&lt;/property&gt; property.</span>
+<span class="source-line-no">204</span><span id="line-204">    *</span>
+<span class="source-line-no">205</span><span id="line-205">    * @param key The mapping key.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">206</span><span id="line-206">    * @param value</span>
+<span class="source-line-no">207</span><span id="line-207">    *    The values to add to this property.</span>
+<span class="source-line-no">208</span><span id="line-208">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">209</span><span id="line-209">    * @return This object</span>
+<span class="source-line-no">210</span><span id="line-210">    */</span>
+<span class="source-line-no">211</span><span id="line-211">   public Encoding addHeader(String key, HeaderInfo value) {</span>
+<span class="source-line-no">212</span><span id="line-212">      assertArgNotNull("key", key);</span>
+<span class="source-line-no">213</span><span id="line-213">      assertArgNotNull("value", value);</span>
+<span class="source-line-no">214</span><span id="line-214">      headers = mapBuilder(headers).sparse().add(key, value).build();</span>
+<span class="source-line-no">215</span><span id="line-215">      return this;</span>
+<span class="source-line-no">216</span><span id="line-216">   }</span>
+<span class="source-line-no">217</span><span id="line-217"></span>
+<span class="source-line-no">218</span><span id="line-218">   /**</span>
+<span class="source-line-no">219</span><span id="line-219">    * Bean property getter:  &lt;property&gt;required&lt;/property&gt;.</span>
+<span class="source-line-no">220</span><span id="line-220">    *</span>
+<span class="source-line-no">221</span><span id="line-221">    * &lt;p&gt;</span>
+<span class="source-line-no">222</span><span id="line-222">    * The type of the object.</span>
+<span class="source-line-no">223</span><span id="line-223">    *</span>
+<span class="source-line-no">224</span><span id="line-224">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">225</span><span id="line-225">    */</span>
+<span class="source-line-no">226</span><span id="line-226">   public Boolean getExplode() {</span>
+<span class="source-line-no">227</span><span id="line-227">      return explode;</span>
+<span class="source-line-no">228</span><span id="line-228">   }</span>
+<span class="source-line-no">229</span><span id="line-229"></span>
+<span class="source-line-no">230</span><span id="line-230">   /**</span>
+<span class="source-line-no">231</span><span id="line-231">    * Bean property setter:  &lt;property&gt;explode&lt;/property&gt;.</span>
+<span class="source-line-no">232</span><span id="line-232">    *</span>
+<span class="source-line-no">233</span><span id="line-233">    * &lt;p&gt;</span>
+<span class="source-line-no">234</span><span id="line-234">    * The type of the object.</span>
+<span class="source-line-no">235</span><span id="line-235">    *</span>
+<span class="source-line-no">236</span><span id="line-236">    * @param value</span>
+<span class="source-line-no">237</span><span id="line-237">    *    The new value for this property.</span>
+<span class="source-line-no">238</span><span id="line-238">    *    &lt;br&gt;Property value is required.</span>
+<span class="source-line-no">239</span><span id="line-239">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">240</span><span id="line-240">    * @return This object</span>
+<span class="source-line-no">241</span><span id="line-241">    */</span>
+<span class="source-line-no">242</span><span id="line-242">   public Encoding setExplode(Boolean value) {</span>
+<span class="source-line-no">243</span><span id="line-243">      explode = value;</span>
+<span class="source-line-no">244</span><span id="line-244">      return this;</span>
+<span class="source-line-no">245</span><span id="line-245">   }</span>
+<span class="source-line-no">246</span><span id="line-246"></span>
+<span class="source-line-no">247</span><span id="line-247">   /**</span>
+<span class="source-line-no">248</span><span id="line-248">    * Bean property getter:  &lt;property&gt;required&lt;/property&gt;.</span>
+<span class="source-line-no">249</span><span id="line-249">    *</span>
+<span class="source-line-no">250</span><span id="line-250">    * &lt;p&gt;</span>
+<span class="source-line-no">251</span><span id="line-251">    * The type of the object.</span>
+<span class="source-line-no">252</span><span id="line-252">    *</span>
+<span class="source-line-no">253</span><span id="line-253">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">254</span><span id="line-254">    */</span>
+<span class="source-line-no">255</span><span id="line-255">   public Boolean getAllowReserved() {</span>
+<span class="source-line-no">256</span><span id="line-256">      return allowReserved;</span>
+<span class="source-line-no">257</span><span id="line-257">   }</span>
+<span class="source-line-no">258</span><span id="line-258"></span>
+<span class="source-line-no">259</span><span id="line-259">   /**</span>
+<span class="source-line-no">260</span><span id="line-260">    * Bean property setter:  &lt;property&gt;explode&lt;/property&gt;.</span>
+<span class="source-line-no">261</span><span id="line-261">    *</span>
+<span class="source-line-no">262</span><span id="line-262">    * &lt;p&gt;</span>
+<span class="source-line-no">263</span><span id="line-263">    * The type of the object.</span>
+<span class="source-line-no">264</span><span id="line-264">    *</span>
+<span class="source-line-no">265</span><span id="line-265">    * @param value</span>
+<span class="source-line-no">266</span><span id="line-266">    *    The new value for this property.</span>
+<span class="source-line-no">267</span><span id="line-267">    *    &lt;br&gt;Property value is required.</span>
+<span class="source-line-no">268</span><span id="line-268">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">269</span><span id="line-269">    * @return This object</span>
+<span class="source-line-no">270</span><span id="line-270">    */</span>
+<span class="source-line-no">271</span><span id="line-271">   public Encoding setAllowReserved(Boolean value) {</span>
+<span class="source-line-no">272</span><span id="line-272">      allowReserved = value;</span>
+<span class="source-line-no">273</span><span id="line-273">      return this;</span>
+<span class="source-line-no">274</span><span id="line-274">   }</span>
+<span class="source-line-no">275</span><span id="line-275"></span>
+<span class="source-line-no">276</span><span id="line-276">   @Override /* Overridden from OpenApiElement */</span>
+<span class="source-line-no">277</span><span id="line-277">   public &lt;T&gt; T get(String property, Class&lt;T&gt; type) {</span>
+<span class="source-line-no">278</span><span id="line-278">      assertArgNotNull("property", property);</span>
+<span class="source-line-no">279</span><span id="line-279">      return switch (property) {</span>
+<span class="source-line-no">280</span><span id="line-280">         case "contentType" -&gt; toType(getContentType(), type);</span>
+<span class="source-line-no">281</span><span id="line-281">         case "style" -&gt; toType(getStyle(), type);</span>
+<span class="source-line-no">282</span><span id="line-282">         case "headers" -&gt; toType(getHeaders(), type);</span>
+<span class="source-line-no">283</span><span id="line-283">         case "explode" -&gt; toType(getExplode(), type);</span>
+<span class="source-line-no">284</span><span id="line-284">         case "allowReserved" -&gt; toType(getAllowReserved(), type);</span>
+<span class="source-line-no">285</span><span id="line-285">         default -&gt; super.get(property, type);</span>
+<span class="source-line-no">286</span><span id="line-286">      };</span>
+<span class="source-line-no">287</span><span id="line-287">   }</span>
+<span class="source-line-no">288</span><span id="line-288"></span>
+<span class="source-line-no">289</span><span id="line-289">   @Override /* Overridden from OpenApiElement */</span>
+<span class="source-line-no">290</span><span id="line-290">   public Encoding set(String property, Object value) {</span>
+<span class="source-line-no">291</span><span id="line-291">      assertArgNotNull("property", property);</span>
+<span class="source-line-no">292</span><span id="line-292">      return switch (property) {</span>
+<span class="source-line-no">293</span><span id="line-293">         case "allowReserved" -&gt; setAllowReserved(toBoolean(value));</span>
+<span class="source-line-no">294</span><span id="line-294">         case "contentType" -&gt; setContentType(Utils.s(value));</span>
+<span class="source-line-no">295</span><span id="line-295">         case "explode" -&gt; setExplode(toBoolean(value));</span>
+<span class="source-line-no">296</span><span id="line-296">         case "headers" -&gt; setHeaders(mapBuilder(String.class, HeaderInfo.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">297</span><span id="line-297">         case "style" -&gt; setStyle(Utils.s(value));</span>
+<span class="source-line-no">298</span><span id="line-298">         default -&gt; {</span>
+<span class="source-line-no">299</span><span id="line-299">            super.set(property, value);</span>
+<span class="source-line-no">300</span><span id="line-300">            yield this;</span>
+<span class="source-line-no">301</span><span id="line-301">         }</span>
+<span class="source-line-no">302</span><span id="line-302">      };</span>
+<span class="source-line-no">303</span><span id="line-303">   }</span>
+<span class="source-line-no">304</span><span id="line-304"></span>
+<span class="source-line-no">305</span><span id="line-305">   @Override /* Overridden from OpenApiElement */</span>
+<span class="source-line-no">306</span><span id="line-306">   public Set&lt;String&gt; keySet() {</span>
+<span class="source-line-no">307</span><span id="line-307">      var s = setBuilder(String.class)</span>
+<span class="source-line-no">308</span><span id="line-308">         .addIf(allowReserved != null, "allowReserved")</span>
+<span class="source-line-no">309</span><span id="line-309">         .addIf(contentType != null, "contentType")</span>
+<span class="source-line-no">310</span><span id="line-310">         .addIf(explode != null, "explode")</span>
+<span class="source-line-no">311</span><span id="line-311">         .addIf(headers != null, "headers")</span>
+<span class="source-line-no">312</span><span id="line-312">         .addIf(style != null, "style")</span>
+<span class="source-line-no">313</span><span id="line-313">         .build();</span>
+<span class="source-line-no">314</span><span id="line-314">      return new MultiSet&lt;&gt;(s, super.keySet());</span>
+<span class="source-line-no">315</span><span id="line-315">   }</span>
+<span class="source-line-no">316</span><span id="line-316">}</span>
 
 
 

@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="annotation/Bean.html" title="annotation interface in org.apache.juneau.annotation">@Bean</a>(<a href="annotation/Bean.html#properties()">properties</a>="innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-65">ClassMeta</a>&lt;T&gt;</span>
+</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-69">ClassMeta</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a></span></div>
 <div class="block">A wrapper class around the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> object that provides cached information about that class.
@@ -746,7 +746,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getInfo()">
 <h3>getInfo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="reflect/ClassInfo.html" title="class in org.apache.juneau.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-767">getInfo</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="reflect/ClassInfo.html" title="class in org.apache.juneau.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-771">getInfo</a></span>()</div>
 <div class="block">Returns the <a href="reflect/ClassInfo.html" title="class in org.apache.juneau.reflect"><code>ClassInfo</code></a> wrapper for the underlying class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -757,7 +757,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getBeanTypePropertyName()">
 <h3>getBeanTypePropertyName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-781">getBeanTypePropertyName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-785">getBeanTypePropertyName</a></span>()</div>
 <div class="block">Returns the type property name associated with this class and subclasses.
 
  <p>
@@ -772,7 +772,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getDictionaryName()">
 <h3>getDictionaryName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-795">getDictionaryName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-799">getDictionaryName</a></span>()</div>
 <div class="block">Returns the bean dictionary name associated with this class.
 
  <p>
@@ -787,7 +787,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getBeanRegistry()">
 <h3>getBeanRegistry</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanRegistry.html" title="class in org.apache.juneau">BeanRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-809">getBeanRegistry</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanRegistry.html" title="class in org.apache.juneau">BeanRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-813">getBeanRegistry</a></span>()</div>
 <div class="block">Returns the bean registry for this class.
 
  <p>
@@ -803,7 +803,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getClassCategory()">
 <h3>getClassCategory</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.ClassMeta.ClassCategory</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-818">getClassCategory</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.ClassMeta.ClassCategory</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-822">getClassCategory</a></span>()</div>
 <div class="block">Returns the category of this class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -814,7 +814,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isAssignableFrom(java.lang.Class)">
 <h3>isAssignableFrom</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-828">isAssignableFrom</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-832">isAssignableFrom</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Returns <jk>true</jk> if this class is a superclass of or the same as the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -827,7 +827,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isInstanceOf(java.lang.Class)">
 <h3>isInstanceOf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-838">isInstanceOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-842">isInstanceOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Returns <jk>true</jk> if this class is a subclass of or the same as the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -840,7 +840,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hasChildSwaps()">
 <h3>hasChildSwaps</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-851">hasChildSwaps</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-855">hasChildSwaps</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class or any child classes has a <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.swap"><code>ObjectSwap</code></a> associated with it.
 
  <p>
@@ -855,7 +855,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getChildObjectSwapForSwap(java.lang.Class)">
 <h3>getChildObjectSwapForSwap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-862">getChildObjectSwapForSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;normalClass)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-866">getChildObjectSwapForSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;normalClass)</span></div>
 <div class="block">Returns the <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.swap"><code>ObjectSwap</code></a> where the specified class is the same/subclass of the normal class of one of the
  child POJO swaps associated with this class.</div>
 <dl class="notes">
@@ -869,7 +869,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getChildObjectSwapForUnswap(java.lang.Class)">
 <h3>getChildObjectSwapForUnswap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-889">getChildObjectSwapForUnswap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;swapClass)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-893">getChildObjectSwapForUnswap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;swapClass)</span></div>
 <div class="block">Returns the <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.swap"><code>ObjectSwap</code></a> where the specified class is the same/subclass of the swap class of one of the child
  POJO swaps associated with this class.</div>
 <dl class="notes">
@@ -883,7 +883,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="findNoArgConstructor(java.lang.Class,org.apache.juneau.Visibility)">
 <h3>findNoArgConstructor</h3>
-<div class="member-signature"><span class="modifiers">protected static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;? extends T&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-922">findNoArgConstructor</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
+<div class="member-signature"><span class="modifiers">protected static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;? extends T&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-926">findNoArgConstructor</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
  <a href="Visibility.html" title="enum class in org.apache.juneau">Visibility</a>&nbsp;v)</span></div>
 <div class="block">Locates the no-arg constructor for the specified class.
 
@@ -905,7 +905,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getInnerClass()">
 <h3>getInnerClass</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-943">getInnerClass</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-947">getInnerClass</a></span>()</div>
 <div class="block">Returns the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> object that this class type wraps.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -916,7 +916,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getSerializedClassMeta(org.apache.juneau.BeanSession)">
 <h3>getSerializedClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-955">getSerializedClassMeta</a></span><wbr><span class="parameters">(<a href="BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-959">getSerializedClassMeta</a></span><wbr><span class="parameters">(<a href="BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session)</span></div>
 <div class="block">Returns the serialized (swapped) form of this class if there is an <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.swap"><code>ObjectSwap</code></a> associated with it.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -930,7 +930,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getExample(org.apache.juneau.BeanSession,org.apache.juneau.json.JsonParserSession)">
 <h3>getExample</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-969">getExample</a></span><wbr><span class="parameters">(<a href="BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-973">getExample</a></span><wbr><span class="parameters">(<a href="BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="json/JsonParserSession.html" title="class in org.apache.juneau.json">JsonParserSession</a>&nbsp;jpSession)</span></div>
 <div class="block">Returns the example of this class.</div>
 <dl class="notes">
@@ -946,7 +946,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getElementType()">
 <h3>getElementType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1021">getElementType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1025">getElementType</a></span>()</div>
 <div class="block">For array and <code>Collection</code> types, returns the class type of the components of the array or
  <code>Collection</code>.</div>
 <dl class="notes">
@@ -958,7 +958,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getKeyType()">
 <h3>getKeyType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1030">getKeyType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1034">getKeyType</a></span>()</div>
 <div class="block">For <code>Map</code> types, returns the class type of the keys of the <code>Map</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -969,7 +969,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getValueType()">
 <h3>getValueType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1039">getValueType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1043">getValueType</a></span>()</div>
 <div class="block">For <code>Map</code> types, returns the class type of the values of the <code>Map</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -980,7 +980,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isDelegate()">
 <h3>isDelegate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1049">isDelegate</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1053">isDelegate</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class implements <a href="Delegate.html" title="interface in org.apache.juneau"><code>Delegate</code></a>, meaning it's a representation of some other
  object.</div>
 <dl class="notes">
@@ -992,7 +992,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="is(java.lang.Class)">
 <h3>is</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1059">is</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1063">is</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;value)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified class is an exact match for this metadata.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1005,7 +1005,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isChildOf(java.lang.Class)">
 <h3>isChildOf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1069">isChildOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1073">isChildOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Returns <jk>true</jk> if this metadata represents the specified type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1018,7 +1018,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isMap()">
 <h3>isMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1078">isMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1082">isMap</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a subclass of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1029,7 +1029,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isMapOrBean()">
 <h3>isMapOrBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1087">isMapOrBean</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1091">isMapOrBean</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a subclass of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a> or it's a bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1040,7 +1040,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isBeanMap()">
 <h3>isBeanMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1096">isBeanMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1100">isBeanMap</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a subclass of <a href="BeanMap.html" title="class in org.apache.juneau"><code>BeanMap</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1051,7 +1051,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isCollection()">
 <h3>isCollection</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1105">isCollection</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1109">isCollection</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a subclass of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link"><code>Collection</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1062,7 +1062,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isOptional()">
 <h3>isOptional</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1114">isOptional</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1118">isOptional</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a subclass of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1073,7 +1073,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isCollectionOrArray()">
 <h3>isCollectionOrArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1123">isCollectionOrArray</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1127">isCollectionOrArray</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a subclass of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link"><code>Collection</code></a> or is an array.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1084,7 +1084,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isCollectionOrArrayOrOptional()">
 <h3>isCollectionOrArrayOrOptional</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1132">isCollectionOrArrayOrOptional</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1136">isCollectionOrArrayOrOptional</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a subclass of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link"><code>Collection</code></a> or is an array or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1095,7 +1095,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isSet()">
 <h3>isSet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1141">isSet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1145">isSet</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class extends from <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link"><code>Set</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1106,7 +1106,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isList()">
 <h3>isList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1150">isList</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1154">isList</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class extends from <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link"><code>List</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1117,7 +1117,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isByteArray()">
 <h3>isByteArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1159">isByteArray</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1163">isByteArray</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is <code><jk>byte</jk>[]</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1128,7 +1128,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isClass()">
 <h3>isClass</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1168">isClass</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1172">isClass</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1139,7 +1139,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isMethod()">
 <h3>isMethod</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1177">isMethod</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1181">isMethod</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link"><code>Method</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1150,7 +1150,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isEnum()">
 <h3>isEnum</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1186">isEnum</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1190">isEnum</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link"><code>Enum</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1161,7 +1161,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isArray()">
 <h3>isArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1195">isArray</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1199">isArray</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is an array.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1172,7 +1172,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isBean()">
 <h3>isBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1204">isBean</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1208">isBean</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1183,7 +1183,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isObject()">
 <h3>isObject</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1213">isObject</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1217">isObject</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link"><code>Object</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1194,7 +1194,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isNotObject()">
 <h3>isNotObject</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1222">isNotObject</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1226">isNotObject</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is not <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link"><code>Object</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1205,7 +1205,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isNumber()">
 <h3>isNumber</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1231">isNumber</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1235">isNumber</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a subclass of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link"><code>Number</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1216,7 +1216,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isDecimal()">
 <h3>isDecimal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1240">isDecimal</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1244">isDecimal</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a subclass of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link"><code>Float</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link"><code>Double</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1227,7 +1227,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isFloat()">
 <h3>isFloat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1249">isFloat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1253">isFloat</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is either <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link"><code>Float</code></a> or <jk>float</jk>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1238,7 +1238,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isDouble()">
 <h3>isDouble</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1258">isDouble</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1262">isDouble</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is either <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link"><code>Double</code></a> or <jk>double</jk>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1249,7 +1249,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isShort()">
 <h3>isShort</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1267">isShort</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1271">isShort</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is either <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Short.html" title="class or interface in java.lang" class="external-link"><code>Short</code></a> or <jk>short</jk>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1260,7 +1260,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isInteger()">
 <h3>isInteger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1276">isInteger</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1280">isInteger</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is either <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link"><code>Integer</code></a> or <jk>int</jk>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1271,7 +1271,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isLong()">
 <h3>isLong</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1285">isLong</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1289">isLong</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is either <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link"><code>Long</code></a> or <jk>long</jk>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1282,7 +1282,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isBoolean()">
 <h3>isBoolean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1294">isBoolean</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1298">isBoolean</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link"><code>Boolean</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1293,7 +1293,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isCharSequence()">
 <h3>isCharSequence</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1303">isCharSequence</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1307">isCharSequence</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a subclass of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link"><code>CharSequence</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1304,7 +1304,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isString()">
 <h3>isString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1312">isString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1316">isString</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1315,7 +1315,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isChar()">
 <h3>isChar</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1321">isChar</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1325">isChar</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html" title="class or interface in java.lang" class="external-link"><code>Character</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1326,7 +1326,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isPrimitive()">
 <h3>isPrimitive</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1330">isPrimitive</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1334">isPrimitive</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a primitive.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1337,7 +1337,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isDateOrCalendar()">
 <h3>isDateOrCalendar</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1339">isDateOrCalendar</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1343">isDateOrCalendar</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link"><code>Date</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link"><code>Calendar</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1348,7 +1348,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isDateOrCalendarOrTemporal()">
 <h3>isDateOrCalendarOrTemporal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1348">isDateOrCalendarOrTemporal</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1352">isDateOrCalendarOrTemporal</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link"><code>Date</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link"><code>Calendar</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/Temporal.html" title="class or interface in java.time.temporal" class="external-link"><code>Temporal</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1359,7 +1359,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isDate()">
 <h3>isDate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1357">isDate</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1361">isDate</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link"><code>Date</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1370,7 +1370,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isTemporal()">
 <h3>isTemporal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1366">isTemporal</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1370">isTemporal</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/Temporal.html" title="class or interface in java.time.temporal" class="external-link"><code>Temporal</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1381,7 +1381,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isCalendar()">
 <h3>isCalendar</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1375">isCalendar</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1379">isCalendar</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link"><code>Calendar</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1392,7 +1392,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isUri()">
 <h3>isUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1384">isUri</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1388">isUri</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link"><code>URI</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URL.html" title="class or interface in java.net" class="external-link"><code>URL</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1403,7 +1403,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isReader()">
 <h3>isReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1393">isReader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1397">isReader</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1414,7 +1414,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isInputStream()">
 <h3>isInputStream</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1402">isInputStream</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1406">isInputStream</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1425,7 +1425,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isVoid()">
 <h3>isVoid</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1411">isVoid</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1415">isVoid</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link"><code>Void</code></a> or <jk>void</jk>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1436,7 +1436,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isArgs()">
 <h3>isArgs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1420">isArgs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1424">isArgs</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this metadata represents an array of argument types.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1447,7 +1447,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getArgs()">
 <h3>getArgs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1429">getArgs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1433">getArgs</a></span>()</div>
 <div class="block">Returns the argument types of this meta.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1458,7 +1458,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getArg(int)">
 <h3>getArg</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1440">getArg</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1444">getArg</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block">Returns the argument metadata at the specified index if this is an args metadata object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1473,7 +1473,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isNullable()">
 <h3>isNullable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1455">isNullable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1459">isNullable</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if instance of this object can be <jk>null</jk>.
 
  <p>
@@ -1488,7 +1488,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isAbstract()">
 <h3>isAbstract</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1466">isAbstract</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1470">isAbstract</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is abstract.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1499,7 +1499,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isMemberClass()">
 <h3>isMemberClass</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1475">isMemberClass</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1479">isMemberClass</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class is an inner class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1510,7 +1510,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getPublicMethods()">
 <h3>getPublicMethods</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1487">getPublicMethods</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1491">getPublicMethods</a></span>()</div>
 <div class="block">All public methods on this class including static methods.
 
  <p>
@@ -1524,7 +1524,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getSwap(org.apache.juneau.BeanSession)">
 <h3>getSwap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;<a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1502">getSwap</a></span><wbr><span class="parameters">(<a href="BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;<a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1506">getSwap</a></span><wbr><span class="parameters">(<a href="BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session)</span></div>
 <div class="block">Returns the <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.swap"><code>ObjectSwap</code></a> associated with this class that's the best match for the specified session.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1540,7 +1540,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getBuilderSwap(org.apache.juneau.BeanSession)">
 <h3>getBuilderSwap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="swap/BuilderSwap.html" title="class in org.apache.juneau.swap">BuilderSwap</a>&lt;<a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1526">getBuilderSwap</a></span><wbr><span class="parameters">(<a href="BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="swap/BuilderSwap.html" title="class in org.apache.juneau.swap">BuilderSwap</a>&lt;<a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1530">getBuilderSwap</a></span><wbr><span class="parameters">(<a href="BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session)</span></div>
 <div class="block">Returns the builder swap associated with this class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1553,7 +1553,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getBeanMeta()">
 <h3>getBeanMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMeta.html" title="class in org.apache.juneau">BeanMeta</a>&lt;<a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1537">getBeanMeta</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMeta.html" title="class in org.apache.juneau">BeanMeta</a>&lt;<a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1541">getBeanMeta</a></span>()</div>
 <div class="block">Returns the <a href="BeanMeta.html" title="class in org.apache.juneau"><code>BeanMeta</code></a> associated with this class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1565,7 +1565,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getConstructor()">
 <h3>getConstructor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="reflect/ConstructorInfo.html" title="class in org.apache.juneau.reflect">ConstructorInfo</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1546">getConstructor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="reflect/ConstructorInfo.html" title="class in org.apache.juneau.reflect">ConstructorInfo</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1550">getConstructor</a></span>()</div>
 <div class="block">Returns the no-arg constructor for this class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1576,7 +1576,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getImplClassConstructor(org.apache.juneau.Visibility)">
 <h3>getImplClassConstructor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="reflect/ConstructorInfo.html" title="class in org.apache.juneau.reflect">ConstructorInfo</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1556">getImplClassConstructor</a></span><wbr><span class="parameters">(<a href="Visibility.html" title="enum class in org.apache.juneau">Visibility</a>&nbsp;conVis)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="reflect/ConstructorInfo.html" title="class in org.apache.juneau.reflect">ConstructorInfo</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1560">getImplClassConstructor</a></span><wbr><span class="parameters">(<a href="Visibility.html" title="enum class in org.apache.juneau">Visibility</a>&nbsp;conVis)</span></div>
 <div class="block">Returns the no-arg constructor for this class based on the <a href="annotation/Marshalled.html#implClass()"><code>Marshalled.implClass()</code></a> value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1589,7 +1589,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getProxyInvocationHandler()">
 <h3>getProxyInvocationHandler</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/InvocationHandler.html" title="class or interface in java.lang.reflect" class="external-link">InvocationHandler</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1567">getProxyInvocationHandler</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/InvocationHandler.html" title="class or interface in java.lang.reflect" class="external-link">InvocationHandler</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1571">getProxyInvocationHandler</a></span>()</div>
 <div class="block">Returns the interface proxy invocation handler for this class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1600,7 +1600,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="canCreateNewInstance()">
 <h3>canCreateNewInstance</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1576">canCreateNewInstance</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1580">canCreateNewInstance</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class has a no-arg constructor or invocation handler.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1611,7 +1611,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="canCreateNewInstance(java.lang.Object)">
 <h3>canCreateNewInstance</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1594">canCreateNewInstance</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1598">canCreateNewInstance</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer)</span></div>
 <div class="block">Returns <jk>true</jk> if this class has a no-arg constructor or invocation handler.
  Returns <jk>false</jk> if this is a non-static member class and the outer object does not match the class type of
  the defining class.</div>
@@ -1626,7 +1626,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="canCreateNewBean(java.lang.Object)">
 <h3>canCreateNewBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1610">canCreateNewBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1614">canCreateNewBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer)</span></div>
 <div class="block">Returns <jk>true</jk> if this class can be instantiated as a bean.
  Returns <jk>false</jk> if this is a non-static member class and the outer object does not match the class type of
  the defining class.</div>
@@ -1641,7 +1641,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="canCreateNewInstanceFromString(java.lang.Object)">
 <h3>canCreateNewInstanceFromString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1626">canCreateNewInstanceFromString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1630">canCreateNewInstanceFromString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer)</span></div>
 <div class="block">Returns <jk>true</jk> if this class can call the <a href="#newInstanceFromString(java.lang.Object,java.lang.String)"><code>newInstanceFromString(Object, String)</code></a> method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1655,7 +1655,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getNameProperty()">
 <h3>getNameProperty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="internal/Setter.html" title="interface in org.apache.juneau.internal">Setter</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1644">getNameProperty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="internal/Setter.html" title="interface in org.apache.juneau.internal">Setter</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1648">getNameProperty</a></span>()</div>
 <div class="block">Returns the method or field annotated with <a href="annotation/NameProperty.html" title="annotation interface in org.apache.juneau.annotation"><code>@NameProperty</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1667,7 +1667,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getParentProperty()">
 <h3>getParentProperty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="internal/Setter.html" title="interface in org.apache.juneau.internal">Setter</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1655">getParentProperty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="internal/Setter.html" title="interface in org.apache.juneau.internal">Setter</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1659">getParentProperty</a></span>()</div>
 <div class="block">Returns the method or field annotated with <a href="annotation/ParentProperty.html" title="annotation interface in org.apache.juneau.annotation"><code>@ParentProperty</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1679,7 +1679,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getNotABeanReason()">
 <h3>getNotABeanReason</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1664">getNotABeanReason</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1668">getNotABeanReason</a></span>()</div>
 <div class="block">Returns the reason why this class is not a bean, or <jk>null</jk> if it is a bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1690,7 +1690,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getInitException()">
 <h3>getInitException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1673">getInitException</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1677">getInitException</a></span>()</div>
 <div class="block">Returns any exception that was throw in the <c>init()</c> method.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1701,7 +1701,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getBeanContext()">
 <h3>getBeanContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanContext.html" title="class in org.apache.juneau">BeanContext</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1682">getBeanContext</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanContext.html" title="class in org.apache.juneau">BeanContext</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1686">getBeanContext</a></span>()</div>
 <div class="block">Returns the <a href="BeanContext.html" title="class in org.apache.juneau"><code>BeanContext</code></a> that created this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1712,7 +1712,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getPrimitiveDefault()">
 <h3>getPrimitiveDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1691">getPrimitiveDefault</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1695">getPrimitiveDefault</a></span>()</div>
 <div class="block">Returns the default value for primitives such as <jk>int</jk> or <jk>Integer</jk>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1723,7 +1723,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getOptionalDefault()">
 <h3>getOptionalDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1704">getOptionalDefault</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1708">getOptionalDefault</a></span>()</div>
 <div class="block">If this is an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>, returns an empty optional.
 
  <p>
@@ -1737,7 +1737,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="toString(java.lang.Object)">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1716">toString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;t)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1720">toString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;t)</span></div>
 <div class="block">Converts the specified object to a string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1750,7 +1750,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="newInstanceFromString(java.lang.Object,java.lang.String)">
 <h3>newInstanceFromString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1741">newInstanceFromString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1745">newInstanceFromString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;arg)</span>
                         throws <span class="exceptions"><a href="ExecutableException.html" title="class in org.apache.juneau">ExecutableException</a></span></div>
 <div class="block">Create a new instance of the main class of this declared type from a <c>String</c> input.
@@ -1776,7 +1776,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="newInstance()">
 <h3>newInstance</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1774">newInstance</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1778">newInstance</a></span>()
               throws <span class="exceptions"><a href="ExecutableException.html" title="class in org.apache.juneau">ExecutableException</a></span></div>
 <div class="block">Create a new instance of the main class of this declared type.</div>
 <dl class="notes">
@@ -1790,7 +1790,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="newInstance(java.lang.Object)">
 <h3>newInstance</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1798">newInstance</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1802">newInstance</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer)</span>
               throws <span class="exceptions"><a href="ExecutableException.html" title="class in org.apache.juneau">ExecutableException</a></span></div>
 <div class="block">Same as <a href="#newInstance()"><code>newInstance()</code></a> except for instantiating non-static member classes.</div>
 <dl class="notes">
@@ -1807,7 +1807,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="same(org.apache.juneau.ClassMeta)">
 <h3>same</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1811">same</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1815">same</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Similar to <a href="#equals(java.lang.Object)"><code>equals(Object)</code></a> except primitive and Object types that are similar are considered the same.
  (e.g. <jk>boolean</jk> == <c>Boolean</c>).</div>
 <dl class="notes">
@@ -1821,7 +1821,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1817">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1821">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -1831,7 +1831,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="toString(boolean)">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1828">toString</a></span><wbr><span class="parameters">(boolean&nbsp;simple)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1832">toString</a></span><wbr><span class="parameters">(boolean&nbsp;simple)</span></div>
 <div class="block">Same as <a href="#toString()"><code>toString()</code></a> except use simple class names.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1844,7 +1844,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="toString(java.lang.StringBuilder,boolean)">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link">StringBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1839">toString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link">StringBuilder</a>&nbsp;sb,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link">StringBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1843">toString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link">StringBuilder</a>&nbsp;sb,
  boolean&nbsp;simple)</span></div>
 <div class="block">Appends this object as a readable string to the specified string builder.</div>
 <dl class="notes">
@@ -1859,7 +1859,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isInstance(java.lang.Object)">
 <h3>isInstance</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1865">isInstance</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1869">isInstance</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified object is an instance of this class.
 
  <p>
@@ -1875,7 +1875,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getFullName()">
 <h3>getFullName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1876">getFullName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1880">getFullName</a></span>()</div>
 <div class="block">Returns a readable name for this class (e.g. <js>"java.lang.String"</js>, <js>"boolean[]"</js>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1886,7 +1886,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getName()">
 <h3>getName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1885">getName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1889">getName</a></span>()</div>
 <div class="block">Shortcut for calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getName()" title="class or interface in java.lang" class="external-link"><code>Class.getName()</code></a> on the inner class of this metadata.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1897,7 +1897,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getSimpleName()">
 <h3>getSimpleName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1894">getSimpleName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1898">getSimpleName</a></span>()</div>
 <div class="block">Shortcut for calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getSimpleName()" title="class or interface in java.lang" class="external-link"><code>Class.getSimpleName()</code></a> on the inner class of this metadata.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1908,7 +1908,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hasReaderMutater()">
 <h3>hasReaderMutater</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1903">hasReaderMutater</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1907">hasReaderMutater</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class has a transform associated with it that allows it to be created from a Reader.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1919,7 +1919,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getReaderMutater()">
 <h3>getReaderMutater</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="reflect/Mutater.html" title="class in org.apache.juneau.reflect">Mutater</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>,<wbr><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1912">getReaderMutater</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="reflect/Mutater.html" title="class in org.apache.juneau.reflect">Mutater</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>,<wbr><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1916">getReaderMutater</a></span>()</div>
 <div class="block">Returns the transform for this class for creating instances from a Reader.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1930,7 +1930,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hasInputStreamMutater()">
 <h3>hasInputStreamMutater</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1921">hasInputStreamMutater</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1925">hasInputStreamMutater</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class has a transform associated with it that allows it to be created from an InputStream.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1941,7 +1941,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getInputStreamMutater()">
 <h3>getInputStreamMutater</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="reflect/Mutater.html" title="class in org.apache.juneau.reflect">Mutater</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a>,<wbr><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1930">getInputStreamMutater</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="reflect/Mutater.html" title="class in org.apache.juneau.reflect">Mutater</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a>,<wbr><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1934">getInputStreamMutater</a></span>()</div>
 <div class="block">Returns the transform for this class for creating instances from an InputStream.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1952,7 +1952,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hasStringMutater()">
 <h3>hasStringMutater</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1939">hasStringMutater</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1943">hasStringMutater</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this class has a transform associated with it that allows it to be created from a String.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1963,7 +1963,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getStringMutater()">
 <h3>getStringMutater</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="reflect/Mutater.html" title="class in org.apache.juneau.reflect">Mutater</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1948">getStringMutater</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="reflect/Mutater.html" title="class in org.apache.juneau.reflect">Mutater</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1952">getStringMutater</a></span>()</div>
 <div class="block">Returns the transform for this class for creating instances from a String.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1974,7 +1974,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hasMutaterFrom(java.lang.Class)">
 <h3>hasMutaterFrom</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1958">hasMutaterFrom</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1962">hasMutaterFrom</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Returns <jk>true</jk> if this class can be instantiated from the specified type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1987,7 +1987,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hasMutaterFrom(org.apache.juneau.ClassMeta)">
 <h3>hasMutaterFrom</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1968">hasMutaterFrom</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1972">hasMutaterFrom</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Returns <jk>true</jk> if this class can be instantiated from the specified type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -2000,7 +2000,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hasMutaterTo(java.lang.Class)">
 <h3>hasMutaterTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1978">hasMutaterTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1982">hasMutaterTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Returns <jk>true</jk> if this class can be transformed to the specified type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -2013,7 +2013,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hasMutaterTo(org.apache.juneau.ClassMeta)">
 <h3>hasMutaterTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1988">hasMutaterTo</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1992">hasMutaterTo</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Returns <jk>true</jk> if this class can be transformed to the specified type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -2026,7 +2026,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="mutateFrom(java.lang.Object)">
 <h3>mutateFrom</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-1998">mutateFrom</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2002">mutateFrom</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Transforms the specified object into an instance of this class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -2039,7 +2039,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="mutateTo(java.lang.Object,java.lang.Class)">
 <h3>mutateTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2012">mutateTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2016">mutateTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;O&gt;&nbsp;c)</span></div>
 <div class="block">Transforms the specified object into an instance of this class.</div>
 <dl class="notes">
@@ -2056,7 +2056,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="mutateTo(java.lang.Object,org.apache.juneau.ClassMeta)">
 <h3>mutateTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2026">mutateTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2030">mutateTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;O&gt;&nbsp;c)</span></div>
 <div class="block">Transforms the specified object into an instance of this class.</div>
 <dl class="notes">
@@ -2073,7 +2073,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getFromMutater(java.lang.Class)">
 <h3>getFromMutater</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;I&gt;</span>&nbsp;<span class="return-type"><a href="reflect/Mutater.html" title="class in org.apache.juneau.reflect">Mutater</a>&lt;I,<wbr><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2037">getFromMutater</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;I&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;I&gt;</span>&nbsp;<span class="return-type"><a href="reflect/Mutater.html" title="class in org.apache.juneau.reflect">Mutater</a>&lt;I,<wbr><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2041">getFromMutater</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;I&gt;&nbsp;c)</span></div>
 <div class="block">Returns the transform for this class for creating instances from other object types.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -2088,7 +2088,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getToMutater(java.lang.Class)">
 <h3>getToMutater</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;O&gt;</span>&nbsp;<span class="return-type"><a href="reflect/Mutater.html" title="class in org.apache.juneau.reflect">Mutater</a>&lt;<a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>,<wbr>O&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2058">getToMutater</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;O&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;O&gt;</span>&nbsp;<span class="return-type"><a href="reflect/Mutater.html" title="class in org.apache.juneau.reflect">Mutater</a>&lt;<a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>,<wbr>O&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2062">getToMutater</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;O&gt;&nbsp;c)</span></div>
 <div class="block">Returns the transform for this class for creating instances from other object types.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -2103,7 +2103,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hasAnnotation(java.lang.Class)">
 <h3>hasAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2078">hasAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;&nbsp;a)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2082">hasAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;&nbsp;a)</span></div>
 <div class="block">Shortcut for calling <code>getInnerClass().getAnnotation(a) != <jk>null</jk></code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -2116,7 +2116,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getLastAnnotation(java.lang.Class)">
 <h3>getLastAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">A</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2089">getLastAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;a)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">A</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2093">getLastAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;a)</span></div>
 <div class="block">Shortcut for calling <c>getInnerClass().getAnnotation(a)</c>.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -2131,7 +2131,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="forEachAnnotation(java.lang.Class,java.util.function.Predicate,java.util.function.Consumer)">
 <h3>forEachAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;<a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2110">forEachAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;<a href="ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2114">forEachAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;A&gt;&nbsp;filter,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;A&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on all matching annotations of the specified type defined on this class or parent classes/interfaces in parent-to-child order.</div>
@@ -2150,7 +2150,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="firstAnnotation(java.lang.Class,java.util.function.Predicate)">
 <h3>firstAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;A&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2130">firstAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;A&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2134">firstAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;A&gt;&nbsp;filter)</span></div>
 <div class="block">Returns the first matching annotation on this class or parent classes/interfaces in parent-to-child order.</div>
 <dl class="notes">
@@ -2167,7 +2167,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="lastAnnotation(java.lang.Class,java.util.function.Predicate)">
 <h3>lastAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;A&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2151">lastAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;A&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2155">lastAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;A&gt;&nbsp;filter)</span></div>
 <div class="block">Returns the last matching annotation on this class or parent classes/interfaces in parent-to-child order.</div>
 <dl class="notes">
@@ -2184,7 +2184,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getProperty(java.lang.String,java.util.function.Function)">
 <h3>getProperty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T2&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2186">getProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T2&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2190">getProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;,<wbr>T2&gt;&nbsp;function)</span></div>
 <div class="block">Returns a calculated property on this context.</div>
 <dl class="notes">
@@ -2201,7 +2201,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="cast(java.lang.Object)">
 <h3>cast</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2202">cast</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="type parameter in ClassMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2206">cast</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Cast this object to this type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -2214,7 +2214,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2206">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2210">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -2224,7 +2224,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2211">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/ClassMeta.html#line-2215">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

@@ -11,77 +11,81 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.annotation;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static java.lang.annotation.ElementType.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import static java.lang.annotation.RetentionPolicy.*;</span>
-<span class="source-line-no">017</span><span id="line-17"></span>
-<span class="source-line-no">018</span><span id="line-18">import java.lang.annotation.*;</span>
-<span class="source-line-no">019</span><span id="line-19"></span>
-<span class="source-line-no">020</span><span id="line-20">/**</span>
-<span class="source-line-no">021</span><span id="line-21"> * Identifies a class as a builder for a POJO class.</span>
-<span class="source-line-no">022</span><span id="line-22"> *</span>
-<span class="source-line-no">023</span><span id="line-23"> * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">024</span><span id="line-24"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">025</span><span id="line-25"> *    &lt;jc&gt;// POJO class.&lt;/jc&gt;</span>
-<span class="source-line-no">026</span><span id="line-26"> *    &lt;ja&gt;@Builder&lt;/ja&gt;(MyBeanBuilder.&lt;jk&gt;class&lt;/jk&gt;)</span>
-<span class="source-line-no">027</span><span id="line-27"> *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {</span>
-<span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> *       &lt;jc&gt;// Read-only properties.&lt;/jc&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> *       &lt;jk&gt;public final&lt;/jk&gt; String &lt;jf&gt;foo&lt;/jf&gt;;</span>
-<span class="source-line-no">031</span><span id="line-31"> *       &lt;jk&gt;public final int&lt;/jk&gt; &lt;jf&gt;bar&lt;/jf&gt;;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.annotation;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import static java.lang.annotation.ElementType.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static java.lang.annotation.RetentionPolicy.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">import java.lang.annotation.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">/**</span>
+<span class="source-line-no">025</span><span id="line-25"> * Identifies a class as a builder for a POJO class.</span>
+<span class="source-line-no">026</span><span id="line-26"> *</span>
+<span class="source-line-no">027</span><span id="line-27"> * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">028</span><span id="line-28"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> *    &lt;jc&gt;// POJO class.&lt;/jc&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> *    &lt;ja&gt;@Builder&lt;/ja&gt;(MyBeanBuilder.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">031</span><span id="line-31"> *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> *       &lt;jc&gt;// Constructor that takes in a builder.&lt;/jc&gt;</span>
-<span class="source-line-no">034</span><span id="line-34"> *       &lt;jk&gt;public&lt;/jk&gt; MyBean(MyBeanBuilder &lt;jv&gt;builder&lt;/jv&gt;) {</span>
-<span class="source-line-no">035</span><span id="line-35"> *          &lt;jk&gt;this&lt;/jk&gt;.&lt;jf&gt;foo&lt;/jf&gt; = &lt;jv&gt;builder&lt;/jv&gt;.&lt;jf&gt;foo&lt;/jf&gt;;</span>
-<span class="source-line-no">036</span><span id="line-36"> *          &lt;jk&gt;this&lt;/jk&gt;.&lt;jf&gt;bar&lt;/jf&gt; = &lt;jv&gt;builder&lt;/jv&gt;.&lt;jf&gt;bar&lt;/jf&gt;;</span>
-<span class="source-line-no">037</span><span id="line-37"> *       }</span>
-<span class="source-line-no">038</span><span id="line-38"> *    }</span>
-<span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> *    &lt;jc&gt;// Builder class.&lt;/jc&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *    &lt;jk&gt;public class&lt;/jk&gt; MyBeanBuilder {</span>
-<span class="source-line-no">042</span><span id="line-42"> *       &lt;jk&gt;public&lt;/jk&gt; String &lt;jf&gt;foo&lt;/jf&gt;;</span>
-<span class="source-line-no">043</span><span id="line-43"> *       &lt;jk&gt;public int&lt;/jk&gt; &lt;jf&gt;bar&lt;/jf&gt;;</span>
-<span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> *       &lt;jc&gt;// Method that creates the bean.&lt;/jc&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> *       &lt;jk&gt;public&lt;/jk&gt; MyBean build() {</span>
-<span class="source-line-no">047</span><span id="line-47"> *          &lt;jk&gt;return new&lt;/jk&gt; MyBean(&lt;jk&gt;this&lt;/jk&gt;);</span>
-<span class="source-line-no">048</span><span id="line-48"> *       }</span>
-<span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> *       &lt;jc&gt;// Bean property setters.&lt;/jc&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *    }</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;/p&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> *       &lt;jc&gt;// Read-only properties.&lt;/jc&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> *       &lt;jk&gt;public final&lt;/jk&gt; String &lt;jf&gt;foo&lt;/jf&gt;;</span>
+<span class="source-line-no">035</span><span id="line-35"> *       &lt;jk&gt;public final int&lt;/jk&gt; &lt;jf&gt;bar&lt;/jf&gt;;</span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
+<span class="source-line-no">037</span><span id="line-37"> *       &lt;jc&gt;// Constructor that takes in a builder.&lt;/jc&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> *       &lt;jk&gt;public&lt;/jk&gt; MyBean(MyBeanBuilder &lt;jv&gt;builder&lt;/jv&gt;) {</span>
+<span class="source-line-no">039</span><span id="line-39"> *          &lt;jk&gt;this&lt;/jk&gt;.&lt;jf&gt;foo&lt;/jf&gt; = &lt;jv&gt;builder&lt;/jv&gt;.&lt;jf&gt;foo&lt;/jf&gt;;</span>
+<span class="source-line-no">040</span><span id="line-40"> *          &lt;jk&gt;this&lt;/jk&gt;.&lt;jf&gt;bar&lt;/jf&gt; = &lt;jv&gt;builder&lt;/jv&gt;.&lt;jf&gt;bar&lt;/jf&gt;;</span>
+<span class="source-line-no">041</span><span id="line-41"> *       }</span>
+<span class="source-line-no">042</span><span id="line-42"> *    }</span>
+<span class="source-line-no">043</span><span id="line-43"> *</span>
+<span class="source-line-no">044</span><span id="line-44"> *    &lt;jc&gt;// Builder class.&lt;/jc&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;jk&gt;public class&lt;/jk&gt; MyBeanBuilder {</span>
+<span class="source-line-no">046</span><span id="line-46"> *       &lt;jk&gt;public&lt;/jk&gt; String &lt;jf&gt;foo&lt;/jf&gt;;</span>
+<span class="source-line-no">047</span><span id="line-47"> *       &lt;jk&gt;public int&lt;/jk&gt; &lt;jf&gt;bar&lt;/jf&gt;;</span>
+<span class="source-line-no">048</span><span id="line-48"> *</span>
+<span class="source-line-no">049</span><span id="line-49"> *       &lt;jc&gt;// Method that creates the bean.&lt;/jc&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> *       &lt;jk&gt;public&lt;/jk&gt; MyBean build() {</span>
+<span class="source-line-no">051</span><span id="line-51"> *          &lt;jk&gt;return new&lt;/jk&gt; MyBean(&lt;jk&gt;this&lt;/jk&gt;);</span>
+<span class="source-line-no">052</span><span id="line-52"> *       }</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/PojoBuilders"&gt;POJO Builders&lt;/a&gt;</span>
-<span class="source-line-no">056</span><span id="line-56"></span>
-<span class="source-line-no">057</span><span id="line-57"> * &lt;/ul&gt;</span>
-<span class="source-line-no">058</span><span id="line-58"> */</span>
-<span class="source-line-no">059</span><span id="line-59">@Documented</span>
-<span class="source-line-no">060</span><span id="line-60">@Target({TYPE})</span>
-<span class="source-line-no">061</span><span id="line-61">@Retention(RUNTIME)</span>
-<span class="source-line-no">062</span><span id="line-62">@Inherited</span>
-<span class="source-line-no">063</span><span id="line-63">public @interface Builder {</span>
-<span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">   /**</span>
-<span class="source-line-no">066</span><span id="line-66">    * The builder for this class.</span>
-<span class="source-line-no">067</span><span id="line-67">    *</span>
-<span class="source-line-no">068</span><span id="line-68">    * @return The annotation value.</span>
-<span class="source-line-no">069</span><span id="line-69">    */</span>
-<span class="source-line-no">070</span><span id="line-70">   Class&lt;?&gt; value() default void.class;</span>
-<span class="source-line-no">071</span><span id="line-71">}</span>
+<span class="source-line-no">054</span><span id="line-54"> *       &lt;jc&gt;// Bean property setters.&lt;/jc&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> *    }</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> *</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/PojoBuilders"&gt;POJO Builders&lt;/a&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"></span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;/ul&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> */</span>
+<span class="source-line-no">063</span><span id="line-63">@Documented</span>
+<span class="source-line-no">064</span><span id="line-64">@Target({TYPE})</span>
+<span class="source-line-no">065</span><span id="line-65">@Retention(RUNTIME)</span>
+<span class="source-line-no">066</span><span id="line-66">@Inherited</span>
+<span class="source-line-no">067</span><span id="line-67">public @interface Builder {</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">   /**</span>
+<span class="source-line-no">070</span><span id="line-70">    * The builder for this class.</span>
+<span class="source-line-no">071</span><span id="line-71">    *</span>
+<span class="source-line-no">072</span><span id="line-72">    * @return The annotation value.</span>
+<span class="source-line-no">073</span><span id="line-73">    */</span>
+<span class="source-line-no">074</span><span id="line-74">   Class&lt;?&gt; value() default void.class;</span>
+<span class="source-line-no">075</span><span id="line-75">}</span>
 
 
 

@@ -11,61 +11,65 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.utils;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">/**</span>
-<span class="source-line-no">016</span><span id="line-16"> * A simple weighted average of numbers.</span>
-<span class="source-line-no">017</span><span id="line-17"> *</span>
-<span class="source-line-no">018</span><span id="line-18"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">019</span><span id="line-19"> * &lt;/ul&gt;</span>
-<span class="source-line-no">020</span><span id="line-20"> */</span>
-<span class="source-line-no">021</span><span id="line-21">public class WeightedAverage {</span>
-<span class="source-line-no">022</span><span id="line-22">   private Double value = 0d;</span>
-<span class="source-line-no">023</span><span id="line-23">   private int weight;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">   /**</span>
-<span class="source-line-no">026</span><span id="line-26">    * Add a number with a weight to this average.</span>
-<span class="source-line-no">027</span><span id="line-27">    *</span>
-<span class="source-line-no">028</span><span id="line-28">    * @param w The weight of the new value.</span>
-<span class="source-line-no">029</span><span id="line-29">    * @param v The new value.</span>
-<span class="source-line-no">030</span><span id="line-30">    * @return This object.</span>
-<span class="source-line-no">031</span><span id="line-31">    */</span>
-<span class="source-line-no">032</span><span id="line-32">   public WeightedAverage add(int w, Number v) {</span>
-<span class="source-line-no">033</span><span id="line-33">      if (v != null) {</span>
-<span class="source-line-no">034</span><span id="line-34">         try {</span>
-<span class="source-line-no">035</span><span id="line-35">            double w1 = weight, w2 = w;</span>
-<span class="source-line-no">036</span><span id="line-36">            weight = Math.addExact(weight, w);</span>
-<span class="source-line-no">037</span><span id="line-37">            if (weight != 0) {</span>
-<span class="source-line-no">038</span><span id="line-38">               value = (value * (w1/weight)) + (v.floatValue() * (w2/weight));</span>
-<span class="source-line-no">039</span><span id="line-39">            }</span>
-<span class="source-line-no">040</span><span id="line-40">         } catch (ArithmeticException ae) {</span>
-<span class="source-line-no">041</span><span id="line-41">            throw new ArithmeticException("Weight overflow.");</span>
-<span class="source-line-no">042</span><span id="line-42">         }</span>
-<span class="source-line-no">043</span><span id="line-43">      }</span>
-<span class="source-line-no">044</span><span id="line-44">      return this;</span>
-<span class="source-line-no">045</span><span id="line-45">   }</span>
-<span class="source-line-no">046</span><span id="line-46"></span>
-<span class="source-line-no">047</span><span id="line-47">   /**</span>
-<span class="source-line-no">048</span><span id="line-48">    * Returns the weighted average of all numbers.</span>
-<span class="source-line-no">049</span><span id="line-49">    *</span>
-<span class="source-line-no">050</span><span id="line-50">    * @return The weighted average of all numbers.</span>
-<span class="source-line-no">051</span><span id="line-51">    */</span>
-<span class="source-line-no">052</span><span id="line-52">   public double getValue() {</span>
-<span class="source-line-no">053</span><span id="line-53">      return value;</span>
-<span class="source-line-no">054</span><span id="line-54">   }</span>
-<span class="source-line-no">055</span><span id="line-55">}</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.utils;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">/**</span>
+<span class="source-line-no">020</span><span id="line-20"> * A simple weighted average of numbers.</span>
+<span class="source-line-no">021</span><span id="line-21"> *</span>
+<span class="source-line-no">022</span><span id="line-22"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">023</span><span id="line-23"> * &lt;/ul&gt;</span>
+<span class="source-line-no">024</span><span id="line-24"> */</span>
+<span class="source-line-no">025</span><span id="line-25">public class WeightedAverage {</span>
+<span class="source-line-no">026</span><span id="line-26">   private Double value = 0d;</span>
+<span class="source-line-no">027</span><span id="line-27">   private int weight;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">   /**</span>
+<span class="source-line-no">030</span><span id="line-30">    * Add a number with a weight to this average.</span>
+<span class="source-line-no">031</span><span id="line-31">    *</span>
+<span class="source-line-no">032</span><span id="line-32">    * @param w The weight of the new value.</span>
+<span class="source-line-no">033</span><span id="line-33">    * @param v The new value.</span>
+<span class="source-line-no">034</span><span id="line-34">    * @return This object.</span>
+<span class="source-line-no">035</span><span id="line-35">    */</span>
+<span class="source-line-no">036</span><span id="line-36">   public WeightedAverage add(int w, Number v) {</span>
+<span class="source-line-no">037</span><span id="line-37">      if (v != null) {</span>
+<span class="source-line-no">038</span><span id="line-38">         try {</span>
+<span class="source-line-no">039</span><span id="line-39">            double w1 = weight, w2 = w;</span>
+<span class="source-line-no">040</span><span id="line-40">            weight = Math.addExact(weight, w);</span>
+<span class="source-line-no">041</span><span id="line-41">            if (weight != 0) {</span>
+<span class="source-line-no">042</span><span id="line-42">               value = (value * (w1/weight)) + (v.floatValue() * (w2/weight));</span>
+<span class="source-line-no">043</span><span id="line-43">            }</span>
+<span class="source-line-no">044</span><span id="line-44">         } catch (ArithmeticException ae) {</span>
+<span class="source-line-no">045</span><span id="line-45">            throw new ArithmeticException("Weight overflow.");</span>
+<span class="source-line-no">046</span><span id="line-46">         }</span>
+<span class="source-line-no">047</span><span id="line-47">      }</span>
+<span class="source-line-no">048</span><span id="line-48">      return this;</span>
+<span class="source-line-no">049</span><span id="line-49">   }</span>
+<span class="source-line-no">050</span><span id="line-50"></span>
+<span class="source-line-no">051</span><span id="line-51">   /**</span>
+<span class="source-line-no">052</span><span id="line-52">    * Returns the weighted average of all numbers.</span>
+<span class="source-line-no">053</span><span id="line-53">    *</span>
+<span class="source-line-no">054</span><span id="line-54">    * @return The weighted average of all numbers.</span>
+<span class="source-line-no">055</span><span id="line-55">    */</span>
+<span class="source-line-no">056</span><span id="line-56">   public double getValue() {</span>
+<span class="source-line-no">057</span><span id="line-57">      return value;</span>
+<span class="source-line-no">058</span><span id="line-58">   }</span>
+<span class="source-line-no">059</span><span id="line-59">}</span>
 
 
 

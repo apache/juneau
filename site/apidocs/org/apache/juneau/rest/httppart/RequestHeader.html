@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a></code>, <code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-94">RequestHeader</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-98">RequestHeader</a></span>
 <span class="extends-implements">extends <a href="RequestHttpPart.html" title="class in org.apache.juneau.rest.httppart">RequestHttpPart</a>
 implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a></span></div>
 <div class="block">Represents a single header on an HTTP request.
@@ -277,7 +277,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.RestRequest,java.lang.String,java.lang.String)">
 <h3>RequestHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-103">RequestHeader</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;request,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-107">RequestHeader</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;request,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Constructor.</div>
@@ -300,7 +300,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="asCsvHeader()">
 <h3>asCsvHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicCsvHeader.html" title="class in org.apache.juneau.http.header">BasicCsvHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-112">asCsvHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicCsvHeader.html" title="class in org.apache.juneau.http.header">BasicCsvHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-116">asCsvHeader</a></span>()</div>
 <div class="block">Returns the value of this header as a <a href="../../http/header/BasicCsvHeader.html" title="class in org.apache.juneau.http.header"><code>BasicCsvHeader</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -311,7 +311,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="asDateHeader()">
 <h3>asDateHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicDateHeader.html" title="class in org.apache.juneau.http.header">BasicDateHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-121">asDateHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicDateHeader.html" title="class in org.apache.juneau.http.header">BasicDateHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-125">asDateHeader</a></span>()</div>
 <div class="block">Returns the value of this header as a <a href="../../http/header/BasicDateHeader.html" title="class in org.apache.juneau.http.header"><code>BasicDateHeader</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -322,7 +322,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="asEntityTagsHeader()">
 <h3>asEntityTagsHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicEntityTagsHeader.html" title="class in org.apache.juneau.http.header">BasicEntityTagsHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-130">asEntityTagsHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicEntityTagsHeader.html" title="class in org.apache.juneau.http.header">BasicEntityTagsHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-134">asEntityTagsHeader</a></span>()</div>
 <div class="block">Returns the value of this header as a <a href="../../http/header/BasicEntityTagsHeader.html" title="class in org.apache.juneau.http.header"><code>BasicEntityTagsHeader</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -333,7 +333,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="asEntityTagHeader()">
 <h3>asEntityTagHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicEntityTagHeader.html" title="class in org.apache.juneau.http.header">BasicEntityTagHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-139">asEntityTagHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicEntityTagHeader.html" title="class in org.apache.juneau.http.header">BasicEntityTagHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-143">asEntityTagHeader</a></span>()</div>
 <div class="block">Returns the value of this header as a <a href="../../http/header/BasicEntityTagHeader.html" title="class in org.apache.juneau.http.header"><code>BasicEntityTagHeader</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -344,7 +344,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="asIntegerHeader()">
 <h3>asIntegerHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicIntegerHeader.html" title="class in org.apache.juneau.http.header">BasicIntegerHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-148">asIntegerHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicIntegerHeader.html" title="class in org.apache.juneau.http.header">BasicIntegerHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-152">asIntegerHeader</a></span>()</div>
 <div class="block">Returns the value of this header as a <a href="../../http/header/BasicIntegerHeader.html" title="class in org.apache.juneau.http.header"><code>BasicIntegerHeader</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -355,7 +355,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="asBooleanHeader()">
 <h3>asBooleanHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicBooleanHeader.html" title="class in org.apache.juneau.http.header">BasicBooleanHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-157">asBooleanHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicBooleanHeader.html" title="class in org.apache.juneau.http.header">BasicBooleanHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-161">asBooleanHeader</a></span>()</div>
 <div class="block">Returns the value of this header as a <a href="../../http/header/BasicBooleanHeader.html" title="class in org.apache.juneau.http.header"><code>BasicBooleanHeader</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -366,7 +366,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="asLongHeader()">
 <h3>asLongHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicLongHeader.html" title="class in org.apache.juneau.http.header">BasicLongHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-166">asLongHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicLongHeader.html" title="class in org.apache.juneau.http.header">BasicLongHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-170">asLongHeader</a></span>()</div>
 <div class="block">Returns the value of this header as a <a href="../../http/header/BasicLongHeader.html" title="class in org.apache.juneau.http.header"><code>BasicLongHeader</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -377,7 +377,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="asStringRangesHeader()">
 <h3>asStringRangesHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicStringRangesHeader.html" title="class in org.apache.juneau.http.header">BasicStringRangesHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-175">asStringRangesHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicStringRangesHeader.html" title="class in org.apache.juneau.http.header">BasicStringRangesHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-179">asStringRangesHeader</a></span>()</div>
 <div class="block">Returns the value of this header as a <a href="../../http/header/BasicStringRangesHeader.html" title="class in org.apache.juneau.http.header"><code>BasicStringRangesHeader</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -388,7 +388,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="asStringHeader()">
 <h3>asStringHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicStringHeader.html" title="class in org.apache.juneau.http.header">BasicStringHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-184">asStringHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicStringHeader.html" title="class in org.apache.juneau.http.header">BasicStringHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-188">asStringHeader</a></span>()</div>
 <div class="block">Returns the value of this header as a <a href="../../http/header/BasicStringHeader.html" title="class in org.apache.juneau.http.header"><code>BasicStringHeader</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -399,7 +399,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="asUriHeader()">
 <h3>asUriHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicUriHeader.html" title="class in org.apache.juneau.http.header">BasicUriHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-193">asUriHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/BasicUriHeader.html" title="class in org.apache.juneau.http.header">BasicUriHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-197">asUriHeader</a></span>()</div>
 <div class="block">Returns the value of this header as a <a href="../../http/header/BasicUriHeader.html" title="class in org.apache.juneau.http.header"><code>BasicUriHeader</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -410,7 +410,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getElements()">
 <h3>getElements</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HeaderElement.html" title="class or interface in org.apache.http" class="external-link">HeaderElement</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-203">getElements</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HeaderElement.html" title="class or interface in org.apache.http" class="external-link">HeaderElement</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-207">getElements</a></span>()
                             throws <span class="exceptions"><a href="../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></span></div>
 <div class="block">Parses the value.</div>
 <dl class="notes">
@@ -426,7 +426,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-208">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-212">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="RequestHttpPart.html#toString()">toString</a></code>&nbsp;in class&nbsp;<code><a href="RequestHttpPart.html" title="class in org.apache.juneau.rest.httppart">RequestHttpPart</a></code></dd>
@@ -436,7 +436,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="schema(org.apache.juneau.httppart.HttpPartSchema)">
 <h3>schema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestHeader.html" title="class in org.apache.juneau.rest.httppart">RequestHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-215">schema</a></span><wbr><span class="parameters">(<a href="../../httppart/HttpPartSchema.html" title="class in org.apache.juneau.httppart">HttpPartSchema</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestHeader.html" title="class in org.apache.juneau.rest.httppart">RequestHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-219">schema</a></span><wbr><span class="parameters">(<a href="../../httppart/HttpPartSchema.html" title="class in org.apache.juneau.httppart">HttpPartSchema</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RequestHttpPart.html#schema(org.apache.juneau.httppart.HttpPartSchema)">RequestHttpPart</a></code></span></div>
 <div class="block">Specifies the part schema for this part.
 
@@ -455,7 +455,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="parser(org.apache.juneau.httppart.HttpPartParserSession)">
 <h3>parser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestHeader.html" title="class in org.apache.juneau.rest.httppart">RequestHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-221">parser</a></span><wbr><span class="parameters">(<a href="../../httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.httppart">HttpPartParserSession</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestHeader.html" title="class in org.apache.juneau.rest.httppart">RequestHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/httppart/RequestHeader.html#line-225">parser</a></span><wbr><span class="parameters">(<a href="../../httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.httppart">HttpPartParserSession</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RequestHttpPart.html#parser(org.apache.juneau.httppart.HttpPartParserSession)">RequestHttpPart</a></code></span></div>
 <div class="block">Specifies the part parser to use for this part.
 

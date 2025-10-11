@@ -73,7 +73,7 @@ loadScripts(document, 'script');</script>
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Inherited.html" title="class or interface in java.lang.annotation" class="external-link">@Inherited</a>
 <a href="../../annotation/ContextApply.html" title="annotation interface in org.apache.juneau.annotation">@ContextApply</a>({<a href="SerializerConfigAnnotation.SerializerApply.html" title="class in org.apache.juneau.serializer.annotation">SerializerApply.class</a>,<a href="SerializerConfigAnnotation.OutputStreamSerializerApply.html" title="class in org.apache.juneau.serializer.annotation">OutputStreamSerializerApply.class</a>,<a href="SerializerConfigAnnotation.WriterSerializerApply.html" title="class in org.apache.juneau.serializer.annotation">WriterSerializerApply.class</a>})
-</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-36">SerializerConfig</a></span></div>
+</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-40">SerializerConfig</a></span></div>
 <div class="block">Annotation for specifying config properties defined in <a href="../Serializer.html" title="class in org.apache.juneau.serializer"><code>Serializer</code></a>, <a href="../OutputStreamSerializer.html" title="class in org.apache.juneau.serializer"><code>OutputStreamSerializer</code></a>, and <a href="../WriterSerializer.html" title="class in org.apache.juneau.serializer"><code>WriterSerializer</code></a>.
 
  <p>
@@ -224,7 +224,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rank()">
 <h3>rank</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-50">rank</a></span></div>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-54">rank</a></span></div>
 <div class="block">Optional rank for this config.
 
  <p>
@@ -242,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="binaryFormat()">
 <h3>binaryFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-80">binaryFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-84">binaryFormat</a></span></div>
 <div class="block">Binary output format.
 
  <p>
@@ -276,7 +276,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addBeanTypes()">
 <h3>addBeanTypes</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-121">addBeanTypes</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-125">addBeanTypes</a></span></div>
 <div class="block">Add <js>"_type"</js> properties when needed.
 
  <p>
@@ -321,7 +321,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addRootType()">
 <h3>addRootType</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-157">addRootType</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-161">addRootType</a></span></div>
 <div class="block">Add type attribute to root nodes.
 
  <p>
@@ -365,7 +365,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="keepNullProperties()">
 <h3>keepNullProperties</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-188">keepNullProperties</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-192">keepNullProperties</a></span></div>
 <div class="block">Don't trim null bean property values.
 
  <p>
@@ -404,7 +404,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="listener()">
 <h3>listener</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../SerializerListener.html" title="class in org.apache.juneau.serializer">SerializerListener</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-202">listener</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../SerializerListener.html" title="class in org.apache.juneau.serializer">SerializerListener</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-206">listener</a></span></div>
 <div class="block">Serializer listener.
 
  <p>
@@ -426,7 +426,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sortCollections()">
 <h3>sortCollections</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-229">sortCollections</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-233">sortCollections</a></span></div>
 <div class="block">Sort arrays and collections alphabetically.
 
  <p>
@@ -461,7 +461,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sortMaps()">
 <h3>sortMaps</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-256">sortMaps</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-260">sortMaps</a></span></div>
 <div class="block">Sort maps alphabetically.
 
  <p>
@@ -496,7 +496,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="trimEmptyCollections()">
 <h3>trimEmptyCollections</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-289">trimEmptyCollections</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-293">trimEmptyCollections</a></span></div>
 <div class="block">Trim empty lists and arrays.
 
  <p>
@@ -537,7 +537,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="trimEmptyMaps()">
 <h3>trimEmptyMaps</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-320">trimEmptyMaps</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-324">trimEmptyMaps</a></span></div>
 <div class="block">Trim empty maps.
 
  <p>
@@ -576,7 +576,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="trimStrings()">
 <h3>trimStrings</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-344">trimStrings</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-348">trimStrings</a></span></div>
 <div class="block">Trim strings.
 
  <p>
@@ -608,7 +608,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="uriContext()">
 <h3>uriContext</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-366">uriContext</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-370">uriContext</a></span></div>
 <div class="block">URI context bean.
 
  <h5 class='section'>Description:</h5>
@@ -638,7 +638,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="uriRelativity()">
 <h3>uriRelativity</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-396">uriRelativity</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-400">uriRelativity</a></span></div>
 <div class="block">URI relativity.
 
  <p>
@@ -676,7 +676,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="uriResolution()">
 <h3>uriResolution</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-427">uriResolution</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-431">uriResolution</a></span></div>
 <div class="block">URI resolution.
 
  <p>
@@ -715,7 +715,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fileCharset()">
 <h3>fileCharset</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-461">fileCharset</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-465">fileCharset</a></span></div>
 <div class="block">File charset.
 
  <p>
@@ -753,7 +753,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxIndent()">
 <h3>maxIndent</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-486">maxIndent</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-490">maxIndent</a></span></div>
 <div class="block">Maximum indentation.
 
  <p>
@@ -786,7 +786,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="quoteChar()">
 <h3>quoteChar</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-509">quoteChar</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-513">quoteChar</a></span></div>
 <div class="block">Quote character.
 
  <p>
@@ -817,7 +817,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="streamCharset()">
 <h3>streamCharset</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-537">streamCharset</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-541">streamCharset</a></span></div>
 <div class="block">Output stream charset.
 
  <p>
@@ -853,7 +853,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="useWhitespace()">
 <h3>useWhitespace</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-561">useWhitespace</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-565">useWhitespace</a></span></div>
 <div class="block">Use whitespace.
 
  <p>
@@ -885,7 +885,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="detectRecursions()">
 <h3>detectRecursions</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-607">detectRecursions</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-611">detectRecursions</a></span></div>
 <div class="block">Automatically detect POJO recursions.
 
  <p>
@@ -935,7 +935,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ignoreRecursions()">
 <h3>ignoreRecursions</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-636">ignoreRecursions</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-640">ignoreRecursions</a></span></div>
 <div class="block">Ignore recursion errors.
 
  <p>
@@ -972,7 +972,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="initialDepth()">
 <h3>initialDepth</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-660">initialDepth</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-664">initialDepth</a></span></div>
 <div class="block">Initial depth.
 
  <p>
@@ -1004,7 +1004,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxDepth()">
 <h3>maxDepth</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-684">maxDepth</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/serializer/annotation/SerializerConfig.html#line-688">maxDepth</a></span></div>
 <div class="block">Max traversal depth.
 
  <p>

@@ -85,7 +85,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations"><a href="../../annotation/Bean.html" title="annotation interface in org.apache.juneau.annotation">@Bean</a>(<a href="../../annotation/Bean.html#properties()">properties</a>="name,description",
       <a href="../../annotation/Bean.html#findFluentSetters()">findFluentSetters</a>=true)
 <a href="../../http/annotation/Response.html" title="annotation interface in org.apache.juneau.http.annotation">@Response</a>(<a href="../../http/annotation/Response.html#schema()">schema</a>=<a href="../../annotation/Schema.html" title="annotation interface in org.apache.juneau.annotation">@Schema</a>(<a href="../../annotation/Schema.html#ignore()">ignore</a>=true))
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-36">ResourceDescription</a></span>
+</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-40">ResourceDescription</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="ResourceDescription.html" title="class in org.apache.juneau.rest.beans">ResourceDescription</a>&gt;</span></div>
 <div class="block">Shortcut label for child resources.
@@ -201,7 +201,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String)">
 <h3>ResourceDescription</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-48">ResourceDescription</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-52">ResourceDescription</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</span></div>
 <div class="block">Constructor for when the name and uri are the same.</div>
 <dl class="notes">
@@ -214,7 +214,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,java.lang.String)">
 <h3>ResourceDescription</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-61">ResourceDescription</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-65">ResourceDescription</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</span></div>
 <div class="block">Constructor for when the name and uri are different.</div>
@@ -229,7 +229,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ResourceDescription</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-68">ResourceDescription</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-72">ResourceDescription</a></span>()</div>
 <div class="block">No-arg constructor.  Used for JUnit testing of OPTIONS pages.</div>
 </section>
 </li>
@@ -245,7 +245,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <section class="detail" id="getName()">
 <h3>getName</h3>
 <div class="member-signature"><span class="annotations"><a href="../../html/annotation/Html.html" title="annotation interface in org.apache.juneau.html.annotation">@Html</a>(<a href="../../html/annotation/Html.html#link()">link</a>="servlet:/{uri}")
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-75">getName</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-79">getName</a></span>()</div>
 <div class="block">Returns the name field on this label.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -256,7 +256,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getUri()">
 <h3>getUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-85">getUri</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-89">getUri</a></span>()</div>
 <div class="block">Returns the uri on this label.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -267,7 +267,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="name(java.lang.String)">
 <h3>name</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResourceDescription.html" title="class in org.apache.juneau.rest.beans">ResourceDescription</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-95">name</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResourceDescription.html" title="class in org.apache.juneau.rest.beans">ResourceDescription</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-99">name</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Sets the name field on this label to a new value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -280,7 +280,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getDescription()">
 <h3>getDescription</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-105">getDescription</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-109">getDescription</a></span>()</div>
 <div class="block">Returns the description field on this label.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -291,7 +291,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="description(java.lang.String)">
 <h3>description</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResourceDescription.html" title="class in org.apache.juneau.rest.beans">ResourceDescription</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-115">description</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResourceDescription.html" title="class in org.apache.juneau.rest.beans">ResourceDescription</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-119">description</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</span></div>
 <div class="block">Sets the description field on this label to a new value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -304,7 +304,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="uri(java.lang.String)">
 <h3>uri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResourceDescription.html" title="class in org.apache.juneau.rest.beans">ResourceDescription</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-126">uri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResourceDescription.html" title="class in org.apache.juneau.rest.beans">ResourceDescription</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-130">uri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</span></div>
 <div class="block">Sets the uri field on this label to a new value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -317,7 +317,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="compareTo(org.apache.juneau.rest.beans.ResourceDescription)">
 <h3>compareTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-131">compareTo</a></span><wbr><span class="parameters">(<a href="ResourceDescription.html" title="class in org.apache.juneau.rest.beans">ResourceDescription</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-135">compareTo</a></span><wbr><span class="parameters">(<a href="ResourceDescription.html" title="class in org.apache.juneau.rest.beans">ResourceDescription</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html#compareTo(T)" title="class or interface in java.lang" class="external-link">compareTo</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="ResourceDescription.html" title="class in org.apache.juneau.rest.beans">ResourceDescription</a>&gt;</code></dd>
@@ -327,7 +327,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-136">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-140">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -337,7 +337,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-141">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/beans/ResourceDescription.html#line-145">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

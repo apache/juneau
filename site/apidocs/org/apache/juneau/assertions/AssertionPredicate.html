@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="AssertionPredicate.And.html" title="class in org.apache.juneau.assertions">AssertionPredicate.And</a></code>, <code><a href="AssertionPredicate.Not.html" title="class in org.apache.juneau.assertions">AssertionPredicate.Not</a></code>, <code><a href="AssertionPredicate.Or.html" title="class in org.apache.juneau.assertions">AssertionPredicate.Or</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/AssertionPredicate.html#line-57">AssertionPredicate</a>&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/AssertionPredicate.html#line-61">AssertionPredicate</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;</span></div>
 <div class="block">Wrapper around a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link"><code>Predicate</code></a> that allows for an error message for when the predicate fails.
@@ -229,7 +229,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="VALUE">
 <h3>VALUE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/AssertionPredicate.html#line-66">VALUE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/AssertionPredicate.html#line-70">VALUE</a></span></div>
 <div class="block">Argument placeholder for tested value.</div>
 </section>
 </li>
@@ -244,7 +244,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.function.Predicate,java.lang.String,java.lang.Object...)">
 <h3>AssertionPredicate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/AssertionPredicate.html#line-94">AssertionPredicate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="AssertionPredicate.html" title="type parameter in AssertionPredicate">T</a>&gt;&nbsp;inner,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/AssertionPredicate.html#line-98">AssertionPredicate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="AssertionPredicate.html" title="type parameter in AssertionPredicate">T</a>&gt;&nbsp;inner,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Constructor.</div>
@@ -270,7 +270,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="test(T)">
 <h3 id="test(java.lang.Object)">test</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/AssertionPredicate.html#line-118">test</a></span><wbr><span class="parameters">(<a href="AssertionPredicate.html" title="type parameter in AssertionPredicate">T</a>&nbsp;t)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/AssertionPredicate.html#line-122">test</a></span><wbr><span class="parameters">(<a href="AssertionPredicate.html" title="type parameter in AssertionPredicate">T</a>&nbsp;t)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html#test(T)" title="class or interface in java.util.function" class="external-link">test</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="AssertionPredicate.html" title="type parameter in AssertionPredicate">T</a>&gt;</code></dd>
@@ -280,7 +280,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getFailureMessage()">
 <h3>getFailureMessage</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/AssertionPredicate.html#line-149">getFailureMessage</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/AssertionPredicate.html#line-153">getFailureMessage</a></span>()</div>
 <div class="block">Returns the error message from the last call to this assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>

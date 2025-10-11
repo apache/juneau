@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-35">RrpcInterfaceMeta</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-39">RrpcInterfaceMeta</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Contains the meta-data about a remote proxy REST interface.
 
@@ -163,7 +163,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class,java.lang.String)">
 <h3>RrpcInterfaceMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-52">RrpcInterfaceMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-56">RrpcInterfaceMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -186,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMethodsByPath()">
 <h3>getMethodsByPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="RrpcInterfaceMethodMeta.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-81">getMethodsByPath</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="RrpcInterfaceMethodMeta.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-85">getMethodsByPath</a></span>()</div>
 <div class="block">Returns a map of all methods on this interface proxy keyed by HTTP path.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -199,7 +199,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMethodMeta(java.lang.reflect.Method)">
 <h3>getMethodMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RrpcInterfaceMethodMeta.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-91">getMethodMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RrpcInterfaceMethodMeta.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-95">getMethodMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m)</span></div>
 <div class="block">Returns the metadata about the specified method on this interface proxy.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -212,7 +212,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMethodMetaByPath(java.lang.String)">
 <h3>getMethodMetaByPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RrpcInterfaceMethodMeta.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-101">getMethodMetaByPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;p)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RrpcInterfaceMethodMeta.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-105">getMethodMetaByPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;p)</span></div>
 <div class="block">Returns the metadata about the specified method on this interface proxy by the path defined on the method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -225,7 +225,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getJavaClass()">
 <h3>getJavaClass</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-112">getJavaClass</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-116">getJavaClass</a></span>()</div>
 <div class="block">Returns the Java class of this interface.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -237,7 +237,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPath()">
 <h3>getPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-124">getPath</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMeta.html#line-128">getPath</a></span>()</div>
 <div class="block">Returns the HTTP path of this interface.</div>
 <dl class="notes">
 <dt>Returns:</dt>

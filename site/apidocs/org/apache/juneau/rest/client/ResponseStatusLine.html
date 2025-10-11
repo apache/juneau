@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link">StatusLine</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-25">ResponseStatusLine</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-29">ResponseStatusLine</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link">StatusLine</a></span></div>
 <div class="block">An implementation of <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link"><code>StatusLine</code></a> that adds assertions methods.
@@ -164,7 +164,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.client.RestResponse,org.apache.http.StatusLine)">
 <h3>ResponseStatusLine</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-36">ResponseStatusLine</a></span><wbr><span class="parameters">(<a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;response,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-40">ResponseStatusLine</a></span><wbr><span class="parameters">(<a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;response,
  <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link">StatusLine</a>&nbsp;inner)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -185,7 +185,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getProtocolVersion()">
 <h3>getProtocolVersion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-41">getProtocolVersion</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-45">getProtocolVersion</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html#getProtocolVersion--" title="class or interface in org.apache.http" class="external-link">getProtocolVersion</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link">StatusLine</a></code></dd>
@@ -195,7 +195,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getStatusCode()">
 <h3>getStatusCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-46">getStatusCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-50">getStatusCode</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html#getStatusCode--" title="class or interface in org.apache.http" class="external-link">getStatusCode</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link">StatusLine</a></code></dd>
@@ -205,7 +205,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getReasonPhrase()">
 <h3>getReasonPhrase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-51">getReasonPhrase</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-55">getReasonPhrase</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html#getReasonPhrase--" title="class or interface in org.apache.http" class="external-link">getReasonPhrase</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link">StatusLine</a></code></dd>
@@ -215,7 +215,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="assertValue()">
 <h3>assertValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="assertion/FluentResponseStatusLineAssertion.html" title="class in org.apache.juneau.rest.client.assertion">FluentResponseStatusLineAssertion</a>&lt;<a href="ResponseStatusLine.html" title="class in org.apache.juneau.rest.client">ResponseStatusLine</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-74">assertValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="assertion/FluentResponseStatusLineAssertion.html" title="class in org.apache.juneau.rest.client.assertion">FluentResponseStatusLineAssertion</a>&lt;<a href="ResponseStatusLine.html" title="class in org.apache.juneau.rest.client">ResponseStatusLine</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-78">assertValue</a></span>()</div>
 <div class="block">Provides the ability to perform fluent-style assertions on this response status line.
 
  <h5 class='section'>Examples:</h5>
@@ -235,7 +235,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="response()">
 <h3>response</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-83">response</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-87">response</a></span>()</div>
 <div class="block">Returns the response that created this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -246,7 +246,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-91">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseStatusLine.html#line-95">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="BasicSwaggerProvider.html" title="class in org.apache.juneau.rest.swagger">BasicSwaggerProvider</a></code>, <code><a href="SwaggerProvider.Void.html" title="class in org.apache.juneau.rest.swagger">SwaggerProvider.Void</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/swagger/SwaggerProvider.html#line-34">SwaggerProvider</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/swagger/SwaggerProvider.html#line-38">SwaggerProvider</a></span></div>
 <div class="block">Interface for retrieving Swagger on a REST resource.
 
  <h5 class='section'>See Also:</h5><ul>
@@ -149,7 +149,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.cp.BeanStore)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="SwaggerProvider.Builder.html" title="class in org.apache.juneau.rest.swagger">SwaggerProvider.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/swagger/SwaggerProvider.html#line-55">create</a></span><wbr><span class="parameters">(<a href="../../cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="SwaggerProvider.Builder.html" title="class in org.apache.juneau.rest.swagger">SwaggerProvider.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/swagger/SwaggerProvider.html#line-59">create</a></span><wbr><span class="parameters">(<a href="../../cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -162,7 +162,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSwagger(org.apache.juneau.rest.RestContext,java.util.Locale)">
 <h3>getSwagger</h3>
-<div class="member-signature"><span class="return-type"><a href="../../bean/swagger/Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/swagger/SwaggerProvider.html#line-227">getSwagger</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest">RestContext</a>&nbsp;context,
+<div class="member-signature"><span class="return-type"><a href="../../bean/swagger/Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/swagger/SwaggerProvider.html#line-231">getSwagger</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest">RestContext</a>&nbsp;context,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Returns the Swagger associated with the specified <a href="../annotation/Rest.html" title="annotation interface in org.apache.juneau.rest.annotation"><code>Rest</code></a>-annotated class.</div>

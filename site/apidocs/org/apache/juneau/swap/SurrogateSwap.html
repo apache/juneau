@@ -85,7 +85,7 @@ loadScripts(document, 'script');</script>
 <dd><code>F</code> - The transformed class type.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/SurrogateSwap.html#line-36">SurrogateSwap</a>&lt;T,<wbr>F&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/SurrogateSwap.html#line-40">SurrogateSwap</a>&lt;T,<wbr>F&gt;</span>
 <span class="extends-implements">extends <a href="ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;T,<wbr>F&gt;</span></div>
 <div class="block">Specialized <a href="ObjectSwap.html" title="class in org.apache.juneau.swap"><code>ObjectSwap</code></a> for <a href="Surrogate.html" title="interface in org.apache.juneau.swap"><code>Surrogate</code></a> classes.
 
@@ -176,7 +176,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class,java.lang.reflect.Constructor,java.lang.reflect.Method)">
 <h3>SurrogateSwap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/SurrogateSwap.html#line-48">SurrogateSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="SurrogateSwap.html" title="type parameter in SurrogateSwap">T</a>&gt;&nbsp;forClass,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/SurrogateSwap.html#line-52">SurrogateSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="SurrogateSwap.html" title="type parameter in SurrogateSwap">T</a>&gt;&nbsp;forClass,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;<a href="SurrogateSwap.html" title="type parameter in SurrogateSwap">F</a>&gt;&nbsp;constructor,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;unswapMethod)</span></div>
 <div class="block">Constructor.</div>
@@ -199,7 +199,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="findObjectSwaps(java.lang.Class,org.apache.juneau.BeanContext)">
 <h3>findObjectSwaps</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="SurrogateSwap.html" title="class in org.apache.juneau.swap">SurrogateSwap</a>&lt;?,<wbr>?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/SurrogateSwap.html#line-65">findObjectSwaps</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="SurrogateSwap.html" title="class in org.apache.juneau.swap">SurrogateSwap</a>&lt;?,<wbr>?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/SurrogateSwap.html#line-69">findObjectSwaps</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
  <a href="../BeanContext.html" title="class in org.apache.juneau">BeanContext</a>&nbsp;bc)</span></div>
 <div class="block">Given the specified surrogate class, return the list of object swaps.
 
@@ -218,7 +218,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="swap(org.apache.juneau.BeanSession,T)">
 <h3 id="swap(org.apache.juneau.BeanSession,java.lang.Object)">swap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SurrogateSwap.html" title="type parameter in SurrogateSwap">F</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/SurrogateSwap.html#line-84">swap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SurrogateSwap.html" title="type parameter in SurrogateSwap">F</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/SurrogateSwap.html#line-88">swap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="SurrogateSwap.html" title="type parameter in SurrogateSwap">T</a>&nbsp;o)</span>
        throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.serializer">SerializeException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="ObjectSwap.html#swap(org.apache.juneau.BeanSession,T)">ObjectSwap</a></code></span></div>
@@ -259,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unswap(org.apache.juneau.BeanSession,F,org.apache.juneau.ClassMeta)">
 <h3 id="unswap(org.apache.juneau.BeanSession,java.lang.Object,org.apache.juneau.ClassMeta)">unswap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SurrogateSwap.html" title="type parameter in SurrogateSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/SurrogateSwap.html#line-93">unswap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SurrogateSwap.html" title="type parameter in SurrogateSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/SurrogateSwap.html#line-97">unswap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="SurrogateSwap.html" title="type parameter in SurrogateSwap">F</a>&nbsp;f,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;hint)</span>
          throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>

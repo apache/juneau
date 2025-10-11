@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - The normal class type.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/AutoListSwap.html#line-80">AutoListSwap</a>&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/AutoListSwap.html#line-84">AutoListSwap</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;T,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;?&gt;&gt;</span></div>
 <div class="block">A dynamic object swap based on reflection of a Java class that converts objects to Lists.
 
@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="find(org.apache.juneau.BeanContext,org.apache.juneau.reflect.ClassInfo)">
 <h3>find</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/AutoListSwap.html#line-93">find</a></span><wbr><span class="parameters">(<a href="../BeanContext.html" title="class in org.apache.juneau">BeanContext</a>&nbsp;bc,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/AutoListSwap.html#line-97">find</a></span><wbr><span class="parameters">(<a href="../BeanContext.html" title="class in org.apache.juneau">BeanContext</a>&nbsp;bc,
  <a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.reflect">ClassInfo</a>&nbsp;ci)</span></div>
 <div class="block">Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.</div>
 <dl class="notes">
@@ -215,7 +215,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="swap(org.apache.juneau.BeanSession,java.lang.Object)">
 <h3>swap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/AutoListSwap.html#line-168">swap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/AutoListSwap.html#line-172">swap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
              throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.serializer">SerializeException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="ObjectSwap.html#swap(org.apache.juneau.BeanSession,T)">ObjectSwap</a></code></span></div>
@@ -256,7 +256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unswap(org.apache.juneau.BeanSession,java.util.List,org.apache.juneau.ClassMeta)">
 <h3>unswap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AutoListSwap.html" title="type parameter in AutoListSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/AutoListSwap.html#line-177">unswap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AutoListSwap.html" title="type parameter in AutoListSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/AutoListSwap.html#line-181">unswap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;?&gt;&nbsp;o,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;hint)</span>
          throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>

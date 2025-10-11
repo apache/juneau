@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Cloneable.html" title="class or interface in java.lang" class="external-link">Cloneable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code>, <code><a href="../Delegate.html" title="interface in org.apache.juneau">Delegate</a>&lt;T&gt;</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/DelegateMap.html#line-31">DelegateMap</a>&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/DelegateMap.html#line-35">DelegateMap</a>&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&gt;</span>
 <span class="extends-implements">extends <a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a>
 implements <a href="../Delegate.html" title="interface in org.apache.juneau">Delegate</a>&lt;T&gt;</span></div>
 <div class="block">Represents a wrapped <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a> where entries in the map can be removed without affecting the underlying map.
@@ -195,7 +195,7 @@ implements <a href="../Delegate.html" title="interface in org.apache.juneau">Del
 <li>
 <section class="detail" id="&lt;init&gt;(T,org.apache.juneau.BeanSession)">
 <h3 id="&lt;init&gt;(java.util.Map,org.apache.juneau.BeanSession)">DelegateMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/DelegateMap.html#line-43">DelegateMap</a></span><wbr><span class="parameters">(<a href="DelegateMap.html" title="type parameter in DelegateMap">T</a>&nbsp;m,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/DelegateMap.html#line-47">DelegateMap</a></span><wbr><span class="parameters">(<a href="DelegateMap.html" title="type parameter in DelegateMap">T</a>&nbsp;m,
  <a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -216,7 +216,7 @@ implements <a href="../Delegate.html" title="interface in org.apache.juneau">Del
 <li>
 <section class="detail" id="getClassMeta()">
 <h3>getClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;<a href="DelegateMap.html" title="type parameter in DelegateMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/DelegateMap.html#line-49">getClassMeta</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;<a href="DelegateMap.html" title="type parameter in DelegateMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/DelegateMap.html#line-53">getClassMeta</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Delegate.html#getClassMeta()">Delegate</a></code></span></div>
 <div class="block">The <a href="../ClassMeta.html" title="class in org.apache.juneau"><code>ClassMeta</code></a> of the class of the represented object.</div>
 <dl class="notes">
@@ -230,7 +230,7 @@ implements <a href="../Delegate.html" title="interface in org.apache.juneau">Del
 <li>
 <section class="detail" id="filterKeys(java.util.List)">
 <h3>filterKeys</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DelegateMap.html" title="class in org.apache.juneau.internal">DelegateMap</a>&lt;<a href="DelegateMap.html" title="type parameter in DelegateMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/DelegateMap.html#line-63">filterKeys</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;keys)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DelegateMap.html" title="class in org.apache.juneau.internal">DelegateMap</a>&lt;<a href="DelegateMap.html" title="type parameter in DelegateMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/DelegateMap.html#line-67">filterKeys</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;keys)</span></div>
 <div class="block">Remove all but the specified keys from this map.
 
  <p>

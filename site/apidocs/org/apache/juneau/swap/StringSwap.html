@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../swaps/BeanStringSwap.html" title="class in org.apache.juneau.swaps">BeanStringSwap</a></code>, <code><a href="../swaps/ByteArraySwap.html" title="class in org.apache.juneau.swaps">ByteArraySwap</a></code>, <code><a href="../swaps/ClassSwap.html" title="class in org.apache.juneau.swaps">ClassSwap</a></code>, <code><a href="../swaps/InputStreamSwap.html" title="class in org.apache.juneau.swaps">InputStreamSwap</a></code>, <code><a href="../swaps/LocaleSwap.html" title="class in org.apache.juneau.swaps">LocaleSwap</a></code>, <code><a href="../swaps/ReaderSwap.html" title="class in org.apache.juneau.swaps">ReaderSwap</a></code>, <code><a href="../swaps/StringFormatSwap.html" title="class in org.apache.juneau.swaps">StringFormatSwap</a></code>, <code><a href="../swaps/TemporalCalendarSwap.html" title="class in org.apache.juneau.swaps">TemporalCalendarSwap</a></code>, <code><a href="../swaps/TemporalDateSwap.html" title="class in org.apache.juneau.swaps">TemporalDateSwap</a></code>, <code><a href="../swaps/TemporalSwap.html" title="class in org.apache.juneau.swaps">TemporalSwap</a></code>, <code><a href="../swaps/TimeZoneSwap.html" title="class in org.apache.juneau.swaps">TimeZoneSwap</a></code>, <code><a href="../swaps/UrlSwap.html" title="class in org.apache.juneau.swaps">UrlSwap</a></code>, <code><a href="../swaps/XMLGregorianCalendarSwap.html" title="class in org.apache.juneau.swaps">XMLGregorianCalendarSwap</a></code>, <code><a href="../swaps/ZoneIdSwap.html" title="class in org.apache.juneau.swaps">ZoneIdSwap</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/StringSwap.html#line-47">StringSwap</a>&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/StringSwap.html#line-51">StringSwap</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&lt;T,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span></div>
 <div class="block">Abstract subclass for object swaps that swap objects for strings.
 
@@ -197,14 +197,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>StringSwap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/StringSwap.html#line-52">StringSwap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/StringSwap.html#line-56">StringSwap</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class)">
 <h3>StringSwap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/StringSwap.html#line-60">StringSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="StringSwap.html" title="type parameter in StringSwap">T</a>&gt;&nbsp;normalClass)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/StringSwap.html#line-64">StringSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="StringSwap.html" title="type parameter in StringSwap">T</a>&gt;&nbsp;normalClass)</span></div>
 <div class="block">Constructor for when the normal and transformed classes are already known.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -223,7 +223,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="swap(org.apache.juneau.BeanSession,T)">
 <h3 id="swap(org.apache.juneau.BeanSession,java.lang.Object)">swap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/StringSwap.html#line-64">swap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/StringSwap.html#line-68">swap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="StringSwap.html" title="type parameter in StringSwap">T</a>&nbsp;o)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="ObjectSwap.html#swap(org.apache.juneau.BeanSession,T)">ObjectSwap</a></code></span></div>
@@ -264,7 +264,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unswap(org.apache.juneau.BeanSession,java.lang.String,org.apache.juneau.ClassMeta)">
 <h3>unswap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StringSwap.html" title="type parameter in StringSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/StringSwap.html#line-69">unswap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StringSwap.html" title="type parameter in StringSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/StringSwap.html#line-73">unswap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;f,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;hint)</span>
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>

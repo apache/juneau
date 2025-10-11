@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-32">XmlBeanMeta</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-36">XmlBeanMeta</a></span>
 <span class="extends-implements">extends <a href="../ExtendedBeanMeta.html" title="class in org.apache.juneau">ExtendedBeanMeta</a></span></div>
 <div class="block">Metadata on beans specific to the XML serializers and parsers pulled from the <a href="annotation/Xml.html" title="annotation interface in org.apache.juneau.xml.annotation"><code>@Xml</code></a> annotation on the
  class.
@@ -203,7 +203,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.BeanMeta,org.apache.juneau.xml.XmlMetaProvider)">
 <h3>XmlBeanMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-48">XmlBeanMeta</a></span><wbr><span class="parameters">(<a href="../BeanMeta.html" title="class in org.apache.juneau">BeanMeta</a>&lt;?&gt;&nbsp;beanMeta,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-52">XmlBeanMeta</a></span><wbr><span class="parameters">(<a href="../BeanMeta.html" title="class in org.apache.juneau">BeanMeta</a>&lt;?&gt;&nbsp;beanMeta,
  <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.xml">XmlMetaProvider</a>&nbsp;mp)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -224,7 +224,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAttrProperties()">
 <h3>getAttrProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-150">getAttrProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-154">getAttrProperties</a></span>()</div>
 <div class="block">The list of properties that should be rendered as XML attributes.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -235,7 +235,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAttrPropertyNames()">
 <h3>getAttrPropertyNames</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-159">getAttrPropertyNames</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-163">getAttrPropertyNames</a></span>()</div>
 <div class="block">The list of names of properties that should be rendered as XML attributes.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -246,7 +246,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getElementProperties()">
 <h3>getElementProperties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-168">getElementProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-172">getElementProperties</a></span>()</div>
 <div class="block">The list of properties that should be rendered as child elements.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -257,7 +257,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getElementPropertyNames()">
 <h3>getElementPropertyNames</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-177">getElementPropertyNames</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-181">getElementPropertyNames</a></span>()</div>
 <div class="block">The list of names of properties that should be rendered as child elements.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -268,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getCollapsedProperties()">
 <h3>getCollapsedProperties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-187">getCollapsedProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-191">getCollapsedProperties</a></span>()</div>
 <div class="block">The list of properties that should be rendered as collapsed child elements.
  <br>See <a href="annotation/Xml.html#childName()"><code>@Xml(childName)</code></a></div>
 <dl class="notes">
@@ -280,7 +280,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getCollapsedPropertyNames()">
 <h3>getCollapsedPropertyNames</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-196">getCollapsedPropertyNames</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-200">getCollapsedPropertyNames</a></span>()</div>
 <div class="block">The list of names of properties that should be rendered as collapsed child elements.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -291,7 +291,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAttrsProperty()">
 <h3>getAttrsProperty</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-205">getAttrsProperty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-209">getAttrsProperty</a></span>()</div>
 <div class="block">The property that returns a map of XML attributes as key/value pairs.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -302,7 +302,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAttrsPropertyName()">
 <h3>getAttrsPropertyName</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-214">getAttrsPropertyName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-218">getAttrsPropertyName</a></span>()</div>
 <div class="block">The name of the property that returns a map of XML attributes as key/value pairs.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -313,7 +313,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getContentProperty()">
 <h3>getContentProperty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-223">getContentProperty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-227">getContentProperty</a></span>()</div>
 <div class="block">The property that represents the inner XML content of this bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -324,7 +324,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getContentPropertyName()">
 <h3>getContentPropertyName</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-232">getContentPropertyName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-236">getContentPropertyName</a></span>()</div>
 <div class="block">The name of the property that represents the inner XML content of this bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -335,7 +335,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getContentFormat()">
 <h3>getContentFormat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="annotation/XmlFormat.html" title="enum class in org.apache.juneau.xml.annotation">XmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-254">getContentFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="annotation/XmlFormat.html" title="enum class in org.apache.juneau.xml.annotation">XmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-258">getContentFormat</a></span>()</div>
 <div class="block">Returns the format of the inner XML content of this bean.
 
  <p>
@@ -359,7 +359,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPropertyMeta(java.lang.String)">
 <h3>getPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-268">getPropertyMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;fieldName)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/xml/XmlBeanMeta.html#line-272">getPropertyMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;fieldName)</span></div>
 <div class="block">Returns bean property meta with the specified name.
 
  <p>

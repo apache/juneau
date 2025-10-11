@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <dd><code>B</code> - The builder class.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-34">BuilderSwap</a>&lt;T,<wbr>B&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-38">BuilderSwap</a>&lt;T,<wbr>B&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Specialized transform for builder classes.
 
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class,java.lang.Class,java.lang.reflect.Constructor,java.lang.reflect.Constructor,org.apache.juneau.reflect.MethodInfo,org.apache.juneau.reflect.MethodInfo)">
 <h3>BuilderSwap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-55">BuilderSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;&nbsp;objectClass,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-59">BuilderSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;&nbsp;objectClass,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&gt;&nbsp;builderClass,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;&nbsp;objectConstructor,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&gt;&nbsp;builderConstructor,
@@ -220,7 +220,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getObjectClass()">
 <h3>getObjectClass</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-69">getObjectClass</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-73">getObjectClass</a></span>()</div>
 <div class="block">The object class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -231,7 +231,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBuilderClass()">
 <h3>getBuilderClass</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-78">getBuilderClass</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-82">getBuilderClass</a></span>()</div>
 <div class="block">The builder class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -242,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBuilderClassMeta(org.apache.juneau.BeanSession)">
 <h3>getBuilderClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-93">getBuilderClassMeta</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-97">getBuilderClassMeta</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session)</span></div>
 <div class="block">Returns the <a href="../ClassMeta.html" title="class in org.apache.juneau"><code>ClassMeta</code></a> of the transformed class type.
 
  <p>
@@ -259,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.BeanSession,org.apache.juneau.ClassMeta)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-107">create</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-111">create</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;hint)</span>
          throws <span class="exceptions"><a href="../ExecutableException.html" title="class in org.apache.juneau">ExecutableException</a></span></div>
 <div class="block">Creates a new builder object.</div>
@@ -277,7 +277,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build(org.apache.juneau.BeanSession,B,org.apache.juneau.ClassMeta)">
 <h3 id="build(org.apache.juneau.BeanSession,java.lang.Object,org.apache.juneau.ClassMeta)">build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-126">build</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-130">build</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&nbsp;builder,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;hint)</span>
         throws <span class="exceptions"><a href="../ExecutableException.html" title="class in org.apache.juneau">ExecutableException</a></span></div>
@@ -297,7 +297,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="findSwapFromBuilderClass(java.lang.Class,org.apache.juneau.Visibility,org.apache.juneau.Visibility)">
 <h3>findSwapFromBuilderClass</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BuilderSwap.html" title="class in org.apache.juneau.swap">BuilderSwap</a>&lt;?,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-144">findSwapFromBuilderClass</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;builderClass,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BuilderSwap.html" title="class in org.apache.juneau.swap">BuilderSwap</a>&lt;?,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-148">findSwapFromBuilderClass</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;builderClass,
  <a href="../Visibility.html" title="enum class in org.apache.juneau">Visibility</a>&nbsp;cVis,
  <a href="../Visibility.html" title="enum class in org.apache.juneau">Visibility</a>&nbsp;mVis)</span></div>
 <div class="block">Creates a BuilderSwap from the specified builder class if it qualifies as one.</div>
@@ -314,7 +314,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="findSwapFromObjectClass(org.apache.juneau.BeanContext,java.lang.Class,org.apache.juneau.Visibility,org.apache.juneau.Visibility)">
 <h3>findSwapFromObjectClass</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BuilderSwap.html" title="class in org.apache.juneau.swap">BuilderSwap</a>&lt;?,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-187">findSwapFromObjectClass</a></span><wbr><span class="parameters">(<a href="../BeanContext.html" title="class in org.apache.juneau">BeanContext</a>&nbsp;bc,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BuilderSwap.html" title="class in org.apache.juneau.swap">BuilderSwap</a>&lt;?,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swap/BuilderSwap.html#line-191">findSwapFromObjectClass</a></span><wbr><span class="parameters">(<a href="../BeanContext.html" title="class in org.apache.juneau">BeanContext</a>&nbsp;bc,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;objectClass,
  <a href="../Visibility.html" title="enum class in org.apache.juneau">Visibility</a>&nbsp;cVis,
  <a href="../Visibility.html" title="enum class in org.apache.juneau">Visibility</a>&nbsp;mVis)</span></div>

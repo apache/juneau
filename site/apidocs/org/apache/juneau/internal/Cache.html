@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <dd><code>V</code> - The value type.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Cache.html#line-35">Cache</a>&lt;K,<wbr>V&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Cache.html#line-39">Cache</a>&lt;K,<wbr>V&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Simple in-memory cache of objects.
 
@@ -173,7 +173,7 @@ V&gt;&nbsp;<a href="Cache.Builder.html" title="class in org.apache.juneau.intern
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.internal.Cache.Builder)">
 <h3>Cache</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Cache.html#line-130">Cache</a></span><wbr><span class="parameters">(<a href="Cache.Builder.html" title="class in org.apache.juneau.internal">Cache.Builder</a>&lt;<a href="Cache.html" title="type parameter in Cache">K</a>,<wbr><a href="Cache.html" title="type parameter in Cache">V</a>&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Cache.html#line-134">Cache</a></span><wbr><span class="parameters">(<a href="Cache.Builder.html" title="class in org.apache.juneau.internal">Cache.Builder</a>&lt;<a href="Cache.html" title="type parameter in Cache">K</a>,<wbr><a href="Cache.html" title="type parameter in Cache">V</a>&gt;&nbsp;builder)</span></div>
 <div class="block">Constructor</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -193,7 +193,7 @@ V&gt;&nbsp;<a href="Cache.Builder.html" title="class in org.apache.juneau.intern
 <section class="detail" id="of(java.lang.Class,java.lang.Class)">
 <h3>of</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="Cache.Builder.html" title="class in org.apache.juneau.internal">Cache.Builder</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Cache.html#line-50">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;K&gt;&nbsp;key,
+V&gt;</span>&nbsp;<span class="return-type"><a href="Cache.Builder.html" title="class in org.apache.juneau.internal">Cache.Builder</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Cache.html#line-54">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;K&gt;&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;V&gt;&nbsp;type)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
@@ -211,7 +211,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache.Builder.html" title="
 <li>
 <section class="detail" id="get(K,java.util.function.Supplier)">
 <h3 id="get(java.lang.Object,java.util.function.Supplier)">get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Cache.html" title="type parameter in Cache">V</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Cache.html#line-144">get</a></span><wbr><span class="parameters">(<a href="Cache.html" title="type parameter in Cache">K</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Cache.html" title="type parameter in Cache">V</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/Cache.html#line-148">get</a></span><wbr><span class="parameters">(<a href="Cache.html" title="type parameter in Cache">K</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="Cache.html" title="type parameter in Cache">V</a>&gt;&nbsp;supplier)</span></div>
 <div class="block">Retrieves the value with the specified key from this cache.</div>
 <dl class="notes">

@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/UriResolver.html#line-57">UriResolver</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/UriResolver.html#line-61">UriResolver</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Class used to create absolute and root-relative URIs based on your current URI 'location' and rules about how to
  make such resolutions.
@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.UriResolution,org.apache.juneau.UriRelativity,org.apache.juneau.UriContext)">
 <h3>UriResolver</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/UriResolver.html#line-82">UriResolver</a></span><wbr><span class="parameters">(<a href="UriResolution.html" title="enum class in org.apache.juneau">UriResolution</a>&nbsp;resolution,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/UriResolver.html#line-86">UriResolver</a></span><wbr><span class="parameters">(<a href="UriResolution.html" title="enum class in org.apache.juneau">UriResolution</a>&nbsp;resolution,
  <a href="UriRelativity.html" title="enum class in org.apache.juneau">UriRelativity</a>&nbsp;relativity,
  <a href="UriContext.html" title="class in org.apache.juneau">UriContext</a>&nbsp;uriContext)</span></div>
 <div class="block">Constructor.</div>
@@ -208,7 +208,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(org.apache.juneau.UriResolution,org.apache.juneau.UriRelativity,org.apache.juneau.UriContext)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="UriResolver.html" title="class in org.apache.juneau">UriResolver</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/UriResolver.html#line-71">of</a></span><wbr><span class="parameters">(<a href="UriResolution.html" title="enum class in org.apache.juneau">UriResolution</a>&nbsp;resolution,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="UriResolver.html" title="class in org.apache.juneau">UriResolver</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/UriResolver.html#line-75">of</a></span><wbr><span class="parameters">(<a href="UriResolution.html" title="enum class in org.apache.juneau">UriResolution</a>&nbsp;resolution,
  <a href="UriRelativity.html" title="enum class in org.apache.juneau">UriRelativity</a>&nbsp;relativity,
  <a href="UriContext.html" title="class in org.apache.juneau">UriContext</a>&nbsp;uriContext)</span></div>
 <div class="block">Static creator.</div>
@@ -225,7 +225,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolve(java.lang.Object)">
 <h3>resolve</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/UriResolver.html#line-119">resolve</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/UriResolver.html#line-123">resolve</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span></div>
 <div class="block">Converts the specified URI to absolute form based on values in this context.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -258,7 +258,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="relativize(java.lang.Object,java.lang.Object)">
 <h3>relativize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/UriResolver.html#line-152">relativize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;relativeTo,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/UriResolver.html#line-156">relativize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;relativeTo,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span></div>
 <div class="block">Relativizes a URI.
 
@@ -284,7 +284,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.Appendable,java.lang.Object)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html" title="class or interface in java.lang" class="external-link">Appendable</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/UriResolver.html#line-165">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html" title="class or interface in java.lang" class="external-link">Appendable</a>&nbsp;a,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html" title="class or interface in java.lang" class="external-link">Appendable</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/UriResolver.html#line-169">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html" title="class or interface in java.lang" class="external-link">Appendable</a>&nbsp;a,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Same as <a href="#resolve(java.lang.Object)"><code>resolve(Object)</code></a> except appends result to the specified appendable.</div>
 <dl class="notes">

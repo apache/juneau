@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="SimpleHtmlWriter.html" title="class in org.apache.juneau.html">SimpleHtmlWriter</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-30">HtmlWriter</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-34">HtmlWriter</a></span>
 <span class="extends-implements">extends <a href="../xml/XmlWriter.html" title="class in org.apache.juneau.xml">XmlWriter</a></span></div>
 <div class="block">Specialized writer for serializing HTML.
 
@@ -442,7 +442,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.Writer,boolean,int,boolean,char,org.apache.juneau.UriResolver)">
 <h3>HtmlWriter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-42">HtmlWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-46">HtmlWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
  boolean&nbsp;useWhitespace,
  int&nbsp;maxIndent,
  boolean&nbsp;trimStrings,
@@ -463,7 +463,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.html.HtmlWriter)">
 <h3>HtmlWriter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-52">HtmlWriter</a></span><wbr><span class="parameters">(<a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a>&nbsp;w)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-56">HtmlWriter</a></span><wbr><span class="parameters">(<a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a>&nbsp;w)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -482,7 +482,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="text(java.lang.Object,boolean)">
 <h3>text</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-60">text</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-64">text</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  boolean&nbsp;preserveWhitespace)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#text(java.lang.Object,boolean)">XmlWriter</a></code></span></div>
 <div class="block">Serializes and encodes the specified object as valid XML text.</div>
@@ -500,7 +500,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oTag(java.lang.String,java.lang.String,boolean)">
 <h3>oTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-108">oTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-112">oTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#oTag(java.lang.String,java.lang.String,boolean)">XmlWriter</a></code></span></div>
@@ -520,7 +520,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oTag(java.lang.String,java.lang.String)">
 <h3>oTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-114">oTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-118">oTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#oTag(java.lang.String,java.lang.String)">XmlWriter</a></code></span></div>
 <div class="block">Shortcut for <code>oTag(ns, name, <jk>false</jk>);</code></div>
@@ -538,7 +538,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oTag(java.lang.String)">
 <h3>oTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-120">oTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-124">oTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#oTag(java.lang.String)">XmlWriter</a></code></span></div>
 <div class="block">Shortcut for <code>oTag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
 <dl class="notes">
@@ -554,7 +554,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oTag(int,java.lang.String,java.lang.String,boolean)">
 <h3>oTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-126">oTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-130">oTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
@@ -576,7 +576,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oTag(int,java.lang.String,java.lang.String)">
 <h3>oTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-132">oTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-136">oTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#oTag(int,java.lang.String,java.lang.String)">XmlWriter</a></code></span></div>
@@ -596,7 +596,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oTag(int,java.lang.String)">
 <h3>oTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-138">oTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-142">oTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#oTag(int,java.lang.String)">XmlWriter</a></code></span></div>
 <div class="block">Shortcut for <code>i(indent).oTag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
@@ -614,7 +614,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag(java.lang.String,java.lang.String,boolean)">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-144">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-148">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#tag(java.lang.String,java.lang.String,boolean)">XmlWriter</a></code></span></div>
@@ -634,7 +634,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag(java.lang.String,java.lang.String)">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-150">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-154">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#tag(java.lang.String,java.lang.String)">XmlWriter</a></code></span></div>
 <div class="block">Shortcut for <code>tag(ns, name, <jk>false</jk>);</code></div>
@@ -652,7 +652,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag(java.lang.String)">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-156">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-160">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#tag(java.lang.String)">XmlWriter</a></code></span></div>
 <div class="block">Shortcut for <code>tag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
 <dl class="notes">
@@ -668,7 +668,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag(int,java.lang.String)">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-162">tag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-166">tag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#tag(int,java.lang.String)">XmlWriter</a></code></span></div>
 <div class="block">Shortcut for <code>i(indent).tag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
@@ -686,7 +686,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag(int,java.lang.String,java.lang.String,boolean)">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-168">tag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-172">tag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
@@ -708,7 +708,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag(int,java.lang.String,java.lang.String)">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-174">tag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-178">tag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#tag(int,java.lang.String,java.lang.String)">XmlWriter</a></code></span></div>
@@ -728,7 +728,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sTag(java.lang.String,java.lang.String)">
 <h3>sTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-180">sTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-184">sTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#sTag(java.lang.String,java.lang.String)">XmlWriter</a></code></span></div>
 <div class="block">Shortcut for <code>sTag(ns, name, <jk>false</jk>);</code></div>
@@ -746,7 +746,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sTag(java.lang.String,java.lang.String,boolean)">
 <h3>sTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-186">sTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-190">sTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#sTag(java.lang.String,java.lang.String,boolean)">XmlWriter</a></code></span></div>
@@ -766,7 +766,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sTag(int,java.lang.String,java.lang.String)">
 <h3>sTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-192">sTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-196">sTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#sTag(int,java.lang.String,java.lang.String)">XmlWriter</a></code></span></div>
@@ -786,7 +786,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sTag(int,java.lang.String)">
 <h3>sTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-198">sTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-202">sTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#sTag(int,java.lang.String)">XmlWriter</a></code></span></div>
 <div class="block">Shortcut for <code>i(indent).sTag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
@@ -804,7 +804,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sTag(java.lang.String)">
 <h3>sTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-204">sTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-208">sTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#sTag(java.lang.String)">XmlWriter</a></code></span></div>
 <div class="block">Shortcut for <code>sTag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
 <dl class="notes">
@@ -820,7 +820,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sTag(int,java.lang.String,java.lang.String,boolean)">
 <h3>sTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-210">sTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-214">sTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
@@ -842,7 +842,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eTag(java.lang.String,java.lang.String)">
 <h3>eTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-216">eTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-220">eTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#eTag(java.lang.String,java.lang.String)">XmlWriter</a></code></span></div>
 <div class="block">Shortcut for <code>eTag(ns, name, <jk>false</jk>);</code></div>
@@ -860,7 +860,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eTag(java.lang.String,java.lang.String,boolean)">
 <h3>eTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-222">eTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-226">eTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#eTag(java.lang.String,java.lang.String,boolean)">XmlWriter</a></code></span></div>
@@ -880,7 +880,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eTag(int,java.lang.String,java.lang.String)">
 <h3>eTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-228">eTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-232">eTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#eTag(int,java.lang.String,java.lang.String)">XmlWriter</a></code></span></div>
@@ -900,7 +900,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eTag(int,java.lang.String)">
 <h3>eTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-234">eTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-238">eTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#eTag(int,java.lang.String)">XmlWriter</a></code></span></div>
 <div class="block">Shortcut for <code>i(indent).eTag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
@@ -918,7 +918,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eTag(java.lang.String)">
 <h3>eTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-240">eTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-244">eTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#eTag(java.lang.String)">XmlWriter</a></code></span></div>
 <div class="block">Shortcut for <code>eTag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
 <dl class="notes">
@@ -934,7 +934,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eTag(int,java.lang.String,java.lang.String,boolean)">
 <h3>eTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-246">eTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-250">eTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
@@ -956,7 +956,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attr(java.lang.String,java.lang.Object)">
 <h3>attr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-252">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-256">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#attr(java.lang.String,java.lang.Object)">XmlWriter</a></code></span></div>
 <div class="block">Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>false</jk>);</code></div>
@@ -974,7 +974,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attr(java.lang.String,java.lang.String,java.lang.Object)">
 <h3>attr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-258">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-262">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#attr(java.lang.String,java.lang.String,java.lang.Object)">XmlWriter</a></code></span></div>
@@ -994,7 +994,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attr(java.lang.String,java.lang.String,java.lang.Object,boolean)">
 <h3>attr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-264">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-268">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  boolean&nbsp;valNeedsEncoding)</span></div>
@@ -1016,7 +1016,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attr(java.lang.String,java.lang.Object,boolean)">
 <h3>attr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-270">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-274">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  boolean&nbsp;valNeedsEncoding)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#attr(java.lang.String,java.lang.Object,boolean)">XmlWriter</a></code></span></div>
@@ -1036,7 +1036,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oAttr(java.lang.String,java.lang.String)">
 <h3>oAttr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-276">oAttr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-280">oAttr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../xml/XmlWriter.html#oAttr(java.lang.String,java.lang.String)">XmlWriter</a></code></span></div>
 <div class="block">Writes an open-ended attribute to the output:  <code><xa>ns:name</xa>=</code></div>
@@ -1054,7 +1054,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cr(int)">
 <h3>cr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-282">cr</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-286">cr</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#cr(int)">SerializerWriter</a></code></span></div>
 <div class="block">Performs a carriage return.
 
@@ -1073,7 +1073,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cre(int)">
 <h3>cre</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-289">cre</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-293">cre</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#cre(int)">SerializerWriter</a></code></span></div>
 <div class="block">Performs a carriage return at the end of a line.
 
@@ -1092,7 +1092,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendln(int,java.lang.String)">
 <h3>appendln</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-296">appendln</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-300">appendln</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#appendln(int,java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text, followed by a newline
@@ -1111,7 +1111,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendln(java.lang.String)">
 <h3>appendln</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-302">appendln</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-306">appendln</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#appendln(java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified text followed by a newline (if the <code>useWhitespace</code> setting is enabled).</div>
 <dl class="notes">
@@ -1127,7 +1127,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(int,java.lang.String)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-308">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-312">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#append(int,java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text.</div>
@@ -1145,7 +1145,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(int,char)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-314">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-318">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
  char&nbsp;c)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#append(int,char)">SerializerWriter</a></code></span></div>
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text.</div>
@@ -1163,7 +1163,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="s()">
 <h3>s</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-320">s</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-324">s</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#s()">SerializerWriter</a></code></span></div>
 <div class="block">Adds a whitespace character to the output if the <code>useWhitespace</code> setting is enabled.</div>
 <dl class="notes">
@@ -1177,7 +1177,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="q()">
 <h3>q</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-326">q</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-330">q</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#q()">SerializerWriter</a></code></span></div>
 <div class="block">Adds the quote character specified by the <code>quoteChar</code> setting to the output.</div>
 <dl class="notes">
@@ -1191,7 +1191,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="i(int)">
 <h3>i</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-332">i</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-336">i</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#i(int)">SerializerWriter</a></code></span></div>
 <div class="block">Writes an indent to the writer if the <code>useWhitespace</code> setting is enabled.</div>
 <dl class="notes">
@@ -1207,7 +1207,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="nl(int)">
 <h3>nl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-338">nl</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-342">nl</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#nl(int)">SerializerWriter</a></code></span></div>
 <div class="block">Writes a newline to the writer if the <code>useWhitespace</code> setting is enabled.</div>
 <dl class="notes">
@@ -1223,7 +1223,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.Object)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-344">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;text)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-348">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#append(java.lang.Object)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
 <dl class="notes">
@@ -1239,7 +1239,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.String)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-350">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-354">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#append(java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
 <dl class="notes">
@@ -1255,7 +1255,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(char)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-356">append</a></span><wbr><span class="parameters">(char&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlWriter.html" title="class in org.apache.juneau.html">HtmlWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/html/HtmlWriter.html#line-360">append</a></span><wbr><span class="parameters">(char&nbsp;c)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html#append(char)" title="class or interface in java.lang" class="external-link">append</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html" title="class or interface in java.lang" class="external-link">Appendable</a></code></dd>

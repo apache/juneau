@@ -11,362 +11,366 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.junit.bct;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static java.util.Collections.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import static java.util.stream.StreamSupport.*;</span>
-<span class="source-line-no">017</span><span id="line-17">import static java.util.Spliterators.*;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.junit.bct;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import java.util.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import java.util.stream.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">/**</span>
-<span class="source-line-no">023</span><span id="line-23"> * Collection of standard listifier implementations for the Bean-Centric Testing framework.</span>
-<span class="source-line-no">024</span><span id="line-24"> *</span>
-<span class="source-line-no">025</span><span id="line-25"> * &lt;p&gt;This class provides built-in list conversion strategies that handle common Java collection</span>
-<span class="source-line-no">026</span><span id="line-26"> * and iterable types. These listifiers are automatically registered when using</span>
-<span class="source-line-no">027</span><span id="line-27"> * {@link BasicBeanConverter.Builder#defaultSettings()}.&lt;/p&gt;</span>
+<span class="source-line-no">019</span><span id="line-19">import static java.util.Collections.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static java.util.stream.StreamSupport.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static java.util.Spliterators.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.stream.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">/**</span>
+<span class="source-line-no">027</span><span id="line-27"> * Collection of standard listifier implementations for the Bean-Centric Testing framework.</span>
 <span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;h5 class='section'&gt;Purpose:&lt;/h5&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;Listifiers convert various collection-like objects to {@link List} instances for uniform</span>
-<span class="source-line-no">031</span><span id="line-31"> * processing in BCT assertions. This enables consistent iteration and element access across</span>
-<span class="source-line-no">032</span><span id="line-32"> * different data structures like arrays, iterators, streams, and custom collections.&lt;/p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Built-in Listifiers:&lt;/h5&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;ul&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;&lt;b&gt;{@link #collectionListifier()}&lt;/b&gt; - Converts {@link Collection} objects to {@link ArrayList}&lt;/li&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;&lt;b&gt;{@link #iterableListifier()}&lt;/b&gt; - Converts {@link Iterable} objects using streams&lt;/li&gt;</span>
-<span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;&lt;b&gt;{@link #iteratorListifier()}&lt;/b&gt; - Converts {@link Iterator} objects to lists (consumes iterator)&lt;/li&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;&lt;b&gt;{@link #enumerationListifier()}&lt;/b&gt; - Converts {@link Enumeration} objects to lists&lt;/li&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;&lt;b&gt;{@link #streamListifier()}&lt;/b&gt; - Converts {@link Stream} objects to lists (terminates stream)&lt;/li&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;&lt;b&gt;{@link #mapListifier()}&lt;/b&gt; - Converts {@link Map} to list of {@link Map.Entry} objects&lt;/li&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;/ul&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;Usage Example:&lt;/h5&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> *    &lt;jc&gt;// Register listifiers using builder&lt;/jc&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;converter&lt;/jv&gt; = BasicBeanConverter.&lt;jsm&gt;builder&lt;/jsm&gt;()</span>
-<span class="source-line-no">048</span><span id="line-48"> *       .defaultSettings()</span>
-<span class="source-line-no">049</span><span id="line-49"> *       .addListifier(Collection.&lt;jk&gt;class&lt;/jk&gt;, Listifiers.&lt;jsm&gt;collectionListifier&lt;/jsm&gt;())</span>
-<span class="source-line-no">050</span><span id="line-50"> *       .addListifier(Stream.&lt;jk&gt;class&lt;/jk&gt;, Listifiers.&lt;jsm&gt;streamListifier&lt;/jsm&gt;())</span>
-<span class="source-line-no">051</span><span id="line-51"> *       .build();</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;/p&gt;</span>
-<span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='section'&gt;Iterator Consumption:&lt;/h5&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;p&gt;&lt;b&gt;Warning:&lt;/b&gt; Some listifiers consume their input objects during conversion:&lt;/p&gt;</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;ul&gt;</span>
-<span class="source-line-no">057</span><span id="line-57"> *    &lt;li&gt;&lt;b&gt;{@link Iterator}:&lt;/b&gt; Elements are consumed and iterator becomes exhausted&lt;/li&gt;</span>
-<span class="source-line-no">058</span><span id="line-58"> *    &lt;li&gt;&lt;b&gt;{@link Enumeration}:&lt;/b&gt; Elements are consumed and enumeration becomes exhausted&lt;/li&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> *    &lt;li&gt;&lt;b&gt;{@link Stream}:&lt;/b&gt; Stream is terminated and cannot be reused&lt;/li&gt;</span>
-<span class="source-line-no">060</span><span id="line-60"> * &lt;/ul&gt;</span>
-<span class="source-line-no">061</span><span id="line-61"> *</span>
-<span class="source-line-no">062</span><span id="line-62"> * &lt;h5 class='section'&gt;Custom Listifier Development:&lt;/h5&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;p&gt;When creating custom listifiers, follow these patterns:&lt;/p&gt;</span>
-<span class="source-line-no">064</span><span id="line-64"> * &lt;ul&gt;</span>
-<span class="source-line-no">065</span><span id="line-65"> *    &lt;li&gt;&lt;b&gt;Null Safety:&lt;/b&gt; Handle &lt;jk&gt;null&lt;/jk&gt; inputs gracefully&lt;/li&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> *    &lt;li&gt;&lt;b&gt;Immutability:&lt;/b&gt; Return new lists rather than modifying inputs&lt;/li&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *    &lt;li&gt;&lt;b&gt;Type Safety:&lt;/b&gt; Ensure proper generic type handling&lt;/li&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> *    &lt;li&gt;&lt;b&gt;Performance:&lt;/b&gt; Consider memory usage for large collections&lt;/li&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;/ul&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> *</span>
-<span class="source-line-no">071</span><span id="line-71"> * @see Listifier</span>
-<span class="source-line-no">072</span><span id="line-72"> * @see BasicBeanConverter.Builder#addListifier(Class, Listifier)</span>
-<span class="source-line-no">073</span><span id="line-73"> * @see BasicBeanConverter.Builder#defaultSettings()</span>
-<span class="source-line-no">074</span><span id="line-74"> */</span>
-<span class="source-line-no">075</span><span id="line-75">@SuppressWarnings("rawtypes")</span>
-<span class="source-line-no">076</span><span id="line-76">public class Listifiers {</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">   /**</span>
-<span class="source-line-no">079</span><span id="line-79">    * Constructor.</span>
-<span class="source-line-no">080</span><span id="line-80">    */</span>
-<span class="source-line-no">081</span><span id="line-81">   private Listifiers() {}</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">   /**</span>
-<span class="source-line-no">084</span><span id="line-84">    * Returns a listifier for {@link Collection} objects that converts them to {@link ArrayList}.</span>
-<span class="source-line-no">085</span><span id="line-85">    *</span>
-<span class="source-line-no">086</span><span id="line-86">    * &lt;p&gt;This listifier creates a new ArrayList containing all elements from the source collection.</span>
-<span class="source-line-no">087</span><span id="line-87">    * It works with any Collection subtype including List, Set, Queue, and Deque.&lt;/p&gt;</span>
-<span class="source-line-no">088</span><span id="line-88">    *</span>
-<span class="source-line-no">089</span><span id="line-89">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
-<span class="source-line-no">090</span><span id="line-90">    * &lt;ul&gt;</span>
-<span class="source-line-no">091</span><span id="line-91">    *    &lt;li&gt;&lt;b&gt;Non-empty collections:&lt;/b&gt; Returns new ArrayList with all elements in iteration order&lt;/li&gt;</span>
-<span class="source-line-no">092</span><span id="line-92">    *    &lt;li&gt;&lt;b&gt;Empty collections:&lt;/b&gt; Returns new empty ArrayList&lt;/li&gt;</span>
-<span class="source-line-no">093</span><span id="line-93">    *    &lt;li&gt;&lt;b&gt;Preserves order:&lt;/b&gt; Maintains the iteration order of the source collection&lt;/li&gt;</span>
-<span class="source-line-no">094</span><span id="line-94">    *    &lt;li&gt;&lt;b&gt;Set ordering:&lt;/b&gt; Converts unordered Sets (HashSet, etc.) to TreeSet for deterministic ordering&lt;/li&gt;</span>
-<span class="source-line-no">095</span><span id="line-95">    * &lt;/ul&gt;</span>
-<span class="source-line-no">096</span><span id="line-96">    *</span>
-<span class="source-line-no">097</span><span id="line-97">    * &lt;h5 class='section'&gt;Set Ordering Behavior:&lt;/h5&gt;</span>
-<span class="source-line-no">098</span><span id="line-98">    * &lt;p&gt;To ensure predictable test results, this listifier handles Sets with unreliable ordering:&lt;/p&gt;</span>
-<span class="source-line-no">099</span><span id="line-99">    * &lt;ul&gt;</span>
-<span class="source-line-no">100</span><span id="line-100">    *    &lt;li&gt;&lt;b&gt;{@link SortedSet} (TreeSet, etc.):&lt;/b&gt; Preserves existing sort order&lt;/li&gt;</span>
-<span class="source-line-no">101</span><span id="line-101">    *    &lt;li&gt;&lt;b&gt;{@link LinkedHashSet}:&lt;/b&gt; Preserves insertion order&lt;/li&gt;</span>
-<span class="source-line-no">102</span><span id="line-102">    *    &lt;li&gt;&lt;b&gt;{@link HashSet} and other unordered Sets:&lt;/b&gt; Converts to {@link TreeSet} for natural ordering&lt;/li&gt;</span>
-<span class="source-line-no">103</span><span id="line-103">    * &lt;/ul&gt;</span>
-<span class="source-line-no">104</span><span id="line-104">    *</span>
-<span class="source-line-no">105</span><span id="line-105">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">106</span><span id="line-106">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">107</span><span id="line-107">    *    &lt;jc&gt;// Test with different collection types&lt;/jc&gt;</span>
-<span class="source-line-no">108</span><span id="line-108">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;list&lt;/jv&gt; = List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
-<span class="source-line-no">109</span><span id="line-109">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;list&lt;/jv&gt;, &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
-<span class="source-line-no">110</span><span id="line-110">    *</span>
-<span class="source-line-no">111</span><span id="line-111">    *    &lt;jc&gt;// HashSet converted to TreeSet for predictable ordering&lt;/jc&gt;</span>
-<span class="source-line-no">112</span><span id="line-112">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;set&lt;/jv&gt; = Set.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"z"&lt;/js&gt;, &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"m"&lt;/js&gt;);</span>
-<span class="source-line-no">113</span><span id="line-113">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;set&lt;/jv&gt;, &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"m"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;); &lt;jc&gt;// Natural ordering&lt;/jc&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;This class provides built-in list conversion strategies that handle common Java collection</span>
+<span class="source-line-no">030</span><span id="line-30"> * and iterable types. These listifiers are automatically registered when using</span>
+<span class="source-line-no">031</span><span id="line-31"> * {@link BasicBeanConverter.Builder#defaultSettings()}.&lt;/p&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Purpose:&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;Listifiers convert various collection-like objects to {@link List} instances for uniform</span>
+<span class="source-line-no">035</span><span id="line-35"> * processing in BCT assertions. This enables consistent iteration and element access across</span>
+<span class="source-line-no">036</span><span id="line-36"> * different data structures like arrays, iterators, streams, and custom collections.&lt;/p&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> *</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;Built-in Listifiers:&lt;/h5&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;ul&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;&lt;b&gt;{@link #collectionListifier()}&lt;/b&gt; - Converts {@link Collection} objects to {@link ArrayList}&lt;/li&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;&lt;b&gt;{@link #iterableListifier()}&lt;/b&gt; - Converts {@link Iterable} objects using streams&lt;/li&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;&lt;b&gt;{@link #iteratorListifier()}&lt;/b&gt; - Converts {@link Iterator} objects to lists (consumes iterator)&lt;/li&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;&lt;b&gt;{@link #enumerationListifier()}&lt;/b&gt; - Converts {@link Enumeration} objects to lists&lt;/li&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;&lt;b&gt;{@link #streamListifier()}&lt;/b&gt; - Converts {@link Stream} objects to lists (terminates stream)&lt;/li&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;&lt;b&gt;{@link #mapListifier()}&lt;/b&gt; - Converts {@link Map} to list of {@link Map.Entry} objects&lt;/li&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;/ul&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;Usage Example:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;jc&gt;// Register listifiers using builder&lt;/jc&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;converter&lt;/jv&gt; = BasicBeanConverter.&lt;jsm&gt;builder&lt;/jsm&gt;()</span>
+<span class="source-line-no">052</span><span id="line-52"> *       .defaultSettings()</span>
+<span class="source-line-no">053</span><span id="line-53"> *       .addListifier(Collection.&lt;jk&gt;class&lt;/jk&gt;, Listifiers.&lt;jsm&gt;collectionListifier&lt;/jsm&gt;())</span>
+<span class="source-line-no">054</span><span id="line-54"> *       .addListifier(Stream.&lt;jk&gt;class&lt;/jk&gt;, Listifiers.&lt;jsm&gt;streamListifier&lt;/jsm&gt;())</span>
+<span class="source-line-no">055</span><span id="line-55"> *       .build();</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> *</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;Iterator Consumption:&lt;/h5&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> * &lt;p&gt;&lt;b&gt;Warning:&lt;/b&gt; Some listifiers consume their input objects during conversion:&lt;/p&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;ul&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> *    &lt;li&gt;&lt;b&gt;{@link Iterator}:&lt;/b&gt; Elements are consumed and iterator becomes exhausted&lt;/li&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> *    &lt;li&gt;&lt;b&gt;{@link Enumeration}:&lt;/b&gt; Elements are consumed and enumeration becomes exhausted&lt;/li&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> *    &lt;li&gt;&lt;b&gt;{@link Stream}:&lt;/b&gt; Stream is terminated and cannot be reused&lt;/li&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> * &lt;/ul&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> *</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;Custom Listifier Development:&lt;/h5&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;p&gt;When creating custom listifiers, follow these patterns:&lt;/p&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;ul&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> *    &lt;li&gt;&lt;b&gt;Null Safety:&lt;/b&gt; Handle &lt;jk&gt;null&lt;/jk&gt; inputs gracefully&lt;/li&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> *    &lt;li&gt;&lt;b&gt;Immutability:&lt;/b&gt; Return new lists rather than modifying inputs&lt;/li&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> *    &lt;li&gt;&lt;b&gt;Type Safety:&lt;/b&gt; Ensure proper generic type handling&lt;/li&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> *    &lt;li&gt;&lt;b&gt;Performance:&lt;/b&gt; Consider memory usage for large collections&lt;/li&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> * &lt;/ul&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> *</span>
+<span class="source-line-no">075</span><span id="line-75"> * @see Listifier</span>
+<span class="source-line-no">076</span><span id="line-76"> * @see BasicBeanConverter.Builder#addListifier(Class, Listifier)</span>
+<span class="source-line-no">077</span><span id="line-77"> * @see BasicBeanConverter.Builder#defaultSettings()</span>
+<span class="source-line-no">078</span><span id="line-78"> */</span>
+<span class="source-line-no">079</span><span id="line-79">@SuppressWarnings("rawtypes")</span>
+<span class="source-line-no">080</span><span id="line-80">public class Listifiers {</span>
+<span class="source-line-no">081</span><span id="line-81"></span>
+<span class="source-line-no">082</span><span id="line-82">   /**</span>
+<span class="source-line-no">083</span><span id="line-83">    * Constructor.</span>
+<span class="source-line-no">084</span><span id="line-84">    */</span>
+<span class="source-line-no">085</span><span id="line-85">   private Listifiers() {}</span>
+<span class="source-line-no">086</span><span id="line-86"></span>
+<span class="source-line-no">087</span><span id="line-87">   /**</span>
+<span class="source-line-no">088</span><span id="line-88">    * Returns a listifier for {@link Collection} objects that converts them to {@link ArrayList}.</span>
+<span class="source-line-no">089</span><span id="line-89">    *</span>
+<span class="source-line-no">090</span><span id="line-90">    * &lt;p&gt;This listifier creates a new ArrayList containing all elements from the source collection.</span>
+<span class="source-line-no">091</span><span id="line-91">    * It works with any Collection subtype including List, Set, Queue, and Deque.&lt;/p&gt;</span>
+<span class="source-line-no">092</span><span id="line-92">    *</span>
+<span class="source-line-no">093</span><span id="line-93">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">094</span><span id="line-94">    * &lt;ul&gt;</span>
+<span class="source-line-no">095</span><span id="line-95">    *    &lt;li&gt;&lt;b&gt;Non-empty collections:&lt;/b&gt; Returns new ArrayList with all elements in iteration order&lt;/li&gt;</span>
+<span class="source-line-no">096</span><span id="line-96">    *    &lt;li&gt;&lt;b&gt;Empty collections:&lt;/b&gt; Returns new empty ArrayList&lt;/li&gt;</span>
+<span class="source-line-no">097</span><span id="line-97">    *    &lt;li&gt;&lt;b&gt;Preserves order:&lt;/b&gt; Maintains the iteration order of the source collection&lt;/li&gt;</span>
+<span class="source-line-no">098</span><span id="line-98">    *    &lt;li&gt;&lt;b&gt;Set ordering:&lt;/b&gt; Converts unordered Sets (HashSet, etc.) to TreeSet for deterministic ordering&lt;/li&gt;</span>
+<span class="source-line-no">099</span><span id="line-99">    * &lt;/ul&gt;</span>
+<span class="source-line-no">100</span><span id="line-100">    *</span>
+<span class="source-line-no">101</span><span id="line-101">    * &lt;h5 class='section'&gt;Set Ordering Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">102</span><span id="line-102">    * &lt;p&gt;To ensure predictable test results, this listifier handles Sets with unreliable ordering:&lt;/p&gt;</span>
+<span class="source-line-no">103</span><span id="line-103">    * &lt;ul&gt;</span>
+<span class="source-line-no">104</span><span id="line-104">    *    &lt;li&gt;&lt;b&gt;{@link SortedSet} (TreeSet, etc.):&lt;/b&gt; Preserves existing sort order&lt;/li&gt;</span>
+<span class="source-line-no">105</span><span id="line-105">    *    &lt;li&gt;&lt;b&gt;{@link LinkedHashSet}:&lt;/b&gt; Preserves insertion order&lt;/li&gt;</span>
+<span class="source-line-no">106</span><span id="line-106">    *    &lt;li&gt;&lt;b&gt;{@link HashSet} and other unordered Sets:&lt;/b&gt; Converts to {@link TreeSet} for natural ordering&lt;/li&gt;</span>
+<span class="source-line-no">107</span><span id="line-107">    * &lt;/ul&gt;</span>
+<span class="source-line-no">108</span><span id="line-108">    *</span>
+<span class="source-line-no">109</span><span id="line-109">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">110</span><span id="line-110">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">111</span><span id="line-111">    *    &lt;jc&gt;// Test with different collection types&lt;/jc&gt;</span>
+<span class="source-line-no">112</span><span id="line-112">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;list&lt;/jv&gt; = List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
+<span class="source-line-no">113</span><span id="line-113">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;list&lt;/jv&gt;, &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
 <span class="source-line-no">114</span><span id="line-114">    *</span>
-<span class="source-line-no">115</span><span id="line-115">    *    &lt;jc&gt;// LinkedHashSet preserves insertion order&lt;/jc&gt;</span>
-<span class="source-line-no">116</span><span id="line-116">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;linkedSet&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LinkedHashSet&amp;lt;&amp;gt;(Arrays.&lt;jsm&gt;asList&lt;/jsm&gt;(&lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;));</span>
-<span class="source-line-no">117</span><span id="line-117">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;linkedSet&lt;/jv&gt;, &lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;);</span>
+<span class="source-line-no">115</span><span id="line-115">    *    &lt;jc&gt;// HashSet converted to TreeSet for predictable ordering&lt;/jc&gt;</span>
+<span class="source-line-no">116</span><span id="line-116">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;set&lt;/jv&gt; = Set.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"z"&lt;/js&gt;, &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"m"&lt;/js&gt;);</span>
+<span class="source-line-no">117</span><span id="line-117">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;set&lt;/jv&gt;, &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"m"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;); &lt;jc&gt;// Natural ordering&lt;/jc&gt;</span>
 <span class="source-line-no">118</span><span id="line-118">    *</span>
-<span class="source-line-no">119</span><span id="line-119">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;queue&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LinkedList&amp;lt;&amp;gt;(Arrays.&lt;jsm&gt;asList&lt;/jsm&gt;(&lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;));</span>
-<span class="source-line-no">120</span><span id="line-120">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;queue&lt;/jv&gt;, &lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;);</span>
-<span class="source-line-no">121</span><span id="line-121">    * &lt;/p&gt;</span>
+<span class="source-line-no">119</span><span id="line-119">    *    &lt;jc&gt;// LinkedHashSet preserves insertion order&lt;/jc&gt;</span>
+<span class="source-line-no">120</span><span id="line-120">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;linkedSet&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LinkedHashSet&amp;lt;&amp;gt;(Arrays.&lt;jsm&gt;asList&lt;/jsm&gt;(&lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;));</span>
+<span class="source-line-no">121</span><span id="line-121">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;linkedSet&lt;/jv&gt;, &lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;);</span>
 <span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * &lt;h5 class='section'&gt;Performance:&lt;/h5&gt;</span>
-<span class="source-line-no">124</span><span id="line-124">    * &lt;p&gt;This listifier creates a new ArrayList and copies all elements, so it has O(n) time</span>
-<span class="source-line-no">125</span><span id="line-125">    * and space complexity. For unordered Sets, an additional TreeSet conversion adds O(n log n)</span>
-<span class="source-line-no">126</span><span id="line-126">    * sorting overhead. For large collections, consider the memory implications.&lt;/p&gt;</span>
-<span class="source-line-no">127</span><span id="line-127">    *</span>
-<span class="source-line-no">128</span><span id="line-128">    * @return A {@link Listifier} for {@link Collection} objects</span>
-<span class="source-line-no">129</span><span id="line-129">    * @see Collection</span>
-<span class="source-line-no">130</span><span id="line-130">    * @see ArrayList</span>
-<span class="source-line-no">131</span><span id="line-131">    * @see TreeSet</span>
-<span class="source-line-no">132</span><span id="line-132">    * @see LinkedHashSet</span>
-<span class="source-line-no">133</span><span id="line-133">    */</span>
-<span class="source-line-no">134</span><span id="line-134">   public static Listifier&lt;Collection&gt; collectionListifier() {</span>
-<span class="source-line-no">135</span><span id="line-135">      return (bc, collection) -&gt; {</span>
-<span class="source-line-no">136</span><span id="line-136">         if (collection instanceof Set &amp;&amp; !(collection instanceof SortedSet) &amp;&amp; !(collection instanceof LinkedHashSet)) {</span>
-<span class="source-line-no">137</span><span id="line-137">            collection = new TreeSet&lt;&gt;(collection);</span>
-<span class="source-line-no">138</span><span id="line-138">         }</span>
-<span class="source-line-no">139</span><span id="line-139">         return new ArrayList&lt;&gt;(collection);</span>
-<span class="source-line-no">140</span><span id="line-140">      };</span>
-<span class="source-line-no">141</span><span id="line-141">   }</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">   /**</span>
-<span class="source-line-no">144</span><span id="line-144">    * Returns a listifier for {@link Iterable} objects that converts them using streams.</span>
-<span class="source-line-no">145</span><span id="line-145">    *</span>
-<span class="source-line-no">146</span><span id="line-146">    * &lt;p&gt;This listifier handles any Iterable implementation by creating a stream from its</span>
-<span class="source-line-no">147</span><span id="line-147">    * spliterator and collecting elements to a list. It works with custom iterables and</span>
-<span class="source-line-no">148</span><span id="line-148">    * collection types not covered by more specific listifiers.&lt;/p&gt;</span>
+<span class="source-line-no">123</span><span id="line-123">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;queue&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LinkedList&amp;lt;&amp;gt;(Arrays.&lt;jsm&gt;asList&lt;/jsm&gt;(&lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;));</span>
+<span class="source-line-no">124</span><span id="line-124">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;queue&lt;/jv&gt;, &lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;);</span>
+<span class="source-line-no">125</span><span id="line-125">    * &lt;/p&gt;</span>
+<span class="source-line-no">126</span><span id="line-126">    *</span>
+<span class="source-line-no">127</span><span id="line-127">    * &lt;h5 class='section'&gt;Performance:&lt;/h5&gt;</span>
+<span class="source-line-no">128</span><span id="line-128">    * &lt;p&gt;This listifier creates a new ArrayList and copies all elements, so it has O(n) time</span>
+<span class="source-line-no">129</span><span id="line-129">    * and space complexity. For unordered Sets, an additional TreeSet conversion adds O(n log n)</span>
+<span class="source-line-no">130</span><span id="line-130">    * sorting overhead. For large collections, consider the memory implications.&lt;/p&gt;</span>
+<span class="source-line-no">131</span><span id="line-131">    *</span>
+<span class="source-line-no">132</span><span id="line-132">    * @return A {@link Listifier} for {@link Collection} objects</span>
+<span class="source-line-no">133</span><span id="line-133">    * @see Collection</span>
+<span class="source-line-no">134</span><span id="line-134">    * @see ArrayList</span>
+<span class="source-line-no">135</span><span id="line-135">    * @see TreeSet</span>
+<span class="source-line-no">136</span><span id="line-136">    * @see LinkedHashSet</span>
+<span class="source-line-no">137</span><span id="line-137">    */</span>
+<span class="source-line-no">138</span><span id="line-138">   public static Listifier&lt;Collection&gt; collectionListifier() {</span>
+<span class="source-line-no">139</span><span id="line-139">      return (bc, collection) -&gt; {</span>
+<span class="source-line-no">140</span><span id="line-140">         if (collection instanceof Set &amp;&amp; !(collection instanceof SortedSet) &amp;&amp; !(collection instanceof LinkedHashSet)) {</span>
+<span class="source-line-no">141</span><span id="line-141">            collection = new TreeSet&lt;&gt;(collection);</span>
+<span class="source-line-no">142</span><span id="line-142">         }</span>
+<span class="source-line-no">143</span><span id="line-143">         return new ArrayList&lt;&gt;(collection);</span>
+<span class="source-line-no">144</span><span id="line-144">      };</span>
+<span class="source-line-no">145</span><span id="line-145">   }</span>
+<span class="source-line-no">146</span><span id="line-146"></span>
+<span class="source-line-no">147</span><span id="line-147">   /**</span>
+<span class="source-line-no">148</span><span id="line-148">    * Returns a listifier for {@link Iterable} objects that converts them using streams.</span>
 <span class="source-line-no">149</span><span id="line-149">    *</span>
-<span class="source-line-no">150</span><span id="line-150">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
-<span class="source-line-no">151</span><span id="line-151">    * &lt;ul&gt;</span>
-<span class="source-line-no">152</span><span id="line-152">    *    &lt;li&gt;&lt;b&gt;Standard iterables:&lt;/b&gt; Converts elements to list maintaining iteration order&lt;/li&gt;</span>
-<span class="source-line-no">153</span><span id="line-153">    *    &lt;li&gt;&lt;b&gt;Custom iterables:&lt;/b&gt; Works with any object implementing Iterable interface&lt;/li&gt;</span>
-<span class="source-line-no">154</span><span id="line-154">    *    &lt;li&gt;&lt;b&gt;Large iterables:&lt;/b&gt; Processes all elements regardless of size&lt;/li&gt;</span>
-<span class="source-line-no">155</span><span id="line-155">    * &lt;/ul&gt;</span>
-<span class="source-line-no">156</span><span id="line-156">    *</span>
-<span class="source-line-no">157</span><span id="line-157">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">158</span><span id="line-158">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">159</span><span id="line-159">    *    &lt;jc&gt;// Test with custom iterable&lt;/jc&gt;</span>
-<span class="source-line-no">160</span><span id="line-160">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;range&lt;/jv&gt; = IntStream.&lt;jsm&gt;range&lt;/jsm&gt;(&lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;4&lt;/jv&gt;).&lt;jsm&gt;boxed&lt;/jsm&gt;().&lt;jsm&gt;collect&lt;/jsm&gt;(toList());</span>
-<span class="source-line-no">161</span><span id="line-161">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;range&lt;/jv&gt;, &lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;2&lt;/jv&gt;, &lt;jv&gt;3&lt;/jv&gt;);</span>
-<span class="source-line-no">162</span><span id="line-162">    *</span>
-<span class="source-line-no">163</span><span id="line-163">    *    &lt;jc&gt;// Test with custom Iterable implementation&lt;/jc&gt;</span>
-<span class="source-line-no">164</span><span id="line-164">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;fibonacci&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; FibonacciIterable(&lt;jv&gt;5&lt;/jv&gt;);</span>
-<span class="source-line-no">165</span><span id="line-165">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;fibonacci&lt;/jv&gt;, &lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;2&lt;/jv&gt;, &lt;jv&gt;3&lt;/jv&gt;, &lt;jv&gt;5&lt;/jv&gt;);</span>
-<span class="source-line-no">166</span><span id="line-166">    * &lt;/p&gt;</span>
-<span class="source-line-no">167</span><span id="line-167">    *</span>
-<span class="source-line-no">168</span><span id="line-168">    * @return A {@link Listifier} for {@link Iterable} objects</span>
-<span class="source-line-no">169</span><span id="line-169">    * @see Iterable</span>
-<span class="source-line-no">170</span><span id="line-170">    */</span>
-<span class="source-line-no">171</span><span id="line-171">   public static Listifier&lt;Iterable&gt; iterableListifier() {</span>
-<span class="source-line-no">172</span><span id="line-172">      return (bc, iterable) -&gt; stream(iterable.spliterator(), false).toList();</span>
-<span class="source-line-no">173</span><span id="line-173">   }</span>
-<span class="source-line-no">174</span><span id="line-174"></span>
-<span class="source-line-no">175</span><span id="line-175">   /**</span>
-<span class="source-line-no">176</span><span id="line-176">    * Returns a listifier for {@link Iterator} objects that converts them to lists.</span>
-<span class="source-line-no">177</span><span id="line-177">    *</span>
-<span class="source-line-no">178</span><span id="line-178">    * &lt;p&gt;&lt;b&gt;Warning:&lt;/b&gt; This listifier consumes the iterator during conversion. After listification,</span>
-<span class="source-line-no">179</span><span id="line-179">    * the iterator will be exhausted and cannot be used again.&lt;/p&gt;</span>
-<span class="source-line-no">180</span><span id="line-180">    *</span>
-<span class="source-line-no">181</span><span id="line-181">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
-<span class="source-line-no">182</span><span id="line-182">    * &lt;ul&gt;</span>
-<span class="source-line-no">183</span><span id="line-183">    *    &lt;li&gt;&lt;b&gt;Element extraction:&lt;/b&gt; Consumes all remaining elements from the iterator&lt;/li&gt;</span>
-<span class="source-line-no">184</span><span id="line-184">    *    &lt;li&gt;&lt;b&gt;Order preservation:&lt;/b&gt; Maintains the iterator's order in the resulting list&lt;/li&gt;</span>
-<span class="source-line-no">185</span><span id="line-185">    *    &lt;li&gt;&lt;b&gt;Iterator exhaustion:&lt;/b&gt; The iterator becomes unusable after conversion&lt;/li&gt;</span>
-<span class="source-line-no">186</span><span id="line-186">    * &lt;/ul&gt;</span>
-<span class="source-line-no">187</span><span id="line-187">    *</span>
-<span class="source-line-no">188</span><span id="line-188">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">189</span><span id="line-189">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">190</span><span id="line-190">    *    &lt;jc&gt;// Test with list iterator&lt;/jc&gt;</span>
-<span class="source-line-no">191</span><span id="line-191">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;list&lt;/jv&gt; = List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
-<span class="source-line-no">192</span><span id="line-192">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;iterator&lt;/jv&gt; = &lt;jv&gt;list&lt;/jv&gt;.iterator();</span>
-<span class="source-line-no">193</span><span id="line-193">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;iterator&lt;/jv&gt;, &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
-<span class="source-line-no">194</span><span id="line-194">    *    &lt;jc&gt;// iterator is now exhausted&lt;/jc&gt;</span>
-<span class="source-line-no">195</span><span id="line-195">    *</span>
-<span class="source-line-no">196</span><span id="line-196">    *    &lt;jc&gt;// Test with custom iterator&lt;/jc&gt;</span>
-<span class="source-line-no">197</span><span id="line-197">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;numbers&lt;/jv&gt; = IntStream.&lt;jsm&gt;range&lt;/jsm&gt;(&lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;4&lt;/jv&gt;).iterator();</span>
-<span class="source-line-no">198</span><span id="line-198">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;numbers&lt;/jv&gt;, &lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;2&lt;/jv&gt;, &lt;jv&gt;3&lt;/jv&gt;);</span>
-<span class="source-line-no">199</span><span id="line-199">    * &lt;/p&gt;</span>
-<span class="source-line-no">200</span><span id="line-200">    *</span>
-<span class="source-line-no">201</span><span id="line-201">    * &lt;h5 class='section'&gt;Important Notes:&lt;/h5&gt;</span>
-<span class="source-line-no">202</span><span id="line-202">    * &lt;ul&gt;</span>
-<span class="source-line-no">203</span><span id="line-203">    *    &lt;li&gt;&lt;b&gt;One-time use:&lt;/b&gt; The iterator becomes exhausted and unusable after conversion&lt;/li&gt;</span>
-<span class="source-line-no">204</span><span id="line-204">    *    &lt;li&gt;&lt;b&gt;Side effects:&lt;/b&gt; Any side effects in the iterator's next() method will occur&lt;/li&gt;</span>
-<span class="source-line-no">205</span><span id="line-205">    *    &lt;li&gt;&lt;b&gt;Exception handling:&lt;/b&gt; Exceptions from the iterator are propagated&lt;/li&gt;</span>
-<span class="source-line-no">206</span><span id="line-206">    * &lt;/ul&gt;</span>
-<span class="source-line-no">207</span><span id="line-207">    *</span>
-<span class="source-line-no">208</span><span id="line-208">    * @return A {@link Listifier} for {@link Iterator} objects</span>
-<span class="source-line-no">209</span><span id="line-209">    * @see Iterator</span>
-<span class="source-line-no">210</span><span id="line-210">    */</span>
-<span class="source-line-no">211</span><span id="line-211">   public static Listifier&lt;Iterator&gt; iteratorListifier() {</span>
-<span class="source-line-no">212</span><span id="line-212">      return (bc, iterator) -&gt; stream(spliteratorUnknownSize(iterator, 0), false).toList();</span>
-<span class="source-line-no">213</span><span id="line-213">   }</span>
-<span class="source-line-no">214</span><span id="line-214"></span>
-<span class="source-line-no">215</span><span id="line-215">   /**</span>
-<span class="source-line-no">216</span><span id="line-216">    * Returns a listifier for {@link Enumeration} objects that converts them to lists.</span>
-<span class="source-line-no">217</span><span id="line-217">    *</span>
-<span class="source-line-no">218</span><span id="line-218">    * &lt;p&gt;&lt;b&gt;Warning:&lt;/b&gt; This listifier consumes the enumeration during conversion. After listification,</span>
-<span class="source-line-no">219</span><span id="line-219">    * the enumeration will be exhausted and cannot be used again.&lt;/p&gt;</span>
-<span class="source-line-no">220</span><span id="line-220">    *</span>
-<span class="source-line-no">221</span><span id="line-221">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
-<span class="source-line-no">222</span><span id="line-222">    * &lt;ul&gt;</span>
-<span class="source-line-no">223</span><span id="line-223">    *    &lt;li&gt;&lt;b&gt;Element extraction:&lt;/b&gt; Consumes all remaining elements from the enumeration&lt;/li&gt;</span>
-<span class="source-line-no">224</span><span id="line-224">    *    &lt;li&gt;&lt;b&gt;Order preservation:&lt;/b&gt; Maintains the enumeration's order in the resulting list&lt;/li&gt;</span>
-<span class="source-line-no">225</span><span id="line-225">    *    &lt;li&gt;&lt;b&gt;Enumeration exhaustion:&lt;/b&gt; The enumeration becomes unusable after conversion&lt;/li&gt;</span>
-<span class="source-line-no">226</span><span id="line-226">    * &lt;/ul&gt;</span>
-<span class="source-line-no">227</span><span id="line-227">    *</span>
-<span class="source-line-no">228</span><span id="line-228">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">229</span><span id="line-229">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">230</span><span id="line-230">    *    &lt;jc&gt;// Test with Vector enumeration&lt;/jc&gt;</span>
-<span class="source-line-no">231</span><span id="line-231">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;vector&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Vector&amp;lt;&amp;gt;(List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;));</span>
-<span class="source-line-no">232</span><span id="line-232">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;enumeration&lt;/jv&gt; = &lt;jv&gt;vector&lt;/jv&gt;.elements();</span>
-<span class="source-line-no">233</span><span id="line-233">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;enumeration&lt;/jv&gt;, &lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;);</span>
-<span class="source-line-no">234</span><span id="line-234">    *</span>
-<span class="source-line-no">235</span><span id="line-235">    *    &lt;jc&gt;// Test with Hashtable enumeration&lt;/jc&gt;</span>
-<span class="source-line-no">236</span><span id="line-236">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;table&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Hashtable&amp;lt;&amp;gt;(Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"key1"&lt;/js&gt;, &lt;js&gt;"value1"&lt;/js&gt;));</span>
-<span class="source-line-no">237</span><span id="line-237">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;keys&lt;/jv&gt; = &lt;jv&gt;table&lt;/jv&gt;.keys();</span>
-<span class="source-line-no">238</span><span id="line-238">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;keys&lt;/jv&gt;, &lt;js&gt;"key1"&lt;/js&gt;);</span>
-<span class="source-line-no">239</span><span id="line-239">    * &lt;/p&gt;</span>
-<span class="source-line-no">240</span><span id="line-240">    *</span>
-<span class="source-line-no">241</span><span id="line-241">    * @return A {@link Listifier} for {@link Enumeration} objects</span>
-<span class="source-line-no">242</span><span id="line-242">    * @see Enumeration</span>
-<span class="source-line-no">243</span><span id="line-243">    */</span>
-<span class="source-line-no">244</span><span id="line-244">   public static Listifier&lt;Enumeration&gt; enumerationListifier() {</span>
-<span class="source-line-no">245</span><span id="line-245">      return (bc, enumeration) -&gt; list(enumeration);</span>
-<span class="source-line-no">246</span><span id="line-246">   }</span>
-<span class="source-line-no">247</span><span id="line-247"></span>
-<span class="source-line-no">248</span><span id="line-248">   /**</span>
-<span class="source-line-no">249</span><span id="line-249">    * Returns a listifier for {@link Stream} objects that converts them to lists.</span>
-<span class="source-line-no">250</span><span id="line-250">    *</span>
-<span class="source-line-no">251</span><span id="line-251">    * &lt;p&gt;&lt;b&gt;Warning:&lt;/b&gt; This listifier terminates the stream during conversion. After listification,</span>
-<span class="source-line-no">252</span><span id="line-252">    * the stream is closed and cannot be used again.&lt;/p&gt;</span>
-<span class="source-line-no">253</span><span id="line-253">    *</span>
-<span class="source-line-no">254</span><span id="line-254">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
-<span class="source-line-no">255</span><span id="line-255">    * &lt;ul&gt;</span>
-<span class="source-line-no">256</span><span id="line-256">    *    &lt;li&gt;&lt;b&gt;Stream termination:&lt;/b&gt; Calls toList() to collect all stream elements&lt;/li&gt;</span>
-<span class="source-line-no">257</span><span id="line-257">    *    &lt;li&gt;&lt;b&gt;Order preservation:&lt;/b&gt; Maintains stream order in the resulting list&lt;/li&gt;</span>
-<span class="source-line-no">258</span><span id="line-258">    *    &lt;li&gt;&lt;b&gt;Stream closure:&lt;/b&gt; The stream becomes unusable after conversion&lt;/li&gt;</span>
-<span class="source-line-no">259</span><span id="line-259">    * &lt;/ul&gt;</span>
-<span class="source-line-no">260</span><span id="line-260">    *</span>
-<span class="source-line-no">261</span><span id="line-261">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">262</span><span id="line-262">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">263</span><span id="line-263">    *    &lt;jc&gt;// Test with filtered stream&lt;/jc&gt;</span>
-<span class="source-line-no">264</span><span id="line-264">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;numbers&lt;/jv&gt; = IntStream.&lt;jsm&gt;range&lt;/jsm&gt;(&lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;10&lt;/jv&gt;)</span>
-<span class="source-line-no">265</span><span id="line-265">    *       .filter(&lt;jv&gt;n&lt;/jv&gt; -&amp;gt; &lt;jv&gt;n&lt;/jv&gt; % &lt;jv&gt;2&lt;/jv&gt; == &lt;jv&gt;0&lt;/jv&gt;)</span>
-<span class="source-line-no">266</span><span id="line-266">    *       .boxed();</span>
-<span class="source-line-no">267</span><span id="line-267">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;numbers&lt;/jv&gt;, &lt;jv&gt;2&lt;/jv&gt;, &lt;jv&gt;4&lt;/jv&gt;, &lt;jv&gt;6&lt;/jv&gt;, &lt;jv&gt;8&lt;/jv&gt;);</span>
-<span class="source-line-no">268</span><span id="line-268">    *</span>
-<span class="source-line-no">269</span><span id="line-269">    *    &lt;jc&gt;// Test with mapped stream&lt;/jc&gt;</span>
-<span class="source-line-no">270</span><span id="line-270">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;words&lt;/jv&gt; = Stream.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;, &lt;js&gt;"world"&lt;/js&gt;)</span>
-<span class="source-line-no">271</span><span id="line-271">    *       .map(String::toUpperCase);</span>
-<span class="source-line-no">272</span><span id="line-272">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;words&lt;/jv&gt;, &lt;js&gt;"HELLO"&lt;/js&gt;, &lt;js&gt;"WORLD"&lt;/js&gt;);</span>
-<span class="source-line-no">273</span><span id="line-273">    * &lt;/p&gt;</span>
-<span class="source-line-no">274</span><span id="line-274">    *</span>
-<span class="source-line-no">275</span><span id="line-275">    * &lt;h5 class='section'&gt;Important Notes:&lt;/h5&gt;</span>
-<span class="source-line-no">276</span><span id="line-276">    * &lt;ul&gt;</span>
-<span class="source-line-no">277</span><span id="line-277">    *    &lt;li&gt;&lt;b&gt;One-time use:&lt;/b&gt; The stream is terminated and cannot be reused&lt;/li&gt;</span>
-<span class="source-line-no">278</span><span id="line-278">    *    &lt;li&gt;&lt;b&gt;Lazy evaluation:&lt;/b&gt; Stream operations are executed during listification&lt;/li&gt;</span>
-<span class="source-line-no">279</span><span id="line-279">    *    &lt;li&gt;&lt;b&gt;Exception handling:&lt;/b&gt; Stream operation exceptions are propagated&lt;/li&gt;</span>
-<span class="source-line-no">280</span><span id="line-280">    * &lt;/ul&gt;</span>
-<span class="source-line-no">281</span><span id="line-281">    *</span>
-<span class="source-line-no">282</span><span id="line-282">    * @return A {@link Listifier} for {@link Stream} objects</span>
-<span class="source-line-no">283</span><span id="line-283">    * @see Stream</span>
-<span class="source-line-no">284</span><span id="line-284">    */</span>
-<span class="source-line-no">285</span><span id="line-285">   public static Listifier&lt;Stream&gt; streamListifier() {</span>
-<span class="source-line-no">286</span><span id="line-286">      return (bc, stream) -&gt; stream.toList();</span>
-<span class="source-line-no">287</span><span id="line-287">   }</span>
-<span class="source-line-no">288</span><span id="line-288"></span>
-<span class="source-line-no">289</span><span id="line-289">   /**</span>
-<span class="source-line-no">290</span><span id="line-290">    * Returns a listifier for {@link Map} objects that converts them to lists of {@link Map.Entry} objects.</span>
-<span class="source-line-no">291</span><span id="line-291">    *</span>
-<span class="source-line-no">292</span><span id="line-292">    * &lt;p&gt;This listifier enables maps to be processed as lists in BCT assertions, making it easy</span>
-<span class="source-line-no">293</span><span id="line-293">    * to test map contents using list-based assertion methods.&lt;/p&gt;</span>
-<span class="source-line-no">294</span><span id="line-294">    *</span>
-<span class="source-line-no">295</span><span id="line-295">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
-<span class="source-line-no">296</span><span id="line-296">    * &lt;ul&gt;</span>
-<span class="source-line-no">297</span><span id="line-297">    *    &lt;li&gt;&lt;b&gt;Entry conversion:&lt;/b&gt; Each key-value pair becomes a Map.Entry in the list&lt;/li&gt;</span>
-<span class="source-line-no">298</span><span id="line-298">    *    &lt;li&gt;&lt;b&gt;Order preservation:&lt;/b&gt; Maintains the map's iteration order&lt;/li&gt;</span>
-<span class="source-line-no">299</span><span id="line-299">    *    &lt;li&gt;&lt;b&gt;Empty maps:&lt;/b&gt; Returns empty list for empty maps&lt;/li&gt;</span>
-<span class="source-line-no">300</span><span id="line-300">    *    &lt;li&gt;&lt;b&gt;Map ordering:&lt;/b&gt; Converts unordered Maps (HashMap, etc.) to TreeMap for deterministic ordering&lt;/li&gt;</span>
-<span class="source-line-no">301</span><span id="line-301">    * &lt;/ul&gt;</span>
-<span class="source-line-no">302</span><span id="line-302">    *</span>
-<span class="source-line-no">303</span><span id="line-303">    * &lt;h5 class='section'&gt;Map Ordering Behavior:&lt;/h5&gt;</span>
-<span class="source-line-no">304</span><span id="line-304">    * &lt;p&gt;To ensure predictable test results, this listifier handles Maps with unreliable ordering:&lt;/p&gt;</span>
-<span class="source-line-no">305</span><span id="line-305">    * &lt;ul&gt;</span>
-<span class="source-line-no">306</span><span id="line-306">    *    &lt;li&gt;&lt;b&gt;{@link SortedMap} (TreeMap, etc.):&lt;/b&gt; Preserves existing sort order&lt;/li&gt;</span>
-<span class="source-line-no">307</span><span id="line-307">    *    &lt;li&gt;&lt;b&gt;{@link LinkedHashMap}:&lt;/b&gt; Preserves insertion order&lt;/li&gt;</span>
-<span class="source-line-no">308</span><span id="line-308">    *    &lt;li&gt;&lt;b&gt;{@link HashMap} and other unordered Maps:&lt;/b&gt; Converts to {@link TreeMap} for natural key ordering&lt;/li&gt;</span>
-<span class="source-line-no">309</span><span id="line-309">    * &lt;/ul&gt;</span>
-<span class="source-line-no">310</span><span id="line-310">    *</span>
-<span class="source-line-no">311</span><span id="line-311">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">312</span><span id="line-312">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">313</span><span id="line-313">    *    &lt;jc&gt;// Test map contents with deterministic ordering&lt;/jc&gt;</span>
-<span class="source-line-no">314</span><span id="line-314">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;map&lt;/jv&gt; = Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"z"&lt;/js&gt;, &lt;js&gt;"value1"&lt;/js&gt;, &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"value2"&lt;/js&gt;);</span>
-<span class="source-line-no">315</span><span id="line-315">    *    &lt;jsm&gt;assertSize&lt;/jsm&gt;(&lt;jv&gt;map&lt;/jv&gt;, &lt;jv&gt;2&lt;/jv&gt;);</span>
-<span class="source-line-no">316</span><span id="line-316">    *    &lt;jc&gt;// Entries will be ordered by key: [a=value2, z=value1]&lt;/jc&gt;</span>
-<span class="source-line-no">317</span><span id="line-317">    *</span>
-<span class="source-line-no">318</span><span id="line-318">    *    &lt;jc&gt;// LinkedHashMap preserves insertion order&lt;/jc&gt;</span>
-<span class="source-line-no">319</span><span id="line-319">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;linkedMap&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LinkedHashMap&amp;lt;&amp;gt;();</span>
-<span class="source-line-no">320</span><span id="line-320">    *    &lt;jv&gt;linkedMap&lt;/jv&gt;.put(&lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"1"&lt;/js&gt;);</span>
-<span class="source-line-no">321</span><span id="line-321">    *    &lt;jv&gt;linkedMap&lt;/jv&gt;.put(&lt;js&gt;"second"&lt;/js&gt;, &lt;js&gt;"2"&lt;/js&gt;);</span>
-<span class="source-line-no">322</span><span id="line-322">    *    &lt;jc&gt;// Entries will maintain insertion order: [first=1, second=2]&lt;/jc&gt;</span>
-<span class="source-line-no">323</span><span id="line-323">    *</span>
-<span class="source-line-no">324</span><span id="line-324">    *    &lt;jc&gt;// Test empty map&lt;/jc&gt;</span>
-<span class="source-line-no">325</span><span id="line-325">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;emptyMap&lt;/jv&gt; = Map.&lt;jsm&gt;of&lt;/jsm&gt;();</span>
-<span class="source-line-no">326</span><span id="line-326">    *    &lt;jsm&gt;assertEmpty&lt;/jsm&gt;(&lt;jv&gt;emptyMap&lt;/jv&gt;);</span>
+<span class="source-line-no">150</span><span id="line-150">    * &lt;p&gt;This listifier handles any Iterable implementation by creating a stream from its</span>
+<span class="source-line-no">151</span><span id="line-151">    * spliterator and collecting elements to a list. It works with custom iterables and</span>
+<span class="source-line-no">152</span><span id="line-152">    * collection types not covered by more specific listifiers.&lt;/p&gt;</span>
+<span class="source-line-no">153</span><span id="line-153">    *</span>
+<span class="source-line-no">154</span><span id="line-154">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">155</span><span id="line-155">    * &lt;ul&gt;</span>
+<span class="source-line-no">156</span><span id="line-156">    *    &lt;li&gt;&lt;b&gt;Standard iterables:&lt;/b&gt; Converts elements to list maintaining iteration order&lt;/li&gt;</span>
+<span class="source-line-no">157</span><span id="line-157">    *    &lt;li&gt;&lt;b&gt;Custom iterables:&lt;/b&gt; Works with any object implementing Iterable interface&lt;/li&gt;</span>
+<span class="source-line-no">158</span><span id="line-158">    *    &lt;li&gt;&lt;b&gt;Large iterables:&lt;/b&gt; Processes all elements regardless of size&lt;/li&gt;</span>
+<span class="source-line-no">159</span><span id="line-159">    * &lt;/ul&gt;</span>
+<span class="source-line-no">160</span><span id="line-160">    *</span>
+<span class="source-line-no">161</span><span id="line-161">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">162</span><span id="line-162">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">163</span><span id="line-163">    *    &lt;jc&gt;// Test with custom iterable&lt;/jc&gt;</span>
+<span class="source-line-no">164</span><span id="line-164">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;range&lt;/jv&gt; = IntStream.&lt;jsm&gt;range&lt;/jsm&gt;(&lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;4&lt;/jv&gt;).&lt;jsm&gt;boxed&lt;/jsm&gt;().&lt;jsm&gt;collect&lt;/jsm&gt;(toList());</span>
+<span class="source-line-no">165</span><span id="line-165">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;range&lt;/jv&gt;, &lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;2&lt;/jv&gt;, &lt;jv&gt;3&lt;/jv&gt;);</span>
+<span class="source-line-no">166</span><span id="line-166">    *</span>
+<span class="source-line-no">167</span><span id="line-167">    *    &lt;jc&gt;// Test with custom Iterable implementation&lt;/jc&gt;</span>
+<span class="source-line-no">168</span><span id="line-168">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;fibonacci&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; FibonacciIterable(&lt;jv&gt;5&lt;/jv&gt;);</span>
+<span class="source-line-no">169</span><span id="line-169">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;fibonacci&lt;/jv&gt;, &lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;2&lt;/jv&gt;, &lt;jv&gt;3&lt;/jv&gt;, &lt;jv&gt;5&lt;/jv&gt;);</span>
+<span class="source-line-no">170</span><span id="line-170">    * &lt;/p&gt;</span>
+<span class="source-line-no">171</span><span id="line-171">    *</span>
+<span class="source-line-no">172</span><span id="line-172">    * @return A {@link Listifier} for {@link Iterable} objects</span>
+<span class="source-line-no">173</span><span id="line-173">    * @see Iterable</span>
+<span class="source-line-no">174</span><span id="line-174">    */</span>
+<span class="source-line-no">175</span><span id="line-175">   public static Listifier&lt;Iterable&gt; iterableListifier() {</span>
+<span class="source-line-no">176</span><span id="line-176">      return (bc, iterable) -&gt; stream(iterable.spliterator(), false).toList();</span>
+<span class="source-line-no">177</span><span id="line-177">   }</span>
+<span class="source-line-no">178</span><span id="line-178"></span>
+<span class="source-line-no">179</span><span id="line-179">   /**</span>
+<span class="source-line-no">180</span><span id="line-180">    * Returns a listifier for {@link Iterator} objects that converts them to lists.</span>
+<span class="source-line-no">181</span><span id="line-181">    *</span>
+<span class="source-line-no">182</span><span id="line-182">    * &lt;p&gt;&lt;b&gt;Warning:&lt;/b&gt; This listifier consumes the iterator during conversion. After listification,</span>
+<span class="source-line-no">183</span><span id="line-183">    * the iterator will be exhausted and cannot be used again.&lt;/p&gt;</span>
+<span class="source-line-no">184</span><span id="line-184">    *</span>
+<span class="source-line-no">185</span><span id="line-185">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">186</span><span id="line-186">    * &lt;ul&gt;</span>
+<span class="source-line-no">187</span><span id="line-187">    *    &lt;li&gt;&lt;b&gt;Element extraction:&lt;/b&gt; Consumes all remaining elements from the iterator&lt;/li&gt;</span>
+<span class="source-line-no">188</span><span id="line-188">    *    &lt;li&gt;&lt;b&gt;Order preservation:&lt;/b&gt; Maintains the iterator's order in the resulting list&lt;/li&gt;</span>
+<span class="source-line-no">189</span><span id="line-189">    *    &lt;li&gt;&lt;b&gt;Iterator exhaustion:&lt;/b&gt; The iterator becomes unusable after conversion&lt;/li&gt;</span>
+<span class="source-line-no">190</span><span id="line-190">    * &lt;/ul&gt;</span>
+<span class="source-line-no">191</span><span id="line-191">    *</span>
+<span class="source-line-no">192</span><span id="line-192">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">193</span><span id="line-193">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">194</span><span id="line-194">    *    &lt;jc&gt;// Test with list iterator&lt;/jc&gt;</span>
+<span class="source-line-no">195</span><span id="line-195">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;list&lt;/jv&gt; = List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
+<span class="source-line-no">196</span><span id="line-196">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;iterator&lt;/jv&gt; = &lt;jv&gt;list&lt;/jv&gt;.iterator();</span>
+<span class="source-line-no">197</span><span id="line-197">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;iterator&lt;/jv&gt;, &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
+<span class="source-line-no">198</span><span id="line-198">    *    &lt;jc&gt;// iterator is now exhausted&lt;/jc&gt;</span>
+<span class="source-line-no">199</span><span id="line-199">    *</span>
+<span class="source-line-no">200</span><span id="line-200">    *    &lt;jc&gt;// Test with custom iterator&lt;/jc&gt;</span>
+<span class="source-line-no">201</span><span id="line-201">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;numbers&lt;/jv&gt; = IntStream.&lt;jsm&gt;range&lt;/jsm&gt;(&lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;4&lt;/jv&gt;).iterator();</span>
+<span class="source-line-no">202</span><span id="line-202">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;numbers&lt;/jv&gt;, &lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;2&lt;/jv&gt;, &lt;jv&gt;3&lt;/jv&gt;);</span>
+<span class="source-line-no">203</span><span id="line-203">    * &lt;/p&gt;</span>
+<span class="source-line-no">204</span><span id="line-204">    *</span>
+<span class="source-line-no">205</span><span id="line-205">    * &lt;h5 class='section'&gt;Important Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">206</span><span id="line-206">    * &lt;ul&gt;</span>
+<span class="source-line-no">207</span><span id="line-207">    *    &lt;li&gt;&lt;b&gt;One-time use:&lt;/b&gt; The iterator becomes exhausted and unusable after conversion&lt;/li&gt;</span>
+<span class="source-line-no">208</span><span id="line-208">    *    &lt;li&gt;&lt;b&gt;Side effects:&lt;/b&gt; Any side effects in the iterator's next() method will occur&lt;/li&gt;</span>
+<span class="source-line-no">209</span><span id="line-209">    *    &lt;li&gt;&lt;b&gt;Exception handling:&lt;/b&gt; Exceptions from the iterator are propagated&lt;/li&gt;</span>
+<span class="source-line-no">210</span><span id="line-210">    * &lt;/ul&gt;</span>
+<span class="source-line-no">211</span><span id="line-211">    *</span>
+<span class="source-line-no">212</span><span id="line-212">    * @return A {@link Listifier} for {@link Iterator} objects</span>
+<span class="source-line-no">213</span><span id="line-213">    * @see Iterator</span>
+<span class="source-line-no">214</span><span id="line-214">    */</span>
+<span class="source-line-no">215</span><span id="line-215">   public static Listifier&lt;Iterator&gt; iteratorListifier() {</span>
+<span class="source-line-no">216</span><span id="line-216">      return (bc, iterator) -&gt; stream(spliteratorUnknownSize(iterator, 0), false).toList();</span>
+<span class="source-line-no">217</span><span id="line-217">   }</span>
+<span class="source-line-no">218</span><span id="line-218"></span>
+<span class="source-line-no">219</span><span id="line-219">   /**</span>
+<span class="source-line-no">220</span><span id="line-220">    * Returns a listifier for {@link Enumeration} objects that converts them to lists.</span>
+<span class="source-line-no">221</span><span id="line-221">    *</span>
+<span class="source-line-no">222</span><span id="line-222">    * &lt;p&gt;&lt;b&gt;Warning:&lt;/b&gt; This listifier consumes the enumeration during conversion. After listification,</span>
+<span class="source-line-no">223</span><span id="line-223">    * the enumeration will be exhausted and cannot be used again.&lt;/p&gt;</span>
+<span class="source-line-no">224</span><span id="line-224">    *</span>
+<span class="source-line-no">225</span><span id="line-225">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">226</span><span id="line-226">    * &lt;ul&gt;</span>
+<span class="source-line-no">227</span><span id="line-227">    *    &lt;li&gt;&lt;b&gt;Element extraction:&lt;/b&gt; Consumes all remaining elements from the enumeration&lt;/li&gt;</span>
+<span class="source-line-no">228</span><span id="line-228">    *    &lt;li&gt;&lt;b&gt;Order preservation:&lt;/b&gt; Maintains the enumeration's order in the resulting list&lt;/li&gt;</span>
+<span class="source-line-no">229</span><span id="line-229">    *    &lt;li&gt;&lt;b&gt;Enumeration exhaustion:&lt;/b&gt; The enumeration becomes unusable after conversion&lt;/li&gt;</span>
+<span class="source-line-no">230</span><span id="line-230">    * &lt;/ul&gt;</span>
+<span class="source-line-no">231</span><span id="line-231">    *</span>
+<span class="source-line-no">232</span><span id="line-232">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">233</span><span id="line-233">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">234</span><span id="line-234">    *    &lt;jc&gt;// Test with Vector enumeration&lt;/jc&gt;</span>
+<span class="source-line-no">235</span><span id="line-235">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;vector&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Vector&amp;lt;&amp;gt;(List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;));</span>
+<span class="source-line-no">236</span><span id="line-236">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;enumeration&lt;/jv&gt; = &lt;jv&gt;vector&lt;/jv&gt;.elements();</span>
+<span class="source-line-no">237</span><span id="line-237">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;enumeration&lt;/jv&gt;, &lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;);</span>
+<span class="source-line-no">238</span><span id="line-238">    *</span>
+<span class="source-line-no">239</span><span id="line-239">    *    &lt;jc&gt;// Test with Hashtable enumeration&lt;/jc&gt;</span>
+<span class="source-line-no">240</span><span id="line-240">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;table&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Hashtable&amp;lt;&amp;gt;(Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"key1"&lt;/js&gt;, &lt;js&gt;"value1"&lt;/js&gt;));</span>
+<span class="source-line-no">241</span><span id="line-241">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;keys&lt;/jv&gt; = &lt;jv&gt;table&lt;/jv&gt;.keys();</span>
+<span class="source-line-no">242</span><span id="line-242">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;keys&lt;/jv&gt;, &lt;js&gt;"key1"&lt;/js&gt;);</span>
+<span class="source-line-no">243</span><span id="line-243">    * &lt;/p&gt;</span>
+<span class="source-line-no">244</span><span id="line-244">    *</span>
+<span class="source-line-no">245</span><span id="line-245">    * @return A {@link Listifier} for {@link Enumeration} objects</span>
+<span class="source-line-no">246</span><span id="line-246">    * @see Enumeration</span>
+<span class="source-line-no">247</span><span id="line-247">    */</span>
+<span class="source-line-no">248</span><span id="line-248">   public static Listifier&lt;Enumeration&gt; enumerationListifier() {</span>
+<span class="source-line-no">249</span><span id="line-249">      return (bc, enumeration) -&gt; list(enumeration);</span>
+<span class="source-line-no">250</span><span id="line-250">   }</span>
+<span class="source-line-no">251</span><span id="line-251"></span>
+<span class="source-line-no">252</span><span id="line-252">   /**</span>
+<span class="source-line-no">253</span><span id="line-253">    * Returns a listifier for {@link Stream} objects that converts them to lists.</span>
+<span class="source-line-no">254</span><span id="line-254">    *</span>
+<span class="source-line-no">255</span><span id="line-255">    * &lt;p&gt;&lt;b&gt;Warning:&lt;/b&gt; This listifier terminates the stream during conversion. After listification,</span>
+<span class="source-line-no">256</span><span id="line-256">    * the stream is closed and cannot be used again.&lt;/p&gt;</span>
+<span class="source-line-no">257</span><span id="line-257">    *</span>
+<span class="source-line-no">258</span><span id="line-258">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">259</span><span id="line-259">    * &lt;ul&gt;</span>
+<span class="source-line-no">260</span><span id="line-260">    *    &lt;li&gt;&lt;b&gt;Stream termination:&lt;/b&gt; Calls toList() to collect all stream elements&lt;/li&gt;</span>
+<span class="source-line-no">261</span><span id="line-261">    *    &lt;li&gt;&lt;b&gt;Order preservation:&lt;/b&gt; Maintains stream order in the resulting list&lt;/li&gt;</span>
+<span class="source-line-no">262</span><span id="line-262">    *    &lt;li&gt;&lt;b&gt;Stream closure:&lt;/b&gt; The stream becomes unusable after conversion&lt;/li&gt;</span>
+<span class="source-line-no">263</span><span id="line-263">    * &lt;/ul&gt;</span>
+<span class="source-line-no">264</span><span id="line-264">    *</span>
+<span class="source-line-no">265</span><span id="line-265">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">266</span><span id="line-266">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">267</span><span id="line-267">    *    &lt;jc&gt;// Test with filtered stream&lt;/jc&gt;</span>
+<span class="source-line-no">268</span><span id="line-268">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;numbers&lt;/jv&gt; = IntStream.&lt;jsm&gt;range&lt;/jsm&gt;(&lt;jv&gt;1&lt;/jv&gt;, &lt;jv&gt;10&lt;/jv&gt;)</span>
+<span class="source-line-no">269</span><span id="line-269">    *       .filter(&lt;jv&gt;n&lt;/jv&gt; -&amp;gt; &lt;jv&gt;n&lt;/jv&gt; % &lt;jv&gt;2&lt;/jv&gt; == &lt;jv&gt;0&lt;/jv&gt;)</span>
+<span class="source-line-no">270</span><span id="line-270">    *       .boxed();</span>
+<span class="source-line-no">271</span><span id="line-271">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;numbers&lt;/jv&gt;, &lt;jv&gt;2&lt;/jv&gt;, &lt;jv&gt;4&lt;/jv&gt;, &lt;jv&gt;6&lt;/jv&gt;, &lt;jv&gt;8&lt;/jv&gt;);</span>
+<span class="source-line-no">272</span><span id="line-272">    *</span>
+<span class="source-line-no">273</span><span id="line-273">    *    &lt;jc&gt;// Test with mapped stream&lt;/jc&gt;</span>
+<span class="source-line-no">274</span><span id="line-274">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;words&lt;/jv&gt; = Stream.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;, &lt;js&gt;"world"&lt;/js&gt;)</span>
+<span class="source-line-no">275</span><span id="line-275">    *       .map(String::toUpperCase);</span>
+<span class="source-line-no">276</span><span id="line-276">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jv&gt;words&lt;/jv&gt;, &lt;js&gt;"HELLO"&lt;/js&gt;, &lt;js&gt;"WORLD"&lt;/js&gt;);</span>
+<span class="source-line-no">277</span><span id="line-277">    * &lt;/p&gt;</span>
+<span class="source-line-no">278</span><span id="line-278">    *</span>
+<span class="source-line-no">279</span><span id="line-279">    * &lt;h5 class='section'&gt;Important Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">280</span><span id="line-280">    * &lt;ul&gt;</span>
+<span class="source-line-no">281</span><span id="line-281">    *    &lt;li&gt;&lt;b&gt;One-time use:&lt;/b&gt; The stream is terminated and cannot be reused&lt;/li&gt;</span>
+<span class="source-line-no">282</span><span id="line-282">    *    &lt;li&gt;&lt;b&gt;Lazy evaluation:&lt;/b&gt; Stream operations are executed during listification&lt;/li&gt;</span>
+<span class="source-line-no">283</span><span id="line-283">    *    &lt;li&gt;&lt;b&gt;Exception handling:&lt;/b&gt; Stream operation exceptions are propagated&lt;/li&gt;</span>
+<span class="source-line-no">284</span><span id="line-284">    * &lt;/ul&gt;</span>
+<span class="source-line-no">285</span><span id="line-285">    *</span>
+<span class="source-line-no">286</span><span id="line-286">    * @return A {@link Listifier} for {@link Stream} objects</span>
+<span class="source-line-no">287</span><span id="line-287">    * @see Stream</span>
+<span class="source-line-no">288</span><span id="line-288">    */</span>
+<span class="source-line-no">289</span><span id="line-289">   public static Listifier&lt;Stream&gt; streamListifier() {</span>
+<span class="source-line-no">290</span><span id="line-290">      return (bc, stream) -&gt; stream.toList();</span>
+<span class="source-line-no">291</span><span id="line-291">   }</span>
+<span class="source-line-no">292</span><span id="line-292"></span>
+<span class="source-line-no">293</span><span id="line-293">   /**</span>
+<span class="source-line-no">294</span><span id="line-294">    * Returns a listifier for {@link Map} objects that converts them to lists of {@link Map.Entry} objects.</span>
+<span class="source-line-no">295</span><span id="line-295">    *</span>
+<span class="source-line-no">296</span><span id="line-296">    * &lt;p&gt;This listifier enables maps to be processed as lists in BCT assertions, making it easy</span>
+<span class="source-line-no">297</span><span id="line-297">    * to test map contents using list-based assertion methods.&lt;/p&gt;</span>
+<span class="source-line-no">298</span><span id="line-298">    *</span>
+<span class="source-line-no">299</span><span id="line-299">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">300</span><span id="line-300">    * &lt;ul&gt;</span>
+<span class="source-line-no">301</span><span id="line-301">    *    &lt;li&gt;&lt;b&gt;Entry conversion:&lt;/b&gt; Each key-value pair becomes a Map.Entry in the list&lt;/li&gt;</span>
+<span class="source-line-no">302</span><span id="line-302">    *    &lt;li&gt;&lt;b&gt;Order preservation:&lt;/b&gt; Maintains the map's iteration order&lt;/li&gt;</span>
+<span class="source-line-no">303</span><span id="line-303">    *    &lt;li&gt;&lt;b&gt;Empty maps:&lt;/b&gt; Returns empty list for empty maps&lt;/li&gt;</span>
+<span class="source-line-no">304</span><span id="line-304">    *    &lt;li&gt;&lt;b&gt;Map ordering:&lt;/b&gt; Converts unordered Maps (HashMap, etc.) to TreeMap for deterministic ordering&lt;/li&gt;</span>
+<span class="source-line-no">305</span><span id="line-305">    * &lt;/ul&gt;</span>
+<span class="source-line-no">306</span><span id="line-306">    *</span>
+<span class="source-line-no">307</span><span id="line-307">    * &lt;h5 class='section'&gt;Map Ordering Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">308</span><span id="line-308">    * &lt;p&gt;To ensure predictable test results, this listifier handles Maps with unreliable ordering:&lt;/p&gt;</span>
+<span class="source-line-no">309</span><span id="line-309">    * &lt;ul&gt;</span>
+<span class="source-line-no">310</span><span id="line-310">    *    &lt;li&gt;&lt;b&gt;{@link SortedMap} (TreeMap, etc.):&lt;/b&gt; Preserves existing sort order&lt;/li&gt;</span>
+<span class="source-line-no">311</span><span id="line-311">    *    &lt;li&gt;&lt;b&gt;{@link LinkedHashMap}:&lt;/b&gt; Preserves insertion order&lt;/li&gt;</span>
+<span class="source-line-no">312</span><span id="line-312">    *    &lt;li&gt;&lt;b&gt;{@link HashMap} and other unordered Maps:&lt;/b&gt; Converts to {@link TreeMap} for natural key ordering&lt;/li&gt;</span>
+<span class="source-line-no">313</span><span id="line-313">    * &lt;/ul&gt;</span>
+<span class="source-line-no">314</span><span id="line-314">    *</span>
+<span class="source-line-no">315</span><span id="line-315">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">316</span><span id="line-316">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">317</span><span id="line-317">    *    &lt;jc&gt;// Test map contents with deterministic ordering&lt;/jc&gt;</span>
+<span class="source-line-no">318</span><span id="line-318">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;map&lt;/jv&gt; = Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"z"&lt;/js&gt;, &lt;js&gt;"value1"&lt;/js&gt;, &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"value2"&lt;/js&gt;);</span>
+<span class="source-line-no">319</span><span id="line-319">    *    &lt;jsm&gt;assertSize&lt;/jsm&gt;(&lt;jv&gt;map&lt;/jv&gt;, &lt;jv&gt;2&lt;/jv&gt;);</span>
+<span class="source-line-no">320</span><span id="line-320">    *    &lt;jc&gt;// Entries will be ordered by key: [a=value2, z=value1]&lt;/jc&gt;</span>
+<span class="source-line-no">321</span><span id="line-321">    *</span>
+<span class="source-line-no">322</span><span id="line-322">    *    &lt;jc&gt;// LinkedHashMap preserves insertion order&lt;/jc&gt;</span>
+<span class="source-line-no">323</span><span id="line-323">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;linkedMap&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LinkedHashMap&amp;lt;&amp;gt;();</span>
+<span class="source-line-no">324</span><span id="line-324">    *    &lt;jv&gt;linkedMap&lt;/jv&gt;.put(&lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"1"&lt;/js&gt;);</span>
+<span class="source-line-no">325</span><span id="line-325">    *    &lt;jv&gt;linkedMap&lt;/jv&gt;.put(&lt;js&gt;"second"&lt;/js&gt;, &lt;js&gt;"2"&lt;/js&gt;);</span>
+<span class="source-line-no">326</span><span id="line-326">    *    &lt;jc&gt;// Entries will maintain insertion order: [first=1, second=2]&lt;/jc&gt;</span>
 <span class="source-line-no">327</span><span id="line-327">    *</span>
-<span class="source-line-no">328</span><span id="line-328">    *    &lt;jc&gt;// Test map in object property&lt;/jc&gt;</span>
-<span class="source-line-no">329</span><span id="line-329">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;config&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Configuration().setProperties(&lt;jv&gt;map&lt;/jv&gt;);</span>
-<span class="source-line-no">330</span><span id="line-330">    *    &lt;jsm&gt;assertSize&lt;/jsm&gt;(&lt;jv&gt;config&lt;/jv&gt;, &lt;js&gt;"properties"&lt;/js&gt;, &lt;jv&gt;2&lt;/jv&gt;);</span>
-<span class="source-line-no">331</span><span id="line-331">    * &lt;/p&gt;</span>
-<span class="source-line-no">332</span><span id="line-332">    *</span>
-<span class="source-line-no">333</span><span id="line-333">    * &lt;h5 class='section'&gt;Entry Processing:&lt;/h5&gt;</span>
-<span class="source-line-no">334</span><span id="line-334">    * &lt;p&gt;The resulting Map.Entry objects can be further processed by other parts of the</span>
-<span class="source-line-no">335</span><span id="line-335">    * conversion system, typically being stringified to &lt;js&gt;"key=value"&lt;/js&gt; format.&lt;/p&gt;</span>
+<span class="source-line-no">328</span><span id="line-328">    *    &lt;jc&gt;// Test empty map&lt;/jc&gt;</span>
+<span class="source-line-no">329</span><span id="line-329">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;emptyMap&lt;/jv&gt; = Map.&lt;jsm&gt;of&lt;/jsm&gt;();</span>
+<span class="source-line-no">330</span><span id="line-330">    *    &lt;jsm&gt;assertEmpty&lt;/jsm&gt;(&lt;jv&gt;emptyMap&lt;/jv&gt;);</span>
+<span class="source-line-no">331</span><span id="line-331">    *</span>
+<span class="source-line-no">332</span><span id="line-332">    *    &lt;jc&gt;// Test map in object property&lt;/jc&gt;</span>
+<span class="source-line-no">333</span><span id="line-333">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;config&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Configuration().setProperties(&lt;jv&gt;map&lt;/jv&gt;);</span>
+<span class="source-line-no">334</span><span id="line-334">    *    &lt;jsm&gt;assertSize&lt;/jsm&gt;(&lt;jv&gt;config&lt;/jv&gt;, &lt;js&gt;"properties"&lt;/js&gt;, &lt;jv&gt;2&lt;/jv&gt;);</span>
+<span class="source-line-no">335</span><span id="line-335">    * &lt;/p&gt;</span>
 <span class="source-line-no">336</span><span id="line-336">    *</span>
-<span class="source-line-no">337</span><span id="line-337">    * &lt;h5 class='section'&gt;Performance:&lt;/h5&gt;</span>
-<span class="source-line-no">338</span><span id="line-338">    * &lt;p&gt;This listifier creates a new ArrayList from the map's entrySet. For unordered Maps,</span>
-<span class="source-line-no">339</span><span id="line-339">    * an additional TreeMap conversion adds O(n log n) sorting overhead based on key ordering.</span>
-<span class="source-line-no">340</span><span id="line-340">    * For large maps, consider the memory implications.&lt;/p&gt;</span>
-<span class="source-line-no">341</span><span id="line-341">    *</span>
-<span class="source-line-no">342</span><span id="line-342">    * @return A {@link Listifier} for {@link Map} objects</span>
-<span class="source-line-no">343</span><span id="line-343">    * @see Map</span>
-<span class="source-line-no">344</span><span id="line-344">    * @see Map.Entry</span>
-<span class="source-line-no">345</span><span id="line-345">    * @see TreeMap</span>
-<span class="source-line-no">346</span><span id="line-346">    * @see LinkedHashMap</span>
-<span class="source-line-no">347</span><span id="line-347">    */</span>
-<span class="source-line-no">348</span><span id="line-348">   public static Listifier&lt;Map&gt; mapListifier() {</span>
-<span class="source-line-no">349</span><span id="line-349">      return (bc, map) -&gt; {</span>
-<span class="source-line-no">350</span><span id="line-350">         if (!(map instanceof SortedMap) &amp;&amp; !(map instanceof LinkedHashMap)) {</span>
-<span class="source-line-no">351</span><span id="line-351">            map = new TreeMap&lt;&gt;(map);</span>
-<span class="source-line-no">352</span><span id="line-352">         }</span>
-<span class="source-line-no">353</span><span id="line-353">         return new ArrayList&lt;&gt;(map.entrySet());</span>
-<span class="source-line-no">354</span><span id="line-354">      };</span>
-<span class="source-line-no">355</span><span id="line-355">   }</span>
-<span class="source-line-no">356</span><span id="line-356">}</span>
+<span class="source-line-no">337</span><span id="line-337">    * &lt;h5 class='section'&gt;Entry Processing:&lt;/h5&gt;</span>
+<span class="source-line-no">338</span><span id="line-338">    * &lt;p&gt;The resulting Map.Entry objects can be further processed by other parts of the</span>
+<span class="source-line-no">339</span><span id="line-339">    * conversion system, typically being stringified to &lt;js&gt;"key=value"&lt;/js&gt; format.&lt;/p&gt;</span>
+<span class="source-line-no">340</span><span id="line-340">    *</span>
+<span class="source-line-no">341</span><span id="line-341">    * &lt;h5 class='section'&gt;Performance:&lt;/h5&gt;</span>
+<span class="source-line-no">342</span><span id="line-342">    * &lt;p&gt;This listifier creates a new ArrayList from the map's entrySet. For unordered Maps,</span>
+<span class="source-line-no">343</span><span id="line-343">    * an additional TreeMap conversion adds O(n log n) sorting overhead based on key ordering.</span>
+<span class="source-line-no">344</span><span id="line-344">    * For large maps, consider the memory implications.&lt;/p&gt;</span>
+<span class="source-line-no">345</span><span id="line-345">    *</span>
+<span class="source-line-no">346</span><span id="line-346">    * @return A {@link Listifier} for {@link Map} objects</span>
+<span class="source-line-no">347</span><span id="line-347">    * @see Map</span>
+<span class="source-line-no">348</span><span id="line-348">    * @see Map.Entry</span>
+<span class="source-line-no">349</span><span id="line-349">    * @see TreeMap</span>
+<span class="source-line-no">350</span><span id="line-350">    * @see LinkedHashMap</span>
+<span class="source-line-no">351</span><span id="line-351">    */</span>
+<span class="source-line-no">352</span><span id="line-352">   public static Listifier&lt;Map&gt; mapListifier() {</span>
+<span class="source-line-no">353</span><span id="line-353">      return (bc, map) -&gt; {</span>
+<span class="source-line-no">354</span><span id="line-354">         if (!(map instanceof SortedMap) &amp;&amp; !(map instanceof LinkedHashMap)) {</span>
+<span class="source-line-no">355</span><span id="line-355">            map = new TreeMap&lt;&gt;(map);</span>
+<span class="source-line-no">356</span><span id="line-356">         }</span>
+<span class="source-line-no">357</span><span id="line-357">         return new ArrayList&lt;&gt;(map.entrySet());</span>
+<span class="source-line-no">358</span><span id="line-358">      };</span>
+<span class="source-line-no">359</span><span id="line-359">   }</span>
+<span class="source-line-no">360</span><span id="line-360">}</span>
 
 
 

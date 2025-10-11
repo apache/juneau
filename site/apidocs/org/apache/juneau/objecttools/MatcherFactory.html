@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="NumberMatcherFactory.html" title="class in org.apache.juneau.objecttools">NumberMatcherFactory</a></code>, <code><a href="StringMatcherFactory.html" title="class in org.apache.juneau.objecttools">StringMatcherFactory</a></code>, <code><a href="TimeMatcherFactory.html" title="class in org.apache.juneau.objecttools">TimeMatcherFactory</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/MatcherFactory.html#line-24">MatcherFactory</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/MatcherFactory.html#line-28">MatcherFactory</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Common interface for matchers used by the <a href="ObjectSearcher.html" title="class in org.apache.juneau.objecttools"><code>ObjectSearcher</code></a> class.
 
@@ -146,7 +146,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>MatcherFactory</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/MatcherFactory.html#line-24">MatcherFactory</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/MatcherFactory.html#line-28">MatcherFactory</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -160,7 +160,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="canMatch(org.apache.juneau.ClassMeta)">
 <h3>canMatch</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/MatcherFactory.html#line-32">canMatch</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/MatcherFactory.html#line-36">canMatch</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Returns <jk>true</jk> if this matcher can be used on the specified object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -173,7 +173,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(java.lang.String)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="AbstractMatcher.html" title="class in org.apache.juneau.objecttools">AbstractMatcher</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/MatcherFactory.html#line-40">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern)</span></div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="AbstractMatcher.html" title="class in org.apache.juneau.objecttools">AbstractMatcher</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/objecttools/MatcherFactory.html#line-44">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern)</span></div>
 <div class="block">Instantiates a matcher for the specified pattern.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

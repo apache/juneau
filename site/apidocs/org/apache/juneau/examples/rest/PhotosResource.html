@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.config">DefaultConfig</a></code>, <code><a href="../../rest/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.config">DefaultHtmlConfig</a></code>, <code><a href="../../rest/servlet/BasicRestOperations.html" title="interface in org.apache.juneau.rest.servlet">BasicRestOperations</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-38">PhotosResource</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-42">PhotosResource</a></span>
 <span class="extends-implements">extends <a href="../../rest/servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.servlet">BasicRestServlet</a></span></div>
 <div class="block">Sample resource that allows images to be uploaded and retrieved.
 
@@ -223,7 +223,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>PhotosResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-61">PhotosResource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-65">PhotosResource</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -237,7 +237,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAllPhotos()">
 <h3>getAllPhotos</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="PhotosResource.Photo.html" title="class in org.apache.juneau.examples.rest">PhotosResource.Photo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-107">getAllPhotos</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="PhotosResource.Photo.html" title="class in org.apache.juneau.examples.rest">PhotosResource.Photo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-111">getAllPhotos</a></span>()</div>
 <div class="block">[HTTP GET /photos]
  GET request handler for list of all photos.</div>
 <dl class="notes">
@@ -249,7 +249,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPhoto(int)">
 <h3>getPhoto</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/awt/image/BufferedImage.html" title="class or interface in java.awt.image" class="external-link">BufferedImage</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-120">getPhoto</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Path.html" title="annotation interface in org.apache.juneau.http.annotation">@Path</a>("id")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/awt/image/BufferedImage.html" title="class or interface in java.awt.image" class="external-link">BufferedImage</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-124">getPhoto</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Path.html" title="annotation interface in org.apache.juneau.http.annotation">@Path</a>("id")
  int&nbsp;id)</span>
                        throws <span class="exceptions"><a href="../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></span></div>
 <div class="block">[HTTP GET /photos/{id}]
@@ -267,7 +267,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addPhoto(int,java.awt.image.BufferedImage)">
 <h3>addPhoto</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/response/Ok.html" title="class in org.apache.juneau.http.response">Ok</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-136">addPhoto</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Path.html" title="annotation interface in org.apache.juneau.http.annotation">@Path</a>("id")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/response/Ok.html" title="class in org.apache.juneau.http.response">Ok</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-140">addPhoto</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Path.html" title="annotation interface in org.apache.juneau.http.annotation">@Path</a>("id")
  int&nbsp;id,
  <a href="../../http/annotation/Content.html" title="annotation interface in org.apache.juneau.http.annotation">@Content</a>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/awt/image/BufferedImage.html" title="class or interface in java.awt.image" class="external-link">BufferedImage</a>&nbsp;image)</span></div>
@@ -285,7 +285,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setPhoto(java.awt.image.BufferedImage)">
 <h3>setPhoto</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PhotosResource.Photo.html" title="class in org.apache.juneau.examples.rest">PhotosResource.Photo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-149">setPhoto</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Content.html" title="annotation interface in org.apache.juneau.http.annotation">@Content</a>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PhotosResource.Photo.html" title="class in org.apache.juneau.examples.rest">PhotosResource.Photo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-153">setPhoto</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Content.html" title="annotation interface in org.apache.juneau.http.annotation">@Content</a>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/awt/image/BufferedImage.html" title="class or interface in java.awt.image" class="external-link">BufferedImage</a>&nbsp;image)</span></div>
 <div class="block">[HTTP POST /photos]
  POST request handler.</div>
@@ -300,7 +300,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="deletePhoto(int)">
 <h3>deletePhoto</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/response/Ok.html" title="class in org.apache.juneau.http.response">Ok</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-165">deletePhoto</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Path.html" title="annotation interface in org.apache.juneau.http.annotation">@Path</a>("id")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/response/Ok.html" title="class in org.apache.juneau.http.response">Ok</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/rest/PhotosResource.html#line-169">deletePhoto</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Path.html" title="annotation interface in org.apache.juneau.http.annotation">@Path</a>("id")
  int&nbsp;id)</span>
                throws <span class="exceptions"><a href="../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></span></div>
 <div class="block">[HTTP DELETE /photos/{id}]

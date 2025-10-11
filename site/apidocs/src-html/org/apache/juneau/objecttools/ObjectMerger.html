@@ -11,158 +11,162 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.objecttools;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import java.lang.reflect.*;</span>
-<span class="source-line-no">016</span><span id="line-16"></span>
-<span class="source-line-no">017</span><span id="line-17">import org.apache.juneau.*;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.objecttools;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">/**</span>
-<span class="source-line-no">020</span><span id="line-20"> * POJO merger.</span>
-<span class="source-line-no">021</span><span id="line-21"> *</span>
-<span class="source-line-no">022</span><span id="line-22"> * &lt;p&gt;</span>
-<span class="source-line-no">023</span><span id="line-23"> * Useful in cases where you want to define beans with 'default' values.</span>
-<span class="source-line-no">024</span><span id="line-24"> *</span>
-<span class="source-line-no">025</span><span id="line-25"> * &lt;p&gt;</span>
-<span class="source-line-no">026</span><span id="line-26"> * For example, given the following bean classes...</span>
-<span class="source-line-no">027</span><span id="line-27"> *</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> *    &lt;jk&gt;public interface&lt;/jk&gt; IA {</span>
-<span class="source-line-no">030</span><span id="line-30"> *       String getX();</span>
-<span class="source-line-no">031</span><span id="line-31"> *       &lt;jk&gt;void&lt;/jk&gt; setX(String &lt;jv&gt;x&lt;/jv&gt;);</span>
-<span class="source-line-no">032</span><span id="line-32"> *    }</span>
-<span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> *    &lt;jk&gt;public class&lt;/jk&gt; A &lt;jk&gt;implements&lt;/jk&gt; IA {</span>
-<span class="source-line-no">035</span><span id="line-35"> *       &lt;jk&gt;private&lt;/jk&gt; String &lt;jf&gt;x&lt;/jf&gt;;</span>
-<span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> *       &lt;jk&gt;public&lt;/jk&gt; A(String &lt;jv&gt;x&lt;/jv&gt;) {</span>
-<span class="source-line-no">038</span><span id="line-38"> *          &lt;jk&gt;this&lt;/jk&gt;.&lt;jf&gt;x&lt;/jf&gt; = &lt;jv&gt;x&lt;/jv&gt;;</span>
-<span class="source-line-no">039</span><span id="line-39"> *       }</span>
+<span class="source-line-no">019</span><span id="line-19">import java.lang.reflect.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">/**</span>
+<span class="source-line-no">024</span><span id="line-24"> * POJO merger.</span>
+<span class="source-line-no">025</span><span id="line-25"> *</span>
+<span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
+<span class="source-line-no">027</span><span id="line-27"> * Useful in cases where you want to define beans with 'default' values.</span>
+<span class="source-line-no">028</span><span id="line-28"> *</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * For example, given the following bean classes...</span>
+<span class="source-line-no">031</span><span id="line-31"> *</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> *    &lt;jk&gt;public interface&lt;/jk&gt; IA {</span>
+<span class="source-line-no">034</span><span id="line-34"> *       String getX();</span>
+<span class="source-line-no">035</span><span id="line-35"> *       &lt;jk&gt;void&lt;/jk&gt; setX(String &lt;jv&gt;x&lt;/jv&gt;);</span>
+<span class="source-line-no">036</span><span id="line-36"> *    }</span>
+<span class="source-line-no">037</span><span id="line-37"> *</span>
+<span class="source-line-no">038</span><span id="line-38"> *    &lt;jk&gt;public class&lt;/jk&gt; A &lt;jk&gt;implements&lt;/jk&gt; IA {</span>
+<span class="source-line-no">039</span><span id="line-39"> *       &lt;jk&gt;private&lt;/jk&gt; String &lt;jf&gt;x&lt;/jf&gt;;</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> *       &lt;jk&gt;public&lt;/jk&gt; String getX() {</span>
-<span class="source-line-no">042</span><span id="line-42"> *          &lt;jk&gt;return&lt;/jk&gt; &lt;jf&gt;x&lt;/jf&gt;;</span>
+<span class="source-line-no">041</span><span id="line-41"> *       &lt;jk&gt;public&lt;/jk&gt; A(String &lt;jv&gt;x&lt;/jv&gt;) {</span>
+<span class="source-line-no">042</span><span id="line-42"> *          &lt;jk&gt;this&lt;/jk&gt;.&lt;jf&gt;x&lt;/jf&gt; = &lt;jv&gt;x&lt;/jv&gt;;</span>
 <span class="source-line-no">043</span><span id="line-43"> *       }</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> *       &lt;jk&gt;public void&lt;/jk&gt; setX(String &lt;jv&gt;x&lt;/jv&gt;) {</span>
-<span class="source-line-no">046</span><span id="line-46"> *          &lt;jk&gt;this&lt;/jk&gt;.&lt;jf&gt;x&lt;/jf&gt; = &lt;jv&gt;x&lt;/jv&gt;;</span>
+<span class="source-line-no">045</span><span id="line-45"> *       &lt;jk&gt;public&lt;/jk&gt; String getX() {</span>
+<span class="source-line-no">046</span><span id="line-46"> *          &lt;jk&gt;return&lt;/jk&gt; &lt;jf&gt;x&lt;/jf&gt;;</span>
 <span class="source-line-no">047</span><span id="line-47"> *       }</span>
-<span class="source-line-no">048</span><span id="line-48"> *    }</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;/p&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> *</span>
-<span class="source-line-no">051</span><span id="line-51"> * &lt;p&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> * The getters will be called in order until the first non-null value is returned...</span>
-<span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> *    &lt;jv&gt;merge&lt;/jv&gt; = ObjectMerger.&lt;jsm&gt;merger&lt;/jsm&gt;(IA.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;new&lt;/jk&gt; A(&lt;js&gt;"1"&lt;/js&gt;), &lt;jk&gt;new&lt;/jk&gt; A(&lt;js&gt;"2"&lt;/js&gt;));</span>
-<span class="source-line-no">056</span><span id="line-56"> *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;js&gt;"1"&lt;/js&gt;, &lt;jv&gt;merge&lt;/jv&gt;.getX());</span>
+<span class="source-line-no">048</span><span id="line-48"> *</span>
+<span class="source-line-no">049</span><span id="line-49"> *       &lt;jk&gt;public void&lt;/jk&gt; setX(String &lt;jv&gt;x&lt;/jv&gt;) {</span>
+<span class="source-line-no">050</span><span id="line-50"> *          &lt;jk&gt;this&lt;/jk&gt;.&lt;jf&gt;x&lt;/jf&gt; = &lt;jv&gt;x&lt;/jv&gt;;</span>
+<span class="source-line-no">051</span><span id="line-51"> *       }</span>
+<span class="source-line-no">052</span><span id="line-52"> *    }</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;/p&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> *</span>
+<span class="source-line-no">055</span><span id="line-55"> * &lt;p&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * The getters will be called in order until the first non-null value is returned...</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> *    &lt;jv&gt;merge&lt;/jv&gt; = ObjectMerger.&lt;jsm&gt;merger&lt;/jsm&gt;(IA.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;new&lt;/jk&gt; A(&lt;jk&gt;null&lt;/jk&gt;), &lt;jk&gt;new&lt;/jk&gt; A(&lt;js&gt;"2"&lt;/js&gt;));</span>
-<span class="source-line-no">059</span><span id="line-59"> *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;js&gt;"2"&lt;/js&gt;, &lt;jv&gt;merge&lt;/jv&gt;.getX());</span>
-<span class="source-line-no">060</span><span id="line-60"> *</span>
-<span class="source-line-no">061</span><span id="line-61"> *    &lt;jv&gt;merge&lt;/jv&gt; = ObjectMerger.&lt;jsm&gt;merger&lt;/jsm&gt;(IA.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;new&lt;/jk&gt; A(&lt;jk&gt;null&lt;/jk&gt;), &lt;jk&gt;new&lt;/jk&gt; A(&lt;jk&gt;null&lt;/jk&gt;));</span>
-<span class="source-line-no">062</span><span id="line-62"> *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;jk&gt;null&lt;/jk&gt;, &lt;jv&gt;merge&lt;/jv&gt;.getX());</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;/p&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> *    &lt;jv&gt;merge&lt;/jv&gt; = ObjectMerger.&lt;jsm&gt;merger&lt;/jsm&gt;(IA.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;new&lt;/jk&gt; A(&lt;js&gt;"1"&lt;/js&gt;), &lt;jk&gt;new&lt;/jk&gt; A(&lt;js&gt;"2"&lt;/js&gt;));</span>
+<span class="source-line-no">060</span><span id="line-60"> *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;js&gt;"1"&lt;/js&gt;, &lt;jv&gt;merge&lt;/jv&gt;.getX());</span>
+<span class="source-line-no">061</span><span id="line-61"> *</span>
+<span class="source-line-no">062</span><span id="line-62"> *    &lt;jv&gt;merge&lt;/jv&gt; = ObjectMerger.&lt;jsm&gt;merger&lt;/jsm&gt;(IA.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;new&lt;/jk&gt; A(&lt;jk&gt;null&lt;/jk&gt;), &lt;jk&gt;new&lt;/jk&gt; A(&lt;js&gt;"2"&lt;/js&gt;));</span>
+<span class="source-line-no">063</span><span id="line-63"> *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;js&gt;"2"&lt;/js&gt;, &lt;jv&gt;merge&lt;/jv&gt;.getX());</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *       Null POJOs are ignored.</span>
-<span class="source-line-no">068</span><span id="line-68"> *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> *       Non-getter methods are either invoked on the first POJO or all POJOs depending on the &lt;c&gt;callAllNonGetters&lt;/c&gt; flag</span>
-<span class="source-line-no">070</span><span id="line-70"> *       passed into the constructor.</span>
-<span class="source-line-no">071</span><span id="line-71"> *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">072</span><span id="line-72"> *       For purposes of this interface, a getter is any method with zero arguments and a non-&lt;c&gt;void&lt;/c&gt; return type.</span>
-<span class="source-line-no">073</span><span id="line-73"> * &lt;/ul&gt;</span>
-<span class="source-line-no">074</span><span id="line-74"> *</span>
-<span class="source-line-no">075</span><span id="line-75"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">076</span><span id="line-76"> * &lt;/ul&gt;</span>
-<span class="source-line-no">077</span><span id="line-77"> */</span>
-<span class="source-line-no">078</span><span id="line-78">public class ObjectMerger {</span>
-<span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">   /**</span>
-<span class="source-line-no">081</span><span id="line-81">    * Create a proxy interface on top of zero or more POJOs.</span>
-<span class="source-line-no">082</span><span id="line-82">    *</span>
-<span class="source-line-no">083</span><span id="line-83">    * &lt;p&gt;</span>
-<span class="source-line-no">084</span><span id="line-84">    * This is a shortcut to calling &lt;code&gt;merge(interfaceClass, &lt;jk&gt;false&lt;/jk&gt;, pojos);&lt;/code&gt;</span>
-<span class="source-line-no">085</span><span id="line-85">    *</span>
-<span class="source-line-no">086</span><span id="line-86">    * @param &lt;T&gt; The pojo types.</span>
-<span class="source-line-no">087</span><span id="line-87">    * @param interfaceClass The common interface class.</span>
-<span class="source-line-no">088</span><span id="line-88">    * @param pojos</span>
-<span class="source-line-no">089</span><span id="line-89">    *    Zero or more POJOs to merge.</span>
-<span class="source-line-no">090</span><span id="line-90">    *    &lt;br&gt;Can contain nulls.</span>
-<span class="source-line-no">091</span><span id="line-91">    * @return A proxy interface over the merged POJOs.</span>
-<span class="source-line-no">092</span><span id="line-92">    */</span>
-<span class="source-line-no">093</span><span id="line-93">   @SuppressWarnings("unchecked")</span>
-<span class="source-line-no">094</span><span id="line-94">   public static &lt;T&gt; T merge(Class&lt;T&gt; interfaceClass, T...pojos) {</span>
-<span class="source-line-no">095</span><span id="line-95">      return merge(interfaceClass, false, pojos);</span>
-<span class="source-line-no">096</span><span id="line-96">   }</span>
-<span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">   /**</span>
-<span class="source-line-no">099</span><span id="line-99">    * Create a proxy interface on top of zero or more POJOs.</span>
-<span class="source-line-no">100</span><span id="line-100">    *</span>
-<span class="source-line-no">101</span><span id="line-101">    * @param &lt;T&gt; The pojo types.</span>
-<span class="source-line-no">102</span><span id="line-102">    * @param interfaceClass The common interface class.</span>
-<span class="source-line-no">103</span><span id="line-103">    * @param callAllNonGetters</span>
-<span class="source-line-no">104</span><span id="line-104">    *    If &lt;jk&gt;true&lt;/jk&gt;, when calling a method that's not a getter, the method will be invoked on all POJOs.</span>
-<span class="source-line-no">105</span><span id="line-105">    *    &lt;br&gt;Otherwise, the method will only be called on the first POJO.</span>
-<span class="source-line-no">106</span><span id="line-106">    * @param pojos</span>
-<span class="source-line-no">107</span><span id="line-107">    *    Zero or more POJOs to merge.</span>
-<span class="source-line-no">108</span><span id="line-108">    *    &lt;br&gt;Can contain nulls.</span>
-<span class="source-line-no">109</span><span id="line-109">    * @return A proxy interface over the merged POJOs.</span>
-<span class="source-line-no">110</span><span id="line-110">    */</span>
-<span class="source-line-no">111</span><span id="line-111">   @SuppressWarnings("unchecked")</span>
-<span class="source-line-no">112</span><span id="line-112">   public static &lt;T&gt; T merge(Class&lt;T&gt; interfaceClass, boolean callAllNonGetters, T...pojos) {</span>
-<span class="source-line-no">113</span><span id="line-113">      return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] { interfaceClass }, new MergeInvocationHandler(callAllNonGetters, pojos));</span>
-<span class="source-line-no">114</span><span id="line-114">   }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   private static class MergeInvocationHandler implements InvocationHandler {</span>
-<span class="source-line-no">117</span><span id="line-117">      private final Object[] pojos;</span>
-<span class="source-line-no">118</span><span id="line-118">      private final boolean callAllNonGetters;</span>
+<span class="source-line-no">065</span><span id="line-65"> *    &lt;jv&gt;merge&lt;/jv&gt; = ObjectMerger.&lt;jsm&gt;merger&lt;/jsm&gt;(IA.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;new&lt;/jk&gt; A(&lt;jk&gt;null&lt;/jk&gt;), &lt;jk&gt;new&lt;/jk&gt; A(&lt;jk&gt;null&lt;/jk&gt;));</span>
+<span class="source-line-no">066</span><span id="line-66"> *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;jk&gt;null&lt;/jk&gt;, &lt;jv&gt;merge&lt;/jv&gt;.getX());</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;/p&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> *       Null POJOs are ignored.</span>
+<span class="source-line-no">072</span><span id="line-72"> *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> *       Non-getter methods are either invoked on the first POJO or all POJOs depending on the &lt;c&gt;callAllNonGetters&lt;/c&gt; flag</span>
+<span class="source-line-no">074</span><span id="line-74"> *       passed into the constructor.</span>
+<span class="source-line-no">075</span><span id="line-75"> *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> *       For purposes of this interface, a getter is any method with zero arguments and a non-&lt;c&gt;void&lt;/c&gt; return type.</span>
+<span class="source-line-no">077</span><span id="line-77"> * &lt;/ul&gt;</span>
+<span class="source-line-no">078</span><span id="line-78"> *</span>
+<span class="source-line-no">079</span><span id="line-79"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> * &lt;/ul&gt;</span>
+<span class="source-line-no">081</span><span id="line-81"> */</span>
+<span class="source-line-no">082</span><span id="line-82">public class ObjectMerger {</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">   /**</span>
+<span class="source-line-no">085</span><span id="line-85">    * Create a proxy interface on top of zero or more POJOs.</span>
+<span class="source-line-no">086</span><span id="line-86">    *</span>
+<span class="source-line-no">087</span><span id="line-87">    * &lt;p&gt;</span>
+<span class="source-line-no">088</span><span id="line-88">    * This is a shortcut to calling &lt;code&gt;merge(interfaceClass, &lt;jk&gt;false&lt;/jk&gt;, pojos);&lt;/code&gt;</span>
+<span class="source-line-no">089</span><span id="line-89">    *</span>
+<span class="source-line-no">090</span><span id="line-90">    * @param &lt;T&gt; The pojo types.</span>
+<span class="source-line-no">091</span><span id="line-91">    * @param interfaceClass The common interface class.</span>
+<span class="source-line-no">092</span><span id="line-92">    * @param pojos</span>
+<span class="source-line-no">093</span><span id="line-93">    *    Zero or more POJOs to merge.</span>
+<span class="source-line-no">094</span><span id="line-94">    *    &lt;br&gt;Can contain nulls.</span>
+<span class="source-line-no">095</span><span id="line-95">    * @return A proxy interface over the merged POJOs.</span>
+<span class="source-line-no">096</span><span id="line-96">    */</span>
+<span class="source-line-no">097</span><span id="line-97">   @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">098</span><span id="line-98">   public static &lt;T&gt; T merge(Class&lt;T&gt; interfaceClass, T...pojos) {</span>
+<span class="source-line-no">099</span><span id="line-99">      return merge(interfaceClass, false, pojos);</span>
+<span class="source-line-no">100</span><span id="line-100">   }</span>
+<span class="source-line-no">101</span><span id="line-101"></span>
+<span class="source-line-no">102</span><span id="line-102">   /**</span>
+<span class="source-line-no">103</span><span id="line-103">    * Create a proxy interface on top of zero or more POJOs.</span>
+<span class="source-line-no">104</span><span id="line-104">    *</span>
+<span class="source-line-no">105</span><span id="line-105">    * @param &lt;T&gt; The pojo types.</span>
+<span class="source-line-no">106</span><span id="line-106">    * @param interfaceClass The common interface class.</span>
+<span class="source-line-no">107</span><span id="line-107">    * @param callAllNonGetters</span>
+<span class="source-line-no">108</span><span id="line-108">    *    If &lt;jk&gt;true&lt;/jk&gt;, when calling a method that's not a getter, the method will be invoked on all POJOs.</span>
+<span class="source-line-no">109</span><span id="line-109">    *    &lt;br&gt;Otherwise, the method will only be called on the first POJO.</span>
+<span class="source-line-no">110</span><span id="line-110">    * @param pojos</span>
+<span class="source-line-no">111</span><span id="line-111">    *    Zero or more POJOs to merge.</span>
+<span class="source-line-no">112</span><span id="line-112">    *    &lt;br&gt;Can contain nulls.</span>
+<span class="source-line-no">113</span><span id="line-113">    * @return A proxy interface over the merged POJOs.</span>
+<span class="source-line-no">114</span><span id="line-114">    */</span>
+<span class="source-line-no">115</span><span id="line-115">   @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">116</span><span id="line-116">   public static &lt;T&gt; T merge(Class&lt;T&gt; interfaceClass, boolean callAllNonGetters, T...pojos) {</span>
+<span class="source-line-no">117</span><span id="line-117">      return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] { interfaceClass }, new MergeInvocationHandler(callAllNonGetters, pojos));</span>
+<span class="source-line-no">118</span><span id="line-118">   }</span>
 <span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">      public MergeInvocationHandler(boolean callAllNonGetters, Object...pojos) {</span>
-<span class="source-line-no">121</span><span id="line-121">         this.callAllNonGetters = callAllNonGetters;</span>
-<span class="source-line-no">122</span><span id="line-122">         this.pojos = pojos;</span>
-<span class="source-line-no">123</span><span id="line-123">      }</span>
-<span class="source-line-no">124</span><span id="line-124"></span>
-<span class="source-line-no">125</span><span id="line-125">      /**</span>
-<span class="source-line-no">126</span><span id="line-126">       * Implemented to handle the method called.</span>
-<span class="source-line-no">127</span><span id="line-127">       * @throws ExecutableException Exception occurred on invoked constructor/method/field.</span>
-<span class="source-line-no">128</span><span id="line-128">       */</span>
-<span class="source-line-no">129</span><span id="line-129">      @Override /* InvocationHandler */</span>
-<span class="source-line-no">130</span><span id="line-130">      public Object invoke(Object proxy, Method method, Object[] args) throws ExecutableException {</span>
-<span class="source-line-no">131</span><span id="line-131">         Object r = null;</span>
-<span class="source-line-no">132</span><span id="line-132">         boolean isGetter = args == null &amp;&amp; method.getReturnType() != Void.class;</span>
-<span class="source-line-no">133</span><span id="line-133">         for (Object pojo : pojos) {</span>
-<span class="source-line-no">134</span><span id="line-134">            if (pojo != null) {</span>
-<span class="source-line-no">135</span><span id="line-135">               try {</span>
-<span class="source-line-no">136</span><span id="line-136">                  r = method.invoke(pojo, args);</span>
-<span class="source-line-no">137</span><span id="line-137">               } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {</span>
-<span class="source-line-no">138</span><span id="line-138">                  throw new ExecutableException(e);</span>
-<span class="source-line-no">139</span><span id="line-139">               }</span>
-<span class="source-line-no">140</span><span id="line-140">               if (isGetter) {</span>
-<span class="source-line-no">141</span><span id="line-141">                  if (r != null)</span>
-<span class="source-line-no">142</span><span id="line-142">                     return r;</span>
-<span class="source-line-no">143</span><span id="line-143">               } else {</span>
-<span class="source-line-no">144</span><span id="line-144">                  if (! callAllNonGetters)</span>
-<span class="source-line-no">145</span><span id="line-145">                     return r;</span>
-<span class="source-line-no">146</span><span id="line-146">               }</span>
-<span class="source-line-no">147</span><span id="line-147">            }</span>
-<span class="source-line-no">148</span><span id="line-148">         }</span>
-<span class="source-line-no">149</span><span id="line-149">         return r;</span>
-<span class="source-line-no">150</span><span id="line-150">      }</span>
-<span class="source-line-no">151</span><span id="line-151">   }</span>
-<span class="source-line-no">152</span><span id="line-152">}</span>
+<span class="source-line-no">120</span><span id="line-120">   private static class MergeInvocationHandler implements InvocationHandler {</span>
+<span class="source-line-no">121</span><span id="line-121">      private final Object[] pojos;</span>
+<span class="source-line-no">122</span><span id="line-122">      private final boolean callAllNonGetters;</span>
+<span class="source-line-no">123</span><span id="line-123"></span>
+<span class="source-line-no">124</span><span id="line-124">      public MergeInvocationHandler(boolean callAllNonGetters, Object...pojos) {</span>
+<span class="source-line-no">125</span><span id="line-125">         this.callAllNonGetters = callAllNonGetters;</span>
+<span class="source-line-no">126</span><span id="line-126">         this.pojos = pojos;</span>
+<span class="source-line-no">127</span><span id="line-127">      }</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">      /**</span>
+<span class="source-line-no">130</span><span id="line-130">       * Implemented to handle the method called.</span>
+<span class="source-line-no">131</span><span id="line-131">       * @throws ExecutableException Exception occurred on invoked constructor/method/field.</span>
+<span class="source-line-no">132</span><span id="line-132">       */</span>
+<span class="source-line-no">133</span><span id="line-133">      @Override /* InvocationHandler */</span>
+<span class="source-line-no">134</span><span id="line-134">      public Object invoke(Object proxy, Method method, Object[] args) throws ExecutableException {</span>
+<span class="source-line-no">135</span><span id="line-135">         Object r = null;</span>
+<span class="source-line-no">136</span><span id="line-136">         boolean isGetter = args == null &amp;&amp; method.getReturnType() != Void.class;</span>
+<span class="source-line-no">137</span><span id="line-137">         for (Object pojo : pojos) {</span>
+<span class="source-line-no">138</span><span id="line-138">            if (pojo != null) {</span>
+<span class="source-line-no">139</span><span id="line-139">               try {</span>
+<span class="source-line-no">140</span><span id="line-140">                  r = method.invoke(pojo, args);</span>
+<span class="source-line-no">141</span><span id="line-141">               } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {</span>
+<span class="source-line-no">142</span><span id="line-142">                  throw new ExecutableException(e);</span>
+<span class="source-line-no">143</span><span id="line-143">               }</span>
+<span class="source-line-no">144</span><span id="line-144">               if (isGetter) {</span>
+<span class="source-line-no">145</span><span id="line-145">                  if (r != null)</span>
+<span class="source-line-no">146</span><span id="line-146">                     return r;</span>
+<span class="source-line-no">147</span><span id="line-147">               } else {</span>
+<span class="source-line-no">148</span><span id="line-148">                  if (! callAllNonGetters)</span>
+<span class="source-line-no">149</span><span id="line-149">                     return r;</span>
+<span class="source-line-no">150</span><span id="line-150">               }</span>
+<span class="source-line-no">151</span><span id="line-151">            }</span>
+<span class="source-line-no">152</span><span id="line-152">         }</span>
+<span class="source-line-no">153</span><span id="line-153">         return r;</span>
+<span class="source-line-no">154</span><span id="line-154">      }</span>
+<span class="source-line-no">155</span><span id="line-155">   }</span>
+<span class="source-line-no">156</span><span id="line-156">}</span>
 
 
 

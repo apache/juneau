@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="MsgPack.html" title="class in org.apache.juneau.marshaller">MsgPack</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/StreamMarshaller.html#line-29">StreamMarshaller</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/StreamMarshaller.html#line-33">StreamMarshaller</a></span>
 <span class="extends-implements">extends <a href="Marshaller.html" title="class in org.apache.juneau.marshaller">Marshaller</a></span></div>
 <div class="block">A subclass of <a href="Marshaller.html" title="class in org.apache.juneau.marshaller"><code>Marshaller</code></a> for stream-based serializers and parsers.
 
@@ -162,7 +162,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.serializer.OutputStreamSerializer,org.apache.juneau.parser.InputStreamParser)">
 <h3>StreamMarshaller</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/StreamMarshaller.html#line-48">StreamMarshaller</a></span><wbr><span class="parameters">(<a href="../serializer/OutputStreamSerializer.html" title="class in org.apache.juneau.serializer">OutputStreamSerializer</a>&nbsp;s,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/StreamMarshaller.html#line-52">StreamMarshaller</a></span><wbr><span class="parameters">(<a href="../serializer/OutputStreamSerializer.html" title="class in org.apache.juneau.serializer">OutputStreamSerializer</a>&nbsp;s,
  <a href="../parser/InputStreamParser.html" title="class in org.apache.juneau.parser">InputStreamParser</a>&nbsp;p)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="read(byte[],java.lang.Class)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/StreamMarshaller.html#line-86">read</a></span><wbr><span class="parameters">(byte[]&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/StreamMarshaller.html#line-90">read</a></span><wbr><span class="parameters">(byte[]&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
                  throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Same as <a href="Marshaller.html#read(java.lang.Object,java.lang.Class)"><code>Marshaller.read(Object,Class)</code></a> but reads from a byte array and thus doesn't throw an <c>IOException</c>.
@@ -228,7 +228,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="read(byte[],java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/StreamMarshaller.html#line-110">read</a></span><wbr><span class="parameters">(byte[]&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/StreamMarshaller.html#line-114">read</a></span><wbr><span class="parameters">(byte[]&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span>
                  throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
@@ -259,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="write(java.lang.Object)">
 <h3>write</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/StreamMarshaller.html#line-124">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshaller/StreamMarshaller.html#line-128">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
                    throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.serializer">SerializeException</a></span></div>
 <div class="block">Serializes a POJO directly to a <code><jk>byte</jk>[]</code>.</div>
 <dl class="notes">

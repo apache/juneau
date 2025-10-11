@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="BasicRestObjectGroup.html" title="class in org.apache.juneau.rest.servlet">BasicRestObjectGroup</a></code>, <code><a href="../../examples/rest/HelloWorldResource.html" title="class in org.apache.juneau.examples.rest">HelloWorldResource</a></code>, <code><a href="../../examples/rest/springboot/HelloWorldResource.html" title="class in org.apache.juneau.examples.rest.springboot">HelloWorldResource</a></code>, <code><a href="../../microservice/springboot/template/HelloWorldResource.html" title="class in org.apache.juneau.microservice.springboot.template">HelloWorldResource</a></code>, <code><a href="../../examples/rest/HtmlBeansResource.html" title="class in org.apache.juneau.examples.rest">HtmlBeansResource</a></code>, <code><a href="../../examples/rest/RequestEchoResource.html" title="class in org.apache.juneau.examples.rest">RequestEchoResource</a></code>, <code><a href="../../examples/rest/UtilityBeansResource.html" title="class in org.apache.juneau.examples.rest">UtilityBeansResource</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-45">BasicRestObject</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-49">BasicRestObject</a></span>
 <span class="extends-implements">extends <a href="RestObject.html" title="class in org.apache.juneau.rest.servlet">RestObject</a>
 implements <a href="BasicRestOperations.html" title="interface in org.apache.juneau.rest.servlet">BasicRestOperations</a>, <a href="../config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.config">BasicUniversalConfig</a></span></div>
 <div class="block">Identical to <a href="BasicRestServlet.html" title="class in org.apache.juneau.rest.servlet"><code>BasicRestServlet</code></a> but doesn't extend from <code>HttpServlet</code>.
@@ -182,7 +182,7 @@ implements <a href="BasicRestOperations.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>BasicRestObject</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-46">BasicRestObject</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-50">BasicRestObject</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -196,7 +196,7 @@ implements <a href="BasicRestOperations.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getSwagger(org.apache.juneau.rest.RestRequest)">
 <h3>getSwagger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../bean/swagger/Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-52">getSwagger</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../bean/swagger/Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-56">getSwagger</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="BasicRestOperations.html#getSwagger(org.apache.juneau.rest.RestRequest)">BasicRestOperations</a></code></span></div>
 <div class="block">[GET /api] - Show resource options.</div>
 <dl class="notes">
@@ -212,7 +212,7 @@ implements <a href="BasicRestOperations.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getHtdoc(java.lang.String,java.util.Locale)">
 <h3>getHtdoc</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/resource/HttpResource.html" title="interface in org.apache.juneau.http.resource">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-57">getHtdoc</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Path.html" title="annotation interface in org.apache.juneau.http.annotation">@Path</a>("/*")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/resource/HttpResource.html" title="interface in org.apache.juneau.http.resource">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-61">getHtdoc</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Path.html" title="annotation interface in org.apache.juneau.http.annotation">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</span>
                       throws <span class="exceptions"><a href="../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></span></div>
@@ -234,7 +234,7 @@ implements <a href="BasicRestOperations.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getFavIcon()">
 <h3>getFavIcon</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/resource/HttpResource.html" title="interface in org.apache.juneau.http.resource">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-62">getFavIcon</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/resource/HttpResource.html" title="interface in org.apache.juneau.http.resource">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-66">getFavIcon</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="BasicRestOperations.html#getFavIcon()">BasicRestOperations</a></code></span></div>
 <div class="block">[GET favicon.ico] - Retrieve favorites icon image.</div>
 <dl class="notes">
@@ -248,7 +248,7 @@ implements <a href="BasicRestOperations.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="error()">
 <h3>error</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-68">error</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-72">error</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="BasicRestOperations.html#error()">BasicRestOperations</a></code></span></div>
 <div class="block">[* /error] - Error occurred.</div>
 <dl class="notes">
@@ -260,7 +260,7 @@ implements <a href="BasicRestOperations.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getStats(org.apache.juneau.rest.RestRequest)">
 <h3>getStats</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stats/RestContextStats.html" title="class in org.apache.juneau.rest.stats">RestContextStats</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-71">getStats</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stats/RestContextStats.html" title="class in org.apache.juneau.rest.stats">RestContextStats</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/servlet/BasicRestObject.html#line-75">getStats</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="BasicRestOperations.html#getStats(org.apache.juneau.rest.RestRequest)">BasicRestOperations</a></code></span></div>
 <div class="block">[GET /stats] - Timing statistics.
 

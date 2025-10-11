@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="TemporalSwap.BasicIsoDate.html" title="class in org.apache.juneau.swaps">TemporalSwap.BasicIsoDate</a></code>, <code><a href="TemporalSwap.IsoDate.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoDate</a></code>, <code><a href="TemporalSwap.IsoDateTime.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoDateTime</a></code>, <code><a href="TemporalSwap.IsoInstant.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoInstant</a></code>, <code><a href="TemporalSwap.IsoLocalDate.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoLocalDate</a></code>, <code><a href="TemporalSwap.IsoLocalDateTime.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoLocalDateTime</a></code>, <code><a href="TemporalSwap.IsoLocalTime.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoLocalTime</a></code>, <code><a href="TemporalSwap.IsoOffsetDate.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoOffsetDate</a></code>, <code><a href="TemporalSwap.IsoOffsetDateTime.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoOffsetDateTime</a></code>, <code><a href="TemporalSwap.IsoOffsetTime.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoOffsetTime</a></code>, <code><a href="TemporalSwap.IsoOrdinalDate.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoOrdinalDate</a></code>, <code><a href="TemporalSwap.IsoTime.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoTime</a></code>, <code><a href="TemporalSwap.IsoWeekDate.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoWeekDate</a></code>, <code><a href="TemporalSwap.IsoYear.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoYear</a></code>, <code><a href="TemporalSwap.IsoYearMonth.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoYearMonth</a></code>, <code><a href="TemporalSwap.IsoZonedDateTime.html" title="class in org.apache.juneau.swaps">TemporalSwap.IsoZonedDateTime</a></code>, <code><a href="TemporalSwap.Rfc1123DateTime.html" title="class in org.apache.juneau.swaps">TemporalSwap.Rfc1123DateTime</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/TemporalSwap.html#line-56">TemporalSwap</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/TemporalSwap.html#line-60">TemporalSwap</a></span>
 <span class="extends-implements">extends <a href="../swap/StringSwap.html" title="class in org.apache.juneau.swap">StringSwap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/Temporal.html" title="class or interface in java.time.temporal" class="external-link">Temporal</a>&gt;</span></div>
 <div class="block">Swap that converts <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/Temporal.html" title="class or interface in java.time.temporal" class="external-link"><code>Temporal</code></a> objects to strings.
 
@@ -297,7 +297,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,boolean)">
 <h3>TemporalSwap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/TemporalSwap.html#line-360">TemporalSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/TemporalSwap.html#line-364">TemporalSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  boolean&nbsp;zoneOptional)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -318,7 +318,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="zoneOptional()">
 <h3>zoneOptional</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/TemporalSwap.html#line-375">zoneOptional</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/TemporalSwap.html#line-379">zoneOptional</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if the time zone on the pattern is optional.
 
  <p>
@@ -333,7 +333,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="swap(org.apache.juneau.BeanSession,java.time.temporal.Temporal)">
 <h3>swap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/TemporalSwap.html#line-379">swap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/TemporalSwap.html#line-383">swap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/Temporal.html" title="class or interface in java.time.temporal" class="external-link">Temporal</a>&nbsp;o)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../swap/ObjectSwap.html#swap(org.apache.juneau.BeanSession,T)">ObjectSwap</a></code></span></div>
@@ -374,7 +374,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="convertToSerializable(org.apache.juneau.BeanSession,java.time.temporal.Temporal)">
 <h3>convertToSerializable</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/Temporal.html" title="class or interface in java.time.temporal" class="external-link">Temporal</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/TemporalSwap.html#line-394">convertToSerializable</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/Temporal.html" title="class or interface in java.time.temporal" class="external-link">Temporal</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/TemporalSwap.html#line-398">convertToSerializable</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/Temporal.html" title="class or interface in java.time.temporal" class="external-link">Temporal</a>&nbsp;t)</span></div>
 <div class="block">Converts the specified temporal object to a form suitable to be serialized using any pattern.</div>
 <dl class="notes">
@@ -389,7 +389,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unswap(org.apache.juneau.BeanSession,java.lang.String,org.apache.juneau.ClassMeta)">
 <h3>unswap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/Temporal.html" title="class or interface in java.time.temporal" class="external-link">Temporal</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/TemporalSwap.html#line-419">unswap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/Temporal.html" title="class or interface in java.time.temporal" class="external-link">Temporal</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/swaps/TemporalSwap.html#line-423">unswap</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;f,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;hint)</span>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>

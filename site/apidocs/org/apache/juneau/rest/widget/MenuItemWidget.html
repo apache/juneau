@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="ContentTypeMenuItem.html" title="class in org.apache.juneau.rest.widget">ContentTypeMenuItem</a></code>, <code><a href="QueryMenuItem.html" title="class in org.apache.juneau.rest.widget">QueryMenuItem</a></code>, <code><a href="ThemeMenuItem.html" title="class in org.apache.juneau.rest.widget">ThemeMenuItem</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-34">MenuItemWidget</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-38">MenuItemWidget</a></span>
 <span class="extends-implements">extends <a href="Widget.html" title="class in org.apache.juneau.rest.widget">Widget</a></span></div>
 <div class="block">A subclass of widgets for rendering menu items with drop-down windows.
 
@@ -189,7 +189,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>MenuItemWidget</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-34">MenuItemWidget</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-38">MenuItemWidget</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -203,7 +203,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getScript(org.apache.juneau.rest.RestRequest,org.apache.juneau.rest.RestResponse)">
 <h3>getScript</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-39">getScript</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-43">getScript</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest">RestResponse</a>&nbsp;res)</span></div>
 <div class="block">Returns the Javascript needed for the show and hide actions of the menu item.</div>
 <dl class="notes">
@@ -220,7 +220,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeforeShowScript(org.apache.juneau.rest.RestRequest,org.apache.juneau.rest.RestResponse)">
 <h3>getBeforeShowScript</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-90">getBeforeShowScript</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-94">getBeforeShowScript</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest">RestResponse</a>&nbsp;res)</span></div>
 <div class="block">Optional Javascript to execute immediately before a menu item is shown.
 
@@ -274,7 +274,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAfterShowScript(org.apache.juneau.rest.RestRequest,org.apache.juneau.rest.RestResponse)">
 <h3>getAfterShowScript</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-104">getAfterShowScript</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-108">getAfterShowScript</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest">RestResponse</a>&nbsp;res)</span></div>
 <div class="block">Optional Javascript to execute immediately after a menu item is shown.
 
@@ -292,7 +292,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStyle(org.apache.juneau.rest.RestRequest,org.apache.juneau.rest.RestResponse)">
 <h3>getStyle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-112">getStyle</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-116">getStyle</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest">RestResponse</a>&nbsp;res)</span></div>
 <div class="block">Defines a <js>"menu-item"</js> class that needs to be used on the outer element of the HTML returned by the
  <a href="#getHtml(org.apache.juneau.rest.RestRequest,org.apache.juneau.rest.RestResponse)"><code>getHtml(RestRequest,RestResponse)</code></a> method.</div>
@@ -310,7 +310,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getHtml(org.apache.juneau.rest.RestRequest,org.apache.juneau.rest.RestResponse)">
 <h3>getHtml</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-117">getHtml</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-121">getHtml</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest">RestResponse</a>&nbsp;res)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Widget.html#getHtml(org.apache.juneau.rest.RestRequest,org.apache.juneau.rest.RestResponse)">Widget</a></code></span></div>
 <div class="block">Resolves the HTML content for this widget.
@@ -331,7 +331,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLabel(org.apache.juneau.rest.RestRequest,org.apache.juneau.rest.RestResponse)">
 <h3>getLabel</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-193">getLabel</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-197">getLabel</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest">RestResponse</a>&nbsp;res)</span></div>
 <div class="block">The label for the menu item as it's rendered in the menu bar.</div>
 <dl class="notes">
@@ -346,7 +346,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getContent(org.apache.juneau.rest.RestRequest,org.apache.juneau.rest.RestResponse)">
 <h3>getContent</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-210">getContent</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/widget/MenuItemWidget.html#line-214">getContent</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest">RestResponse</a>&nbsp;res)</span></div>
 <div class="block">The content of the popup.</div>
 <dl class="notes">

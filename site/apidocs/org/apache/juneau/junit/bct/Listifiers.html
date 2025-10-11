@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-75">Listifiers</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-79">Listifiers</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Collection of standard listifier implementations for the Bean-Centric Testing framework.
 
@@ -201,7 +201,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="collectionListifier()">
 <h3>collectionListifier</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Listifier.html" title="interface in org.apache.juneau.junit.bct">Listifier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-134">collectionListifier</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Listifier.html" title="interface in org.apache.juneau.junit.bct">Listifier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-138">collectionListifier</a></span>()</div>
 <div class="block">Returns a listifier for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link"><code>Collection</code></a> objects that converts them to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link"><code>ArrayList</code></a>.
 
  <p>This listifier creates a new ArrayList containing all elements from the source collection.
@@ -263,7 +263,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="iterableListifier()">
 <h3>iterableListifier</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Listifier.html" title="interface in org.apache.juneau.junit.bct">Listifier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-171">iterableListifier</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Listifier.html" title="interface in org.apache.juneau.junit.bct">Listifier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-175">iterableListifier</a></span>()</div>
 <div class="block">Returns a listifier for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link"><code>Iterable</code></a> objects that converts them using streams.
 
  <p>This listifier handles any Iterable implementation by creating a stream from its
@@ -302,7 +302,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="iteratorListifier()">
 <h3>iteratorListifier</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Listifier.html" title="interface in org.apache.juneau.junit.bct">Listifier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Iterator.html" title="class or interface in java.util" class="external-link">Iterator</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-211">iteratorListifier</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Listifier.html" title="interface in org.apache.juneau.junit.bct">Listifier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Iterator.html" title="class or interface in java.util" class="external-link">Iterator</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-215">iteratorListifier</a></span>()</div>
 <div class="block">Returns a listifier for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Iterator.html" title="class or interface in java.util" class="external-link"><code>Iterator</code></a> objects that converts them to lists.
 
  <p><b>Warning:</b> This listifier consumes the iterator during conversion. After listification,
@@ -349,7 +349,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="enumerationListifier()">
 <h3>enumerationListifier</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Listifier.html" title="interface in org.apache.juneau.junit.bct">Listifier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Enumeration.html" title="class or interface in java.util" class="external-link">Enumeration</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-244">enumerationListifier</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Listifier.html" title="interface in org.apache.juneau.junit.bct">Listifier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Enumeration.html" title="class or interface in java.util" class="external-link">Enumeration</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-248">enumerationListifier</a></span>()</div>
 <div class="block">Returns a listifier for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Enumeration.html" title="class or interface in java.util" class="external-link"><code>Enumeration</code></a> objects that converts them to lists.
 
  <p><b>Warning:</b> This listifier consumes the enumeration during conversion. After listification,
@@ -389,7 +389,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="streamListifier()">
 <h3>streamListifier</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Listifier.html" title="interface in org.apache.juneau.junit.bct">Listifier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-285">streamListifier</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Listifier.html" title="interface in org.apache.juneau.junit.bct">Listifier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-289">streamListifier</a></span>()</div>
 <div class="block">Returns a listifier for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link"><code>Stream</code></a> objects that converts them to lists.
 
  <p><b>Warning:</b> This listifier terminates the stream during conversion. After listification,
@@ -437,7 +437,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="mapListifier()">
 <h3>mapListifier</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Listifier.html" title="interface in org.apache.juneau.junit.bct">Listifier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-348">mapListifier</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Listifier.html" title="interface in org.apache.juneau.junit.bct">Listifier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Listifiers.html#line-352">mapListifier</a></span>()</div>
 <div class="block">Returns a listifier for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a> objects that converts them to lists of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link"><code>Map.Entry</code></a> objects.
 
  <p>This listifier enables maps to be processed as lists in BCT assertions, making it easy

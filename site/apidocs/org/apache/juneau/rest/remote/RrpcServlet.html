@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.config">BasicUniversalConfig</a></code>, <code><a href="../config/DefaultConfig.html" title="interface in org.apache.juneau.rest.config">DefaultConfig</a></code>, <code><a href="../config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.config">DefaultHtmlConfig</a></code>, <code><a href="../servlet/BasicRestOperations.html" title="interface in org.apache.juneau.rest.servlet">BasicRestOperations</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-54">RrpcServlet</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-58">RrpcServlet</a></span>
 <span class="extends-implements">extends <a href="../servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.servlet">BasicRestServlet</a></span></div>
 <div class="block">Abstract class for defining Remote Interface Services.
 
@@ -202,7 +202,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>RrpcServlet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-55">RrpcServlet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-59">RrpcServlet</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -216,7 +216,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getServiceMap()">
 <h3>getServiceMap</h3>
-<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-72">getServiceMap</a></span>()
+<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-76">getServiceMap</a></span>()
                                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Returns the list of interfaces to their implementation objects.
 
@@ -233,7 +233,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getInterfaces()">
 <h3>getInterfaces</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../bean/LinkString.html" title="class in org.apache.juneau.bean">LinkString</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-78">getInterfaces</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../bean/LinkString.html" title="class in org.apache.juneau.bean">LinkString</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-82">getInterfaces</a></span>()
                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
@@ -244,7 +244,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="listMethods(java.lang.String)">
 <h3>listMethods</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../bean/LinkString.html" title="class in org.apache.juneau.bean">LinkString</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-90">listMethods</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Path.html" title="annotation interface in org.apache.juneau.http.annotation">@Path</a>("javaInterface") <a href="../../annotation/Schema.html" title="annotation interface in org.apache.juneau.annotation">@Schema</a>(<a href="../../annotation/Schema.html#description()">description</a>="Java interface name")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../bean/LinkString.html" title="class in org.apache.juneau.bean">LinkString</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-94">listMethods</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Path.html" title="annotation interface in org.apache.juneau.http.annotation">@Path</a>("javaInterface") <a href="../../annotation/Schema.html" title="annotation interface in org.apache.juneau.annotation">@Schema</a>(<a href="../../annotation/Schema.html#description()">description</a>="Java interface name")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;javaInterface)</span>
                                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <dl class="notes">
@@ -256,7 +256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="showEntryForm(java.lang.String,java.lang.String)">
 <h3>showEntryForm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../bean/html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-108">showEntryForm</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Path.html" title="annotation interface in org.apache.juneau.http.annotation">@Path</a>("javaInterface") <a href="../../annotation/Schema.html" title="annotation interface in org.apache.juneau.annotation">@Schema</a>(<a href="../../annotation/Schema.html#description()">description</a>="Java interface name")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../bean/html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-112">showEntryForm</a></span><wbr><span class="parameters">(<a href="../../http/annotation/Path.html" title="annotation interface in org.apache.juneau.http.annotation">@Path</a>("javaInterface") <a href="../../annotation/Schema.html" title="annotation interface in org.apache.juneau.annotation">@Schema</a>(<a href="../../annotation/Schema.html#description()">description</a>="Java interface name")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;javaInterface,
  <a href="../../http/annotation/Path.html" title="annotation interface in org.apache.juneau.http.annotation">@Path</a>("javaMethod") <a href="../../annotation/Schema.html" title="annotation interface in org.apache.juneau.annotation">@Schema</a>(<a href="../../annotation/Schema.html#description()">description</a>="Java method name")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;javaMethod)</span>
@@ -272,7 +272,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="invoke(java.io.Reader,org.apache.juneau.parser.ReaderParser,org.apache.juneau.http.header.ContentType,java.lang.String,java.lang.String)">
 <h3>invoke</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-155">invoke</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;r,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/remote/RrpcServlet.html#line-159">invoke</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;r,
  <a href="../../parser/ReaderParser.html" title="class in org.apache.juneau.parser">ReaderParser</a>&nbsp;p,
  <a href="../../http/annotation/Header.html" title="annotation interface in org.apache.juneau.http.annotation">@Header</a>("Content-Type")
  <a href="../../http/header/ContentType.html" title="class in org.apache.juneau.http.header">ContentType</a>&nbsp;contentType,

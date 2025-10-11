@@ -75,7 +75,7 @@ loadScripts(document, 'script');</script>
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Inherited.html" title="class or interface in java.lang.annotation" class="external-link">@Inherited</a>
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Repeatable.html" title="class or interface in java.lang.annotation" class="external-link">@Repeatable</a>(<a href="RequestAnnotation.Array.html" title="annotation interface in org.apache.juneau.http.annotation">Array.class</a>)
 <a href="../../annotation/ContextApply.html" title="annotation interface in org.apache.juneau.annotation">@ContextApply</a>(<a href="RequestAnnotation.Applier.html" title="class in org.apache.juneau.http.annotation">Applier.class</a>)
-</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Request.html#line-144">Request</a></span></div>
+</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Request.html#line-148">Request</a></span></div>
 <div class="block">Request bean annotation.
 
  <p>
@@ -246,7 +246,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="description()">
 <h3>description</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Request.html#line-158">description</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Request.html#line-162">description</a></span></div>
 <div class="block">Optional description for the exposed API.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -263,7 +263,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="on()">
 <h3>on</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Request.html#line-169">on</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Request.html#line-173">on</a></span></div>
 <div class="block">Dynamically apply this annotation to the specified classes.
 
  <h5 class='section'>See Also:</h5><ul>
@@ -282,7 +282,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onClass()">
 <h3>onClass</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Request.html#line-183">onClass</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Request.html#line-187">onClass</a></span></div>
 <div class="block">Dynamically apply this annotation to the specified classes.
 
  <p>
@@ -304,7 +304,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parser()">
 <h3>parser</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../httppart/HttpPartParser.html" title="interface in org.apache.juneau.httppart">HttpPartParser</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Request.html#line-193">parser</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../httppart/HttpPartParser.html" title="interface in org.apache.juneau.httppart">HttpPartParser</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Request.html#line-197">parser</a></span></div>
 <div class="block">Specifies the <a href="../../httppart/HttpPartParser.html" title="interface in org.apache.juneau.httppart"><code>HttpPartParser</code></a> class used for parsing strings to values.
 
  <p>
@@ -322,7 +322,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializer()">
 <h3>serializer</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.httppart">HttpPartSerializer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Request.html#line-203">serializer</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.httppart">HttpPartSerializer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Request.html#line-207">serializer</a></span></div>
 <div class="block">Specifies the <a href="../../httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.httppart"><code>HttpPartSerializer</code></a> class used for serializing values to strings.
 
  <p>

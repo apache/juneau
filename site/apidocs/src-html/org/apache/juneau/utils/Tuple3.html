@@ -11,104 +11,108 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.utils;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import org.apache.juneau.common.utils.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import org.apache.juneau.internal.*;</span>
-<span class="source-line-no">017</span><span id="line-17"></span>
-<span class="source-line-no">018</span><span id="line-18">/**</span>
-<span class="source-line-no">019</span><span id="line-19"> * Represents a simple tuple of 3 objects.</span>
-<span class="source-line-no">020</span><span id="line-20"> *</span>
-<span class="source-line-no">021</span><span id="line-21"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">022</span><span id="line-22"> * &lt;/ul&gt;</span>
-<span class="source-line-no">023</span><span id="line-23"> *</span>
-<span class="source-line-no">024</span><span id="line-24"> * @param &lt;A&gt; Object 1 type.</span>
-<span class="source-line-no">025</span><span id="line-25"> * @param &lt;B&gt; Object 2 type.</span>
-<span class="source-line-no">026</span><span id="line-26"> * @param &lt;C&gt; Object 3 type.</span>
-<span class="source-line-no">027</span><span id="line-27"> */</span>
-<span class="source-line-no">028</span><span id="line-28">public class Tuple3&lt;A,B,C&gt; {</span>
-<span class="source-line-no">029</span><span id="line-29"></span>
-<span class="source-line-no">030</span><span id="line-30">   /**</span>
-<span class="source-line-no">031</span><span id="line-31">    * Static creator.</span>
-<span class="source-line-no">032</span><span id="line-32">    *</span>
-<span class="source-line-no">033</span><span id="line-33">    * @param &lt;A&gt; Object 1 type.</span>
-<span class="source-line-no">034</span><span id="line-34">    * @param &lt;B&gt; Object 2 type.</span>
-<span class="source-line-no">035</span><span id="line-35">    * @param &lt;C&gt; Object 3 type.</span>
-<span class="source-line-no">036</span><span id="line-36">    * @param a Object 1.</span>
-<span class="source-line-no">037</span><span id="line-37">    * @param b Object 2.</span>
-<span class="source-line-no">038</span><span id="line-38">    * @param c Object 3.</span>
-<span class="source-line-no">039</span><span id="line-39">    * @return A new tuple object.</span>
-<span class="source-line-no">040</span><span id="line-40">    */</span>
-<span class="source-line-no">041</span><span id="line-41">   public static &lt;A,B,C&gt; Tuple3&lt;A,B,C&gt; of(A a, B b, C c) {</span>
-<span class="source-line-no">042</span><span id="line-42">      return new Tuple3&lt;&gt;(a,b,c);</span>
-<span class="source-line-no">043</span><span id="line-43">   }</span>
-<span class="source-line-no">044</span><span id="line-44"></span>
-<span class="source-line-no">045</span><span id="line-45">   private final A a;</span>
-<span class="source-line-no">046</span><span id="line-46">   private final B b;</span>
-<span class="source-line-no">047</span><span id="line-47">   private final C c;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.utils;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.common.utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.internal.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">/**</span>
+<span class="source-line-no">023</span><span id="line-23"> * Represents a simple tuple of 3 objects.</span>
+<span class="source-line-no">024</span><span id="line-24"> *</span>
+<span class="source-line-no">025</span><span id="line-25"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">026</span><span id="line-26"> * &lt;/ul&gt;</span>
+<span class="source-line-no">027</span><span id="line-27"> *</span>
+<span class="source-line-no">028</span><span id="line-28"> * @param &lt;A&gt; Object 1 type.</span>
+<span class="source-line-no">029</span><span id="line-29"> * @param &lt;B&gt; Object 2 type.</span>
+<span class="source-line-no">030</span><span id="line-30"> * @param &lt;C&gt; Object 3 type.</span>
+<span class="source-line-no">031</span><span id="line-31"> */</span>
+<span class="source-line-no">032</span><span id="line-32">public class Tuple3&lt;A,B,C&gt; {</span>
+<span class="source-line-no">033</span><span id="line-33"></span>
+<span class="source-line-no">034</span><span id="line-34">   /**</span>
+<span class="source-line-no">035</span><span id="line-35">    * Static creator.</span>
+<span class="source-line-no">036</span><span id="line-36">    *</span>
+<span class="source-line-no">037</span><span id="line-37">    * @param &lt;A&gt; Object 1 type.</span>
+<span class="source-line-no">038</span><span id="line-38">    * @param &lt;B&gt; Object 2 type.</span>
+<span class="source-line-no">039</span><span id="line-39">    * @param &lt;C&gt; Object 3 type.</span>
+<span class="source-line-no">040</span><span id="line-40">    * @param a Object 1.</span>
+<span class="source-line-no">041</span><span id="line-41">    * @param b Object 2.</span>
+<span class="source-line-no">042</span><span id="line-42">    * @param c Object 3.</span>
+<span class="source-line-no">043</span><span id="line-43">    * @return A new tuple object.</span>
+<span class="source-line-no">044</span><span id="line-44">    */</span>
+<span class="source-line-no">045</span><span id="line-45">   public static &lt;A,B,C&gt; Tuple3&lt;A,B,C&gt; of(A a, B b, C c) {</span>
+<span class="source-line-no">046</span><span id="line-46">      return new Tuple3&lt;&gt;(a,b,c);</span>
+<span class="source-line-no">047</span><span id="line-47">   }</span>
 <span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   /**</span>
-<span class="source-line-no">050</span><span id="line-50">    * Constructor.</span>
-<span class="source-line-no">051</span><span id="line-51">    *</span>
-<span class="source-line-no">052</span><span id="line-52">    * @param a Object 1.</span>
-<span class="source-line-no">053</span><span id="line-53">    * @param b Object 2.</span>
-<span class="source-line-no">054</span><span id="line-54">    * @param c Object 3.</span>
-<span class="source-line-no">055</span><span id="line-55">    */</span>
-<span class="source-line-no">056</span><span id="line-56">   public Tuple3(A a, B b, C c) {</span>
-<span class="source-line-no">057</span><span id="line-57">      this.a = a;</span>
-<span class="source-line-no">058</span><span id="line-58">      this.b = b;</span>
-<span class="source-line-no">059</span><span id="line-59">      this.c = c;</span>
-<span class="source-line-no">060</span><span id="line-60">   }</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">   /**</span>
-<span class="source-line-no">063</span><span id="line-63">    * Returns the first object in this tuple.</span>
-<span class="source-line-no">064</span><span id="line-64">    *</span>
-<span class="source-line-no">065</span><span id="line-65">    * @return The first object in this tuple.</span>
-<span class="source-line-no">066</span><span id="line-66">    */</span>
-<span class="source-line-no">067</span><span id="line-67">   public A getA() {</span>
-<span class="source-line-no">068</span><span id="line-68">      return a;</span>
-<span class="source-line-no">069</span><span id="line-69">   }</span>
-<span class="source-line-no">070</span><span id="line-70"></span>
-<span class="source-line-no">071</span><span id="line-71">   /**</span>
-<span class="source-line-no">072</span><span id="line-72">    * Returns the second object in this tuple.</span>
-<span class="source-line-no">073</span><span id="line-73">    *</span>
-<span class="source-line-no">074</span><span id="line-74">    * @return The second object in this tuple.</span>
-<span class="source-line-no">075</span><span id="line-75">    */</span>
-<span class="source-line-no">076</span><span id="line-76">   public B getB() {</span>
-<span class="source-line-no">077</span><span id="line-77">      return b;</span>
-<span class="source-line-no">078</span><span id="line-78">   }</span>
-<span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">   /**</span>
-<span class="source-line-no">081</span><span id="line-81">    * Returns the third object in this tuple.</span>
-<span class="source-line-no">082</span><span id="line-82">    *</span>
-<span class="source-line-no">083</span><span id="line-83">    * @return The third object in this tuple.</span>
-<span class="source-line-no">084</span><span id="line-84">    */</span>
-<span class="source-line-no">085</span><span id="line-85">   public C getC() {</span>
-<span class="source-line-no">086</span><span id="line-86">      return c;</span>
-<span class="source-line-no">087</span><span id="line-87">   }</span>
-<span class="source-line-no">088</span><span id="line-88"></span>
-<span class="source-line-no">089</span><span id="line-89">   @Override /* Object */</span>
-<span class="source-line-no">090</span><span id="line-90">   public int hashCode() {</span>
-<span class="source-line-no">091</span><span id="line-91">      return HashCode.of(a,b,c);</span>
-<span class="source-line-no">092</span><span id="line-92">   }</span>
-<span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94">   @Override /* Object */</span>
-<span class="source-line-no">095</span><span id="line-95">   public boolean equals(Object o) {</span>
-<span class="source-line-no">096</span><span id="line-96">      return o instanceof Tuple3 &amp;&amp; Utils.eq(this, (Tuple3&lt;?,?,?&gt;)o, (x,y)-&gt;Utils.eq(x.a,y.a) &amp;&amp; Utils.eq(x.b,y.b) &amp;&amp; Utils.eq(x.c,y.c));</span>
-<span class="source-line-no">097</span><span id="line-97">   }</span>
-<span class="source-line-no">098</span><span id="line-98">}</span>
+<span class="source-line-no">049</span><span id="line-49">   private final A a;</span>
+<span class="source-line-no">050</span><span id="line-50">   private final B b;</span>
+<span class="source-line-no">051</span><span id="line-51">   private final C c;</span>
+<span class="source-line-no">052</span><span id="line-52"></span>
+<span class="source-line-no">053</span><span id="line-53">   /**</span>
+<span class="source-line-no">054</span><span id="line-54">    * Constructor.</span>
+<span class="source-line-no">055</span><span id="line-55">    *</span>
+<span class="source-line-no">056</span><span id="line-56">    * @param a Object 1.</span>
+<span class="source-line-no">057</span><span id="line-57">    * @param b Object 2.</span>
+<span class="source-line-no">058</span><span id="line-58">    * @param c Object 3.</span>
+<span class="source-line-no">059</span><span id="line-59">    */</span>
+<span class="source-line-no">060</span><span id="line-60">   public Tuple3(A a, B b, C c) {</span>
+<span class="source-line-no">061</span><span id="line-61">      this.a = a;</span>
+<span class="source-line-no">062</span><span id="line-62">      this.b = b;</span>
+<span class="source-line-no">063</span><span id="line-63">      this.c = c;</span>
+<span class="source-line-no">064</span><span id="line-64">   }</span>
+<span class="source-line-no">065</span><span id="line-65"></span>
+<span class="source-line-no">066</span><span id="line-66">   /**</span>
+<span class="source-line-no">067</span><span id="line-67">    * Returns the first object in this tuple.</span>
+<span class="source-line-no">068</span><span id="line-68">    *</span>
+<span class="source-line-no">069</span><span id="line-69">    * @return The first object in this tuple.</span>
+<span class="source-line-no">070</span><span id="line-70">    */</span>
+<span class="source-line-no">071</span><span id="line-71">   public A getA() {</span>
+<span class="source-line-no">072</span><span id="line-72">      return a;</span>
+<span class="source-line-no">073</span><span id="line-73">   }</span>
+<span class="source-line-no">074</span><span id="line-74"></span>
+<span class="source-line-no">075</span><span id="line-75">   /**</span>
+<span class="source-line-no">076</span><span id="line-76">    * Returns the second object in this tuple.</span>
+<span class="source-line-no">077</span><span id="line-77">    *</span>
+<span class="source-line-no">078</span><span id="line-78">    * @return The second object in this tuple.</span>
+<span class="source-line-no">079</span><span id="line-79">    */</span>
+<span class="source-line-no">080</span><span id="line-80">   public B getB() {</span>
+<span class="source-line-no">081</span><span id="line-81">      return b;</span>
+<span class="source-line-no">082</span><span id="line-82">   }</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">   /**</span>
+<span class="source-line-no">085</span><span id="line-85">    * Returns the third object in this tuple.</span>
+<span class="source-line-no">086</span><span id="line-86">    *</span>
+<span class="source-line-no">087</span><span id="line-87">    * @return The third object in this tuple.</span>
+<span class="source-line-no">088</span><span id="line-88">    */</span>
+<span class="source-line-no">089</span><span id="line-89">   public C getC() {</span>
+<span class="source-line-no">090</span><span id="line-90">      return c;</span>
+<span class="source-line-no">091</span><span id="line-91">   }</span>
+<span class="source-line-no">092</span><span id="line-92"></span>
+<span class="source-line-no">093</span><span id="line-93">   @Override /* Object */</span>
+<span class="source-line-no">094</span><span id="line-94">   public int hashCode() {</span>
+<span class="source-line-no">095</span><span id="line-95">      return HashCode.of(a,b,c);</span>
+<span class="source-line-no">096</span><span id="line-96">   }</span>
+<span class="source-line-no">097</span><span id="line-97"></span>
+<span class="source-line-no">098</span><span id="line-98">   @Override /* Object */</span>
+<span class="source-line-no">099</span><span id="line-99">   public boolean equals(Object o) {</span>
+<span class="source-line-no">100</span><span id="line-100">      return o instanceof Tuple3 &amp;&amp; Utils.eq(this, (Tuple3&lt;?,?,?&gt;)o, (x,y)-&gt;Utils.eq(x.a,y.a) &amp;&amp; Utils.eq(x.b,y.b) &amp;&amp; Utils.eq(x.c,y.c));</span>
+<span class="source-line-no">101</span><span id="line-101">   }</span>
+<span class="source-line-no">102</span><span id="line-102">}</span>
 
 
 

@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="Version.html" title="class in org.apache.juneau">Version</a>&gt;</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-28">Version</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-32">Version</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="Version.html" title="class in org.apache.juneau">Version</a>&gt;</span></div>
 <div class="block">Represents a version string such as <js>"1.2"</js> or <js>"1.2.3"</js>
@@ -202,7 +202,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String)">
 <h3>Version</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-68">Version</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-72">Version</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Constructor</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -229,7 +229,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="of(java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Version.html" title="class in org.apache.juneau">Version</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-47">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Version.html" title="class in org.apache.juneau">Version</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-51">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -250,7 +250,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getPart(int)">
 <h3>getPart</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-88">getPart</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-92">getPart</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block">Returns the version part at the specified zero-indexed value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -263,7 +263,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getMajor()">
 <h3>getMajor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-99">getMajor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-103">getMajor</a></span>()</div>
 <div class="block">Returns the major version part (i.e. part at index 0).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -274,7 +274,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getMinor()">
 <h3>getMinor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-108">getMinor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-112">getMinor</a></span>()</div>
 <div class="block">Returns the minor version part (i.e. part at index 1).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -285,7 +285,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getMaintenance()">
 <h3>getMaintenance</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-117">getMaintenance</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-121">getMaintenance</a></span>()</div>
 <div class="block">Returns the maintenance version part (i.e. part at index 2).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -296,7 +296,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isAtLeast(org.apache.juneau.Version)">
 <h3>isAtLeast</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-135">isAtLeast</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau">Version</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-139">isAtLeast</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau">Version</a>&nbsp;v)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified version is at least this version.
 
  <h5 class='section'>Example:</h5>
@@ -317,7 +317,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isAtLeast(org.apache.juneau.Version,boolean)">
 <h3>isAtLeast</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-153">isAtLeast</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau">Version</a>&nbsp;v,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-157">isAtLeast</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau">Version</a>&nbsp;v,
  boolean&nbsp;exclusive)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified version is at least this version.
 
@@ -338,7 +338,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isAtMost(org.apache.juneau.Version)">
 <h3>isAtMost</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-181">isAtMost</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau">Version</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-185">isAtMost</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau">Version</a>&nbsp;v)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified version is at most this version.
 
  <h5 class='section'>Example:</h5>
@@ -359,7 +359,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isAtMost(org.apache.juneau.Version,boolean)">
 <h3>isAtMost</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-198">isAtMost</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau">Version</a>&nbsp;v,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-202">isAtMost</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau">Version</a>&nbsp;v,
  boolean&nbsp;exclusive)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified version is at most this version.
 
@@ -380,7 +380,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="equals(org.apache.juneau.Version)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-224">equals</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau">Version</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-228">equals</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau">Version</a>&nbsp;v)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified version is equal to this version.
 
  <h5 class='section'>Example:</h5>
@@ -399,7 +399,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-231">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-235">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -409,7 +409,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-236">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-240">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -419,7 +419,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="compareTo(org.apache.juneau.Version)">
 <h3>compareTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-241">compareTo</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau">Version</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/Version.html#line-245">compareTo</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau">Version</a>&nbsp;v)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html#compareTo(T)" title="class or interface in java.lang" class="external-link">compareTo</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="Version.html" title="class in org.apache.juneau">Version</a>&gt;</code></dd>

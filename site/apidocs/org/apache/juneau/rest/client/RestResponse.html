@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../mock/MockRestResponse.html" title="class in org.apache.juneau.rest.mock">MockRestResponse</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-46">RestResponse</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-50">RestResponse</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a></span></div>
 <div class="block">Represents a response from a remote REST resource.
@@ -405,7 +405,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.client.RestClient,org.apache.juneau.rest.client.RestRequest,org.apache.http.HttpResponse,org.apache.juneau.parser.Parser)">
 <h3>RestResponse</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-68">RestResponse</a></span><wbr><span class="parameters">(<a href="RestClient.html" title="class in org.apache.juneau.rest.client">RestClient</a>&nbsp;client,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-72">RestResponse</a></span><wbr><span class="parameters">(<a href="RestClient.html" title="class in org.apache.juneau.rest.client">RestClient</a>&nbsp;client,
  <a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;request,
  <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;response,
  <a href="../../parser/Parser.html" title="class in org.apache.juneau.parser">Parser</a>&nbsp;parser)</span></div>
@@ -430,7 +430,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getRequest()">
 <h3>getRequest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-82">getRequest</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-86">getRequest</a></span>()</div>
 <div class="block">Returns the request object that created this response object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -441,7 +441,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="consume()">
 <h3>consume</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-99">consume</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-103">consume</a></span>()
                      throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client">RestCallException</a></span></div>
 <div class="block">Consumes the response body.
 
@@ -458,7 +458,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getStatusCode()">
 <h3>getStatusCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-116">getStatusCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-120">getStatusCode</a></span>()</div>
 <div class="block">Returns the status code of the response.
 
  Shortcut for calling <code>getStatusLine().getStatusCode()</code>.</div>
@@ -471,7 +471,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getReasonPhrase()">
 <h3>getReasonPhrase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-127">getReasonPhrase</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-131">getReasonPhrase</a></span>()</div>
 <div class="block">Returns the status line reason phrase of the response.
 
  Shortcut for calling <code>getStatusLine().getReasonPhrase()</code>.</div>
@@ -484,7 +484,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="assertStatus()">
 <h3>assertStatus</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="assertion/FluentResponseStatusLineAssertion.html" title="class in org.apache.juneau.rest.client.assertion">FluentResponseStatusLineAssertion</a>&lt;<a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-149">assertStatus</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="assertion/FluentResponseStatusLineAssertion.html" title="class in org.apache.juneau.rest.client.assertion">FluentResponseStatusLineAssertion</a>&lt;<a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-153">assertStatus</a></span>()</div>
 <div class="block">Provides the ability to perform fluent-style assertions on the response <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link"><code>StatusLine</code></a> object.
 
  <h5 class='section'>Examples:</h5>
@@ -504,7 +504,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="assertStatus(int)">
 <h3>assertStatus</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-168">assertStatus</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-172">assertStatus</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
 <div class="block">Provides the ability to perform fluent-style assertions on the response status code.
 
  <h5 class='section'>Examples:</h5>
@@ -526,7 +526,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getStringHeader(java.lang.String)">
 <h3>getStringHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-183">getStringHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-187">getStringHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for calling <code>getHeader(name).asString()</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -539,7 +539,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getCharacterEncoding()">
 <h3>getCharacterEncoding</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-193">getCharacterEncoding</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-197">getCharacterEncoding</a></span>()
                             throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client">RestCallException</a></span></div>
 <div class="block">Shortcut for retrieving the response charset from the <l>Content-Type</l> header.</div>
 <dl class="notes">
@@ -553,7 +553,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getContentType()">
 <h3>getContentType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../http/header/ContentType.html" title="class in org.apache.juneau.http.header">ContentType</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-210">getContentType</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../http/header/ContentType.html" title="class in org.apache.juneau.http.header">ContentType</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-214">getContentType</a></span>()
                                      throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client">RestCallException</a></span></div>
 <div class="block">Shortcut for retrieving the response content type from the <l>Content-Type</l> header.
 
@@ -570,7 +570,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="assertCharset()">
 <h3>assertCharset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../assertions/FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-229">assertCharset</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../assertions/FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-233">assertCharset</a></span>()
                                                   throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client">RestCallException</a></span></div>
 <div class="block">Provides the ability to perform fluent-style assertions on the response character encoding.
 
@@ -593,7 +593,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="assertHeader(java.lang.String)">
 <h3>assertHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="assertion/FluentResponseHeaderAssertion.html" title="class in org.apache.juneau.rest.client.assertion">FluentResponseHeaderAssertion</a>&lt;<a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-290">assertHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="assertion/FluentResponseHeaderAssertion.html" title="class in org.apache.juneau.rest.client.assertion">FluentResponseHeaderAssertion</a>&lt;<a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-294">assertHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Provides the ability to perform fluent-style assertions on a response header.
 
  <h5 class='section'>Examples:</h5>
@@ -657,7 +657,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getContent()">
 <h3>getContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseContent.html" title="class in org.apache.juneau.rest.client">ResponseContent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-305">getContent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseContent.html" title="class in org.apache.juneau.rest.client">ResponseContent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-309">getContent</a></span>()</div>
 <div class="block">Returns the body of the response.
 
  This method can be called multiple times returning the same response body each time.</div>
@@ -670,7 +670,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="assertContent()">
 <h3>assertContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="assertion/FluentResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">FluentResponseBodyAssertion</a>&lt;<a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-375">assertContent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="assertion/FluentResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">FluentResponseBodyAssertion</a>&lt;<a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-379">assertContent</a></span>()</div>
 <div class="block">Provides the ability to perform fluent-style assertions on this response body.
 
  <h5 class='section'>Examples:</h5>
@@ -742,7 +742,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="assertContent(java.lang.String)">
 <h3>assertContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-397">assertContent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-401">assertContent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Provides the ability to perform fluent-style assertions on this response body.
 
  <p>
@@ -767,7 +767,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="assertContentMatches(java.lang.String)">
 <h3>assertContentMatches</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-412">assertContentMatches</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-416">assertContentMatches</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Provides the ability to perform fluent-style assertions on this response body.
 
  <p>
@@ -789,7 +789,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="cacheContent()">
 <h3>cacheContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-427">cacheContent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-431">cacheContent</a></span>()</div>
 <div class="block">Caches the response body so that it can be read as a stream multiple times.
 
  This is equivalent to calling the following:
@@ -805,7 +805,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="log(java.util.logging.Level,java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>log</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-464">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-468">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
@@ -824,7 +824,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="log(java.util.logging.Level,java.lang.String,java.lang.Object...)">
 <h3>log</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-477">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-481">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a message.</div>
@@ -841,7 +841,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getStatusLine()">
 <h3>getStatusLine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseStatusLine.html" title="class in org.apache.juneau.rest.client">ResponseStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-493">getStatusLine</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseStatusLine.html" title="class in org.apache.juneau.rest.client">ResponseStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-497">getStatusLine</a></span>()</div>
 <div class="block">Obtains the status line of this response.
 
  The status line can be set using one of the setStatusLine methods, or it can be initialized in a constructor.</div>
@@ -856,7 +856,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setStatusLine(org.apache.http.StatusLine)">
 <h3>setStatusLine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-503">setStatusLine</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link">StatusLine</a>&nbsp;statusline)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-507">setStatusLine</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link">StatusLine</a>&nbsp;statusline)</span></div>
 <div class="block">Sets the status line of this response.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -869,7 +869,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setStatusLine(org.apache.http.ProtocolVersion,int)">
 <h3>setStatusLine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-517">setStatusLine</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a>&nbsp;ver,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-521">setStatusLine</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a>&nbsp;ver,
  int&nbsp;code)</span></div>
 <div class="block">Sets the status line of this response.
 
@@ -887,7 +887,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setStatusLine(org.apache.http.ProtocolVersion,int,java.lang.String)">
 <h3>setStatusLine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-529">setStatusLine</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a>&nbsp;ver,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-533">setStatusLine</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a>&nbsp;ver,
  int&nbsp;code,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reason)</span></div>
 <div class="block">Sets the status line of this response with a reason phrase.</div>
@@ -904,7 +904,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setStatusCode(int)">
 <h3>setStatusCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-540">setStatusCode</a></span><wbr><span class="parameters">(int&nbsp;code)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-544">setStatusCode</a></span><wbr><span class="parameters">(int&nbsp;code)</span></div>
 <div class="block">Updates the status line of this response with a new status code.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -919,7 +919,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setReasonPhrase(java.lang.String)">
 <h3>setReasonPhrase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-551">setReasonPhrase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reason)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-555">setReasonPhrase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reason)</span></div>
 <div class="block">Updates the status line of this response with a new reason phrase.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -934,7 +934,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getEntity()">
 <h3>getEntity</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseContent.html" title="class in org.apache.juneau.rest.client">ResponseContent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-569">getEntity</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseContent.html" title="class in org.apache.juneau.rest.client">ResponseContent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-573">getEntity</a></span>()</div>
 <div class="block">Obtains the message entity of this response.
 
  <p>
@@ -955,7 +955,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setEntity(org.apache.http.HttpEntity)">
 <h3>setEntity</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-585">setEntity</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a>&nbsp;entity)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-589">setEntity</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a>&nbsp;entity)</span></div>
 <div class="block">Associates a response entity with this response.
 
  <h5 class='section'>Notes:</h5><ul>
@@ -974,7 +974,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getLocale()">
 <h3>getLocale</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-599">getLocale</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-603">getLocale</a></span>()</div>
 <div class="block">Obtains the locale of this response.
 
  The locale is used to determine the reason phrase for the status code.
@@ -990,7 +990,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setLocale(java.util.Locale)">
 <h3>setLocale</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-609">setLocale</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;loc)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-613">setLocale</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;loc)</span></div>
 <div class="block">Changes the locale of this response.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -1003,7 +1003,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getProtocolVersion()">
 <h3>getProtocolVersion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-619">getProtocolVersion</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-623">getProtocolVersion</a></span>()</div>
 <div class="block">Returns the protocol version this message is compatible with.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -1016,7 +1016,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="containsHeader(java.lang.String)">
 <h3>containsHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-633">containsHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-637">containsHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Checks if a certain header is present in this message.
 
  <p>
@@ -1034,7 +1034,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getHeaders(java.lang.String)">
 <h3>getHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseHeader.html" title="class in org.apache.juneau.rest.client">ResponseHeader</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-647">getHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseHeader.html" title="class in org.apache.juneau.rest.client">ResponseHeader</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-651">getHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns all the headers with a specified name of this message.
 
  Header values are ignored.
@@ -1052,7 +1052,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getFirstHeader(java.lang.String)">
 <h3>getFirstHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseHeader.html" title="class in org.apache.juneau.rest.client">ResponseHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-663">getFirstHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseHeader.html" title="class in org.apache.juneau.rest.client">ResponseHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-667">getFirstHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the first header with a specified name of this message.
 
  <p>
@@ -1072,7 +1072,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getLastHeader(java.lang.String)">
 <h3>getLastHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseHeader.html" title="class in org.apache.juneau.rest.client">ResponseHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-679">getLastHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseHeader.html" title="class in org.apache.juneau.rest.client">ResponseHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-683">getLastHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the last header with a specified name of this message.
 
  <p>
@@ -1092,7 +1092,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getHeader(java.lang.String)">
 <h3>getHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseHeader.html" title="class in org.apache.juneau.rest.client">ResponseHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-693">getHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseHeader.html" title="class in org.apache.juneau.rest.client">ResponseHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-697">getHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the response header with the specified name.
 
  <p>
@@ -1108,7 +1108,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getAllHeaders()">
 <h3>getAllHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseHeader.html" title="class in org.apache.juneau.rest.client">ResponseHeader</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-704">getAllHeaders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseHeader.html" title="class in org.apache.juneau.rest.client">ResponseHeader</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-708">getAllHeaders</a></span>()</div>
 <div class="block">Returns all the headers of this message.
 
  Headers are ordered in the sequence they were sent over a connection.</div>
@@ -1123,7 +1123,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="addHeader(org.apache.http.Header)">
 <h3>addHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-716">addHeader</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;header)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-720">addHeader</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;header)</span></div>
 <div class="block">Adds a header to this message.
 
  The header will be appended to the end of the list.</div>
@@ -1138,7 +1138,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="addHeader(java.lang.String,java.lang.String)">
 <h3>addHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-729">addHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-733">addHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Adds a header to this message.
 
@@ -1155,7 +1155,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setHeader(org.apache.http.Header)">
 <h3>setHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-741">setHeader</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;header)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-745">setHeader</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;header)</span></div>
 <div class="block">Overwrites the first header with the same name.
 
  The new header will be appended to the end of the list, if no header with the given name can be found.</div>
@@ -1170,7 +1170,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setHeader(java.lang.String,java.lang.String)">
 <h3>setHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-754">setHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-758">setHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Overwrites the first header with the same name.
 
@@ -1187,7 +1187,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setHeaders(org.apache.http.Header[])">
 <h3>setHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-764">setHeaders</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>[]&nbsp;headers)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-768">setHeaders</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>[]&nbsp;headers)</span></div>
 <div class="block">Overwrites all the headers in the message.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -1200,7 +1200,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="removeHeader(org.apache.http.Header)">
 <h3>removeHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-774">removeHeader</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;header)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-778">removeHeader</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;header)</span></div>
 <div class="block">Removes a header from this message.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -1213,7 +1213,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="removeHeaders(java.lang.String)">
 <h3>removeHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-784">removeHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-788">removeHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Removes all headers with a certain name from this message.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -1226,7 +1226,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="headerIterator()">
 <h3>headerIterator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HeaderIterator.html" title="class or interface in org.apache.http" class="external-link">HeaderIterator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-794">headerIterator</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HeaderIterator.html" title="class or interface in org.apache.http" class="external-link">HeaderIterator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-798">headerIterator</a></span>()</div>
 <div class="block">Returns an iterator of all the headers.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -1239,7 +1239,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="headerIterator(java.lang.String)">
 <h3>headerIterator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HeaderIterator.html" title="class or interface in org.apache.http" class="external-link">HeaderIterator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-805">headerIterator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HeaderIterator.html" title="class or interface in org.apache.http" class="external-link">HeaderIterator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-809">headerIterator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns an iterator of the headers with a given name.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -1255,7 +1255,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <section class="detail" id="getParams()">
 <h3>getParams</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/params/HttpParams.html" title="class or interface in org.apache.http.params" class="external-link">HttpParams</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-816">getParams</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/params/HttpParams.html" title="class or interface in org.apache.http.params" class="external-link">HttpParams</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-820">getParams</a></span>()</div>
 <div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
 <div class="deprecation-comment">Use configuration classes provided <jk>org.apache.http.config</jk> and <jk>org.apache.http.client.config</jk>.</div>
 </div>
@@ -1272,7 +1272,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <section class="detail" id="setParams(org.apache.http.params.HttpParams)">
 <h3>setParams</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-828">setParams</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/params/HttpParams.html" title="class or interface in org.apache.http.params" class="external-link">HttpParams</a>&nbsp;params)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-832">setParams</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/params/HttpParams.html" title="class or interface in org.apache.http.params" class="external-link">HttpParams</a>&nbsp;params)</span></div>
 <div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
 <div class="deprecation-comment">Use configuration classes provided <jk>org.apache.http.config</jk> and <jk>org.apache.http.client.config</jk>.</div>
 </div>
@@ -1288,7 +1288,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getPartParserSession(org.apache.juneau.httppart.HttpPartParser)">
 <h3>getPartParserSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.httppart">HttpPartParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-896">getPartParserSession</a></span><wbr><span class="parameters">(<a href="../../httppart/HttpPartParser.html" title="interface in org.apache.juneau.httppart">HttpPartParser</a>&nbsp;parser)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.httppart">HttpPartParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-900">getPartParserSession</a></span><wbr><span class="parameters">(<a href="../../httppart/HttpPartParser.html" title="interface in org.apache.juneau.httppart">HttpPartParser</a>&nbsp;parser)</span></div>
 <div class="block">Creates a session of the specified part parser.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1301,7 +1301,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getPartParserSession()">
 <h3>getPartParserSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.httppart">HttpPartParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-910">getPartParserSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.httppart">HttpPartParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestResponse.html#line-914">getPartParserSession</a></span>()</div>
 <div class="block">Creates a session of the client-default parat parser.</div>
 <dl class="notes">
 <dt>Returns:</dt>

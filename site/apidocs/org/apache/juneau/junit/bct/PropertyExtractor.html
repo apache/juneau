@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="PropertyExtractors.ListPropertyExtractor.html" title="class in org.apache.juneau.junit.bct">PropertyExtractors.ListPropertyExtractor</a></code>, <code><a href="PropertyExtractors.MapPropertyExtractor.html" title="class in org.apache.juneau.junit.bct">PropertyExtractors.MapPropertyExtractor</a></code>, <code><a href="PropertyExtractors.ObjectPropertyExtractor.html" title="class in org.apache.juneau.junit.bct">PropertyExtractors.ObjectPropertyExtractor</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/PropertyExtractor.html#line-87">PropertyExtractor</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/PropertyExtractor.html#line-91">PropertyExtractor</a></span></div>
 <div class="block">Interface for custom property extraction strategies in the Bean-Centric Testing framework.
 
  <p>Property extractors define how the converter accesses object properties during nested
@@ -201,7 +201,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="canExtract(org.apache.juneau.junit.bct.BeanConverter,java.lang.Object,java.lang.String)">
 <h3>canExtract</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/PropertyExtractor.html#line-100">canExtract</a></span><wbr><span class="parameters">(<a href="BeanConverter.html" title="interface in org.apache.juneau.junit.bct">BeanConverter</a>&nbsp;converter,
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/PropertyExtractor.html#line-104">canExtract</a></span><wbr><span class="parameters">(<a href="BeanConverter.html" title="interface in org.apache.juneau.junit.bct">BeanConverter</a>&nbsp;converter,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Determines if this extractor can handle property access for the given object and property name.
@@ -221,7 +221,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="extract(org.apache.juneau.junit.bct.BeanConverter,java.lang.Object,java.lang.String)">
 <h3>extract</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/PropertyExtractor.html#line-115">extract</a></span><wbr><span class="parameters">(<a href="BeanConverter.html" title="interface in org.apache.juneau.junit.bct">BeanConverter</a>&nbsp;converter,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/PropertyExtractor.html#line-119">extract</a></span><wbr><span class="parameters">(<a href="BeanConverter.html" title="interface in org.apache.juneau.junit.bct">BeanConverter</a>&nbsp;converter,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Extracts the specified property value from the given object.

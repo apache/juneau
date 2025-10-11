@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../csv/CsvParserSession.html" title="class in org.apache.juneau.csv">CsvParserSession</a></code>, <code><a href="../json/JsonParserSession.html" title="class in org.apache.juneau.json">JsonParserSession</a></code>, <code><a href="../plaintext/PlainTextParserSession.html" title="class in org.apache.juneau.plaintext">PlainTextParserSession</a></code>, <code><a href="../uon/UonParserSession.html" title="class in org.apache.juneau.uon">UonParserSession</a></code>, <code><a href="../xml/XmlParserSession.html" title="class in org.apache.juneau.xml">XmlParserSession</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-39">ReaderParserSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-43">ReaderParserSession</a></span>
 <span class="extends-implements">extends <a href="ParserSession.html" title="class in org.apache.juneau.parser">ParserSession</a></span></div>
 <div class="block">Subclass of parser session objects for character-based parsers.
 
@@ -207,7 +207,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.parser.ReaderParserSession.Builder)">
 <h3>ReaderParserSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-238">ReaderParserSession</a></span><wbr><span class="parameters">(<a href="ReaderParserSession.Builder.html" title="class in org.apache.juneau.parser">ReaderParserSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-242">ReaderParserSession</a></span><wbr><span class="parameters">(<a href="ReaderParserSession.Builder.html" title="class in org.apache.juneau.parser">ReaderParserSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -226,7 +226,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.parser.ReaderParser)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ReaderParserSession.Builder.html" title="class in org.apache.juneau.parser">ReaderParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-51">create</a></span><wbr><span class="parameters">(<a href="ReaderParser.html" title="class in org.apache.juneau.parser">ReaderParser</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ReaderParserSession.Builder.html" title="class in org.apache.juneau.parser">ReaderParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-55">create</a></span><wbr><span class="parameters">(<a href="ReaderParser.html" title="class in org.apache.juneau.parser">ReaderParser</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -239,7 +239,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isReaderParser()">
 <h3>isReaderParser</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-245">isReaderParser</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-249">isReaderParser</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="ParserSession.html#isReaderParser()">ParserSession</a></code></span></div>
 <div class="block">Returns <jk>true</jk> if this parser subclasses from <a href="ReaderParser.html" title="class in org.apache.juneau.parser"><code>ReaderParser</code></a>.</div>
 <dl class="notes">
@@ -253,7 +253,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createPipe(java.lang.Object)">
 <h3>createPipe</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-271">createPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-275">createPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span></div>
 <div class="block">Wraps the specified input object into a <a href="ParserPipe.html" title="class in org.apache.juneau.parser"><code>ParserPipe</code></a> object so that it can be easily converted into
  a stream or reader.</div>
 <dl class="notes">
@@ -281,7 +281,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getFileCharset()">
 <h3>getFileCharset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-286">getFileCharset</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-290">getFileCharset</a></span>()</div>
 <div class="block">Returns the file charset defined on this session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -292,7 +292,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStreamCharset()">
 <h3>getStreamCharset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-295">getStreamCharset</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-299">getStreamCharset</a></span>()</div>
 <div class="block">Returns the stream charset defined on this session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -303,7 +303,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-303">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ReaderParserSession.html#line-307">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../ContextSession.html#properties()">ContextSession</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

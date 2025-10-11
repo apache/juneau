@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="internal/DelegateBeanMap.html" title="class in org.apache.juneau.internal">DelegateBeanMap</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-67">BeanMap</a>&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-71">BeanMap</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractMap.html" title="class or interface in java.util" class="external-link">AbstractMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;
 implements <a href="Delegate.html" title="interface in org.apache.juneau">Delegate</a>&lt;T&gt;</span></div>
 <div class="block">Java bean wrapper class.
@@ -356,28 +356,28 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="bean">
 <h3>bean</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="type parameter in BeanMap">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-70">bean</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="type parameter in BeanMap">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-74">bean</a></span></div>
 <div class="block">The wrapped object.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="propertyCache">
 <h3>propertyCache</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-73">propertyCache</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-77">propertyCache</a></span></div>
 <div class="block">Temporary holding cache for beans with read-only properties.  Normally null.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="arrayPropertyCache">
 <h3>arrayPropertyCache</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-76">arrayPropertyCache</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-80">arrayPropertyCache</a></span></div>
 <div class="block">Temporary holding cache for bean properties of array types when the add() method is being used.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="meta">
 <h3>meta</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BeanMeta.html" title="class in org.apache.juneau">BeanMeta</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-79">meta</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BeanMeta.html" title="class in org.apache.juneau">BeanMeta</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-83">meta</a></span></div>
 <div class="block">The BeanMeta associated with the class of the object.</div>
 </section>
 </li>
@@ -392,7 +392,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.BeanSession,T,org.apache.juneau.BeanMeta)">
 <h3 id="&lt;init&gt;(org.apache.juneau.BeanSession,java.lang.Object,org.apache.juneau.BeanMeta)">BeanMap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-102">BeanMap</a></span><wbr><span class="parameters">(<a href="BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-106">BeanMap</a></span><wbr><span class="parameters">(<a href="BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session,
  <a href="BeanMap.html" title="type parameter in BeanMap">T</a>&nbsp;bean,
  <a href="BeanMeta.html" title="class in org.apache.juneau">BeanMeta</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;&nbsp;meta)</span></div>
 <div class="block">Instance of this class are instantiated through the BeanContext class.</div>
@@ -415,7 +415,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="of(T)">
 <h3 id="of(java.lang.Object)">of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="class in org.apache.juneau">BeanMap</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-91">of</a></span><wbr><span class="parameters">(T&nbsp;bean)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="class in org.apache.juneau">BeanMap</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-95">of</a></span><wbr><span class="parameters">(T&nbsp;bean)</span></div>
 <div class="block">Convenience method for wrapping a bean inside a <a href="BeanMap.html" title="class in org.apache.juneau"><code>BeanMap</code></a>.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -430,7 +430,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="getMeta()">
 <h3>getMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMeta.html" title="class in org.apache.juneau">BeanMeta</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-116">getMeta</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMeta.html" title="class in org.apache.juneau">BeanMeta</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-120">getMeta</a></span>()</div>
 <div class="block">Returns the metadata associated with this bean map.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -441,7 +441,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="getBeanSession()">
 <h3>getBeanSession</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="BeanSession.html" title="class in org.apache.juneau">BeanSession</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-125">getBeanSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="BeanSession.html" title="class in org.apache.juneau">BeanSession</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-129">getBeanSession</a></span>()</div>
 <div class="block">Returns the bean session that created this bean map.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -452,7 +452,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="getBean()">
 <h3>getBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="type parameter in BeanMap">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-138">getBean</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="type parameter in BeanMap">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-142">getBean</a></span>()</div>
 <div class="block">Returns the wrapped bean object.
 
  <p>
@@ -467,7 +467,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="getBean(boolean)">
 <h3>getBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="type parameter in BeanMap">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-183">getBean</a></span><wbr><span class="parameters">(boolean&nbsp;create)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="type parameter in BeanMap">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-187">getBean</a></span><wbr><span class="parameters">(boolean&nbsp;create)</span></div>
 <div class="block">Returns the wrapped bean object.
 
  <p>
@@ -488,7 +488,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="put(java.lang.String,java.lang.Object)">
 <h3>put</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-244">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-248">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Sets a property on the bean.
 
@@ -539,7 +539,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="containsKey(java.lang.Object)">
 <h3>containsKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-258">containsKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;property)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-262">containsKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;property)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#containsKey(java.lang.Object)" title="class or interface in java.util" class="external-link">containsKey</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></dd>
@@ -551,7 +551,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="add(java.lang.String,java.lang.Object)">
 <h3>add</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-275">add</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-279">add</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Add a value to a collection or array property.
 
@@ -568,7 +568,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="get(java.lang.Object)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-321">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;property)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-325">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;property)</span></div>
 <div class="block">Gets a property on the bean.
 
  <p>
@@ -616,7 +616,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="get(java.lang.String,java.lang.Class)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type">T2</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-345">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type">T2</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-349">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;c)</span></div>
 <div class="block">Same as <a href="#get(java.lang.Object)"><code>get(Object)</code></a> but casts the value to the specific type.</div>
 <dl class="notes">
@@ -641,7 +641,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="getRaw(java.lang.Object)">
 <h3>getRaw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-361">getRaw</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;property)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-365">getRaw</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;property)</span></div>
 <div class="block">Same as <a href="#get(java.lang.Object)"><code>get(Object)</code></a> except bypasses the POJO filter associated with the bean property or bean filter
  associated with the bean class.</div>
 <dl class="notes">
@@ -655,7 +655,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="load(java.lang.String)">
 <h3>load</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="class in org.apache.juneau">BeanMap</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-381">load</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="class in org.apache.juneau">BeanMap</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-385">load</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</span>
                 throws <span class="exceptions"><a href="parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Convenience method for setting multiple property values by passing in JSON text.
 
@@ -676,7 +676,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="load(java.io.Reader,org.apache.juneau.parser.ReaderParser)">
 <h3>load</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="class in org.apache.juneau">BeanMap</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-395">load</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;r,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="class in org.apache.juneau">BeanMap</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-399">load</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;r,
  <a href="parser/ReaderParser.html" title="class in org.apache.juneau.parser">ReaderParser</a>&nbsp;p)</span>
                 throws <span class="exceptions"><a href="parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -696,7 +696,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="load(java.util.Map)">
 <h3>load</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="class in org.apache.juneau">BeanMap</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-409">load</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&nbsp;entries)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="class in org.apache.juneau">BeanMap</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-413">load</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&nbsp;entries)</span></div>
 <div class="block">Convenience method for loading this map with the contents of the specified map.
 
  <p>
@@ -712,7 +712,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="keySet()">
 <h3>keySet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-421">keySet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-425">keySet</a></span>()</div>
 <div class="block">Returns the names of all properties associated with the bean.
 
  <p>
@@ -728,7 +728,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="getProperty(java.lang.String)">
 <h3>getProperty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMapEntry.html" title="class in org.apache.juneau">BeanMapEntry</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-451">getProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;propertyName)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMapEntry.html" title="class in org.apache.juneau">BeanMapEntry</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-455">getProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;propertyName)</span></div>
 <div class="block">Returns the specified property on this bean map.
 
  <p>
@@ -748,7 +748,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="getPropertyMeta(java.lang.String)">
 <h3>getPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-464">getPropertyMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;propertyName)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-468">getPropertyMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;propertyName)</span></div>
 <div class="block">Returns the metadata on the specified property.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -761,7 +761,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="getClassMeta()">
 <h3>getClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-473">getClassMeta</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-477">getClassMeta</a></span>()</div>
 <div class="block">Returns the <a href="ClassMeta.html" title="class in org.apache.juneau"><code>ClassMeta</code></a> of the wrapped bean.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -774,7 +774,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="getProperties(java.lang.String...)">
 <h3>getProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-486">getProperties</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;fields)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-490">getProperties</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;fields)</span></div>
 <div class="block">Extracts the specified field values from this bean and returns it as a simple Map.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -788,7 +788,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="forEachValue(java.util.function.Predicate,org.apache.juneau.BeanPropertyConsumer)">
 <h3>forEachValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="class in org.apache.juneau">BeanMap</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-497">forEachValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;valueFilter,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="class in org.apache.juneau">BeanMap</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-501">forEachValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;valueFilter,
  <a href="BeanPropertyConsumer.html" title="interface in org.apache.juneau">BeanPropertyConsumer</a>&nbsp;action)</span></div>
 <div class="block">Invokes all the getters on this bean and consumes the results.</div>
 <dl class="notes">
@@ -803,7 +803,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="resolveVars(java.lang.String)">
 <h3>resolveVars</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-560">resolveVars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-564">resolveVars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
 <div class="block">Given a string containing variables of the form <c>"{property}"</c>, replaces those variables with property
  values in this bean.</div>
 <dl class="notes">
@@ -817,7 +817,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="getProperties()">
 <h3>getProperties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-569">getProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-573">getProperties</a></span>()</div>
 <div class="block">Returns a simple collection of properties for this bean map.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -828,7 +828,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="forEachProperty(java.util.function.Predicate,java.util.function.Consumer)">
 <h3>forEachProperty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="class in org.apache.juneau">BeanMap</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-580">forEachProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&gt;&nbsp;filter,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMap.html" title="class in org.apache.juneau">BeanMap</a>&lt;<a href="BeanMap.html" title="type parameter in BeanMap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-584">forEachProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&gt;&nbsp;filter,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on each property in this bean map.</div>
 <dl class="notes">
@@ -843,7 +843,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau">Delega
 <li>
 <section class="detail" id="entrySet()">
 <h3>entrySet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-592">entrySet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanMap.html#line-596">entrySet</a></span>()</div>
 <div class="block">Returns all the properties associated with the bean.</div>
 <dl class="notes">
 <dt>Specified by:</dt>

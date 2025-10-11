@@ -11,95 +11,99 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.reflect;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.internal.ConsumerUtils.*;</span>
-<span class="source-line-no">016</span><span id="line-16"></span>
-<span class="source-line-no">017</span><span id="line-17">import java.lang.annotation.*;</span>
-<span class="source-line-no">018</span><span id="line-18">import java.util.*;</span>
-<span class="source-line-no">019</span><span id="line-19">import java.util.function.*;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.reflect;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.internal.ConsumerUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">/**</span>
-<span class="source-line-no">022</span><span id="line-22"> * An ordered list of annotations and the classes/methods/packages they were found on.</span>
-<span class="source-line-no">023</span><span id="line-23"> *</span>
-<span class="source-line-no">024</span><span id="line-24"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">025</span><span id="line-25"> * &lt;/ul&gt;</span>
-<span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> * @serial exclude</span>
-<span class="source-line-no">028</span><span id="line-28"> */</span>
-<span class="source-line-no">029</span><span id="line-29">public class AnnotationList extends ArrayList&lt;AnnotationInfo&lt;?&gt;&gt; {</span>
-<span class="source-line-no">030</span><span id="line-30">   private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">031</span><span id="line-31"></span>
-<span class="source-line-no">032</span><span id="line-32">   private static final Comparator&lt;AnnotationInfo&lt;?&gt;&gt; RANK_COMPARATOR = (o1, o2) -&gt; o1.rank - o2.rank;</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">   /**</span>
-<span class="source-line-no">035</span><span id="line-35">    * Sort the annotations in this list based on rank.</span>
-<span class="source-line-no">036</span><span id="line-36">    *</span>
-<span class="source-line-no">037</span><span id="line-37">    * @return This object.</span>
-<span class="source-line-no">038</span><span id="line-38">    */</span>
-<span class="source-line-no">039</span><span id="line-39">   public AnnotationList sort() {</span>
-<span class="source-line-no">040</span><span id="line-40">      Collections.sort(this, RANK_COMPARATOR);</span>
-<span class="source-line-no">041</span><span id="line-41">      return this;</span>
-<span class="source-line-no">042</span><span id="line-42">   }</span>
-<span class="source-line-no">043</span><span id="line-43"></span>
-<span class="source-line-no">044</span><span id="line-44">   /**</span>
-<span class="source-line-no">045</span><span id="line-45">    * Performs an action on the specified matching values from all annotations in this list.</span>
-<span class="source-line-no">046</span><span id="line-46">    *</span>
-<span class="source-line-no">047</span><span id="line-47">    * @param &lt;T&gt; The annotation value type.</span>
-<span class="source-line-no">048</span><span id="line-48">    * @param type The annotation value type.</span>
-<span class="source-line-no">049</span><span id="line-49">    * @param name The annotation value name.</span>
-<span class="source-line-no">050</span><span id="line-50">    * @param filter A predicate to apply to the value to determine if action should be performed.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">051</span><span id="line-51">    * @param action An action to perform on the value.</span>
-<span class="source-line-no">052</span><span id="line-52">    * @return This object.</span>
-<span class="source-line-no">053</span><span id="line-53">    */</span>
-<span class="source-line-no">054</span><span id="line-54">   public &lt;T&gt; AnnotationList forEachValue(Class&lt;T&gt; type, String name, Predicate&lt;T&gt; filter, Consumer&lt;T&gt; action) {</span>
-<span class="source-line-no">055</span><span id="line-55">      forEach(x -&gt; x.forEachValue(type, name, filter, action));</span>
-<span class="source-line-no">056</span><span id="line-56">      return this;</span>
-<span class="source-line-no">057</span><span id="line-57">   }</span>
-<span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">   /**</span>
-<span class="source-line-no">060</span><span id="line-60">    * Performs an action on all matching annotations in this list.</span>
-<span class="source-line-no">061</span><span id="line-61">    *</span>
-<span class="source-line-no">062</span><span id="line-62">    * @param &lt;A&gt; The annotation type.</span>
-<span class="source-line-no">063</span><span id="line-63">    * @param type The annotation type.</span>
-<span class="source-line-no">064</span><span id="line-64">    * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">065</span><span id="line-65">    * @param action An action to perform on the entry.</span>
-<span class="source-line-no">066</span><span id="line-66">    * @return This object.</span>
-<span class="source-line-no">067</span><span id="line-67">    */</span>
-<span class="source-line-no">068</span><span id="line-68">   @SuppressWarnings("unchecked")</span>
-<span class="source-line-no">069</span><span id="line-69">   public &lt;A extends Annotation&gt; AnnotationList forEach(Class&lt;A&gt; type, Predicate&lt;AnnotationInfo&lt;A&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;A&gt;&gt; action) {</span>
-<span class="source-line-no">070</span><span id="line-70">      forEach(x -&gt; {</span>
-<span class="source-line-no">071</span><span id="line-71">         if (x.isType(type))</span>
-<span class="source-line-no">072</span><span id="line-72">            consume(filter, action, (AnnotationInfo&lt;A&gt;)x);</span>
-<span class="source-line-no">073</span><span id="line-73">      });</span>
-<span class="source-line-no">074</span><span id="line-74">      return this;</span>
-<span class="source-line-no">075</span><span id="line-75">   }</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">   /**</span>
-<span class="source-line-no">078</span><span id="line-78">    * Performs an action on all matching annotations in this list.</span>
-<span class="source-line-no">079</span><span id="line-79">    *</span>
-<span class="source-line-no">080</span><span id="line-80">    * @param &lt;A&gt; The annotation type.</span>
-<span class="source-line-no">081</span><span id="line-81">    * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">082</span><span id="line-82">    * @param action An action to perform on the entry.</span>
-<span class="source-line-no">083</span><span id="line-83">    * @return This object.</span>
-<span class="source-line-no">084</span><span id="line-84">    */</span>
-<span class="source-line-no">085</span><span id="line-85">   public &lt;A extends Annotation&gt; AnnotationList forEach(Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {</span>
-<span class="source-line-no">086</span><span id="line-86">      forEach(x -&gt; consume(filter, action, x));</span>
-<span class="source-line-no">087</span><span id="line-87">      return this;</span>
-<span class="source-line-no">088</span><span id="line-88">   }</span>
-<span class="source-line-no">089</span><span id="line-89">}</span>
+<span class="source-line-no">021</span><span id="line-21">import java.lang.annotation.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.function.*;</span>
+<span class="source-line-no">024</span><span id="line-24"></span>
+<span class="source-line-no">025</span><span id="line-25">/**</span>
+<span class="source-line-no">026</span><span id="line-26"> * An ordered list of annotations and the classes/methods/packages they were found on.</span>
+<span class="source-line-no">027</span><span id="line-27"> *</span>
+<span class="source-line-no">028</span><span id="line-28"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;/ul&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> *</span>
+<span class="source-line-no">031</span><span id="line-31"> * @serial exclude</span>
+<span class="source-line-no">032</span><span id="line-32"> */</span>
+<span class="source-line-no">033</span><span id="line-33">public class AnnotationList extends ArrayList&lt;AnnotationInfo&lt;?&gt;&gt; {</span>
+<span class="source-line-no">034</span><span id="line-34">   private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">035</span><span id="line-35"></span>
+<span class="source-line-no">036</span><span id="line-36">   private static final Comparator&lt;AnnotationInfo&lt;?&gt;&gt; RANK_COMPARATOR = (o1, o2) -&gt; o1.rank - o2.rank;</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38">   /**</span>
+<span class="source-line-no">039</span><span id="line-39">    * Sort the annotations in this list based on rank.</span>
+<span class="source-line-no">040</span><span id="line-40">    *</span>
+<span class="source-line-no">041</span><span id="line-41">    * @return This object.</span>
+<span class="source-line-no">042</span><span id="line-42">    */</span>
+<span class="source-line-no">043</span><span id="line-43">   public AnnotationList sort() {</span>
+<span class="source-line-no">044</span><span id="line-44">      Collections.sort(this, RANK_COMPARATOR);</span>
+<span class="source-line-no">045</span><span id="line-45">      return this;</span>
+<span class="source-line-no">046</span><span id="line-46">   }</span>
+<span class="source-line-no">047</span><span id="line-47"></span>
+<span class="source-line-no">048</span><span id="line-48">   /**</span>
+<span class="source-line-no">049</span><span id="line-49">    * Performs an action on the specified matching values from all annotations in this list.</span>
+<span class="source-line-no">050</span><span id="line-50">    *</span>
+<span class="source-line-no">051</span><span id="line-51">    * @param &lt;T&gt; The annotation value type.</span>
+<span class="source-line-no">052</span><span id="line-52">    * @param type The annotation value type.</span>
+<span class="source-line-no">053</span><span id="line-53">    * @param name The annotation value name.</span>
+<span class="source-line-no">054</span><span id="line-54">    * @param filter A predicate to apply to the value to determine if action should be performed.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">055</span><span id="line-55">    * @param action An action to perform on the value.</span>
+<span class="source-line-no">056</span><span id="line-56">    * @return This object.</span>
+<span class="source-line-no">057</span><span id="line-57">    */</span>
+<span class="source-line-no">058</span><span id="line-58">   public &lt;T&gt; AnnotationList forEachValue(Class&lt;T&gt; type, String name, Predicate&lt;T&gt; filter, Consumer&lt;T&gt; action) {</span>
+<span class="source-line-no">059</span><span id="line-59">      forEach(x -&gt; x.forEachValue(type, name, filter, action));</span>
+<span class="source-line-no">060</span><span id="line-60">      return this;</span>
+<span class="source-line-no">061</span><span id="line-61">   }</span>
+<span class="source-line-no">062</span><span id="line-62"></span>
+<span class="source-line-no">063</span><span id="line-63">   /**</span>
+<span class="source-line-no">064</span><span id="line-64">    * Performs an action on all matching annotations in this list.</span>
+<span class="source-line-no">065</span><span id="line-65">    *</span>
+<span class="source-line-no">066</span><span id="line-66">    * @param &lt;A&gt; The annotation type.</span>
+<span class="source-line-no">067</span><span id="line-67">    * @param type The annotation type.</span>
+<span class="source-line-no">068</span><span id="line-68">    * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">069</span><span id="line-69">    * @param action An action to perform on the entry.</span>
+<span class="source-line-no">070</span><span id="line-70">    * @return This object.</span>
+<span class="source-line-no">071</span><span id="line-71">    */</span>
+<span class="source-line-no">072</span><span id="line-72">   @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">073</span><span id="line-73">   public &lt;A extends Annotation&gt; AnnotationList forEach(Class&lt;A&gt; type, Predicate&lt;AnnotationInfo&lt;A&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;A&gt;&gt; action) {</span>
+<span class="source-line-no">074</span><span id="line-74">      forEach(x -&gt; {</span>
+<span class="source-line-no">075</span><span id="line-75">         if (x.isType(type))</span>
+<span class="source-line-no">076</span><span id="line-76">            consume(filter, action, (AnnotationInfo&lt;A&gt;)x);</span>
+<span class="source-line-no">077</span><span id="line-77">      });</span>
+<span class="source-line-no">078</span><span id="line-78">      return this;</span>
+<span class="source-line-no">079</span><span id="line-79">   }</span>
+<span class="source-line-no">080</span><span id="line-80"></span>
+<span class="source-line-no">081</span><span id="line-81">   /**</span>
+<span class="source-line-no">082</span><span id="line-82">    * Performs an action on all matching annotations in this list.</span>
+<span class="source-line-no">083</span><span id="line-83">    *</span>
+<span class="source-line-no">084</span><span id="line-84">    * @param &lt;A&gt; The annotation type.</span>
+<span class="source-line-no">085</span><span id="line-85">    * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">086</span><span id="line-86">    * @param action An action to perform on the entry.</span>
+<span class="source-line-no">087</span><span id="line-87">    * @return This object.</span>
+<span class="source-line-no">088</span><span id="line-88">    */</span>
+<span class="source-line-no">089</span><span id="line-89">   public &lt;A extends Annotation&gt; AnnotationList forEach(Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {</span>
+<span class="source-line-no">090</span><span id="line-90">      forEach(x -&gt; consume(filter, action, x));</span>
+<span class="source-line-no">091</span><span id="line-91">      return this;</span>
+<span class="source-line-no">092</span><span id="line-92">   }</span>
+<span class="source-line-no">093</span><span id="line-93">}</span>
 
 
 

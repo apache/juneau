@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Flushable.html" title="class or interface in java.io" class="external-link">Flushable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html" title="class or interface in java.lang" class="external-link">Appendable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-28">CsvWriter</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-32">CsvWriter</a></span>
 <span class="extends-implements">extends <a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.serializer">SerializerWriter</a></span></div>
 <div class="block">Specialized writer for serializing CSV.
 
@@ -242,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.Writer,boolean,int,char,boolean,org.apache.juneau.UriResolver)">
 <h3>CsvWriter</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-40">CsvWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-44">CsvWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
  boolean&nbsp;useWhitespace,
  int&nbsp;maxIndent,
  char&nbsp;quoteChar,
@@ -271,7 +271,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="writeEntry(java.lang.Object)">
 <h3>writeEntry</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-50">writeEntry</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-54">writeEntry</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Writes an entry to the writer.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -282,7 +282,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendln(int,java.lang.String)">
 <h3>appendln</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-70">appendln</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-74">appendln</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#appendln(int,java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text, followed by a newline
@@ -301,7 +301,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendln(java.lang.String)">
 <h3>appendln</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-76">appendln</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-80">appendln</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#appendln(java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified text followed by a newline (if the <code>useWhitespace</code> setting is enabled).</div>
 <dl class="notes">
@@ -317,7 +317,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(int,java.lang.String)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-82">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-86">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#append(int,java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text.</div>
@@ -335,7 +335,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(int,char)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-88">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-92">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
  char&nbsp;c)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#append(int,char)">SerializerWriter</a></code></span></div>
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text.</div>
@@ -353,7 +353,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="s()">
 <h3>s</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-94">s</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-98">s</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#s()">SerializerWriter</a></code></span></div>
 <div class="block">Adds a whitespace character to the output if the <code>useWhitespace</code> setting is enabled.</div>
 <dl class="notes">
@@ -367,7 +367,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="q()">
 <h3>q</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-100">q</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-104">q</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#q()">SerializerWriter</a></code></span></div>
 <div class="block">Adds the quote character specified by the <code>quoteChar</code> setting to the output.</div>
 <dl class="notes">
@@ -381,7 +381,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="i(int)">
 <h3>i</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-106">i</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-110">i</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#i(int)">SerializerWriter</a></code></span></div>
 <div class="block">Writes an indent to the writer if the <code>useWhitespace</code> setting is enabled.</div>
 <dl class="notes">
@@ -397,7 +397,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="nl(int)">
 <h3>nl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-112">nl</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-116">nl</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#nl(int)">SerializerWriter</a></code></span></div>
 <div class="block">Writes a newline to the writer if the <code>useWhitespace</code> setting is enabled.</div>
 <dl class="notes">
@@ -413,7 +413,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.Object)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-118">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;text)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-122">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#append(java.lang.Object)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
 <dl class="notes">
@@ -429,7 +429,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.String)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-124">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-128">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#append(java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
 <dl class="notes">
@@ -445,7 +445,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendIf(boolean,java.lang.String)">
 <h3>appendIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-130">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;b,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-134">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;b,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#appendIf(boolean,java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified text to the writer if b is true.</div>
@@ -463,7 +463,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendIf(boolean,char)">
 <h3>appendIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-136">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;b,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-140">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;b,
  char&nbsp;c)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#appendIf(boolean,char)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified text to the writer if b is true.</div>
@@ -481,7 +481,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(char)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-142">append</a></span><wbr><span class="parameters">(char&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvWriter.html" title="class in org.apache.juneau.csv">CsvWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/csv/CsvWriter.html#line-146">append</a></span><wbr><span class="parameters">(char&nbsp;c)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html#append(char)" title="class or interface in java.lang" class="external-link">append</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html" title="class or interface in java.lang" class="external-link">Appendable</a></code></dd>

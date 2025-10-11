@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentMap.html" title="class or interface in java.util.concurrent" class="external-link">ConcurrentMap</a>&lt;org.apache.juneau.internal.TwoKeyConcurrentCache.Key&lt;K1,<wbr>K2&gt;,<wbr>V&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;org.apache.juneau.internal.TwoKeyConcurrentCache.Key&lt;K1,<wbr>K2&gt;,<wbr>V&gt;</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/TwoKeyConcurrentCache.html#line-30">TwoKeyConcurrentCache</a>&lt;K1,<wbr>K2,<wbr>V&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/TwoKeyConcurrentCache.html#line-34">TwoKeyConcurrentCache</a>&lt;K1,<wbr>K2,<wbr>V&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html" title="class or interface in java.util.concurrent" class="external-link">ConcurrentHashMap</a>&lt;org.apache.juneau.internal.TwoKeyConcurrentCache.Key&lt;K1,<wbr>K2&gt;,<wbr>V&gt;</span></div>
 <div class="block">A hashmap that allows for two-part keys.
 
@@ -186,14 +186,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>TwoKeyConcurrentCache</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/TwoKeyConcurrentCache.html#line-39">TwoKeyConcurrentCache</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/TwoKeyConcurrentCache.html#line-43">TwoKeyConcurrentCache</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(boolean,java.util.function.BiFunction)">
 <h3>TwoKeyConcurrentCache</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/TwoKeyConcurrentCache.html#line-48">TwoKeyConcurrentCache</a></span><wbr><span class="parameters">(boolean&nbsp;disabled,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/TwoKeyConcurrentCache.html#line-52">TwoKeyConcurrentCache</a></span><wbr><span class="parameters">(boolean&nbsp;disabled,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;<a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">K1</a>,<wbr><a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">K2</a>,<wbr><a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">V</a>&gt;&nbsp;supplier)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -214,7 +214,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="put(K1,K2,V)">
 <h3 id="put(java.lang.Object,java.lang.Object,java.lang.Object)">put</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">V</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/TwoKeyConcurrentCache.html#line-61">put</a></span><wbr><span class="parameters">(<a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">K1</a>&nbsp;key1,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">V</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/TwoKeyConcurrentCache.html#line-65">put</a></span><wbr><span class="parameters">(<a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">K1</a>&nbsp;key1,
  <a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">K2</a>&nbsp;key2,
  <a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">V</a>&nbsp;value)</span></div>
 <div class="block">Adds an entry to this map.</div>
@@ -231,7 +231,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(K1,K2)">
 <h3 id="get(java.lang.Object,java.lang.Object)">get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">V</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/TwoKeyConcurrentCache.html#line-75">get</a></span><wbr><span class="parameters">(<a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">K1</a>&nbsp;key1,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">V</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/internal/TwoKeyConcurrentCache.html#line-79">get</a></span><wbr><span class="parameters">(<a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">K1</a>&nbsp;key1,
  <a href="TwoKeyConcurrentCache.html" title="type parameter in TwoKeyConcurrentCache">K2</a>&nbsp;key2)</span></div>
 <div class="block">Retrieves an entry from this map.</div>
 <dl class="notes">

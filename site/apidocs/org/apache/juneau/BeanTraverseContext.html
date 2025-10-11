@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="jsonschema/JsonSchemaGenerator.html" title="class in org.apache.juneau.jsonschema">JsonSchemaGenerator</a></code>, <code><a href="serializer/Serializer.html" title="class in org.apache.juneau.serializer">Serializer</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-41">BeanTraverseContext</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-45">BeanTraverseContext</a></span>
 <span class="extends-implements">extends <a href="BeanContextable.html" title="class in org.apache.juneau">BeanContextable</a></span></div>
 <div class="block">Parent class for all classes that traverse POJOs.
 
@@ -221,7 +221,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.BeanTraverseContext.Builder)">
 <h3>BeanTraverseContext</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-731">BeanTraverseContext</a></span><wbr><span class="parameters">(<a href="BeanTraverseContext.Builder.html" title="class in org.apache.juneau">BeanTraverseContext.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-735">BeanTraverseContext</a></span><wbr><span class="parameters">(<a href="BeanTraverseContext.Builder.html" title="class in org.apache.juneau">BeanTraverseContext.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -240,7 +240,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="BeanTraverseContext.Builder.html" title="class in org.apache.juneau">BeanTraverseContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-742">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="BeanTraverseContext.Builder.html" title="class in org.apache.juneau">BeanTraverseContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-746">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -257,7 +257,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isDetectRecursions()">
 <h3>isDetectRecursions</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-756">isDetectRecursions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-760">isDetectRecursions</a></span>()</div>
 <div class="block">Automatically detect POJO recursions.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -274,7 +274,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isIgnoreRecursions()">
 <h3>isIgnoreRecursions</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-768">isIgnoreRecursions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-772">isIgnoreRecursions</a></span>()</div>
 <div class="block">Ignore recursion errors.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -292,7 +292,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getInitialDepth()">
 <h3>getInitialDepth</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-779">getInitialDepth</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-783">getInitialDepth</a></span>()</div>
 <div class="block">Initial depth.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -309,7 +309,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMaxDepth()">
 <h3>getMaxDepth</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-791">getMaxDepth</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-795">getMaxDepth</a></span>()</div>
 <div class="block">Max traversal depth.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -327,7 +327,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-799">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTraverseContext.html#line-803">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

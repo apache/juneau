@@ -11,205 +11,209 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.http.part;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.internal.ClassUtils.*;</span>
-<span class="source-line-no">016</span><span id="line-16"></span>
-<span class="source-line-no">017</span><span id="line-17">import java.util.*;</span>
-<span class="source-line-no">018</span><span id="line-18">import java.util.function.*;</span>
-<span class="source-line-no">019</span><span id="line-19"></span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.http.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.annotation.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.assertions.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.common.utils.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.http.header.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.internal.*;</span>
-<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.reflect.*;</span>
-<span class="source-line-no">028</span><span id="line-28"></span>
-<span class="source-line-no">029</span><span id="line-29">/**</span>
-<span class="source-line-no">030</span><span id="line-30"> * Implementation of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries.</span>
-<span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * Provides the following features:</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> *       Values from {@link Supplier Suppliers}.</span>
-<span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> *       Caching.</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.part;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.internal.ClassUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.http.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.annotation.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.assertions.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.common.utils.*;</span>
+<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.http.header.*;</span>
+<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.internal.*;</span>
+<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.reflect.*;</span>
+<span class="source-line-no">032</span><span id="line-32"></span>
+<span class="source-line-no">033</span><span id="line-33">/**</span>
+<span class="source-line-no">034</span><span id="line-34"> * Implementation of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries.</span>
+<span class="source-line-no">035</span><span id="line-35"> *</span>
+<span class="source-line-no">036</span><span id="line-36"> * Provides the following features:</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> *       Fluent setters.</span>
+<span class="source-line-no">039</span><span id="line-39"> *       Values from {@link Supplier Suppliers}.</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *       Fluent assertions.</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;/ul&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> *       Caching.</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> *       Fluent setters.</span>
+<span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> *       Fluent assertions.</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;/ul&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> */</span>
-<span class="source-line-no">048</span><span id="line-48">@FluentSetters</span>
-<span class="source-line-no">049</span><span id="line-49">@BeanIgnore</span>
-<span class="source-line-no">050</span><span id="line-50">public class BasicPart implements NameValuePair, Headerable {</span>
-<span class="source-line-no">051</span><span id="line-51">   private final String name;</span>
-<span class="source-line-no">052</span><span id="line-52">   private final Object value;</span>
-<span class="source-line-no">053</span><span id="line-53"></span>
-<span class="source-line-no">054</span><span id="line-54">   /**</span>
-<span class="source-line-no">055</span><span id="line-55">    * Static creator.</span>
-<span class="source-line-no">056</span><span id="line-56">    *</span>
-<span class="source-line-no">057</span><span id="line-57">    * @param name The part name.</span>
-<span class="source-line-no">058</span><span id="line-58">    * @param value The part value.</span>
-<span class="source-line-no">059</span><span id="line-59">    * @return A new {@link BasicPart} object.</span>
-<span class="source-line-no">060</span><span id="line-60">    */</span>
-<span class="source-line-no">061</span><span id="line-61">   public static BasicPart of(String name, Object value) {</span>
-<span class="source-line-no">062</span><span id="line-62">      return new BasicPart(name, value);</span>
-<span class="source-line-no">063</span><span id="line-63">   }</span>
-<span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">   /**</span>
-<span class="source-line-no">066</span><span id="line-66">    * Creates a {@link NameValuePair} from a name/value pair string (e.g. &lt;js&gt;"Foo: bar"&lt;/js&gt;)</span>
-<span class="source-line-no">067</span><span id="line-67">    *</span>
-<span class="source-line-no">068</span><span id="line-68">    * @param pair The pair string.</span>
-<span class="source-line-no">069</span><span id="line-69">    * @return A new {@link NameValuePair} object.</span>
-<span class="source-line-no">070</span><span id="line-70">    */</span>
-<span class="source-line-no">071</span><span id="line-71">   public static BasicPart ofPair(String pair) {</span>
-<span class="source-line-no">072</span><span id="line-72">      if (pair == null)</span>
-<span class="source-line-no">073</span><span id="line-73">         return null;</span>
-<span class="source-line-no">074</span><span id="line-74">      int i = pair.indexOf(':');</span>
-<span class="source-line-no">075</span><span id="line-75">      if (i == -1)</span>
-<span class="source-line-no">076</span><span id="line-76">         i = pair.indexOf('=');</span>
-<span class="source-line-no">077</span><span id="line-77">      if (i == -1)</span>
-<span class="source-line-no">078</span><span id="line-78">         return of(pair, "");</span>
-<span class="source-line-no">079</span><span id="line-79">      return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());</span>
-<span class="source-line-no">080</span><span id="line-80">   }</span>
-<span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82">   /**</span>
-<span class="source-line-no">083</span><span id="line-83">    * Utility method for converting an arbitrary object to a {@link NameValuePair}.</span>
-<span class="source-line-no">084</span><span id="line-84">    *</span>
-<span class="source-line-no">085</span><span id="line-85">    * @param o</span>
-<span class="source-line-no">086</span><span id="line-86">    *    The object to cast or convert to a {@link NameValuePair}.</span>
-<span class="source-line-no">087</span><span id="line-87">    * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.</span>
-<span class="source-line-no">088</span><span id="line-88">    */</span>
-<span class="source-line-no">089</span><span id="line-89">   @SuppressWarnings("rawtypes")</span>
-<span class="source-line-no">090</span><span id="line-90">   public static NameValuePair cast(Object o) {</span>
-<span class="source-line-no">091</span><span id="line-91">      if (o instanceof NameValuePair)</span>
-<span class="source-line-no">092</span><span id="line-92">         return (NameValuePair)o;</span>
-<span class="source-line-no">093</span><span id="line-93">      if (o instanceof NameValuePairable)</span>
-<span class="source-line-no">094</span><span id="line-94">         return ((NameValuePairable)o).asNameValuePair();</span>
-<span class="source-line-no">095</span><span id="line-95">      if (o instanceof NameValuePair) {</span>
-<span class="source-line-no">096</span><span id="line-96">         NameValuePair p = (NameValuePair)o;</span>
-<span class="source-line-no">097</span><span id="line-97">         return BasicPart.of(p.getName(), p.getValue());</span>
-<span class="source-line-no">098</span><span id="line-98">      }</span>
-<span class="source-line-no">099</span><span id="line-99">      if (o instanceof Headerable) {</span>
-<span class="source-line-no">100</span><span id="line-100">         Header x = ((Headerable)o).asHeader();</span>
-<span class="source-line-no">101</span><span id="line-101">         return BasicPart.of(x.getName(), x.getValue());</span>
+<span class="source-line-no">047</span><span id="line-47"> *</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;/ul&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> */</span>
+<span class="source-line-no">052</span><span id="line-52">@FluentSetters</span>
+<span class="source-line-no">053</span><span id="line-53">@BeanIgnore</span>
+<span class="source-line-no">054</span><span id="line-54">public class BasicPart implements NameValuePair, Headerable {</span>
+<span class="source-line-no">055</span><span id="line-55">   private final String name;</span>
+<span class="source-line-no">056</span><span id="line-56">   private final Object value;</span>
+<span class="source-line-no">057</span><span id="line-57"></span>
+<span class="source-line-no">058</span><span id="line-58">   /**</span>
+<span class="source-line-no">059</span><span id="line-59">    * Static creator.</span>
+<span class="source-line-no">060</span><span id="line-60">    *</span>
+<span class="source-line-no">061</span><span id="line-61">    * @param name The part name.</span>
+<span class="source-line-no">062</span><span id="line-62">    * @param value The part value.</span>
+<span class="source-line-no">063</span><span id="line-63">    * @return A new {@link BasicPart} object.</span>
+<span class="source-line-no">064</span><span id="line-64">    */</span>
+<span class="source-line-no">065</span><span id="line-65">   public static BasicPart of(String name, Object value) {</span>
+<span class="source-line-no">066</span><span id="line-66">      return new BasicPart(name, value);</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">   /**</span>
+<span class="source-line-no">070</span><span id="line-70">    * Creates a {@link NameValuePair} from a name/value pair string (e.g. &lt;js&gt;"Foo: bar"&lt;/js&gt;)</span>
+<span class="source-line-no">071</span><span id="line-71">    *</span>
+<span class="source-line-no">072</span><span id="line-72">    * @param pair The pair string.</span>
+<span class="source-line-no">073</span><span id="line-73">    * @return A new {@link NameValuePair} object.</span>
+<span class="source-line-no">074</span><span id="line-74">    */</span>
+<span class="source-line-no">075</span><span id="line-75">   public static BasicPart ofPair(String pair) {</span>
+<span class="source-line-no">076</span><span id="line-76">      if (pair == null)</span>
+<span class="source-line-no">077</span><span id="line-77">         return null;</span>
+<span class="source-line-no">078</span><span id="line-78">      int i = pair.indexOf(':');</span>
+<span class="source-line-no">079</span><span id="line-79">      if (i == -1)</span>
+<span class="source-line-no">080</span><span id="line-80">         i = pair.indexOf('=');</span>
+<span class="source-line-no">081</span><span id="line-81">      if (i == -1)</span>
+<span class="source-line-no">082</span><span id="line-82">         return of(pair, "");</span>
+<span class="source-line-no">083</span><span id="line-83">      return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());</span>
+<span class="source-line-no">084</span><span id="line-84">   }</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">   /**</span>
+<span class="source-line-no">087</span><span id="line-87">    * Utility method for converting an arbitrary object to a {@link NameValuePair}.</span>
+<span class="source-line-no">088</span><span id="line-88">    *</span>
+<span class="source-line-no">089</span><span id="line-89">    * @param o</span>
+<span class="source-line-no">090</span><span id="line-90">    *    The object to cast or convert to a {@link NameValuePair}.</span>
+<span class="source-line-no">091</span><span id="line-91">    * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.</span>
+<span class="source-line-no">092</span><span id="line-92">    */</span>
+<span class="source-line-no">093</span><span id="line-93">   @SuppressWarnings("rawtypes")</span>
+<span class="source-line-no">094</span><span id="line-94">   public static NameValuePair cast(Object o) {</span>
+<span class="source-line-no">095</span><span id="line-95">      if (o instanceof NameValuePair)</span>
+<span class="source-line-no">096</span><span id="line-96">         return (NameValuePair)o;</span>
+<span class="source-line-no">097</span><span id="line-97">      if (o instanceof NameValuePairable)</span>
+<span class="source-line-no">098</span><span id="line-98">         return ((NameValuePairable)o).asNameValuePair();</span>
+<span class="source-line-no">099</span><span id="line-99">      if (o instanceof NameValuePair) {</span>
+<span class="source-line-no">100</span><span id="line-100">         NameValuePair p = (NameValuePair)o;</span>
+<span class="source-line-no">101</span><span id="line-101">         return BasicPart.of(p.getName(), p.getValue());</span>
 <span class="source-line-no">102</span><span id="line-102">      }</span>
-<span class="source-line-no">103</span><span id="line-103">      if (o instanceof Map.Entry) {</span>
-<span class="source-line-no">104</span><span id="line-104">         Map.Entry e = (Map.Entry)o;</span>
-<span class="source-line-no">105</span><span id="line-105">         return BasicPart.of(Utils.s(e.getKey()), e.getValue());</span>
+<span class="source-line-no">103</span><span id="line-103">      if (o instanceof Headerable) {</span>
+<span class="source-line-no">104</span><span id="line-104">         Header x = ((Headerable)o).asHeader();</span>
+<span class="source-line-no">105</span><span id="line-105">         return BasicPart.of(x.getName(), x.getValue());</span>
 <span class="source-line-no">106</span><span id="line-106">      }</span>
-<span class="source-line-no">107</span><span id="line-107">      throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", className(o));</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   /**</span>
-<span class="source-line-no">111</span><span id="line-111">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the {@link #cast(Object)} method can be used on the specified object.</span>
-<span class="source-line-no">112</span><span id="line-112">    *</span>
-<span class="source-line-no">113</span><span id="line-113">    * @param o The object to check.</span>
-<span class="source-line-no">114</span><span id="line-114">    * @return &lt;jk&gt;true&lt;/jk&gt; if the {@link #cast(Object)} method can be used on the specified object.</span>
-<span class="source-line-no">115</span><span id="line-115">    */</span>
-<span class="source-line-no">116</span><span id="line-116">   public static boolean canCast(Object o) {</span>
-<span class="source-line-no">117</span><span id="line-117">      ClassInfo ci = ClassInfo.of(o);</span>
-<span class="source-line-no">118</span><span id="line-118">      return ci != null &amp;&amp; ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);</span>
-<span class="source-line-no">119</span><span id="line-119">   }</span>
-<span class="source-line-no">120</span><span id="line-120"></span>
-<span class="source-line-no">121</span><span id="line-121">   /**</span>
-<span class="source-line-no">122</span><span id="line-122">    * Constructor.</span>
-<span class="source-line-no">123</span><span id="line-123">    *</span>
-<span class="source-line-no">124</span><span id="line-124">    * @param name The part name.</span>
-<span class="source-line-no">125</span><span id="line-125">    * @param value The POJO to serialize to The part value.</span>
-<span class="source-line-no">126</span><span id="line-126">    */</span>
-<span class="source-line-no">127</span><span id="line-127">   public BasicPart(String name, Object value) {</span>
-<span class="source-line-no">128</span><span id="line-128">      this.name = name;</span>
-<span class="source-line-no">129</span><span id="line-129">      this.value = value;</span>
-<span class="source-line-no">130</span><span id="line-130">   }</span>
-<span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">   /**</span>
-<span class="source-line-no">133</span><span id="line-133">    * Copy constructor.</span>
-<span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * @param copyFrom The object to copy.</span>
-<span class="source-line-no">136</span><span id="line-136">    */</span>
-<span class="source-line-no">137</span><span id="line-137">   protected BasicPart(BasicPart copyFrom) {</span>
-<span class="source-line-no">138</span><span id="line-138">      Utils.assertArgNotNull("copyFrom", copyFrom);</span>
-<span class="source-line-no">139</span><span id="line-139">      this.name = copyFrom.name;</span>
-<span class="source-line-no">140</span><span id="line-140">      this.value = copyFrom.value;</span>
-<span class="source-line-no">141</span><span id="line-141">   }</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">   /**</span>
-<span class="source-line-no">144</span><span id="line-144">    * Provides an object for performing assertions against the name of this pair.</span>
-<span class="source-line-no">145</span><span id="line-145">    *</span>
-<span class="source-line-no">146</span><span id="line-146">    * @return An object for performing assertions against the name of this pair.</span>
-<span class="source-line-no">147</span><span id="line-147">    */</span>
-<span class="source-line-no">148</span><span id="line-148">   public FluentStringAssertion&lt;BasicPart&gt; assertName() {</span>
-<span class="source-line-no">149</span><span id="line-149">      return new FluentStringAssertion&lt;&gt;(getName(), this);</span>
-<span class="source-line-no">150</span><span id="line-150">   }</span>
-<span class="source-line-no">151</span><span id="line-151"></span>
-<span class="source-line-no">152</span><span id="line-152">   /**</span>
-<span class="source-line-no">153</span><span id="line-153">    * Provides an object for performing assertions against the value of this pair.</span>
-<span class="source-line-no">154</span><span id="line-154">    *</span>
-<span class="source-line-no">155</span><span id="line-155">    * @return An object for performing assertions against the value of this pair.</span>
-<span class="source-line-no">156</span><span id="line-156">    */</span>
-<span class="source-line-no">157</span><span id="line-157">   public FluentStringAssertion&lt;BasicPart&gt; assertValue() {</span>
-<span class="source-line-no">158</span><span id="line-158">      return new FluentStringAssertion&lt;&gt;(getValue(), this);</span>
-<span class="source-line-no">159</span><span id="line-159">   }</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">   @Override /* Headerable */</span>
-<span class="source-line-no">162</span><span id="line-162">   public BasicHeader asHeader() {</span>
-<span class="source-line-no">163</span><span id="line-163">      return BasicHeader.of(name, Utils.s(value));</span>
-<span class="source-line-no">164</span><span id="line-164">   }</span>
-<span class="source-line-no">165</span><span id="line-165"></span>
-<span class="source-line-no">166</span><span id="line-166">   @Override /* NameValuePair */</span>
-<span class="source-line-no">167</span><span id="line-167">   public String getName() {</span>
-<span class="source-line-no">168</span><span id="line-168">      return name;</span>
-<span class="source-line-no">169</span><span id="line-169">   }</span>
-<span class="source-line-no">170</span><span id="line-170"></span>
-<span class="source-line-no">171</span><span id="line-171">   @Override /* NameValuePair */</span>
-<span class="source-line-no">172</span><span id="line-172">   public String getValue() {</span>
-<span class="source-line-no">173</span><span id="line-173">      return Utils.s(unwrap(value));</span>
-<span class="source-line-no">174</span><span id="line-174">   }</span>
-<span class="source-line-no">175</span><span id="line-175"></span>
-<span class="source-line-no">176</span><span id="line-176">   /**</span>
-<span class="source-line-no">177</span><span id="line-177">    * Returns the raw value of the part.</span>
-<span class="source-line-no">178</span><span id="line-178">    *</span>
-<span class="source-line-no">179</span><span id="line-179">    * @return The raw value of the part.</span>
-<span class="source-line-no">180</span><span id="line-180">    */</span>
-<span class="source-line-no">181</span><span id="line-181">   public Object getRawValue() {</span>
-<span class="source-line-no">182</span><span id="line-182">      return unwrap(value);</span>
-<span class="source-line-no">183</span><span id="line-183">   }</span>
-<span class="source-line-no">184</span><span id="line-184"></span>
-<span class="source-line-no">185</span><span id="line-185">   @Override /* Object */</span>
-<span class="source-line-no">186</span><span id="line-186">   public String toString() {</span>
-<span class="source-line-no">187</span><span id="line-187">      return getName() + "=" + getValue();</span>
-<span class="source-line-no">188</span><span id="line-188">   }</span>
-<span class="source-line-no">189</span><span id="line-189"></span>
-<span class="source-line-no">190</span><span id="line-190">   private Object unwrap(Object o) {</span>
-<span class="source-line-no">191</span><span id="line-191">      while (o instanceof Supplier)</span>
-<span class="source-line-no">192</span><span id="line-192">         o = ((Supplier&lt;?&gt;)o).get();</span>
-<span class="source-line-no">193</span><span id="line-193">      return o;</span>
-<span class="source-line-no">194</span><span id="line-194">   }</span>
-<span class="source-line-no">195</span><span id="line-195"></span>
-<span class="source-line-no">196</span><span id="line-196">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">197</span><span id="line-197"></span>
-<span class="source-line-no">198</span><span id="line-198">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">199</span><span id="line-199">}</span>
+<span class="source-line-no">107</span><span id="line-107">      if (o instanceof Map.Entry) {</span>
+<span class="source-line-no">108</span><span id="line-108">         Map.Entry e = (Map.Entry)o;</span>
+<span class="source-line-no">109</span><span id="line-109">         return BasicPart.of(Utils.s(e.getKey()), e.getValue());</span>
+<span class="source-line-no">110</span><span id="line-110">      }</span>
+<span class="source-line-no">111</span><span id="line-111">      throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", className(o));</span>
+<span class="source-line-no">112</span><span id="line-112">   }</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">   /**</span>
+<span class="source-line-no">115</span><span id="line-115">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the {@link #cast(Object)} method can be used on the specified object.</span>
+<span class="source-line-no">116</span><span id="line-116">    *</span>
+<span class="source-line-no">117</span><span id="line-117">    * @param o The object to check.</span>
+<span class="source-line-no">118</span><span id="line-118">    * @return &lt;jk&gt;true&lt;/jk&gt; if the {@link #cast(Object)} method can be used on the specified object.</span>
+<span class="source-line-no">119</span><span id="line-119">    */</span>
+<span class="source-line-no">120</span><span id="line-120">   public static boolean canCast(Object o) {</span>
+<span class="source-line-no">121</span><span id="line-121">      ClassInfo ci = ClassInfo.of(o);</span>
+<span class="source-line-no">122</span><span id="line-122">      return ci != null &amp;&amp; ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);</span>
+<span class="source-line-no">123</span><span id="line-123">   }</span>
+<span class="source-line-no">124</span><span id="line-124"></span>
+<span class="source-line-no">125</span><span id="line-125">   /**</span>
+<span class="source-line-no">126</span><span id="line-126">    * Constructor.</span>
+<span class="source-line-no">127</span><span id="line-127">    *</span>
+<span class="source-line-no">128</span><span id="line-128">    * @param name The part name.</span>
+<span class="source-line-no">129</span><span id="line-129">    * @param value The POJO to serialize to The part value.</span>
+<span class="source-line-no">130</span><span id="line-130">    */</span>
+<span class="source-line-no">131</span><span id="line-131">   public BasicPart(String name, Object value) {</span>
+<span class="source-line-no">132</span><span id="line-132">      this.name = name;</span>
+<span class="source-line-no">133</span><span id="line-133">      this.value = value;</span>
+<span class="source-line-no">134</span><span id="line-134">   }</span>
+<span class="source-line-no">135</span><span id="line-135"></span>
+<span class="source-line-no">136</span><span id="line-136">   /**</span>
+<span class="source-line-no">137</span><span id="line-137">    * Copy constructor.</span>
+<span class="source-line-no">138</span><span id="line-138">    *</span>
+<span class="source-line-no">139</span><span id="line-139">    * @param copyFrom The object to copy.</span>
+<span class="source-line-no">140</span><span id="line-140">    */</span>
+<span class="source-line-no">141</span><span id="line-141">   protected BasicPart(BasicPart copyFrom) {</span>
+<span class="source-line-no">142</span><span id="line-142">      Utils.assertArgNotNull("copyFrom", copyFrom);</span>
+<span class="source-line-no">143</span><span id="line-143">      this.name = copyFrom.name;</span>
+<span class="source-line-no">144</span><span id="line-144">      this.value = copyFrom.value;</span>
+<span class="source-line-no">145</span><span id="line-145">   }</span>
+<span class="source-line-no">146</span><span id="line-146"></span>
+<span class="source-line-no">147</span><span id="line-147">   /**</span>
+<span class="source-line-no">148</span><span id="line-148">    * Provides an object for performing assertions against the name of this pair.</span>
+<span class="source-line-no">149</span><span id="line-149">    *</span>
+<span class="source-line-no">150</span><span id="line-150">    * @return An object for performing assertions against the name of this pair.</span>
+<span class="source-line-no">151</span><span id="line-151">    */</span>
+<span class="source-line-no">152</span><span id="line-152">   public FluentStringAssertion&lt;BasicPart&gt; assertName() {</span>
+<span class="source-line-no">153</span><span id="line-153">      return new FluentStringAssertion&lt;&gt;(getName(), this);</span>
+<span class="source-line-no">154</span><span id="line-154">   }</span>
+<span class="source-line-no">155</span><span id="line-155"></span>
+<span class="source-line-no">156</span><span id="line-156">   /**</span>
+<span class="source-line-no">157</span><span id="line-157">    * Provides an object for performing assertions against the value of this pair.</span>
+<span class="source-line-no">158</span><span id="line-158">    *</span>
+<span class="source-line-no">159</span><span id="line-159">    * @return An object for performing assertions against the value of this pair.</span>
+<span class="source-line-no">160</span><span id="line-160">    */</span>
+<span class="source-line-no">161</span><span id="line-161">   public FluentStringAssertion&lt;BasicPart&gt; assertValue() {</span>
+<span class="source-line-no">162</span><span id="line-162">      return new FluentStringAssertion&lt;&gt;(getValue(), this);</span>
+<span class="source-line-no">163</span><span id="line-163">   }</span>
+<span class="source-line-no">164</span><span id="line-164"></span>
+<span class="source-line-no">165</span><span id="line-165">   @Override /* Headerable */</span>
+<span class="source-line-no">166</span><span id="line-166">   public BasicHeader asHeader() {</span>
+<span class="source-line-no">167</span><span id="line-167">      return BasicHeader.of(name, Utils.s(value));</span>
+<span class="source-line-no">168</span><span id="line-168">   }</span>
+<span class="source-line-no">169</span><span id="line-169"></span>
+<span class="source-line-no">170</span><span id="line-170">   @Override /* NameValuePair */</span>
+<span class="source-line-no">171</span><span id="line-171">   public String getName() {</span>
+<span class="source-line-no">172</span><span id="line-172">      return name;</span>
+<span class="source-line-no">173</span><span id="line-173">   }</span>
+<span class="source-line-no">174</span><span id="line-174"></span>
+<span class="source-line-no">175</span><span id="line-175">   @Override /* NameValuePair */</span>
+<span class="source-line-no">176</span><span id="line-176">   public String getValue() {</span>
+<span class="source-line-no">177</span><span id="line-177">      return Utils.s(unwrap(value));</span>
+<span class="source-line-no">178</span><span id="line-178">   }</span>
+<span class="source-line-no">179</span><span id="line-179"></span>
+<span class="source-line-no">180</span><span id="line-180">   /**</span>
+<span class="source-line-no">181</span><span id="line-181">    * Returns the raw value of the part.</span>
+<span class="source-line-no">182</span><span id="line-182">    *</span>
+<span class="source-line-no">183</span><span id="line-183">    * @return The raw value of the part.</span>
+<span class="source-line-no">184</span><span id="line-184">    */</span>
+<span class="source-line-no">185</span><span id="line-185">   public Object getRawValue() {</span>
+<span class="source-line-no">186</span><span id="line-186">      return unwrap(value);</span>
+<span class="source-line-no">187</span><span id="line-187">   }</span>
+<span class="source-line-no">188</span><span id="line-188"></span>
+<span class="source-line-no">189</span><span id="line-189">   @Override /* Object */</span>
+<span class="source-line-no">190</span><span id="line-190">   public String toString() {</span>
+<span class="source-line-no">191</span><span id="line-191">      return getName() + "=" + getValue();</span>
+<span class="source-line-no">192</span><span id="line-192">   }</span>
+<span class="source-line-no">193</span><span id="line-193"></span>
+<span class="source-line-no">194</span><span id="line-194">   private Object unwrap(Object o) {</span>
+<span class="source-line-no">195</span><span id="line-195">      while (o instanceof Supplier)</span>
+<span class="source-line-no">196</span><span id="line-196">         o = ((Supplier&lt;?&gt;)o).get();</span>
+<span class="source-line-no">197</span><span id="line-197">      return o;</span>
+<span class="source-line-no">198</span><span id="line-198">   }</span>
+<span class="source-line-no">199</span><span id="line-199"></span>
+<span class="source-line-no">200</span><span id="line-200">   // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">201</span><span id="line-201"></span>
+<span class="source-line-no">202</span><span id="line-202">   // &lt;/FluentSetters&gt;</span>
+<span class="source-line-no">203</span><span id="line-203">}</span>
 
 
 

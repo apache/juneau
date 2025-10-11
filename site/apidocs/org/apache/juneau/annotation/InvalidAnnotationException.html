@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/annotation/InvalidAnnotationException.html#line-28">InvalidAnnotationException</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/annotation/InvalidAnnotationException.html#line-32">InvalidAnnotationException</a></span>
 <span class="extends-implements">extends <a href="../BasicRuntimeException.html" title="class in org.apache.juneau">BasicRuntimeException</a></span></div>
 <div class="block">Defines an invalid usage of an annotation.
 
@@ -158,7 +158,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.Object...)">
 <h3>InvalidAnnotationException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/annotation/InvalidAnnotationException.html#line-38">InvalidAnnotationException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/annotation/InvalidAnnotationException.html#line-42">InvalidAnnotationException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -180,7 +180,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="assertNoInvalidAnnotations(org.apache.juneau.reflect.MethodInfo,java.lang.Class...)">
 <h3>assertNoInvalidAnnotations</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/annotation/InvalidAnnotationException.html#line-49">assertNoInvalidAnnotations</a></span><wbr><span class="parameters">(<a href="../reflect/MethodInfo.html" title="class in org.apache.juneau.reflect">MethodInfo</a>&nbsp;onMethod,
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/annotation/InvalidAnnotationException.html#line-53">assertNoInvalidAnnotations</a></span><wbr><span class="parameters">(<a href="../reflect/MethodInfo.html" title="class in org.apache.juneau.reflect">MethodInfo</a>&nbsp;onMethod,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;...&nbsp;types)</span>
                                        throws <span class="exceptions"><a href="InvalidAnnotationException.html" title="class in org.apache.juneau.annotation">InvalidAnnotationException</a></span></div>
 <div class="block">Throws an <a href="InvalidAnnotationException.html" title="class in org.apache.juneau.annotation"><code>InvalidAnnotationException</code></a> if the specified method contains any of the specified annotations.</div>

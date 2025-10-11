@@ -11,83 +11,87 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.junit.bct;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import java.util.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import java.util.function.*;</span>
-<span class="source-line-no">017</span><span id="line-17"></span>
-<span class="source-line-no">018</span><span id="line-18">/**</span>
-<span class="source-line-no">019</span><span id="line-19"> * Functional interface for converting collection-like objects to standardized List&amp;lt;Object&amp;gt; format.</span>
-<span class="source-line-no">020</span><span id="line-20"> *</span>
-<span class="source-line-no">021</span><span id="line-21"> * &lt;p&gt;Listifiers enable the Bean-Centric Testing framework to treat diverse collection-like</span>
-<span class="source-line-no">022</span><span id="line-22"> * objects uniformly during property access and iteration. They convert various iterable</span>
-<span class="source-line-no">023</span><span id="line-23"> * structures into a common List format for consistent processing.&lt;/p&gt;</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.junit.bct;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import java.util.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import java.util.function.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">/**</span>
+<span class="source-line-no">023</span><span id="line-23"> * Functional interface for converting collection-like objects to standardized List&amp;lt;Object&amp;gt; format.</span>
 <span class="source-line-no">024</span><span id="line-24"> *</span>
-<span class="source-line-no">025</span><span id="line-25"> * &lt;h5 class='section'&gt;Common Use Cases:&lt;/h5&gt;</span>
-<span class="source-line-no">026</span><span id="line-26"> * &lt;ul&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> *    &lt;li&gt;&lt;b&gt;Arrays:&lt;/b&gt; Convert primitive and object arrays to lists&lt;/li&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> *    &lt;li&gt;&lt;b&gt;Streams:&lt;/b&gt; Materialize Stream objects to lists&lt;/li&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> *    &lt;li&gt;&lt;b&gt;Custom collections:&lt;/b&gt; Extract elements from domain-specific collections&lt;/li&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> *    &lt;li&gt;&lt;b&gt;Map entries:&lt;/b&gt; Convert Maps to lists of entry objects&lt;/li&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> *    &lt;li&gt;&lt;b&gt;Iterables:&lt;/b&gt; Handle any Iterable implementation&lt;/li&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;/ul&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> *    &lt;jc&gt;// Custom collection handling&lt;/jc&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> *    Listifier&amp;lt;ResultSet&amp;gt; &lt;jv&gt;resultSetListifier&lt;/jv&gt; = (&lt;jp&gt;conv&lt;/jp&gt;, &lt;jp&gt;rs&lt;/jp&gt;) -&amp;gt; {</span>
-<span class="source-line-no">038</span><span id="line-38"> *       &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;results&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; ArrayList&amp;lt;&amp;gt;();</span>
-<span class="source-line-no">039</span><span id="line-39"> *       &lt;jk&gt;while&lt;/jk&gt; (&lt;jp&gt;rs&lt;/jp&gt;.next()) {</span>
-<span class="source-line-no">040</span><span id="line-40"> *          &lt;jv&gt;results&lt;/jv&gt;.add(&lt;jp&gt;rs&lt;/jp&gt;.getRowData()); &lt;jc&gt;// Custom row extraction&lt;/jc&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *       }</span>
-<span class="source-line-no">042</span><span id="line-42"> *       &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;results&lt;/jv&gt;;</span>
-<span class="source-line-no">043</span><span id="line-43"> *    };</span>
-<span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> *    &lt;jc&gt;// Stream processing with side effects&lt;/jc&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> *    Listifier&amp;lt;Stream&amp;gt; &lt;jv&gt;streamListifier&lt;/jv&gt; = (&lt;jp&gt;conv&lt;/jp&gt;, &lt;jp&gt;stream&lt;/jp&gt;) -&amp;gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> *       &lt;jp&gt;stream&lt;/jp&gt;.peek(&lt;jv&gt;logProcessor&lt;/jv&gt;::log).collect(toList());</span>
+<span class="source-line-no">025</span><span id="line-25"> * &lt;p&gt;Listifiers enable the Bean-Centric Testing framework to treat diverse collection-like</span>
+<span class="source-line-no">026</span><span id="line-26"> * objects uniformly during property access and iteration. They convert various iterable</span>
+<span class="source-line-no">027</span><span id="line-27"> * structures into a common List format for consistent processing.&lt;/p&gt;</span>
+<span class="source-line-no">028</span><span id="line-28"> *</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;h5 class='section'&gt;Common Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;ul&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> *    &lt;li&gt;&lt;b&gt;Arrays:&lt;/b&gt; Convert primitive and object arrays to lists&lt;/li&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> *    &lt;li&gt;&lt;b&gt;Streams:&lt;/b&gt; Materialize Stream objects to lists&lt;/li&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;&lt;b&gt;Custom collections:&lt;/b&gt; Extract elements from domain-specific collections&lt;/li&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;&lt;b&gt;Map entries:&lt;/b&gt; Convert Maps to lists of entry objects&lt;/li&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;&lt;b&gt;Iterables:&lt;/b&gt; Handle any Iterable implementation&lt;/li&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;/ul&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> *</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;jc&gt;// Custom collection handling&lt;/jc&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> *    Listifier&amp;lt;ResultSet&amp;gt; &lt;jv&gt;resultSetListifier&lt;/jv&gt; = (&lt;jp&gt;conv&lt;/jp&gt;, &lt;jp&gt;rs&lt;/jp&gt;) -&amp;gt; {</span>
+<span class="source-line-no">042</span><span id="line-42"> *       &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;results&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; ArrayList&amp;lt;&amp;gt;();</span>
+<span class="source-line-no">043</span><span id="line-43"> *       &lt;jk&gt;while&lt;/jk&gt; (&lt;jp&gt;rs&lt;/jp&gt;.next()) {</span>
+<span class="source-line-no">044</span><span id="line-44"> *          &lt;jv&gt;results&lt;/jv&gt;.add(&lt;jp&gt;rs&lt;/jp&gt;.getRowData()); &lt;jc&gt;// Custom row extraction&lt;/jc&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> *       }</span>
+<span class="source-line-no">046</span><span id="line-46"> *       &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;results&lt;/jv&gt;;</span>
+<span class="source-line-no">047</span><span id="line-47"> *    };</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> *    &lt;jc&gt;// Custom data structure&lt;/jc&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> *    Listifier&amp;lt;Tree&amp;gt; &lt;jv&gt;treeListifier&lt;/jv&gt; = (&lt;jp&gt;conv&lt;/jp&gt;, &lt;jp&gt;tree&lt;/jp&gt;) -&amp;gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *       &lt;jp&gt;tree&lt;/jp&gt;.traversePreOrder().collect(toList());</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;/p&gt;</span>
-<span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='section'&gt;Registration:&lt;/h5&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">056</span><span id="line-56"> *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;converter&lt;/jv&gt; = BasicBeanConverter.&lt;jsm&gt;builder&lt;/jsm&gt;()</span>
-<span class="source-line-no">057</span><span id="line-57"> *       .defaultSettings()</span>
-<span class="source-line-no">058</span><span id="line-58"> *       .addListifier(ResultSet.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;resultSetListifier&lt;/jv&gt;)</span>
-<span class="source-line-no">059</span><span id="line-59"> *       .addListifier(Stream.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;streamListifier&lt;/jv&gt;)</span>
-<span class="source-line-no">060</span><span id="line-60"> *       .addListifier(Tree.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;treeListifier&lt;/jv&gt;)</span>
-<span class="source-line-no">061</span><span id="line-61"> *       .build();</span>
-<span class="source-line-no">062</span><span id="line-62"> * &lt;/p&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> *</span>
-<span class="source-line-no">064</span><span id="line-64"> * &lt;h5 class='section'&gt;Best Practices:&lt;/h5&gt;</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;ul&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> *    &lt;li&gt;&lt;b&gt;Preserve order&lt;/b&gt; when the original collection has meaningful ordering&lt;/li&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *    &lt;li&gt;&lt;b&gt;Handle empty cases&lt;/b&gt; gracefully (return empty list, not null)&lt;/li&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> *    &lt;li&gt;&lt;b&gt;Consider performance&lt;/b&gt; for large collections (avoid full materialization when possible)&lt;/li&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> *    &lt;li&gt;&lt;b&gt;Use converter parameter&lt;/b&gt; for swapping/transforming individual elements&lt;/li&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;/ul&gt;</span>
-<span class="source-line-no">071</span><span id="line-71"> *</span>
-<span class="source-line-no">072</span><span id="line-72"> * @param &lt;T&gt; The type of collection-like object this listifier handles</span>
-<span class="source-line-no">073</span><span id="line-73"> * @see BasicBeanConverter.Builder#addListifier(Class, Listifier)</span>
-<span class="source-line-no">074</span><span id="line-74"> * @see BeanConverter#listify(Object)</span>
-<span class="source-line-no">075</span><span id="line-75"> */</span>
-<span class="source-line-no">076</span><span id="line-76">@FunctionalInterface</span>
-<span class="source-line-no">077</span><span id="line-77">public interface Listifier&lt;T&gt; extends BiFunction&lt;BeanConverter,T,List&lt;Object&gt;&gt; {}</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;jc&gt;// Stream processing with side effects&lt;/jc&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> *    Listifier&amp;lt;Stream&amp;gt; &lt;jv&gt;streamListifier&lt;/jv&gt; = (&lt;jp&gt;conv&lt;/jp&gt;, &lt;jp&gt;stream&lt;/jp&gt;) -&amp;gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *       &lt;jp&gt;stream&lt;/jp&gt;.peek(&lt;jv&gt;logProcessor&lt;/jv&gt;::log).collect(toList());</span>
+<span class="source-line-no">052</span><span id="line-52"> *</span>
+<span class="source-line-no">053</span><span id="line-53"> *    &lt;jc&gt;// Custom data structure&lt;/jc&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> *    Listifier&amp;lt;Tree&amp;gt; &lt;jv&gt;treeListifier&lt;/jv&gt; = (&lt;jp&gt;conv&lt;/jp&gt;, &lt;jp&gt;tree&lt;/jp&gt;) -&amp;gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> *       &lt;jp&gt;tree&lt;/jp&gt;.traversePreOrder().collect(toList());</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> *</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;Registration:&lt;/h5&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;converter&lt;/jv&gt; = BasicBeanConverter.&lt;jsm&gt;builder&lt;/jsm&gt;()</span>
+<span class="source-line-no">061</span><span id="line-61"> *       .defaultSettings()</span>
+<span class="source-line-no">062</span><span id="line-62"> *       .addListifier(ResultSet.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;resultSetListifier&lt;/jv&gt;)</span>
+<span class="source-line-no">063</span><span id="line-63"> *       .addListifier(Stream.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;streamListifier&lt;/jv&gt;)</span>
+<span class="source-line-no">064</span><span id="line-64"> *       .addListifier(Tree.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;treeListifier&lt;/jv&gt;)</span>
+<span class="source-line-no">065</span><span id="line-65"> *       .build();</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;/p&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> *</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;h5 class='section'&gt;Best Practices:&lt;/h5&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;ul&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> *    &lt;li&gt;&lt;b&gt;Preserve order&lt;/b&gt; when the original collection has meaningful ordering&lt;/li&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> *    &lt;li&gt;&lt;b&gt;Handle empty cases&lt;/b&gt; gracefully (return empty list, not null)&lt;/li&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> *    &lt;li&gt;&lt;b&gt;Consider performance&lt;/b&gt; for large collections (avoid full materialization when possible)&lt;/li&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> *    &lt;li&gt;&lt;b&gt;Use converter parameter&lt;/b&gt; for swapping/transforming individual elements&lt;/li&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> * &lt;/ul&gt;</span>
+<span class="source-line-no">075</span><span id="line-75"> *</span>
+<span class="source-line-no">076</span><span id="line-76"> * @param &lt;T&gt; The type of collection-like object this listifier handles</span>
+<span class="source-line-no">077</span><span id="line-77"> * @see BasicBeanConverter.Builder#addListifier(Class, Listifier)</span>
+<span class="source-line-no">078</span><span id="line-78"> * @see BeanConverter#listify(Object)</span>
+<span class="source-line-no">079</span><span id="line-79"> */</span>
+<span class="source-line-no">080</span><span id="line-80">@FunctionalInterface</span>
+<span class="source-line-no">081</span><span id="line-81">public interface Listifier&lt;T&gt; extends BiFunction&lt;BeanConverter,T,List&lt;Object&gt;&gt; {}</span>
 
 
 

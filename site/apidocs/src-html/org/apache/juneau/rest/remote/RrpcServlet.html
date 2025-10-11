@@ -11,244 +11,248 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.rest.remote;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import static org.apache.juneau.common.utils.StringUtils.*;</span>
-<span class="source-line-no">017</span><span id="line-17">import static org.apache.juneau.common.utils.Utils.*;</span>
-<span class="source-line-no">018</span><span id="line-18">import static org.apache.juneau.http.HttpMethod.*;</span>
-<span class="source-line-no">019</span><span id="line-19"></span>
-<span class="source-line-no">020</span><span id="line-20">import java.io.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import java.lang.reflect.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import java.util.Map;</span>
-<span class="source-line-no">024</span><span id="line-24">import java.util.concurrent.*;</span>
-<span class="source-line-no">025</span><span id="line-25"></span>
-<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.annotation.*;</span>
-<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.bean.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.bean.html5.*;</span>
-<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.html.annotation.*;</span>
-<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.http.annotation.*;</span>
-<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.http.annotation.Header;</span>
-<span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.http.header.*;</span>
-<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.http.remote.*;</span>
-<span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.http.response.*;</span>
-<span class="source-line-no">035</span><span id="line-35">import org.apache.juneau.parser.*;</span>
-<span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.reflect.*;</span>
-<span class="source-line-no">037</span><span id="line-37">import org.apache.juneau.rest.annotation.*;</span>
-<span class="source-line-no">038</span><span id="line-38">import org.apache.juneau.rest.servlet.*;</span>
-<span class="source-line-no">039</span><span id="line-39"></span>
-<span class="source-line-no">040</span><span id="line-40">/**</span>
-<span class="source-line-no">041</span><span id="line-41"> * Abstract class for defining Remote Interface Services.</span>
-<span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> * Remote Interface Services are POJOs whose methods can be invoked remotely through proxy interfaces.</span>
-<span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;p&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> * To implement a remote interface service, developers must simply subclass from this class and implement the</span>
-<span class="source-line-no">048</span><span id="line-48"> * {@link #getServiceMap()} method that maps java interfaces to POJO instances.</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.remote;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.common.utils.StringUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.common.utils.Utils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.http.HttpMethod.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">import java.io.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import java.lang.reflect.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import java.util.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import java.util.Map;</span>
+<span class="source-line-no">028</span><span id="line-28">import java.util.concurrent.*;</span>
+<span class="source-line-no">029</span><span id="line-29"></span>
+<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.annotation.*;</span>
+<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.bean.*;</span>
+<span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.bean.html5.*;</span>
+<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.html.annotation.*;</span>
+<span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.http.annotation.*;</span>
+<span class="source-line-no">035</span><span id="line-35">import org.apache.juneau.http.annotation.Header;</span>
+<span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.http.header.*;</span>
+<span class="source-line-no">037</span><span id="line-37">import org.apache.juneau.http.remote.*;</span>
+<span class="source-line-no">038</span><span id="line-38">import org.apache.juneau.http.response.*;</span>
+<span class="source-line-no">039</span><span id="line-39">import org.apache.juneau.parser.*;</span>
+<span class="source-line-no">040</span><span id="line-40">import org.apache.juneau.reflect.*;</span>
+<span class="source-line-no">041</span><span id="line-41">import org.apache.juneau.rest.annotation.*;</span>
+<span class="source-line-no">042</span><span id="line-42">import org.apache.juneau.rest.servlet.*;</span>
+<span class="source-line-no">043</span><span id="line-43"></span>
+<span class="source-line-no">044</span><span id="line-44">/**</span>
+<span class="source-line-no">045</span><span id="line-45"> * Abstract class for defining Remote Interface Services.</span>
+<span class="source-line-no">046</span><span id="line-46"> *</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;p&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> * Remote Interface Services are POJOs whose methods can be invoked remotely through proxy interfaces.</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc"&gt;REST/RPC&lt;/a&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;/ul&gt;</span>
-<span class="source-line-no">053</span><span id="line-53"> */</span>
-<span class="source-line-no">054</span><span id="line-54">@SuppressWarnings({"serial","javadoc"})</span>
-<span class="source-line-no">055</span><span id="line-55">public abstract class RrpcServlet extends BasicRestServlet {</span>
-<span class="source-line-no">056</span><span id="line-56"></span>
-<span class="source-line-no">057</span><span id="line-57">   private final Map&lt;String,RrpcInterfaceMeta&gt; serviceMap = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">060</span><span id="line-60">   // Abstract methods</span>
-<span class="source-line-no">061</span><span id="line-61">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;p&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> * To implement a remote interface service, developers must simply subclass from this class and implement the</span>
+<span class="source-line-no">052</span><span id="line-52"> * {@link #getServiceMap()} method that maps java interfaces to POJO instances.</span>
+<span class="source-line-no">053</span><span id="line-53"> *</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc"&gt;REST/RPC&lt;/a&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;/ul&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> */</span>
+<span class="source-line-no">058</span><span id="line-58">@SuppressWarnings({"serial","javadoc"})</span>
+<span class="source-line-no">059</span><span id="line-59">public abstract class RrpcServlet extends BasicRestServlet {</span>
+<span class="source-line-no">060</span><span id="line-60"></span>
+<span class="source-line-no">061</span><span id="line-61">   private final Map&lt;String,RrpcInterfaceMeta&gt; serviceMap = new ConcurrentHashMap&lt;&gt;();</span>
 <span class="source-line-no">062</span><span id="line-62"></span>
-<span class="source-line-no">063</span><span id="line-63">   /**</span>
-<span class="source-line-no">064</span><span id="line-64">    * Returns the list of interfaces to their implementation objects.</span>
-<span class="source-line-no">065</span><span id="line-65">    *</span>
-<span class="source-line-no">066</span><span id="line-66">    * &lt;p&gt;</span>
-<span class="source-line-no">067</span><span id="line-67">    * This class is called often and not cached, so any caching should occur in the subclass if necessary.</span>
-<span class="source-line-no">068</span><span id="line-68">    *</span>
-<span class="source-line-no">069</span><span id="line-69">    * @return The service map.</span>
-<span class="source-line-no">070</span><span id="line-70">    * @throws Exception Any exception.</span>
-<span class="source-line-no">071</span><span id="line-71">    */</span>
-<span class="source-line-no">072</span><span id="line-72">   protected abstract Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() throws Exception;</span>
-<span class="source-line-no">073</span><span id="line-73"></span>
-<span class="source-line-no">074</span><span id="line-74">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">075</span><span id="line-75">   // REST methods</span>
-<span class="source-line-no">076</span><span id="line-76">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">063</span><span id="line-63">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">064</span><span id="line-64">   // Abstract methods</span>
+<span class="source-line-no">065</span><span id="line-65">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">066</span><span id="line-66"></span>
+<span class="source-line-no">067</span><span id="line-67">   /**</span>
+<span class="source-line-no">068</span><span id="line-68">    * Returns the list of interfaces to their implementation objects.</span>
+<span class="source-line-no">069</span><span id="line-69">    *</span>
+<span class="source-line-no">070</span><span id="line-70">    * &lt;p&gt;</span>
+<span class="source-line-no">071</span><span id="line-71">    * This class is called often and not cached, so any caching should occur in the subclass if necessary.</span>
+<span class="source-line-no">072</span><span id="line-72">    *</span>
+<span class="source-line-no">073</span><span id="line-73">    * @return The service map.</span>
+<span class="source-line-no">074</span><span id="line-74">    * @throws Exception Any exception.</span>
+<span class="source-line-no">075</span><span id="line-75">    */</span>
+<span class="source-line-no">076</span><span id="line-76">   protected abstract Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() throws Exception;</span>
 <span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">   @RestGet(</span>
-<span class="source-line-no">079</span><span id="line-79">      path="/",</span>
-<span class="source-line-no">080</span><span id="line-80">      summary="List of available remote interfaces",</span>
-<span class="source-line-no">081</span><span id="line-81">      description="Shows a list of the interfaces registered with this remote interface servlet."</span>
-<span class="source-line-no">082</span><span id="line-82">   )</span>
-<span class="source-line-no">083</span><span id="line-83">   public List&lt;LinkString&gt; getInterfaces() throws Exception {</span>
-<span class="source-line-no">084</span><span id="line-84">      List&lt;LinkString&gt; l = new LinkedList&lt;&gt;();</span>
-<span class="source-line-no">085</span><span id="line-85">      for (Class&lt;?&gt; c : getServiceMap().keySet())</span>
-<span class="source-line-no">086</span><span id="line-86">         l.add(new LinkString(c.getName(), "servlet:/{0}", urlEncode(c.getName())));</span>
-<span class="source-line-no">087</span><span id="line-87">      return l;</span>
-<span class="source-line-no">088</span><span id="line-88">   }</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">   @RestGet(</span>
-<span class="source-line-no">091</span><span id="line-91">      path="/{javaInterface}",</span>
-<span class="source-line-no">092</span><span id="line-92">      summary="List of available methods on interface",</span>
-<span class="source-line-no">093</span><span id="line-93">      description="Shows a list of all the exposed methods on an interface."</span>
-<span class="source-line-no">094</span><span id="line-94">   )</span>
-<span class="source-line-no">095</span><span id="line-95">   @HtmlDocConfig(</span>
-<span class="source-line-no">096</span><span id="line-96">      nav="&lt;h5&gt;Interface:  $RP{javaInterface}&lt;/h5&gt;"</span>
-<span class="source-line-no">097</span><span id="line-97">   )</span>
-<span class="source-line-no">098</span><span id="line-98">   public Collection&lt;LinkString&gt; listMethods(</span>
-<span class="source-line-no">099</span><span id="line-99">         @Path("javaInterface") @Schema(description="Java interface name") String javaInterface</span>
-<span class="source-line-no">100</span><span id="line-100">      ) throws Exception {</span>
-<span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">      List&lt;LinkString&gt; l = list();</span>
-<span class="source-line-no">103</span><span id="line-103">      for (String s : getMethods(javaInterface).keySet())</span>
-<span class="source-line-no">104</span><span id="line-104">         l.add(new LinkString(s, "servlet:/{0}/{1}", urlEncode(javaInterface), urlEncode(s)));</span>
-<span class="source-line-no">105</span><span id="line-105">      return l;</span>
-<span class="source-line-no">106</span><span id="line-106">   }</span>
-<span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108">   @RestGet(</span>
-<span class="source-line-no">109</span><span id="line-109">      path="/{javaInterface}/{javaMethod}",</span>
-<span class="source-line-no">110</span><span id="line-110">      summary="Form entry for interface method call",</span>
-<span class="source-line-no">111</span><span id="line-111">      description="Shows a form entry page for executing a remote interface method."</span>
-<span class="source-line-no">112</span><span id="line-112">   )</span>
-<span class="source-line-no">113</span><span id="line-113">   @HtmlDocConfig(</span>
-<span class="source-line-no">114</span><span id="line-114">      nav={</span>
-<span class="source-line-no">115</span><span id="line-115">         "&lt;h5&gt;Interface:  $RP{javaInterface}&lt;/h5&gt;",</span>
-<span class="source-line-no">116</span><span id="line-116">         "&lt;h5&gt;Method:  $RP{javaMethod}&lt;/h5&gt;"</span>
-<span class="source-line-no">117</span><span id="line-117">      }</span>
-<span class="source-line-no">118</span><span id="line-118">   )</span>
-<span class="source-line-no">119</span><span id="line-119">   public Div showEntryForm(</span>
-<span class="source-line-no">120</span><span id="line-120">         @Path("javaInterface") @Schema(description="Java interface name") String javaInterface,</span>
-<span class="source-line-no">121</span><span id="line-121">         @Path("javaMethod") @Schema(description="Java method name") String javaMethod</span>
-<span class="source-line-no">122</span><span id="line-122">      ) throws NotFound, Exception {</span>
-<span class="source-line-no">123</span><span id="line-123"></span>
-<span class="source-line-no">124</span><span id="line-124">      // Find the method.</span>
-<span class="source-line-no">125</span><span id="line-125">      RrpcInterfaceMethodMeta rmm = getMethods(javaInterface).get(javaMethod);</span>
-<span class="source-line-no">126</span><span id="line-126">      if (rmm == null)</span>
-<span class="source-line-no">127</span><span id="line-127">         throw new NotFound("Method not found");</span>
-<span class="source-line-no">128</span><span id="line-128"></span>
-<span class="source-line-no">129</span><span id="line-129">      Table t = table();</span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">      Type[] types = rmm.getJavaMethod().getGenericParameterTypes();</span>
-<span class="source-line-no">132</span><span id="line-132">      if (types.length == 0) {</span>
-<span class="source-line-no">133</span><span id="line-133">         t.child(tr(td("No arguments").colspan(3).style("text-align:center")));</span>
-<span class="source-line-no">134</span><span id="line-134">      } else {</span>
-<span class="source-line-no">135</span><span id="line-135">         t.child(tr(th("Index"),th("Type"),th("Value")));</span>
-<span class="source-line-no">136</span><span id="line-136">         for (int i = 0; i &lt; types.length; i++) {</span>
-<span class="source-line-no">137</span><span id="line-137">            String type = Mutaters.toString(types[i]);</span>
-<span class="source-line-no">138</span><span id="line-138">            t.child(tr(td(i), td(type), td(input().name(String.valueOf(i)).type("text"))));</span>
-<span class="source-line-no">139</span><span id="line-139">         }</span>
-<span class="source-line-no">140</span><span id="line-140">      }</span>
-<span class="source-line-no">141</span><span id="line-141"></span>
-<span class="source-line-no">142</span><span id="line-142">      t.child(</span>
-<span class="source-line-no">143</span><span id="line-143">         tr(</span>
-<span class="source-line-no">144</span><span id="line-144">            td().colspan(3).style("text-align:right").children(</span>
-<span class="source-line-no">145</span><span id="line-145">               types.length == 0 ? null : button("reset", "Reset"),</span>
-<span class="source-line-no">146</span><span id="line-146">               button("button","Cancel").onclick("window.location.href='/'"),</span>
-<span class="source-line-no">147</span><span id="line-147">               button("submit", "Submit")</span>
-<span class="source-line-no">148</span><span id="line-148">            )</span>
-<span class="source-line-no">149</span><span id="line-149">         )</span>
-<span class="source-line-no">150</span><span id="line-150">      );</span>
-<span class="source-line-no">151</span><span id="line-151"></span>
-<span class="source-line-no">152</span><span id="line-152">      return div(form().id("form").action("request:/").method(POST).children(t));</span>
-<span class="source-line-no">153</span><span id="line-153">   }</span>
-<span class="source-line-no">154</span><span id="line-154"></span>
-<span class="source-line-no">155</span><span id="line-155">   @RestPost(</span>
-<span class="source-line-no">156</span><span id="line-156">      path="/{javaInterface}/{javaMethod}",</span>
-<span class="source-line-no">157</span><span id="line-157">      summary="Invoke an interface method",</span>
-<span class="source-line-no">158</span><span id="line-158">      description="Invoke a Java method by passing in the arguments as an array of serialized objects.\nThe returned object is then serialized to the response.",</span>
-<span class="source-line-no">159</span><span id="line-159">      swagger=@OpSwagger(</span>
-<span class="source-line-no">160</span><span id="line-160">         parameters= {</span>
-<span class="source-line-no">161</span><span id="line-161">            "{",</span>
-<span class="source-line-no">162</span><span id="line-162">               "in: 'body',",</span>
-<span class="source-line-no">163</span><span id="line-163">               "description: 'Serialized array of Java objects',",</span>
-<span class="source-line-no">164</span><span id="line-164">               "schema: {",</span>
-<span class="source-line-no">165</span><span id="line-165">                  "type': 'array'",</span>
-<span class="source-line-no">166</span><span id="line-166">               "},",</span>
-<span class="source-line-no">167</span><span id="line-167">               "examples: {",</span>
-<span class="source-line-no">168</span><span id="line-168">                  "'application/json+lax': '[\\'foo\\', 123, true]'",</span>
-<span class="source-line-no">169</span><span id="line-169">               "}",</span>
-<span class="source-line-no">170</span><span id="line-170">            "}"</span>
-<span class="source-line-no">171</span><span id="line-171">         },</span>
-<span class="source-line-no">172</span><span id="line-172">         responses= {</span>
-<span class="source-line-no">173</span><span id="line-173">            "200:{ description:'The return object serialized', schema:{type:'any'},example:{foo:123} }",</span>
-<span class="source-line-no">174</span><span id="line-174">         }</span>
-<span class="source-line-no">175</span><span id="line-175">      )</span>
-<span class="source-line-no">176</span><span id="line-176">   )</span>
-<span class="source-line-no">177</span><span id="line-177">   @HtmlDocConfig(</span>
-<span class="source-line-no">178</span><span id="line-178">      nav= {</span>
-<span class="source-line-no">179</span><span id="line-179">         "&lt;h5&gt;Interface:  $RP{javaInterface}&lt;/h5&gt;",</span>
-<span class="source-line-no">180</span><span id="line-180">         "&lt;h5&gt;Method:  $RP{javaMethod}&lt;/h5&gt;"</span>
-<span class="source-line-no">181</span><span id="line-181">      }</span>
-<span class="source-line-no">182</span><span id="line-182">   )</span>
-<span class="source-line-no">183</span><span id="line-183">   public Object invoke(</span>
-<span class="source-line-no">184</span><span id="line-184">         Reader r,</span>
-<span class="source-line-no">185</span><span id="line-185">         ReaderParser p,</span>
-<span class="source-line-no">186</span><span id="line-186">         @Header("Content-Type") ContentType contentType,</span>
-<span class="source-line-no">187</span><span id="line-187">         @Path("javaInterface") @Schema(description="Java interface name") String javaInterface,</span>
-<span class="source-line-no">188</span><span id="line-188">         @Path("javaMethod") @Schema(description="Java method name") String javaMethod</span>
-<span class="source-line-no">189</span><span id="line-189">      ) throws UnsupportedMediaType, NotFound, Exception {</span>
-<span class="source-line-no">190</span><span id="line-190"></span>
-<span class="source-line-no">191</span><span id="line-191">      // Find the parser.</span>
-<span class="source-line-no">192</span><span id="line-192">      if (p == null)</span>
-<span class="source-line-no">193</span><span id="line-193">         throw new UnsupportedMediaType("Could not find parser for media type ''{0}''", contentType);</span>
-<span class="source-line-no">194</span><span id="line-194">      RrpcInterfaceMeta rim = getInterfaceClass(javaInterface);</span>
-<span class="source-line-no">195</span><span id="line-195"></span>
-<span class="source-line-no">196</span><span id="line-196">      // Find the service.</span>
-<span class="source-line-no">197</span><span id="line-197">      Object service = getServiceMap().get(rim.getJavaClass());</span>
-<span class="source-line-no">198</span><span id="line-198">      if (service == null)</span>
-<span class="source-line-no">199</span><span id="line-199">         throw new NotFound("Service not found");</span>
-<span class="source-line-no">200</span><span id="line-200"></span>
-<span class="source-line-no">201</span><span id="line-201">      // Find the method.</span>
-<span class="source-line-no">202</span><span id="line-202">      RrpcInterfaceMethodMeta rmm = getMethods(javaInterface).get(javaMethod);</span>
-<span class="source-line-no">203</span><span id="line-203">      if (rmm == null)</span>
-<span class="source-line-no">204</span><span id="line-204">         throw new NotFound("Method not found");</span>
-<span class="source-line-no">205</span><span id="line-205"></span>
-<span class="source-line-no">206</span><span id="line-206">      // Parse the args and invoke the method.</span>
-<span class="source-line-no">207</span><span id="line-207">      java.lang.reflect.Method m = rmm.getJavaMethod();</span>
-<span class="source-line-no">208</span><span id="line-208">      Object[] params = p.parseArgs(r, m.getGenericParameterTypes());</span>
-<span class="source-line-no">209</span><span id="line-209">      return m.invoke(service, params);</span>
-<span class="source-line-no">210</span><span id="line-210">   }</span>
-<span class="source-line-no">211</span><span id="line-211"></span>
-<span class="source-line-no">212</span><span id="line-212"></span>
-<span class="source-line-no">213</span><span id="line-213">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">214</span><span id="line-214">   // Other methods</span>
-<span class="source-line-no">215</span><span id="line-215">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">078</span><span id="line-78">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">079</span><span id="line-79">   // REST methods</span>
+<span class="source-line-no">080</span><span id="line-80">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">081</span><span id="line-81"></span>
+<span class="source-line-no">082</span><span id="line-82">   @RestGet(</span>
+<span class="source-line-no">083</span><span id="line-83">      path="/",</span>
+<span class="source-line-no">084</span><span id="line-84">      summary="List of available remote interfaces",</span>
+<span class="source-line-no">085</span><span id="line-85">      description="Shows a list of the interfaces registered with this remote interface servlet."</span>
+<span class="source-line-no">086</span><span id="line-86">   )</span>
+<span class="source-line-no">087</span><span id="line-87">   public List&lt;LinkString&gt; getInterfaces() throws Exception {</span>
+<span class="source-line-no">088</span><span id="line-88">      List&lt;LinkString&gt; l = new LinkedList&lt;&gt;();</span>
+<span class="source-line-no">089</span><span id="line-89">      for (Class&lt;?&gt; c : getServiceMap().keySet())</span>
+<span class="source-line-no">090</span><span id="line-90">         l.add(new LinkString(c.getName(), "servlet:/{0}", urlEncode(c.getName())));</span>
+<span class="source-line-no">091</span><span id="line-91">      return l;</span>
+<span class="source-line-no">092</span><span id="line-92">   }</span>
+<span class="source-line-no">093</span><span id="line-93"></span>
+<span class="source-line-no">094</span><span id="line-94">   @RestGet(</span>
+<span class="source-line-no">095</span><span id="line-95">      path="/{javaInterface}",</span>
+<span class="source-line-no">096</span><span id="line-96">      summary="List of available methods on interface",</span>
+<span class="source-line-no">097</span><span id="line-97">      description="Shows a list of all the exposed methods on an interface."</span>
+<span class="source-line-no">098</span><span id="line-98">   )</span>
+<span class="source-line-no">099</span><span id="line-99">   @HtmlDocConfig(</span>
+<span class="source-line-no">100</span><span id="line-100">      nav="&lt;h5&gt;Interface:  $RP{javaInterface}&lt;/h5&gt;"</span>
+<span class="source-line-no">101</span><span id="line-101">   )</span>
+<span class="source-line-no">102</span><span id="line-102">   public Collection&lt;LinkString&gt; listMethods(</span>
+<span class="source-line-no">103</span><span id="line-103">         @Path("javaInterface") @Schema(description="Java interface name") String javaInterface</span>
+<span class="source-line-no">104</span><span id="line-104">      ) throws Exception {</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">      List&lt;LinkString&gt; l = list();</span>
+<span class="source-line-no">107</span><span id="line-107">      for (String s : getMethods(javaInterface).keySet())</span>
+<span class="source-line-no">108</span><span id="line-108">         l.add(new LinkString(s, "servlet:/{0}/{1}", urlEncode(javaInterface), urlEncode(s)));</span>
+<span class="source-line-no">109</span><span id="line-109">      return l;</span>
+<span class="source-line-no">110</span><span id="line-110">   }</span>
+<span class="source-line-no">111</span><span id="line-111"></span>
+<span class="source-line-no">112</span><span id="line-112">   @RestGet(</span>
+<span class="source-line-no">113</span><span id="line-113">      path="/{javaInterface}/{javaMethod}",</span>
+<span class="source-line-no">114</span><span id="line-114">      summary="Form entry for interface method call",</span>
+<span class="source-line-no">115</span><span id="line-115">      description="Shows a form entry page for executing a remote interface method."</span>
+<span class="source-line-no">116</span><span id="line-116">   )</span>
+<span class="source-line-no">117</span><span id="line-117">   @HtmlDocConfig(</span>
+<span class="source-line-no">118</span><span id="line-118">      nav={</span>
+<span class="source-line-no">119</span><span id="line-119">         "&lt;h5&gt;Interface:  $RP{javaInterface}&lt;/h5&gt;",</span>
+<span class="source-line-no">120</span><span id="line-120">         "&lt;h5&gt;Method:  $RP{javaMethod}&lt;/h5&gt;"</span>
+<span class="source-line-no">121</span><span id="line-121">      }</span>
+<span class="source-line-no">122</span><span id="line-122">   )</span>
+<span class="source-line-no">123</span><span id="line-123">   public Div showEntryForm(</span>
+<span class="source-line-no">124</span><span id="line-124">         @Path("javaInterface") @Schema(description="Java interface name") String javaInterface,</span>
+<span class="source-line-no">125</span><span id="line-125">         @Path("javaMethod") @Schema(description="Java method name") String javaMethod</span>
+<span class="source-line-no">126</span><span id="line-126">      ) throws NotFound, Exception {</span>
+<span class="source-line-no">127</span><span id="line-127"></span>
+<span class="source-line-no">128</span><span id="line-128">      // Find the method.</span>
+<span class="source-line-no">129</span><span id="line-129">      RrpcInterfaceMethodMeta rmm = getMethods(javaInterface).get(javaMethod);</span>
+<span class="source-line-no">130</span><span id="line-130">      if (rmm == null)</span>
+<span class="source-line-no">131</span><span id="line-131">         throw new NotFound("Method not found");</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">      Table t = table();</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">      Type[] types = rmm.getJavaMethod().getGenericParameterTypes();</span>
+<span class="source-line-no">136</span><span id="line-136">      if (types.length == 0) {</span>
+<span class="source-line-no">137</span><span id="line-137">         t.child(tr(td("No arguments").colspan(3).style("text-align:center")));</span>
+<span class="source-line-no">138</span><span id="line-138">      } else {</span>
+<span class="source-line-no">139</span><span id="line-139">         t.child(tr(th("Index"),th("Type"),th("Value")));</span>
+<span class="source-line-no">140</span><span id="line-140">         for (int i = 0; i &lt; types.length; i++) {</span>
+<span class="source-line-no">141</span><span id="line-141">            String type = Mutaters.toString(types[i]);</span>
+<span class="source-line-no">142</span><span id="line-142">            t.child(tr(td(i), td(type), td(input().name(String.valueOf(i)).type("text"))));</span>
+<span class="source-line-no">143</span><span id="line-143">         }</span>
+<span class="source-line-no">144</span><span id="line-144">      }</span>
+<span class="source-line-no">145</span><span id="line-145"></span>
+<span class="source-line-no">146</span><span id="line-146">      t.child(</span>
+<span class="source-line-no">147</span><span id="line-147">         tr(</span>
+<span class="source-line-no">148</span><span id="line-148">            td().colspan(3).style("text-align:right").children(</span>
+<span class="source-line-no">149</span><span id="line-149">               types.length == 0 ? null : button("reset", "Reset"),</span>
+<span class="source-line-no">150</span><span id="line-150">               button("button","Cancel").onclick("window.location.href='/'"),</span>
+<span class="source-line-no">151</span><span id="line-151">               button("submit", "Submit")</span>
+<span class="source-line-no">152</span><span id="line-152">            )</span>
+<span class="source-line-no">153</span><span id="line-153">         )</span>
+<span class="source-line-no">154</span><span id="line-154">      );</span>
+<span class="source-line-no">155</span><span id="line-155"></span>
+<span class="source-line-no">156</span><span id="line-156">      return div(form().id("form").action("request:/").method(POST).children(t));</span>
+<span class="source-line-no">157</span><span id="line-157">   }</span>
+<span class="source-line-no">158</span><span id="line-158"></span>
+<span class="source-line-no">159</span><span id="line-159">   @RestPost(</span>
+<span class="source-line-no">160</span><span id="line-160">      path="/{javaInterface}/{javaMethod}",</span>
+<span class="source-line-no">161</span><span id="line-161">      summary="Invoke an interface method",</span>
+<span class="source-line-no">162</span><span id="line-162">      description="Invoke a Java method by passing in the arguments as an array of serialized objects.\nThe returned object is then serialized to the response.",</span>
+<span class="source-line-no">163</span><span id="line-163">      swagger=@OpSwagger(</span>
+<span class="source-line-no">164</span><span id="line-164">         parameters= {</span>
+<span class="source-line-no">165</span><span id="line-165">            "{",</span>
+<span class="source-line-no">166</span><span id="line-166">               "in: 'body',",</span>
+<span class="source-line-no">167</span><span id="line-167">               "description: 'Serialized array of Java objects',",</span>
+<span class="source-line-no">168</span><span id="line-168">               "schema: {",</span>
+<span class="source-line-no">169</span><span id="line-169">                  "type': 'array'",</span>
+<span class="source-line-no">170</span><span id="line-170">               "},",</span>
+<span class="source-line-no">171</span><span id="line-171">               "examples: {",</span>
+<span class="source-line-no">172</span><span id="line-172">                  "'application/json+lax': '[\\'foo\\', 123, true]'",</span>
+<span class="source-line-no">173</span><span id="line-173">               "}",</span>
+<span class="source-line-no">174</span><span id="line-174">            "}"</span>
+<span class="source-line-no">175</span><span id="line-175">         },</span>
+<span class="source-line-no">176</span><span id="line-176">         responses= {</span>
+<span class="source-line-no">177</span><span id="line-177">            "200:{ description:'The return object serialized', schema:{type:'any'},example:{foo:123} }",</span>
+<span class="source-line-no">178</span><span id="line-178">         }</span>
+<span class="source-line-no">179</span><span id="line-179">      )</span>
+<span class="source-line-no">180</span><span id="line-180">   )</span>
+<span class="source-line-no">181</span><span id="line-181">   @HtmlDocConfig(</span>
+<span class="source-line-no">182</span><span id="line-182">      nav= {</span>
+<span class="source-line-no">183</span><span id="line-183">         "&lt;h5&gt;Interface:  $RP{javaInterface}&lt;/h5&gt;",</span>
+<span class="source-line-no">184</span><span id="line-184">         "&lt;h5&gt;Method:  $RP{javaMethod}&lt;/h5&gt;"</span>
+<span class="source-line-no">185</span><span id="line-185">      }</span>
+<span class="source-line-no">186</span><span id="line-186">   )</span>
+<span class="source-line-no">187</span><span id="line-187">   public Object invoke(</span>
+<span class="source-line-no">188</span><span id="line-188">         Reader r,</span>
+<span class="source-line-no">189</span><span id="line-189">         ReaderParser p,</span>
+<span class="source-line-no">190</span><span id="line-190">         @Header("Content-Type") ContentType contentType,</span>
+<span class="source-line-no">191</span><span id="line-191">         @Path("javaInterface") @Schema(description="Java interface name") String javaInterface,</span>
+<span class="source-line-no">192</span><span id="line-192">         @Path("javaMethod") @Schema(description="Java method name") String javaMethod</span>
+<span class="source-line-no">193</span><span id="line-193">      ) throws UnsupportedMediaType, NotFound, Exception {</span>
+<span class="source-line-no">194</span><span id="line-194"></span>
+<span class="source-line-no">195</span><span id="line-195">      // Find the parser.</span>
+<span class="source-line-no">196</span><span id="line-196">      if (p == null)</span>
+<span class="source-line-no">197</span><span id="line-197">         throw new UnsupportedMediaType("Could not find parser for media type ''{0}''", contentType);</span>
+<span class="source-line-no">198</span><span id="line-198">      RrpcInterfaceMeta rim = getInterfaceClass(javaInterface);</span>
+<span class="source-line-no">199</span><span id="line-199"></span>
+<span class="source-line-no">200</span><span id="line-200">      // Find the service.</span>
+<span class="source-line-no">201</span><span id="line-201">      Object service = getServiceMap().get(rim.getJavaClass());</span>
+<span class="source-line-no">202</span><span id="line-202">      if (service == null)</span>
+<span class="source-line-no">203</span><span id="line-203">         throw new NotFound("Service not found");</span>
+<span class="source-line-no">204</span><span id="line-204"></span>
+<span class="source-line-no">205</span><span id="line-205">      // Find the method.</span>
+<span class="source-line-no">206</span><span id="line-206">      RrpcInterfaceMethodMeta rmm = getMethods(javaInterface).get(javaMethod);</span>
+<span class="source-line-no">207</span><span id="line-207">      if (rmm == null)</span>
+<span class="source-line-no">208</span><span id="line-208">         throw new NotFound("Method not found");</span>
+<span class="source-line-no">209</span><span id="line-209"></span>
+<span class="source-line-no">210</span><span id="line-210">      // Parse the args and invoke the method.</span>
+<span class="source-line-no">211</span><span id="line-211">      java.lang.reflect.Method m = rmm.getJavaMethod();</span>
+<span class="source-line-no">212</span><span id="line-212">      Object[] params = p.parseArgs(r, m.getGenericParameterTypes());</span>
+<span class="source-line-no">213</span><span id="line-213">      return m.invoke(service, params);</span>
+<span class="source-line-no">214</span><span id="line-214">   }</span>
+<span class="source-line-no">215</span><span id="line-215"></span>
 <span class="source-line-no">216</span><span id="line-216"></span>
-<span class="source-line-no">217</span><span id="line-217">   private Map&lt;String,RrpcInterfaceMethodMeta&gt; getMethods(String javaInterface) throws Exception {</span>
-<span class="source-line-no">218</span><span id="line-218">      return getInterfaceClass(javaInterface).getMethodsByPath();</span>
-<span class="source-line-no">219</span><span id="line-219">   }</span>
+<span class="source-line-no">217</span><span id="line-217">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">218</span><span id="line-218">   // Other methods</span>
+<span class="source-line-no">219</span><span id="line-219">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">220</span><span id="line-220"></span>
-<span class="source-line-no">221</span><span id="line-221">   /**</span>
-<span class="source-line-no">222</span><span id="line-222">    * Return the &lt;c&gt;Class&lt;/c&gt; given it's name if it exists in the services map.</span>
-<span class="source-line-no">223</span><span id="line-223">    */</span>
-<span class="source-line-no">224</span><span id="line-224">   private RrpcInterfaceMeta getInterfaceClass(String javaInterface) throws NotFound, Exception {</span>
-<span class="source-line-no">225</span><span id="line-225">      RrpcInterfaceMeta rm = serviceMap.get(javaInterface);</span>
-<span class="source-line-no">226</span><span id="line-226">      if (rm == null) {</span>
-<span class="source-line-no">227</span><span id="line-227">         for (Class&lt;?&gt; c : getServiceMap().keySet()) {</span>
-<span class="source-line-no">228</span><span id="line-228">            if (c.getName().equals(javaInterface)) {</span>
-<span class="source-line-no">229</span><span id="line-229">               rm = new RrpcInterfaceMeta(c, null);</span>
-<span class="source-line-no">230</span><span id="line-230">               serviceMap.put(javaInterface, rm);</span>
-<span class="source-line-no">231</span><span id="line-231">               return rm;</span>
-<span class="source-line-no">232</span><span id="line-232">            }</span>
-<span class="source-line-no">233</span><span id="line-233">         }</span>
-<span class="source-line-no">234</span><span id="line-234">         throw new NotFound("Interface class not found");</span>
-<span class="source-line-no">235</span><span id="line-235">      }</span>
-<span class="source-line-no">236</span><span id="line-236">      return rm;</span>
-<span class="source-line-no">237</span><span id="line-237">   }</span>
-<span class="source-line-no">238</span><span id="line-238">}</span>
+<span class="source-line-no">221</span><span id="line-221">   private Map&lt;String,RrpcInterfaceMethodMeta&gt; getMethods(String javaInterface) throws Exception {</span>
+<span class="source-line-no">222</span><span id="line-222">      return getInterfaceClass(javaInterface).getMethodsByPath();</span>
+<span class="source-line-no">223</span><span id="line-223">   }</span>
+<span class="source-line-no">224</span><span id="line-224"></span>
+<span class="source-line-no">225</span><span id="line-225">   /**</span>
+<span class="source-line-no">226</span><span id="line-226">    * Return the &lt;c&gt;Class&lt;/c&gt; given it's name if it exists in the services map.</span>
+<span class="source-line-no">227</span><span id="line-227">    */</span>
+<span class="source-line-no">228</span><span id="line-228">   private RrpcInterfaceMeta getInterfaceClass(String javaInterface) throws NotFound, Exception {</span>
+<span class="source-line-no">229</span><span id="line-229">      RrpcInterfaceMeta rm = serviceMap.get(javaInterface);</span>
+<span class="source-line-no">230</span><span id="line-230">      if (rm == null) {</span>
+<span class="source-line-no">231</span><span id="line-231">         for (Class&lt;?&gt; c : getServiceMap().keySet()) {</span>
+<span class="source-line-no">232</span><span id="line-232">            if (c.getName().equals(javaInterface)) {</span>
+<span class="source-line-no">233</span><span id="line-233">               rm = new RrpcInterfaceMeta(c, null);</span>
+<span class="source-line-no">234</span><span id="line-234">               serviceMap.put(javaInterface, rm);</span>
+<span class="source-line-no">235</span><span id="line-235">               return rm;</span>
+<span class="source-line-no">236</span><span id="line-236">            }</span>
+<span class="source-line-no">237</span><span id="line-237">         }</span>
+<span class="source-line-no">238</span><span id="line-238">         throw new NotFound("Interface class not found");</span>
+<span class="source-line-no">239</span><span id="line-239">      }</span>
+<span class="source-line-no">240</span><span id="line-240">      return rm;</span>
+<span class="source-line-no">241</span><span id="line-241">   }</span>
+<span class="source-line-no">242</span><span id="line-242">}</span>
 
 
 

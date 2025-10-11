@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../internal/DelegateList.html" title="class in org.apache.juneau.internal">DelegateList</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-110">JsonList</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-114">JsonList</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedList.html" title="class or interface in java.util" class="external-link">LinkedList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span></div>
 <div class="block">Java implementation of a JSON array.
 
@@ -542,7 +542,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="EMPTY_LIST">
 <h3>EMPTY_LIST</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-148">EMPTY_LIST</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-152">EMPTY_LIST</a></span></div>
 <div class="block">An empty read-only JsonList.</div>
 </section>
 </li>
@@ -557,14 +557,14 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>JsonList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-184">JsonList</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-188">JsonList</a></span>()</div>
 <div class="block">Construct an empty list.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.BeanSession)">
 <h3>JsonList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-191">JsonList</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-195">JsonList</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session)</span></div>
 <div class="block">Construct an empty list with the specified bean context.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -575,7 +575,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.Collection)">
 <h3>JsonList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-202">JsonList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-206">JsonList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;copyFrom)</span></div>
 <div class="block">Construct a list initialized with the specified list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -587,7 +587,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.CharSequence)">
 <h3>JsonList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-214">JsonList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;json)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-218">JsonList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;json)</span>
          throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified JSON.</div>
 <dl class="notes">
@@ -602,7 +602,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.CharSequence,org.apache.juneau.parser.Parser)">
 <h3>JsonList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-229">JsonList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-233">JsonList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;in,
  <a href="../parser/Parser.html" title="class in org.apache.juneau.parser">Parser</a>&nbsp;p)</span>
          throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified string.</div>
@@ -620,7 +620,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.Reader)">
 <h3>JsonList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-245">JsonList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;json)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-249">JsonList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;json)</span>
          throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified reader containing JSON.</div>
 <dl class="notes">
@@ -635,7 +635,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.Reader,org.apache.juneau.parser.Parser)">
 <h3>JsonList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-260">JsonList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-264">JsonList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;in,
  <a href="../parser/Parser.html" title="class in org.apache.juneau.parser">Parser</a>&nbsp;p)</span>
          throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified string.</div>
@@ -653,7 +653,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Object...)">
 <h3>JsonList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-270">JsonList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;entries)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-274">JsonList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;entries)</span></div>
 <div class="block">Construct a list initialized with the contents.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -672,7 +672,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="ofJsonOrCdl(java.lang.String)">
 <h3>ofJsonOrCdl</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-128">ofJsonOrCdl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-132">ofJsonOrCdl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span>
                             throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Parses a string that can consist of either a JSON array or comma-delimited list.
 
@@ -691,7 +691,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-283">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-287">create</a></span>()</div>
 <div class="block">Construct an empty list.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -702,7 +702,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="of(java.util.Collection)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-295">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-299">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;values)</span></div>
 <div class="block">Construct a list initialized with the specified list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -716,7 +716,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="ofCollections(java.util.Collection...)">
 <h3>ofCollections</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-305">ofCollections</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-309">ofCollections</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;...&nbsp;values)</span></div>
 <div class="block">Convenience method for creating a list of collection objects.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -729,7 +729,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="ofArrays(java.lang.Object[]...)">
 <h3>ofArrays</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-318">ofArrays</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-322">ofArrays</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]...&nbsp;values)</span></div>
 <div class="block">Convenience method for creating a list of array objects.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -742,7 +742,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="ofJson(java.lang.CharSequence)">
 <h3>ofJson</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-334">ofJson</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;json)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-338">ofJson</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;json)</span>
                        throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified JSON string.</div>
 <dl class="notes">
@@ -759,7 +759,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="ofText(java.lang.CharSequence,org.apache.juneau.parser.Parser)">
 <h3>ofText</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-350">ofText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-354">ofText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;in,
  <a href="../parser/Parser.html" title="class in org.apache.juneau.parser">Parser</a>&nbsp;p)</span>
                        throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified string.</div>
@@ -779,7 +779,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="ofJson(java.io.Reader)">
 <h3>ofJson</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-363">ofJson</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;json)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-367">ofJson</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;json)</span>
                        throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified reader containing JSON.</div>
 <dl class="notes">
@@ -796,7 +796,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="ofText(java.io.Reader,org.apache.juneau.parser.Parser)">
 <h3>ofText</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-379">ofText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-383">ofText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;in,
  <a href="../parser/Parser.html" title="class in org.apache.juneau.parser">Parser</a>&nbsp;p)</span>
                        throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified string.</div>
@@ -816,7 +816,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="of(java.lang.Object...)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-389">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-393">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</span></div>
 <div class="block">Construct a list initialized with the specified values.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -829,7 +829,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="session(org.apache.juneau.BeanSession)">
 <h3>session</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-409">session</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-413">session</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;session)</span></div>
 <div class="block">Override the default bean session used for converting POJOs.
 
  <p>
@@ -848,7 +848,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="append(java.lang.Object)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-424">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-428">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Adds the value to this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -861,7 +861,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="append(java.lang.Object...)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-435">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-439">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</span></div>
 <div class="block">Adds all the values in the specified array to this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -874,7 +874,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="append(java.util.Collection)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-446">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-450">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;values)</span></div>
 <div class="block">Adds all the values in the specified collection to this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -887,7 +887,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="appendIf(boolean,java.lang.Object)">
 <h3>appendIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-459">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-463">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Adds an entry to this list if the boolean flag is <jk>true</jk>.</div>
 <dl class="notes">
@@ -902,7 +902,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="appendReverse(java.util.List)">
 <h3>appendReverse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-471">appendReverse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;?&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-475">appendReverse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;?&gt;&nbsp;values)</span></div>
 <div class="block">Adds all the entries in the specified collection to this list in reverse order.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -915,7 +915,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="appendReverse(java.lang.Object...)">
 <h3>appendReverse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-486">appendReverse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-490">appendReverse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</span></div>
 <div class="block">Adds the contents of the array to the list in reverse order.
 
  <p>
@@ -931,7 +931,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="appendIf(java.util.function.Predicate,T)">
 <h3 id="appendIf(java.util.function.Predicate,java.lang.Object)">appendIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-500">appendIf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;&nbsp;test,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-504">appendIf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;&nbsp;test,
  T&nbsp;value)</span></div>
 <div class="block">Add if predicate matches.</div>
 <dl class="notes">
@@ -948,7 +948,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="get(int,java.lang.Class)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-542">get</a></span><wbr><span class="parameters">(int&nbsp;index,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-546">get</a></span><wbr><span class="parameters">(int&nbsp;index,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Get the entry at the specified index, converted to the specified type.
 
@@ -991,7 +991,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="get(int,java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-590">get</a></span><wbr><span class="parameters">(int&nbsp;index,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-594">get</a></span><wbr><span class="parameters">(int&nbsp;index,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span></div>
 <div class="block">Get the entry at the specified index, converted to the specified type.
@@ -1045,7 +1045,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getString(int)">
 <h3>getString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-600">getString</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-604">getString</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block">Shortcut for calling <code>get(index, String.<jk>class</jk>)</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1058,7 +1058,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getInt(int)">
 <h3>getInt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-611">getInt</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-615">getInt</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block">Shortcut for calling <code>get(index, Integer.<jk>class</jk>)</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1073,7 +1073,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getBoolean(int)">
 <h3>getBoolean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-622">getBoolean</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-626">getBoolean</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block">Shortcut for calling <code>get(index, Boolean.<jk>class</jk>)</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1088,7 +1088,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getLong(int)">
 <h3>getLong</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-633">getLong</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-637">getLong</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block">Shortcut for calling <code>get(index, Long.<jk>class</jk>)</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1103,7 +1103,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getMap(int)">
 <h3>getMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-644">getMap</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-648">getMap</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block">Shortcut for calling <code>get(index, JsonMap.<jk>class</jk>)</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1119,7 +1119,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <section class="detail" id="getMap(int,java.lang.Class,java.lang.Class)">
 <h3>getMap</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-659">getMap</a></span><wbr><span class="parameters">(int&nbsp;index,
+V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-663">getMap</a></span><wbr><span class="parameters">(int&nbsp;index,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;K&gt;&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;V&gt;&nbsp;valType)</span></div>
 <div class="block">Same as <a href="#getMap(int)"><code>getMap(int)</code></a> except converts the keys and values to the specified types.</div>
@@ -1141,7 +1141,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getList(int)">
 <h3>getList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-670">getList</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-674">getList</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block">Shortcut for calling <code>get(index, JsonList.<jk>class</jk>)</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1156,7 +1156,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getList(int,java.lang.Class)">
 <h3>getList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-683">getList</a></span><wbr><span class="parameters">(int&nbsp;index,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-687">getList</a></span><wbr><span class="parameters">(int&nbsp;index,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;elementType)</span></div>
 <div class="block">Same as <a href="#getList(int)"><code>getList(int)</code></a> except converts the elements to the specified types.</div>
 <dl class="notes">
@@ -1175,7 +1175,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getAt(java.lang.String,java.lang.Class)">
 <h3>getAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-718">getAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-722">getAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Same as <a href="#get(int,java.lang.Class)"><code>get(int,Class)</code></a>, but the key is a slash-delimited path used to traverse entries in
  this POJO.
@@ -1210,7 +1210,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getAt(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3>getAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-732">getAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-736">getAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span></div>
 <div class="block">Same as <a href="#getAt(java.lang.String,java.lang.Class)"><code>getAt(String,Class)</code></a>, but allows for conversion to complex maps and collections.</div>
@@ -1229,7 +1229,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="putAt(java.lang.String,java.lang.Object)">
 <h3>putAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-761">putAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-765">putAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Same as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedList.html#set(int,E)" title="class or interface in java.util" class="external-link"><code>set(int,Object)</code></a>, but the key is a slash-delimited path used to traverse entries
  in this POJO.
@@ -1262,7 +1262,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="postAt(java.lang.String,java.lang.Object)">
 <h3>postAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-789">postAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-793">postAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Similar to <a href="#putAt(java.lang.String,java.lang.Object)"><code>putAt(String,Object)</code></a>, but used to append to collections and arrays.
 
@@ -1294,7 +1294,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="deleteAt(java.lang.String)">
 <h3>deleteAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-817">deleteAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-821">deleteAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Similar to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedList.html#remove(int)" title="class or interface in java.util" class="external-link"><code>remove(int)</code></a>,but the key is a slash-delimited path used to traverse entries in
  this POJO.
 
@@ -1325,7 +1325,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getBeanSession()">
 <h3>getBeanSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-830">getBeanSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-834">getBeanSession</a></span>()</div>
 <div class="block">Returns the <a href="../BeanSession.html" title="class in org.apache.juneau"><code>BeanSession</code></a> currently associated with this list.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1336,7 +1336,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="setBeanSession(org.apache.juneau.BeanSession)">
 <h3>setBeanSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-840">setBeanSession</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-844">setBeanSession</a></span><wbr><span class="parameters">(<a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a>&nbsp;value)</span></div>
 <div class="block">Sets the <a href="../BeanSession.html" title="class in org.apache.juneau"><code>BeanSession</code></a> currently associated with this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1349,7 +1349,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="elements(java.lang.Class)">
 <h3>elements</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-884">elements</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;childType)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-888">elements</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;childType)</span></div>
 <div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link"><code>Iterable</code></a> with elements of the specified child type.
 
  <p>
@@ -1396,7 +1396,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getClassMeta(int)">
 <h3>getClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-912">getClassMeta</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-916">getClassMeta</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block">Returns the <a href="../ClassMeta.html" title="class in org.apache.juneau"><code>ClassMeta</code></a> of the class of the object at the specified index.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1409,7 +1409,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="asString(org.apache.juneau.serializer.WriterSerializer)">
 <h3>asString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-922">asString</a></span><wbr><span class="parameters">(<a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.serializer">WriterSerializer</a>&nbsp;serializer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-926">asString</a></span><wbr><span class="parameters">(<a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.serializer">WriterSerializer</a>&nbsp;serializer)</span></div>
 <div class="block">Serialize this array to a string using the specified serializer.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1422,7 +1422,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="asString()">
 <h3>asString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-931">asString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-935">asString</a></span>()</div>
 <div class="block">Serialize this array to Simplified JSON.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1433,7 +1433,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isUnmodifiable()">
 <h3>isUnmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-940">isUnmodifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-944">isUnmodifiable</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this list is unmodifiable.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1444,7 +1444,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="modifiable()">
 <h3>modifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-949">modifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-953">modifiable</a></span>()</div>
 <div class="block">Returns a modifiable copy of this list if it's unmodifiable.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1455,7 +1455,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="unmodifiable()">
 <h3>unmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-960">unmodifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-964">unmodifiable</a></span>()</div>
 <div class="block">Returns an unmodifiable copy of this list if it's modifiable.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1466,7 +1466,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="writeTo(java.io.Writer)">
 <h3>writeTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-975">writeTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonList.html" title="class in org.apache.juneau.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-979">writeTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../serializer/SerializeException.html" title="class in org.apache.juneau.serializer">SerializeException</a></span></div>
 <div class="block">Convenience method for serializing this JsonList to the specified Writer using the JsonSerializer.DEFAULT
@@ -1485,7 +1485,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="cast(org.apache.juneau.ClassMeta)">
 <h3>cast</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-989">cast</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-993">cast</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Converts this object into the specified class type.
 
  <p>
@@ -1501,7 +1501,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="asJson()">
 <h3>asJson</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-1058">asJson</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-1062">asJson</a></span>()</div>
 <div class="block">A synonym for <a href="#toString()"><code>toString()</code></a></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1512,7 +1512,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-1062">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/collections/JsonList.html#line-1066">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractCollection.html#toString()" title="class or interface in java.util" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractCollection.html" title="class or interface in java.util" class="external-link">AbstractCollection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></dd>

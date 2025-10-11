@@ -11,241 +11,245 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.rest.mock;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import static org.apache.juneau.common.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import static org.apache.juneau.common.utils.Utils.*;</span>
-<span class="source-line-no">017</span><span id="line-17"></span>
-<span class="source-line-no">018</span><span id="line-18">import java.io.*;</span>
-<span class="source-line-no">019</span><span id="line-19">import java.util.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import java.util.logging.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import java.util.logging.Formatter;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.assertions.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">/**</span>
-<span class="source-line-no">026</span><span id="line-26"> * Simplified logger for intercepting and asserting logging messages.</span>
-<span class="source-line-no">027</span><span id="line-27"> *</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> *    &lt;jc&gt;// Instantiate a mock logger.&lt;/jc&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> *    MockLogger &lt;jv&gt;logger&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; MockLogger();</span>
-<span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> *    &lt;jc&gt;// Associate it with a MockRestClient.&lt;/jc&gt;</span>
-<span class="source-line-no">034</span><span id="line-34"> *    MockRestClient</span>
-<span class="source-line-no">035</span><span id="line-35"> *       .&lt;jsm&gt;create&lt;/jsm&gt;(MyRestResource.&lt;jk&gt;class&lt;/jk&gt;)</span>
-<span class="source-line-no">036</span><span id="line-36"> *       .json5()</span>
-<span class="source-line-no">037</span><span id="line-37"> *       .logger(&lt;jv&gt;logger&lt;/jv&gt;)</span>
-<span class="source-line-no">038</span><span id="line-38"> *       .logRequests(DetailLevel.&lt;jsf&gt;FULL&lt;/jsf&gt;, Level.&lt;jsf&gt;SEVERE&lt;/jsf&gt;)</span>
-<span class="source-line-no">039</span><span id="line-39"> *       .build()</span>
-<span class="source-line-no">040</span><span id="line-40"> *       .post(&lt;js&gt;"/bean"&lt;/js&gt;, &lt;jv&gt;bean&lt;/jv&gt;)</span>
-<span class="source-line-no">041</span><span id="line-41"> *       .complete();</span>
-<span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;jc&gt;// Assert that logging occurred.&lt;/jc&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> *    &lt;jv&gt;logger&lt;/jv&gt;.assertLastLevel(Level.&lt;jsf&gt;SEVERE&lt;/jsf&gt;);</span>
-<span class="source-line-no">045</span><span id="line-45"> *    &lt;jv&gt;logger&lt;/jv&gt;.assertLastMessage().is(</span>
-<span class="source-line-no">046</span><span id="line-46"> *       &lt;js&gt;"=== HTTP Call (outgoing) ======================================================"&lt;/js&gt;,</span>
-<span class="source-line-no">047</span><span id="line-47"> *       &lt;js&gt;"=== REQUEST ==="&lt;/js&gt;,</span>
-<span class="source-line-no">048</span><span id="line-48"> *       &lt;js&gt;"POST http://localhost/bean"&lt;/js&gt;,</span>
-<span class="source-line-no">049</span><span id="line-49"> *       &lt;js&gt;"---request headers---"&lt;/js&gt;,</span>
-<span class="source-line-no">050</span><span id="line-50"> *       &lt;js&gt;" Accept: application/json5"&lt;/js&gt;,</span>
-<span class="source-line-no">051</span><span id="line-51"> *       &lt;js&gt;"---request entity---"&lt;/js&gt;,</span>
-<span class="source-line-no">052</span><span id="line-52"> *       &lt;js&gt;" Content-Type: application/json5"&lt;/js&gt;,</span>
-<span class="source-line-no">053</span><span id="line-53"> *       &lt;js&gt;"---request content---"&lt;/js&gt;,</span>
-<span class="source-line-no">054</span><span id="line-54"> *       &lt;js&gt;"{f:1}"&lt;/js&gt;,</span>
-<span class="source-line-no">055</span><span id="line-55"> *       &lt;js&gt;"=== RESPONSE ==="&lt;/js&gt;,</span>
-<span class="source-line-no">056</span><span id="line-56"> *       &lt;js&gt;"HTTP/1.1 200 "&lt;/js&gt;,</span>
-<span class="source-line-no">057</span><span id="line-57"> *       &lt;js&gt;"---response headers---"&lt;/js&gt;,</span>
-<span class="source-line-no">058</span><span id="line-58"> *       &lt;js&gt;" Content-Type: application/json"&lt;/js&gt;,</span>
-<span class="source-line-no">059</span><span id="line-59"> *       &lt;js&gt;"---response content---"&lt;/js&gt;,</span>
-<span class="source-line-no">060</span><span id="line-60"> *       &lt;js&gt;"{f:1}"&lt;/js&gt;,</span>
-<span class="source-line-no">061</span><span id="line-61"> *       &lt;js&gt;"=== END ======================================================================="&lt;/js&gt;,</span>
-<span class="source-line-no">062</span><span id="line-62"> *       &lt;js&gt;""&lt;/js&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> *    );</span>
-<span class="source-line-no">064</span><span id="line-64"> * &lt;/p&gt;</span>
-<span class="source-line-no">065</span><span id="line-65"> *</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics"&gt;juneau-rest-mock Basics&lt;/a&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;/ul&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> */</span>
-<span class="source-line-no">070</span><span id="line-70">public class MockLogger extends Logger {</span>
-<span class="source-line-no">071</span><span id="line-71"></span>
-<span class="source-line-no">072</span><span id="line-72">   private static final String FORMAT_PROPERTY = "java.util.logging.SimpleFormatter.format";</span>
-<span class="source-line-no">073</span><span id="line-73"></span>
-<span class="source-line-no">074</span><span id="line-74">   private final List&lt;LogRecord&gt; logRecords = list();</span>
-<span class="source-line-no">075</span><span id="line-75">   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
-<span class="source-line-no">076</span><span id="line-76">   private volatile Formatter formatter;</span>
-<span class="source-line-no">077</span><span id="line-77">   private volatile String format = "%4$s: %5$s%6$s%n";</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">   /**</span>
-<span class="source-line-no">080</span><span id="line-80">    * Constructor.</span>
-<span class="source-line-no">081</span><span id="line-81">    */</span>
-<span class="source-line-no">082</span><span id="line-82">   public MockLogger() {</span>
-<span class="source-line-no">083</span><span id="line-83">      super("Mock", null);</span>
-<span class="source-line-no">084</span><span id="line-84">   }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   /**</span>
-<span class="source-line-no">087</span><span id="line-87">    * Creator.</span>
-<span class="source-line-no">088</span><span id="line-88">    *</span>
-<span class="source-line-no">089</span><span id="line-89">    * @return A new {@link MockLogger} object.</span>
-<span class="source-line-no">090</span><span id="line-90">    */</span>
-<span class="source-line-no">091</span><span id="line-91">   public static MockLogger create() {</span>
-<span class="source-line-no">092</span><span id="line-92">      return new MockLogger();</span>
-<span class="source-line-no">093</span><span id="line-93">   }</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">   @Override /* Logger */</span>
-<span class="source-line-no">096</span><span id="line-96">   public synchronized void log(LogRecord record) {</span>
-<span class="source-line-no">097</span><span id="line-97">      logRecords.add(record);</span>
-<span class="source-line-no">098</span><span id="line-98">      try {</span>
-<span class="source-line-no">099</span><span id="line-99">         baos.write(getFormatter().format(record).getBytes("UTF-8"));</span>
-<span class="source-line-no">100</span><span id="line-100">      } catch (Exception e) {</span>
-<span class="source-line-no">101</span><span id="line-101">         throw asRuntimeException(e);</span>
-<span class="source-line-no">102</span><span id="line-102">      }</span>
-<span class="source-line-no">103</span><span id="line-103">   }</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   private Formatter getFormatter() {</span>
-<span class="source-line-no">106</span><span id="line-106">      if (formatter == null) {</span>
-<span class="source-line-no">107</span><span id="line-107">         synchronized(this) {</span>
-<span class="source-line-no">108</span><span id="line-108">            String oldFormat = System.getProperty(FORMAT_PROPERTY);</span>
-<span class="source-line-no">109</span><span id="line-109">            System.setProperty(FORMAT_PROPERTY, format);</span>
-<span class="source-line-no">110</span><span id="line-110">            formatter = new SimpleFormatter();</span>
-<span class="source-line-no">111</span><span id="line-111">            if (oldFormat == null)</span>
-<span class="source-line-no">112</span><span id="line-112">               System.clearProperty(FORMAT_PROPERTY);</span>
-<span class="source-line-no">113</span><span id="line-113">            else</span>
-<span class="source-line-no">114</span><span id="line-114">               System.setProperty(FORMAT_PROPERTY, oldFormat);</span>
-<span class="source-line-no">115</span><span id="line-115">         }</span>
-<span class="source-line-no">116</span><span id="line-116">      }</span>
-<span class="source-line-no">117</span><span id="line-117">      return formatter;</span>
-<span class="source-line-no">118</span><span id="line-118">   }</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   /**</span>
-<span class="source-line-no">121</span><span id="line-121">    * Sets the level for this logger.</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * @param level The new level for this logger.</span>
-<span class="source-line-no">124</span><span id="line-124">    * @return This object.</span>
-<span class="source-line-no">125</span><span id="line-125">    */</span>
-<span class="source-line-no">126</span><span id="line-126">   public synchronized MockLogger level(Level level) {</span>
-<span class="source-line-no">127</span><span id="line-127">      super.setLevel(level);</span>
-<span class="source-line-no">128</span><span id="line-128">      return this;</span>
-<span class="source-line-no">129</span><span id="line-129">   }</span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">   /**</span>
-<span class="source-line-no">132</span><span id="line-132">    * Specifies the format for messages sent to the log file.</span>
-<span class="source-line-no">133</span><span id="line-133">    *</span>
-<span class="source-line-no">134</span><span id="line-134">    * &lt;p&gt;</span>
-<span class="source-line-no">135</span><span id="line-135">    * See {@link SimpleFormatter#format(LogRecord)} for the syntax of this string.</span>
-<span class="source-line-no">136</span><span id="line-136">    *</span>
-<span class="source-line-no">137</span><span id="line-137">    * @param format The format string.</span>
-<span class="source-line-no">138</span><span id="line-138">    * @return This object.</span>
-<span class="source-line-no">139</span><span id="line-139">    */</span>
-<span class="source-line-no">140</span><span id="line-140">   public synchronized MockLogger format(String format) {</span>
-<span class="source-line-no">141</span><span id="line-141">      this.format = format;</span>
-<span class="source-line-no">142</span><span id="line-142">      return this;</span>
-<span class="source-line-no">143</span><span id="line-143">   }</span>
-<span class="source-line-no">144</span><span id="line-144"></span>
-<span class="source-line-no">145</span><span id="line-145">   /**</span>
-<span class="source-line-no">146</span><span id="line-146">    * Overrides the formatter to use for formatting messages.</span>
-<span class="source-line-no">147</span><span id="line-147">    *</span>
-<span class="source-line-no">148</span><span id="line-148">    * &lt;p&gt;</span>
-<span class="source-line-no">149</span><span id="line-149">    * The default uses {@link SimpleFormatter}.</span>
-<span class="source-line-no">150</span><span id="line-150">    *</span>
-<span class="source-line-no">151</span><span id="line-151">    * @param formatter The log record formatter.</span>
-<span class="source-line-no">152</span><span id="line-152">    * @return This object.</span>
-<span class="source-line-no">153</span><span id="line-153">    */</span>
-<span class="source-line-no">154</span><span id="line-154">   public synchronized MockLogger formatter(Formatter formatter) {</span>
-<span class="source-line-no">155</span><span id="line-155">      this.formatter = formatter;</span>
-<span class="source-line-no">156</span><span id="line-156">      return this;</span>
-<span class="source-line-no">157</span><span id="line-157">   }</span>
-<span class="source-line-no">158</span><span id="line-158"></span>
-<span class="source-line-no">159</span><span id="line-159">   /**</span>
-<span class="source-line-no">160</span><span id="line-160">    * Resets this logger.</span>
-<span class="source-line-no">161</span><span id="line-161">    *</span>
-<span class="source-line-no">162</span><span id="line-162">    * @return This object.</span>
-<span class="source-line-no">163</span><span id="line-163">    */</span>
-<span class="source-line-no">164</span><span id="line-164">   public synchronized MockLogger reset() {</span>
-<span class="source-line-no">165</span><span id="line-165">      logRecords.clear();</span>
-<span class="source-line-no">166</span><span id="line-166">      baos.reset();</span>
-<span class="source-line-no">167</span><span id="line-167">      return this;</span>
-<span class="source-line-no">168</span><span id="line-168">   }</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">   /**</span>
-<span class="source-line-no">171</span><span id="line-171">    * Asserts that this logger was called.</span>
-<span class="source-line-no">172</span><span id="line-172">    *</span>
-<span class="source-line-no">173</span><span id="line-173">    * @return This object.</span>
-<span class="source-line-no">174</span><span id="line-174">    */</span>
-<span class="source-line-no">175</span><span id="line-175">   public synchronized MockLogger assertLogged() {</span>
-<span class="source-line-no">176</span><span id="line-176">      if (logRecords.isEmpty())</span>
-<span class="source-line-no">177</span><span id="line-177">         throw new AssertionError("Message not logged");</span>
-<span class="source-line-no">178</span><span id="line-178">      return this;</span>
-<span class="source-line-no">179</span><span id="line-179">   }</span>
-<span class="source-line-no">180</span><span id="line-180"></span>
-<span class="source-line-no">181</span><span id="line-181">   /**</span>
-<span class="source-line-no">182</span><span id="line-182">    * Asserts that the last message was logged at the specified level.</span>
-<span class="source-line-no">183</span><span id="line-183">    *</span>
-<span class="source-line-no">184</span><span id="line-184">    * @param level The level to match against.</span>
-<span class="source-line-no">185</span><span id="line-185">    * @return This object.</span>
-<span class="source-line-no">186</span><span id="line-186">    */</span>
-<span class="source-line-no">187</span><span id="line-187">   public synchronized MockLogger assertLastLevel(Level level) {</span>
-<span class="source-line-no">188</span><span id="line-188">      assertLogged();</span>
-<span class="source-line-no">189</span><span id="line-189">      if (last().getLevel() != level)</span>
-<span class="source-line-no">190</span><span id="line-190">         throw new AssertionError("Message logged at [" + last().getLevel() + "] instead of [" + level + "]");</span>
-<span class="source-line-no">191</span><span id="line-191">      return this;</span>
-<span class="source-line-no">192</span><span id="line-192">   }</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">   /**</span>
-<span class="source-line-no">195</span><span id="line-195">    * Asserts that the last message matched the specified message.</span>
-<span class="source-line-no">196</span><span id="line-196">    *</span>
-<span class="source-line-no">197</span><span id="line-197">    * @return This object.</span>
-<span class="source-line-no">198</span><span id="line-198">    */</span>
-<span class="source-line-no">199</span><span id="line-199">   public synchronized FluentStringAssertion&lt;MockLogger&gt; assertLastMessage() {</span>
-<span class="source-line-no">200</span><span id="line-200">      assertLogged();</span>
-<span class="source-line-no">201</span><span id="line-201">      return new FluentStringAssertion&lt;&gt;(last().getMessage(), this);</span>
-<span class="source-line-no">202</span><span id="line-202">   }</span>
-<span class="source-line-no">203</span><span id="line-203"></span>
-<span class="source-line-no">204</span><span id="line-204">   /**</span>
-<span class="source-line-no">205</span><span id="line-205">    * Asserts that the specified number of messages have been logged.</span>
-<span class="source-line-no">206</span><span id="line-206">    *</span>
-<span class="source-line-no">207</span><span id="line-207">    * @return This object.</span>
-<span class="source-line-no">208</span><span id="line-208">    */</span>
-<span class="source-line-no">209</span><span id="line-209">   public synchronized FluentIntegerAssertion&lt;MockLogger&gt; assertRecordCount() {</span>
-<span class="source-line-no">210</span><span id="line-210">      return new FluentIntegerAssertion&lt;&gt;(logRecords.size(), this);</span>
-<span class="source-line-no">211</span><span id="line-211">   }</span>
-<span class="source-line-no">212</span><span id="line-212"></span>
-<span class="source-line-no">213</span><span id="line-213">   /**</span>
-<span class="source-line-no">214</span><span id="line-214">    * Allows you to perform fluent-style assertions on the contents of the log file.</span>
-<span class="source-line-no">215</span><span id="line-215">    *</span>
-<span class="source-line-no">216</span><span id="line-216">    * @return A new fluent-style assertion object.</span>
-<span class="source-line-no">217</span><span id="line-217">    */</span>
-<span class="source-line-no">218</span><span id="line-218">   public synchronized FluentStringAssertion&lt;MockLogger&gt; assertContents() {</span>
-<span class="source-line-no">219</span><span id="line-219">      return new FluentStringAssertion&lt;&gt;(baos.toString(), this);</span>
-<span class="source-line-no">220</span><span id="line-220">   }</span>
-<span class="source-line-no">221</span><span id="line-221"></span>
-<span class="source-line-no">222</span><span id="line-222">   private LogRecord last() {</span>
-<span class="source-line-no">223</span><span id="line-223">      if (logRecords.isEmpty())</span>
-<span class="source-line-no">224</span><span id="line-224">         throw new AssertionError("Message not logged");</span>
-<span class="source-line-no">225</span><span id="line-225">      return logRecords.get(logRecords.size()-1);</span>
-<span class="source-line-no">226</span><span id="line-226">   }</span>
-<span class="source-line-no">227</span><span id="line-227"></span>
-<span class="source-line-no">228</span><span id="line-228">   /**</span>
-<span class="source-line-no">229</span><span id="line-229">    * Returns the contents of this log file as a string.</span>
-<span class="source-line-no">230</span><span id="line-230">    */</span>
-<span class="source-line-no">231</span><span id="line-231">   @Override</span>
-<span class="source-line-no">232</span><span id="line-232">   public String toString() {</span>
-<span class="source-line-no">233</span><span id="line-233">      return baos.toString();</span>
-<span class="source-line-no">234</span><span id="line-234">   }</span>
-<span class="source-line-no">235</span><span id="line-235">}</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.mock;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.common.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.common.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.logging.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import java.util.logging.Formatter;</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.assertions.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">/**</span>
+<span class="source-line-no">030</span><span id="line-30"> * Simplified logger for intercepting and asserting logging messages.</span>
+<span class="source-line-no">031</span><span id="line-31"> *</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> *    &lt;jc&gt;// Instantiate a mock logger.&lt;/jc&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> *    MockLogger &lt;jv&gt;logger&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; MockLogger();</span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
+<span class="source-line-no">037</span><span id="line-37"> *    &lt;jc&gt;// Associate it with a MockRestClient.&lt;/jc&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> *    MockRestClient</span>
+<span class="source-line-no">039</span><span id="line-39"> *       .&lt;jsm&gt;create&lt;/jsm&gt;(MyRestResource.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">040</span><span id="line-40"> *       .json5()</span>
+<span class="source-line-no">041</span><span id="line-41"> *       .logger(&lt;jv&gt;logger&lt;/jv&gt;)</span>
+<span class="source-line-no">042</span><span id="line-42"> *       .logRequests(DetailLevel.&lt;jsf&gt;FULL&lt;/jsf&gt;, Level.&lt;jsf&gt;SEVERE&lt;/jsf&gt;)</span>
+<span class="source-line-no">043</span><span id="line-43"> *       .build()</span>
+<span class="source-line-no">044</span><span id="line-44"> *       .post(&lt;js&gt;"/bean"&lt;/js&gt;, &lt;jv&gt;bean&lt;/jv&gt;)</span>
+<span class="source-line-no">045</span><span id="line-45"> *       .complete();</span>
+<span class="source-line-no">046</span><span id="line-46"> *</span>
+<span class="source-line-no">047</span><span id="line-47"> *    &lt;jc&gt;// Assert that logging occurred.&lt;/jc&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> *    &lt;jv&gt;logger&lt;/jv&gt;.assertLastLevel(Level.&lt;jsf&gt;SEVERE&lt;/jsf&gt;);</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;jv&gt;logger&lt;/jv&gt;.assertLastMessage().is(</span>
+<span class="source-line-no">050</span><span id="line-50"> *       &lt;js&gt;"=== HTTP Call (outgoing) ======================================================"&lt;/js&gt;,</span>
+<span class="source-line-no">051</span><span id="line-51"> *       &lt;js&gt;"=== REQUEST ==="&lt;/js&gt;,</span>
+<span class="source-line-no">052</span><span id="line-52"> *       &lt;js&gt;"POST http://localhost/bean"&lt;/js&gt;,</span>
+<span class="source-line-no">053</span><span id="line-53"> *       &lt;js&gt;"---request headers---"&lt;/js&gt;,</span>
+<span class="source-line-no">054</span><span id="line-54"> *       &lt;js&gt;" Accept: application/json5"&lt;/js&gt;,</span>
+<span class="source-line-no">055</span><span id="line-55"> *       &lt;js&gt;"---request entity---"&lt;/js&gt;,</span>
+<span class="source-line-no">056</span><span id="line-56"> *       &lt;js&gt;" Content-Type: application/json5"&lt;/js&gt;,</span>
+<span class="source-line-no">057</span><span id="line-57"> *       &lt;js&gt;"---request content---"&lt;/js&gt;,</span>
+<span class="source-line-no">058</span><span id="line-58"> *       &lt;js&gt;"{f:1}"&lt;/js&gt;,</span>
+<span class="source-line-no">059</span><span id="line-59"> *       &lt;js&gt;"=== RESPONSE ==="&lt;/js&gt;,</span>
+<span class="source-line-no">060</span><span id="line-60"> *       &lt;js&gt;"HTTP/1.1 200 "&lt;/js&gt;,</span>
+<span class="source-line-no">061</span><span id="line-61"> *       &lt;js&gt;"---response headers---"&lt;/js&gt;,</span>
+<span class="source-line-no">062</span><span id="line-62"> *       &lt;js&gt;" Content-Type: application/json"&lt;/js&gt;,</span>
+<span class="source-line-no">063</span><span id="line-63"> *       &lt;js&gt;"---response content---"&lt;/js&gt;,</span>
+<span class="source-line-no">064</span><span id="line-64"> *       &lt;js&gt;"{f:1}"&lt;/js&gt;,</span>
+<span class="source-line-no">065</span><span id="line-65"> *       &lt;js&gt;"=== END ======================================================================="&lt;/js&gt;,</span>
+<span class="source-line-no">066</span><span id="line-66"> *       &lt;js&gt;""&lt;/js&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> *    );</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;/p&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> *</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics"&gt;juneau-rest-mock Basics&lt;/a&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;/ul&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> */</span>
+<span class="source-line-no">074</span><span id="line-74">public class MockLogger extends Logger {</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">   private static final String FORMAT_PROPERTY = "java.util.logging.SimpleFormatter.format";</span>
+<span class="source-line-no">077</span><span id="line-77"></span>
+<span class="source-line-no">078</span><span id="line-78">   private final List&lt;LogRecord&gt; logRecords = list();</span>
+<span class="source-line-no">079</span><span id="line-79">   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
+<span class="source-line-no">080</span><span id="line-80">   private volatile Formatter formatter;</span>
+<span class="source-line-no">081</span><span id="line-81">   private volatile String format = "%4$s: %5$s%6$s%n";</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">   /**</span>
+<span class="source-line-no">084</span><span id="line-84">    * Constructor.</span>
+<span class="source-line-no">085</span><span id="line-85">    */</span>
+<span class="source-line-no">086</span><span id="line-86">   public MockLogger() {</span>
+<span class="source-line-no">087</span><span id="line-87">      super("Mock", null);</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   /**</span>
+<span class="source-line-no">091</span><span id="line-91">    * Creator.</span>
+<span class="source-line-no">092</span><span id="line-92">    *</span>
+<span class="source-line-no">093</span><span id="line-93">    * @return A new {@link MockLogger} object.</span>
+<span class="source-line-no">094</span><span id="line-94">    */</span>
+<span class="source-line-no">095</span><span id="line-95">   public static MockLogger create() {</span>
+<span class="source-line-no">096</span><span id="line-96">      return new MockLogger();</span>
+<span class="source-line-no">097</span><span id="line-97">   }</span>
+<span class="source-line-no">098</span><span id="line-98"></span>
+<span class="source-line-no">099</span><span id="line-99">   @Override /* Logger */</span>
+<span class="source-line-no">100</span><span id="line-100">   public synchronized void log(LogRecord record) {</span>
+<span class="source-line-no">101</span><span id="line-101">      logRecords.add(record);</span>
+<span class="source-line-no">102</span><span id="line-102">      try {</span>
+<span class="source-line-no">103</span><span id="line-103">         baos.write(getFormatter().format(record).getBytes("UTF-8"));</span>
+<span class="source-line-no">104</span><span id="line-104">      } catch (Exception e) {</span>
+<span class="source-line-no">105</span><span id="line-105">         throw asRuntimeException(e);</span>
+<span class="source-line-no">106</span><span id="line-106">      }</span>
+<span class="source-line-no">107</span><span id="line-107">   }</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   private Formatter getFormatter() {</span>
+<span class="source-line-no">110</span><span id="line-110">      if (formatter == null) {</span>
+<span class="source-line-no">111</span><span id="line-111">         synchronized(this) {</span>
+<span class="source-line-no">112</span><span id="line-112">            String oldFormat = System.getProperty(FORMAT_PROPERTY);</span>
+<span class="source-line-no">113</span><span id="line-113">            System.setProperty(FORMAT_PROPERTY, format);</span>
+<span class="source-line-no">114</span><span id="line-114">            formatter = new SimpleFormatter();</span>
+<span class="source-line-no">115</span><span id="line-115">            if (oldFormat == null)</span>
+<span class="source-line-no">116</span><span id="line-116">               System.clearProperty(FORMAT_PROPERTY);</span>
+<span class="source-line-no">117</span><span id="line-117">            else</span>
+<span class="source-line-no">118</span><span id="line-118">               System.setProperty(FORMAT_PROPERTY, oldFormat);</span>
+<span class="source-line-no">119</span><span id="line-119">         }</span>
+<span class="source-line-no">120</span><span id="line-120">      }</span>
+<span class="source-line-no">121</span><span id="line-121">      return formatter;</span>
+<span class="source-line-no">122</span><span id="line-122">   }</span>
+<span class="source-line-no">123</span><span id="line-123"></span>
+<span class="source-line-no">124</span><span id="line-124">   /**</span>
+<span class="source-line-no">125</span><span id="line-125">    * Sets the level for this logger.</span>
+<span class="source-line-no">126</span><span id="line-126">    *</span>
+<span class="source-line-no">127</span><span id="line-127">    * @param level The new level for this logger.</span>
+<span class="source-line-no">128</span><span id="line-128">    * @return This object.</span>
+<span class="source-line-no">129</span><span id="line-129">    */</span>
+<span class="source-line-no">130</span><span id="line-130">   public synchronized MockLogger level(Level level) {</span>
+<span class="source-line-no">131</span><span id="line-131">      super.setLevel(level);</span>
+<span class="source-line-no">132</span><span id="line-132">      return this;</span>
+<span class="source-line-no">133</span><span id="line-133">   }</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">   /**</span>
+<span class="source-line-no">136</span><span id="line-136">    * Specifies the format for messages sent to the log file.</span>
+<span class="source-line-no">137</span><span id="line-137">    *</span>
+<span class="source-line-no">138</span><span id="line-138">    * &lt;p&gt;</span>
+<span class="source-line-no">139</span><span id="line-139">    * See {@link SimpleFormatter#format(LogRecord)} for the syntax of this string.</span>
+<span class="source-line-no">140</span><span id="line-140">    *</span>
+<span class="source-line-no">141</span><span id="line-141">    * @param format The format string.</span>
+<span class="source-line-no">142</span><span id="line-142">    * @return This object.</span>
+<span class="source-line-no">143</span><span id="line-143">    */</span>
+<span class="source-line-no">144</span><span id="line-144">   public synchronized MockLogger format(String format) {</span>
+<span class="source-line-no">145</span><span id="line-145">      this.format = format;</span>
+<span class="source-line-no">146</span><span id="line-146">      return this;</span>
+<span class="source-line-no">147</span><span id="line-147">   }</span>
+<span class="source-line-no">148</span><span id="line-148"></span>
+<span class="source-line-no">149</span><span id="line-149">   /**</span>
+<span class="source-line-no">150</span><span id="line-150">    * Overrides the formatter to use for formatting messages.</span>
+<span class="source-line-no">151</span><span id="line-151">    *</span>
+<span class="source-line-no">152</span><span id="line-152">    * &lt;p&gt;</span>
+<span class="source-line-no">153</span><span id="line-153">    * The default uses {@link SimpleFormatter}.</span>
+<span class="source-line-no">154</span><span id="line-154">    *</span>
+<span class="source-line-no">155</span><span id="line-155">    * @param formatter The log record formatter.</span>
+<span class="source-line-no">156</span><span id="line-156">    * @return This object.</span>
+<span class="source-line-no">157</span><span id="line-157">    */</span>
+<span class="source-line-no">158</span><span id="line-158">   public synchronized MockLogger formatter(Formatter formatter) {</span>
+<span class="source-line-no">159</span><span id="line-159">      this.formatter = formatter;</span>
+<span class="source-line-no">160</span><span id="line-160">      return this;</span>
+<span class="source-line-no">161</span><span id="line-161">   }</span>
+<span class="source-line-no">162</span><span id="line-162"></span>
+<span class="source-line-no">163</span><span id="line-163">   /**</span>
+<span class="source-line-no">164</span><span id="line-164">    * Resets this logger.</span>
+<span class="source-line-no">165</span><span id="line-165">    *</span>
+<span class="source-line-no">166</span><span id="line-166">    * @return This object.</span>
+<span class="source-line-no">167</span><span id="line-167">    */</span>
+<span class="source-line-no">168</span><span id="line-168">   public synchronized MockLogger reset() {</span>
+<span class="source-line-no">169</span><span id="line-169">      logRecords.clear();</span>
+<span class="source-line-no">170</span><span id="line-170">      baos.reset();</span>
+<span class="source-line-no">171</span><span id="line-171">      return this;</span>
+<span class="source-line-no">172</span><span id="line-172">   }</span>
+<span class="source-line-no">173</span><span id="line-173"></span>
+<span class="source-line-no">174</span><span id="line-174">   /**</span>
+<span class="source-line-no">175</span><span id="line-175">    * Asserts that this logger was called.</span>
+<span class="source-line-no">176</span><span id="line-176">    *</span>
+<span class="source-line-no">177</span><span id="line-177">    * @return This object.</span>
+<span class="source-line-no">178</span><span id="line-178">    */</span>
+<span class="source-line-no">179</span><span id="line-179">   public synchronized MockLogger assertLogged() {</span>
+<span class="source-line-no">180</span><span id="line-180">      if (logRecords.isEmpty())</span>
+<span class="source-line-no">181</span><span id="line-181">         throw new AssertionError("Message not logged");</span>
+<span class="source-line-no">182</span><span id="line-182">      return this;</span>
+<span class="source-line-no">183</span><span id="line-183">   }</span>
+<span class="source-line-no">184</span><span id="line-184"></span>
+<span class="source-line-no">185</span><span id="line-185">   /**</span>
+<span class="source-line-no">186</span><span id="line-186">    * Asserts that the last message was logged at the specified level.</span>
+<span class="source-line-no">187</span><span id="line-187">    *</span>
+<span class="source-line-no">188</span><span id="line-188">    * @param level The level to match against.</span>
+<span class="source-line-no">189</span><span id="line-189">    * @return This object.</span>
+<span class="source-line-no">190</span><span id="line-190">    */</span>
+<span class="source-line-no">191</span><span id="line-191">   public synchronized MockLogger assertLastLevel(Level level) {</span>
+<span class="source-line-no">192</span><span id="line-192">      assertLogged();</span>
+<span class="source-line-no">193</span><span id="line-193">      if (last().getLevel() != level)</span>
+<span class="source-line-no">194</span><span id="line-194">         throw new AssertionError("Message logged at [" + last().getLevel() + "] instead of [" + level + "]");</span>
+<span class="source-line-no">195</span><span id="line-195">      return this;</span>
+<span class="source-line-no">196</span><span id="line-196">   }</span>
+<span class="source-line-no">197</span><span id="line-197"></span>
+<span class="source-line-no">198</span><span id="line-198">   /**</span>
+<span class="source-line-no">199</span><span id="line-199">    * Asserts that the last message matched the specified message.</span>
+<span class="source-line-no">200</span><span id="line-200">    *</span>
+<span class="source-line-no">201</span><span id="line-201">    * @return This object.</span>
+<span class="source-line-no">202</span><span id="line-202">    */</span>
+<span class="source-line-no">203</span><span id="line-203">   public synchronized FluentStringAssertion&lt;MockLogger&gt; assertLastMessage() {</span>
+<span class="source-line-no">204</span><span id="line-204">      assertLogged();</span>
+<span class="source-line-no">205</span><span id="line-205">      return new FluentStringAssertion&lt;&gt;(last().getMessage(), this);</span>
+<span class="source-line-no">206</span><span id="line-206">   }</span>
+<span class="source-line-no">207</span><span id="line-207"></span>
+<span class="source-line-no">208</span><span id="line-208">   /**</span>
+<span class="source-line-no">209</span><span id="line-209">    * Asserts that the specified number of messages have been logged.</span>
+<span class="source-line-no">210</span><span id="line-210">    *</span>
+<span class="source-line-no">211</span><span id="line-211">    * @return This object.</span>
+<span class="source-line-no">212</span><span id="line-212">    */</span>
+<span class="source-line-no">213</span><span id="line-213">   public synchronized FluentIntegerAssertion&lt;MockLogger&gt; assertRecordCount() {</span>
+<span class="source-line-no">214</span><span id="line-214">      return new FluentIntegerAssertion&lt;&gt;(logRecords.size(), this);</span>
+<span class="source-line-no">215</span><span id="line-215">   }</span>
+<span class="source-line-no">216</span><span id="line-216"></span>
+<span class="source-line-no">217</span><span id="line-217">   /**</span>
+<span class="source-line-no">218</span><span id="line-218">    * Allows you to perform fluent-style assertions on the contents of the log file.</span>
+<span class="source-line-no">219</span><span id="line-219">    *</span>
+<span class="source-line-no">220</span><span id="line-220">    * @return A new fluent-style assertion object.</span>
+<span class="source-line-no">221</span><span id="line-221">    */</span>
+<span class="source-line-no">222</span><span id="line-222">   public synchronized FluentStringAssertion&lt;MockLogger&gt; assertContents() {</span>
+<span class="source-line-no">223</span><span id="line-223">      return new FluentStringAssertion&lt;&gt;(baos.toString(), this);</span>
+<span class="source-line-no">224</span><span id="line-224">   }</span>
+<span class="source-line-no">225</span><span id="line-225"></span>
+<span class="source-line-no">226</span><span id="line-226">   private LogRecord last() {</span>
+<span class="source-line-no">227</span><span id="line-227">      if (logRecords.isEmpty())</span>
+<span class="source-line-no">228</span><span id="line-228">         throw new AssertionError("Message not logged");</span>
+<span class="source-line-no">229</span><span id="line-229">      return logRecords.get(logRecords.size()-1);</span>
+<span class="source-line-no">230</span><span id="line-230">   }</span>
+<span class="source-line-no">231</span><span id="line-231"></span>
+<span class="source-line-no">232</span><span id="line-232">   /**</span>
+<span class="source-line-no">233</span><span id="line-233">    * Returns the contents of this log file as a string.</span>
+<span class="source-line-no">234</span><span id="line-234">    */</span>
+<span class="source-line-no">235</span><span id="line-235">   @Override</span>
+<span class="source-line-no">236</span><span id="line-236">   public String toString() {</span>
+<span class="source-line-no">237</span><span id="line-237">      return baos.toString();</span>
+<span class="source-line-no">238</span><span id="line-238">   }</span>
+<span class="source-line-no">239</span><span id="line-239">}</span>
 
 
 

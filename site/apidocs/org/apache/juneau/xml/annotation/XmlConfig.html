@@ -73,7 +73,7 @@ loadScripts(document, 'script');</script>
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Inherited.html" title="class or interface in java.lang.annotation" class="external-link">@Inherited</a>
 <a href="../../annotation/ContextApply.html" title="annotation interface in org.apache.juneau.annotation">@ContextApply</a>({<a href="XmlConfigAnnotation.SerializerApply.html" title="class in org.apache.juneau.xml.annotation">SerializerApply.class</a>,<a href="XmlConfigAnnotation.ParserApply.html" title="class in org.apache.juneau.xml.annotation">ParserApply.class</a>})
-</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-38">XmlConfig</a></span></div>
+</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-42">XmlConfig</a></span></div>
 <div class="block">Annotation for specifying config properties defined in <a href="../XmlSerializer.html" title="class in org.apache.juneau.xml"><code>XmlSerializer</code></a>, <a href="../XmlDocSerializer.html" title="class in org.apache.juneau.xml"><code>XmlDocSerializer</code></a>, and <a href="../XmlParser.html" title="class in org.apache.juneau.xml"><code>XmlParser</code></a>.
 
  <p>
@@ -169,7 +169,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rank()">
 <h3>rank</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-52">rank</a></span></div>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-56">rank</a></span></div>
 <div class="block">Optional rank for this config.
 
  <p>
@@ -187,7 +187,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eventAllocator()">
 <h3>eventAllocator</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/util/XMLEventAllocator.html" title="class or interface in javax.xml.stream.util" class="external-link">XMLEventAllocator</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-74">eventAllocator</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/util/XMLEventAllocator.html" title="class or interface in javax.xml.stream.util" class="external-link">XMLEventAllocator</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-78">eventAllocator</a></span></div>
 <div class="block">XML event allocator.
 
  <p>
@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="preserveRootElement()">
 <h3>preserveRootElement</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-99">preserveRootElement</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-103">preserveRootElement</a></span></div>
 <div class="block">Preserve root element during generalized parsing.
 
  <p>
@@ -242,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="reporter()">
 <h3>reporter</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLReporter.html" title="class or interface in javax.xml.stream" class="external-link">XMLReporter</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-118">reporter</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLReporter.html" title="class or interface in javax.xml.stream" class="external-link">XMLReporter</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-122">reporter</a></span></div>
 <div class="block">XML reporter.
 
  <p>
@@ -269,7 +269,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolver()">
 <h3>resolver</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLResolver.html" title="class or interface in javax.xml.stream" class="external-link">XMLResolver</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-132">resolver</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLResolver.html" title="class or interface in javax.xml.stream" class="external-link">XMLResolver</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-136">resolver</a></span></div>
 <div class="block">XML resolver.
 
  <p>
@@ -291,7 +291,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="validating()">
 <h3>validating</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-159">validating</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-163">validating</a></span></div>
 <div class="block">Enable validation.
 
  <p>
@@ -326,7 +326,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addBeanTypes()">
 <h3>addBeanTypes</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-192">addBeanTypes</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-196">addBeanTypes</a></span></div>
 <div class="block">Add <js>"_type"</js> properties when needed.
 
  <p>
@@ -363,7 +363,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addNamespaceUrisToRoot()">
 <h3>addNamespaceUrisToRoot</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-219">addNamespaceUrisToRoot</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-223">addNamespaceUrisToRoot</a></span></div>
 <div class="block">Add namespace URLs to the root element.
 
  <p>
@@ -398,7 +398,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="disableAutoDetectNamespaces()">
 <h3>disableAutoDetectNamespaces</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-259">disableAutoDetectNamespaces</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-263">disableAutoDetectNamespaces</a></span></div>
 <div class="block">Don't auto-detect namespace usage.
 
  <p>
@@ -446,7 +446,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultNamespace()">
 <h3>defaultNamespace</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-279">defaultNamespace</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-283">defaultNamespace</a></span></div>
 <div class="block">Default namespace.
 
  <p>
@@ -474,7 +474,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="enableNamespaces()">
 <h3>enableNamespaces</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-304">enableNamespaces</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-308">enableNamespaces</a></span></div>
 <div class="block">Enable support for XML namespaces.
 
  <p>
@@ -507,7 +507,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="namespaces()">
 <h3>namespaces</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-324">namespaces</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/xml/annotation/XmlConfig.html#line-328">namespaces</a></span></div>
 <div class="block">Default namespaces.
 
  <p>

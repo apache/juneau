@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="rest/logger/CallLoggerRule.Builder.html" title="class in org.apache.juneau.rest.logger">CallLoggerRule.Builder</a></code>, <code><a href="encoders/EncoderSet.Builder.html" title="class in org.apache.juneau.encoders">EncoderSet.Builder</a></code>, <code><a href="cp/FileFinder.Builder.html" title="class in org.apache.juneau.cp">FileFinder.Builder</a></code>, <code><a href="cp/Messages.Builder.html" title="class in org.apache.juneau.cp">Messages.Builder</a></code>, <code><a href="rest/stats/MethodExecStats.Builder.html" title="class in org.apache.juneau.rest.stats">MethodExecStats.Builder</a></code>, <code><a href="rest/stats/MethodExecStore.Builder.html" title="class in org.apache.juneau.rest.stats">MethodExecStore.Builder</a></code>, <code><a href="parser/ParserSet.Builder.html" title="class in org.apache.juneau.parser">ParserSet.Builder</a></code>, <code><a href="rest/processor/ResponseProcessorList.Builder.html" title="class in org.apache.juneau.rest.processor">ResponseProcessorList.Builder</a></code>, <code><a href="rest/RestChildren.Builder.html" title="class in org.apache.juneau.rest">RestChildren.Builder</a></code>, <code><a href="rest/converter/RestConverterList.Builder.html" title="class in org.apache.juneau.rest.converter">RestConverterList.Builder</a></code>, <code><a href="rest/guard/RestGuardList.Builder.html" title="class in org.apache.juneau.rest.guard">RestGuardList.Builder</a></code>, <code><a href="rest/matcher/RestMatcherList.Builder.html" title="class in org.apache.juneau.rest.matcher">RestMatcherList.Builder</a></code>, <code><a href="rest/arg/RestOpArgList.Builder.html" title="class in org.apache.juneau.rest.arg">RestOpArgList.Builder</a></code>, <code><a href="rest/RestOperations.Builder.html" title="class in org.apache.juneau.rest">RestOperations.Builder</a></code>, <code><a href="serializer/SerializerSet.Builder.html" title="class in org.apache.juneau.serializer">SerializerSet.Builder</a></code>, <code><a href="rest/staticfile/StaticFiles.Builder.html" title="class in org.apache.juneau.rest.staticfile">StaticFiles.Builder</a></code>, <code><a href="rest/stats/ThrownStore.Builder.html" title="class in org.apache.juneau.rest.stats">ThrownStore.Builder</a></code>, <code><a href="svl/VarResolver.Builder.html" title="class in org.apache.juneau.svl">VarResolver.Builder</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-29">BeanBuilder</a>&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-33">BeanBuilder</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Base class for bean builders.
 
@@ -194,7 +194,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class,org.apache.juneau.cp.BeanStore)">
 <h3>BeanBuilder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-42">BeanBuilder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;&nbsp;defaultType,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-46">BeanBuilder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;&nbsp;defaultType,
  <a href="cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -207,7 +207,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class)">
 <h3>BeanBuilder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-52">BeanBuilder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;&nbsp;defaultType)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-56">BeanBuilder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;&nbsp;defaultType)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -218,7 +218,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.BeanBuilder)">
 <h3>BeanBuilder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-61">BeanBuilder</a></span><wbr><span class="parameters">(<a href="BeanBuilder.html" title="class in org.apache.juneau">BeanBuilder</a>&lt;<a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-65">BeanBuilder</a></span><wbr><span class="parameters">(<a href="BeanBuilder.html" title="class in org.apache.juneau">BeanBuilder</a>&lt;<a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -237,7 +237,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-72">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-76">build</a></span>()</div>
 <div class="block">Creates the bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -248,7 +248,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="creator()">
 <h3>creator</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="cp/BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;? extends <a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-88">creator</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="cp/BeanCreator.html" title="class in org.apache.juneau.cp">BeanCreator</a>&lt;? extends <a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-92">creator</a></span>()</div>
 <div class="block">Instantiates the creator for this bean.
 
  <p>
@@ -262,7 +262,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="buildDefault()">
 <h3>buildDefault</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-99">buildDefault</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-103">buildDefault</a></span>()</div>
 <div class="block">Creates the bean when the bean type is <jk>null</jk> or is the default value.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -273,7 +273,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="type(java.lang.Class)">
 <h3>type</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanBuilder.html" title="class in org.apache.juneau">BeanBuilder</a>&lt;<a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-115">type</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanBuilder.html" title="class in org.apache.juneau">BeanBuilder</a>&lt;<a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-119">type</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;value)</span></div>
 <div class="block">Overrides the bean type produced by the <a href="#build()"><code>build()</code></a> method.
 
  <p>
@@ -289,7 +289,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="type()">
 <h3>type</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-127">type</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-131">type</a></span>()</div>
 <div class="block">Returns the implementation type specified via <a href="#type(java.lang.Class)"><code>type(Class)</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -300,7 +300,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="impl(java.lang.Object)">
 <h3>impl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanBuilder.html" title="class in org.apache.juneau">BeanBuilder</a>&lt;<a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-140">impl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanBuilder.html" title="class in org.apache.juneau">BeanBuilder</a>&lt;<a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-144">impl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Overrides the bean returned by the <a href="#build()"><code>build()</code></a> method.
 
  <p>
@@ -316,7 +316,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="impl()">
 <h3>impl</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-152">impl</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="BeanBuilder.html" title="type parameter in BeanBuilder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-156">impl</a></span>()</div>
 <div class="block">Returns the override bean specified via <a href="#impl(java.lang.Object)"><code>impl(Object)</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -327,7 +327,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beanStore()">
 <h3>beanStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-161">beanStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanBuilder.html#line-165">beanStore</a></span>()</div>
 <div class="block">Returns the bean store passed in through the constructor.</div>
 <dl class="notes">
 <dt>Returns:</dt>

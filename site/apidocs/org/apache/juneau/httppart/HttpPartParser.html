@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="BaseHttpPartParser.html" title="class in org.apache.juneau.httppart">BaseHttpPartParser</a></code>, <code><a href="../oapi/OpenApiParser.html" title="class in org.apache.juneau.oapi">OpenApiParser</a></code>, <code><a href="SimplePartParser.html" title="class in org.apache.juneau.httppart">SimplePartParser</a></code>, <code><a href="../uon/UonParser.html" title="class in org.apache.juneau.uon">UonParser</a></code>, <code><a href="../uon/UonParser.Decoding.html" title="class in org.apache.juneau.uon">UonParser.Decoding</a></code>, <code><a href="../urlencoding/UrlEncodingParser.html" title="class in org.apache.juneau.urlencoding">UrlEncodingParser</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartParser.html#line-38">HttpPartParser</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartParser.html#line-42">HttpPartParser</a></span></div>
 <div class="block">Interface used to convert HTTP headers, query parameters, form-data parameters, and URI path variables to POJOs
 
  <p>
@@ -174,7 +174,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="creator()">
 <h3>creator</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="HttpPartParser.Creator.html" title="class in org.apache.juneau.httppart">HttpPartParser.Creator</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartParser.html#line-56">creator</a></span>()</div>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="HttpPartParser.Creator.html" title="class in org.apache.juneau.httppart">HttpPartParser.Creator</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartParser.html#line-60">creator</a></span>()</div>
 <div class="block">Instantiates a creator for a part parser.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPartSession()">
 <h3>getPartSession</h3>
-<div class="member-signature"><span class="return-type"><a href="HttpPartParserSession.html" title="interface in org.apache.juneau.httppart">HttpPartParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartParser.html#line-114">getPartSession</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="HttpPartParserSession.html" title="interface in org.apache.juneau.httppart">HttpPartParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartParser.html#line-118">getPartSession</a></span>()</div>
 <div class="block">Creates a new parser session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -196,7 +196,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getClassMeta(java.lang.Class)">
 <h3>getClassMeta</h3>
-<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartParser.html#line-123">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartParser.html#line-127">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
 <div class="block">Returns metadata about the specified class.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getClassMeta(java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3>getClassMeta</h3>
-<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartParser.html#line-133">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;t,
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartParser.html#line-137">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;t,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span></div>
 <div class="block">Returns metadata about the specified class.</div>
 <dl class="notes">

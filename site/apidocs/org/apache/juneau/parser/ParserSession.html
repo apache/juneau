@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="InputStreamParserSession.html" title="class in org.apache.juneau.parser">InputStreamParserSession</a></code>, <code><a href="ReaderParserSession.html" title="class in org.apache.juneau.parser">ReaderParserSession</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-46">ParserSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-50">ParserSession</a></span>
 <span class="extends-implements">extends <a href="../BeanSession.html" title="class in org.apache.juneau">BeanSession</a></span></div>
 <div class="block">Session object that lives for the duration of a single use of <a href="Parser.html" title="class in org.apache.juneau.parser"><code>Parser</code></a>.
 
@@ -448,7 +448,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.parser.ParserSession.Builder)">
 <h3>ParserSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-249">ParserSession</a></span><wbr><span class="parameters">(<a href="ParserSession.Builder.html" title="class in org.apache.juneau.parser">ParserSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-253">ParserSession</a></span><wbr><span class="parameters">(<a href="ParserSession.Builder.html" title="class in org.apache.juneau.parser">ParserSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -467,7 +467,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="create(org.apache.juneau.parser.Parser)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="class in org.apache.juneau.parser">ParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-58">create</a></span><wbr><span class="parameters">(<a href="Parser.html" title="class in org.apache.juneau.parser">Parser</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="class in org.apache.juneau.parser">ParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-62">create</a></span><wbr><span class="parameters">(<a href="Parser.html" title="class in org.apache.juneau.parser">Parser</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -480,7 +480,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="doParse(org.apache.juneau.parser.ParserPipe,org.apache.juneau.ClassMeta)">
 <h3>doParse</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-284">doParse</a></span><wbr><span class="parameters">(<a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-288">doParse</a></span><wbr><span class="parameters">(<a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="ParseException.html" title="class in org.apache.juneau.parser">ParseException</a>,
@@ -513,7 +513,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isReaderParser()">
 <h3>isReaderParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-293">isReaderParser</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-297">isReaderParser</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this parser subclasses from <a href="ReaderParser.html" title="class in org.apache.juneau.parser"><code>ReaderParser</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -524,7 +524,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="createPipe(java.lang.Object)">
 <h3>createPipe</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-331">createPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-335">createPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span></div>
 <div class="block">Wraps the specified input object into a <a href="ParserPipe.html" title="class in org.apache.juneau.parser"><code>ParserPipe</code></a> object so that it can be easily converted into
  a stream or reader.</div>
 <dl class="notes">
@@ -558,7 +558,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getLastLocation()">
 <h3>getLastLocation</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-340">getLastLocation</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-344">getLastLocation</a></span>()</div>
 <div class="block">Returns information used to determine at what location in the parse a failure occurred.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -569,7 +569,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getJavaMethod()">
 <h3>getJavaMethod</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-358">getJavaMethod</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-362">getJavaMethod</a></span>()</div>
 <div class="block">Returns the Java method that invoked this parser.
 
  <p>
@@ -584,7 +584,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getOuter()">
 <h3>getOuter</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-370">getOuter</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-374">getOuter</a></span>()</div>
 <div class="block">Returns the outer object used for instantiating top-level non-static member classes.
 
  <p>
@@ -598,7 +598,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="setCurrentProperty(org.apache.juneau.BeanPropertyMeta)">
 <h3>setCurrentProperty</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-379">setCurrentProperty</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;currentProperty)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-383">setCurrentProperty</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;currentProperty)</span></div>
 <div class="block">Sets the current bean property being parsed for proper error messages.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -609,7 +609,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="setCurrentClass(org.apache.juneau.ClassMeta)">
 <h3>setCurrentClass</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-388">setCurrentClass</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;currentClass)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-392">setCurrentClass</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;currentClass)</span></div>
 <div class="block">Sets the current class being parsed for proper error messages.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -620,7 +620,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="trim(K)">
 <h3 id="trim(java.lang.Object)">trim</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="type-parameters">&lt;K&gt;</span>&nbsp;<span class="return-type">K</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-399">trim</a></span><wbr><span class="parameters">(K&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="type-parameters">&lt;K&gt;</span>&nbsp;<span class="return-type">K</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-403">trim</a></span><wbr><span class="parameters">(K&nbsp;o)</span></div>
 <div class="block">Trims the specified object if it's a <c>String</c> and <a href="#isTrimStrings()"><code>isTrimStrings()</code></a> returns <jk>true</jk>.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -635,7 +635,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="trim(java.lang.String)">
 <h3>trim</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-413">trim</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-417">trim</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
 <div class="block">Trims the specified string if <a href="#isTrimStrings()"><code>isTrimStrings()</code></a> returns <jk>true</jk>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -648,7 +648,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="cast(org.apache.juneau.collections.JsonMap,org.apache.juneau.BeanPropertyMeta,org.apache.juneau.ClassMeta)">
 <h3>cast</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-428">cast</a></span><wbr><span class="parameters">(<a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a>&nbsp;m,
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-432">cast</a></span><wbr><span class="parameters">(<a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a>&nbsp;m,
  <a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;pMeta,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;eType)</span></div>
 <div class="block">Converts the specified <c>JsonMap</c> into a bean identified by the <js>"_type"</js> property in the map.</div>
@@ -665,7 +665,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getClassMeta(java.lang.String,org.apache.juneau.BeanPropertyMeta,org.apache.juneau.ClassMeta)">
 <h3>getClassMeta</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-465">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName,
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-469">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName,
  <a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;pMeta,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;eType)</span></div>
 <div class="block">Give the specified dictionary name, resolve it to a class.</div>
@@ -682,7 +682,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="onBeanSetterException(org.apache.juneau.BeanPropertyMeta,java.lang.Throwable)">
 <h3>onBeanSetterException</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-493">onBeanSetterException</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;p,
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-497">onBeanSetterException</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;p,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t)</span></div>
 <div class="block">Specialized warning when an exception is thrown while executing a bean setter.</div>
 <dl class="notes">
@@ -695,7 +695,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="onUnknownProperty(java.lang.String,org.apache.juneau.BeanMap,java.lang.Object)">
 <h3>onUnknownProperty</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-512">onUnknownProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;propertyName,
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-516">onUnknownProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;propertyName,
  <a href="../BeanMap.html" title="class in org.apache.juneau">BeanMap</a>&lt;T&gt;&nbsp;beanMap,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
                                     throws <span class="exceptions"><a href="ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
@@ -716,7 +716,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="parse(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-598">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-602">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span>
                   throws <span class="exceptions"><a href="ParseException.html" title="class in org.apache.juneau.parser">ParseException</a>,
@@ -805,7 +805,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="parse(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-641">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-645">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span>
                   throws <span class="exceptions"><a href="ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
@@ -855,7 +855,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="parse(java.lang.Object,java.lang.Class)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-685">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-689">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
                   throws <span class="exceptions"><a href="ParseException.html" title="class in org.apache.juneau.parser">ParseException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -901,7 +901,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="parse(java.lang.String,java.lang.Class)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-725">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-729">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
                   throws <span class="exceptions"><a href="ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Same as <a href="#parse(java.lang.Object,java.lang.Class)"><code>parse(Object, Class)</code></a> but parses from a string and doesn't throw an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a>.
@@ -945,7 +945,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="parse(java.lang.Object,org.apache.juneau.ClassMeta)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-749">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-753">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
                   throws <span class="exceptions"><a href="ParseException.html" title="class in org.apache.juneau.parser">ParseException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -972,7 +972,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="parse(java.lang.String,org.apache.juneau.ClassMeta)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-769">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-773">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
                   throws <span class="exceptions"><a href="ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Same as <a href="#parse(java.lang.Object,org.apache.juneau.ClassMeta)"><code>parse(Object, ClassMeta)</code></a> except parses from a string and doesn't throw an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a>.
@@ -997,7 +997,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <section class="detail" id="parseIntoMap(java.lang.Object,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">
 <h3>parseIntoMap</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-832">parseIntoMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-836">parseIntoMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;valueType)</span>
@@ -1035,7 +1035,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <section class="detail" id="doParseIntoMap(org.apache.juneau.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">
 <h3>doParseIntoMap</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-859">doParseIntoMap</a></span><wbr><span class="parameters">(<a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe,
+V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-863">doParseIntoMap</a></span><wbr><span class="parameters">(<a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;valueType)</span>
@@ -1063,7 +1063,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="parseIntoCollection(java.lang.Object,java.util.Collection,java.lang.reflect.Type)">
 <h3>parseIntoCollection</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-882">parseIntoCollection</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-886">parseIntoCollection</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;elementType)</span>
                                             throws <span class="exceptions"><a href="ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
@@ -1094,7 +1094,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="doParseIntoCollection(org.apache.juneau.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)">
 <h3>doParseIntoCollection</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-913">doParseIntoCollection</a></span><wbr><span class="parameters">(<a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-917">doParseIntoCollection</a></span><wbr><span class="parameters">(<a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;elementType)</span>
                                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -1119,7 +1119,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="parseArgs(java.lang.Object,java.lang.reflect.Type[])">
 <h3>parseArgs</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-937">parseArgs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-941">parseArgs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>[]&nbsp;argTypes)</span>
                          throws <span class="exceptions"><a href="ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
 <div class="block">Parses the specified array input with each entry in the object defined by the <code>argTypes</code>
@@ -1149,7 +1149,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="convertAttrToType(java.lang.Object,java.lang.String,org.apache.juneau.ClassMeta)">
 <h3>convertAttrToType</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-968">convertAttrToType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer,
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-972">convertAttrToType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
                                  throws <span class="exceptions"><a href="ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
@@ -1173,7 +1173,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="setParent(org.apache.juneau.ClassMeta,java.lang.Object,java.lang.Object)">
 <h3>setParent</h3>
-<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1007">setParent</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm,
+<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1011">setParent</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;parent)</span>
                                throws <span class="exceptions"><a href="../ExecutableException.html" title="class in org.apache.juneau">ExecutableException</a></span></div>
@@ -1192,7 +1192,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="setName(org.apache.juneau.ClassMeta,java.lang.Object,java.lang.Object)">
 <h3>setName</h3>
-<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1021">setName</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm,
+<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1025">setName</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;name)</span>
                              throws <span class="exceptions"><a href="../ExecutableException.html" title="class in org.apache.juneau">ExecutableException</a></span></div>
@@ -1210,7 +1210,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getListener(java.lang.Class)">
 <h3>getListener</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="ParserListener.html" title="class in org.apache.juneau.parser">ParserListener</a>&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1036">getListener</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="ParserListener.html" title="class in org.apache.juneau.parser">ParserListener</a>&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1040">getListener</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
 <div class="block">Returns the listener associated with this session.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -1225,7 +1225,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="setPipe(org.apache.juneau.parser.ParserPipe)">
 <h3>setPipe</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1047">setPipe</a></span><wbr><span class="parameters">(<a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1051">setPipe</a></span><wbr><span class="parameters">(<a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe)</span></div>
 <div class="block">The <a href="#createPipe(java.lang.Object)"><code>createPipe(Object)</code></a> method should call this method to set the pipe for debugging purposes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1238,7 +1238,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getPosition()">
 <h3>getPosition</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Position.html" title="class in org.apache.juneau.parser">Position</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1059">getPosition</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Position.html" title="class in org.apache.juneau.parser">Position</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1063">getPosition</a></span>()</div>
 <div class="block">Returns the current position into the reader or input stream.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1250,21 +1250,21 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="mark()">
 <h3>mark</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1070">mark</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1074">mark</a></span>()</div>
 <div class="block">Marks the current position.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="unmark()">
 <h3>unmark</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1082">unmark</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1086">unmark</a></span>()</div>
 <div class="block">Unmarks the current position.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="getInputAsString()">
 <h3>getInputAsString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1098">getInputAsString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1102">getInputAsString</a></span>()</div>
 <div class="block">Returns the input as a string.
 
  <p>
@@ -1280,7 +1280,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="unswap(org.apache.juneau.swap.ObjectSwap,java.lang.Object,org.apache.juneau.ClassMeta)">
 <h3>unswap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1111">unswap</a></span><wbr><span class="parameters">(<a href="../swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&nbsp;swap,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1115">unswap</a></span><wbr><span class="parameters">(<a href="../swap/ObjectSwap.html" title="class in org.apache.juneau.swap">ObjectSwap</a>&nbsp;swap,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;eType)</span>
                  throws <span class="exceptions"><a href="ParseException.html" title="class in org.apache.juneau.parser">ParseException</a></span></div>
@@ -1300,7 +1300,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getStringBuilder()">
 <h3>getStringBuilder</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link">StringBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1128">getStringBuilder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link">StringBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1132">getStringBuilder</a></span>()</div>
 <div class="block">Creates a reusable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link"><code>StringBuilder</code></a> object from an internal pool.
 
  <p>
@@ -1314,7 +1314,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="returnStringBuilder(java.lang.StringBuilder)">
 <h3>returnStringBuilder</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1139">returnStringBuilder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link">StringBuilder</a>&nbsp;sb)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1143">returnStringBuilder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link">StringBuilder</a>&nbsp;sb)</span></div>
 <div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link"><code>StringBuilder</code></a> object back into the internal reuse pool.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1325,7 +1325,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isAutoCloseStreams()">
 <h3>isAutoCloseStreams</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1158">isAutoCloseStreams</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1162">isAutoCloseStreams</a></span>()</div>
 <div class="block">Auto-close streams.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1343,7 +1343,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getDebugOutputLines()">
 <h3>getDebugOutputLines</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1169">getDebugOutputLines</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1173">getDebugOutputLines</a></span>()</div>
 <div class="block">Debug output lines.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1360,7 +1360,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getListener()">
 <h3>getListener</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserListener.html" title="class in org.apache.juneau.parser">ParserListener</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1178">getListener</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserListener.html" title="class in org.apache.juneau.parser">ParserListener</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1182">getListener</a></span>()</div>
 <div class="block">Returns the listener associated with this session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1371,7 +1371,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isStrict()">
 <h3>isStrict</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1189">isStrict</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1193">isStrict</a></span>()</div>
 <div class="block">Strict mode.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1388,7 +1388,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isTrimStrings()">
 <h3>isTrimStrings</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1201">isTrimStrings</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1205">isTrimStrings</a></span>()</div>
 <div class="block">Trim parsed strings.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1406,7 +1406,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isUnbuffered()">
 <h3>isUnbuffered</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1212">isUnbuffered</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1216">isUnbuffered</a></span>()</div>
 <div class="block">Unbuffered.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1423,7 +1423,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getSchema()">
 <h3>getSchema</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.httppart">HttpPartSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1221">getSchema</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.httppart">HttpPartSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1225">getSchema</a></span>()</div>
 <div class="block">HTTP part schema of object being parsed.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1434,7 +1434,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getListenerClass()">
 <h3>getListenerClass</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="ParserListener.html" title="class in org.apache.juneau.parser">ParserListener</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1236">getListenerClass</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="ParserListener.html" title="class in org.apache.juneau.parser">ParserListener</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1240">getListenerClass</a></span>()</div>
 <div class="block">Parser listener.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1451,7 +1451,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1240">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSession.html#line-1244">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../ContextSession.html#properties()">ContextSession</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

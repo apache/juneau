@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="annotations">@SpringBootApplication
 @Controller
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-33">App</a></span>
+</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-37">App</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Entry point for Examples REST application when deployed as a Spring Boot application.
 
@@ -163,7 +163,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>App</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-35">App</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-39">App</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -177,7 +177,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="main(java.lang.String[])">
 <h3>main</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-41">main</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-45">main</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args)</span></div>
 <div class="block">Entry point method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -189,7 +189,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getRootResources()">
 <h3>getRootResources</h3>
 <div class="member-signature"><span class="annotations">@Bean
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RootResources.html" title="class in org.apache.juneau.microservice.springboot.template">RootResources</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-56">getRootResources</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RootResources.html" title="class in org.apache.juneau.microservice.springboot.template">RootResources</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-60">getRootResources</a></span>()</div>
 <div class="block">Our root REST bean.
  <p>
  Note that this must extend from <a href="../../../rest/springboot/SpringRestServlet.html" title="class in org.apache.juneau.rest.springboot"><code>SpringRestServlet</code></a> so that child resources can be resolved as Spring
@@ -206,7 +206,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getHelloWorldResource()">
 <h3>getHelloWorldResource</h3>
 <div class="member-signature"><span class="annotations">@Bean
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HelloWorldResource.html" title="class in org.apache.juneau.microservice.springboot.template">HelloWorldResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-66">getHelloWorldResource</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HelloWorldResource.html" title="class in org.apache.juneau.microservice.springboot.template">HelloWorldResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-70">getHelloWorldResource</a></span>()</div>
 <div class="block">Optionally return the <a href="HelloWorldResource.html" title="class in org.apache.juneau.microservice.springboot.template"><code>HelloWorldResource</code></a> object as an injectable bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -218,7 +218,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getHelloWorldMessageProvider()">
 <h3>getHelloWorldMessageProvider</h3>
 <div class="member-signature"><span class="annotations">@Bean
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HelloWorldMessageProvider.html" title="class in org.apache.juneau.microservice.springboot.template">HelloWorldMessageProvider</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-76">getHelloWorldMessageProvider</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HelloWorldMessageProvider.html" title="class in org.apache.juneau.microservice.springboot.template">HelloWorldMessageProvider</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-80">getHelloWorldMessageProvider</a></span>()</div>
 <div class="block">Optionally return an injectable message provider for the <a href="HelloWorldResource.html" title="class in org.apache.juneau.microservice.springboot.template"><code>HelloWorldResource</code></a> class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -230,7 +230,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getRootServlet(org.apache.juneau.microservice.springboot.template.RootResources)">
 <h3>getRootServlet</h3>
 <div class="member-signature"><span class="annotations">@Bean
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.boot.web.servlet.ServletRegistrationBean&lt;jakarta.servlet.Servlet&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-85">getRootServlet</a></span><wbr><span class="parameters">(<a href="RootResources.html" title="class in org.apache.juneau.microservice.springboot.template">RootResources</a>&nbsp;rootResources)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.boot.web.servlet.ServletRegistrationBean&lt;jakarta.servlet.Servlet&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-89">getRootServlet</a></span><wbr><span class="parameters">(<a href="RootResources.html" title="class in org.apache.juneau.microservice.springboot.template">RootResources</a>&nbsp;rootResources)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>rootResources</code> - The root REST resource servlet</dd>
@@ -243,7 +243,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="registration(org.springframework.web.filter.HiddenHttpMethodFilter)">
 <h3>registration</h3>
 <div class="member-signature"><span class="annotations">@Bean
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.boot.web.servlet.FilterRegistrationBean&lt;org.springframework.web.filter.HiddenHttpMethodFilter&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-97">registration</a></span><wbr><span class="parameters">(org.springframework.web.filter.HiddenHttpMethodFilter&nbsp;filter)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.boot.web.servlet.FilterRegistrationBean&lt;org.springframework.web.filter.HiddenHttpMethodFilter&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/microservice/springboot/template/App.html#line-101">registration</a></span><wbr><span class="parameters">(org.springframework.web.filter.HiddenHttpMethodFilter&nbsp;filter)</span></div>
 <div class="block">We want to be able to consume url-encoded-form-post bodies, but HiddenHttpMethodFilter triggers the HTTP
  body to be consumed.  So disable it.</div>
 <dl class="notes">

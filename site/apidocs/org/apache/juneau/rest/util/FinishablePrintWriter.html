@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Flushable.html" title="class or interface in java.io" class="external-link">Flushable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html" title="class or interface in java.lang" class="external-link">Appendable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code>, <code><a href="../../encoders/Finishable.html" title="interface in org.apache.juneau.encoders">Finishable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishablePrintWriter.html#line-25">FinishablePrintWriter</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishablePrintWriter.html#line-29">FinishablePrintWriter</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintWriter.html" title="class or interface in java.io" class="external-link">PrintWriter</a>
 implements <a href="../../encoders/Finishable.html" title="interface in org.apache.juneau.encoders">Finishable</a></span></div>
 <div class="block">A wrapped <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintWriter.html" title="class or interface in java.io" class="external-link"><code>PrintWriter</code></a> with an added <c>finish()</c> method.
@@ -167,7 +167,7 @@ implements <a href="../../encoders/Finishable.html" title="interface in org.apac
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.OutputStream,java.lang.String,boolean)">
 <h3>FinishablePrintWriter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishablePrintWriter.html#line-37">FinishablePrintWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishablePrintWriter.html#line-41">FinishablePrintWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;characterEncoding,
  boolean&nbsp;autoFlush)</span>
                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -193,7 +193,7 @@ implements <a href="../../encoders/Finishable.html" title="interface in org.apac
 <li>
 <section class="detail" id="finish()">
 <h3>finish</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishablePrintWriter.html#line-48">finish</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/FinishablePrintWriter.html#line-52">finish</a></span>()
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Calls <a href="../../encoders/Finishable.html#finish()"><code>Finishable.finish()</code></a> on the underlying output stream.
 

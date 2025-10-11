@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.httppart">HttpPartParserSession</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiParserSession.html#line-48">OpenApiParserSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiParserSession.html#line-52">OpenApiParserSession</a></span>
 <span class="extends-implements">extends <a href="../uon/UonParserSession.html" title="class in org.apache.juneau.uon">UonParserSession</a></span></div>
 <div class="block">Session object that lives for the duration of a single use of <a href="OpenApiParser.html" title="class in org.apache.juneau.oapi"><code>OpenApiParser</code></a>.
 
@@ -206,7 +206,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.oapi.OpenApiParserSession.Builder)">
 <h3>OpenApiParserSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiParserSession.html#line-227">OpenApiParserSession</a></span><wbr><span class="parameters">(<a href="OpenApiParserSession.Builder.html" title="class in org.apache.juneau.oapi">OpenApiParserSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiParserSession.html#line-231">OpenApiParserSession</a></span><wbr><span class="parameters">(<a href="OpenApiParserSession.Builder.html" title="class in org.apache.juneau.oapi">OpenApiParserSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -225,7 +225,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.oapi.OpenApiParser)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OpenApiParserSession.Builder.html" title="class in org.apache.juneau.oapi">OpenApiParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiParserSession.html#line-72">create</a></span><wbr><span class="parameters">(<a href="OpenApiParser.html" title="class in org.apache.juneau.oapi">OpenApiParser</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OpenApiParserSession.Builder.html" title="class in org.apache.juneau.oapi">OpenApiParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiParserSession.html#line-76">create</a></span><wbr><span class="parameters">(<a href="OpenApiParser.html" title="class in org.apache.juneau.oapi">OpenApiParser</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -238,7 +238,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parse(org.apache.juneau.httppart.HttpPartType,org.apache.juneau.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.ClassMeta)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiParserSession.html#line-233">parse</a></span><wbr><span class="parameters">(<a href="../httppart/HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a>&nbsp;partType,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiParserSession.html#line-237">parse</a></span><wbr><span class="parameters">(<a href="../httppart/HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
@@ -271,7 +271,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="doParse(org.apache.juneau.parser.ParserPipe,org.apache.juneau.ClassMeta)">
 <h3>doParse</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiParserSession.html#line-260">doParse</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiParserSession.html#line-264">doParse</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.parser">ParseException</a>,

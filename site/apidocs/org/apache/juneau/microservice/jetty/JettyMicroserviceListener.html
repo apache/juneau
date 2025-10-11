@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="BasicJettyMicroserviceListener.html" title="class in org.apache.juneau.microservice.jetty">BasicJettyMicroserviceListener</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroserviceListener.html#line-24">JettyMicroserviceListener</a></span><span class="extends-implements">
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroserviceListener.html#line-28">JettyMicroserviceListener</a></span><span class="extends-implements">
 extends <a href="../MicroserviceListener.html" title="interface in org.apache.juneau.microservice">MicroserviceListener</a></span></div>
 <div class="block">Listener class for Jetty microservice lifecycle events.
 
@@ -149,7 +149,7 @@ extends <a href="../MicroserviceListener.html" title="interface in org.apache.ju
 <li>
 <section class="detail" id="onCreateServer(org.apache.juneau.microservice.jetty.JettyMicroservice)">
 <h3>onCreateServer</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroserviceListener.html#line-31">onCreateServer</a></span><wbr><span class="parameters">(<a href="JettyMicroservice.html" title="class in org.apache.juneau.microservice.jetty">JettyMicroservice</a>&nbsp;microservice)</span></div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroserviceListener.html#line-35">onCreateServer</a></span><wbr><span class="parameters">(<a href="JettyMicroservice.html" title="class in org.apache.juneau.microservice.jetty">JettyMicroservice</a>&nbsp;microservice)</span></div>
 <div class="block">Called before the Jetty server is created.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -160,7 +160,7 @@ extends <a href="../MicroserviceListener.html" title="interface in org.apache.ju
 <li>
 <section class="detail" id="onStartServer(org.apache.juneau.microservice.jetty.JettyMicroservice)">
 <h3>onStartServer</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroserviceListener.html#line-38">onStartServer</a></span><wbr><span class="parameters">(<a href="JettyMicroservice.html" title="class in org.apache.juneau.microservice.jetty">JettyMicroservice</a>&nbsp;microservice)</span></div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroserviceListener.html#line-42">onStartServer</a></span><wbr><span class="parameters">(<a href="JettyMicroservice.html" title="class in org.apache.juneau.microservice.jetty">JettyMicroservice</a>&nbsp;microservice)</span></div>
 <div class="block">Called before the Jetty server is started.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -171,7 +171,7 @@ extends <a href="../MicroserviceListener.html" title="interface in org.apache.ju
 <li>
 <section class="detail" id="onPostStartServer(org.apache.juneau.microservice.jetty.JettyMicroservice)">
 <h3>onPostStartServer</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroserviceListener.html#line-45">onPostStartServer</a></span><wbr><span class="parameters">(<a href="JettyMicroservice.html" title="class in org.apache.juneau.microservice.jetty">JettyMicroservice</a>&nbsp;microservice)</span></div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroserviceListener.html#line-49">onPostStartServer</a></span><wbr><span class="parameters">(<a href="JettyMicroservice.html" title="class in org.apache.juneau.microservice.jetty">JettyMicroservice</a>&nbsp;microservice)</span></div>
 <div class="block">Called after the Jetty server is started.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -182,7 +182,7 @@ extends <a href="../MicroserviceListener.html" title="interface in org.apache.ju
 <li>
 <section class="detail" id="onStopServer(org.apache.juneau.microservice.jetty.JettyMicroservice)">
 <h3>onStopServer</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroserviceListener.html#line-52">onStopServer</a></span><wbr><span class="parameters">(<a href="JettyMicroservice.html" title="class in org.apache.juneau.microservice.jetty">JettyMicroservice</a>&nbsp;microservice)</span></div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroserviceListener.html#line-56">onStopServer</a></span><wbr><span class="parameters">(<a href="JettyMicroservice.html" title="class in org.apache.juneau.microservice.jetty">JettyMicroservice</a>&nbsp;microservice)</span></div>
 <div class="block">Called before the Jetty server is stopped.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -193,7 +193,7 @@ extends <a href="../MicroserviceListener.html" title="interface in org.apache.ju
 <li>
 <section class="detail" id="onPostStopServer(org.apache.juneau.microservice.jetty.JettyMicroservice)">
 <h3>onPostStopServer</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroserviceListener.html#line-59">onPostStopServer</a></span><wbr><span class="parameters">(<a href="JettyMicroservice.html" title="class in org.apache.juneau.microservice.jetty">JettyMicroservice</a>&nbsp;microservice)</span></div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroserviceListener.html#line-63">onPostStopServer</a></span><wbr><span class="parameters">(<a href="JettyMicroservice.html" title="class in org.apache.juneau.microservice.jetty">JettyMicroservice</a>&nbsp;microservice)</span></div>
 <div class="block">Called after the Jetty server is stopped.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

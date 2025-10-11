@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Flushable.html" title="class or interface in java.io" class="external-link">Flushable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html" title="class or interface in java.lang" class="external-link">Appendable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-35">JsonWriter</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-39">JsonWriter</a></span>
 <span class="extends-implements">extends <a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.serializer">SerializerWriter</a></span></div>
 <div class="block">Specialized writer for serializing JSON.
 
@@ -289,7 +289,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.Writer,boolean,int,boolean,char,boolean,boolean,org.apache.juneau.UriResolver)">
 <h3>JsonWriter</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-74">JsonWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-78">JsonWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
  boolean&nbsp;useWhitespace,
  int&nbsp;maxIndent,
  boolean&nbsp;escapeSolidus,
@@ -322,7 +322,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="stringValue(java.lang.String)">
 <h3>stringValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-88">stringValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-92">stringValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
 <div class="block">Serializes the specified object as a JSON string value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -335,7 +335,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attr(java.lang.String)">
 <h3>attr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-134">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-138">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
 <div class="block">Serializes the specified object as a JSON attribute name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -348,7 +348,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="uriValue(java.lang.Object)">
 <h3>uriValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-185">uriValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-189">uriValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span></div>
 <div class="block">Appends a URI to the output.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -361,7 +361,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="smi(int)">
 <h3>smi</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-195">smi</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-199">smi</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
 <div class="block">Performs an indentation only if we're currently past max indentation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -374,7 +374,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="s(int)">
 <h3>s</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-207">s</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-211">s</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
 <div class="block">Adds a space only if the current indentation level is below maxIndent.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -387,7 +387,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cr(int)">
 <h3>cr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-219">cr</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-223">cr</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#cr(int)">SerializerWriter</a></code></span></div>
 <div class="block">Performs a carriage return.
 
@@ -406,7 +406,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cre(int)">
 <h3>cre</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-225">cre</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-229">cre</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#cre(int)">SerializerWriter</a></code></span></div>
 <div class="block">Performs a carriage return at the end of a line.
 
@@ -425,7 +425,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendln(int,java.lang.String)">
 <h3>appendln</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-231">appendln</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-235">appendln</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#appendln(int,java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text, followed by a newline
@@ -444,7 +444,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendln(java.lang.String)">
 <h3>appendln</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-237">appendln</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-241">appendln</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#appendln(java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified text followed by a newline (if the <code>useWhitespace</code> setting is enabled).</div>
 <dl class="notes">
@@ -460,7 +460,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(int,java.lang.String)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-243">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-247">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#append(int,java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text.</div>
@@ -478,7 +478,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(int,char)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-249">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-253">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
  char&nbsp;c)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#append(int,char)">SerializerWriter</a></code></span></div>
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text.</div>
@@ -496,7 +496,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="s()">
 <h3>s</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-255">s</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-259">s</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#s()">SerializerWriter</a></code></span></div>
 <div class="block">Adds a whitespace character to the output if the <code>useWhitespace</code> setting is enabled.</div>
 <dl class="notes">
@@ -510,7 +510,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="w(char)">
 <h3>w</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-261">w</a></span><wbr><span class="parameters">(char&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-265">w</a></span><wbr><span class="parameters">(char&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#w(char)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified character to the writer.</div>
 <dl class="notes">
@@ -526,7 +526,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="w(java.lang.String)">
 <h3>w</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-267">w</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-271">w</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#w(java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified string to the writer.</div>
 <dl class="notes">
@@ -542,7 +542,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="q()">
 <h3>q</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-273">q</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-277">q</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#q()">SerializerWriter</a></code></span></div>
 <div class="block">Adds the quote character specified by the <code>quoteChar</code> setting to the output.</div>
 <dl class="notes">
@@ -556,7 +556,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="i(int)">
 <h3>i</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-279">i</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-283">i</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#i(int)">SerializerWriter</a></code></span></div>
 <div class="block">Writes an indent to the writer if the <code>useWhitespace</code> setting is enabled.</div>
 <dl class="notes">
@@ -572,7 +572,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="nl(int)">
 <h3>nl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-285">nl</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-289">nl</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#nl(int)">SerializerWriter</a></code></span></div>
 <div class="block">Writes a newline to the writer if the <code>useWhitespace</code> setting is enabled.</div>
 <dl class="notes">
@@ -588,7 +588,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.Object)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-291">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;text)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-295">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#append(java.lang.Object)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
 <dl class="notes">
@@ -604,7 +604,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.String)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-297">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-301">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#append(java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
 <dl class="notes">
@@ -620,7 +620,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendIf(boolean,java.lang.String)">
 <h3>appendIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-303">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;b,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-307">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;b,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#appendIf(boolean,java.lang.String)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified text to the writer if b is true.</div>
@@ -638,7 +638,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendIf(boolean,char)">
 <h3>appendIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-309">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;b,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-313">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;b,
  char&nbsp;c)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#appendIf(boolean,char)">SerializerWriter</a></code></span></div>
 <div class="block">Writes the specified text to the writer if b is true.</div>
@@ -656,7 +656,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(char)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-315">append</a></span><wbr><span class="parameters">(char&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/json/JsonWriter.html#line-319">append</a></span><wbr><span class="parameters">(char&nbsp;c)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html#append(char)" title="class or interface in java.lang" class="external-link">append</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html" title="class or interface in java.lang" class="external-link">Appendable</a></code></dd>

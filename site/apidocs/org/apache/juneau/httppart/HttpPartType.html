@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-22">HttpPartType</a></span>
+<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-26">HttpPartType</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a>&gt;</span></div>
 <div class="block">Represents possible enum values that can be passed to the <a href="HttpPartSerializerSession.html#serialize(org.apache.juneau.httppart.HttpPartType,org.apache.juneau.httppart.HttpPartSchema,java.lang.Object)"><code>HttpPartSerializerSession.serialize(HttpPartType, HttpPartSchema, Object)</code></a>.
 
@@ -199,70 +199,70 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="BODY">
 <h3>BODY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-25">BODY</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-29">BODY</a></span></div>
 <div class="block">An HTTP request body</div>
 </section>
 </li>
 <li>
 <section class="detail" id="PATH">
 <h3>PATH</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-28">PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-32">PATH</a></span></div>
 <div class="block">A URI path variable</div>
 </section>
 </li>
 <li>
 <section class="detail" id="QUERY">
 <h3>QUERY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-31">QUERY</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-35">QUERY</a></span></div>
 <div class="block">A URI query parameter</div>
 </section>
 </li>
 <li>
 <section class="detail" id="FORMDATA">
 <h3>FORMDATA</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-34">FORMDATA</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-38">FORMDATA</a></span></div>
 <div class="block">A form-data parameter</div>
 </section>
 </li>
 <li>
 <section class="detail" id="HEADER">
 <h3>HEADER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-37">HEADER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-41">HEADER</a></span></div>
 <div class="block">An HTTP request header</div>
 </section>
 </li>
 <li>
 <section class="detail" id="RESPONSE_HEADER">
 <h3>RESPONSE_HEADER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-40">RESPONSE_HEADER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-44">RESPONSE_HEADER</a></span></div>
 <div class="block">An HTTP response header</div>
 </section>
 </li>
 <li>
 <section class="detail" id="RESPONSE_BODY">
 <h3>RESPONSE_BODY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-43">RESPONSE_BODY</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-47">RESPONSE_BODY</a></span></div>
 <div class="block">An HTTP response body</div>
 </section>
 </li>
 <li>
 <section class="detail" id="RESPONSE_STATUS">
 <h3>RESPONSE_STATUS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-46">RESPONSE_STATUS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-50">RESPONSE_STATUS</a></span></div>
 <div class="block">An HTTP response status code</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ANY">
 <h3>ANY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-49">ANY</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-53">ANY</a></span></div>
 <div class="block">Generic part</div>
 </section>
 </li>
 <li>
 <section class="detail" id="OTHER">
 <h3>OTHER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-52">OTHER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-56">OTHER</a></span></div>
 <div class="block">A non-standard field</div>
 </section>
 </li>
@@ -277,7 +277,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="values()">
 <h3>values</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-22">values</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-26">values</a></span>()</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 <dl class="notes">
@@ -289,7 +289,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="valueOf(java.lang.String)">
 <h3>valueOf</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-22">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPartType.html" title="enum class in org.apache.juneau.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/httppart/HttpPartType.html#line-26">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the enum constant of this class with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
 enum constant in this class.  (Extraneous whitespace characters are 

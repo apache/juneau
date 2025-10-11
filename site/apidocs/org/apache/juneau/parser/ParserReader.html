@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../uon/UonReader.html" title="class in org.apache.juneau.uon">UonReader</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-39">ParserReader</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-43">ParserReader</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>
 implements <a href="Positionable.html" title="interface in org.apache.juneau.parser">Positionable</a></span></div>
 <div class="block">Similar to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PushbackReader.html" title="class or interface in java.io" class="external-link"><code>PushbackReader</code></a> with a pushback buffer of 1 character.
@@ -274,7 +274,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="r">
 <h3>r</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-42">r</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-46">r</a></span></div>
 <div class="block">Wrapped reader</div>
 </section>
 </li>
@@ -289,7 +289,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.parser.ParserPipe)">
 <h3>ParserReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-59">ParserReader</a></span><wbr><span class="parameters">(<a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-63">ParserReader</a></span><wbr><span class="parameters">(<a href="ParserPipe.html" title="class in org.apache.juneau.parser">ParserPipe</a>&nbsp;pipe)</span>
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -311,7 +311,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="read()">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-87">read</a></span>()
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-91">read</a></span>()
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads a single character.
 
@@ -332,7 +332,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="readSkipWs()">
 <h3>readSkipWs</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-107">readSkipWs</a></span>()
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-111">readSkipWs</a></span>()
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Same as <a href="#read()"><code>read()</code></a> but skips over any whitespace characters.</div>
 <dl class="notes">
@@ -346,7 +346,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="readCodePoint()">
 <h3>readCodePoint</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-121">readCodePoint</a></span>()
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-125">readCodePoint</a></span>()
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Same as <a href="#read()"><code>read()</code></a> but detects and combines extended unicode characters (characters above 0x10000).</div>
 <dl class="notes">
@@ -360,14 +360,14 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="mark()">
 <h3>mark</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-202">mark</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-206">mark</a></span>()</div>
 <div class="block">Start buffering the calls to read() so that the text can be gathered from the mark point on calling <code>getFromMarked()</code>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="peek()">
 <h3>peek</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-215">peek</a></span>()
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-219">peek</a></span>()
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Peeks the next character in the stream.
 
@@ -384,7 +384,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="peekSkipWs()">
 <h3>peekSkipWs</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-231">peekSkipWs</a></span>()
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-235">peekSkipWs</a></span>()
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Same as <a href="#peek()"><code>peek()</code></a> but skips over any whitespace characters.
 
@@ -401,7 +401,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="read(int)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-249">read</a></span><wbr><span class="parameters">(int&nbsp;num)</span>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-253">read</a></span><wbr><span class="parameters">(int&nbsp;num)</span>
                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Read the specified number of characters off the stream.</div>
 <dl class="notes">
@@ -417,7 +417,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="unread()">
 <h3>unread</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserReader.html" title="class in org.apache.juneau.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-266">unread</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserReader.html" title="class in org.apache.juneau.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-270">unread</a></span>()
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Pushes the last read character back into the stream.</div>
 <dl class="notes">
@@ -431,7 +431,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-285">close</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-289">close</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">No-op.
 
@@ -452,7 +452,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="getMarked()">
 <h3>getMarked</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-295">getMarked</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-299">getMarked</a></span>()</div>
 <div class="block">Returns the contents of the reusable character buffer as a string, and resets the buffer for next usage.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -463,7 +463,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="getMarked(int,int)">
 <h3>getMarked</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-312">getMarked</a></span><wbr><span class="parameters">(int&nbsp;offsetStart,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-316">getMarked</a></span><wbr><span class="parameters">(int&nbsp;offsetStart,
  int&nbsp;offsetEnd)</span></div>
 <div class="block">Same as <a href="#getMarked()"><code>getMarked()</code></a> except allows you to specify offsets into the buffer.
 
@@ -484,7 +484,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="delete()">
 <h3>delete</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ParserReader.html" title="class in org.apache.juneau.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-340">delete</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ParserReader.html" title="class in org.apache.juneau.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-344">delete</a></span>()</div>
 <div class="block">Trims off the last character in the marking buffer.
 
  <p>
@@ -498,7 +498,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="delete(int)">
 <h3>delete</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ParserReader.html" title="class in org.apache.juneau.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-351">delete</a></span><wbr><span class="parameters">(int&nbsp;count)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ParserReader.html" title="class in org.apache.juneau.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-355">delete</a></span><wbr><span class="parameters">(int&nbsp;count)</span></div>
 <div class="block">Trims off the specified number of last characters in the marking buffer.
  Useful for removing escape characters from sequences.</div>
 <dl class="notes">
@@ -512,7 +512,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="replace(int,int)">
 <h3>replace</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ParserReader.html" title="class in org.apache.juneau.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-370">replace</a></span><wbr><span class="parameters">(int&nbsp;c,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ParserReader.html" title="class in org.apache.juneau.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-374">replace</a></span><wbr><span class="parameters">(int&nbsp;c,
  int&nbsp;offset)</span>
                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Replaces the last character in the marking buffer with the specified character.
@@ -534,7 +534,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="replace(char)">
 <h3>replace</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ParserReader.html" title="class in org.apache.juneau.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-397">replace</a></span><wbr><span class="parameters">(char&nbsp;c)</span>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ParserReader.html" title="class in org.apache.juneau.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-401">replace</a></span><wbr><span class="parameters">(char&nbsp;c)</span>
                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Replace the last read character in the buffer with the specified character.</div>
 <dl class="notes">
@@ -550,7 +550,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="parseNumberString()">
 <h3>parseNumberString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-406">parseNumberString</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-410">parseNumberString</a></span>()
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads a numeric string from the specified reader.</div>
 <dl class="notes">
@@ -564,7 +564,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="read(char[],int,int)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-427">read</a></span><wbr><span class="parameters">(char[]&nbsp;cbuf,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-431">read</a></span><wbr><span class="parameters">(char[]&nbsp;cbuf,
  int&nbsp;off,
  int&nbsp;len)</span>
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -583,7 +583,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.par
 <li>
 <section class="detail" id="getPosition()">
 <h3>getPosition</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Position.html" title="class in org.apache.juneau.parser">Position</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-432">getPosition</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Position.html" title="class in org.apache.juneau.parser">Position</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserReader.html#line-436">getPosition</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="Positionable.html#getPosition()">Positionable</a></code></span></div>
 <div class="block">Returns the current position in a reader or input stream.</div>
 <dl class="notes">

@@ -6,145 +6,149 @@
 </head>
 <body>
 <div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/rest/config/DefaultConfig.html">View Javadoc</a></div><pre>
-<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">// ***************************************************************************************************************************</em>
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</em>
-<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</em>
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment">// * with the License.  You may obtain a copy of the License at                                                              *</em>
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</em>
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</em>
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</em>
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment">// * specific language governing permissions and limitations under the License.                                              *</em>
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment">// ***************************************************************************************************************************</em>
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.config;
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.cp.*;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.encoders.*;
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.oapi.*;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.arg.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.debug.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.logger.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.processor.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.staticfile.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.swagger.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.serializer.annotation.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Predefined REST configuration that defines common default values for all configurations.</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  @Rest(
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<em class="jxr_comment">// Configuration file.</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	config=<span class="jxr_string">"$S{j.configFile,$E{J_CONFIG_FILE,SYSTEM_DEFAULT}}"</span>,
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<em class="jxr_comment">// Standard fields.</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	path=<span class="jxr_string">""</span>,
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	roleGuard=<span class="jxr_string">""</span>,
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	rolesDeclared=<span class="jxr_string">""</span>,
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<em class="jxr_comment">// Configuration beans.</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	converters={},
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	encoders={IdentityEncoder.<strong class="jxr_keyword">class</strong>},
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	guards={},
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	parsers={},
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	partParser=OpenApiParser.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	partSerializer=OpenApiSerializer.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	responseProcessors={
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		ReaderProcessor.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		InputStreamProcessor.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		ThrowableProcessor.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		HttpResponseProcessor.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		HttpResourceProcessor.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		HttpEntityProcessor.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		ResponseBeanProcessor.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		PlainTextPojoProcessor.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		SerializedPojoProcessor.<strong class="jxr_keyword">class</strong>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	},
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	restOpArgs={
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		AttributeArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		ContentArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		FormDataArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		HasFormDataArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		HasQueryArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		HeaderArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		HttpServletRequestArgs.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		HttpServletResponseArgs.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		HttpSessionArgs.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		InputStreamParserArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		MethodArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		ParserArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		PathArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		QueryArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		ReaderParserArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		RequestBeanArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		ResponseBeanArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		ResponseHeaderArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		ResponseCodeArg.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		RestContextArgs.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		RestSessionArgs.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		RestOpContextArgs.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		RestOpSessionArgs.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		RestRequestArgs.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		RestResponseArgs.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		DefaultArg.<strong class="jxr_keyword">class</strong>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	},
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	serializers={},
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<em class="jxr_comment">// Configurable settings.</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	allowedHeaderParams=<span class="jxr_string">"$S{j.allowedHeaderParams,$E{J_ALLOWED_HEADER_PARAMS,Accept,Content-Type}}"</span>,
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	allowedMethodHeaders=<span class="jxr_string">"$S{j.allowedMethodHeaders,$E{J_ALLOWED_METHOD_HEADERS,}}"</span>,
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	allowedMethodParams=<span class="jxr_string">"$S{j.allowedMethodParams,$E{J_ALLOWED_METHOD_PARAMS,HEAD,OPTIONS}}"</span>,
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	clientVersionHeader=<span class="jxr_string">"$S{j.clientVersionHeader,$E{J_CLIENT_VERSION_HEADER,Client-Version}}"</span>,
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	debug=<span class="jxr_string">"$S{j.debug,$E{J_DEBUG,}}"</span>,
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	debugOn=<span class="jxr_string">"$S{j.debugOn,$E{J_DEBUG_ON,}}"</span>,
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	defaultAccept=<span class="jxr_string">"$S{j.defaultAccept,$E{J_DEFAULT_ACCEPT,}}"</span>,
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	defaultCharset=<span class="jxr_string">"$S{j.defaultCharset,$E{J_DEFAULT_CHARSET,UTF-8}}"</span>,
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	defaultContentType=<span class="jxr_string">"$S{j.defaultContentType,$E{J_DEFAULT_CONTENT_TYPE,}}"</span>,
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	defaultRequestAttributes=<span class="jxr_string">"$S{j.defaultRequestAttributes,$E{J_DEFAULT_REQUEST_ATTRIBUTES,}}"</span>,
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	defaultRequestHeaders=<span class="jxr_string">"$S{j.defaultRequestHeaders,$E{J_DEFAULT_REQUEST_HEADERS,}}"</span>,
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	defaultResponseHeaders=<span class="jxr_string">"$S{j.defaultResponseHeaders,$E{J_DEFAULT_RESPONSE_HEADERS,}}"</span>,
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	disableContentParam=<span class="jxr_string">"$S{j.disableContentParam,$E{J_DISABLE_CONTENT_PARAM,false}}"</span>,
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	maxInput=<span class="jxr_string">"$S{j.maxInput,$E{J_MAX_INPUT,1000000}}"</span>,
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	messages=<span class="jxr_string">"$S{j.messages,$E{J_MESSAGES,}}"</span>,
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	renderResponseStackTraces=<span class="jxr_string">"$S{j.renderResponseStackTraces,$E{J_RENDER_RESPONSE_STACK_TRACES,false}}"</span>,
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	uriAuthority=<span class="jxr_string">"$S{j.uriAuthority,$E{J_URI_AUTHORITY,}}"</span>,
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	uriContext=<span class="jxr_string">"$S{j.uriContext,$E{J_URI_CONTEXT,}}"</span>,
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	uriRelativity=<span class="jxr_string">"$S{j.uriRelativity,$E{J_URI_RELATIVITY,}}"</span>,
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	uriResolution=<span class="jxr_string">"$S{j.uriResolution,$E{J_URI_RESOLUTION,}}"</span>,
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<em class="jxr_comment">// Metadata settings.</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	consumes={},
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	description=<span class="jxr_string">""</span>,
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	produces={},
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	siteName=<span class="jxr_string">"$S{j.siteName,$E{J_SITE_NAME,}}"</span>,
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	swagger=@Swagger,
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	title=<span class="jxr_string">"$S{j.title,$E{J_TITLE,}}"</span>,
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<em class="jxr_comment">// Injectable/overridable beans.</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	beanStore=BeanStore.Void.<strong class="jxr_keyword">class</strong>,  <em class="jxr_comment">// Defaults to BeanStore.</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	callLogger=CallLogger.Void.<strong class="jxr_keyword">class</strong>,  <em class="jxr_comment">// Defaults to BasicCallLogger.</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	debugEnablement=DebugEnablement.Void.<strong class="jxr_keyword">class</strong>,  <em class="jxr_comment">// Defaults to BasicDefaultEnablement.</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	staticFiles=StaticFiles.Void.<strong class="jxr_keyword">class</strong>,  <em class="jxr_comment">// Defaults to BasicStaticFiles.</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	swaggerProvider=SwaggerProvider.Void.<strong class="jxr_keyword">class</strong>,  <em class="jxr_comment">// Defaults to BasicSwaggerProvider.</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<em class="jxr_comment">// Overridable context classes.</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	restChildrenClass=RestChildren.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	restOperationsClass=RestOperations.<strong class="jxr_keyword">class</strong>
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> )
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> @BeanConfig(
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<em class="jxr_comment">// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	ignoreUnknownBeanProperties=<span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	ignoreUnknownEnumValues=<span class="jxr_string">"true"</span>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> )
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> @SerializerConfig(
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<em class="jxr_comment">// Enable automatic resolution of URI objects to root-relative values.</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	uriResolution=<span class="jxr_string">"ROOT_RELATIVE"</span>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.config;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.cp.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.encoders.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.oapi.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.arg.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.debug.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.logger.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.processor.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.staticfile.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.swagger.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.serializer.annotation.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Predefined REST configuration that defines common default values for all configurations.</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  @Rest(
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<em class="jxr_comment">// Configuration file.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	config=<span class="jxr_string">"$S{j.configFile,$E{J_CONFIG_FILE,SYSTEM_DEFAULT}}"</span>,
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<em class="jxr_comment">// Standard fields.</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	path=<span class="jxr_string">""</span>,
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	roleGuard=<span class="jxr_string">""</span>,
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	rolesDeclared=<span class="jxr_string">""</span>,
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<em class="jxr_comment">// Configuration beans.</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	converters={},
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	encoders={IdentityEncoder.<strong class="jxr_keyword">class</strong>},
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	guards={},
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	parsers={},
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	partParser=OpenApiParser.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	partSerializer=OpenApiSerializer.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	responseProcessors={
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		ReaderProcessor.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		InputStreamProcessor.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		ThrowableProcessor.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		HttpResponseProcessor.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		HttpResourceProcessor.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		HttpEntityProcessor.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		ResponseBeanProcessor.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		PlainTextPojoProcessor.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		SerializedPojoProcessor.<strong class="jxr_keyword">class</strong>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	},
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	restOpArgs={
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		AttributeArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		ContentArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		FormDataArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		HasFormDataArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		HasQueryArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		HeaderArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		HttpServletRequestArgs.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		HttpServletResponseArgs.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		HttpSessionArgs.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		InputStreamParserArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		MethodArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		ParserArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		PathArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		QueryArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		ReaderParserArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		RequestBeanArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		ResponseBeanArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		ResponseHeaderArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		ResponseCodeArg.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		RestContextArgs.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		RestSessionArgs.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		RestOpContextArgs.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		RestOpSessionArgs.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		RestRequestArgs.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		RestResponseArgs.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		DefaultArg.<strong class="jxr_keyword">class</strong>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	},
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	serializers={},
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<em class="jxr_comment">// Configurable settings.</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	allowedHeaderParams=<span class="jxr_string">"$S{j.allowedHeaderParams,$E{J_ALLOWED_HEADER_PARAMS,Accept,Content-Type}}"</span>,
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	allowedMethodHeaders=<span class="jxr_string">"$S{j.allowedMethodHeaders,$E{J_ALLOWED_METHOD_HEADERS,}}"</span>,
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	allowedMethodParams=<span class="jxr_string">"$S{j.allowedMethodParams,$E{J_ALLOWED_METHOD_PARAMS,HEAD,OPTIONS}}"</span>,
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	clientVersionHeader=<span class="jxr_string">"$S{j.clientVersionHeader,$E{J_CLIENT_VERSION_HEADER,Client-Version}}"</span>,
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	debug=<span class="jxr_string">"$S{j.debug,$E{J_DEBUG,}}"</span>,
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	debugOn=<span class="jxr_string">"$S{j.debugOn,$E{J_DEBUG_ON,}}"</span>,
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	defaultAccept=<span class="jxr_string">"$S{j.defaultAccept,$E{J_DEFAULT_ACCEPT,}}"</span>,
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	defaultCharset=<span class="jxr_string">"$S{j.defaultCharset,$E{J_DEFAULT_CHARSET,UTF-8}}"</span>,
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	defaultContentType=<span class="jxr_string">"$S{j.defaultContentType,$E{J_DEFAULT_CONTENT_TYPE,}}"</span>,
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	defaultRequestAttributes=<span class="jxr_string">"$S{j.defaultRequestAttributes,$E{J_DEFAULT_REQUEST_ATTRIBUTES,}}"</span>,
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	defaultRequestHeaders=<span class="jxr_string">"$S{j.defaultRequestHeaders,$E{J_DEFAULT_REQUEST_HEADERS,}}"</span>,
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	defaultResponseHeaders=<span class="jxr_string">"$S{j.defaultResponseHeaders,$E{J_DEFAULT_RESPONSE_HEADERS,}}"</span>,
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	disableContentParam=<span class="jxr_string">"$S{j.disableContentParam,$E{J_DISABLE_CONTENT_PARAM,false}}"</span>,
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	maxInput=<span class="jxr_string">"$S{j.maxInput,$E{J_MAX_INPUT,1000000}}"</span>,
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	messages=<span class="jxr_string">"$S{j.messages,$E{J_MESSAGES,}}"</span>,
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	renderResponseStackTraces=<span class="jxr_string">"$S{j.renderResponseStackTraces,$E{J_RENDER_RESPONSE_STACK_TRACES,false}}"</span>,
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	uriAuthority=<span class="jxr_string">"$S{j.uriAuthority,$E{J_URI_AUTHORITY,}}"</span>,
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	uriContext=<span class="jxr_string">"$S{j.uriContext,$E{J_URI_CONTEXT,}}"</span>,
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	uriRelativity=<span class="jxr_string">"$S{j.uriRelativity,$E{J_URI_RELATIVITY,}}"</span>,
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	uriResolution=<span class="jxr_string">"$S{j.uriResolution,$E{J_URI_RESOLUTION,}}"</span>,
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<em class="jxr_comment">// Metadata settings.</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	consumes={},
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	description=<span class="jxr_string">""</span>,
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	produces={},
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	siteName=<span class="jxr_string">"$S{j.siteName,$E{J_SITE_NAME,}}"</span>,
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	swagger=@Swagger,
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	title=<span class="jxr_string">"$S{j.title,$E{J_TITLE,}}"</span>,
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<em class="jxr_comment">// Injectable/overridable beans.</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	beanStore=BeanStore.Void.<strong class="jxr_keyword">class</strong>,  <em class="jxr_comment">// Defaults to BeanStore.</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	callLogger=CallLogger.Void.<strong class="jxr_keyword">class</strong>,  <em class="jxr_comment">// Defaults to BasicCallLogger.</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	debugEnablement=DebugEnablement.Void.<strong class="jxr_keyword">class</strong>,  <em class="jxr_comment">// Defaults to BasicDefaultEnablement.</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	staticFiles=StaticFiles.Void.<strong class="jxr_keyword">class</strong>,  <em class="jxr_comment">// Defaults to BasicStaticFiles.</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	swaggerProvider=SwaggerProvider.Void.<strong class="jxr_keyword">class</strong>,  <em class="jxr_comment">// Defaults to BasicSwaggerProvider.</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<em class="jxr_comment">// Overridable context classes.</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	restChildrenClass=RestChildren.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	restOperationsClass=RestOperations.<strong class="jxr_keyword">class</strong>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> )
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> @BeanConfig(
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<em class="jxr_comment">// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	ignoreUnknownBeanProperties=<span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	ignoreUnknownEnumValues=<span class="jxr_string">"true"</span>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> )
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> DefaultConfig {}
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> @SerializerConfig(
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<em class="jxr_comment">// Enable automatic resolution of URI objects to root-relative values.</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	uriResolution=<span class="jxr_string">"ROOT_RELATIVE"</span>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> )
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> DefaultConfig {}
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../AnnotationProvider.html" title="interface in org.apache.juneau">AnnotationProvider</a></code>, <code><a href="../httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.httppart">HttpPartSerializer</a></code>, <code><a href="OpenApiMetaProvider.html" title="interface in org.apache.juneau.oapi">OpenApiMetaProvider</a></code>, <code><a href="../uon/UonMetaProvider.html" title="interface in org.apache.juneau.uon">UonMetaProvider</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-39">OpenApiSerializer</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-43">OpenApiSerializer</a></span>
 <span class="extends-implements">extends <a href="../uon/UonSerializer.html" title="class in org.apache.juneau.uon">UonSerializer</a>
 implements <a href="OpenApiMetaProvider.html" title="interface in org.apache.juneau.oapi">OpenApiMetaProvider</a></span></div>
 <div class="block">Serializes POJOs to values suitable for transmission as HTTP headers, query/form-data parameters, and path variables.
@@ -274,7 +274,7 @@ implements <a href="OpenApiMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OpenApiSerializer.html" title="class in org.apache.juneau.oapi">OpenApiSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-46">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OpenApiSerializer.html" title="class in org.apache.juneau.oapi">OpenApiSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-50">DEFAULT</a></span></div>
 <div class="block">Reusable instance of <a href="OpenApiSerializer.html" title="class in org.apache.juneau.oapi"><code>OpenApiSerializer</code></a>, all default settings.</div>
 </section>
 </li>
@@ -289,7 +289,7 @@ implements <a href="OpenApiMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.oapi.OpenApiSerializer.Builder)">
 <h3>OpenApiSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-937">OpenApiSerializer</a></span><wbr><span class="parameters">(<a href="OpenApiSerializer.Builder.html" title="class in org.apache.juneau.oapi">OpenApiSerializer.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-941">OpenApiSerializer</a></span><wbr><span class="parameters">(<a href="OpenApiSerializer.Builder.html" title="class in org.apache.juneau.oapi">OpenApiSerializer.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -308,7 +308,7 @@ implements <a href="OpenApiMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OpenApiSerializer.Builder.html" title="class in org.apache.juneau.oapi">OpenApiSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-53">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OpenApiSerializer.Builder.html" title="class in org.apache.juneau.oapi">OpenApiSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-57">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -319,7 +319,7 @@ implements <a href="OpenApiMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApiSerializer.Builder.html" title="class in org.apache.juneau.oapi">OpenApiSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-943">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApiSerializer.Builder.html" title="class in org.apache.juneau.oapi">OpenApiSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-947">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -336,7 +336,7 @@ implements <a href="OpenApiMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApiSerializerSession.Builder.html" title="class in org.apache.juneau.oapi">OpenApiSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-948">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApiSerializerSession.Builder.html" title="class in org.apache.juneau.oapi">OpenApiSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-952">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -354,7 +354,7 @@ implements <a href="OpenApiMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApiSerializerSession.html" title="class in org.apache.juneau.oapi">OpenApiSerializerSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-953">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApiSerializerSession.html" title="class in org.apache.juneau.oapi">OpenApiSerializerSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-957">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -371,7 +371,7 @@ implements <a href="OpenApiMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getPartSession()">
 <h3>getPartSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApiSerializerSession.html" title="class in org.apache.juneau.oapi">OpenApiSerializerSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-958">getPartSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApiSerializerSession.html" title="class in org.apache.juneau.oapi">OpenApiSerializerSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-962">getPartSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../httppart/HttpPartSerializer.html#getPartSession()">HttpPartSerializer</a></code></span></div>
 <div class="block">Creates a new serializer session.</div>
 <dl class="notes">
@@ -387,7 +387,7 @@ implements <a href="OpenApiMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getOpenApiClassMeta(org.apache.juneau.ClassMeta)">
 <h3>getOpenApiClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApiClassMeta.html" title="class in org.apache.juneau.oapi">OpenApiClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-967">getOpenApiClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApiClassMeta.html" title="class in org.apache.juneau.oapi">OpenApiClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-971">getOpenApiClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="OpenApiMetaProvider.html#getOpenApiClassMeta(org.apache.juneau.ClassMeta)">OpenApiMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -403,7 +403,7 @@ implements <a href="OpenApiMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getOpenApiBeanPropertyMeta(org.apache.juneau.BeanPropertyMeta)">
 <h3>getOpenApiBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApiBeanPropertyMeta.html" title="class in org.apache.juneau.oapi">OpenApiBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-977">getOpenApiBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OpenApiBeanPropertyMeta.html" title="class in org.apache.juneau.oapi">OpenApiBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-981">getOpenApiBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="OpenApiMetaProvider.html#getOpenApiBeanPropertyMeta(org.apache.juneau.BeanPropertyMeta)">OpenApiMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -419,7 +419,7 @@ implements <a href="OpenApiMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getFormat()">
 <h3>getFormat</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../httppart/HttpPartFormat.html" title="enum class in org.apache.juneau.httppart">HttpPartFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-998">getFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../httppart/HttpPartFormat.html" title="enum class in org.apache.juneau.httppart">HttpPartFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-1002">getFormat</a></span>()</div>
 <div class="block">Returns the default format to use when not otherwise specified via <a href="../annotation/Schema.html#format()"><code>Schema.format()</code></a></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -430,7 +430,7 @@ implements <a href="OpenApiMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getCollectionFormat()">
 <h3>getCollectionFormat</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../httppart/HttpPartCollectionFormat.html" title="enum class in org.apache.juneau.httppart">HttpPartCollectionFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-1007">getCollectionFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../httppart/HttpPartCollectionFormat.html" title="enum class in org.apache.juneau.httppart">HttpPartCollectionFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/oapi/OpenApiSerializer.html#line-1011">getCollectionFormat</a></span>()</div>
 <div class="block">Returns the default collection format to use when not otherwise specified via <a href="../annotation/Schema.html#collectionFormat()"><code>Schema.collectionFormat()</code></a></div>
 <dl class="notes">
 <dt>Returns:</dt>

@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Swappers.html#line-65">Swappers</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Swappers.html#line-69">Swappers</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Collection of standard swapper implementations for the Bean-Centric Testing framework.
 
@@ -179,7 +179,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="optionalSwapper()">
 <h3>optionalSwapper</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Swapper.html" title="interface in org.apache.juneau.junit.bct">Swapper</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Swappers.html#line-109">optionalSwapper</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Swapper.html" title="interface in org.apache.juneau.junit.bct">Swapper</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Swappers.html#line-113">optionalSwapper</a></span>()</div>
 <div class="block">Returns a swapper for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> objects that unwraps them to their contained values.
 
  <p>This swapper extracts the value from Optional instances, returning the contained object
@@ -226,7 +226,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="supplierSwapper()">
 <h3>supplierSwapper</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Swapper.html" title="interface in org.apache.juneau.junit.bct">Swapper</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Swappers.html#line-151">supplierSwapper</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Swapper.html" title="interface in org.apache.juneau.junit.bct">Swapper</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Swappers.html#line-155">supplierSwapper</a></span>()</div>
 <div class="block">Returns a swapper for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a> objects that evaluates them to get their supplied values.
 
  <p>This swapper calls the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html#get()" title="class or interface in java.util.function" class="external-link"><code>Supplier.get()</code></a> method to obtain the value that the supplier
@@ -275,7 +275,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="futureSwapper()">
 <h3>futureSwapper</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Swapper.html" title="interface in org.apache.juneau.junit.bct">Swapper</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Future.html" title="class or interface in java.util.concurrent" class="external-link">Future</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Swappers.html#line-204">futureSwapper</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Swapper.html" title="interface in org.apache.juneau.junit.bct">Swapper</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Future.html" title="class or interface in java.util.concurrent" class="external-link">Future</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/junit/bct/Swappers.html#line-208">futureSwapper</a></span>()</div>
 <div class="block">Returns a swapper for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Future.html" title="class or interface in java.util.concurrent" class="external-link"><code>Future</code></a> objects that extracts completed results or status information.
 
  <p>This swapper handles <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Future.html" title="class or interface in java.util.concurrent" class="external-link"><code>Future</code></a> objects in a non-blocking manner, providing meaningful

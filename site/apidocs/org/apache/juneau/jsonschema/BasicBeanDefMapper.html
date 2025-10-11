@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="BeanDefMapper.html" title="interface in org.apache.juneau.jsonschema">BeanDefMapper</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/BasicBeanDefMapper.html#line-32">BasicBeanDefMapper</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/BasicBeanDefMapper.html#line-36">BasicBeanDefMapper</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="BeanDefMapper.html" title="interface in org.apache.juneau.jsonschema">BeanDefMapper</a></span></div>
 <div class="block">Simple implementation of the <a href="BeanDefMapper.html" title="interface in org.apache.juneau.jsonschema"><code>BeanDefMapper</code></a> interface.
@@ -175,14 +175,14 @@ implements <a href="BeanDefMapper.html" title="interface in org.apache.juneau.js
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>BasicBeanDefMapper</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/BasicBeanDefMapper.html#line-39">BasicBeanDefMapper</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/BasicBeanDefMapper.html#line-43">BasicBeanDefMapper</a></span>()</div>
 <div class="block">Default constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String)">
 <h3>BasicBeanDefMapper</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/BasicBeanDefMapper.html#line-48">BasicBeanDefMapper</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uriPattern)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/BasicBeanDefMapper.html#line-52">BasicBeanDefMapper</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uriPattern)</span></div>
 <div class="block">Constructor that allows you to override the URI pattern.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -201,7 +201,7 @@ implements <a href="BeanDefMapper.html" title="interface in org.apache.juneau.js
 <li>
 <section class="detail" id="getId(org.apache.juneau.ClassMeta)">
 <h3>getId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/BasicBeanDefMapper.html#line-52">getId</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/BasicBeanDefMapper.html#line-56">getId</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="BeanDefMapper.html#getId(org.apache.juneau.ClassMeta)">BeanDefMapper</a></code></span></div>
 <div class="block">Returns the ID for the specified class.</div>
 <dl class="notes">
@@ -217,7 +217,7 @@ implements <a href="BeanDefMapper.html" title="interface in org.apache.juneau.js
 <li>
 <section class="detail" id="getURI(org.apache.juneau.ClassMeta)">
 <h3>getURI</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/BasicBeanDefMapper.html#line-57">getURI</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/BasicBeanDefMapper.html#line-61">getURI</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="BeanDefMapper.html#getURI(org.apache.juneau.ClassMeta)">BeanDefMapper</a></code></span></div>
 <div class="block">Returns the URI for the specified class.</div>
 <dl class="notes">
@@ -233,7 +233,7 @@ implements <a href="BeanDefMapper.html" title="interface in org.apache.juneau.js
 <li>
 <section class="detail" id="getURI(java.lang.String)">
 <h3>getURI</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/BasicBeanDefMapper.html#line-62">getURI</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/BasicBeanDefMapper.html#line-66">getURI</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="BeanDefMapper.html#getURI(java.lang.String)">BeanDefMapper</a></code></span></div>
 <div class="block">Returns the URI for the specified class by its ID.</div>
 <dl class="notes">

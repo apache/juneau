@@ -11,69 +11,73 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.examples.core.xml;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import java.util.*;</span>
-<span class="source-line-no">016</span><span id="line-16"></span>
-<span class="source-line-no">017</span><span id="line-17">import org.apache.juneau.examples.core.pojo.*;</span>
-<span class="source-line-no">018</span><span id="line-18">import org.apache.juneau.xml.*;</span>
-<span class="source-line-no">019</span><span id="line-19"></span>
-<span class="source-line-no">020</span><span id="line-20">/**</span>
-<span class="source-line-no">021</span><span id="line-21"> * Sample class which shows the complex usage of XmlSerializer.</span>
-<span class="source-line-no">022</span><span id="line-22"> *</span>
-<span class="source-line-no">023</span><span id="line-23"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">024</span><span id="line-24"> * &lt;/ul&gt;</span>
-<span class="source-line-no">025</span><span id="line-25"> */</span>
-<span class="source-line-no">026</span><span id="line-26">public class XmlComplexExample {</span>
-<span class="source-line-no">027</span><span id="line-27"></span>
-<span class="source-line-no">028</span><span id="line-28">   /**</span>
-<span class="source-line-no">029</span><span id="line-29">    * Serializing PojoComplex bean into human readable XML</span>
-<span class="source-line-no">030</span><span id="line-30">    * and Deserialize back to PojoComplex instance type.</span>
-<span class="source-line-no">031</span><span id="line-31">    *</span>
-<span class="source-line-no">032</span><span id="line-32">    * @param args Unused.</span>
-<span class="source-line-no">033</span><span id="line-33">    * @throws Exception Unused.</span>
-<span class="source-line-no">034</span><span id="line-34">    */</span>
-<span class="source-line-no">035</span><span id="line-35">   public static void main(String[] args) throws Exception {</span>
-<span class="source-line-no">036</span><span id="line-36"></span>
-<span class="source-line-no">037</span><span id="line-37">      // Fill some data to a PojoComplex bean</span>
-<span class="source-line-no">038</span><span id="line-38">      HashMap&lt;String, List&lt;Pojo&gt;&gt; values = new HashMap&lt;&gt;();</span>
-<span class="source-line-no">039</span><span id="line-39">      ArrayList&lt;Pojo&gt; setOne = new ArrayList&lt;&gt;();</span>
-<span class="source-line-no">040</span><span id="line-40">      setOne.add(new Pojo("1.1", "name1"));</span>
-<span class="source-line-no">041</span><span id="line-41">      setOne.add(new Pojo("1.1", "name2"));</span>
-<span class="source-line-no">042</span><span id="line-42">      ArrayList&lt;Pojo&gt; setTwo = new ArrayList&lt;&gt;();</span>
-<span class="source-line-no">043</span><span id="line-43">      setTwo.add(new Pojo("1.2", "name1"));</span>
-<span class="source-line-no">044</span><span id="line-44">      setTwo.add(new Pojo("1.2", "name2"));</span>
-<span class="source-line-no">045</span><span id="line-45">      values.put("setOne", setOne);</span>
-<span class="source-line-no">046</span><span id="line-46">      values.put("setTwo", setTwo);</span>
-<span class="source-line-no">047</span><span id="line-47">      PojoComplex pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">      // Serialize to human readable XML and print</span>
-<span class="source-line-no">050</span><span id="line-50">      String serial = XmlSerializer.DEFAULT_SQ_READABLE.serialize(pojoc);</span>
-<span class="source-line-no">051</span><span id="line-51">      System.out.println(serial);</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.examples.core.xml;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import java.util.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.examples.core.pojo.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.xml.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">/**</span>
+<span class="source-line-no">025</span><span id="line-25"> * Sample class which shows the complex usage of XmlSerializer.</span>
+<span class="source-line-no">026</span><span id="line-26"> *</span>
+<span class="source-line-no">027</span><span id="line-27"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">028</span><span id="line-28"> * &lt;/ul&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> */</span>
+<span class="source-line-no">030</span><span id="line-30">public class XmlComplexExample {</span>
+<span class="source-line-no">031</span><span id="line-31"></span>
+<span class="source-line-no">032</span><span id="line-32">   /**</span>
+<span class="source-line-no">033</span><span id="line-33">    * Serializing PojoComplex bean into human readable XML</span>
+<span class="source-line-no">034</span><span id="line-34">    * and Deserialize back to PojoComplex instance type.</span>
+<span class="source-line-no">035</span><span id="line-35">    *</span>
+<span class="source-line-no">036</span><span id="line-36">    * @param args Unused.</span>
+<span class="source-line-no">037</span><span id="line-37">    * @throws Exception Unused.</span>
+<span class="source-line-no">038</span><span id="line-38">    */</span>
+<span class="source-line-no">039</span><span id="line-39">   public static void main(String[] args) throws Exception {</span>
+<span class="source-line-no">040</span><span id="line-40"></span>
+<span class="source-line-no">041</span><span id="line-41">      // Fill some data to a PojoComplex bean</span>
+<span class="source-line-no">042</span><span id="line-42">      HashMap&lt;String, List&lt;Pojo&gt;&gt; values = new HashMap&lt;&gt;();</span>
+<span class="source-line-no">043</span><span id="line-43">      ArrayList&lt;Pojo&gt; setOne = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">044</span><span id="line-44">      setOne.add(new Pojo("1.1", "name1"));</span>
+<span class="source-line-no">045</span><span id="line-45">      setOne.add(new Pojo("1.1", "name2"));</span>
+<span class="source-line-no">046</span><span id="line-46">      ArrayList&lt;Pojo&gt; setTwo = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">047</span><span id="line-47">      setTwo.add(new Pojo("1.2", "name1"));</span>
+<span class="source-line-no">048</span><span id="line-48">      setTwo.add(new Pojo("1.2", "name2"));</span>
+<span class="source-line-no">049</span><span id="line-49">      values.put("setOne", setOne);</span>
+<span class="source-line-no">050</span><span id="line-50">      values.put("setTwo", setTwo);</span>
+<span class="source-line-no">051</span><span id="line-51">      PojoComplex pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);</span>
 <span class="source-line-no">052</span><span id="line-52"></span>
-<span class="source-line-no">053</span><span id="line-53">      // Deserialize back to PojoComplex instance</span>
-<span class="source-line-no">054</span><span id="line-54">      PojoComplex obj = XmlParser.DEFAULT.parse(serial, PojoComplex.class);</span>
-<span class="source-line-no">055</span><span id="line-55"></span>
-<span class="source-line-no">056</span><span id="line-56">      assert obj.getClass().equals(pojoc.getClass());</span>
-<span class="source-line-no">057</span><span id="line-57">      assert obj.getInnerPojo().getId().equals(pojoc.getInnerPojo().getId());</span>
-<span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">      // The object above can be parsed thanks to the @Beanc annotation on PojoComplex</span>
-<span class="source-line-no">060</span><span id="line-60">      // Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">   }</span>
-<span class="source-line-no">063</span><span id="line-63">}</span>
+<span class="source-line-no">053</span><span id="line-53">      // Serialize to human readable XML and print</span>
+<span class="source-line-no">054</span><span id="line-54">      String serial = XmlSerializer.DEFAULT_SQ_READABLE.serialize(pojoc);</span>
+<span class="source-line-no">055</span><span id="line-55">      System.out.println(serial);</span>
+<span class="source-line-no">056</span><span id="line-56"></span>
+<span class="source-line-no">057</span><span id="line-57">      // Deserialize back to PojoComplex instance</span>
+<span class="source-line-no">058</span><span id="line-58">      PojoComplex obj = XmlParser.DEFAULT.parse(serial, PojoComplex.class);</span>
+<span class="source-line-no">059</span><span id="line-59"></span>
+<span class="source-line-no">060</span><span id="line-60">      assert obj.getClass().equals(pojoc.getClass());</span>
+<span class="source-line-no">061</span><span id="line-61">      assert obj.getInnerPojo().getId().equals(pojoc.getInnerPojo().getId());</span>
+<span class="source-line-no">062</span><span id="line-62"></span>
+<span class="source-line-no">063</span><span id="line-63">      // The object above can be parsed thanks to the @Beanc annotation on PojoComplex</span>
+<span class="source-line-no">064</span><span id="line-64">      // Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.</span>
+<span class="source-line-no">065</span><span id="line-65"></span>
+<span class="source-line-no">066</span><span id="line-66">   }</span>
+<span class="source-line-no">067</span><span id="line-67">}</span>
 
 
 

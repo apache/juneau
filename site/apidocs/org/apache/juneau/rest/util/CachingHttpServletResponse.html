@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.http.HttpServletResponse</code>, <code>jakarta.servlet.ServletResponse</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/CachingHttpServletResponse.html#line-26">CachingHttpServletResponse</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/CachingHttpServletResponse.html#line-30">CachingHttpServletResponse</a></span>
 <span class="extends-implements">extends jakarta.servlet.http.HttpServletResponseWrapper</span></div>
 <div class="block">Wraps an <code>HttpServletResponse</code> and caches the output stream in a separate buffer for debugging purposes.
 
@@ -174,7 +174,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(jakarta.servlet.http.HttpServletResponse)">
 <h3>CachingHttpServletResponse</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/CachingHttpServletResponse.html#line-50">CachingHttpServletResponse</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletResponse&nbsp;res)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/CachingHttpServletResponse.html#line-54">CachingHttpServletResponse</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletResponse&nbsp;res)</span>
                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -196,7 +196,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="wrap(jakarta.servlet.http.HttpServletResponse)">
 <h3>wrap</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CachingHttpServletResponse.html" title="class in org.apache.juneau.rest.util">CachingHttpServletResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/CachingHttpServletResponse.html#line-38">wrap</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletResponse&nbsp;res)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CachingHttpServletResponse.html" title="class in org.apache.juneau.rest.util">CachingHttpServletResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/CachingHttpServletResponse.html#line-42">wrap</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletResponse&nbsp;res)</span>
                                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Wraps the specified response inside a <a href="CachingHttpServletResponse.html" title="class in org.apache.juneau.rest.util"><code>CachingHttpServletResponse</code></a> if it isn't already.</div>
 <dl class="notes">
@@ -212,7 +212,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getOutputStream()">
 <h3>getOutputStream</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.ServletOutputStream</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/CachingHttpServletResponse.html#line-55">getOutputStream</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.ServletOutputStream</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/CachingHttpServletResponse.html#line-59">getOutputStream</a></span>()
                                                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -227,7 +227,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getContent()">
 <h3>getContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/CachingHttpServletResponse.html#line-92">getContent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/util/CachingHttpServletResponse.html#line-96">getContent</a></span>()</div>
 <div class="block">Returns the content of the servlet response without consuming the stream.</div>
 <dl class="notes">
 <dt>Returns:</dt>

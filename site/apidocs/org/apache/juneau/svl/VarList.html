@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Cloneable.html" title="class or interface in java.lang" class="external-link">Cloneable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/RandomAccess.html" title="class or interface in java.util" class="external-link">RandomAccess</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-30">VarList</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-34">VarList</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span></div>
 <div class="block">Simple list of variables that can consist of either variable classes or instances.
 
@@ -212,14 +212,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>VarList</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-67">VarList</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-71">VarList</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.svl.VarList)">
 <h3>VarList</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-75">VarList</a></span><wbr><span class="parameters">(<a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-79">VarList</a></span><wbr><span class="parameters">(<a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -238,7 +238,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-39">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-43">create</a></span>()</div>
 <div class="block">Returns an empty list of variables.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -249,7 +249,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(org.apache.juneau.svl.Var...)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-49">of</a></span><wbr><span class="parameters">(<a href="Var.html" title="class in org.apache.juneau.svl">Var</a>...&nbsp;vars)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-53">of</a></span><wbr><span class="parameters">(<a href="Var.html" title="class in org.apache.juneau.svl">Var</a>...&nbsp;vars)</span></div>
 <div class="block">Creates a new list of variables.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -263,7 +263,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="of(java.lang.Class...)">
 <h3>of</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-59">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="Var.html" title="class in org.apache.juneau.svl">Var</a>&gt;...&nbsp;vars)</span></div>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-63">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="Var.html" title="class in org.apache.juneau.svl">Var</a>&gt;...&nbsp;vars)</span></div>
 <div class="block">Creates a new list of variables.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -276,7 +276,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(org.apache.juneau.svl.Var...)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-85">append</a></span><wbr><span class="parameters">(<a href="Var.html" title="class in org.apache.juneau.svl">Var</a>...&nbsp;vars)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-89">append</a></span><wbr><span class="parameters">(<a href="Var.html" title="class in org.apache.juneau.svl">Var</a>...&nbsp;vars)</span></div>
 <div class="block">Adds a list of variables to this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -289,7 +289,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(org.apache.juneau.svl.VarList)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-96">append</a></span><wbr><span class="parameters">(<a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a>&nbsp;vars)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-100">append</a></span><wbr><span class="parameters">(<a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a>&nbsp;vars)</span></div>
 <div class="block">Adds a list of variables to this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -303,7 +303,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="append(java.lang.Class...)">
 <h3>append</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-107">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="Var.html" title="class in org.apache.juneau.svl">Var</a>&gt;...&nbsp;vars)</span></div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-111">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="Var.html" title="class in org.apache.juneau.svl">Var</a>&gt;...&nbsp;vars)</span></div>
 <div class="block">Adds a list of variables to this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -316,7 +316,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addDefault()">
 <h3>addDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-138">addDefault</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-142">addDefault</a></span>()</div>
 <div class="block">Adds the default variables to this list.
 
  <p>
@@ -347,7 +347,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-163">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarList.html" title="class in org.apache.juneau.svl">VarList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/svl/VarList.html#line-167">copy</a></span>()</div>
 <div class="block">Makes a copy of this list.</div>
 <dl class="notes">
 <dt>Returns:</dt>

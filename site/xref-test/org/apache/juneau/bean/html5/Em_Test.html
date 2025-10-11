@@ -6,110 +6,114 @@
 </head>
 <body>
 <div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/bean/html5/Em_Test.html">View Javadoc</a></div><pre>
-<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">// ***************************************************************************************************************************</em>
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</em>
-<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</em>
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment">// * with the License.  You may obtain a copy of the License at                                                              *</em>
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</em>
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</em>
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</em>
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment">// * specific language governing permissions and limitations under the License.                                              *</em>
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment">// ***************************************************************************************************************************</em>
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.bean.html5;
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bean.html5.HtmlBuilder.*;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.BctAssertions.*;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">class</strong> <a name="Em_Test" href="../../../../../org/apache/juneau/bean/html5/Em_Test.html#Em_Test">Em_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basicSetters() {
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  		Em x = em()
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  			._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"a"</span>)
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  			.accesskey(<span class="jxr_string">"b"</span>)
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  			.contenteditable(<span class="jxr_string">"c"</span>)
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  			.dir(<span class="jxr_string">"d"</span>)
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  			.hidden(<span class="jxr_string">"e"</span>)
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  			.id(<span class="jxr_string">"f"</span>)
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  			.lang(<span class="jxr_string">"g"</span>)
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  			.onabort(<span class="jxr_string">"h"</span>)
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  			.onblur(<span class="jxr_string">"i"</span>)
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  			.oncancel(<span class="jxr_string">"j"</span>)
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  			.oncanplay(<span class="jxr_string">"k"</span>)
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  			.oncanplaythrough(<span class="jxr_string">"l"</span>)
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  			.onchange(<span class="jxr_string">"m"</span>)
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  			.onclick(<span class="jxr_string">"n"</span>)
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  			.oncuechange(<span class="jxr_string">"o"</span>)
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  			.ondblclick(<span class="jxr_string">"p"</span>)
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			.ondurationchange(<span class="jxr_string">"q"</span>)
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  			.onemptied(<span class="jxr_string">"r"</span>)
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			.onended(<span class="jxr_string">"s"</span>)
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			.onerror(<span class="jxr_string">"t"</span>)
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  			.onfocus(<span class="jxr_string">"u"</span>)
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			.oninput(<span class="jxr_string">"v"</span>)
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  			.oninvalid(<span class="jxr_string">"w"</span>)
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			.onkeydown(<span class="jxr_string">"x"</span>)
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			.onkeypress(<span class="jxr_string">"y"</span>)
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			.onkeyup(<span class="jxr_string">"z"</span>)
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  			.onload(<span class="jxr_string">"aa"</span>)
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			.onloadeddata(<span class="jxr_string">"ab"</span>)
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  			.onloadedmetadata(<span class="jxr_string">"ac"</span>)
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			.onloadstart(<span class="jxr_string">"ad"</span>)
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			.onmousedown(<span class="jxr_string">"ae"</span>)
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			.onmouseenter(<span class="jxr_string">"af"</span>)
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			.onmouseleave(<span class="jxr_string">"ag"</span>)
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			.onmousemove(<span class="jxr_string">"ah"</span>)
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			.onmouseout(<span class="jxr_string">"ai"</span>)
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			.onmouseover(<span class="jxr_string">"aj"</span>)
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			.onmouseup(<span class="jxr_string">"ak"</span>)
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			.onmousewheel(<span class="jxr_string">"al"</span>)
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			.onpause(<span class="jxr_string">"am"</span>)
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			.onplay(<span class="jxr_string">"an"</span>)
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			.onplaying(<span class="jxr_string">"ao"</span>)
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			.onprogress(<span class="jxr_string">"ap"</span>)
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			.onratechange(<span class="jxr_string">"aq"</span>)
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			.onreset(<span class="jxr_string">"ar"</span>)
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			.onresize(<span class="jxr_string">"as"</span>)
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			.onscroll(<span class="jxr_string">"at"</span>)
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			.onseeked(<span class="jxr_string">"au"</span>)
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			.onseeking(<span class="jxr_string">"av"</span>)
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  			.onselect(<span class="jxr_string">"aw"</span>)
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			.onshow(<span class="jxr_string">"ax"</span>)
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			.onstalled(<span class="jxr_string">"ay"</span>)
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			.onsubmit(<span class="jxr_string">"az"</span>)
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			.onsuspend(<span class="jxr_string">"ba"</span>)
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			.ontimeupdate(<span class="jxr_string">"bb"</span>)
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			.ontoggle(<span class="jxr_string">"bc"</span>)
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			.onvolumechange(<span class="jxr_string">"bd"</span>)
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			.onwaiting(<span class="jxr_string">"be"</span>)
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			.spellcheck(<span class="jxr_string">"bf"</span>)
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.style(<span class="jxr_string">"bg"</span>)
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.tabindex(<span class="jxr_string">"bh"</span>)
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			.title(<span class="jxr_string">"bi"</span>)
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			.translate(<span class="jxr_string">"bj"</span>)
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			.children(<span class="jxr_string">"bk"</span>, strong(<span class="jxr_string">"bl"</span>));
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertString(
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<span class="jxr_string">"&lt;em class='a' accesskey='b' contenteditable='c' dir='d' hidden='e' id='f' lang='g' onabort='h' onblur='i' oncancel='j' oncanplay='k' oncanplaythrough='l' onchange='m' onclick='n' oncuechange='o' ondblclick='p' ondurationchange='q' onemptied='r' onended='s' onerror='t' onfocus='u' oninput='v' oninvalid='w' onkeydown='x' onkeypress='y' onkeyup='z' onload='aa' onloadeddata='ab' onloadedmetadata='ac' onloadstart='ad' onmousedown='ae' onmouseenter='af' onmouseleave='ag' onmousemove='ah' onmouseout='ai' onmouseover='aj' onmouseup='ak' onmousewheel='al' onpause='am' onplay='an' onplaying='ao' onprogress='ap' onratechange='aq' onreset='ar' onresize='as' onscroll='at' onseeked='au' onseeking='av' onselect='aw' onshow='ax' onstalled='ay' onsubmit='az' onsuspend='ba' ontimeupdate='bb' ontoggle='bc' onvolumechange='bd' onwaiting='be' spellcheck='bf' style='bg' tabindex='bh' title='bi' translate='bj'&gt;bk&lt;strong&gt;bl&lt;/strong&gt;&lt;/em&gt;"</span>,
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			x
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Test <strong class="jxr_keyword">void</strong> a02_emptyBean() {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertString(<span class="jxr_string">"&lt;em&gt;&lt;/em&gt;"</span>, em());
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.bean.html5;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bean.html5.HtmlBuilder.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">class</strong> <a name="Em_Test" href="../../../../../org/apache/juneau/bean/html5/Em_Test.html#Em_Test">Em_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basicSetters() {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  		Em x = em()
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  			._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"a"</span>)
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  			.accesskey(<span class="jxr_string">"b"</span>)
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  			.contenteditable(<span class="jxr_string">"c"</span>)
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  			.dir(<span class="jxr_string">"d"</span>)
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  			.hidden(<span class="jxr_string">"e"</span>)
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  			.id(<span class="jxr_string">"f"</span>)
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  			.lang(<span class="jxr_string">"g"</span>)
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  			.onabort(<span class="jxr_string">"h"</span>)
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  			.onblur(<span class="jxr_string">"i"</span>)
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  			.oncancel(<span class="jxr_string">"j"</span>)
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  			.oncanplay(<span class="jxr_string">"k"</span>)
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  			.oncanplaythrough(<span class="jxr_string">"l"</span>)
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			.onchange(<span class="jxr_string">"m"</span>)
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  			.onclick(<span class="jxr_string">"n"</span>)
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			.oncuechange(<span class="jxr_string">"o"</span>)
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			.ondblclick(<span class="jxr_string">"p"</span>)
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  			.ondurationchange(<span class="jxr_string">"q"</span>)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			.onemptied(<span class="jxr_string">"r"</span>)
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  			.onended(<span class="jxr_string">"s"</span>)
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			.onerror(<span class="jxr_string">"t"</span>)
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			.onfocus(<span class="jxr_string">"u"</span>)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			.oninput(<span class="jxr_string">"v"</span>)
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  			.oninvalid(<span class="jxr_string">"w"</span>)
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			.onkeydown(<span class="jxr_string">"x"</span>)
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  			.onkeypress(<span class="jxr_string">"y"</span>)
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			.onkeyup(<span class="jxr_string">"z"</span>)
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			.onload(<span class="jxr_string">"aa"</span>)
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			.onloadeddata(<span class="jxr_string">"ab"</span>)
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			.onloadedmetadata(<span class="jxr_string">"ac"</span>)
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			.onloadstart(<span class="jxr_string">"ad"</span>)
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			.onmousedown(<span class="jxr_string">"ae"</span>)
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			.onmouseenter(<span class="jxr_string">"af"</span>)
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			.onmouseleave(<span class="jxr_string">"ag"</span>)
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			.onmousemove(<span class="jxr_string">"ah"</span>)
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			.onmouseout(<span class="jxr_string">"ai"</span>)
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			.onmouseover(<span class="jxr_string">"aj"</span>)
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			.onmouseup(<span class="jxr_string">"ak"</span>)
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			.onmousewheel(<span class="jxr_string">"al"</span>)
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			.onpause(<span class="jxr_string">"am"</span>)
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			.onplay(<span class="jxr_string">"an"</span>)
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			.onplaying(<span class="jxr_string">"ao"</span>)
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			.onprogress(<span class="jxr_string">"ap"</span>)
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			.onratechange(<span class="jxr_string">"aq"</span>)
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			.onreset(<span class="jxr_string">"ar"</span>)
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  			.onresize(<span class="jxr_string">"as"</span>)
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			.onscroll(<span class="jxr_string">"at"</span>)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			.onseeked(<span class="jxr_string">"au"</span>)
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			.onseeking(<span class="jxr_string">"av"</span>)
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			.onselect(<span class="jxr_string">"aw"</span>)
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			.onshow(<span class="jxr_string">"ax"</span>)
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			.onstalled(<span class="jxr_string">"ay"</span>)
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			.onsubmit(<span class="jxr_string">"az"</span>)
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			.onsuspend(<span class="jxr_string">"ba"</span>)
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			.ontimeupdate(<span class="jxr_string">"bb"</span>)
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.ontoggle(<span class="jxr_string">"bc"</span>)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.onvolumechange(<span class="jxr_string">"bd"</span>)
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			.onwaiting(<span class="jxr_string">"be"</span>)
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			.spellcheck(<span class="jxr_string">"bf"</span>)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			.style(<span class="jxr_string">"bg"</span>)
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			.tabindex(<span class="jxr_string">"bh"</span>)
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			.title(<span class="jxr_string">"bi"</span>)
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			.translate(<span class="jxr_string">"bj"</span>)
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			.children(<span class="jxr_string">"bk"</span>, strong(<span class="jxr_string">"bl"</span>));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertString(
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			<span class="jxr_string">"&lt;em class='a' accesskey='b' contenteditable='c' dir='d' hidden='e' id='f' lang='g' onabort='h' onblur='i' oncancel='j' oncanplay='k' oncanplaythrough='l' onchange='m' onclick='n' oncuechange='o' ondblclick='p' ondurationchange='q' onemptied='r' onended='s' onerror='t' onfocus='u' oninput='v' oninvalid='w' onkeydown='x' onkeypress='y' onkeyup='z' onload='aa' onloadeddata='ab' onloadedmetadata='ac' onloadstart='ad' onmousedown='ae' onmouseenter='af' onmouseleave='ag' onmousemove='ah' onmouseout='ai' onmouseover='aj' onmouseup='ak' onmousewheel='al' onpause='am' onplay='an' onplaying='ao' onprogress='ap' onratechange='aq' onreset='ar' onresize='as' onscroll='at' onseeked='au' onseeking='av' onselect='aw' onshow='ax' onstalled='ay' onsubmit='az' onsuspend='ba' ontimeupdate='bb' ontoggle='bc' onvolumechange='bd' onwaiting='be' spellcheck='bf' style='bg' tabindex='bh' title='bi' translate='bj'&gt;bk&lt;strong&gt;bl&lt;/strong&gt;&lt;/em&gt;"</span>,
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			x
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		);
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> a03_otherConstructors() {
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		Em x1 = <strong class="jxr_keyword">new</strong> Em(<span class="jxr_string">"a1"</span>, strong(<span class="jxr_string">"a2"</span>));
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertString(<span class="jxr_string">"&lt;em&gt;a1&lt;strong&gt;a2&lt;/strong&gt;&lt;/em&gt;"</span>, x1);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> a02_emptyBean() {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertString(<span class="jxr_string">"&lt;em&gt;&lt;/em&gt;"</span>, em());
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	}
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> }
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@Test <strong class="jxr_keyword">void</strong> a03_otherConstructors() {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		Em x1 = <strong class="jxr_keyword">new</strong> Em(<span class="jxr_string">"a1"</span>, strong(<span class="jxr_string">"a2"</span>));
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertString(<span class="jxr_string">"&lt;em&gt;a1&lt;strong&gt;a2&lt;/strong&gt;&lt;/em&gt;"</span>, x1);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

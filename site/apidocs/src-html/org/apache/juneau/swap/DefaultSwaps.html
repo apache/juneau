@@ -11,78 +11,82 @@
 <body class="source-page">
 <main role="main">
 <div class="source-container">
-<pre><span class="source-line-no">001</span><span id="line-1">// ***************************************************************************************************************************</span>
-<span class="source-line-no">002</span><span id="line-2">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</span>
-<span class="source-line-no">003</span><span id="line-3">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</span>
-<span class="source-line-no">004</span><span id="line-4">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</span>
-<span class="source-line-no">005</span><span id="line-5">// * with the License.  You may obtain a copy of the License at                                                              *</span>
-<span class="source-line-no">006</span><span id="line-6">// *                                                                                                                         *</span>
-<span class="source-line-no">007</span><span id="line-7">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</span>
-<span class="source-line-no">008</span><span id="line-8">// *                                                                                                                         *</span>
-<span class="source-line-no">009</span><span id="line-9">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</span>
-<span class="source-line-no">010</span><span id="line-10">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</span>
-<span class="source-line-no">011</span><span id="line-11">// * specific language governing permissions and limitations under the License.                                              *</span>
-<span class="source-line-no">012</span><span id="line-12">// ***************************************************************************************************************************</span>
-<span class="source-line-no">013</span><span id="line-13">package org.apache.juneau.swap;</span>
-<span class="source-line-no">014</span><span id="line-14"></span>
-<span class="source-line-no">015</span><span id="line-15">import java.net.*;</span>
-<span class="source-line-no">016</span><span id="line-16">import java.time.*;</span>
-<span class="source-line-no">017</span><span id="line-17">import java.time.temporal.*;</span>
-<span class="source-line-no">018</span><span id="line-18">import java.util.*;</span>
-<span class="source-line-no">019</span><span id="line-19">import java.util.concurrent.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import java.util.regex.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import javax.xml.datatype.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.reflect.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.swaps.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">/**</span>
-<span class="source-line-no">028</span><span id="line-28"> * Maintain the list of default swaps used by all serializers and parsers.</span>
-<span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics"&gt;Swap Basics&lt;/a&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;/ul&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> */</span>
-<span class="source-line-no">034</span><span id="line-34">public class DefaultSwaps {</span>
-<span class="source-line-no">035</span><span id="line-35"></span>
-<span class="source-line-no">036</span><span id="line-36">   private static final Map&lt;Class&lt;?&gt;,ObjectSwap&lt;?,?&gt;&gt; SWAPS = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">037</span><span id="line-37">   static {</span>
-<span class="source-line-no">038</span><span id="line-38">      SWAPS.put(Enumeration.class, new EnumerationSwap());</span>
-<span class="source-line-no">039</span><span id="line-39">      SWAPS.put(Iterator.class, new IteratorSwap());</span>
-<span class="source-line-no">040</span><span id="line-40">      SWAPS.put(Locale.class, new LocaleSwap());</span>
-<span class="source-line-no">041</span><span id="line-41">      SWAPS.put(Class.class, new ClassSwap());</span>
-<span class="source-line-no">042</span><span id="line-42">      SWAPS.put(Calendar.class, new TemporalCalendarSwap.IsoOffsetDateTime());</span>
-<span class="source-line-no">043</span><span id="line-43">      SWAPS.put(Date.class, new TemporalDateSwap.IsoLocalDateTime());</span>
-<span class="source-line-no">044</span><span id="line-44">      SWAPS.put(Instant.class, new TemporalSwap.IsoInstant());</span>
-<span class="source-line-no">045</span><span id="line-45">      SWAPS.put(ZonedDateTime.class, new TemporalSwap.IsoOffsetDateTime());</span>
-<span class="source-line-no">046</span><span id="line-46">      SWAPS.put(LocalDate.class, new TemporalSwap.IsoLocalDate());</span>
-<span class="source-line-no">047</span><span id="line-47">      SWAPS.put(LocalDateTime.class, new TemporalSwap.IsoLocalDateTime());</span>
-<span class="source-line-no">048</span><span id="line-48">      SWAPS.put(LocalTime.class, new TemporalSwap.IsoLocalTime());</span>
-<span class="source-line-no">049</span><span id="line-49">      SWAPS.put(OffsetDateTime.class, new TemporalSwap.IsoOffsetDateTime());</span>
-<span class="source-line-no">050</span><span id="line-50">      SWAPS.put(OffsetTime.class, new TemporalSwap.IsoOffsetTime());</span>
-<span class="source-line-no">051</span><span id="line-51">      SWAPS.put(StackTraceElement.class, new StackTraceElementSwap());</span>
-<span class="source-line-no">052</span><span id="line-52">      SWAPS.put(Year.class, new TemporalSwap.IsoYear());</span>
-<span class="source-line-no">053</span><span id="line-53">      SWAPS.put(YearMonth.class, new TemporalSwap.IsoYearMonth());</span>
-<span class="source-line-no">054</span><span id="line-54">      SWAPS.put(Temporal.class, new TemporalSwap.IsoInstant());</span>
-<span class="source-line-no">055</span><span id="line-55">      SWAPS.put(TimeZone.class, new TimeZoneSwap());</span>
-<span class="source-line-no">056</span><span id="line-56">      SWAPS.put(XMLGregorianCalendar.class, new XMLGregorianCalendarSwap());</span>
-<span class="source-line-no">057</span><span id="line-57">      SWAPS.put(ZoneId.class, new ZoneIdSwap());</span>
-<span class="source-line-no">058</span><span id="line-58">      SWAPS.put(MatchResult.class, new MatchResultSwap());</span>
-<span class="source-line-no">059</span><span id="line-59">      SWAPS.put(URL.class, new UrlSwap());</span>
-<span class="source-line-no">060</span><span id="line-60">   }</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">   /**</span>
-<span class="source-line-no">063</span><span id="line-63">    * Find the default ObjectSwap for the specified class.</span>
-<span class="source-line-no">064</span><span id="line-64">    *</span>
-<span class="source-line-no">065</span><span id="line-65">    * @param ci The class to find the swap for.</span>
-<span class="source-line-no">066</span><span id="line-66">    * @return The matched swap, or &lt;jk&gt;null&lt;/jk&gt; if it couldn't be found.</span>
-<span class="source-line-no">067</span><span id="line-67">    */</span>
-<span class="source-line-no">068</span><span id="line-68">   public static ObjectSwap&lt;?,?&gt; find(ClassInfo ci) {</span>
-<span class="source-line-no">069</span><span id="line-69">      ClassInfo ci2 = ci.getAnyParent(x -&gt; SWAPS.get(x.inner()) != null);</span>
-<span class="source-line-no">070</span><span id="line-70">      return ci2 == null ? null : SWAPS.get(ci2.inner());</span>
-<span class="source-line-no">071</span><span id="line-71">   }</span>
-<span class="source-line-no">072</span><span id="line-72">}</span>
+<pre><span class="source-line-no">001</span><span id="line-1">/*</span>
+<span class="source-line-no">002</span><span id="line-2"> * Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="source-line-no">003</span><span id="line-3"> * contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="source-line-no">004</span><span id="line-4"> * this work for additional information regarding copyright ownership.</span>
+<span class="source-line-no">005</span><span id="line-5"> * The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="source-line-no">006</span><span id="line-6"> * (the "License"); you may not use this file except in compliance with</span>
+<span class="source-line-no">007</span><span id="line-7"> * the License.  You may obtain a copy of the License at</span>
+<span class="source-line-no">008</span><span id="line-8"> *</span>
+<span class="source-line-no">009</span><span id="line-9"> *      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="source-line-no">010</span><span id="line-10"> *</span>
+<span class="source-line-no">011</span><span id="line-11"> * Unless required by applicable law or agreed to in writing, software</span>
+<span class="source-line-no">012</span><span id="line-12"> * distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="source-line-no">013</span><span id="line-13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="source-line-no">014</span><span id="line-14"> * See the License for the specific language governing permissions and</span>
+<span class="source-line-no">015</span><span id="line-15"> * limitations under the License.</span>
+<span class="source-line-no">016</span><span id="line-16"> */</span>
+<span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.swap;</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">import java.net.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import java.time.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import java.time.temporal.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.concurrent.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.regex.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">import javax.xml.datatype.*;</span>
+<span class="source-line-no">027</span><span id="line-27"></span>
+<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.reflect.*;</span>
+<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.swaps.*;</span>
+<span class="source-line-no">030</span><span id="line-30"></span>
+<span class="source-line-no">031</span><span id="line-31">/**</span>
+<span class="source-line-no">032</span><span id="line-32"> * Maintain the list of default swaps used by all serializers and parsers.</span>
+<span class="source-line-no">033</span><span id="line-33"> *</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics"&gt;Swap Basics&lt;/a&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;/ul&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> */</span>
+<span class="source-line-no">038</span><span id="line-38">public class DefaultSwaps {</span>
+<span class="source-line-no">039</span><span id="line-39"></span>
+<span class="source-line-no">040</span><span id="line-40">   private static final Map&lt;Class&lt;?&gt;,ObjectSwap&lt;?,?&gt;&gt; SWAPS = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">041</span><span id="line-41">   static {</span>
+<span class="source-line-no">042</span><span id="line-42">      SWAPS.put(Enumeration.class, new EnumerationSwap());</span>
+<span class="source-line-no">043</span><span id="line-43">      SWAPS.put(Iterator.class, new IteratorSwap());</span>
+<span class="source-line-no">044</span><span id="line-44">      SWAPS.put(Locale.class, new LocaleSwap());</span>
+<span class="source-line-no">045</span><span id="line-45">      SWAPS.put(Class.class, new ClassSwap());</span>
+<span class="source-line-no">046</span><span id="line-46">      SWAPS.put(Calendar.class, new TemporalCalendarSwap.IsoOffsetDateTime());</span>
+<span class="source-line-no">047</span><span id="line-47">      SWAPS.put(Date.class, new TemporalDateSwap.IsoLocalDateTime());</span>
+<span class="source-line-no">048</span><span id="line-48">      SWAPS.put(Instant.class, new TemporalSwap.IsoInstant());</span>
+<span class="source-line-no">049</span><span id="line-49">      SWAPS.put(ZonedDateTime.class, new TemporalSwap.IsoOffsetDateTime());</span>
+<span class="source-line-no">050</span><span id="line-50">      SWAPS.put(LocalDate.class, new TemporalSwap.IsoLocalDate());</span>
+<span class="source-line-no">051</span><span id="line-51">      SWAPS.put(LocalDateTime.class, new TemporalSwap.IsoLocalDateTime());</span>
+<span class="source-line-no">052</span><span id="line-52">      SWAPS.put(LocalTime.class, new TemporalSwap.IsoLocalTime());</span>
+<span class="source-line-no">053</span><span id="line-53">      SWAPS.put(OffsetDateTime.class, new TemporalSwap.IsoOffsetDateTime());</span>
+<span class="source-line-no">054</span><span id="line-54">      SWAPS.put(OffsetTime.class, new TemporalSwap.IsoOffsetTime());</span>
+<span class="source-line-no">055</span><span id="line-55">      SWAPS.put(StackTraceElement.class, new StackTraceElementSwap());</span>
+<span class="source-line-no">056</span><span id="line-56">      SWAPS.put(Year.class, new TemporalSwap.IsoYear());</span>
+<span class="source-line-no">057</span><span id="line-57">      SWAPS.put(YearMonth.class, new TemporalSwap.IsoYearMonth());</span>
+<span class="source-line-no">058</span><span id="line-58">      SWAPS.put(Temporal.class, new TemporalSwap.IsoInstant());</span>
+<span class="source-line-no">059</span><span id="line-59">      SWAPS.put(TimeZone.class, new TimeZoneSwap());</span>
+<span class="source-line-no">060</span><span id="line-60">      SWAPS.put(XMLGregorianCalendar.class, new XMLGregorianCalendarSwap());</span>
+<span class="source-line-no">061</span><span id="line-61">      SWAPS.put(ZoneId.class, new ZoneIdSwap());</span>
+<span class="source-line-no">062</span><span id="line-62">      SWAPS.put(MatchResult.class, new MatchResultSwap());</span>
+<span class="source-line-no">063</span><span id="line-63">      SWAPS.put(URL.class, new UrlSwap());</span>
+<span class="source-line-no">064</span><span id="line-64">   }</span>
+<span class="source-line-no">065</span><span id="line-65"></span>
+<span class="source-line-no">066</span><span id="line-66">   /**</span>
+<span class="source-line-no">067</span><span id="line-67">    * Find the default ObjectSwap for the specified class.</span>
+<span class="source-line-no">068</span><span id="line-68">    *</span>
+<span class="source-line-no">069</span><span id="line-69">    * @param ci The class to find the swap for.</span>
+<span class="source-line-no">070</span><span id="line-70">    * @return The matched swap, or &lt;jk&gt;null&lt;/jk&gt; if it couldn't be found.</span>
+<span class="source-line-no">071</span><span id="line-71">    */</span>
+<span class="source-line-no">072</span><span id="line-72">   public static ObjectSwap&lt;?,?&gt; find(ClassInfo ci) {</span>
+<span class="source-line-no">073</span><span id="line-73">      ClassInfo ci2 = ci.getAnyParent(x -&gt; SWAPS.get(x.inner()) != null);</span>
+<span class="source-line-no">074</span><span id="line-74">      return ci2 == null ? null : SWAPS.get(ci2.inner());</span>
+<span class="source-line-no">075</span><span id="line-75">   }</span>
+<span class="source-line-no">076</span><span id="line-76">}</span>
 
 
 

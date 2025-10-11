@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-33">ParamInfo</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-37">ParamInfo</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Lightweight utility class for introspecting information about a method parameter.
 
@@ -231,7 +231,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.reflect.ExecutableInfo,java.lang.reflect.Parameter,int)">
 <h3>ParamInfo</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-51">ParamInfo</a></span><wbr><span class="parameters">(<a href="ExecutableInfo.html" title="class in org.apache.juneau.reflect">ExecutableInfo</a>&nbsp;eInfo,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-55">ParamInfo</a></span><wbr><span class="parameters">(<a href="ExecutableInfo.html" title="class in org.apache.juneau.reflect">ExecutableInfo</a>&nbsp;eInfo,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Parameter.html" title="class or interface in java.lang.reflect" class="external-link">Parameter</a>&nbsp;p,
  int&nbsp;index)</span></div>
 <div class="block">Constructor.</div>
@@ -254,7 +254,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getIndex()">
 <h3>getIndex</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-62">getIndex</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-66">getIndex</a></span>()</div>
 <div class="block">Returns the index position of this parameter.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -265,7 +265,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMethod()">
 <h3>getMethod</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MethodInfo.html" title="class in org.apache.juneau.reflect">MethodInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-71">getMethod</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MethodInfo.html" title="class in org.apache.juneau.reflect">MethodInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-75">getMethod</a></span>()</div>
 <div class="block">Returns the method that this parameter belongs to.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -276,7 +276,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getConstructor()">
 <h3>getConstructor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConstructorInfo.html" title="class in org.apache.juneau.reflect">ConstructorInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-80">getConstructor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConstructorInfo.html" title="class in org.apache.juneau.reflect">ConstructorInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-84">getConstructor</a></span>()</div>
 <div class="block">Returns the constructor that this parameter belongs to.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -287,7 +287,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParameterType()">
 <h3>getParameterType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassInfo.html" title="class in org.apache.juneau.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-89">getParameterType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassInfo.html" title="class in org.apache.juneau.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-93">getParameterType</a></span>()</div>
 <div class="block">Returns the class type of this parameter.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -298,7 +298,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forEachDeclaredAnnotation(java.lang.Class,java.util.function.Predicate,java.util.function.Consumer)">
 <h3>forEachDeclaredAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type"><a href="ParamInfo.html" title="class in org.apache.juneau.reflect">ParamInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-106">forEachDeclaredAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type"><a href="ParamInfo.html" title="class in org.apache.juneau.reflect">ParamInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-110">forEachDeclaredAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;A&gt;&nbsp;filter,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;A&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on all matching annotations declared on this parameter.</div>
@@ -317,7 +317,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDeclaredAnnotation(java.lang.Class)">
 <h3>getDeclaredAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">A</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-119">getDeclaredAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">A</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-123">getDeclaredAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
 <div class="block">Returns the specified parameter annotation declared on this parameter.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -332,7 +332,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAnnotation(java.lang.Class)">
 <h3>getAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">A</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-143">getAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">A</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-147">getAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
 <div class="block">Finds the annotation of the specified type defined on this method parameter.
 
  <p>
@@ -355,7 +355,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasAnnotation(java.lang.Class)">
 <h3>hasAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-161">hasAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-165">hasAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
 <div class="block">Returns <jk>true</jk> if this parameter has the specified annotation.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -370,7 +370,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasNoAnnotation(java.lang.Class)">
 <h3>hasNoAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-173">hasNoAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-177">hasNoAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
 <div class="block">Returns <jk>true</jk> if this parameter doesn't have the specified annotation.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -385,7 +385,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forEachAnnotation(java.lang.Class,java.util.function.Predicate,java.util.function.Consumer)">
 <h3>forEachAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type"><a href="ParamInfo.html" title="class in org.apache.juneau.reflect">ParamInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-205">forEachAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type"><a href="ParamInfo.html" title="class in org.apache.juneau.reflect">ParamInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-209">forEachAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;A&gt;&nbsp;filter,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;A&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on all matching annotations on this parameter.
@@ -410,7 +410,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAnnotation(java.lang.Class,java.util.function.Predicate)">
 <h3>getAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">A</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-223">getAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">A</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-227">getAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;A&gt;&nbsp;filter)</span></div>
 <div class="block">Returns the first matching annotation on this method parameter.
 
@@ -433,7 +433,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="matches(java.util.function.Predicate)">
 <h3>matches</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-281">matches</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="ParamInfo.html" title="class in org.apache.juneau.reflect">ParamInfo</a>&gt;&nbsp;test)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-285">matches</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="ParamInfo.html" title="class in org.apache.juneau.reflect">ParamInfo</a>&gt;&nbsp;test)</span></div>
 <div class="block">Returns <jk>true</jk> if this object passes the specified predicate test.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -446,7 +446,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="accept(java.util.function.Predicate,java.util.function.Consumer)">
 <h3>accept</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParamInfo.html" title="class in org.apache.juneau.reflect">ParamInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-292">accept</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="ParamInfo.html" title="class in org.apache.juneau.reflect">ParamInfo</a>&gt;&nbsp;test,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParamInfo.html" title="class in org.apache.juneau.reflect">ParamInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-296">accept</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="ParamInfo.html" title="class in org.apache.juneau.reflect">ParamInfo</a>&gt;&nbsp;test,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="ParamInfo.html" title="class in org.apache.juneau.reflect">ParamInfo</a>&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on this object if the specified predicate test passes.</div>
 <dl class="notes">
@@ -461,7 +461,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isType(java.lang.Class)">
 <h3>isType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-304">isType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-308">isType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Returns <jk>true</jk> if the parameter type is an exact match for the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -474,7 +474,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasName()">
 <h3>hasName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-313">hasName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-317">hasName</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if the parameter has a name provided by the class file.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -485,7 +485,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getName()">
 <h3>getName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-327">getName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-331">getName</a></span>()</div>
 <div class="block">Returns the name of the parameter.
 
  <p>
@@ -506,7 +506,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="canAccept(java.lang.Object)">
 <h3>canAccept</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-342">canAccept</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-346">canAccept</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Returns <jk>true</jk> if this parameter can accept the specified value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -519,7 +519,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-346">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/reflect/ParamInfo.html#line-350">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

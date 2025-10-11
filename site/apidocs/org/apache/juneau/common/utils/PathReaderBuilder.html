@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-26">PathReaderBuilder</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-30">PathReaderBuilder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Utility class for creating <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link"><code>Path</code></a>-based <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a> objects.</div>
 <dl class="notes">
@@ -172,7 +172,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>PathReaderBuilder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-26">PathReaderBuilder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-30">PathReaderBuilder</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -186,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-33">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-37">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -197,7 +197,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(java.nio.file.Path)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-43">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-47">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;path)</span></div>
 <div class="block">Creates a new builder initialized with the specified path.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -210,7 +210,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="allowNoFile()">
 <h3>allowNoFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-58">allowNoFile</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-62">allowNoFile</a></span>()</div>
 <div class="block">If called and the path is <jk>null</jk> or non-existent, then the <a href="#build()"><code>build()</code></a> command will return an empty reader instead of a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -221,7 +221,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-69">build</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-73">build</a></span>()
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Creates a new File reader.</div>
 <dl class="notes">
@@ -235,7 +235,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="charset(java.nio.charset.Charset)">
 <h3>charset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-85">charset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;charset)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-89">charset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;charset)</span></div>
 <div class="block">Sets the character encoding of the path.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -248,7 +248,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="charset(java.lang.String)">
 <h3>charset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-96">charset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;charset)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-100">charset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;charset)</span></div>
 <div class="block">Sets the character encoding of the path.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -261,7 +261,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="path(java.nio.file.Path)">
 <h3>path</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-107">path</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-111">path</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;path)</span></div>
 <div class="block">Sets the path being written from.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -274,7 +274,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="path(java.lang.String)">
 <h3>path</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-118">path</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.common.utils">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/common/utils/PathReaderBuilder.html#line-122">path</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Sets the path of the path being written from.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

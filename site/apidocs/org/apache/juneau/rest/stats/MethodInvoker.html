@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../RestOpInvoker.html" title="class in org.apache.juneau.rest">RestOpInvoker</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-23">MethodInvoker</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-27">MethodInvoker</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A wrapper around a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html#invoke(java.lang.Object,java.lang.Object...)" title="class or interface in java.lang.reflect" class="external-link"><code>Method.invoke(Object, Object...)</code></a> method that allows for basic instrumentation.</div>
 </section>
@@ -167,7 +167,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.reflect.Method,org.apache.juneau.rest.stats.MethodExecStats)">
 <h3>MethodInvoker</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-33">MethodInvoker</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-37">MethodInvoker</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m,
  <a href="MethodExecStats.html" title="class in org.apache.juneau.rest.stats">MethodExecStats</a>&nbsp;stats)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -188,7 +188,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="inner()">
 <h3>inner</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../reflect/MethodInfo.html" title="class in org.apache.juneau.reflect">MethodInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-43">inner</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../reflect/MethodInfo.html" title="class in org.apache.juneau.reflect">MethodInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-47">inner</a></span>()</div>
 <div class="block">Returns the inner method.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -199,7 +199,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="invoke(java.lang.Object,java.lang.Object...)">
 <h3>invoke</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-57">invoke</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-61">invoke</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span>
               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalAccessException.html" title="class or interface in java.lang" class="external-link">IllegalAccessException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a>,
@@ -221,7 +221,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="invoke(org.apache.juneau.cp.BeanStore,java.lang.Object)">
 <h3>invoke</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-83">invoke</a></span><wbr><span class="parameters">(<a href="../../cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-87">invoke</a></span><wbr><span class="parameters">(<a href="../../cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalAccessException.html" title="class or interface in java.lang" class="external-link">IllegalAccessException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a>,
@@ -243,7 +243,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDeclaringClass()">
 <h3>getDeclaringClass</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../reflect/ClassInfo.html" title="class in org.apache.juneau.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-94">getDeclaringClass</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../reflect/ClassInfo.html" title="class in org.apache.juneau.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-98">getDeclaringClass</a></span>()</div>
 <div class="block">Convenience method for calling <c>inner().getDeclaringClass()</c></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -254,7 +254,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getFullName()">
 <h3>getFullName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-103">getFullName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-107">getFullName</a></span>()</div>
 <div class="block">Convenience method for calling <c>inner().getName()</c></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -265,7 +265,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStats()">
 <h3>getStats</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MethodExecStats.html" title="class in org.apache.juneau.rest.stats">MethodExecStats</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-112">getStats</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MethodExecStats.html" title="class in org.apache.juneau.rest.stats">MethodExecStats</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/stats/MethodInvoker.html#line-116">getStats</a></span>()</div>
 <div class="block">Returns the stats of this method invoker.</div>
 <dl class="notes">
 <dt>Returns:</dt>
