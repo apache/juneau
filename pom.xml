@@ -107,6 +107,7 @@
 						<exclude>**/*.svg</exclude>
 						<exclude>**/*.nojekyll</exclude>
 						<exclude>/juneau-docs/static/site/**</exclude>
+						<exclude>/juneau-docs/static/javadocs/**</exclude>
 
 						<!-- Eclipse metadata files -->
 						<exclude>**/.settings/**</exclude>
@@ -114,6 +115,8 @@
 						<exclude>**/.classpath</exclude>
 						<exclude>**/*.launch</exclude>
 						<exclude>**/*.prefs</exclude>
+
+						<exclude>**/*.gitattributes</exclude>
 
 						<!-- Overlay files -->
 						<exclude>**/*.2</exclude>
