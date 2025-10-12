@@ -24,71 +24,24 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings("deprecation")
 public class JsonSchema_Test extends TestBase {
 
 	@Test void a01_schema1() throws Exception {
-		var s = JsonSerializer.create().json5().ws().build();
+		var s = JsonSerializer.create().json5().ws().sortProperties().build();
 		var p = JsonParser.DEFAULT;
 
 		var expected = """
 			{
-				id: 'http://id',
 				'$schema': 'http://schemaVersionUri',
-				title: 'title',
-				description: 'description',
-				type: 'number',
-				definitions: {
-					definition: {
-						'$ref': 'http://definition'
-					}
-				},
-				properties: {
-					property: {
-						type: 'number'
-					}
-				},
-				patternProperties: {
-					'/pattern/': {
-						type: 'number'
-					}
-				},
-				dependencies: {
-					dependency: {
-						'$ref': 'http://dependency'
-					}
-				},
-				items: [
-					{
-						type: 'number'
-					}
-				],
-				multipleOf: 1,
-				maximum: 2,
-				exclusiveMaximum: true,
-				minimum: 3,
-				exclusiveMinimum: true,
-				maxLength: 4,
-				minLength: 5,
-				pattern: '/pattern/',
 				additionalItems: [
 					{
 						type: 'number'
 					}
 				],
-				maxItems: 6,
-				minItems: 7,
-				uniqueItems: true,
-				maxProperties: 8,
-				minProperties: 9,
-				required: [
-					'required'
-				],
 				additionalProperties: {
 					'$ref': 'http://additionalProperty'
 				},
-				'enum': [
-					'enum'
-				],
 				allOf: [
 					{
 						'$ref': 'http://allOf'
@@ -99,14 +52,62 @@ public class JsonSchema_Test extends TestBase {
 						'$ref': 'http://anyOf'
 					}
 				],
+				definitions: {
+					definition: {
+						'$ref': 'http://definition'
+					}
+				},
+				dependencies: {
+					dependency: {
+						'$ref': 'http://dependency'
+					}
+				},
+				description: 'description',
+				'enum': [
+					'enum'
+				],
+				exclusiveMaximum: 10,
+				exclusiveMinimum: 1,
+				id: 'http://id',
+				items: [
+					{
+						type: 'number'
+					}
+				],
+				maxItems: 6,
+				maxLength: 4,
+				maxProperties: 8,
+				maximum: 2,
+				minItems: 7,
+				minLength: 5,
+				minProperties: 9,
+				minimum: 3,
+				multipleOf: 1,
+				not: {
+					'$ref': 'http://not'
+				},
 				oneOf: [
 					{
 						'$ref': 'http://oneOf'
 					}
 				],
-				not: {
-					'$ref': 'http://not'
-				}
+				pattern: '/pattern/',
+				patternProperties: {
+					'/pattern/': {
+						type: 'number'
+					}
+				},
+				properties: {
+					property: {
+						type: 'number'
+					}
+				},
+				required: [
+					'required'
+				],
+				title: 'title',
+				type: 'number',
+				uniqueItems: true
 			}""";
 
 		var t = getTest1();
@@ -118,29 +119,29 @@ public class JsonSchema_Test extends TestBase {
 	}
 
 	@Test void a02_schema2() throws Exception {
-		var s = JsonSerializer.create().json5().ws().build();
+		var s = JsonSerializer.create().json5().ws().sortProperties().build();
 		var p = JsonParser.DEFAULT;
 
 		var expected = """
 			{
-				id: 'http://id',
 				'$schema': 'http://schemaVersionUri',
-				type: [
-					'string',
-					'number'
-				],
+				additionalItems: true,
+				additionalProperties: true,
 				definitions: {
 					definition: {
 						id: 'http://definition'
 					}
 				},
+				id: 'http://id',
 				items: [
 					{
 						'$ref': 'http://items'
 					}
 				],
-				additionalItems: true,
-				additionalProperties: true
+				type: [
+					'string',
+					'number'
+				]
 			}""";
 
 		var t = getTest2();
@@ -152,68 +153,20 @@ public class JsonSchema_Test extends TestBase {
 	}
 
 	@Test void a03_toString() throws Exception {
-		var s = JsonSerializer.create().json5().ws().build();
+		var s = JsonSerializer.create().json5().ws().sortProperties().build();
 		var p = JsonParser.DEFAULT;
 
 		var expected = """
 			{
-				id: 'http://id',
 				'$schema': 'http://schemaVersionUri',
-				title: 'title',
-				description: 'description',
-				type: 'number',
-				definitions: {
-					definition: {
-						'$ref': 'http://definition'
-					}
-				},
-				properties: {
-					property: {
-						type: 'number'
-					}
-				},
-				patternProperties: {
-					'/pattern/': {
-						type: 'number'
-					}
-				},
-				dependencies: {
-					dependency: {
-						'$ref': 'http://dependency'
-					}
-				},
-				items: [
-					{
-						type: 'number'
-					}
-				],
-				multipleOf: 1,
-				maximum: 2,
-				exclusiveMaximum: true,
-				minimum: 3,
-				exclusiveMinimum: true,
-				maxLength: 4,
-				minLength: 5,
-				pattern: '/pattern/',
 				additionalItems: [
 					{
 						type: 'number'
 					}
 				],
-				maxItems: 6,
-				minItems: 7,
-				uniqueItems: true,
-				maxProperties: 8,
-				minProperties: 9,
-				required: [
-					'required'
-				],
 				additionalProperties: {
 					'$ref': 'http://additionalProperty'
 				},
-				'enum': [
-					'enum'
-				],
 				allOf: [
 					{
 						'$ref': 'http://allOf'
@@ -224,14 +177,62 @@ public class JsonSchema_Test extends TestBase {
 						'$ref': 'http://anyOf'
 					}
 				],
+				definitions: {
+					definition: {
+						'$ref': 'http://definition'
+					}
+				},
+				dependencies: {
+					dependency: {
+						'$ref': 'http://dependency'
+					}
+				},
+				description: 'description',
+				'enum': [
+					'enum'
+				],
+				exclusiveMaximum: 10,
+				exclusiveMinimum: 1,
+				id: 'http://id',
+				items: [
+					{
+						type: 'number'
+					}
+				],
+				maxItems: 6,
+				maxLength: 4,
+				maxProperties: 8,
+				maximum: 2,
+				minItems: 7,
+				minLength: 5,
+				minProperties: 9,
+				minimum: 3,
+				multipleOf: 1,
+				not: {
+					'$ref': 'http://not'
+				},
 				oneOf: [
 					{
 						'$ref': 'http://oneOf'
 					}
 				],
-				not: {
-					'$ref': 'http://not'
-				}
+				pattern: '/pattern/',
+				patternProperties: {
+					'/pattern/': {
+						type: 'number'
+					}
+				},
+				properties: {
+					property: {
+						type: 'number'
+					}
+				},
+				required: [
+					'required'
+				],
+				title: 'title',
+				type: 'number',
+				uniqueItems: true
 			}""";
 
 		var t = getTest1();
@@ -257,9 +258,9 @@ public class JsonSchema_Test extends TestBase {
 			.addItems(new JsonSchema().setType(JsonType.NUMBER))
 			.setMultipleOf(1)
 			.setMaximum(2)
-			.setExclusiveMaximum(true)
+			.setExclusiveMaximum(Integer.valueOf(10))  // Changed from Boolean to Number (Draft 06+)
 			.setMinimum(3)
-			.setExclusiveMinimum(true)
+			.setExclusiveMinimum(Integer.valueOf(1))   // Changed from Boolean to Number (Draft 06+)
 			.setMaxLength(4)
 			.setMinLength(5)
 			.setPattern("/pattern/")

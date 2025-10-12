@@ -32,38 +32,198 @@ import org.apache.juneau.swap.*;
 
 /**
  * Represents a top-level schema object bean in the JSON-Schema core specification.
+ *
+ * <p>
+ * This implementation follows the JSON Schema Draft 2020-12 specification.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create a simple schema for a person object</jc>
+ * 	JsonSchema <jv>schema</jv> = <jk>new</jk> JsonSchema()
+ * 		.setIdUri(<js>"https://example.com/person.schema.json"</js>)
+ * 		.setSchemaVersionUri(<js>"https://json-schema.org/draft/2020-12/schema"</js>)
+ * 		.setTitle(<js>"Person"</js>)
+ * 		.setDescription(<js>"A person object"</js>)
+ * 		.setType(JsonType.<jsf>OBJECT</jsf>)
+ * 		.addProperties(
+ * 			<jk>new</jk> JsonSchemaProperty(<js>"firstName"</js>, JsonType.<jsf>STRING</jsf>)
+ * 				.setMinLength(1)
+ * 				.setMaxLength(50),
+ * 			<jk>new</jk> JsonSchemaProperty(<js>"lastName"</js>, JsonType.<jsf>STRING</jsf>)
+ * 				.setMinLength(1)
+ * 				.setMaxLength(50),
+ * 			<jk>new</jk> JsonSchemaProperty(<js>"age"</js>, JsonType.<jsf>INTEGER</jsf>)
+ * 				.setMinimum(0)
+ * 				.setExclusiveMaximum(150)
+ * 		)
+ * 		.addRequired(<js>"firstName"</js>, <js>"lastName"</js>);
+ *
+ * 	<jc>// Serialize to JSON Schema</jc>
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT_SORTED</jsf>.serialize(<jv>schema</jv>);
+ * </p>
+ *
+ * <p>
+ * Output:
+ * <p class='bjson'>
+ * 	{
+ * 		<js>"$id"</js>: <js>"https://example.com/person.schema.json"</js>,
+ * 		<js>"$schema"</js>: <js>"https://json-schema.org/draft/2020-12/schema"</js>,
+ * 		<js>"title"</js>: <js>"Person"</js>,
+ * 		<js>"description"</js>: <js>"A person object"</js>,
+ * 		<js>"type"</js>: <js>"object"</js>,
+ * 		<js>"properties"</js>: {
+ * 			<js>"firstName"</js>: {
+ * 				<js>"type"</js>: <js>"string"</js>,
+ * 				<js>"minLength"</js>: 1,
+ * 				<js>"maxLength"</js>: 50
+ * 			},
+ * 			<js>"lastName"</js>: {
+ * 				<js>"type"</js>: <js>"string"</js>,
+ * 				<js>"minLength"</js>: 1,
+ * 				<js>"maxLength"</js>: 50
+ * 			},
+ * 			<js>"age"</js>: {
+ * 				<js>"type"</js>: <js>"integer"</js>,
+ * 				<js>"minimum"</js>: 0,
+ * 				<js>"exclusiveMaximum"</js>: 150
+ * 			}
+ * 		},
+ * 		<js>"required"</js>: [<js>"firstName"</js>, <js>"lastName"</js>]
+ * 	}
+ * </p>
+ *
+ * <h5 class='section'>Key Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li><b>Draft 2020-12 Support:</b> Includes all properties from the latest JSON Schema specification
+ * 	<li><b>Backward Compatibility:</b> Deprecated Draft 04 properties (like <c>id</c> and <c>definitions</c>) are still supported
+ * 	<li><b>Fluent API:</b> All setter methods return <c>this</c> for method chaining
+ * 	<li><b>Type Safety:</b> Uses enums and typed collections for validation
+ * 	<li><b>Serialization:</b> Can be serialized to any format supported by Juneau (JSON, XML, HTML, etc.)
+ * </ul>
+ *
+ * <h5 class='section'>Common Use Cases:</h5>
+ *
+ * <p><b>1. Simple Type Constraints:</b>
+ * <p class='bjava'>
+ * 	<jc>// String with length constraints</jc>
+ * 	JsonSchema <jv>schema</jv> = <jk>new</jk> JsonSchema()
+ * 		.setType(JsonType.<jsf>STRING</jsf>)
+ * 		.setMinLength(5)
+ * 		.setMaxLength(100)
+ * 		.setPattern(<js>"^[A-Za-z]+$"</js>);
+ * </p>
+ *
+ * <p><b>2. Numeric Ranges:</b>
+ * <p class='bjava'>
+ * 	<jc>// Number between 0 and 100 (exclusive)</jc>
+ * 	JsonSchema <jv>schema</jv> = <jk>new</jk> JsonSchema()
+ * 		.setType(JsonType.<jsf>NUMBER</jsf>)
+ * 		.setExclusiveMinimum(0)
+ * 		.setExclusiveMaximum(100)
+ * 		.setMultipleOf(0.5);
+ * </p>
+ *
+ * <p><b>3. Enumerations:</b>
+ * <p class='bjava'>
+ * 	<jc>// Status field with allowed values</jc>
+ * 	JsonSchema <jv>schema</jv> = <jk>new</jk> JsonSchema()
+ * 		.setType(JsonType.<jsf>STRING</jsf>)
+ * 		.addEnum(<js>"pending"</js>, <js>"active"</js>, <js>"completed"</js>);
+ * </p>
+ *
+ * <p><b>4. Arrays:</b>
+ * <p class='bjava'>
+ * 	<jc>// Array of strings with constraints</jc>
+ * 	JsonSchema <jv>schema</jv> = <jk>new</jk> JsonSchema()
+ * 		.setType(JsonType.<jsf>ARRAY</jsf>)
+ * 		.setItems(<jk>new</jk> JsonSchema().setType(JsonType.<jsf>STRING</jsf>))
+ * 		.setMinItems(1)
+ * 		.setMaxItems(10)
+ * 		.setUniqueItems(<jk>true</jk>);
+ * </p>
+ *
+ * <p><b>5. Conditional Schemas (Draft 07+):</b>
+ * <p class='bjava'>
+ * 	<jc>// Different validation based on country</jc>
+ * 	JsonSchema <jv>schema</jv> = <jk>new</jk> JsonSchema()
+ * 		.setType(JsonType.<jsf>OBJECT</jsf>)
+ * 		.addProperties(
+ * 			<jk>new</jk> JsonSchemaProperty(<js>"country"</js>, JsonType.<jsf>STRING</jsf>),
+ * 			<jk>new</jk> JsonSchemaProperty(<js>"postalCode"</js>, JsonType.<jsf>STRING</jsf>)
+ * 		)
+ * 		.setIf(<jk>new</jk> JsonSchema()
+ * 			.addProperties(<jk>new</jk> JsonSchemaProperty(<js>"country"</js>).setConst(<js>"USA"</js>))
+ * 		)
+ * 		.setThen(<jk>new</jk> JsonSchema()
+ * 			.addProperties(<jk>new</jk> JsonSchemaProperty(<js>"postalCode"</js>).setPattern(<js>"^[0-9]{5}$"</js>))
+ * 		);
+ * </p>
+ *
+ * <p><b>6. Reusable Definitions:</b>
+ * <p class='bjava'>
+ * 	<jc>// Schema with reusable components using $defs</jc>
+ * 	JsonSchema <jv>schema</jv> = <jk>new</jk> JsonSchema()
+ * 		.setType(JsonType.<jsf>OBJECT</jsf>)
+ * 		.addDef(<js>"address"</js>, <jk>new</jk> JsonSchema()
+ * 			.setType(JsonType.<jsf>OBJECT</jsf>)
+ * 			.addProperties(
+ * 				<jk>new</jk> JsonSchemaProperty(<js>"street"</js>, JsonType.<jsf>STRING</jsf>),
+ * 				<jk>new</jk> JsonSchemaProperty(<js>"city"</js>, JsonType.<jsf>STRING</jsf>)
+ * 			)
+ * 		)
+ * 		.addProperties(
+ * 			<jk>new</jk> JsonSchemaProperty(<js>"billingAddress"</js>)
+ * 				.setRef(<js>"#/$defs/address"</js>),
+ * 			<jk>new</jk> JsonSchemaProperty(<js>"shippingAddress"</js>)
+ * 				.setRef(<js>"#/$defs/address"</js>)
+ * 		);
+ * </p>
+ *
+ * <h5 class='section'>Migration from Draft 04:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Use {@link #setIdUri(Object)} instead of {@link #setId(Object)} (deprecated)
+ * 	<li>Use {@link #setDefs(Map)} instead of {@link #setDefinitions(Map)} (deprecated but still works)
+ * 	<li>Use {@link #setExclusiveMaximum(Number)} with a numeric value instead of a boolean flag
+ * 	<li>Use {@link #setExclusiveMinimum(Number)} with a numeric value instead of a boolean flag
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a href="https://json-schema.org/draft/2020-12/json-schema-core.html">JSON Schema 2020-12 Core</a>
+ * 	<li class='link'><a href="https://json-schema.org/draft/2020-12/json-schema-validation.html">JSON Schema 2020-12 Validation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a>
+ * </ul>
  */
-@Bean(typeName="schema",
-	properties="id,$schema,$ref, title,description,type,definitions,properties,"
-		+ "patternProperties,dependencies,items,multipleOf,maximum,exclusiveMaximum,"
-		+ "minimum,exclusiveMinimum,maxLength,minLength,pattern,additionalItems,"
-		+ "maxItems,minItems,uniqueItems,maxProperties,minProperties,required,"
-		+ "additionalProperties,enum,allOf,anyOf,oneOf,not"
-)
+@Bean(typeName="schema")
 public class JsonSchema {
 	private String name;                                   // Property name.  Not serialized.
-	private URI id;
+	private URI idUri;                                     // Draft 2020-12: $id
+	private URI id;                                        // Draft 04: id (deprecated but kept for compatibility)
 	private URI schemaVersion;
 	private String title;
 	private String description;
 	private JsonType typeJsonType;                         // JsonType representation of type
 	private JsonTypeArray typeJsonTypeArray;               // JsonTypeArray representation of type
-	private Map<String,JsonSchema> definitions;
+	private Map<String,JsonSchema> definitions;            // Retained for backward compatibility
+	private Map<String,JsonSchema> defs;                   // Draft 2020-12: $defs
 	private Map<String,JsonSchema> properties;
 	private Map<String,JsonSchema> patternProperties;
-	private Map<String,JsonSchema> dependencies;
-	private JsonSchema itemsSchema;                            // JsonSchema representation of items
-	private JsonSchemaArray itemsSchemaArray;                  // JsonSchemaArray representation of items
+	private Map<String,JsonSchema> dependencies;           // Retained for backward compatibility
+	private Map<String,JsonSchema> dependentSchemas;       // Draft 2019-09+
+	private Map<String,List<String>> dependentRequired;    // Draft 2019-09+
+	private JsonSchema itemsSchema;                        // JsonSchema representation of items
+	private JsonSchemaArray itemsSchemaArray;              // JsonSchemaArray representation of items
+	private JsonSchemaArray prefixItems;                   // Draft 2020-12: replaces tuple validation
 	private Number multipleOf;
 	private Number maximum;
-	private Boolean exclusiveMaximum;
+	private Number exclusiveMaximum;                       // Draft 06+: changed from Boolean to Number
 	private Number minimum;
-	private Boolean exclusiveMinimum;
+	private Number exclusiveMinimum;                       // Draft 06+: changed from Boolean to Number
 	private Integer maxLength;
 	private Integer minLength;
 	private String pattern;
 	private Boolean additionalItemsBoolean;                // Boolean representation of additionalItems
-	private JsonSchemaArray additionalItemsSchemaArray;        // JsonSchemaArray representation of additionalItems
+	private JsonSchemaArray additionalItemsSchemaArray;    // JsonSchemaArray representation of additionalItems
+	private JsonSchema unevaluatedItems;                   // Draft 2019-09+
 	private Integer maxItems;
 	private Integer minItems;
 	private Boolean uniqueItems;
@@ -71,12 +231,22 @@ public class JsonSchema {
 	private Integer minProperties;
 	private List<String> required;
 	private Boolean additionalPropertiesBoolean;           // Boolean representation of additionalProperties
-	private JsonSchema additionalPropertiesSchema;             // JsonSchema representation of additionalProperties
-	private List<String> _enum;  // NOSONAR - Intentional naming.
+	private JsonSchema additionalPropertiesSchema;         // JsonSchema representation of additionalProperties
+	private JsonSchema unevaluatedProperties;              // Draft 2019-09+
+	private List<Object> _enum;                            // NOSONAR - Intentional naming. Changed to Object to support any type
+	private Object _const;                                 // NOSONAR - Intentional naming. Draft 06+
+	private List<Object> examples;                         // Draft 06+
 	private List<JsonSchema> allOf;
 	private List<JsonSchema> anyOf;
 	private List<JsonSchema> oneOf;
 	private JsonSchema not;
+	private JsonSchema _if;                                // NOSONAR - Intentional naming. Draft 07+
+	private JsonSchema _then;                              // NOSONAR - Intentional naming. Draft 07+
+	private JsonSchema _else;                              // NOSONAR - Intentional naming. Draft 07+
+	private Boolean readOnly;                              // Draft 07+
+	private Boolean writeOnly;                             // Draft 07+
+	private String contentMediaType;                       // Draft 07+
+	private String contentEncoding;                        // Draft 07+
 	private URI ref;
 	private JsonSchemaMap schemaMap;
 	private JsonSchema master = this;
@@ -94,8 +264,12 @@ public class JsonSchema {
 	/**
 	 * Bean property getter:  <property>name</property>.
 	 *
+	 * <p>
+	 * This is an internal property used for tracking property names and is not part of the JSON Schema specification.
+	 *
 	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
+	@BeanIgnore
 	public String getName() {
 		return name;
 	}
@@ -103,25 +277,74 @@ public class JsonSchema {
 	/**
 	 * Bean property setter:  <property>name</property>.
 	 *
+	 * <p>
+	 * This is an internal property used for tracking property names and is not part of the JSON Schema specification.
+	 *
 	 * @param name The new value for the <property>name</property> property on this bean.
 	 * @return This object.
 	 */
+	@BeanIgnore
 	public JsonSchema setName(String name) {
 		this.name = name;
 		return this;
 	}
 
 	/**
+	 * Bean property getter:  <property>$id</property>.
+	 *
+	 * <p>
+	 * This is the Draft 2020-12 property for schema identification.
+	 *
+	 * @return The value of the <property>$id</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	@Beanp("$id")
+	public URI getIdUri() {
+		return idUri;  // Return only idUri, not id (to avoid double serialization)
+	}
+
+	/**
+	 * Bean property setter:  <property>$id</property>.
+	 *
+	 * <p>
+	 * This is the Draft 2020-12 property for schema identification.
+	 *
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 *
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 *
+	 * @param idUri The new value for the <property>$id</property> property on this bean.
+	 * @return This object.
+	 */
+	@Beanp("$id")
+	public JsonSchema setIdUri(Object idUri) {
+		this.idUri = toURI(idUri);
+		return this;
+	}
+
+	/**
 	 * Bean property getter:  <property>id</property>.
 	 *
+	 * <p>
+	 * <b>Deprecated:</b> Use {@link #getIdUri()} instead.
+	 * This property is retained for Draft 04 backward compatibility.
+	 *
 	 * @return The value of the <property>id</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @deprecated Use {@link #getIdUri()} instead.
 	 */
+	@Deprecated
 	public URI getId() {
-		return id;
+		return id != null ? id : idUri;  // Fall back to new '$id' for compatibility when reading
 	}
 
 	/**
 	 * Bean property setter:  <property>id</property>.
+	 *
+	 * <p>
+	 * <b>Deprecated:</b> Use {@link #setIdUri(Object)} instead.
+	 * This property is retained for Draft 04 backward compatibility.
 	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
@@ -132,7 +355,9 @@ public class JsonSchema {
 	 *
 	 * @param id The new value for the <property>id</property> property on this bean.
 	 * @return This object.
+	 * @deprecated Use {@link #setIdUri(Object)} instead.
 	 */
+	@Deprecated
 	public JsonSchema setId(Object id) {
 		this.id = toURI(id);
 		return this;
@@ -230,6 +455,7 @@ public class JsonSchema {
 	 * @return
 	 * 	The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonTypeArray}.
 	 */
+	@BeanIgnore
 	public JsonType getTypeAsJsonType() {
 		return typeJsonType;
 	}
@@ -242,6 +468,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonType}.
 	 */
+	@BeanIgnore
 	public JsonTypeArray getTypeAsJsonTypeArray() {
 		return typeJsonTypeArray;
 	}
@@ -316,11 +543,15 @@ public class JsonSchema {
 	/**
 	 * Bean property getter:  <property>definitions</property>.
 	 *
+	 * <p>
+	 * <b>Deprecated:</b> Use {@link #getDefs()} for Draft 2020-12 compliance.
+	 * This property is retained for Draft 04 backward compatibility.
+	 *
 	 * @return
 	 * 	The value of the <property>definitions</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,JsonSchema> getDefinitions() {
-		return definitions;
+		return definitions != null ? definitions : defs;  // Fall back to $defs for compatibility
 	}
 
 	/**
@@ -551,6 +782,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchemaArray}.
 	 */
+	@BeanIgnore
 	public JsonSchema getItemsAsSchema() {
 		return itemsSchema;
 	}
@@ -563,6 +795,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchema}.
 	 */
+	@BeanIgnore
 	public JsonSchemaArray getItemsAsSchemaArray() {
 		return itemsSchemaArray;
 	}
@@ -681,21 +914,29 @@ public class JsonSchema {
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
+	 * <p>
+	 * In Draft 06+, this is a numeric value representing the exclusive upper bound.
+	 * In Draft 04, this was a boolean flag. This implementation uses the Draft 06+ semantics.
+	 *
 	 * @return
 	 * 	The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is
 	 * 	not set.
 	 */
-	public Boolean isExclusiveMaximum() {
+	public Number getExclusiveMaximum() {
 		return exclusiveMaximum;
 	}
 
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
 	 *
+	 * <p>
+	 * In Draft 06+, this is a numeric value representing the exclusive upper bound.
+	 * In Draft 04, this was a boolean flag. This implementation uses the Draft 06+ semantics.
+	 *
 	 * @param exclusiveMaximum The new value for the <property>exclusiveMaximum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setExclusiveMaximum(Boolean exclusiveMaximum) {
+	public JsonSchema setExclusiveMaximum(Number exclusiveMaximum) {
 		this.exclusiveMaximum = exclusiveMaximum;
 		return this;
 	}
@@ -723,21 +964,29 @@ public class JsonSchema {
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
+	 * <p>
+	 * In Draft 06+, this is a numeric value representing the exclusive lower bound.
+	 * In Draft 04, this was a boolean flag. This implementation uses the Draft 06+ semantics.
+	 *
 	 * @return
 	 * 	The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is
 	 * 	not set.
 	 */
-	public Boolean isExclusiveMinimum() {
+	public Number getExclusiveMinimum() {
 		return exclusiveMinimum;
 	}
 
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
 	 *
+	 * <p>
+	 * In Draft 06+, this is a numeric value representing the exclusive lower bound.
+	 * In Draft 04, this was a boolean flag. This implementation uses the Draft 06+ semantics.
+	 *
 	 * @param exclusiveMinimum The new value for the <property>exclusiveMinimum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setExclusiveMinimum(Boolean exclusiveMinimum) {
+	public JsonSchema setExclusiveMinimum(Number exclusiveMinimum) {
 		this.exclusiveMinimum = exclusiveMinimum;
 		return this;
 	}
@@ -826,6 +1075,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchemaArray}.
 	 */
+	@BeanIgnore
 	public Boolean getAdditionalItemsAsBoolean() {
 		return additionalItemsBoolean;
 	}
@@ -839,6 +1089,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
+	@BeanIgnore
 	public List<JsonSchema> getAdditionalItemsAsSchemaArray() {
 		return additionalItemsSchemaArray;
 	}
@@ -1102,6 +1353,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchema}.
 	 */
+	@BeanIgnore
 	public Boolean getAdditionalPropertiesAsBoolean() {
 		return additionalPropertiesBoolean;
 	}
@@ -1115,6 +1367,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
+	@BeanIgnore
 	public JsonSchema getAdditionalPropertiesAsSchema() {
 		return additionalPropertiesSchema;
 	}
@@ -1182,7 +1435,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>enum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<String> getEnum() {
+	public List<Object> getEnum() {
 		return _enum;
 	}
 
@@ -1192,7 +1445,7 @@ public class JsonSchema {
 	 * @param _enum The new value for the <property>enum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setEnum(List<String> _enum) {  // NOSONAR - Intentional naming.
+	public JsonSchema setEnum(List<Object> _enum) {  // NOSONAR - Intentional naming.
 		this._enum = _enum;
 		return this;
 	}
@@ -1203,7 +1456,7 @@ public class JsonSchema {
 	 * @param _enum The list of items to append to the <property>enum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addEnum(String..._enum) {  // NOSONAR - Intentional naming.
+	public JsonSchema addEnum(Object..._enum) {  // NOSONAR - Intentional naming.
 		if (this._enum == null)
 			this._enum = new LinkedList<>();
 		for (var e : _enum)
@@ -1338,6 +1591,488 @@ public class JsonSchema {
 	}
 
 	/**
+	 * Bean property getter:  <property>const</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 06.
+	 *
+	 * @return The value of the <property>const</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public Object getConst() {
+		return _const;
+	}
+
+	/**
+	 * Bean property setter:  <property>const</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 06.
+	 *
+	 * @param _const The new value for the <property>const</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema setConst(Object _const) {  // NOSONAR - Intentional naming.
+		this._const = _const;
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 06.
+	 *
+	 * @return The value of the <property>examples</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public List<Object> getExamples() {
+		return examples;
+	}
+
+	/**
+	 * Bean property setter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 06.
+	 *
+	 * @param examples The new value for the <property>examples</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema setExamples(List<Object> examples) {
+		this.examples = examples;
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>examples</property>.
+	 *
+	 * @param examples The list of items to append to the <property>examples</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema addExamples(Object...examples) {
+		if (this.examples == null)
+			this.examples = new LinkedList<>();
+		for (var e : examples)
+			this.examples.add(e);
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>if</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07 for conditional schema application.
+	 *
+	 * @return The value of the <property>if</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	@Beanp("if")
+	public JsonSchema getIf() {
+		return _if;
+	}
+
+	/**
+	 * Bean property setter:  <property>if</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07 for conditional schema application.
+	 *
+	 * @param _if The new value for the <property>if</property> property on this bean.
+	 * @return This object.
+	 */
+	@Beanp("if")
+	public JsonSchema setIf(JsonSchema _if) {  // NOSONAR - Intentional naming.
+		this._if = _if;
+		setMasterOn(_if);
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>then</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07 for conditional schema application.
+	 *
+	 * @return The value of the <property>then</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	@Beanp("then")
+	public JsonSchema getThen() {
+		return _then;
+	}
+
+	/**
+	 * Bean property setter:  <property>then</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07 for conditional schema application.
+	 *
+	 * @param _then The new value for the <property>then</property> property on this bean.
+	 * @return This object.
+	 */
+	@Beanp("then")
+	public JsonSchema setThen(JsonSchema _then) {  // NOSONAR - Intentional naming.
+		this._then = _then;
+		setMasterOn(_then);
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>else</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07 for conditional schema application.
+	 *
+	 * @return The value of the <property>else</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	@Beanp("else")
+	public JsonSchema getElse() {
+		return _else;
+	}
+
+	/**
+	 * Bean property setter:  <property>else</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07 for conditional schema application.
+	 *
+	 * @param _else The new value for the <property>else</property> property on this bean.
+	 * @return This object.
+	 */
+	@Beanp("else")
+	public JsonSchema setElse(JsonSchema _else) {  // NOSONAR - Intentional naming.
+		this._else = _else;
+		setMasterOn(_else);
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>readOnly</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07.
+	 *
+	 * @return The value of the <property>readOnly</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getReadOnly() {
+		return readOnly;
+	}
+
+	/**
+	 * Bean property setter:  <property>readOnly</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07.
+	 *
+	 * @param readOnly The new value for the <property>readOnly</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema setReadOnly(Boolean readOnly) {
+		this.readOnly = readOnly;
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>writeOnly</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07.
+	 *
+	 * @return The value of the <property>writeOnly</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getWriteOnly() {
+		return writeOnly;
+	}
+
+	/**
+	 * Bean property setter:  <property>writeOnly</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07.
+	 *
+	 * @param writeOnly The new value for the <property>writeOnly</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema setWriteOnly(Boolean writeOnly) {
+		this.writeOnly = writeOnly;
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>contentMediaType</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07.
+	 *
+	 * @return The value of the <property>contentMediaType</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public String getContentMediaType() {
+		return contentMediaType;
+	}
+
+	/**
+	 * Bean property setter:  <property>contentMediaType</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07.
+	 *
+	 * @param contentMediaType The new value for the <property>contentMediaType</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema setContentMediaType(String contentMediaType) {
+		this.contentMediaType = contentMediaType;
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>contentEncoding</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07.
+	 *
+	 * @return The value of the <property>contentEncoding</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public String getContentEncoding() {
+		return contentEncoding;
+	}
+
+	/**
+	 * Bean property setter:  <property>contentEncoding</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07.
+	 *
+	 * @param contentEncoding The new value for the <property>contentEncoding</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema setContentEncoding(String contentEncoding) {
+		this.contentEncoding = contentEncoding;
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>$defs</property>.
+	 *
+	 * <p>
+	 * This is the Draft 2020-12 replacement for <property>definitions</property>.
+	 * Both properties are supported for backward compatibility.
+	 *
+	 * @return The value of the <property>$defs</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	@Beanp("$defs")
+	public Map<String,JsonSchema> getDefs() {
+		return defs;  // Return only defs, not definitions (to avoid double serialization)
+	}
+
+	/**
+	 * Bean property setter:  <property>$defs</property>.
+	 *
+	 * <p>
+	 * This is the Draft 2020-12 replacement for <property>definitions</property>.
+	 * Both properties are supported for backward compatibility.
+	 *
+	 * @param defs The new value for the <property>$defs</property> property on this bean.
+	 * @return This object.
+	 */
+	@Beanp("$defs")
+	public JsonSchema setDefs(Map<String,JsonSchema> defs) {
+		this.defs = defs;
+		if (defs != null)
+			setMasterOn(defs.values());
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>$defs</property>.
+	 *
+	 * @param name The key in the defs map entry.
+	 * @param def The value in the defs map entry.
+	 * @return This object.
+	 */
+	public JsonSchema addDef(String name, JsonSchema def) {
+		if (this.defs == null)
+			this.defs = map();
+		this.defs.put(name, def);
+		setMasterOn(def);
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>prefixItems</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 2020-12 for tuple validation.
+	 *
+	 * @return The value of the <property>prefixItems</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public JsonSchemaArray getPrefixItems() {
+		return prefixItems;
+	}
+
+	/**
+	 * Bean property setter:  <property>prefixItems</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 2020-12 for tuple validation.
+	 *
+	 * @param prefixItems The new value for the <property>prefixItems</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema setPrefixItems(JsonSchemaArray prefixItems) {
+		this.prefixItems = prefixItems;
+		setMasterOn(prefixItems);
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>prefixItems</property>.
+	 *
+	 * @param prefixItems The list of items to append to the <property>prefixItems</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema addPrefixItems(JsonSchema...prefixItems) {
+		if (this.prefixItems == null)
+			this.prefixItems = new JsonSchemaArray();
+		this.prefixItems.addAll(prefixItems);
+		setMasterOn(prefixItems);
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>unevaluatedItems</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 2019-09.
+	 *
+	 * @return The value of the <property>unevaluatedItems</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public JsonSchema getUnevaluatedItems() {
+		return unevaluatedItems;
+	}
+
+	/**
+	 * Bean property setter:  <property>unevaluatedItems</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 2019-09.
+	 *
+	 * @param unevaluatedItems The new value for the <property>unevaluatedItems</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema setUnevaluatedItems(JsonSchema unevaluatedItems) {
+		this.unevaluatedItems = unevaluatedItems;
+		setMasterOn(unevaluatedItems);
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>unevaluatedProperties</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 2019-09.
+	 *
+	 * @return The value of the <property>unevaluatedProperties</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public JsonSchema getUnevaluatedProperties() {
+		return unevaluatedProperties;
+	}
+
+	/**
+	 * Bean property setter:  <property>unevaluatedProperties</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 2019-09.
+	 *
+	 * @param unevaluatedProperties The new value for the <property>unevaluatedProperties</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema setUnevaluatedProperties(JsonSchema unevaluatedProperties) {
+		this.unevaluatedProperties = unevaluatedProperties;
+		setMasterOn(unevaluatedProperties);
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>dependentSchemas</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 2019-09 as a replacement for the schema form of <property>dependencies</property>.
+	 *
+	 * @return The value of the <property>dependentSchemas</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,JsonSchema> getDependentSchemas() {
+		return dependentSchemas;
+	}
+
+	/**
+	 * Bean property setter:  <property>dependentSchemas</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 2019-09 as a replacement for the schema form of <property>dependencies</property>.
+	 *
+	 * @param dependentSchemas The new value for the <property>dependentSchemas</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema setDependentSchemas(Map<String,JsonSchema> dependentSchemas) {
+		this.dependentSchemas = dependentSchemas;
+		if (dependentSchemas != null)
+			setMasterOn(dependentSchemas.values());
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>dependentSchemas</property>.
+	 *
+	 * @param name The key of the entry in the dependentSchemas map.
+	 * @param schema The value of the entry in the dependentSchemas map.
+	 * @return This object.
+	 */
+	public JsonSchema addDependentSchema(String name, JsonSchema schema) {
+		if (this.dependentSchemas == null)
+			this.dependentSchemas = map();
+		this.dependentSchemas.put(name, schema);
+		setMasterOn(schema);
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>dependentRequired</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 2019-09 as a replacement for the array form of <property>dependencies</property>.
+	 *
+	 * @return The value of the <property>dependentRequired</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,List<String>> getDependentRequired() {
+		return dependentRequired;
+	}
+
+	/**
+	 * Bean property setter:  <property>dependentRequired</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 2019-09 as a replacement for the array form of <property>dependencies</property>.
+	 *
+	 * @param dependentRequired The new value for the <property>dependentRequired</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema setDependentRequired(Map<String,List<String>> dependentRequired) {
+		this.dependentRequired = dependentRequired;
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>dependentRequired</property>.
+	 *
+	 * @param name The key of the entry in the dependentRequired map.
+	 * @param required The value of the entry in the dependentRequired map.
+	 * @return This object.
+	 */
+	public JsonSchema addDependentRequired(String name, List<String> required) {
+		if (this.dependentRequired == null)
+			this.dependentRequired = map();
+		this.dependentRequired.put(name, required);
+		return this;
+	}
+
+	/**
 	 * Bean property getter:  <property>$ref</property>.
 	 *
 	 * @return The value of the <property>$ref</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -1400,20 +2135,30 @@ public class JsonSchema {
 		this.master = master;
 		if (definitions != null)
 			definitions.values().forEach(x -> x.setMaster(master));
+		if (defs != null)
+			defs.values().forEach(x -> x.setMaster(master));
 		if (properties != null)
 			properties.values().forEach(x -> x.setMaster(master));
 		if (patternProperties != null)
 			patternProperties.values().forEach(x -> x.setMaster(master));
 		if (dependencies != null)
 			dependencies.values().forEach(x -> x.setMaster(master));
+		if (dependentSchemas != null)
+			dependentSchemas.values().forEach(x -> x.setMaster(master));
 		if (itemsSchema != null)
 			itemsSchema.setMaster(master);
 		if (itemsSchemaArray != null)
 			itemsSchemaArray.forEach(x -> x.setMaster(master));
+		if (prefixItems != null)
+			prefixItems.forEach(x -> x.setMaster(master));
 		if (additionalItemsSchemaArray != null)
 			additionalItemsSchemaArray.forEach(x -> x.setMaster(master));
+		if (unevaluatedItems != null)
+			unevaluatedItems.setMaster(master);
 		if (additionalPropertiesSchema != null)
 			additionalPropertiesSchema.setMaster(master);
+		if (unevaluatedProperties != null)
+			unevaluatedProperties.setMaster(master);
 		if (allOf != null)
 			allOf.forEach(x -> x.setMaster(master));
 		if (anyOf != null)
@@ -1422,6 +2167,12 @@ public class JsonSchema {
 			oneOf.forEach(x -> x.setMaster(master));
 		if (not != null)
 			not.setMaster(master);
+		if (_if != null)
+			_if.setMaster(master);
+		if (_then != null)
+			_then.setMaster(master);
+		if (_else != null)
+			_else.setMaster(master);
 	}
 
 	/**
@@ -1450,6 +2201,7 @@ public class JsonSchema {
 	 * @param schemaMap The schema map to associate with this schema.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
+	@BeanIgnore
 	public JsonSchema setSchemaMap(JsonSchemaMap schemaMap) {
 		this.schemaMap = schemaMap;
 		return this;
@@ -1457,6 +2209,6 @@ public class JsonSchema {
 
 	@Override /* Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT.toString(this);
+		return JsonSerializer.DEFAULT_SORTED.toString(this);
 	}
 }
