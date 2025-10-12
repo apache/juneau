@@ -1,7 +1,1 @@
-juneau-docs/static/javadocs/**/*.html filter=lfs diff=lfs merge=lfs -text
-juneau-docs/static/javadocs/**/*.css filter=lfs diff=lfs merge=lfs -text
-juneau-docs/static/javadocs/**/*.js filter=lfs diff=lfs merge=lfs -text
-juneau-docs/static/javadocs/**/*.png filter=lfs diff=lfs merge=lfs -text
-juneau-docs/static/javadocs/**/*.gif filter=lfs diff=lfs merge=lfs -text
-juneau-docs/static/javadocs/**/*.jpg filter=lfs diff=lfs merge=lfs -text
-juneau-docs/static/javadocs/**/*.svg filter=lfs diff=lfs merge=lfs -text
+# No LFS configuration - Apache GitBox doesn't support Git LFS

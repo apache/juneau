@@ -1,0 +1,294 @@
+Network Working Group                                          J. Bognar
+Request for Comments: 9999                                                
+Category: Informational                                       Salesforce
+                                                                Feb 2017
+
+                            ***DRAFT***
+               URI Object Notation (UON): Generic Syntax
+
+
+About this document
+
+   This memo provides information for the Internet community.  It does
+   not specify an Internet standard of any kind.  Distribution of this
+   memo is unlimited.
+
+Copyright Notice
+
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+Abstract
+
+   This document describes a grammar that builds upon RFC2396
+   (Uniform Resource Identifiers).  Its purpose is to define a 
+   generalized object notation for URI query parameter values similar in 
+   concept to Javascript Object Notation (RFC4627).  The goal is a 
+   syntax that allows for array and map structures to be
+   such that any data structure defined in JSON can be losslessly 
+   defined in an equivalent URI-based grammar, yet be fully compliant 
+   with the RFC2396 specification. 
+
+   This grammar provides the ability to construct the following data 
+   structures in URL parameter values: 
+	
+      OBJECT
+      ARRAY
+      NUMBER
+      BOOLEAN
+      STRING
+      NULL
+
+   Example:
+
+      The following shows a sample object defined in Javascript:
+
+         var x = { 
+            id: 1, 
+            name: 'John Smith', 
+            uri: 'http://sample/addressBook/person/1', 
+            addressBookUri: 'http://sample/addressBook', 
+            birthDate: '1946-08-12T00:00:00Z', 
+            otherIds: null,
+            addresses: [ 
+               { 
+                  uri: 'http://sample/addressBook/address/1', 
+                  personUri: 'http://sample/addressBook/person/1', 
+                  id: 1, 
+                  street: '100 Main Street', 
+                  city: 'Anywhereville', 
+                  state: 'NY', 
+                  zip: 12345, 
+                  isCurrent: true,
+               } 
+            ] 
+         } 
+
+      Using the syntax defined in this document, the equivalent 
+      UON notation would be as follows:
+
+         x=(id=1,name='John+Smith',uri=http://sample/
+         addressBook/person/1,addressBookUri=http://sample/
+         addressBook,birthDate=1946-08-12T00:00:00Z,otherIds=null,
+         addresses=@((uri=http://sample/addressBook/
+         address/1,personUri=http://sample/addressBook/
+         person/1,id=1,street='100+Main+Street',city=
+         Anywhereville,state=NY,zip=12345,isCurrent=true))) 
+
+1. Language constraints
+
+   The grammar syntax is constrained to usage of characters allowed by 
+      URI notation:
+
+      uric       = reserved | unreserved | escaped
+      reserved   = ";" | "/" | "?" | ":" | "@" | "&" | "=" | "+" |
+                   "$" | ","
+      unreserved = alphanum | mark
+      mark       = "-" | "_" | "." | "!" | "~" | "*" | "'" | "(" | ")"
+
+   In particular, the URI specification disallows the following 
+   characters in unencoded form:
+
+      unwise     = "{" | "}" | "|" | "\" | "^" | "[" | "]" | "`"
+      delims     = "<" | ">" | "#" | "%" | <">
+
+   The exclusion of {} and [] characters eliminates the possibility of 
+   using JSON as parameter values.
+
+
+2. Grammar constructs
+
+   The grammar consists of the following language constructs:
+   
+      Objects - Values consisting of one or more child name/value pairs.
+      Arrays - Values consisting of zero or more child values.
+      Booleans - Values consisting of true/false values.
+      Numbers - Decimal and floating point values.
+      Strings - Everything else.
+
+2.1. Objects 
+
+   Objects are values consisting of one or more child name/value pairs.
+   The (...) construct is used to define an object.
+
+   Example:  A simple map with two key/value pairs:
+
+      a1=(b1=x1,b2=x2)
+
+   Example:  A nested map:
+   
+      a1=(b1=(c1=x1,c2=x2))
+
+2.2. Arrays
+
+   Arrays are values consisting of zero or more child values.
+   The @(...) construct is used to define an array.
+
+   Example:  An array of two string values:
+
+      a1=@(x1,x2)
+
+   Example:  A 2-dimensional array:
+
+      a1=@(@(x1,x2),@(x3,x4))
+
+   Example:  An array of objects:
+
+      a1=@((b1=x1,b2=x2),(c1=x1,c2=x2))
+
+2.3. Booleans
+
+   Booleans are values that can only take on values "true" or "false".  
+   
+   Example:  Two boolean values:
+
+      a1=true&a2=false
+   
+2.4. Numbers
+
+   Numbers are represented without constructs.
+   Both decimal and float numbers are supported.
+   
+   Example:  Two numerical values, one decimal and one float:
+
+      a1=123&a2=1.23e1
+
+2.5. Null values
+
+   Nulls are represented by the keyword 'null':
+
+      a1=null
+
+2.6. Strings
+
+   Strings are encapsulated in single quote (') characters.
+   
+   Example:  Simple string values:
+
+      a1='foobar'&a2='123'&a3='true'
+         
+   The quotes are optional when the string cannot be confused
+   with one of the constructs listed above (i.e. objects/arrays/
+   booleans/numbers/null). 
+   
+   Example:  A simple string value, unquoted:
+
+      a1=foobar
+    
+   Strings must be quoted for the following cases:
+      
+      - The string can be confused with a boolean or number.
+      - The string is empty.
+      - The string contains one or more whitespace characters.
+      - The string starts with one of the following characters:
+        @ (
+      - The string contains any of the following characters:
+        ) , =
+   
+   For example, the string literal "(b1=x)" should be 
+   represented as follows:
+
+      a1='(b1=x)'
+   
+   The tilde character (~) is used for escaping characters to prevent 
+   them from being confused with syntax characters.  
+
+   The following characters must be escaped in string literals:  
+
+      ' ~
+   
+   Example:  The string "foo'bar~baz"
+
+      a1='foo~'bar~~baz'
+   
+2.7. Top-level attribute names
+
+   Top-level attribute names (e.g. "a1" in "&a1=foobar") are treated
+   as strings but for one exception.  The '=' character must be
+   encoded so as not to be confused as a key/value separator.
+   Note that the '=' character must also be escaped per the UON
+   notation.
+   
+   For example, the UON equivalent of {"a=b":"a=b"} constructed as
+   a top-level query parameter string would be as follows:
+   
+      a~%3Db=a~=b
+      
+   Note that the '=' character is encoded in the attribute name,
+   but it is not necessary to have it encoded in the attribute value.
+
+2.8. URL-encoded characters
+
+   UON notation allows for any character, even UON grammar
+   characters, to be URL-encoded.
+   
+   The following query strings are fully equivalent in structure:
+   
+     a1=(b1='x1',b2='x2')
+     %61%31=%79%6f%75%20%61%72%65%20%61%20%6e%65%72%64%21
+
+
+3. BNF
+
+   The following BNF describes the syntax for top-level URI query 
+   parameter values (e.g. ?<attrname>=<value>).
+
+   attrname    = (string | null)
+   value       = (var | string | null)
+
+   string      = ("'" litchar* "'") | litchar*
+   null        = "null"
+   
+   var         = ovar | avar | nvar | boolean | number
+   ovar        = "(" [pairs] ")"
+   avar        = "@(" [values] ")"
+
+   pairs       = pair ["," pairs]
+   pair        = key "=" value	
+   values      = value ["," values]
+   key         = (string | null)
+   boolean     = "true" | "false"
+
+   escape_seq  = "~" escaped
+   encode_seq  = "%" digithex digithex
+
+   number      = [-] (decimal | float) [exp]
+   decimal     = "0" | (digit19 digit*)
+   float       = decimal "." digit+
+   exp         = "e" [("+" | "-")] digit+
+
+   litchar     = unencoded | encode_seq | escape_seq
+   escaped     = "@" | "," | "(" | ")" | "~" | "=" 
+   unencoded   = alpha | digit | 
+                 ";" | "/" | "?" | ":" | "@" |
+                 "-" | "_" | "." | "!" | "*" | "'" 
+   alpha       = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" |
+                 "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" |
+                 "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" |
+                 "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" |             
+                 "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" |
+                 "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z"
+   digit       = "0" | digit19
+   digit19     = "1" | "2" | "3" | "4" | "5" | "6" | "7" |
+                 "8" | "9"
+   digithex    = digit | 
+                 "A" | "B" | "C" | "D" | "E" | "F" |
+                 "a" | "b" | "c" | "d" | "e" | "f"
+
+
+
+
