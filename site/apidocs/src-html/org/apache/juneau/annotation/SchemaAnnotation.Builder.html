@@ -823,409 +823,405 @@
 <span class="source-line-no">810</span><span id="line-810">         return this;</span>
 <span class="source-line-no">811</span><span id="line-811">      }</span>
 <span class="source-line-no">812</span><span id="line-812"></span>
-<span class="source-line-no">813</span><span id="line-813">      // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">813</span><span id="line-813">   }</span>
 <span class="source-line-no">814</span><span id="line-814"></span>
-<span class="source-line-no">815</span><span id="line-815"></span>
-<span class="source-line-no">816</span><span id="line-816">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">817</span><span id="line-817">   }</span>
+<span class="source-line-no">815</span><span id="line-815">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">816</span><span id="line-816">   // Implementation</span>
+<span class="source-line-no">817</span><span id="line-817">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">818</span><span id="line-818"></span>
-<span class="source-line-no">819</span><span id="line-819">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">820</span><span id="line-820">   // Implementation</span>
-<span class="source-line-no">821</span><span id="line-821">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">822</span><span id="line-822"></span>
-<span class="source-line-no">823</span><span id="line-823">   private static class Impl extends TargetedAnnotationTImpl implements Schema {</span>
-<span class="source-line-no">824</span><span id="line-824"></span>
-<span class="source-line-no">825</span><span id="line-825">      private final boolean aev, allowEmptyValue, exclusiveMaximum, emax, exclusiveMinimum, emin, uniqueItems, ui, required, r, readOnly, ro, sie, skipIfEmpty, ignore;</span>
-<span class="source-line-no">826</span><span id="line-826">      private final ExternalDocs externalDocs;</span>
-<span class="source-line-no">827</span><span id="line-827">      private final Items items;</span>
-<span class="source-line-no">828</span><span id="line-828">      private final long maxLength, maxl, minLength, minl, maxItems, maxi, minItems, mini, maxProperties, maxp, minProperties, minp;</span>
-<span class="source-line-no">829</span><span id="line-829">      private final String $ref, format, f, title, multipleOf, mo, maximum, max, minimum, min, pattern, p, type, t, collectionFormat, cf, discriminator;</span>
-<span class="source-line-no">830</span><span id="line-830">      private final String[] d, _default, df, _enum, e, allOf, properties, additionalProperties, xml;</span>
-<span class="source-line-no">831</span><span id="line-831"></span>
-<span class="source-line-no">832</span><span id="line-832">      Impl(Builder b) {</span>
-<span class="source-line-no">833</span><span id="line-833">         super(b);</span>
-<span class="source-line-no">834</span><span id="line-834">         this.$ref = b.$ref;</span>
-<span class="source-line-no">835</span><span id="line-835">         this._default = copyOf(b._default);</span>
-<span class="source-line-no">836</span><span id="line-836">         this._enum = copyOf(b._enum);</span>
-<span class="source-line-no">837</span><span id="line-837">         this.additionalProperties = copyOf(b.additionalProperties);</span>
-<span class="source-line-no">838</span><span id="line-838">         this.allOf = copyOf(b.allOf);</span>
-<span class="source-line-no">839</span><span id="line-839">         this.aev = b.aev;</span>
-<span class="source-line-no">840</span><span id="line-840">         this.allowEmptyValue = b.allowEmptyValue;</span>
-<span class="source-line-no">841</span><span id="line-841">         this.cf = b.cf;</span>
-<span class="source-line-no">842</span><span id="line-842">         this.collectionFormat = b.collectionFormat;</span>
-<span class="source-line-no">843</span><span id="line-843">         this.d = copyOf(b.d);</span>
-<span class="source-line-no">844</span><span id="line-844">         this.df = copyOf(b.df);</span>
-<span class="source-line-no">845</span><span id="line-845">         this.discriminator = b.discriminator;</span>
-<span class="source-line-no">846</span><span id="line-846">         this.e = copyOf(b.e);</span>
-<span class="source-line-no">847</span><span id="line-847">         this.emax = b.emax;</span>
-<span class="source-line-no">848</span><span id="line-848">         this.emin = b.emin;</span>
-<span class="source-line-no">849</span><span id="line-849">         this.exclusiveMaximum = b.exclusiveMaximum;</span>
-<span class="source-line-no">850</span><span id="line-850">         this.exclusiveMinimum = b.exclusiveMinimum;</span>
-<span class="source-line-no">851</span><span id="line-851">         this.externalDocs = b.externalDocs;</span>
-<span class="source-line-no">852</span><span id="line-852">         this.f = b.f;</span>
-<span class="source-line-no">853</span><span id="line-853">         this.format = b.format;</span>
-<span class="source-line-no">854</span><span id="line-854">         this.ignore = b.ignore;</span>
-<span class="source-line-no">855</span><span id="line-855">         this.items = b.items;</span>
-<span class="source-line-no">856</span><span id="line-856">         this.max = b.max;</span>
-<span class="source-line-no">857</span><span id="line-857">         this.maxi = b.maxi;</span>
-<span class="source-line-no">858</span><span id="line-858">         this.maximum = b.maximum;</span>
-<span class="source-line-no">859</span><span id="line-859">         this.maxItems = b.maxItems;</span>
-<span class="source-line-no">860</span><span id="line-860">         this.maxl = b.maxl;</span>
-<span class="source-line-no">861</span><span id="line-861">         this.maxLength = b.maxLength;</span>
-<span class="source-line-no">862</span><span id="line-862">         this.maxp = b.maxp;</span>
-<span class="source-line-no">863</span><span id="line-863">         this.maxProperties = b.maxProperties;</span>
-<span class="source-line-no">864</span><span id="line-864">         this.min = b.min;</span>
-<span class="source-line-no">865</span><span id="line-865">         this.mini = b.mini;</span>
-<span class="source-line-no">866</span><span id="line-866">         this.minimum = b.minimum;</span>
-<span class="source-line-no">867</span><span id="line-867">         this.minItems = b.minItems;</span>
-<span class="source-line-no">868</span><span id="line-868">         this.minl = b.minl;</span>
-<span class="source-line-no">869</span><span id="line-869">         this.minLength = b.minLength;</span>
-<span class="source-line-no">870</span><span id="line-870">         this.minp = b.minp;</span>
-<span class="source-line-no">871</span><span id="line-871">         this.minProperties = b.minProperties;</span>
-<span class="source-line-no">872</span><span id="line-872">         this.mo = b.mo;</span>
-<span class="source-line-no">873</span><span id="line-873">         this.multipleOf = b.multipleOf;</span>
-<span class="source-line-no">874</span><span id="line-874">         this.p = b.p;</span>
-<span class="source-line-no">875</span><span id="line-875">         this.pattern = b.pattern;</span>
-<span class="source-line-no">876</span><span id="line-876">         this.properties = copyOf(b.properties);</span>
-<span class="source-line-no">877</span><span id="line-877">         this.r = b.r;</span>
-<span class="source-line-no">878</span><span id="line-878">         this.readOnly = b.readOnly;</span>
-<span class="source-line-no">879</span><span id="line-879">         this.required = b.required;</span>
-<span class="source-line-no">880</span><span id="line-880">         this.ro = b.ro;</span>
-<span class="source-line-no">881</span><span id="line-881">         this.sie = b.sie;</span>
-<span class="source-line-no">882</span><span id="line-882">         this.skipIfEmpty = b.skipIfEmpty;</span>
-<span class="source-line-no">883</span><span id="line-883">         this.t = b.t;</span>
-<span class="source-line-no">884</span><span id="line-884">         this.title = b.title;</span>
-<span class="source-line-no">885</span><span id="line-885">         this.type = b.type;</span>
-<span class="source-line-no">886</span><span id="line-886">         this.ui = b.ui;</span>
-<span class="source-line-no">887</span><span id="line-887">         this.uniqueItems = b.uniqueItems;</span>
-<span class="source-line-no">888</span><span id="line-888">         this.xml = copyOf(b.xml);</span>
-<span class="source-line-no">889</span><span id="line-889">         postConstruct();</span>
-<span class="source-line-no">890</span><span id="line-890">      }</span>
-<span class="source-line-no">891</span><span id="line-891"></span>
-<span class="source-line-no">892</span><span id="line-892">      @Override /* Schema */</span>
-<span class="source-line-no">893</span><span id="line-893">      public String[] _default() {</span>
-<span class="source-line-no">894</span><span id="line-894">         return _default;</span>
-<span class="source-line-no">895</span><span id="line-895">      }</span>
-<span class="source-line-no">896</span><span id="line-896"></span>
-<span class="source-line-no">897</span><span id="line-897">      @Override /* Schema */</span>
-<span class="source-line-no">898</span><span id="line-898">      public String[] _enum() {</span>
-<span class="source-line-no">899</span><span id="line-899">         return _enum;</span>
-<span class="source-line-no">900</span><span id="line-900">      }</span>
-<span class="source-line-no">901</span><span id="line-901"></span>
-<span class="source-line-no">902</span><span id="line-902">      @Override /* Schema */</span>
-<span class="source-line-no">903</span><span id="line-903">      public String $ref() {</span>
-<span class="source-line-no">904</span><span id="line-904">         return $ref;</span>
-<span class="source-line-no">905</span><span id="line-905">      }</span>
-<span class="source-line-no">906</span><span id="line-906"></span>
-<span class="source-line-no">907</span><span id="line-907">      @Override /* Schema */</span>
-<span class="source-line-no">908</span><span id="line-908">      public String[] additionalProperties() {</span>
-<span class="source-line-no">909</span><span id="line-909">         return additionalProperties;</span>
-<span class="source-line-no">910</span><span id="line-910">      }</span>
-<span class="source-line-no">911</span><span id="line-911"></span>
-<span class="source-line-no">912</span><span id="line-912">      @Override /* Schema */</span>
-<span class="source-line-no">913</span><span id="line-913">      public String[] allOf() {</span>
-<span class="source-line-no">914</span><span id="line-914">         return allOf;</span>
-<span class="source-line-no">915</span><span id="line-915">      }</span>
-<span class="source-line-no">916</span><span id="line-916"></span>
-<span class="source-line-no">917</span><span id="line-917">      @Override /* Schema */</span>
-<span class="source-line-no">918</span><span id="line-918">      public boolean aev() {</span>
-<span class="source-line-no">919</span><span id="line-919">         return aev;</span>
-<span class="source-line-no">920</span><span id="line-920">      }</span>
-<span class="source-line-no">921</span><span id="line-921"></span>
-<span class="source-line-no">922</span><span id="line-922">      @Override /* Schema */</span>
-<span class="source-line-no">923</span><span id="line-923">      public boolean allowEmptyValue() {</span>
-<span class="source-line-no">924</span><span id="line-924">         return allowEmptyValue;</span>
-<span class="source-line-no">925</span><span id="line-925">      }</span>
-<span class="source-line-no">926</span><span id="line-926"></span>
-<span class="source-line-no">927</span><span id="line-927">      @Override /* Schema */</span>
-<span class="source-line-no">928</span><span id="line-928">      public String cf() {</span>
-<span class="source-line-no">929</span><span id="line-929">         return cf;</span>
-<span class="source-line-no">930</span><span id="line-930">      }</span>
-<span class="source-line-no">931</span><span id="line-931"></span>
-<span class="source-line-no">932</span><span id="line-932">      @Override /* Schema */</span>
-<span class="source-line-no">933</span><span id="line-933">      public String collectionFormat() {</span>
-<span class="source-line-no">934</span><span id="line-934">         return collectionFormat;</span>
-<span class="source-line-no">935</span><span id="line-935">      }</span>
-<span class="source-line-no">936</span><span id="line-936"></span>
-<span class="source-line-no">937</span><span id="line-937">      @Override /* Schema */</span>
-<span class="source-line-no">938</span><span id="line-938">      public String[] d() {</span>
-<span class="source-line-no">939</span><span id="line-939">         return d;</span>
-<span class="source-line-no">940</span><span id="line-940">      }</span>
-<span class="source-line-no">941</span><span id="line-941"></span>
-<span class="source-line-no">942</span><span id="line-942">      @Override /* Schema */</span>
-<span class="source-line-no">943</span><span id="line-943">      public String[] df() {</span>
-<span class="source-line-no">944</span><span id="line-944">         return df;</span>
-<span class="source-line-no">945</span><span id="line-945">      }</span>
-<span class="source-line-no">946</span><span id="line-946"></span>
-<span class="source-line-no">947</span><span id="line-947">      @Override /* Schema */</span>
-<span class="source-line-no">948</span><span id="line-948">      public String discriminator() {</span>
-<span class="source-line-no">949</span><span id="line-949">         return discriminator;</span>
-<span class="source-line-no">950</span><span id="line-950">      }</span>
-<span class="source-line-no">951</span><span id="line-951"></span>
-<span class="source-line-no">952</span><span id="line-952">      @Override /* Schema */</span>
-<span class="source-line-no">953</span><span id="line-953">      public String[] e() {</span>
-<span class="source-line-no">954</span><span id="line-954">         return e;</span>
-<span class="source-line-no">955</span><span id="line-955">      }</span>
-<span class="source-line-no">956</span><span id="line-956"></span>
-<span class="source-line-no">957</span><span id="line-957">      @Override /* Schema */</span>
-<span class="source-line-no">958</span><span id="line-958">      public boolean emax() {</span>
-<span class="source-line-no">959</span><span id="line-959">         return emax;</span>
-<span class="source-line-no">960</span><span id="line-960">      }</span>
-<span class="source-line-no">961</span><span id="line-961"></span>
-<span class="source-line-no">962</span><span id="line-962">      @Override /* Schema */</span>
-<span class="source-line-no">963</span><span id="line-963">      public boolean emin() {</span>
-<span class="source-line-no">964</span><span id="line-964">         return emin;</span>
-<span class="source-line-no">965</span><span id="line-965">      }</span>
-<span class="source-line-no">966</span><span id="line-966"></span>
-<span class="source-line-no">967</span><span id="line-967">      @Override /* Schema */</span>
-<span class="source-line-no">968</span><span id="line-968">      public boolean exclusiveMaximum() {</span>
-<span class="source-line-no">969</span><span id="line-969">         return exclusiveMaximum;</span>
-<span class="source-line-no">970</span><span id="line-970">      }</span>
-<span class="source-line-no">971</span><span id="line-971"></span>
-<span class="source-line-no">972</span><span id="line-972">      @Override /* Schema */</span>
-<span class="source-line-no">973</span><span id="line-973">      public boolean exclusiveMinimum() {</span>
-<span class="source-line-no">974</span><span id="line-974">         return exclusiveMinimum;</span>
-<span class="source-line-no">975</span><span id="line-975">      }</span>
-<span class="source-line-no">976</span><span id="line-976"></span>
-<span class="source-line-no">977</span><span id="line-977">      @Override /* Schema */</span>
-<span class="source-line-no">978</span><span id="line-978">      public ExternalDocs externalDocs() {</span>
-<span class="source-line-no">979</span><span id="line-979">         return externalDocs;</span>
-<span class="source-line-no">980</span><span id="line-980">      }</span>
-<span class="source-line-no">981</span><span id="line-981"></span>
-<span class="source-line-no">982</span><span id="line-982">      @Override /* Schema */</span>
-<span class="source-line-no">983</span><span id="line-983">      public String f() {</span>
-<span class="source-line-no">984</span><span id="line-984">         return f;</span>
-<span class="source-line-no">985</span><span id="line-985">      }</span>
-<span class="source-line-no">986</span><span id="line-986"></span>
-<span class="source-line-no">987</span><span id="line-987">      @Override /* Schema */</span>
-<span class="source-line-no">988</span><span id="line-988">      public String format() {</span>
-<span class="source-line-no">989</span><span id="line-989">         return format;</span>
-<span class="source-line-no">990</span><span id="line-990">      }</span>
-<span class="source-line-no">991</span><span id="line-991"></span>
-<span class="source-line-no">992</span><span id="line-992">      @Override /* Schema */</span>
-<span class="source-line-no">993</span><span id="line-993">      public boolean ignore() {</span>
-<span class="source-line-no">994</span><span id="line-994">         return ignore;</span>
-<span class="source-line-no">995</span><span id="line-995">      }</span>
-<span class="source-line-no">996</span><span id="line-996"></span>
-<span class="source-line-no">997</span><span id="line-997">      @Override /* Schema */</span>
-<span class="source-line-no">998</span><span id="line-998">      public Items items() {</span>
-<span class="source-line-no">999</span><span id="line-999">         return items;</span>
-<span class="source-line-no">1000</span><span id="line-1000">      }</span>
-<span class="source-line-no">1001</span><span id="line-1001"></span>
-<span class="source-line-no">1002</span><span id="line-1002">      @Override /* Schema */</span>
-<span class="source-line-no">1003</span><span id="line-1003">      public String max() {</span>
-<span class="source-line-no">1004</span><span id="line-1004">         return max;</span>
-<span class="source-line-no">1005</span><span id="line-1005">      }</span>
-<span class="source-line-no">1006</span><span id="line-1006"></span>
-<span class="source-line-no">1007</span><span id="line-1007">      @Override /* Schema */</span>
-<span class="source-line-no">1008</span><span id="line-1008">      public long maxi() {</span>
-<span class="source-line-no">1009</span><span id="line-1009">         return maxi;</span>
-<span class="source-line-no">1010</span><span id="line-1010">      }</span>
-<span class="source-line-no">1011</span><span id="line-1011"></span>
-<span class="source-line-no">1012</span><span id="line-1012">      @Override /* Schema */</span>
-<span class="source-line-no">1013</span><span id="line-1013">      public String maximum() {</span>
-<span class="source-line-no">1014</span><span id="line-1014">         return maximum;</span>
-<span class="source-line-no">1015</span><span id="line-1015">      }</span>
-<span class="source-line-no">1016</span><span id="line-1016"></span>
-<span class="source-line-no">1017</span><span id="line-1017">      @Override /* Schema */</span>
-<span class="source-line-no">1018</span><span id="line-1018">      public long maxItems() {</span>
-<span class="source-line-no">1019</span><span id="line-1019">         return maxItems;</span>
-<span class="source-line-no">1020</span><span id="line-1020">      }</span>
-<span class="source-line-no">1021</span><span id="line-1021"></span>
-<span class="source-line-no">1022</span><span id="line-1022">      @Override /* Schema */</span>
-<span class="source-line-no">1023</span><span id="line-1023">      public long maxl() {</span>
-<span class="source-line-no">1024</span><span id="line-1024">         return maxl;</span>
-<span class="source-line-no">1025</span><span id="line-1025">      }</span>
-<span class="source-line-no">1026</span><span id="line-1026"></span>
-<span class="source-line-no">1027</span><span id="line-1027">      @Override /* Schema */</span>
-<span class="source-line-no">1028</span><span id="line-1028">      public long maxLength() {</span>
-<span class="source-line-no">1029</span><span id="line-1029">         return maxLength;</span>
-<span class="source-line-no">1030</span><span id="line-1030">      }</span>
-<span class="source-line-no">1031</span><span id="line-1031"></span>
-<span class="source-line-no">1032</span><span id="line-1032">      @Override /* Schema */</span>
-<span class="source-line-no">1033</span><span id="line-1033">      public long maxp() {</span>
-<span class="source-line-no">1034</span><span id="line-1034">         return maxp;</span>
-<span class="source-line-no">1035</span><span id="line-1035">      }</span>
-<span class="source-line-no">1036</span><span id="line-1036"></span>
-<span class="source-line-no">1037</span><span id="line-1037">      @Override /* Schema */</span>
-<span class="source-line-no">1038</span><span id="line-1038">      public long maxProperties() {</span>
-<span class="source-line-no">1039</span><span id="line-1039">         return maxProperties;</span>
-<span class="source-line-no">1040</span><span id="line-1040">      }</span>
-<span class="source-line-no">1041</span><span id="line-1041"></span>
-<span class="source-line-no">1042</span><span id="line-1042">      @Override /* Schema */</span>
-<span class="source-line-no">1043</span><span id="line-1043">      public String min() {</span>
-<span class="source-line-no">1044</span><span id="line-1044">         return min;</span>
-<span class="source-line-no">1045</span><span id="line-1045">      }</span>
-<span class="source-line-no">1046</span><span id="line-1046"></span>
-<span class="source-line-no">1047</span><span id="line-1047">      @Override /* Schema */</span>
-<span class="source-line-no">1048</span><span id="line-1048">      public long mini() {</span>
-<span class="source-line-no">1049</span><span id="line-1049">         return mini;</span>
-<span class="source-line-no">1050</span><span id="line-1050">      }</span>
-<span class="source-line-no">1051</span><span id="line-1051"></span>
-<span class="source-line-no">1052</span><span id="line-1052">      @Override /* Schema */</span>
-<span class="source-line-no">1053</span><span id="line-1053">      public String minimum() {</span>
-<span class="source-line-no">1054</span><span id="line-1054">         return minimum;</span>
-<span class="source-line-no">1055</span><span id="line-1055">      }</span>
-<span class="source-line-no">1056</span><span id="line-1056"></span>
-<span class="source-line-no">1057</span><span id="line-1057">      @Override /* Schema */</span>
-<span class="source-line-no">1058</span><span id="line-1058">      public long minItems() {</span>
-<span class="source-line-no">1059</span><span id="line-1059">         return minItems;</span>
-<span class="source-line-no">1060</span><span id="line-1060">      }</span>
-<span class="source-line-no">1061</span><span id="line-1061"></span>
-<span class="source-line-no">1062</span><span id="line-1062">      @Override /* Schema */</span>
-<span class="source-line-no">1063</span><span id="line-1063">      public long minl() {</span>
-<span class="source-line-no">1064</span><span id="line-1064">         return minl;</span>
-<span class="source-line-no">1065</span><span id="line-1065">      }</span>
-<span class="source-line-no">1066</span><span id="line-1066"></span>
-<span class="source-line-no">1067</span><span id="line-1067">      @Override /* Schema */</span>
-<span class="source-line-no">1068</span><span id="line-1068">      public long minLength() {</span>
-<span class="source-line-no">1069</span><span id="line-1069">         return minLength;</span>
-<span class="source-line-no">1070</span><span id="line-1070">      }</span>
-<span class="source-line-no">1071</span><span id="line-1071"></span>
-<span class="source-line-no">1072</span><span id="line-1072">      @Override /* Schema */</span>
-<span class="source-line-no">1073</span><span id="line-1073">      public long minp() {</span>
-<span class="source-line-no">1074</span><span id="line-1074">         return minp;</span>
-<span class="source-line-no">1075</span><span id="line-1075">      }</span>
-<span class="source-line-no">1076</span><span id="line-1076"></span>
-<span class="source-line-no">1077</span><span id="line-1077">      @Override /* Schema */</span>
-<span class="source-line-no">1078</span><span id="line-1078">      public long minProperties() {</span>
-<span class="source-line-no">1079</span><span id="line-1079">         return minProperties;</span>
-<span class="source-line-no">1080</span><span id="line-1080">      }</span>
-<span class="source-line-no">1081</span><span id="line-1081"></span>
-<span class="source-line-no">1082</span><span id="line-1082">      @Override /* Schema */</span>
-<span class="source-line-no">1083</span><span id="line-1083">      public String mo() {</span>
-<span class="source-line-no">1084</span><span id="line-1084">         return mo;</span>
-<span class="source-line-no">1085</span><span id="line-1085">      }</span>
-<span class="source-line-no">1086</span><span id="line-1086"></span>
-<span class="source-line-no">1087</span><span id="line-1087">      @Override /* Schema */</span>
-<span class="source-line-no">1088</span><span id="line-1088">      public String multipleOf() {</span>
-<span class="source-line-no">1089</span><span id="line-1089">         return multipleOf;</span>
-<span class="source-line-no">1090</span><span id="line-1090">      }</span>
-<span class="source-line-no">1091</span><span id="line-1091"></span>
-<span class="source-line-no">1092</span><span id="line-1092">      @Override /* Schema */</span>
-<span class="source-line-no">1093</span><span id="line-1093">      public String p() {</span>
-<span class="source-line-no">1094</span><span id="line-1094">         return p;</span>
-<span class="source-line-no">1095</span><span id="line-1095">      }</span>
-<span class="source-line-no">1096</span><span id="line-1096"></span>
-<span class="source-line-no">1097</span><span id="line-1097">      @Override /* Schema */</span>
-<span class="source-line-no">1098</span><span id="line-1098">      public String pattern() {</span>
-<span class="source-line-no">1099</span><span id="line-1099">         return pattern;</span>
-<span class="source-line-no">1100</span><span id="line-1100">      }</span>
-<span class="source-line-no">1101</span><span id="line-1101"></span>
-<span class="source-line-no">1102</span><span id="line-1102">      @Override /* Schema */</span>
-<span class="source-line-no">1103</span><span id="line-1103">      public String[] properties() {</span>
-<span class="source-line-no">1104</span><span id="line-1104">         return properties;</span>
-<span class="source-line-no">1105</span><span id="line-1105">      }</span>
-<span class="source-line-no">1106</span><span id="line-1106"></span>
-<span class="source-line-no">1107</span><span id="line-1107">      @Override /* Schema */</span>
-<span class="source-line-no">1108</span><span id="line-1108">      public boolean r() {</span>
-<span class="source-line-no">1109</span><span id="line-1109">         return r;</span>
-<span class="source-line-no">1110</span><span id="line-1110">      }</span>
-<span class="source-line-no">1111</span><span id="line-1111"></span>
-<span class="source-line-no">1112</span><span id="line-1112">      @Override /* Schema */</span>
-<span class="source-line-no">1113</span><span id="line-1113">      public boolean readOnly() {</span>
-<span class="source-line-no">1114</span><span id="line-1114">         return readOnly;</span>
-<span class="source-line-no">1115</span><span id="line-1115">      }</span>
-<span class="source-line-no">1116</span><span id="line-1116"></span>
-<span class="source-line-no">1117</span><span id="line-1117">      @Override /* Schema */</span>
-<span class="source-line-no">1118</span><span id="line-1118">      public boolean required() {</span>
-<span class="source-line-no">1119</span><span id="line-1119">         return required;</span>
-<span class="source-line-no">1120</span><span id="line-1120">      }</span>
-<span class="source-line-no">1121</span><span id="line-1121"></span>
-<span class="source-line-no">1122</span><span id="line-1122">      @Override /* Schema */</span>
-<span class="source-line-no">1123</span><span id="line-1123">      public boolean ro() {</span>
-<span class="source-line-no">1124</span><span id="line-1124">         return ro;</span>
-<span class="source-line-no">1125</span><span id="line-1125">      }</span>
-<span class="source-line-no">1126</span><span id="line-1126"></span>
-<span class="source-line-no">1127</span><span id="line-1127">      @Override /* Schema */</span>
-<span class="source-line-no">1128</span><span id="line-1128">      public boolean sie() {</span>
-<span class="source-line-no">1129</span><span id="line-1129">         return sie;</span>
-<span class="source-line-no">1130</span><span id="line-1130">      }</span>
-<span class="source-line-no">1131</span><span id="line-1131"></span>
-<span class="source-line-no">1132</span><span id="line-1132">      @Override /* Schema */</span>
-<span class="source-line-no">1133</span><span id="line-1133">      public boolean skipIfEmpty() {</span>
-<span class="source-line-no">1134</span><span id="line-1134">         return skipIfEmpty;</span>
-<span class="source-line-no">1135</span><span id="line-1135">      }</span>
-<span class="source-line-no">1136</span><span id="line-1136"></span>
-<span class="source-line-no">1137</span><span id="line-1137">      @Override /* Schema */</span>
-<span class="source-line-no">1138</span><span id="line-1138">      public String t() {</span>
-<span class="source-line-no">1139</span><span id="line-1139">         return t;</span>
-<span class="source-line-no">1140</span><span id="line-1140">      }</span>
-<span class="source-line-no">1141</span><span id="line-1141"></span>
-<span class="source-line-no">1142</span><span id="line-1142">      @Override /* Schema */</span>
-<span class="source-line-no">1143</span><span id="line-1143">      public String title() {</span>
-<span class="source-line-no">1144</span><span id="line-1144">         return title;</span>
-<span class="source-line-no">1145</span><span id="line-1145">      }</span>
-<span class="source-line-no">1146</span><span id="line-1146"></span>
-<span class="source-line-no">1147</span><span id="line-1147">      @Override /* Schema */</span>
-<span class="source-line-no">1148</span><span id="line-1148">      public String type() {</span>
-<span class="source-line-no">1149</span><span id="line-1149">         return type;</span>
-<span class="source-line-no">1150</span><span id="line-1150">      }</span>
-<span class="source-line-no">1151</span><span id="line-1151"></span>
-<span class="source-line-no">1152</span><span id="line-1152">      @Override /* Schema */</span>
-<span class="source-line-no">1153</span><span id="line-1153">      public boolean ui() {</span>
-<span class="source-line-no">1154</span><span id="line-1154">         return ui;</span>
-<span class="source-line-no">1155</span><span id="line-1155">      }</span>
-<span class="source-line-no">1156</span><span id="line-1156"></span>
-<span class="source-line-no">1157</span><span id="line-1157">      @Override /* Schema */</span>
-<span class="source-line-no">1158</span><span id="line-1158">      public boolean uniqueItems() {</span>
-<span class="source-line-no">1159</span><span id="line-1159">         return uniqueItems;</span>
-<span class="source-line-no">1160</span><span id="line-1160">      }</span>
-<span class="source-line-no">1161</span><span id="line-1161"></span>
-<span class="source-line-no">1162</span><span id="line-1162">      @Override /* Schema */</span>
-<span class="source-line-no">1163</span><span id="line-1163">      public String[] xml() {</span>
-<span class="source-line-no">1164</span><span id="line-1164">         return xml;</span>
-<span class="source-line-no">1165</span><span id="line-1165">      }</span>
-<span class="source-line-no">1166</span><span id="line-1166">   }</span>
+<span class="source-line-no">819</span><span id="line-819">   private static class Impl extends TargetedAnnotationTImpl implements Schema {</span>
+<span class="source-line-no">820</span><span id="line-820"></span>
+<span class="source-line-no">821</span><span id="line-821">      private final boolean aev, allowEmptyValue, exclusiveMaximum, emax, exclusiveMinimum, emin, uniqueItems, ui, required, r, readOnly, ro, sie, skipIfEmpty, ignore;</span>
+<span class="source-line-no">822</span><span id="line-822">      private final ExternalDocs externalDocs;</span>
+<span class="source-line-no">823</span><span id="line-823">      private final Items items;</span>
+<span class="source-line-no">824</span><span id="line-824">      private final long maxLength, maxl, minLength, minl, maxItems, maxi, minItems, mini, maxProperties, maxp, minProperties, minp;</span>
+<span class="source-line-no">825</span><span id="line-825">      private final String $ref, format, f, title, multipleOf, mo, maximum, max, minimum, min, pattern, p, type, t, collectionFormat, cf, discriminator;</span>
+<span class="source-line-no">826</span><span id="line-826">      private final String[] d, _default, df, _enum, e, allOf, properties, additionalProperties, xml;</span>
+<span class="source-line-no">827</span><span id="line-827"></span>
+<span class="source-line-no">828</span><span id="line-828">      Impl(Builder b) {</span>
+<span class="source-line-no">829</span><span id="line-829">         super(b);</span>
+<span class="source-line-no">830</span><span id="line-830">         this.$ref = b.$ref;</span>
+<span class="source-line-no">831</span><span id="line-831">         this._default = copyOf(b._default);</span>
+<span class="source-line-no">832</span><span id="line-832">         this._enum = copyOf(b._enum);</span>
+<span class="source-line-no">833</span><span id="line-833">         this.additionalProperties = copyOf(b.additionalProperties);</span>
+<span class="source-line-no">834</span><span id="line-834">         this.allOf = copyOf(b.allOf);</span>
+<span class="source-line-no">835</span><span id="line-835">         this.aev = b.aev;</span>
+<span class="source-line-no">836</span><span id="line-836">         this.allowEmptyValue = b.allowEmptyValue;</span>
+<span class="source-line-no">837</span><span id="line-837">         this.cf = b.cf;</span>
+<span class="source-line-no">838</span><span id="line-838">         this.collectionFormat = b.collectionFormat;</span>
+<span class="source-line-no">839</span><span id="line-839">         this.d = copyOf(b.d);</span>
+<span class="source-line-no">840</span><span id="line-840">         this.df = copyOf(b.df);</span>
+<span class="source-line-no">841</span><span id="line-841">         this.discriminator = b.discriminator;</span>
+<span class="source-line-no">842</span><span id="line-842">         this.e = copyOf(b.e);</span>
+<span class="source-line-no">843</span><span id="line-843">         this.emax = b.emax;</span>
+<span class="source-line-no">844</span><span id="line-844">         this.emin = b.emin;</span>
+<span class="source-line-no">845</span><span id="line-845">         this.exclusiveMaximum = b.exclusiveMaximum;</span>
+<span class="source-line-no">846</span><span id="line-846">         this.exclusiveMinimum = b.exclusiveMinimum;</span>
+<span class="source-line-no">847</span><span id="line-847">         this.externalDocs = b.externalDocs;</span>
+<span class="source-line-no">848</span><span id="line-848">         this.f = b.f;</span>
+<span class="source-line-no">849</span><span id="line-849">         this.format = b.format;</span>
+<span class="source-line-no">850</span><span id="line-850">         this.ignore = b.ignore;</span>
+<span class="source-line-no">851</span><span id="line-851">         this.items = b.items;</span>
+<span class="source-line-no">852</span><span id="line-852">         this.max = b.max;</span>
+<span class="source-line-no">853</span><span id="line-853">         this.maxi = b.maxi;</span>
+<span class="source-line-no">854</span><span id="line-854">         this.maximum = b.maximum;</span>
+<span class="source-line-no">855</span><span id="line-855">         this.maxItems = b.maxItems;</span>
+<span class="source-line-no">856</span><span id="line-856">         this.maxl = b.maxl;</span>
+<span class="source-line-no">857</span><span id="line-857">         this.maxLength = b.maxLength;</span>
+<span class="source-line-no">858</span><span id="line-858">         this.maxp = b.maxp;</span>
+<span class="source-line-no">859</span><span id="line-859">         this.maxProperties = b.maxProperties;</span>
+<span class="source-line-no">860</span><span id="line-860">         this.min = b.min;</span>
+<span class="source-line-no">861</span><span id="line-861">         this.mini = b.mini;</span>
+<span class="source-line-no">862</span><span id="line-862">         this.minimum = b.minimum;</span>
+<span class="source-line-no">863</span><span id="line-863">         this.minItems = b.minItems;</span>
+<span class="source-line-no">864</span><span id="line-864">         this.minl = b.minl;</span>
+<span class="source-line-no">865</span><span id="line-865">         this.minLength = b.minLength;</span>
+<span class="source-line-no">866</span><span id="line-866">         this.minp = b.minp;</span>
+<span class="source-line-no">867</span><span id="line-867">         this.minProperties = b.minProperties;</span>
+<span class="source-line-no">868</span><span id="line-868">         this.mo = b.mo;</span>
+<span class="source-line-no">869</span><span id="line-869">         this.multipleOf = b.multipleOf;</span>
+<span class="source-line-no">870</span><span id="line-870">         this.p = b.p;</span>
+<span class="source-line-no">871</span><span id="line-871">         this.pattern = b.pattern;</span>
+<span class="source-line-no">872</span><span id="line-872">         this.properties = copyOf(b.properties);</span>
+<span class="source-line-no">873</span><span id="line-873">         this.r = b.r;</span>
+<span class="source-line-no">874</span><span id="line-874">         this.readOnly = b.readOnly;</span>
+<span class="source-line-no">875</span><span id="line-875">         this.required = b.required;</span>
+<span class="source-line-no">876</span><span id="line-876">         this.ro = b.ro;</span>
+<span class="source-line-no">877</span><span id="line-877">         this.sie = b.sie;</span>
+<span class="source-line-no">878</span><span id="line-878">         this.skipIfEmpty = b.skipIfEmpty;</span>
+<span class="source-line-no">879</span><span id="line-879">         this.t = b.t;</span>
+<span class="source-line-no">880</span><span id="line-880">         this.title = b.title;</span>
+<span class="source-line-no">881</span><span id="line-881">         this.type = b.type;</span>
+<span class="source-line-no">882</span><span id="line-882">         this.ui = b.ui;</span>
+<span class="source-line-no">883</span><span id="line-883">         this.uniqueItems = b.uniqueItems;</span>
+<span class="source-line-no">884</span><span id="line-884">         this.xml = copyOf(b.xml);</span>
+<span class="source-line-no">885</span><span id="line-885">         postConstruct();</span>
+<span class="source-line-no">886</span><span id="line-886">      }</span>
+<span class="source-line-no">887</span><span id="line-887"></span>
+<span class="source-line-no">888</span><span id="line-888">      @Override /* Schema */</span>
+<span class="source-line-no">889</span><span id="line-889">      public String[] _default() {</span>
+<span class="source-line-no">890</span><span id="line-890">         return _default;</span>
+<span class="source-line-no">891</span><span id="line-891">      }</span>
+<span class="source-line-no">892</span><span id="line-892"></span>
+<span class="source-line-no">893</span><span id="line-893">      @Override /* Schema */</span>
+<span class="source-line-no">894</span><span id="line-894">      public String[] _enum() {</span>
+<span class="source-line-no">895</span><span id="line-895">         return _enum;</span>
+<span class="source-line-no">896</span><span id="line-896">      }</span>
+<span class="source-line-no">897</span><span id="line-897"></span>
+<span class="source-line-no">898</span><span id="line-898">      @Override /* Schema */</span>
+<span class="source-line-no">899</span><span id="line-899">      public String $ref() {</span>
+<span class="source-line-no">900</span><span id="line-900">         return $ref;</span>
+<span class="source-line-no">901</span><span id="line-901">      }</span>
+<span class="source-line-no">902</span><span id="line-902"></span>
+<span class="source-line-no">903</span><span id="line-903">      @Override /* Schema */</span>
+<span class="source-line-no">904</span><span id="line-904">      public String[] additionalProperties() {</span>
+<span class="source-line-no">905</span><span id="line-905">         return additionalProperties;</span>
+<span class="source-line-no">906</span><span id="line-906">      }</span>
+<span class="source-line-no">907</span><span id="line-907"></span>
+<span class="source-line-no">908</span><span id="line-908">      @Override /* Schema */</span>
+<span class="source-line-no">909</span><span id="line-909">      public String[] allOf() {</span>
+<span class="source-line-no">910</span><span id="line-910">         return allOf;</span>
+<span class="source-line-no">911</span><span id="line-911">      }</span>
+<span class="source-line-no">912</span><span id="line-912"></span>
+<span class="source-line-no">913</span><span id="line-913">      @Override /* Schema */</span>
+<span class="source-line-no">914</span><span id="line-914">      public boolean aev() {</span>
+<span class="source-line-no">915</span><span id="line-915">         return aev;</span>
+<span class="source-line-no">916</span><span id="line-916">      }</span>
+<span class="source-line-no">917</span><span id="line-917"></span>
+<span class="source-line-no">918</span><span id="line-918">      @Override /* Schema */</span>
+<span class="source-line-no">919</span><span id="line-919">      public boolean allowEmptyValue() {</span>
+<span class="source-line-no">920</span><span id="line-920">         return allowEmptyValue;</span>
+<span class="source-line-no">921</span><span id="line-921">      }</span>
+<span class="source-line-no">922</span><span id="line-922"></span>
+<span class="source-line-no">923</span><span id="line-923">      @Override /* Schema */</span>
+<span class="source-line-no">924</span><span id="line-924">      public String cf() {</span>
+<span class="source-line-no">925</span><span id="line-925">         return cf;</span>
+<span class="source-line-no">926</span><span id="line-926">      }</span>
+<span class="source-line-no">927</span><span id="line-927"></span>
+<span class="source-line-no">928</span><span id="line-928">      @Override /* Schema */</span>
+<span class="source-line-no">929</span><span id="line-929">      public String collectionFormat() {</span>
+<span class="source-line-no">930</span><span id="line-930">         return collectionFormat;</span>
+<span class="source-line-no">931</span><span id="line-931">      }</span>
+<span class="source-line-no">932</span><span id="line-932"></span>
+<span class="source-line-no">933</span><span id="line-933">      @Override /* Schema */</span>
+<span class="source-line-no">934</span><span id="line-934">      public String[] d() {</span>
+<span class="source-line-no">935</span><span id="line-935">         return d;</span>
+<span class="source-line-no">936</span><span id="line-936">      }</span>
+<span class="source-line-no">937</span><span id="line-937"></span>
+<span class="source-line-no">938</span><span id="line-938">      @Override /* Schema */</span>
+<span class="source-line-no">939</span><span id="line-939">      public String[] df() {</span>
+<span class="source-line-no">940</span><span id="line-940">         return df;</span>
+<span class="source-line-no">941</span><span id="line-941">      }</span>
+<span class="source-line-no">942</span><span id="line-942"></span>
+<span class="source-line-no">943</span><span id="line-943">      @Override /* Schema */</span>
+<span class="source-line-no">944</span><span id="line-944">      public String discriminator() {</span>
+<span class="source-line-no">945</span><span id="line-945">         return discriminator;</span>
+<span class="source-line-no">946</span><span id="line-946">      }</span>
+<span class="source-line-no">947</span><span id="line-947"></span>
+<span class="source-line-no">948</span><span id="line-948">      @Override /* Schema */</span>
+<span class="source-line-no">949</span><span id="line-949">      public String[] e() {</span>
+<span class="source-line-no">950</span><span id="line-950">         return e;</span>
+<span class="source-line-no">951</span><span id="line-951">      }</span>
+<span class="source-line-no">952</span><span id="line-952"></span>
+<span class="source-line-no">953</span><span id="line-953">      @Override /* Schema */</span>
+<span class="source-line-no">954</span><span id="line-954">      public boolean emax() {</span>
+<span class="source-line-no">955</span><span id="line-955">         return emax;</span>
+<span class="source-line-no">956</span><span id="line-956">      }</span>
+<span class="source-line-no">957</span><span id="line-957"></span>
+<span class="source-line-no">958</span><span id="line-958">      @Override /* Schema */</span>
+<span class="source-line-no">959</span><span id="line-959">      public boolean emin() {</span>
+<span class="source-line-no">960</span><span id="line-960">         return emin;</span>
+<span class="source-line-no">961</span><span id="line-961">      }</span>
+<span class="source-line-no">962</span><span id="line-962"></span>
+<span class="source-line-no">963</span><span id="line-963">      @Override /* Schema */</span>
+<span class="source-line-no">964</span><span id="line-964">      public boolean exclusiveMaximum() {</span>
+<span class="source-line-no">965</span><span id="line-965">         return exclusiveMaximum;</span>
+<span class="source-line-no">966</span><span id="line-966">      }</span>
+<span class="source-line-no">967</span><span id="line-967"></span>
+<span class="source-line-no">968</span><span id="line-968">      @Override /* Schema */</span>
+<span class="source-line-no">969</span><span id="line-969">      public boolean exclusiveMinimum() {</span>
+<span class="source-line-no">970</span><span id="line-970">         return exclusiveMinimum;</span>
+<span class="source-line-no">971</span><span id="line-971">      }</span>
+<span class="source-line-no">972</span><span id="line-972"></span>
+<span class="source-line-no">973</span><span id="line-973">      @Override /* Schema */</span>
+<span class="source-line-no">974</span><span id="line-974">      public ExternalDocs externalDocs() {</span>
+<span class="source-line-no">975</span><span id="line-975">         return externalDocs;</span>
+<span class="source-line-no">976</span><span id="line-976">      }</span>
+<span class="source-line-no">977</span><span id="line-977"></span>
+<span class="source-line-no">978</span><span id="line-978">      @Override /* Schema */</span>
+<span class="source-line-no">979</span><span id="line-979">      public String f() {</span>
+<span class="source-line-no">980</span><span id="line-980">         return f;</span>
+<span class="source-line-no">981</span><span id="line-981">      }</span>
+<span class="source-line-no">982</span><span id="line-982"></span>
+<span class="source-line-no">983</span><span id="line-983">      @Override /* Schema */</span>
+<span class="source-line-no">984</span><span id="line-984">      public String format() {</span>
+<span class="source-line-no">985</span><span id="line-985">         return format;</span>
+<span class="source-line-no">986</span><span id="line-986">      }</span>
+<span class="source-line-no">987</span><span id="line-987"></span>
+<span class="source-line-no">988</span><span id="line-988">      @Override /* Schema */</span>
+<span class="source-line-no">989</span><span id="line-989">      public boolean ignore() {</span>
+<span class="source-line-no">990</span><span id="line-990">         return ignore;</span>
+<span class="source-line-no">991</span><span id="line-991">      }</span>
+<span class="source-line-no">992</span><span id="line-992"></span>
+<span class="source-line-no">993</span><span id="line-993">      @Override /* Schema */</span>
+<span class="source-line-no">994</span><span id="line-994">      public Items items() {</span>
+<span class="source-line-no">995</span><span id="line-995">         return items;</span>
+<span class="source-line-no">996</span><span id="line-996">      }</span>
+<span class="source-line-no">997</span><span id="line-997"></span>
+<span class="source-line-no">998</span><span id="line-998">      @Override /* Schema */</span>
+<span class="source-line-no">999</span><span id="line-999">      public String max() {</span>
+<span class="source-line-no">1000</span><span id="line-1000">         return max;</span>
+<span class="source-line-no">1001</span><span id="line-1001">      }</span>
+<span class="source-line-no">1002</span><span id="line-1002"></span>
+<span class="source-line-no">1003</span><span id="line-1003">      @Override /* Schema */</span>
+<span class="source-line-no">1004</span><span id="line-1004">      public long maxi() {</span>
+<span class="source-line-no">1005</span><span id="line-1005">         return maxi;</span>
+<span class="source-line-no">1006</span><span id="line-1006">      }</span>
+<span class="source-line-no">1007</span><span id="line-1007"></span>
+<span class="source-line-no">1008</span><span id="line-1008">      @Override /* Schema */</span>
+<span class="source-line-no">1009</span><span id="line-1009">      public String maximum() {</span>
+<span class="source-line-no">1010</span><span id="line-1010">         return maximum;</span>
+<span class="source-line-no">1011</span><span id="line-1011">      }</span>
+<span class="source-line-no">1012</span><span id="line-1012"></span>
+<span class="source-line-no">1013</span><span id="line-1013">      @Override /* Schema */</span>
+<span class="source-line-no">1014</span><span id="line-1014">      public long maxItems() {</span>
+<span class="source-line-no">1015</span><span id="line-1015">         return maxItems;</span>
+<span class="source-line-no">1016</span><span id="line-1016">      }</span>
+<span class="source-line-no">1017</span><span id="line-1017"></span>
+<span class="source-line-no">1018</span><span id="line-1018">      @Override /* Schema */</span>
+<span class="source-line-no">1019</span><span id="line-1019">      public long maxl() {</span>
+<span class="source-line-no">1020</span><span id="line-1020">         return maxl;</span>
+<span class="source-line-no">1021</span><span id="line-1021">      }</span>
+<span class="source-line-no">1022</span><span id="line-1022"></span>
+<span class="source-line-no">1023</span><span id="line-1023">      @Override /* Schema */</span>
+<span class="source-line-no">1024</span><span id="line-1024">      public long maxLength() {</span>
+<span class="source-line-no">1025</span><span id="line-1025">         return maxLength;</span>
+<span class="source-line-no">1026</span><span id="line-1026">      }</span>
+<span class="source-line-no">1027</span><span id="line-1027"></span>
+<span class="source-line-no">1028</span><span id="line-1028">      @Override /* Schema */</span>
+<span class="source-line-no">1029</span><span id="line-1029">      public long maxp() {</span>
+<span class="source-line-no">1030</span><span id="line-1030">         return maxp;</span>
+<span class="source-line-no">1031</span><span id="line-1031">      }</span>
+<span class="source-line-no">1032</span><span id="line-1032"></span>
+<span class="source-line-no">1033</span><span id="line-1033">      @Override /* Schema */</span>
+<span class="source-line-no">1034</span><span id="line-1034">      public long maxProperties() {</span>
+<span class="source-line-no">1035</span><span id="line-1035">         return maxProperties;</span>
+<span class="source-line-no">1036</span><span id="line-1036">      }</span>
+<span class="source-line-no">1037</span><span id="line-1037"></span>
+<span class="source-line-no">1038</span><span id="line-1038">      @Override /* Schema */</span>
+<span class="source-line-no">1039</span><span id="line-1039">      public String min() {</span>
+<span class="source-line-no">1040</span><span id="line-1040">         return min;</span>
+<span class="source-line-no">1041</span><span id="line-1041">      }</span>
+<span class="source-line-no">1042</span><span id="line-1042"></span>
+<span class="source-line-no">1043</span><span id="line-1043">      @Override /* Schema */</span>
+<span class="source-line-no">1044</span><span id="line-1044">      public long mini() {</span>
+<span class="source-line-no">1045</span><span id="line-1045">         return mini;</span>
+<span class="source-line-no">1046</span><span id="line-1046">      }</span>
+<span class="source-line-no">1047</span><span id="line-1047"></span>
+<span class="source-line-no">1048</span><span id="line-1048">      @Override /* Schema */</span>
+<span class="source-line-no">1049</span><span id="line-1049">      public String minimum() {</span>
+<span class="source-line-no">1050</span><span id="line-1050">         return minimum;</span>
+<span class="source-line-no">1051</span><span id="line-1051">      }</span>
+<span class="source-line-no">1052</span><span id="line-1052"></span>
+<span class="source-line-no">1053</span><span id="line-1053">      @Override /* Schema */</span>
+<span class="source-line-no">1054</span><span id="line-1054">      public long minItems() {</span>
+<span class="source-line-no">1055</span><span id="line-1055">         return minItems;</span>
+<span class="source-line-no">1056</span><span id="line-1056">      }</span>
+<span class="source-line-no">1057</span><span id="line-1057"></span>
+<span class="source-line-no">1058</span><span id="line-1058">      @Override /* Schema */</span>
+<span class="source-line-no">1059</span><span id="line-1059">      public long minl() {</span>
+<span class="source-line-no">1060</span><span id="line-1060">         return minl;</span>
+<span class="source-line-no">1061</span><span id="line-1061">      }</span>
+<span class="source-line-no">1062</span><span id="line-1062"></span>
+<span class="source-line-no">1063</span><span id="line-1063">      @Override /* Schema */</span>
+<span class="source-line-no">1064</span><span id="line-1064">      public long minLength() {</span>
+<span class="source-line-no">1065</span><span id="line-1065">         return minLength;</span>
+<span class="source-line-no">1066</span><span id="line-1066">      }</span>
+<span class="source-line-no">1067</span><span id="line-1067"></span>
+<span class="source-line-no">1068</span><span id="line-1068">      @Override /* Schema */</span>
+<span class="source-line-no">1069</span><span id="line-1069">      public long minp() {</span>
+<span class="source-line-no">1070</span><span id="line-1070">         return minp;</span>
+<span class="source-line-no">1071</span><span id="line-1071">      }</span>
+<span class="source-line-no">1072</span><span id="line-1072"></span>
+<span class="source-line-no">1073</span><span id="line-1073">      @Override /* Schema */</span>
+<span class="source-line-no">1074</span><span id="line-1074">      public long minProperties() {</span>
+<span class="source-line-no">1075</span><span id="line-1075">         return minProperties;</span>
+<span class="source-line-no">1076</span><span id="line-1076">      }</span>
+<span class="source-line-no">1077</span><span id="line-1077"></span>
+<span class="source-line-no">1078</span><span id="line-1078">      @Override /* Schema */</span>
+<span class="source-line-no">1079</span><span id="line-1079">      public String mo() {</span>
+<span class="source-line-no">1080</span><span id="line-1080">         return mo;</span>
+<span class="source-line-no">1081</span><span id="line-1081">      }</span>
+<span class="source-line-no">1082</span><span id="line-1082"></span>
+<span class="source-line-no">1083</span><span id="line-1083">      @Override /* Schema */</span>
+<span class="source-line-no">1084</span><span id="line-1084">      public String multipleOf() {</span>
+<span class="source-line-no">1085</span><span id="line-1085">         return multipleOf;</span>
+<span class="source-line-no">1086</span><span id="line-1086">      }</span>
+<span class="source-line-no">1087</span><span id="line-1087"></span>
+<span class="source-line-no">1088</span><span id="line-1088">      @Override /* Schema */</span>
+<span class="source-line-no">1089</span><span id="line-1089">      public String p() {</span>
+<span class="source-line-no">1090</span><span id="line-1090">         return p;</span>
+<span class="source-line-no">1091</span><span id="line-1091">      }</span>
+<span class="source-line-no">1092</span><span id="line-1092"></span>
+<span class="source-line-no">1093</span><span id="line-1093">      @Override /* Schema */</span>
+<span class="source-line-no">1094</span><span id="line-1094">      public String pattern() {</span>
+<span class="source-line-no">1095</span><span id="line-1095">         return pattern;</span>
+<span class="source-line-no">1096</span><span id="line-1096">      }</span>
+<span class="source-line-no">1097</span><span id="line-1097"></span>
+<span class="source-line-no">1098</span><span id="line-1098">      @Override /* Schema */</span>
+<span class="source-line-no">1099</span><span id="line-1099">      public String[] properties() {</span>
+<span class="source-line-no">1100</span><span id="line-1100">         return properties;</span>
+<span class="source-line-no">1101</span><span id="line-1101">      }</span>
+<span class="source-line-no">1102</span><span id="line-1102"></span>
+<span class="source-line-no">1103</span><span id="line-1103">      @Override /* Schema */</span>
+<span class="source-line-no">1104</span><span id="line-1104">      public boolean r() {</span>
+<span class="source-line-no">1105</span><span id="line-1105">         return r;</span>
+<span class="source-line-no">1106</span><span id="line-1106">      }</span>
+<span class="source-line-no">1107</span><span id="line-1107"></span>
+<span class="source-line-no">1108</span><span id="line-1108">      @Override /* Schema */</span>
+<span class="source-line-no">1109</span><span id="line-1109">      public boolean readOnly() {</span>
+<span class="source-line-no">1110</span><span id="line-1110">         return readOnly;</span>
+<span class="source-line-no">1111</span><span id="line-1111">      }</span>
+<span class="source-line-no">1112</span><span id="line-1112"></span>
+<span class="source-line-no">1113</span><span id="line-1113">      @Override /* Schema */</span>
+<span class="source-line-no">1114</span><span id="line-1114">      public boolean required() {</span>
+<span class="source-line-no">1115</span><span id="line-1115">         return required;</span>
+<span class="source-line-no">1116</span><span id="line-1116">      }</span>
+<span class="source-line-no">1117</span><span id="line-1117"></span>
+<span class="source-line-no">1118</span><span id="line-1118">      @Override /* Schema */</span>
+<span class="source-line-no">1119</span><span id="line-1119">      public boolean ro() {</span>
+<span class="source-line-no">1120</span><span id="line-1120">         return ro;</span>
+<span class="source-line-no">1121</span><span id="line-1121">      }</span>
+<span class="source-line-no">1122</span><span id="line-1122"></span>
+<span class="source-line-no">1123</span><span id="line-1123">      @Override /* Schema */</span>
+<span class="source-line-no">1124</span><span id="line-1124">      public boolean sie() {</span>
+<span class="source-line-no">1125</span><span id="line-1125">         return sie;</span>
+<span class="source-line-no">1126</span><span id="line-1126">      }</span>
+<span class="source-line-no">1127</span><span id="line-1127"></span>
+<span class="source-line-no">1128</span><span id="line-1128">      @Override /* Schema */</span>
+<span class="source-line-no">1129</span><span id="line-1129">      public boolean skipIfEmpty() {</span>
+<span class="source-line-no">1130</span><span id="line-1130">         return skipIfEmpty;</span>
+<span class="source-line-no">1131</span><span id="line-1131">      }</span>
+<span class="source-line-no">1132</span><span id="line-1132"></span>
+<span class="source-line-no">1133</span><span id="line-1133">      @Override /* Schema */</span>
+<span class="source-line-no">1134</span><span id="line-1134">      public String t() {</span>
+<span class="source-line-no">1135</span><span id="line-1135">         return t;</span>
+<span class="source-line-no">1136</span><span id="line-1136">      }</span>
+<span class="source-line-no">1137</span><span id="line-1137"></span>
+<span class="source-line-no">1138</span><span id="line-1138">      @Override /* Schema */</span>
+<span class="source-line-no">1139</span><span id="line-1139">      public String title() {</span>
+<span class="source-line-no">1140</span><span id="line-1140">         return title;</span>
+<span class="source-line-no">1141</span><span id="line-1141">      }</span>
+<span class="source-line-no">1142</span><span id="line-1142"></span>
+<span class="source-line-no">1143</span><span id="line-1143">      @Override /* Schema */</span>
+<span class="source-line-no">1144</span><span id="line-1144">      public String type() {</span>
+<span class="source-line-no">1145</span><span id="line-1145">         return type;</span>
+<span class="source-line-no">1146</span><span id="line-1146">      }</span>
+<span class="source-line-no">1147</span><span id="line-1147"></span>
+<span class="source-line-no">1148</span><span id="line-1148">      @Override /* Schema */</span>
+<span class="source-line-no">1149</span><span id="line-1149">      public boolean ui() {</span>
+<span class="source-line-no">1150</span><span id="line-1150">         return ui;</span>
+<span class="source-line-no">1151</span><span id="line-1151">      }</span>
+<span class="source-line-no">1152</span><span id="line-1152"></span>
+<span class="source-line-no">1153</span><span id="line-1153">      @Override /* Schema */</span>
+<span class="source-line-no">1154</span><span id="line-1154">      public boolean uniqueItems() {</span>
+<span class="source-line-no">1155</span><span id="line-1155">         return uniqueItems;</span>
+<span class="source-line-no">1156</span><span id="line-1156">      }</span>
+<span class="source-line-no">1157</span><span id="line-1157"></span>
+<span class="source-line-no">1158</span><span id="line-1158">      @Override /* Schema */</span>
+<span class="source-line-no">1159</span><span id="line-1159">      public String[] xml() {</span>
+<span class="source-line-no">1160</span><span id="line-1160">         return xml;</span>
+<span class="source-line-no">1161</span><span id="line-1161">      }</span>
+<span class="source-line-no">1162</span><span id="line-1162">   }</span>
+<span class="source-line-no">1163</span><span id="line-1163"></span>
+<span class="source-line-no">1164</span><span id="line-1164">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">1165</span><span id="line-1165">   // Appliers</span>
+<span class="source-line-no">1166</span><span id="line-1166">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">1167</span><span id="line-1167"></span>
-<span class="source-line-no">1168</span><span id="line-1168">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1169</span><span id="line-1169">   // Appliers</span>
-<span class="source-line-no">1170</span><span id="line-1170">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1171</span><span id="line-1171"></span>
-<span class="source-line-no">1172</span><span id="line-1172">   /**</span>
-<span class="source-line-no">1173</span><span id="line-1173">    * Applies targeted {@link Schema} annotations to a {@link org.apache.juneau.Context.Builder}.</span>
-<span class="source-line-no">1174</span><span id="line-1174">    */</span>
-<span class="source-line-no">1175</span><span id="line-1175">   public static class Apply extends AnnotationApplier&lt;Schema,Context.Builder&gt; {</span>
-<span class="source-line-no">1176</span><span id="line-1176"></span>
-<span class="source-line-no">1177</span><span id="line-1177">      /**</span>
-<span class="source-line-no">1178</span><span id="line-1178">       * Constructor.</span>
-<span class="source-line-no">1179</span><span id="line-1179">       *</span>
-<span class="source-line-no">1180</span><span id="line-1180">       * @param vr The resolver for resolving values in annotations.</span>
-<span class="source-line-no">1181</span><span id="line-1181">       */</span>
-<span class="source-line-no">1182</span><span id="line-1182">      public Apply(VarResolverSession vr) {</span>
-<span class="source-line-no">1183</span><span id="line-1183">         super(Schema.class, Context.Builder.class, vr);</span>
-<span class="source-line-no">1184</span><span id="line-1184">      }</span>
-<span class="source-line-no">1185</span><span id="line-1185"></span>
-<span class="source-line-no">1186</span><span id="line-1186">      @Override</span>
-<span class="source-line-no">1187</span><span id="line-1187">      public void apply(AnnotationInfo&lt;Schema&gt; ai, Context.Builder b) {</span>
-<span class="source-line-no">1188</span><span id="line-1188">         Schema a = ai.inner();</span>
-<span class="source-line-no">1189</span><span id="line-1189">         if (isEmptyArray(a.on(), a.onClass()))</span>
-<span class="source-line-no">1190</span><span id="line-1190">            return;</span>
-<span class="source-line-no">1191</span><span id="line-1191">         b.annotations(a);</span>
-<span class="source-line-no">1192</span><span id="line-1192">      }</span>
-<span class="source-line-no">1193</span><span id="line-1193">   }</span>
+<span class="source-line-no">1168</span><span id="line-1168">   /**</span>
+<span class="source-line-no">1169</span><span id="line-1169">    * Applies targeted {@link Schema} annotations to a {@link org.apache.juneau.Context.Builder}.</span>
+<span class="source-line-no">1170</span><span id="line-1170">    */</span>
+<span class="source-line-no">1171</span><span id="line-1171">   public static class Apply extends AnnotationApplier&lt;Schema,Context.Builder&gt; {</span>
+<span class="source-line-no">1172</span><span id="line-1172"></span>
+<span class="source-line-no">1173</span><span id="line-1173">      /**</span>
+<span class="source-line-no">1174</span><span id="line-1174">       * Constructor.</span>
+<span class="source-line-no">1175</span><span id="line-1175">       *</span>
+<span class="source-line-no">1176</span><span id="line-1176">       * @param vr The resolver for resolving values in annotations.</span>
+<span class="source-line-no">1177</span><span id="line-1177">       */</span>
+<span class="source-line-no">1178</span><span id="line-1178">      public Apply(VarResolverSession vr) {</span>
+<span class="source-line-no">1179</span><span id="line-1179">         super(Schema.class, Context.Builder.class, vr);</span>
+<span class="source-line-no">1180</span><span id="line-1180">      }</span>
+<span class="source-line-no">1181</span><span id="line-1181"></span>
+<span class="source-line-no">1182</span><span id="line-1182">      @Override</span>
+<span class="source-line-no">1183</span><span id="line-1183">      public void apply(AnnotationInfo&lt;Schema&gt; ai, Context.Builder b) {</span>
+<span class="source-line-no">1184</span><span id="line-1184">         Schema a = ai.inner();</span>
+<span class="source-line-no">1185</span><span id="line-1185">         if (isEmptyArray(a.on(), a.onClass()))</span>
+<span class="source-line-no">1186</span><span id="line-1186">            return;</span>
+<span class="source-line-no">1187</span><span id="line-1187">         b.annotations(a);</span>
+<span class="source-line-no">1188</span><span id="line-1188">      }</span>
+<span class="source-line-no">1189</span><span id="line-1189">   }</span>
+<span class="source-line-no">1190</span><span id="line-1190"></span>
+<span class="source-line-no">1191</span><span id="line-1191">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">1192</span><span id="line-1192">   // Other</span>
+<span class="source-line-no">1193</span><span id="line-1193">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">1194</span><span id="line-1194"></span>
-<span class="source-line-no">1195</span><span id="line-1195">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1196</span><span id="line-1196">   // Other</span>
-<span class="source-line-no">1197</span><span id="line-1197">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1198</span><span id="line-1198"></span>
-<span class="source-line-no">1199</span><span id="line-1199">   /**</span>
-<span class="source-line-no">1200</span><span id="line-1200">    * A collection of {@link Schema @Schema annotations}.</span>
-<span class="source-line-no">1201</span><span id="line-1201">    */</span>
-<span class="source-line-no">1202</span><span id="line-1202">   @Documented</span>
-<span class="source-line-no">1203</span><span id="line-1203">   @Target({METHOD,TYPE})</span>
-<span class="source-line-no">1204</span><span id="line-1204">   @Retention(RUNTIME)</span>
-<span class="source-line-no">1205</span><span id="line-1205">   @Inherited</span>
-<span class="source-line-no">1206</span><span id="line-1206">   public static @interface Array {</span>
-<span class="source-line-no">1207</span><span id="line-1207"></span>
-<span class="source-line-no">1208</span><span id="line-1208">      /**</span>
-<span class="source-line-no">1209</span><span id="line-1209">       * The child annotations.</span>
-<span class="source-line-no">1210</span><span id="line-1210">       *</span>
-<span class="source-line-no">1211</span><span id="line-1211">       * @return The annotation value.</span>
-<span class="source-line-no">1212</span><span id="line-1212">       */</span>
-<span class="source-line-no">1213</span><span id="line-1213">      Schema[] value();</span>
-<span class="source-line-no">1214</span><span id="line-1214">   }</span>
-<span class="source-line-no">1215</span><span id="line-1215">}</span>
+<span class="source-line-no">1195</span><span id="line-1195">   /**</span>
+<span class="source-line-no">1196</span><span id="line-1196">    * A collection of {@link Schema @Schema annotations}.</span>
+<span class="source-line-no">1197</span><span id="line-1197">    */</span>
+<span class="source-line-no">1198</span><span id="line-1198">   @Documented</span>
+<span class="source-line-no">1199</span><span id="line-1199">   @Target({METHOD,TYPE})</span>
+<span class="source-line-no">1200</span><span id="line-1200">   @Retention(RUNTIME)</span>
+<span class="source-line-no">1201</span><span id="line-1201">   @Inherited</span>
+<span class="source-line-no">1202</span><span id="line-1202">   public static @interface Array {</span>
+<span class="source-line-no">1203</span><span id="line-1203"></span>
+<span class="source-line-no">1204</span><span id="line-1204">      /**</span>
+<span class="source-line-no">1205</span><span id="line-1205">       * The child annotations.</span>
+<span class="source-line-no">1206</span><span id="line-1206">       *</span>
+<span class="source-line-no">1207</span><span id="line-1207">       * @return The annotation value.</span>
+<span class="source-line-no">1208</span><span id="line-1208">       */</span>
+<span class="source-line-no">1209</span><span id="line-1209">      Schema[] value();</span>
+<span class="source-line-no">1210</span><span id="line-1210">   }</span>
+<span class="source-line-no">1211</span><span id="line-1211">}</span>
 
 
 

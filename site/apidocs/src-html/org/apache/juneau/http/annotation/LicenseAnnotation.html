@@ -121,37 +121,34 @@
 <span class="source-line-no">108</span><span id="line-108">         return this;</span>
 <span class="source-line-no">109</span><span id="line-109">      }</span>
 <span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">      // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">111</span><span id="line-111">   }</span>
 <span class="source-line-no">112</span><span id="line-112"></span>
-<span class="source-line-no">113</span><span id="line-113">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">114</span><span id="line-114">   }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">117</span><span id="line-117">   // Implementation</span>
-<span class="source-line-no">118</span><span id="line-118">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   private static class Impl extends AnnotationImpl implements License {</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">      private final String name, url;</span>
-<span class="source-line-no">123</span><span id="line-123"></span>
-<span class="source-line-no">124</span><span id="line-124">      Impl(Builder b) {</span>
-<span class="source-line-no">125</span><span id="line-125">         super(b);</span>
-<span class="source-line-no">126</span><span id="line-126">         this.name = b.name;</span>
-<span class="source-line-no">127</span><span id="line-127">         this.url = b.url;</span>
-<span class="source-line-no">128</span><span id="line-128">         postConstruct();</span>
-<span class="source-line-no">129</span><span id="line-129">      }</span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">      @Override /* License */</span>
-<span class="source-line-no">132</span><span id="line-132">      public String name() {</span>
-<span class="source-line-no">133</span><span id="line-133">         return name;</span>
-<span class="source-line-no">134</span><span id="line-134">      }</span>
-<span class="source-line-no">135</span><span id="line-135"></span>
-<span class="source-line-no">136</span><span id="line-136">      @Override /* License */</span>
-<span class="source-line-no">137</span><span id="line-137">      public String url() {</span>
-<span class="source-line-no">138</span><span id="line-138">         return url;</span>
-<span class="source-line-no">139</span><span id="line-139">      }</span>
-<span class="source-line-no">140</span><span id="line-140">   }</span>
-<span class="source-line-no">141</span><span id="line-141">}</span>
+<span class="source-line-no">113</span><span id="line-113">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">114</span><span id="line-114">   // Implementation</span>
+<span class="source-line-no">115</span><span id="line-115">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">116</span><span id="line-116"></span>
+<span class="source-line-no">117</span><span id="line-117">   private static class Impl extends AnnotationImpl implements License {</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">      private final String name, url;</span>
+<span class="source-line-no">120</span><span id="line-120"></span>
+<span class="source-line-no">121</span><span id="line-121">      Impl(Builder b) {</span>
+<span class="source-line-no">122</span><span id="line-122">         super(b);</span>
+<span class="source-line-no">123</span><span id="line-123">         this.name = b.name;</span>
+<span class="source-line-no">124</span><span id="line-124">         this.url = b.url;</span>
+<span class="source-line-no">125</span><span id="line-125">         postConstruct();</span>
+<span class="source-line-no">126</span><span id="line-126">      }</span>
+<span class="source-line-no">127</span><span id="line-127"></span>
+<span class="source-line-no">128</span><span id="line-128">      @Override /* License */</span>
+<span class="source-line-no">129</span><span id="line-129">      public String name() {</span>
+<span class="source-line-no">130</span><span id="line-130">         return name;</span>
+<span class="source-line-no">131</span><span id="line-131">      }</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">      @Override /* License */</span>
+<span class="source-line-no">134</span><span id="line-134">      public String url() {</span>
+<span class="source-line-no">135</span><span id="line-135">         return url;</span>
+<span class="source-line-no">136</span><span id="line-136">      }</span>
+<span class="source-line-no">137</span><span id="line-137">   }</span>
+<span class="source-line-no">138</span><span id="line-138">}</span>
 
 
 

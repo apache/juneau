@@ -297,175 +297,171 @@
 <span class="source-line-no">284</span><span id="line-284">         return this;</span>
 <span class="source-line-no">285</span><span id="line-285">      }</span>
 <span class="source-line-no">286</span><span id="line-286"></span>
-<span class="source-line-no">287</span><span id="line-287">      // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">287</span><span id="line-287">   }</span>
 <span class="source-line-no">288</span><span id="line-288"></span>
-<span class="source-line-no">289</span><span id="line-289"></span>
-<span class="source-line-no">290</span><span id="line-290">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">291</span><span id="line-291">   }</span>
+<span class="source-line-no">289</span><span id="line-289">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">290</span><span id="line-290">   // Implementation</span>
+<span class="source-line-no">291</span><span id="line-291">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">292</span><span id="line-292"></span>
-<span class="source-line-no">293</span><span id="line-293">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">294</span><span id="line-294">   // Implementation</span>
-<span class="source-line-no">295</span><span id="line-295">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">296</span><span id="line-296"></span>
-<span class="source-line-no">297</span><span id="line-297">   private static class Impl extends TargetedAnnotationImpl implements RestDelete {</span>
-<span class="source-line-no">298</span><span id="line-298"></span>
-<span class="source-line-no">299</span><span id="line-299">      private final Class&lt;? extends RestGuard&gt;[] guards;</span>
-<span class="source-line-no">300</span><span id="line-300">      private final Class&lt;? extends RestMatcher&gt;[] matchers;</span>
-<span class="source-line-no">301</span><span id="line-301">      private final Class&lt;? extends Encoder&gt;[] encoders;</span>
-<span class="source-line-no">302</span><span id="line-302">      private final OpSwagger swagger;</span>
-<span class="source-line-no">303</span><span id="line-303">      private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;</span>
-<span class="source-line-no">304</span><span id="line-304">      private final String[] defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path;</span>
-<span class="source-line-no">305</span><span id="line-305"></span>
-<span class="source-line-no">306</span><span id="line-306">      Impl(Builder b) {</span>
-<span class="source-line-no">307</span><span id="line-307">         super(b);</span>
-<span class="source-line-no">308</span><span id="line-308">         this.clientVersion = b.clientVersion;</span>
-<span class="source-line-no">309</span><span id="line-309">         this.debug = b.debug;</span>
-<span class="source-line-no">310</span><span id="line-310">         this.defaultAccept = b.defaultAccept;</span>
-<span class="source-line-no">311</span><span id="line-311">         this.defaultCharset = b.defaultCharset;</span>
-<span class="source-line-no">312</span><span id="line-312">         this.defaultRequestQueryData = copyOf(b.defaultRequestQueryData);</span>
-<span class="source-line-no">313</span><span id="line-313">         this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);</span>
-<span class="source-line-no">314</span><span id="line-314">         this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);</span>
-<span class="source-line-no">315</span><span id="line-315">         this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);</span>
-<span class="source-line-no">316</span><span id="line-316">         this.encoders = copyOf(b.encoders);</span>
-<span class="source-line-no">317</span><span id="line-317">         this.guards = copyOf(b.guards);</span>
-<span class="source-line-no">318</span><span id="line-318">         this.matchers = copyOf(b.matchers);</span>
-<span class="source-line-no">319</span><span id="line-319">         this.path = copyOf(b.path);</span>
-<span class="source-line-no">320</span><span id="line-320">         this.roleGuard = b.roleGuard;</span>
-<span class="source-line-no">321</span><span id="line-321">         this.rolesDeclared = b.rolesDeclared;</span>
-<span class="source-line-no">322</span><span id="line-322">         this.summary = b.summary;</span>
-<span class="source-line-no">323</span><span id="line-323">         this.swagger = b.swagger;</span>
-<span class="source-line-no">324</span><span id="line-324">         this.value = b.value;</span>
-<span class="source-line-no">325</span><span id="line-325">         postConstruct();</span>
-<span class="source-line-no">326</span><span id="line-326">      }</span>
-<span class="source-line-no">327</span><span id="line-327"></span>
-<span class="source-line-no">328</span><span id="line-328">      @Override /* RestDelete */</span>
-<span class="source-line-no">329</span><span id="line-329">      public String clientVersion() {</span>
-<span class="source-line-no">330</span><span id="line-330">         return clientVersion;</span>
-<span class="source-line-no">331</span><span id="line-331">      }</span>
-<span class="source-line-no">332</span><span id="line-332"></span>
-<span class="source-line-no">333</span><span id="line-333">      @Override /* RestDelete */</span>
-<span class="source-line-no">334</span><span id="line-334">      public String debug() {</span>
-<span class="source-line-no">335</span><span id="line-335">         return debug;</span>
-<span class="source-line-no">336</span><span id="line-336">      }</span>
-<span class="source-line-no">337</span><span id="line-337"></span>
-<span class="source-line-no">338</span><span id="line-338">      @Override /* RestDelete */</span>
-<span class="source-line-no">339</span><span id="line-339">      public String defaultAccept() {</span>
-<span class="source-line-no">340</span><span id="line-340">         return defaultAccept;</span>
-<span class="source-line-no">341</span><span id="line-341">      }</span>
-<span class="source-line-no">342</span><span id="line-342"></span>
-<span class="source-line-no">343</span><span id="line-343">      @Override /* RestDelete */</span>
-<span class="source-line-no">344</span><span id="line-344">      public String defaultCharset() {</span>
-<span class="source-line-no">345</span><span id="line-345">         return defaultCharset;</span>
-<span class="source-line-no">346</span><span id="line-346">      }</span>
-<span class="source-line-no">347</span><span id="line-347"></span>
-<span class="source-line-no">348</span><span id="line-348">      @Override /* RestDelete */</span>
-<span class="source-line-no">349</span><span id="line-349">      public String[] defaultRequestQueryData() {</span>
-<span class="source-line-no">350</span><span id="line-350">         return defaultRequestQueryData;</span>
-<span class="source-line-no">351</span><span id="line-351">      }</span>
-<span class="source-line-no">352</span><span id="line-352"></span>
-<span class="source-line-no">353</span><span id="line-353">      @Override /* RestDelete */</span>
-<span class="source-line-no">354</span><span id="line-354">      public String[] defaultRequestAttributes() {</span>
-<span class="source-line-no">355</span><span id="line-355">         return defaultRequestAttributes;</span>
-<span class="source-line-no">356</span><span id="line-356">      }</span>
-<span class="source-line-no">357</span><span id="line-357"></span>
-<span class="source-line-no">358</span><span id="line-358">      @Override /* RestDelete */</span>
-<span class="source-line-no">359</span><span id="line-359">      public String[] defaultRequestHeaders() {</span>
-<span class="source-line-no">360</span><span id="line-360">         return defaultRequestHeaders;</span>
-<span class="source-line-no">361</span><span id="line-361">      }</span>
-<span class="source-line-no">362</span><span id="line-362"></span>
-<span class="source-line-no">363</span><span id="line-363">      @Override /* RestDelete */</span>
-<span class="source-line-no">364</span><span id="line-364">      public String[] defaultResponseHeaders() {</span>
-<span class="source-line-no">365</span><span id="line-365">         return defaultResponseHeaders;</span>
-<span class="source-line-no">366</span><span id="line-366">      }</span>
-<span class="source-line-no">367</span><span id="line-367"></span>
-<span class="source-line-no">368</span><span id="line-368">      @Override /* RestDelete */</span>
-<span class="source-line-no">369</span><span id="line-369">      public Class&lt;? extends Encoder&gt;[] encoders() {</span>
-<span class="source-line-no">370</span><span id="line-370">         return encoders;</span>
-<span class="source-line-no">371</span><span id="line-371">      }</span>
-<span class="source-line-no">372</span><span id="line-372"></span>
-<span class="source-line-no">373</span><span id="line-373">      @Override /* RestDelete */</span>
-<span class="source-line-no">374</span><span id="line-374">      public Class&lt;? extends RestGuard&gt;[] guards() {</span>
-<span class="source-line-no">375</span><span id="line-375">         return guards;</span>
-<span class="source-line-no">376</span><span id="line-376">      }</span>
-<span class="source-line-no">377</span><span id="line-377"></span>
-<span class="source-line-no">378</span><span id="line-378">      @Override /* RestDelete */</span>
-<span class="source-line-no">379</span><span id="line-379">      public Class&lt;? extends RestMatcher&gt;[] matchers() {</span>
-<span class="source-line-no">380</span><span id="line-380">         return matchers;</span>
-<span class="source-line-no">381</span><span id="line-381">      }</span>
-<span class="source-line-no">382</span><span id="line-382"></span>
-<span class="source-line-no">383</span><span id="line-383">      @Override /* RestDelete */</span>
-<span class="source-line-no">384</span><span id="line-384">      public String[] path() {</span>
-<span class="source-line-no">385</span><span id="line-385">         return path;</span>
-<span class="source-line-no">386</span><span id="line-386">      }</span>
-<span class="source-line-no">387</span><span id="line-387"></span>
-<span class="source-line-no">388</span><span id="line-388">      @Override /* RestDelete */</span>
-<span class="source-line-no">389</span><span id="line-389">      public String roleGuard() {</span>
-<span class="source-line-no">390</span><span id="line-390">         return roleGuard;</span>
-<span class="source-line-no">391</span><span id="line-391">      }</span>
-<span class="source-line-no">392</span><span id="line-392"></span>
-<span class="source-line-no">393</span><span id="line-393">      @Override /* RestDelete */</span>
-<span class="source-line-no">394</span><span id="line-394">      public String rolesDeclared() {</span>
-<span class="source-line-no">395</span><span id="line-395">         return rolesDeclared;</span>
-<span class="source-line-no">396</span><span id="line-396">      }</span>
-<span class="source-line-no">397</span><span id="line-397"></span>
-<span class="source-line-no">398</span><span id="line-398">      @Override /* RestDelete */</span>
-<span class="source-line-no">399</span><span id="line-399">      public String summary() {</span>
-<span class="source-line-no">400</span><span id="line-400">         return summary;</span>
-<span class="source-line-no">401</span><span id="line-401">      }</span>
-<span class="source-line-no">402</span><span id="line-402"></span>
-<span class="source-line-no">403</span><span id="line-403">      @Override /* RestDelete */</span>
-<span class="source-line-no">404</span><span id="line-404">      public OpSwagger swagger() {</span>
-<span class="source-line-no">405</span><span id="line-405">         return swagger;</span>
-<span class="source-line-no">406</span><span id="line-406">      }</span>
-<span class="source-line-no">407</span><span id="line-407"></span>
-<span class="source-line-no">408</span><span id="line-408">      @Override /* RestDelete */</span>
-<span class="source-line-no">409</span><span id="line-409">      public String value() {</span>
-<span class="source-line-no">410</span><span id="line-410">         return value;</span>
-<span class="source-line-no">411</span><span id="line-411">      }</span>
-<span class="source-line-no">412</span><span id="line-412">   }</span>
+<span class="source-line-no">293</span><span id="line-293">   private static class Impl extends TargetedAnnotationImpl implements RestDelete {</span>
+<span class="source-line-no">294</span><span id="line-294"></span>
+<span class="source-line-no">295</span><span id="line-295">      private final Class&lt;? extends RestGuard&gt;[] guards;</span>
+<span class="source-line-no">296</span><span id="line-296">      private final Class&lt;? extends RestMatcher&gt;[] matchers;</span>
+<span class="source-line-no">297</span><span id="line-297">      private final Class&lt;? extends Encoder&gt;[] encoders;</span>
+<span class="source-line-no">298</span><span id="line-298">      private final OpSwagger swagger;</span>
+<span class="source-line-no">299</span><span id="line-299">      private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;</span>
+<span class="source-line-no">300</span><span id="line-300">      private final String[] defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path;</span>
+<span class="source-line-no">301</span><span id="line-301"></span>
+<span class="source-line-no">302</span><span id="line-302">      Impl(Builder b) {</span>
+<span class="source-line-no">303</span><span id="line-303">         super(b);</span>
+<span class="source-line-no">304</span><span id="line-304">         this.clientVersion = b.clientVersion;</span>
+<span class="source-line-no">305</span><span id="line-305">         this.debug = b.debug;</span>
+<span class="source-line-no">306</span><span id="line-306">         this.defaultAccept = b.defaultAccept;</span>
+<span class="source-line-no">307</span><span id="line-307">         this.defaultCharset = b.defaultCharset;</span>
+<span class="source-line-no">308</span><span id="line-308">         this.defaultRequestQueryData = copyOf(b.defaultRequestQueryData);</span>
+<span class="source-line-no">309</span><span id="line-309">         this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);</span>
+<span class="source-line-no">310</span><span id="line-310">         this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);</span>
+<span class="source-line-no">311</span><span id="line-311">         this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);</span>
+<span class="source-line-no">312</span><span id="line-312">         this.encoders = copyOf(b.encoders);</span>
+<span class="source-line-no">313</span><span id="line-313">         this.guards = copyOf(b.guards);</span>
+<span class="source-line-no">314</span><span id="line-314">         this.matchers = copyOf(b.matchers);</span>
+<span class="source-line-no">315</span><span id="line-315">         this.path = copyOf(b.path);</span>
+<span class="source-line-no">316</span><span id="line-316">         this.roleGuard = b.roleGuard;</span>
+<span class="source-line-no">317</span><span id="line-317">         this.rolesDeclared = b.rolesDeclared;</span>
+<span class="source-line-no">318</span><span id="line-318">         this.summary = b.summary;</span>
+<span class="source-line-no">319</span><span id="line-319">         this.swagger = b.swagger;</span>
+<span class="source-line-no">320</span><span id="line-320">         this.value = b.value;</span>
+<span class="source-line-no">321</span><span id="line-321">         postConstruct();</span>
+<span class="source-line-no">322</span><span id="line-322">      }</span>
+<span class="source-line-no">323</span><span id="line-323"></span>
+<span class="source-line-no">324</span><span id="line-324">      @Override /* RestDelete */</span>
+<span class="source-line-no">325</span><span id="line-325">      public String clientVersion() {</span>
+<span class="source-line-no">326</span><span id="line-326">         return clientVersion;</span>
+<span class="source-line-no">327</span><span id="line-327">      }</span>
+<span class="source-line-no">328</span><span id="line-328"></span>
+<span class="source-line-no">329</span><span id="line-329">      @Override /* RestDelete */</span>
+<span class="source-line-no">330</span><span id="line-330">      public String debug() {</span>
+<span class="source-line-no">331</span><span id="line-331">         return debug;</span>
+<span class="source-line-no">332</span><span id="line-332">      }</span>
+<span class="source-line-no">333</span><span id="line-333"></span>
+<span class="source-line-no">334</span><span id="line-334">      @Override /* RestDelete */</span>
+<span class="source-line-no">335</span><span id="line-335">      public String defaultAccept() {</span>
+<span class="source-line-no">336</span><span id="line-336">         return defaultAccept;</span>
+<span class="source-line-no">337</span><span id="line-337">      }</span>
+<span class="source-line-no">338</span><span id="line-338"></span>
+<span class="source-line-no">339</span><span id="line-339">      @Override /* RestDelete */</span>
+<span class="source-line-no">340</span><span id="line-340">      public String defaultCharset() {</span>
+<span class="source-line-no">341</span><span id="line-341">         return defaultCharset;</span>
+<span class="source-line-no">342</span><span id="line-342">      }</span>
+<span class="source-line-no">343</span><span id="line-343"></span>
+<span class="source-line-no">344</span><span id="line-344">      @Override /* RestDelete */</span>
+<span class="source-line-no">345</span><span id="line-345">      public String[] defaultRequestQueryData() {</span>
+<span class="source-line-no">346</span><span id="line-346">         return defaultRequestQueryData;</span>
+<span class="source-line-no">347</span><span id="line-347">      }</span>
+<span class="source-line-no">348</span><span id="line-348"></span>
+<span class="source-line-no">349</span><span id="line-349">      @Override /* RestDelete */</span>
+<span class="source-line-no">350</span><span id="line-350">      public String[] defaultRequestAttributes() {</span>
+<span class="source-line-no">351</span><span id="line-351">         return defaultRequestAttributes;</span>
+<span class="source-line-no">352</span><span id="line-352">      }</span>
+<span class="source-line-no">353</span><span id="line-353"></span>
+<span class="source-line-no">354</span><span id="line-354">      @Override /* RestDelete */</span>
+<span class="source-line-no">355</span><span id="line-355">      public String[] defaultRequestHeaders() {</span>
+<span class="source-line-no">356</span><span id="line-356">         return defaultRequestHeaders;</span>
+<span class="source-line-no">357</span><span id="line-357">      }</span>
+<span class="source-line-no">358</span><span id="line-358"></span>
+<span class="source-line-no">359</span><span id="line-359">      @Override /* RestDelete */</span>
+<span class="source-line-no">360</span><span id="line-360">      public String[] defaultResponseHeaders() {</span>
+<span class="source-line-no">361</span><span id="line-361">         return defaultResponseHeaders;</span>
+<span class="source-line-no">362</span><span id="line-362">      }</span>
+<span class="source-line-no">363</span><span id="line-363"></span>
+<span class="source-line-no">364</span><span id="line-364">      @Override /* RestDelete */</span>
+<span class="source-line-no">365</span><span id="line-365">      public Class&lt;? extends Encoder&gt;[] encoders() {</span>
+<span class="source-line-no">366</span><span id="line-366">         return encoders;</span>
+<span class="source-line-no">367</span><span id="line-367">      }</span>
+<span class="source-line-no">368</span><span id="line-368"></span>
+<span class="source-line-no">369</span><span id="line-369">      @Override /* RestDelete */</span>
+<span class="source-line-no">370</span><span id="line-370">      public Class&lt;? extends RestGuard&gt;[] guards() {</span>
+<span class="source-line-no">371</span><span id="line-371">         return guards;</span>
+<span class="source-line-no">372</span><span id="line-372">      }</span>
+<span class="source-line-no">373</span><span id="line-373"></span>
+<span class="source-line-no">374</span><span id="line-374">      @Override /* RestDelete */</span>
+<span class="source-line-no">375</span><span id="line-375">      public Class&lt;? extends RestMatcher&gt;[] matchers() {</span>
+<span class="source-line-no">376</span><span id="line-376">         return matchers;</span>
+<span class="source-line-no">377</span><span id="line-377">      }</span>
+<span class="source-line-no">378</span><span id="line-378"></span>
+<span class="source-line-no">379</span><span id="line-379">      @Override /* RestDelete */</span>
+<span class="source-line-no">380</span><span id="line-380">      public String[] path() {</span>
+<span class="source-line-no">381</span><span id="line-381">         return path;</span>
+<span class="source-line-no">382</span><span id="line-382">      }</span>
+<span class="source-line-no">383</span><span id="line-383"></span>
+<span class="source-line-no">384</span><span id="line-384">      @Override /* RestDelete */</span>
+<span class="source-line-no">385</span><span id="line-385">      public String roleGuard() {</span>
+<span class="source-line-no">386</span><span id="line-386">         return roleGuard;</span>
+<span class="source-line-no">387</span><span id="line-387">      }</span>
+<span class="source-line-no">388</span><span id="line-388"></span>
+<span class="source-line-no">389</span><span id="line-389">      @Override /* RestDelete */</span>
+<span class="source-line-no">390</span><span id="line-390">      public String rolesDeclared() {</span>
+<span class="source-line-no">391</span><span id="line-391">         return rolesDeclared;</span>
+<span class="source-line-no">392</span><span id="line-392">      }</span>
+<span class="source-line-no">393</span><span id="line-393"></span>
+<span class="source-line-no">394</span><span id="line-394">      @Override /* RestDelete */</span>
+<span class="source-line-no">395</span><span id="line-395">      public String summary() {</span>
+<span class="source-line-no">396</span><span id="line-396">         return summary;</span>
+<span class="source-line-no">397</span><span id="line-397">      }</span>
+<span class="source-line-no">398</span><span id="line-398"></span>
+<span class="source-line-no">399</span><span id="line-399">      @Override /* RestDelete */</span>
+<span class="source-line-no">400</span><span id="line-400">      public OpSwagger swagger() {</span>
+<span class="source-line-no">401</span><span id="line-401">         return swagger;</span>
+<span class="source-line-no">402</span><span id="line-402">      }</span>
+<span class="source-line-no">403</span><span id="line-403"></span>
+<span class="source-line-no">404</span><span id="line-404">      @Override /* RestDelete */</span>
+<span class="source-line-no">405</span><span id="line-405">      public String value() {</span>
+<span class="source-line-no">406</span><span id="line-406">         return value;</span>
+<span class="source-line-no">407</span><span id="line-407">      }</span>
+<span class="source-line-no">408</span><span id="line-408">   }</span>
+<span class="source-line-no">409</span><span id="line-409"></span>
+<span class="source-line-no">410</span><span id="line-410">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">411</span><span id="line-411">   // Appliers</span>
+<span class="source-line-no">412</span><span id="line-412">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">413</span><span id="line-413"></span>
-<span class="source-line-no">414</span><span id="line-414">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">415</span><span id="line-415">   // Appliers</span>
-<span class="source-line-no">416</span><span id="line-416">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">417</span><span id="line-417"></span>
-<span class="source-line-no">418</span><span id="line-418">   /**</span>
-<span class="source-line-no">419</span><span id="line-419">    * Applies {@link RestDelete} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.</span>
-<span class="source-line-no">420</span><span id="line-420">    */</span>
-<span class="source-line-no">421</span><span id="line-421">   public static class RestOpContextApply extends AnnotationApplier&lt;RestDelete,RestOpContext.Builder&gt; {</span>
-<span class="source-line-no">422</span><span id="line-422"></span>
-<span class="source-line-no">423</span><span id="line-423">      /**</span>
-<span class="source-line-no">424</span><span id="line-424">       * Constructor.</span>
-<span class="source-line-no">425</span><span id="line-425">       *</span>
-<span class="source-line-no">426</span><span id="line-426">       * @param vr The resolver for resolving values in annotations.</span>
-<span class="source-line-no">427</span><span id="line-427">       */</span>
-<span class="source-line-no">428</span><span id="line-428">      public RestOpContextApply(VarResolverSession vr) {</span>
-<span class="source-line-no">429</span><span id="line-429">         super(RestDelete.class, RestOpContext.Builder.class, vr);</span>
-<span class="source-line-no">430</span><span id="line-430">      }</span>
+<span class="source-line-no">414</span><span id="line-414">   /**</span>
+<span class="source-line-no">415</span><span id="line-415">    * Applies {@link RestDelete} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.</span>
+<span class="source-line-no">416</span><span id="line-416">    */</span>
+<span class="source-line-no">417</span><span id="line-417">   public static class RestOpContextApply extends AnnotationApplier&lt;RestDelete,RestOpContext.Builder&gt; {</span>
+<span class="source-line-no">418</span><span id="line-418"></span>
+<span class="source-line-no">419</span><span id="line-419">      /**</span>
+<span class="source-line-no">420</span><span id="line-420">       * Constructor.</span>
+<span class="source-line-no">421</span><span id="line-421">       *</span>
+<span class="source-line-no">422</span><span id="line-422">       * @param vr The resolver for resolving values in annotations.</span>
+<span class="source-line-no">423</span><span id="line-423">       */</span>
+<span class="source-line-no">424</span><span id="line-424">      public RestOpContextApply(VarResolverSession vr) {</span>
+<span class="source-line-no">425</span><span id="line-425">         super(RestDelete.class, RestOpContext.Builder.class, vr);</span>
+<span class="source-line-no">426</span><span id="line-426">      }</span>
+<span class="source-line-no">427</span><span id="line-427"></span>
+<span class="source-line-no">428</span><span id="line-428">      @Override</span>
+<span class="source-line-no">429</span><span id="line-429">      public void apply(AnnotationInfo&lt;RestDelete&gt; ai, RestOpContext.Builder b) {</span>
+<span class="source-line-no">430</span><span id="line-430">         RestDelete a = ai.inner();</span>
 <span class="source-line-no">431</span><span id="line-431"></span>
-<span class="source-line-no">432</span><span id="line-432">      @Override</span>
-<span class="source-line-no">433</span><span id="line-433">      public void apply(AnnotationInfo&lt;RestDelete&gt; ai, RestOpContext.Builder b) {</span>
-<span class="source-line-no">434</span><span id="line-434">         RestDelete a = ai.inner();</span>
-<span class="source-line-no">435</span><span id="line-435"></span>
-<span class="source-line-no">436</span><span id="line-436">         b.httpMethod("delete");</span>
-<span class="source-line-no">437</span><span id="line-437"></span>
-<span class="source-line-no">438</span><span id="line-438">         classes(a.encoders()).ifPresent(x -&gt; b.encoders().set(x));</span>
-<span class="source-line-no">439</span><span id="line-439">         stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -&gt; b.defaultRequestHeaders().setDefault(x));</span>
-<span class="source-line-no">440</span><span id="line-440">         stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -&gt; b.defaultResponseHeaders().setDefault(x));</span>
-<span class="source-line-no">441</span><span id="line-441">         stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -&gt; b.defaultRequestAttributes().add(x));</span>
-<span class="source-line-no">442</span><span id="line-442">         stream(a.defaultRequestQueryData()).map(HttpParts::basicPart).forEach(x -&gt; b.defaultRequestQueryData().setDefault(x));</span>
-<span class="source-line-no">443</span><span id="line-443">         string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -&gt; b.defaultRequestHeaders().setDefault(x));</span>
-<span class="source-line-no">444</span><span id="line-444">         b.guards().append(a.guards());</span>
-<span class="source-line-no">445</span><span id="line-445">         b.matchers().append(a.matchers());</span>
-<span class="source-line-no">446</span><span id="line-446">         string(a.clientVersion()).ifPresent(x -&gt; b.clientVersion(x));</span>
-<span class="source-line-no">447</span><span id="line-447">         string(a.defaultCharset()).map(Charset::forName).ifPresent(x -&gt; b.defaultCharset(x));</span>
-<span class="source-line-no">448</span><span id="line-448">         stream(a.path()).forEach(x -&gt; b.path(x));</span>
-<span class="source-line-no">449</span><span id="line-449">         string(a.value()).ifPresent(x -&gt; b.path(x));</span>
-<span class="source-line-no">450</span><span id="line-450">         cdl(a.rolesDeclared()).forEach(x -&gt; b.rolesDeclared(x));</span>
-<span class="source-line-no">451</span><span id="line-451">         string(a.roleGuard()).ifPresent(x -&gt; b.roleGuard(x));</span>
-<span class="source-line-no">452</span><span id="line-452">         string(a.debug()).map(Enablement::fromString).ifPresent(x -&gt; b.debug(x));</span>
-<span class="source-line-no">453</span><span id="line-453">      }</span>
-<span class="source-line-no">454</span><span id="line-454">   }</span>
-<span class="source-line-no">455</span><span id="line-455">}</span>
+<span class="source-line-no">432</span><span id="line-432">         b.httpMethod("delete");</span>
+<span class="source-line-no">433</span><span id="line-433"></span>
+<span class="source-line-no">434</span><span id="line-434">         classes(a.encoders()).ifPresent(x -&gt; b.encoders().set(x));</span>
+<span class="source-line-no">435</span><span id="line-435">         stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -&gt; b.defaultRequestHeaders().setDefault(x));</span>
+<span class="source-line-no">436</span><span id="line-436">         stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -&gt; b.defaultResponseHeaders().setDefault(x));</span>
+<span class="source-line-no">437</span><span id="line-437">         stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -&gt; b.defaultRequestAttributes().add(x));</span>
+<span class="source-line-no">438</span><span id="line-438">         stream(a.defaultRequestQueryData()).map(HttpParts::basicPart).forEach(x -&gt; b.defaultRequestQueryData().setDefault(x));</span>
+<span class="source-line-no">439</span><span id="line-439">         string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -&gt; b.defaultRequestHeaders().setDefault(x));</span>
+<span class="source-line-no">440</span><span id="line-440">         b.guards().append(a.guards());</span>
+<span class="source-line-no">441</span><span id="line-441">         b.matchers().append(a.matchers());</span>
+<span class="source-line-no">442</span><span id="line-442">         string(a.clientVersion()).ifPresent(x -&gt; b.clientVersion(x));</span>
+<span class="source-line-no">443</span><span id="line-443">         string(a.defaultCharset()).map(Charset::forName).ifPresent(x -&gt; b.defaultCharset(x));</span>
+<span class="source-line-no">444</span><span id="line-444">         stream(a.path()).forEach(x -&gt; b.path(x));</span>
+<span class="source-line-no">445</span><span id="line-445">         string(a.value()).ifPresent(x -&gt; b.path(x));</span>
+<span class="source-line-no">446</span><span id="line-446">         cdl(a.rolesDeclared()).forEach(x -&gt; b.rolesDeclared(x));</span>
+<span class="source-line-no">447</span><span id="line-447">         string(a.roleGuard()).ifPresent(x -&gt; b.roleGuard(x));</span>
+<span class="source-line-no">448</span><span id="line-448">         string(a.debug()).map(Enablement::fromString).ifPresent(x -&gt; b.debug(x));</span>
+<span class="source-line-no">449</span><span id="line-449">      }</span>
+<span class="source-line-no">450</span><span id="line-450">   }</span>
+<span class="source-line-no">451</span><span id="line-451">}</span>
 
 
 

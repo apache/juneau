@@ -95,993 +95,987 @@
 <span class="source-line-no">082</span><span id="line-82"> * &lt;/ul&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> */</span>
 <span class="source-line-no">084</span><span id="line-84">@Bean(typeName="input")</span>
-<span class="source-line-no">085</span><span id="line-85">@FluentSetters</span>
-<span class="source-line-no">086</span><span id="line-86">public class Input extends HtmlElementVoid {</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">   /**</span>
-<span class="source-line-no">089</span><span id="line-89">    * Creates an empty {@link Input} element.</span>
-<span class="source-line-no">090</span><span id="line-90">    */</span>
-<span class="source-line-no">091</span><span id="line-91">   public Input() {}</span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   /**</span>
-<span class="source-line-no">094</span><span id="line-94">    * Creates an {@link Input} element with the specified {@link Input#type(String)} attribute.</span>
-<span class="source-line-no">095</span><span id="line-95">    *</span>
-<span class="source-line-no">096</span><span id="line-96">    * @param type The {@link Input#type(String)} attribute.</span>
-<span class="source-line-no">097</span><span id="line-97">    */</span>
-<span class="source-line-no">098</span><span id="line-98">   public Input(String type) {</span>
-<span class="source-line-no">099</span><span id="line-99">      type(type);</span>
-<span class="source-line-no">100</span><span id="line-100">   }</span>
-<span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">   /**</span>
-<span class="source-line-no">103</span><span id="line-103">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-accept"&gt;accept&lt;/a&gt; attribute.</span>
-<span class="source-line-no">104</span><span id="line-104">    *</span>
-<span class="source-line-no">105</span><span id="line-105">    * &lt;p&gt;</span>
-<span class="source-line-no">106</span><span id="line-106">    * Specifies which file types the file input should accept. Used with &lt;c&gt;type="file"&lt;/c&gt;.</span>
-<span class="source-line-no">107</span><span id="line-107">    *</span>
-<span class="source-line-no">108</span><span id="line-108">    * &lt;p&gt;</span>
-<span class="source-line-no">109</span><span id="line-109">    * Examples:</span>
-<span class="source-line-no">110</span><span id="line-110">    * &lt;ul&gt;</span>
-<span class="source-line-no">111</span><span id="line-111">    *    &lt;li&gt;&lt;js&gt;"image/*"&lt;/js&gt; - Accept all image files&lt;/li&gt;</span>
-<span class="source-line-no">112</span><span id="line-112">    *    &lt;li&gt;&lt;js&gt;".pdf,.doc,.docx"&lt;/js&gt; - Accept specific file extensions&lt;/li&gt;</span>
-<span class="source-line-no">113</span><span id="line-113">    *    &lt;li&gt;&lt;js&gt;"image/png,image/jpeg"&lt;/js&gt; - Accept specific MIME types&lt;/li&gt;</span>
-<span class="source-line-no">114</span><span id="line-114">    * &lt;/ul&gt;</span>
-<span class="source-line-no">115</span><span id="line-115">    *</span>
-<span class="source-line-no">116</span><span id="line-116">    * @param accept File type restrictions for file uploads.</span>
-<span class="source-line-no">117</span><span id="line-117">    * @return This object.</span>
-<span class="source-line-no">118</span><span id="line-118">    */</span>
-<span class="source-line-no">119</span><span id="line-119">   public Input accept(String value) {</span>
-<span class="source-line-no">120</span><span id="line-120">      attr("accept", value);</span>
-<span class="source-line-no">121</span><span id="line-121">      return this;</span>
-<span class="source-line-no">122</span><span id="line-122">   }</span>
-<span class="source-line-no">123</span><span id="line-123"></span>
-<span class="source-line-no">124</span><span id="line-124">   /**</span>
-<span class="source-line-no">125</span><span id="line-125">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-alt"&gt;alt&lt;/a&gt; attribute.</span>
-<span class="source-line-no">126</span><span id="line-126">    *</span>
-<span class="source-line-no">127</span><span id="line-127">    * &lt;p&gt;</span>
-<span class="source-line-no">128</span><span id="line-128">    * Alternative text for image submit buttons. Used with &lt;c&gt;type="image"&lt;/c&gt; to provide</span>
-<span class="source-line-no">129</span><span id="line-129">    * accessible text when the image cannot be displayed.</span>
-<span class="source-line-no">130</span><span id="line-130">    *</span>
-<span class="source-line-no">131</span><span id="line-131">    * @param alt Alternative text for image submit buttons.</span>
-<span class="source-line-no">132</span><span id="line-132">    * @return This object.</span>
-<span class="source-line-no">133</span><span id="line-133">    */</span>
-<span class="source-line-no">134</span><span id="line-134">   public Input alt(String value) {</span>
-<span class="source-line-no">135</span><span id="line-135">      attr("alt", value);</span>
-<span class="source-line-no">136</span><span id="line-136">      return this;</span>
-<span class="source-line-no">137</span><span id="line-137">   }</span>
-<span class="source-line-no">138</span><span id="line-138"></span>
-<span class="source-line-no">139</span><span id="line-139">   /**</span>
-<span class="source-line-no">140</span><span id="line-140">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete"&gt;autocomplete&lt;/a&gt; attribute.</span>
-<span class="source-line-no">141</span><span id="line-141">    *</span>
-<span class="source-line-no">142</span><span id="line-142">    * &lt;p&gt;</span>
-<span class="source-line-no">143</span><span id="line-143">    * Controls whether the browser can automatically complete the input field.</span>
-<span class="source-line-no">144</span><span id="line-144">    *</span>
-<span class="source-line-no">145</span><span id="line-145">    * &lt;p&gt;</span>
-<span class="source-line-no">146</span><span id="line-146">    * Common values:</span>
-<span class="source-line-no">147</span><span id="line-147">    * &lt;ul&gt;</span>
-<span class="source-line-no">148</span><span id="line-148">    *    &lt;li&gt;&lt;js&gt;"on"&lt;/js&gt; - Allow autocomplete (default)&lt;/li&gt;</span>
-<span class="source-line-no">149</span><span id="line-149">    *    &lt;li&gt;&lt;js&gt;"off"&lt;/js&gt; - Disable autocomplete&lt;/li&gt;</span>
-<span class="source-line-no">150</span><span id="line-150">    *    &lt;li&gt;&lt;js&gt;"name"&lt;/js&gt; - Full name&lt;/li&gt;</span>
-<span class="source-line-no">151</span><span id="line-151">    *    &lt;li&gt;&lt;js&gt;"email"&lt;/js&gt; - Email address&lt;/li&gt;</span>
-<span class="source-line-no">152</span><span id="line-152">    *    &lt;li&gt;&lt;js&gt;"username"&lt;/js&gt; - Username or login&lt;/li&gt;</span>
-<span class="source-line-no">153</span><span id="line-153">    *    &lt;li&gt;&lt;js&gt;"current-password"&lt;/js&gt; - Current password&lt;/li&gt;</span>
-<span class="source-line-no">154</span><span id="line-154">    *    &lt;li&gt;&lt;js&gt;"new-password"&lt;/js&gt; - New password&lt;/li&gt;</span>
-<span class="source-line-no">155</span><span id="line-155">    *    &lt;li&gt;&lt;js&gt;"tel"&lt;/js&gt; - Telephone number&lt;/li&gt;</span>
-<span class="source-line-no">156</span><span id="line-156">    *    &lt;li&gt;&lt;js&gt;"url"&lt;/js&gt; - URL&lt;/li&gt;</span>
-<span class="source-line-no">157</span><span id="line-157">    *    &lt;li&gt;&lt;js&gt;"address-line1"&lt;/js&gt; - Street address&lt;/li&gt;</span>
-<span class="source-line-no">158</span><span id="line-158">    *    &lt;li&gt;&lt;js&gt;"country"&lt;/js&gt; - Country name&lt;/li&gt;</span>
-<span class="source-line-no">159</span><span id="line-159">    *    &lt;li&gt;&lt;js&gt;"postal-code"&lt;/js&gt; - Postal code&lt;/li&gt;</span>
-<span class="source-line-no">160</span><span id="line-160">    * &lt;/ul&gt;</span>
-<span class="source-line-no">161</span><span id="line-161">    *</span>
-<span class="source-line-no">162</span><span id="line-162">    * @param autocomplete Autocomplete hint for the input field.</span>
-<span class="source-line-no">163</span><span id="line-163">    * @return This object.</span>
-<span class="source-line-no">164</span><span id="line-164">    */</span>
-<span class="source-line-no">165</span><span id="line-165">   public Input autocomplete(String value) {</span>
-<span class="source-line-no">166</span><span id="line-166">      attr("autocomplete", value);</span>
-<span class="source-line-no">167</span><span id="line-167">      return this;</span>
-<span class="source-line-no">168</span><span id="line-168">   }</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">   /**</span>
-<span class="source-line-no">171</span><span id="line-171">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus"&gt;autofocus&lt;/a&gt; attribute.</span>
-<span class="source-line-no">172</span><span id="line-172">    *</span>
-<span class="source-line-no">173</span><span id="line-173">    * &lt;p&gt;</span>
-<span class="source-line-no">174</span><span id="line-174">    * Automatically focuses the form control when the page loads.</span>
-<span class="source-line-no">175</span><span id="line-175">    * Only one element per page should have this attribute.</span>
-<span class="source-line-no">176</span><span id="line-176">    *</span>
-<span class="source-line-no">177</span><span id="line-177">    * @param autofocus</span>
-<span class="source-line-no">178</span><span id="line-178">    *    The new value for this attribute.</span>
-<span class="source-line-no">179</span><span id="line-179">    *    Typically a {@link Boolean} or {@link String}.</span>
-<span class="source-line-no">180</span><span id="line-180">    * @return This object.</span>
-<span class="source-line-no">181</span><span id="line-181">    */</span>
-<span class="source-line-no">182</span><span id="line-182">   public Input autofocus(Object value) {</span>
-<span class="source-line-no">183</span><span id="line-183">      attr("autofocus", value);</span>
-<span class="source-line-no">184</span><span id="line-184">      return this;</span>
-<span class="source-line-no">185</span><span id="line-185">   }</span>
-<span class="source-line-no">186</span><span id="line-186"></span>
-<span class="source-line-no">187</span><span id="line-187">   /**</span>
-<span class="source-line-no">188</span><span id="line-188">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-checked"&gt;checked&lt;/a&gt; attribute.</span>
-<span class="source-line-no">189</span><span id="line-189">    *</span>
-<span class="source-line-no">190</span><span id="line-190">    * &lt;p&gt;</span>
-<span class="source-line-no">191</span><span id="line-191">    * Whether the command or control is checked.</span>
-<span class="source-line-no">192</span><span id="line-192">    *</span>
-<span class="source-line-no">193</span><span id="line-193">    * &lt;p&gt;</span>
-<span class="source-line-no">194</span><span id="line-194">    * This attribute uses deminimized values:</span>
-<span class="source-line-no">195</span><span id="line-195">    * &lt;ul&gt;</span>
-<span class="source-line-no">196</span><span id="line-196">    *    &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt; - Attribute is not added&lt;/li&gt;</span>
-<span class="source-line-no">197</span><span id="line-197">    *    &lt;li&gt;&lt;jk&gt;true&lt;/jk&gt; - Attribute is added as &lt;js&gt;"checked"&lt;/js&gt;&lt;/li&gt;</span>
-<span class="source-line-no">198</span><span id="line-198">    *    &lt;li&gt;Other values - Passed through as-is&lt;/li&gt;</span>
-<span class="source-line-no">199</span><span id="line-199">    * &lt;/ul&gt;</span>
-<span class="source-line-no">200</span><span id="line-200">    *</span>
-<span class="source-line-no">201</span><span id="line-201">    * @param checked</span>
-<span class="source-line-no">202</span><span id="line-202">    *    The new value for this attribute.</span>
-<span class="source-line-no">203</span><span id="line-203">    *    Typically a {@link Boolean} or {@link String}.</span>
-<span class="source-line-no">204</span><span id="line-204">    * @return This object.</span>
-<span class="source-line-no">205</span><span id="line-205">    */</span>
-<span class="source-line-no">206</span><span id="line-206">   public Input checked(Object value) {</span>
-<span class="source-line-no">207</span><span id="line-207">      attr("checked", deminimize(value, "checked"));</span>
-<span class="source-line-no">208</span><span id="line-208">      return this;</span>
-<span class="source-line-no">209</span><span id="line-209">   }</span>
-<span class="source-line-no">210</span><span id="line-210"></span>
-<span class="source-line-no">211</span><span id="line-211">   /**</span>
-<span class="source-line-no">212</span><span id="line-212">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-dirname"&gt;dirname&lt;/a&gt; attribute.</span>
-<span class="source-line-no">213</span><span id="line-213">    *</span>
-<span class="source-line-no">214</span><span id="line-214">    * &lt;p&gt;</span>
-<span class="source-line-no">215</span><span id="line-215">    * Specifies the name of a hidden form field that will be submitted along with the input value,</span>
-<span class="source-line-no">216</span><span id="line-216">    * containing the text direction (ltr or rtl) of the input content.</span>
-<span class="source-line-no">217</span><span id="line-217">    *</span>
-<span class="source-line-no">218</span><span id="line-218">    * &lt;p&gt;</span>
-<span class="source-line-no">219</span><span id="line-219">    * This is useful for forms that need to preserve text direction information when submitted.</span>
-<span class="source-line-no">220</span><span id="line-220">    * The hidden field will contain either "ltr" or "rtl" based on the input's direction.</span>
-<span class="source-line-no">221</span><span id="line-221">    *</span>
-<span class="source-line-no">222</span><span id="line-222">    * @param dirname The name of the hidden field for directionality information.</span>
-<span class="source-line-no">223</span><span id="line-223">    * @return This object.</span>
-<span class="source-line-no">224</span><span id="line-224">    */</span>
-<span class="source-line-no">225</span><span id="line-225">   public Input dirname(String value) {</span>
-<span class="source-line-no">226</span><span id="line-226">      attr("dirname", value);</span>
-<span class="source-line-no">227</span><span id="line-227">      return this;</span>
-<span class="source-line-no">228</span><span id="line-228">   }</span>
-<span class="source-line-no">229</span><span id="line-229"></span>
-<span class="source-line-no">230</span><span id="line-230">   /**</span>
-<span class="source-line-no">231</span><span id="line-231">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled"&gt;disabled&lt;/a&gt; attribute.</span>
-<span class="source-line-no">232</span><span id="line-232">    *</span>
-<span class="source-line-no">233</span><span id="line-233">    * &lt;p&gt;</span>
-<span class="source-line-no">234</span><span id="line-234">    * Whether the form control is disabled.</span>
-<span class="source-line-no">235</span><span id="line-235">    *</span>
-<span class="source-line-no">236</span><span id="line-236">    * &lt;p&gt;</span>
-<span class="source-line-no">237</span><span id="line-237">    * This attribute uses deminimized values:</span>
-<span class="source-line-no">238</span><span id="line-238">    * &lt;ul&gt;</span>
-<span class="source-line-no">239</span><span id="line-239">    *    &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt; - Attribute is not added&lt;/li&gt;</span>
-<span class="source-line-no">240</span><span id="line-240">    *    &lt;li&gt;&lt;jk&gt;true&lt;/jk&gt; - Attribute is added as &lt;js&gt;"disabled"&lt;/js&gt;&lt;/li&gt;</span>
-<span class="source-line-no">241</span><span id="line-241">    *    &lt;li&gt;Other values - Passed through as-is&lt;/li&gt;</span>
-<span class="source-line-no">242</span><span id="line-242">    * &lt;/ul&gt;</span>
-<span class="source-line-no">243</span><span id="line-243">    *</span>
-<span class="source-line-no">244</span><span id="line-244">    * @param disabled</span>
-<span class="source-line-no">245</span><span id="line-245">    *    The new value for this attribute.</span>
-<span class="source-line-no">246</span><span id="line-246">    *    Typically a {@link Boolean} or {@link String}.</span>
-<span class="source-line-no">247</span><span id="line-247">    * @return This object.</span>
-<span class="source-line-no">248</span><span id="line-248">    */</span>
-<span class="source-line-no">249</span><span id="line-249">   public Input disabled(Object value) {</span>
-<span class="source-line-no">250</span><span id="line-250">      attr("disabled", deminimize(value, "disabled"));</span>
-<span class="source-line-no">251</span><span id="line-251">      return this;</span>
-<span class="source-line-no">252</span><span id="line-252">   }</span>
-<span class="source-line-no">253</span><span id="line-253"></span>
-<span class="source-line-no">254</span><span id="line-254">   /**</span>
-<span class="source-line-no">255</span><span id="line-255">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form"&gt;form&lt;/a&gt; attribute.</span>
-<span class="source-line-no">256</span><span id="line-256">    *</span>
-<span class="source-line-no">257</span><span id="line-257">    * &lt;p&gt;</span>
-<span class="source-line-no">258</span><span id="line-258">    * Associates the input with a form element by specifying the form's ID. This allows the input</span>
-<span class="source-line-no">259</span><span id="line-259">    * to be placed outside the form element while still being part of the form.</span>
-<span class="source-line-no">260</span><span id="line-260">    *</span>
-<span class="source-line-no">261</span><span id="line-261">    * &lt;p&gt;</span>
-<span class="source-line-no">262</span><span id="line-262">    * The value should match the ID of a form element in the same document.</span>
-<span class="source-line-no">263</span><span id="line-263">    *</span>
-<span class="source-line-no">264</span><span id="line-264">    * @param form The ID of the form element to associate with this input.</span>
-<span class="source-line-no">265</span><span id="line-265">    * @return This object.</span>
-<span class="source-line-no">266</span><span id="line-266">    */</span>
-<span class="source-line-no">267</span><span id="line-267">   public Input form(String value) {</span>
-<span class="source-line-no">268</span><span id="line-268">      attr("form", value);</span>
-<span class="source-line-no">269</span><span id="line-269">      return this;</span>
-<span class="source-line-no">270</span><span id="line-270">   }</span>
-<span class="source-line-no">271</span><span id="line-271"></span>
-<span class="source-line-no">272</span><span id="line-272">   /**</span>
-<span class="source-line-no">273</span><span id="line-273">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formaction"&gt;formaction&lt;/a&gt; attribute.</span>
-<span class="source-line-no">274</span><span id="line-274">    *</span>
-<span class="source-line-no">275</span><span id="line-275">    * &lt;p&gt;</span>
-<span class="source-line-no">276</span><span id="line-276">    * URL to use for form submission.</span>
-<span class="source-line-no">277</span><span id="line-277">    *</span>
-<span class="source-line-no">278</span><span id="line-278">    * @param formaction The new value for this attribute.</span>
-<span class="source-line-no">279</span><span id="line-279">    * @return This object.</span>
-<span class="source-line-no">280</span><span id="line-280">    */</span>
-<span class="source-line-no">281</span><span id="line-281">   public Input formaction(String value) {</span>
-<span class="source-line-no">282</span><span id="line-282">      attr("formaction", value);</span>
-<span class="source-line-no">283</span><span id="line-283">      return this;</span>
-<span class="source-line-no">284</span><span id="line-284">   }</span>
-<span class="source-line-no">285</span><span id="line-285"></span>
-<span class="source-line-no">286</span><span id="line-286">   /**</span>
-<span class="source-line-no">287</span><span id="line-287">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formenctype"&gt;formenctype&lt;/a&gt; attribute.</span>
-<span class="source-line-no">288</span><span id="line-288">    *</span>
-<span class="source-line-no">289</span><span id="line-289">    * &lt;p&gt;</span>
-<span class="source-line-no">290</span><span id="line-290">    * Form data set encoding type to use for form submission.</span>
-<span class="source-line-no">291</span><span id="line-291">    *</span>
-<span class="source-line-no">292</span><span id="line-292">    * @param formenctype The new value for this attribute.</span>
-<span class="source-line-no">293</span><span id="line-293">    * @return This object.</span>
-<span class="source-line-no">294</span><span id="line-294">    */</span>
-<span class="source-line-no">295</span><span id="line-295">   public Input formenctype(String value) {</span>
-<span class="source-line-no">296</span><span id="line-296">      attr("formenctype", value);</span>
-<span class="source-line-no">297</span><span id="line-297">      return this;</span>
-<span class="source-line-no">298</span><span id="line-298">   }</span>
-<span class="source-line-no">299</span><span id="line-299"></span>
-<span class="source-line-no">300</span><span id="line-300">   /**</span>
-<span class="source-line-no">301</span><span id="line-301">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formmethod"&gt;formmethod&lt;/a&gt; attribute.</span>
-<span class="source-line-no">302</span><span id="line-302">    *</span>
-<span class="source-line-no">303</span><span id="line-303">    * &lt;p&gt;</span>
-<span class="source-line-no">304</span><span id="line-304">    * HTTP method to use for form submission.</span>
-<span class="source-line-no">305</span><span id="line-305">    *</span>
-<span class="source-line-no">306</span><span id="line-306">    * @param formmethod The new value for this attribute.</span>
-<span class="source-line-no">307</span><span id="line-307">    * @return This object.</span>
-<span class="source-line-no">308</span><span id="line-308">    */</span>
-<span class="source-line-no">309</span><span id="line-309">   public Input formmethod(String value) {</span>
-<span class="source-line-no">310</span><span id="line-310">      attr("formmethod", value);</span>
-<span class="source-line-no">311</span><span id="line-311">      return this;</span>
-<span class="source-line-no">312</span><span id="line-312">   }</span>
-<span class="source-line-no">313</span><span id="line-313"></span>
-<span class="source-line-no">314</span><span id="line-314">   /**</span>
-<span class="source-line-no">315</span><span id="line-315">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formnovalidate"&gt;formnovalidate&lt;/a&gt;</span>
-<span class="source-line-no">316</span><span id="line-316">    * attribute.</span>
-<span class="source-line-no">317</span><span id="line-317">    *</span>
-<span class="source-line-no">318</span><span id="line-318">    * &lt;p&gt;</span>
-<span class="source-line-no">319</span><span id="line-319">    * Bypass form control validation for form submission.</span>
-<span class="source-line-no">320</span><span id="line-320">    *</span>
-<span class="source-line-no">321</span><span id="line-321">    * @param formnovalidate The new value for this attribute.</span>
-<span class="source-line-no">322</span><span id="line-322">    * @return This object.</span>
-<span class="source-line-no">323</span><span id="line-323">    */</span>
-<span class="source-line-no">324</span><span id="line-324">   public Input formnovalidate(String value) {</span>
-<span class="source-line-no">325</span><span id="line-325">      attr("formnovalidate", value);</span>
-<span class="source-line-no">326</span><span id="line-326">      return this;</span>
-<span class="source-line-no">327</span><span id="line-327">   }</span>
-<span class="source-line-no">328</span><span id="line-328"></span>
-<span class="source-line-no">329</span><span id="line-329">   /**</span>
-<span class="source-line-no">330</span><span id="line-330">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formtarget"&gt;formtarget&lt;/a&gt; attribute.</span>
-<span class="source-line-no">331</span><span id="line-331">    *</span>
-<span class="source-line-no">332</span><span id="line-332">    * &lt;p&gt;</span>
-<span class="source-line-no">333</span><span id="line-333">    * Browsing context for form submission.</span>
-<span class="source-line-no">334</span><span id="line-334">    *</span>
-<span class="source-line-no">335</span><span id="line-335">    * @param formtarget The new value for this attribute.</span>
-<span class="source-line-no">336</span><span id="line-336">    * @return This object.</span>
-<span class="source-line-no">337</span><span id="line-337">    */</span>
-<span class="source-line-no">338</span><span id="line-338">   public Input formtarget(String value) {</span>
-<span class="source-line-no">339</span><span id="line-339">      attr("formtarget", value);</span>
-<span class="source-line-no">340</span><span id="line-340">      return this;</span>
-<span class="source-line-no">341</span><span id="line-341">   }</span>
-<span class="source-line-no">342</span><span id="line-342"></span>
-<span class="source-line-no">343</span><span id="line-343">   /**</span>
-<span class="source-line-no">344</span><span id="line-344">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height"&gt;height&lt;/a&gt;</span>
-<span class="source-line-no">345</span><span id="line-345">    * attribute.</span>
-<span class="source-line-no">346</span><span id="line-346">    *</span>
-<span class="source-line-no">347</span><span id="line-347">    * &lt;p&gt;</span>
-<span class="source-line-no">348</span><span id="line-348">    * Vertical dimension.</span>
-<span class="source-line-no">349</span><span id="line-349">    *</span>
-<span class="source-line-no">350</span><span id="line-350">    * @param height</span>
-<span class="source-line-no">351</span><span id="line-351">    *    The new value for this attribute.</span>
-<span class="source-line-no">352</span><span id="line-352">    *    Typically a {@link Number} or {@link String}.</span>
-<span class="source-line-no">353</span><span id="line-353">    * @return This object.</span>
-<span class="source-line-no">354</span><span id="line-354">    */</span>
-<span class="source-line-no">355</span><span id="line-355">   public Input height(Object value) {</span>
-<span class="source-line-no">356</span><span id="line-356">      attr("height", value);</span>
-<span class="source-line-no">357</span><span id="line-357">      return this;</span>
-<span class="source-line-no">358</span><span id="line-358">   }</span>
-<span class="source-line-no">359</span><span id="line-359"></span>
-<span class="source-line-no">360</span><span id="line-360">   /**</span>
-<span class="source-line-no">361</span><span id="line-361">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-input-inputmode"&gt;inputmode&lt;/a&gt;</span>
-<span class="source-line-no">362</span><span id="line-362">    * attribute.</span>
-<span class="source-line-no">363</span><span id="line-363">    *</span>
-<span class="source-line-no">364</span><span id="line-364">    * &lt;p&gt;</span>
-<span class="source-line-no">365</span><span id="line-365">    * Provides a hint to browsers about the type of virtual keyboard to display on mobile devices.</span>
-<span class="source-line-no">366</span><span id="line-366">    *</span>
-<span class="source-line-no">367</span><span id="line-367">    * &lt;p&gt;</span>
-<span class="source-line-no">368</span><span id="line-368">    * Possible values:</span>
-<span class="source-line-no">369</span><span id="line-369">    * &lt;ul&gt;</span>
-<span class="source-line-no">370</span><span id="line-370">    *    &lt;li&gt;&lt;js&gt;"none"&lt;/js&gt; - No virtual keyboard&lt;/li&gt;</span>
-<span class="source-line-no">371</span><span id="line-371">    *    &lt;li&gt;&lt;js&gt;"text"&lt;/js&gt; - Standard text keyboard (default)&lt;/li&gt;</span>
-<span class="source-line-no">372</span><span id="line-372">    *    &lt;li&gt;&lt;js&gt;"tel"&lt;/js&gt; - Numeric keypad for telephone numbers&lt;/li&gt;</span>
-<span class="source-line-no">373</span><span id="line-373">    *    &lt;li&gt;&lt;js&gt;"url"&lt;/js&gt; - Keyboard optimized for URLs&lt;/li&gt;</span>
-<span class="source-line-no">374</span><span id="line-374">    *    &lt;li&gt;&lt;js&gt;"email"&lt;/js&gt; - Keyboard optimized for email addresses&lt;/li&gt;</span>
-<span class="source-line-no">375</span><span id="line-375">    *    &lt;li&gt;&lt;js&gt;"numeric"&lt;/js&gt; - Numeric keypad&lt;/li&gt;</span>
-<span class="source-line-no">376</span><span id="line-376">    *    &lt;li&gt;&lt;js&gt;"decimal"&lt;/js&gt; - Numeric keypad with decimal point&lt;/li&gt;</span>
-<span class="source-line-no">377</span><span id="line-377">    *    &lt;li&gt;&lt;js&gt;"search"&lt;/js&gt; - Keyboard optimized for search&lt;/li&gt;</span>
-<span class="source-line-no">378</span><span id="line-378">    * &lt;/ul&gt;</span>
-<span class="source-line-no">379</span><span id="line-379">    *</span>
-<span class="source-line-no">380</span><span id="line-380">    * @param inputmode The input modality hint for mobile keyboards.</span>
-<span class="source-line-no">381</span><span id="line-381">    * @return This object.</span>
-<span class="source-line-no">382</span><span id="line-382">    */</span>
-<span class="source-line-no">383</span><span id="line-383">   public Input inputmode(String value) {</span>
-<span class="source-line-no">384</span><span id="line-384">      attr("inputmode", value);</span>
-<span class="source-line-no">385</span><span id="line-385">      return this;</span>
-<span class="source-line-no">386</span><span id="line-386">   }</span>
-<span class="source-line-no">387</span><span id="line-387"></span>
-<span class="source-line-no">388</span><span id="line-388">   /**</span>
-<span class="source-line-no">389</span><span id="line-389">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-list"&gt;list&lt;/a&gt; attribute.</span>
-<span class="source-line-no">390</span><span id="line-390">    *</span>
-<span class="source-line-no">391</span><span id="line-391">    * &lt;p&gt;</span>
-<span class="source-line-no">392</span><span id="line-392">    * References a &lt;c&gt;&amp;lt;datalist&amp;gt;&lt;/c&gt; element that provides predefined options</span>
-<span class="source-line-no">393</span><span id="line-393">    * for the input field. Creates a dropdown with autocomplete suggestions.</span>
-<span class="source-line-no">394</span><span id="line-394">    *</span>
-<span class="source-line-no">395</span><span id="line-395">    * @param list The ID of a datalist element (without the # prefix).</span>
-<span class="source-line-no">396</span><span id="line-396">    * @return This object.</span>
-<span class="source-line-no">397</span><span id="line-397">    */</span>
-<span class="source-line-no">398</span><span id="line-398">   public Input list(String value) {</span>
-<span class="source-line-no">399</span><span id="line-399">      attr("list", value);</span>
-<span class="source-line-no">400</span><span id="line-400">      return this;</span>
-<span class="source-line-no">401</span><span id="line-401">   }</span>
-<span class="source-line-no">402</span><span id="line-402"></span>
-<span class="source-line-no">403</span><span id="line-403">   /**</span>
-<span class="source-line-no">404</span><span id="line-404">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-max"&gt;max&lt;/a&gt; attribute.</span>
-<span class="source-line-no">405</span><span id="line-405">    *</span>
-<span class="source-line-no">406</span><span id="line-406">    * &lt;p&gt;</span>
-<span class="source-line-no">407</span><span id="line-407">    * Maximum value.</span>
-<span class="source-line-no">408</span><span id="line-408">    *</span>
-<span class="source-line-no">409</span><span id="line-409">    * @param max</span>
-<span class="source-line-no">410</span><span id="line-410">    *    The new value for this attribute.</span>
-<span class="source-line-no">411</span><span id="line-411">    *    Typically a {@link Number} or {@link String}.</span>
-<span class="source-line-no">412</span><span id="line-412">    * @return This object.</span>
-<span class="source-line-no">413</span><span id="line-413">    */</span>
-<span class="source-line-no">414</span><span id="line-414">   public Input max(Object value) {</span>
-<span class="source-line-no">415</span><span id="line-415">      attr("max", value);</span>
-<span class="source-line-no">416</span><span id="line-416">      return this;</span>
-<span class="source-line-no">417</span><span id="line-417">   }</span>
-<span class="source-line-no">418</span><span id="line-418"></span>
-<span class="source-line-no">419</span><span id="line-419">   /**</span>
-<span class="source-line-no">420</span><span id="line-420">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-maxlength"&gt;maxlength&lt;/a&gt; attribute.</span>
-<span class="source-line-no">421</span><span id="line-421">    * Maximum length of value.</span>
-<span class="source-line-no">422</span><span id="line-422">    *</span>
-<span class="source-line-no">423</span><span id="line-423">    * @param maxlength The new value for this attribute.</span>
-<span class="source-line-no">424</span><span id="line-424">    * Typically a {@link Number} or {@link String}.</span>
-<span class="source-line-no">425</span><span id="line-425">    * @return This object.</span>
-<span class="source-line-no">426</span><span id="line-426">    */</span>
-<span class="source-line-no">427</span><span id="line-427">   public Input maxlength(Object value) {</span>
-<span class="source-line-no">428</span><span id="line-428">      attr("maxlength", value);</span>
-<span class="source-line-no">429</span><span id="line-429">      return this;</span>
-<span class="source-line-no">430</span><span id="line-430">   }</span>
-<span class="source-line-no">431</span><span id="line-431"></span>
-<span class="source-line-no">432</span><span id="line-432">   /**</span>
-<span class="source-line-no">433</span><span id="line-433">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-min"&gt;min&lt;/a&gt; attribute.</span>
-<span class="source-line-no">434</span><span id="line-434">    *</span>
-<span class="source-line-no">435</span><span id="line-435">    * &lt;p&gt;</span>
-<span class="source-line-no">436</span><span id="line-436">    * Minimum value.</span>
-<span class="source-line-no">437</span><span id="line-437">    *</span>
-<span class="source-line-no">438</span><span id="line-438">    * @param min</span>
-<span class="source-line-no">439</span><span id="line-439">    *    The new value for this attribute.</span>
-<span class="source-line-no">440</span><span id="line-440">    *    Typically a {@link Number} or {@link String}.</span>
-<span class="source-line-no">441</span><span id="line-441">    * @return This object.</span>
-<span class="source-line-no">442</span><span id="line-442">    */</span>
-<span class="source-line-no">443</span><span id="line-443">   public Input min(Object value) {</span>
-<span class="source-line-no">444</span><span id="line-444">      attr("min", value);</span>
-<span class="source-line-no">445</span><span id="line-445">      return this;</span>
-<span class="source-line-no">446</span><span id="line-446">   }</span>
-<span class="source-line-no">447</span><span id="line-447"></span>
-<span class="source-line-no">448</span><span id="line-448">   /**</span>
-<span class="source-line-no">449</span><span id="line-449">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-minlength"&gt;minlength&lt;/a&gt; attribute.</span>
-<span class="source-line-no">450</span><span id="line-450">    *</span>
-<span class="source-line-no">451</span><span id="line-451">    * &lt;p&gt;</span>
-<span class="source-line-no">452</span><span id="line-452">    * Minimum length of value.</span>
-<span class="source-line-no">453</span><span id="line-453">    *</span>
-<span class="source-line-no">454</span><span id="line-454">    * @param minlength</span>
-<span class="source-line-no">455</span><span id="line-455">    *    The new value for this attribute.</span>
-<span class="source-line-no">456</span><span id="line-456">    *    Typically a {@link Number} or {@link String}.</span>
-<span class="source-line-no">457</span><span id="line-457">    * @return This object.</span>
-<span class="source-line-no">458</span><span id="line-458">    */</span>
-<span class="source-line-no">459</span><span id="line-459">   public Input minlength(Object value) {</span>
-<span class="source-line-no">460</span><span id="line-460">      attr("minlength", value);</span>
-<span class="source-line-no">461</span><span id="line-461">      return this;</span>
-<span class="source-line-no">462</span><span id="line-462">   }</span>
-<span class="source-line-no">463</span><span id="line-463"></span>
-<span class="source-line-no">464</span><span id="line-464">   /**</span>
-<span class="source-line-no">465</span><span id="line-465">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-multiple"&gt;multiple&lt;/a&gt; attribute.</span>
-<span class="source-line-no">466</span><span id="line-466">    *</span>
-<span class="source-line-no">467</span><span id="line-467">    * &lt;p&gt;</span>
-<span class="source-line-no">468</span><span id="line-468">    * Whether to allow multiple values.</span>
-<span class="source-line-no">469</span><span id="line-469">    *</span>
-<span class="source-line-no">470</span><span id="line-470">    * &lt;p&gt;</span>
-<span class="source-line-no">471</span><span id="line-471">    * This attribute uses deminimized values:</span>
-<span class="source-line-no">472</span><span id="line-472">    * &lt;ul&gt;</span>
-<span class="source-line-no">473</span><span id="line-473">    *    &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt; - Attribute is not added&lt;/li&gt;</span>
-<span class="source-line-no">474</span><span id="line-474">    *    &lt;li&gt;&lt;jk&gt;true&lt;/jk&gt; - Attribute is added as &lt;js&gt;"multiple"&lt;/js&gt;&lt;/li&gt;</span>
-<span class="source-line-no">475</span><span id="line-475">    *    &lt;li&gt;Other values - Passed through as-is&lt;/li&gt;</span>
-<span class="source-line-no">476</span><span id="line-476">    * &lt;/ul&gt;</span>
-<span class="source-line-no">477</span><span id="line-477">    *</span>
-<span class="source-line-no">478</span><span id="line-478">    * @param multiple</span>
-<span class="source-line-no">479</span><span id="line-479">    *    The new value for this attribute.</span>
-<span class="source-line-no">480</span><span id="line-480">    *    Typically a {@link Boolean} or {@link String}.</span>
-<span class="source-line-no">481</span><span id="line-481">    * @return This object.</span>
-<span class="source-line-no">482</span><span id="line-482">    */</span>
-<span class="source-line-no">483</span><span id="line-483">   public Input multiple(Object value) {</span>
-<span class="source-line-no">484</span><span id="line-484">      attr("multiple", deminimize(value, "multiple"));</span>
-<span class="source-line-no">485</span><span id="line-485">      return this;</span>
-<span class="source-line-no">486</span><span id="line-486">   }</span>
-<span class="source-line-no">487</span><span id="line-487"></span>
-<span class="source-line-no">488</span><span id="line-488">   /**</span>
-<span class="source-line-no">489</span><span id="line-489">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name"&gt;name&lt;/a&gt; attribute.</span>
-<span class="source-line-no">490</span><span id="line-490">    *</span>
-<span class="source-line-no">491</span><span id="line-491">    * &lt;p&gt;</span>
-<span class="source-line-no">492</span><span id="line-492">    * Name of form control to use for form submission and in the form.elements API.</span>
-<span class="source-line-no">493</span><span id="line-493">    *</span>
-<span class="source-line-no">494</span><span id="line-494">    * @param name The new value for this attribute.</span>
-<span class="source-line-no">495</span><span id="line-495">    * @return This object.</span>
-<span class="source-line-no">496</span><span id="line-496">    */</span>
-<span class="source-line-no">497</span><span id="line-497">   public Input name(String value) {</span>
-<span class="source-line-no">498</span><span id="line-498">      attr("name", value);</span>
-<span class="source-line-no">499</span><span id="line-499">      return this;</span>
-<span class="source-line-no">500</span><span id="line-500">   }</span>
-<span class="source-line-no">501</span><span id="line-501"></span>
-<span class="source-line-no">502</span><span id="line-502">   /**</span>
-<span class="source-line-no">503</span><span id="line-503">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-pattern"&gt;pattern&lt;/a&gt; attribute.</span>
-<span class="source-line-no">504</span><span id="line-504">    *</span>
-<span class="source-line-no">505</span><span id="line-505">    * &lt;p&gt;</span>
-<span class="source-line-no">506</span><span id="line-506">    * Specifies a regular expression that the input's value must match for the form to be valid.</span>
-<span class="source-line-no">507</span><span id="line-507">    * Works with the &lt;c&gt;title&lt;/c&gt; attribute to provide user feedback.</span>
-<span class="source-line-no">508</span><span id="line-508">    *</span>
-<span class="source-line-no">509</span><span id="line-509">    * @param pattern A regular expression pattern (e.g., &lt;js&gt;"[0-9]{3}-[0-9]{3}-[0-9]{4}"&lt;/js&gt; for phone numbers).</span>
-<span class="source-line-no">510</span><span id="line-510">    * @return This object.</span>
-<span class="source-line-no">511</span><span id="line-511">    */</span>
-<span class="source-line-no">512</span><span id="line-512">   public Input pattern(String value) {</span>
-<span class="source-line-no">513</span><span id="line-513">      attr("pattern", value);</span>
-<span class="source-line-no">514</span><span id="line-514">      return this;</span>
-<span class="source-line-no">515</span><span id="line-515">   }</span>
-<span class="source-line-no">516</span><span id="line-516"></span>
-<span class="source-line-no">517</span><span id="line-517">   /**</span>
-<span class="source-line-no">518</span><span id="line-518">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-placeholder"&gt;placeholder&lt;/a&gt; attribute.</span>
-<span class="source-line-no">519</span><span id="line-519">    *</span>
-<span class="source-line-no">520</span><span id="line-520">    * &lt;p&gt;</span>
-<span class="source-line-no">521</span><span id="line-521">    * Provides a hint to the user about what to enter in the input field.</span>
-<span class="source-line-no">522</span><span id="line-522">    * The placeholder text appears when the field is empty and disappears when the user starts typing.</span>
-<span class="source-line-no">523</span><span id="line-523">    *</span>
-<span class="source-line-no">524</span><span id="line-524">    * @param placeholder Hint text to display in the empty input field.</span>
-<span class="source-line-no">525</span><span id="line-525">    * @return This object.</span>
-<span class="source-line-no">526</span><span id="line-526">    */</span>
-<span class="source-line-no">527</span><span id="line-527">   public Input placeholder(String value) {</span>
-<span class="source-line-no">528</span><span id="line-528">      attr("placeholder", value);</span>
-<span class="source-line-no">529</span><span id="line-529">      return this;</span>
-<span class="source-line-no">530</span><span id="line-530">   }</span>
-<span class="source-line-no">531</span><span id="line-531"></span>
-<span class="source-line-no">532</span><span id="line-532">   /**</span>
-<span class="source-line-no">533</span><span id="line-533">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly"&gt;readonly&lt;/a&gt; attribute.</span>
-<span class="source-line-no">534</span><span id="line-534">    *</span>
-<span class="source-line-no">535</span><span id="line-535">    * &lt;p&gt;</span>
-<span class="source-line-no">536</span><span id="line-536">    * Makes the input field read-only, preventing user modification while still allowing</span>
-<span class="source-line-no">537</span><span id="line-537">    * the value to be submitted with the form.</span>
-<span class="source-line-no">538</span><span id="line-538">    *</span>
-<span class="source-line-no">539</span><span id="line-539">    * @param readonly If &lt;jk&gt;true&lt;/jk&gt;, makes the input read-only.</span>
-<span class="source-line-no">540</span><span id="line-540">    * @return This object.</span>
-<span class="source-line-no">541</span><span id="line-541">    */</span>
-<span class="source-line-no">542</span><span id="line-542">   public Input readonly(Object value) {</span>
-<span class="source-line-no">543</span><span id="line-543">      attr("readonly", value);</span>
-<span class="source-line-no">544</span><span id="line-544">      return this;</span>
-<span class="source-line-no">545</span><span id="line-545">   }</span>
+<span class="source-line-no">085</span><span id="line-85">public class Input extends HtmlElementVoid {</span>
+<span class="source-line-no">086</span><span id="line-86"></span>
+<span class="source-line-no">087</span><span id="line-87">   /**</span>
+<span class="source-line-no">088</span><span id="line-88">    * Creates an empty {@link Input} element.</span>
+<span class="source-line-no">089</span><span id="line-89">    */</span>
+<span class="source-line-no">090</span><span id="line-90">   public Input() {}</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">   /**</span>
+<span class="source-line-no">093</span><span id="line-93">    * Creates an {@link Input} element with the specified {@link Input#type(String)} attribute.</span>
+<span class="source-line-no">094</span><span id="line-94">    *</span>
+<span class="source-line-no">095</span><span id="line-95">    * @param type The {@link Input#type(String)} attribute.</span>
+<span class="source-line-no">096</span><span id="line-96">    */</span>
+<span class="source-line-no">097</span><span id="line-97">   public Input(String type) {</span>
+<span class="source-line-no">098</span><span id="line-98">      type(type);</span>
+<span class="source-line-no">099</span><span id="line-99">   }</span>
+<span class="source-line-no">100</span><span id="line-100"></span>
+<span class="source-line-no">101</span><span id="line-101">   /**</span>
+<span class="source-line-no">102</span><span id="line-102">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-accept"&gt;accept&lt;/a&gt; attribute.</span>
+<span class="source-line-no">103</span><span id="line-103">    *</span>
+<span class="source-line-no">104</span><span id="line-104">    * &lt;p&gt;</span>
+<span class="source-line-no">105</span><span id="line-105">    * Specifies which file types the file input should accept. Used with &lt;c&gt;type="file"&lt;/c&gt;.</span>
+<span class="source-line-no">106</span><span id="line-106">    *</span>
+<span class="source-line-no">107</span><span id="line-107">    * &lt;p&gt;</span>
+<span class="source-line-no">108</span><span id="line-108">    * Examples:</span>
+<span class="source-line-no">109</span><span id="line-109">    * &lt;ul&gt;</span>
+<span class="source-line-no">110</span><span id="line-110">    *    &lt;li&gt;&lt;js&gt;"image/*"&lt;/js&gt; - Accept all image files&lt;/li&gt;</span>
+<span class="source-line-no">111</span><span id="line-111">    *    &lt;li&gt;&lt;js&gt;".pdf,.doc,.docx"&lt;/js&gt; - Accept specific file extensions&lt;/li&gt;</span>
+<span class="source-line-no">112</span><span id="line-112">    *    &lt;li&gt;&lt;js&gt;"image/png,image/jpeg"&lt;/js&gt; - Accept specific MIME types&lt;/li&gt;</span>
+<span class="source-line-no">113</span><span id="line-113">    * &lt;/ul&gt;</span>
+<span class="source-line-no">114</span><span id="line-114">    *</span>
+<span class="source-line-no">115</span><span id="line-115">    * @param accept File type restrictions for file uploads.</span>
+<span class="source-line-no">116</span><span id="line-116">    * @return This object.</span>
+<span class="source-line-no">117</span><span id="line-117">    */</span>
+<span class="source-line-no">118</span><span id="line-118">   public Input accept(String value) {</span>
+<span class="source-line-no">119</span><span id="line-119">      attr("accept", value);</span>
+<span class="source-line-no">120</span><span id="line-120">      return this;</span>
+<span class="source-line-no">121</span><span id="line-121">   }</span>
+<span class="source-line-no">122</span><span id="line-122"></span>
+<span class="source-line-no">123</span><span id="line-123">   /**</span>
+<span class="source-line-no">124</span><span id="line-124">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-alt"&gt;alt&lt;/a&gt; attribute.</span>
+<span class="source-line-no">125</span><span id="line-125">    *</span>
+<span class="source-line-no">126</span><span id="line-126">    * &lt;p&gt;</span>
+<span class="source-line-no">127</span><span id="line-127">    * Alternative text for image submit buttons. Used with &lt;c&gt;type="image"&lt;/c&gt; to provide</span>
+<span class="source-line-no">128</span><span id="line-128">    * accessible text when the image cannot be displayed.</span>
+<span class="source-line-no">129</span><span id="line-129">    *</span>
+<span class="source-line-no">130</span><span id="line-130">    * @param alt Alternative text for image submit buttons.</span>
+<span class="source-line-no">131</span><span id="line-131">    * @return This object.</span>
+<span class="source-line-no">132</span><span id="line-132">    */</span>
+<span class="source-line-no">133</span><span id="line-133">   public Input alt(String value) {</span>
+<span class="source-line-no">134</span><span id="line-134">      attr("alt", value);</span>
+<span class="source-line-no">135</span><span id="line-135">      return this;</span>
+<span class="source-line-no">136</span><span id="line-136">   }</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">   /**</span>
+<span class="source-line-no">139</span><span id="line-139">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete"&gt;autocomplete&lt;/a&gt; attribute.</span>
+<span class="source-line-no">140</span><span id="line-140">    *</span>
+<span class="source-line-no">141</span><span id="line-141">    * &lt;p&gt;</span>
+<span class="source-line-no">142</span><span id="line-142">    * Controls whether the browser can automatically complete the input field.</span>
+<span class="source-line-no">143</span><span id="line-143">    *</span>
+<span class="source-line-no">144</span><span id="line-144">    * &lt;p&gt;</span>
+<span class="source-line-no">145</span><span id="line-145">    * Common values:</span>
+<span class="source-line-no">146</span><span id="line-146">    * &lt;ul&gt;</span>
+<span class="source-line-no">147</span><span id="line-147">    *    &lt;li&gt;&lt;js&gt;"on"&lt;/js&gt; - Allow autocomplete (default)&lt;/li&gt;</span>
+<span class="source-line-no">148</span><span id="line-148">    *    &lt;li&gt;&lt;js&gt;"off"&lt;/js&gt; - Disable autocomplete&lt;/li&gt;</span>
+<span class="source-line-no">149</span><span id="line-149">    *    &lt;li&gt;&lt;js&gt;"name"&lt;/js&gt; - Full name&lt;/li&gt;</span>
+<span class="source-line-no">150</span><span id="line-150">    *    &lt;li&gt;&lt;js&gt;"email"&lt;/js&gt; - Email address&lt;/li&gt;</span>
+<span class="source-line-no">151</span><span id="line-151">    *    &lt;li&gt;&lt;js&gt;"username"&lt;/js&gt; - Username or login&lt;/li&gt;</span>
+<span class="source-line-no">152</span><span id="line-152">    *    &lt;li&gt;&lt;js&gt;"current-password"&lt;/js&gt; - Current password&lt;/li&gt;</span>
+<span class="source-line-no">153</span><span id="line-153">    *    &lt;li&gt;&lt;js&gt;"new-password"&lt;/js&gt; - New password&lt;/li&gt;</span>
+<span class="source-line-no">154</span><span id="line-154">    *    &lt;li&gt;&lt;js&gt;"tel"&lt;/js&gt; - Telephone number&lt;/li&gt;</span>
+<span class="source-line-no">155</span><span id="line-155">    *    &lt;li&gt;&lt;js&gt;"url"&lt;/js&gt; - URL&lt;/li&gt;</span>
+<span class="source-line-no">156</span><span id="line-156">    *    &lt;li&gt;&lt;js&gt;"address-line1"&lt;/js&gt; - Street address&lt;/li&gt;</span>
+<span class="source-line-no">157</span><span id="line-157">    *    &lt;li&gt;&lt;js&gt;"country"&lt;/js&gt; - Country name&lt;/li&gt;</span>
+<span class="source-line-no">158</span><span id="line-158">    *    &lt;li&gt;&lt;js&gt;"postal-code"&lt;/js&gt; - Postal code&lt;/li&gt;</span>
+<span class="source-line-no">159</span><span id="line-159">    * &lt;/ul&gt;</span>
+<span class="source-line-no">160</span><span id="line-160">    *</span>
+<span class="source-line-no">161</span><span id="line-161">    * @param autocomplete Autocomplete hint for the input field.</span>
+<span class="source-line-no">162</span><span id="line-162">    * @return This object.</span>
+<span class="source-line-no">163</span><span id="line-163">    */</span>
+<span class="source-line-no">164</span><span id="line-164">   public Input autocomplete(String value) {</span>
+<span class="source-line-no">165</span><span id="line-165">      attr("autocomplete", value);</span>
+<span class="source-line-no">166</span><span id="line-166">      return this;</span>
+<span class="source-line-no">167</span><span id="line-167">   }</span>
+<span class="source-line-no">168</span><span id="line-168"></span>
+<span class="source-line-no">169</span><span id="line-169">   /**</span>
+<span class="source-line-no">170</span><span id="line-170">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus"&gt;autofocus&lt;/a&gt; attribute.</span>
+<span class="source-line-no">171</span><span id="line-171">    *</span>
+<span class="source-line-no">172</span><span id="line-172">    * &lt;p&gt;</span>
+<span class="source-line-no">173</span><span id="line-173">    * Automatically focuses the form control when the page loads.</span>
+<span class="source-line-no">174</span><span id="line-174">    * Only one element per page should have this attribute.</span>
+<span class="source-line-no">175</span><span id="line-175">    *</span>
+<span class="source-line-no">176</span><span id="line-176">    * @param autofocus</span>
+<span class="source-line-no">177</span><span id="line-177">    *    The new value for this attribute.</span>
+<span class="source-line-no">178</span><span id="line-178">    *    Typically a {@link Boolean} or {@link String}.</span>
+<span class="source-line-no">179</span><span id="line-179">    * @return This object.</span>
+<span class="source-line-no">180</span><span id="line-180">    */</span>
+<span class="source-line-no">181</span><span id="line-181">   public Input autofocus(Object value) {</span>
+<span class="source-line-no">182</span><span id="line-182">      attr("autofocus", value);</span>
+<span class="source-line-no">183</span><span id="line-183">      return this;</span>
+<span class="source-line-no">184</span><span id="line-184">   }</span>
+<span class="source-line-no">185</span><span id="line-185"></span>
+<span class="source-line-no">186</span><span id="line-186">   /**</span>
+<span class="source-line-no">187</span><span id="line-187">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-checked"&gt;checked&lt;/a&gt; attribute.</span>
+<span class="source-line-no">188</span><span id="line-188">    *</span>
+<span class="source-line-no">189</span><span id="line-189">    * &lt;p&gt;</span>
+<span class="source-line-no">190</span><span id="line-190">    * Whether the command or control is checked.</span>
+<span class="source-line-no">191</span><span id="line-191">    *</span>
+<span class="source-line-no">192</span><span id="line-192">    * &lt;p&gt;</span>
+<span class="source-line-no">193</span><span id="line-193">    * This attribute uses deminimized values:</span>
+<span class="source-line-no">194</span><span id="line-194">    * &lt;ul&gt;</span>
+<span class="source-line-no">195</span><span id="line-195">    *    &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt; - Attribute is not added&lt;/li&gt;</span>
+<span class="source-line-no">196</span><span id="line-196">    *    &lt;li&gt;&lt;jk&gt;true&lt;/jk&gt; - Attribute is added as &lt;js&gt;"checked"&lt;/js&gt;&lt;/li&gt;</span>
+<span class="source-line-no">197</span><span id="line-197">    *    &lt;li&gt;Other values - Passed through as-is&lt;/li&gt;</span>
+<span class="source-line-no">198</span><span id="line-198">    * &lt;/ul&gt;</span>
+<span class="source-line-no">199</span><span id="line-199">    *</span>
+<span class="source-line-no">200</span><span id="line-200">    * @param checked</span>
+<span class="source-line-no">201</span><span id="line-201">    *    The new value for this attribute.</span>
+<span class="source-line-no">202</span><span id="line-202">    *    Typically a {@link Boolean} or {@link String}.</span>
+<span class="source-line-no">203</span><span id="line-203">    * @return This object.</span>
+<span class="source-line-no">204</span><span id="line-204">    */</span>
+<span class="source-line-no">205</span><span id="line-205">   public Input checked(Object value) {</span>
+<span class="source-line-no">206</span><span id="line-206">      attr("checked", deminimize(value, "checked"));</span>
+<span class="source-line-no">207</span><span id="line-207">      return this;</span>
+<span class="source-line-no">208</span><span id="line-208">   }</span>
+<span class="source-line-no">209</span><span id="line-209"></span>
+<span class="source-line-no">210</span><span id="line-210">   /**</span>
+<span class="source-line-no">211</span><span id="line-211">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-dirname"&gt;dirname&lt;/a&gt; attribute.</span>
+<span class="source-line-no">212</span><span id="line-212">    *</span>
+<span class="source-line-no">213</span><span id="line-213">    * &lt;p&gt;</span>
+<span class="source-line-no">214</span><span id="line-214">    * Specifies the name of a hidden form field that will be submitted along with the input value,</span>
+<span class="source-line-no">215</span><span id="line-215">    * containing the text direction (ltr or rtl) of the input content.</span>
+<span class="source-line-no">216</span><span id="line-216">    *</span>
+<span class="source-line-no">217</span><span id="line-217">    * &lt;p&gt;</span>
+<span class="source-line-no">218</span><span id="line-218">    * This is useful for forms that need to preserve text direction information when submitted.</span>
+<span class="source-line-no">219</span><span id="line-219">    * The hidden field will contain either "ltr" or "rtl" based on the input's direction.</span>
+<span class="source-line-no">220</span><span id="line-220">    *</span>
+<span class="source-line-no">221</span><span id="line-221">    * @param dirname The name of the hidden field for directionality information.</span>
+<span class="source-line-no">222</span><span id="line-222">    * @return This object.</span>
+<span class="source-line-no">223</span><span id="line-223">    */</span>
+<span class="source-line-no">224</span><span id="line-224">   public Input dirname(String value) {</span>
+<span class="source-line-no">225</span><span id="line-225">      attr("dirname", value);</span>
+<span class="source-line-no">226</span><span id="line-226">      return this;</span>
+<span class="source-line-no">227</span><span id="line-227">   }</span>
+<span class="source-line-no">228</span><span id="line-228"></span>
+<span class="source-line-no">229</span><span id="line-229">   /**</span>
+<span class="source-line-no">230</span><span id="line-230">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled"&gt;disabled&lt;/a&gt; attribute.</span>
+<span class="source-line-no">231</span><span id="line-231">    *</span>
+<span class="source-line-no">232</span><span id="line-232">    * &lt;p&gt;</span>
+<span class="source-line-no">233</span><span id="line-233">    * Whether the form control is disabled.</span>
+<span class="source-line-no">234</span><span id="line-234">    *</span>
+<span class="source-line-no">235</span><span id="line-235">    * &lt;p&gt;</span>
+<span class="source-line-no">236</span><span id="line-236">    * This attribute uses deminimized values:</span>
+<span class="source-line-no">237</span><span id="line-237">    * &lt;ul&gt;</span>
+<span class="source-line-no">238</span><span id="line-238">    *    &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt; - Attribute is not added&lt;/li&gt;</span>
+<span class="source-line-no">239</span><span id="line-239">    *    &lt;li&gt;&lt;jk&gt;true&lt;/jk&gt; - Attribute is added as &lt;js&gt;"disabled"&lt;/js&gt;&lt;/li&gt;</span>
+<span class="source-line-no">240</span><span id="line-240">    *    &lt;li&gt;Other values - Passed through as-is&lt;/li&gt;</span>
+<span class="source-line-no">241</span><span id="line-241">    * &lt;/ul&gt;</span>
+<span class="source-line-no">242</span><span id="line-242">    *</span>
+<span class="source-line-no">243</span><span id="line-243">    * @param disabled</span>
+<span class="source-line-no">244</span><span id="line-244">    *    The new value for this attribute.</span>
+<span class="source-line-no">245</span><span id="line-245">    *    Typically a {@link Boolean} or {@link String}.</span>
+<span class="source-line-no">246</span><span id="line-246">    * @return This object.</span>
+<span class="source-line-no">247</span><span id="line-247">    */</span>
+<span class="source-line-no">248</span><span id="line-248">   public Input disabled(Object value) {</span>
+<span class="source-line-no">249</span><span id="line-249">      attr("disabled", deminimize(value, "disabled"));</span>
+<span class="source-line-no">250</span><span id="line-250">      return this;</span>
+<span class="source-line-no">251</span><span id="line-251">   }</span>
+<span class="source-line-no">252</span><span id="line-252"></span>
+<span class="source-line-no">253</span><span id="line-253">   /**</span>
+<span class="source-line-no">254</span><span id="line-254">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form"&gt;form&lt;/a&gt; attribute.</span>
+<span class="source-line-no">255</span><span id="line-255">    *</span>
+<span class="source-line-no">256</span><span id="line-256">    * &lt;p&gt;</span>
+<span class="source-line-no">257</span><span id="line-257">    * Associates the input with a form element by specifying the form's ID. This allows the input</span>
+<span class="source-line-no">258</span><span id="line-258">    * to be placed outside the form element while still being part of the form.</span>
+<span class="source-line-no">259</span><span id="line-259">    *</span>
+<span class="source-line-no">260</span><span id="line-260">    * &lt;p&gt;</span>
+<span class="source-line-no">261</span><span id="line-261">    * The value should match the ID of a form element in the same document.</span>
+<span class="source-line-no">262</span><span id="line-262">    *</span>
+<span class="source-line-no">263</span><span id="line-263">    * @param form The ID of the form element to associate with this input.</span>
+<span class="source-line-no">264</span><span id="line-264">    * @return This object.</span>
+<span class="source-line-no">265</span><span id="line-265">    */</span>
+<span class="source-line-no">266</span><span id="line-266">   public Input form(String value) {</span>
+<span class="source-line-no">267</span><span id="line-267">      attr("form", value);</span>
+<span class="source-line-no">268</span><span id="line-268">      return this;</span>
+<span class="source-line-no">269</span><span id="line-269">   }</span>
+<span class="source-line-no">270</span><span id="line-270"></span>
+<span class="source-line-no">271</span><span id="line-271">   /**</span>
+<span class="source-line-no">272</span><span id="line-272">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formaction"&gt;formaction&lt;/a&gt; attribute.</span>
+<span class="source-line-no">273</span><span id="line-273">    *</span>
+<span class="source-line-no">274</span><span id="line-274">    * &lt;p&gt;</span>
+<span class="source-line-no">275</span><span id="line-275">    * URL to use for form submission.</span>
+<span class="source-line-no">276</span><span id="line-276">    *</span>
+<span class="source-line-no">277</span><span id="line-277">    * @param formaction The new value for this attribute.</span>
+<span class="source-line-no">278</span><span id="line-278">    * @return This object.</span>
+<span class="source-line-no">279</span><span id="line-279">    */</span>
+<span class="source-line-no">280</span><span id="line-280">   public Input formaction(String value) {</span>
+<span class="source-line-no">281</span><span id="line-281">      attr("formaction", value);</span>
+<span class="source-line-no">282</span><span id="line-282">      return this;</span>
+<span class="source-line-no">283</span><span id="line-283">   }</span>
+<span class="source-line-no">284</span><span id="line-284"></span>
+<span class="source-line-no">285</span><span id="line-285">   /**</span>
+<span class="source-line-no">286</span><span id="line-286">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formenctype"&gt;formenctype&lt;/a&gt; attribute.</span>
+<span class="source-line-no">287</span><span id="line-287">    *</span>
+<span class="source-line-no">288</span><span id="line-288">    * &lt;p&gt;</span>
+<span class="source-line-no">289</span><span id="line-289">    * Form data set encoding type to use for form submission.</span>
+<span class="source-line-no">290</span><span id="line-290">    *</span>
+<span class="source-line-no">291</span><span id="line-291">    * @param formenctype The new value for this attribute.</span>
+<span class="source-line-no">292</span><span id="line-292">    * @return This object.</span>
+<span class="source-line-no">293</span><span id="line-293">    */</span>
+<span class="source-line-no">294</span><span id="line-294">   public Input formenctype(String value) {</span>
+<span class="source-line-no">295</span><span id="line-295">      attr("formenctype", value);</span>
+<span class="source-line-no">296</span><span id="line-296">      return this;</span>
+<span class="source-line-no">297</span><span id="line-297">   }</span>
+<span class="source-line-no">298</span><span id="line-298"></span>
+<span class="source-line-no">299</span><span id="line-299">   /**</span>
+<span class="source-line-no">300</span><span id="line-300">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formmethod"&gt;formmethod&lt;/a&gt; attribute.</span>
+<span class="source-line-no">301</span><span id="line-301">    *</span>
+<span class="source-line-no">302</span><span id="line-302">    * &lt;p&gt;</span>
+<span class="source-line-no">303</span><span id="line-303">    * HTTP method to use for form submission.</span>
+<span class="source-line-no">304</span><span id="line-304">    *</span>
+<span class="source-line-no">305</span><span id="line-305">    * @param formmethod The new value for this attribute.</span>
+<span class="source-line-no">306</span><span id="line-306">    * @return This object.</span>
+<span class="source-line-no">307</span><span id="line-307">    */</span>
+<span class="source-line-no">308</span><span id="line-308">   public Input formmethod(String value) {</span>
+<span class="source-line-no">309</span><span id="line-309">      attr("formmethod", value);</span>
+<span class="source-line-no">310</span><span id="line-310">      return this;</span>
+<span class="source-line-no">311</span><span id="line-311">   }</span>
+<span class="source-line-no">312</span><span id="line-312"></span>
+<span class="source-line-no">313</span><span id="line-313">   /**</span>
+<span class="source-line-no">314</span><span id="line-314">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formnovalidate"&gt;formnovalidate&lt;/a&gt;</span>
+<span class="source-line-no">315</span><span id="line-315">    * attribute.</span>
+<span class="source-line-no">316</span><span id="line-316">    *</span>
+<span class="source-line-no">317</span><span id="line-317">    * &lt;p&gt;</span>
+<span class="source-line-no">318</span><span id="line-318">    * Bypass form control validation for form submission.</span>
+<span class="source-line-no">319</span><span id="line-319">    *</span>
+<span class="source-line-no">320</span><span id="line-320">    * @param formnovalidate The new value for this attribute.</span>
+<span class="source-line-no">321</span><span id="line-321">    * @return This object.</span>
+<span class="source-line-no">322</span><span id="line-322">    */</span>
+<span class="source-line-no">323</span><span id="line-323">   public Input formnovalidate(String value) {</span>
+<span class="source-line-no">324</span><span id="line-324">      attr("formnovalidate", value);</span>
+<span class="source-line-no">325</span><span id="line-325">      return this;</span>
+<span class="source-line-no">326</span><span id="line-326">   }</span>
+<span class="source-line-no">327</span><span id="line-327"></span>
+<span class="source-line-no">328</span><span id="line-328">   /**</span>
+<span class="source-line-no">329</span><span id="line-329">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formtarget"&gt;formtarget&lt;/a&gt; attribute.</span>
+<span class="source-line-no">330</span><span id="line-330">    *</span>
+<span class="source-line-no">331</span><span id="line-331">    * &lt;p&gt;</span>
+<span class="source-line-no">332</span><span id="line-332">    * Browsing context for form submission.</span>
+<span class="source-line-no">333</span><span id="line-333">    *</span>
+<span class="source-line-no">334</span><span id="line-334">    * @param formtarget The new value for this attribute.</span>
+<span class="source-line-no">335</span><span id="line-335">    * @return This object.</span>
+<span class="source-line-no">336</span><span id="line-336">    */</span>
+<span class="source-line-no">337</span><span id="line-337">   public Input formtarget(String value) {</span>
+<span class="source-line-no">338</span><span id="line-338">      attr("formtarget", value);</span>
+<span class="source-line-no">339</span><span id="line-339">      return this;</span>
+<span class="source-line-no">340</span><span id="line-340">   }</span>
+<span class="source-line-no">341</span><span id="line-341"></span>
+<span class="source-line-no">342</span><span id="line-342">   /**</span>
+<span class="source-line-no">343</span><span id="line-343">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height"&gt;height&lt;/a&gt;</span>
+<span class="source-line-no">344</span><span id="line-344">    * attribute.</span>
+<span class="source-line-no">345</span><span id="line-345">    *</span>
+<span class="source-line-no">346</span><span id="line-346">    * &lt;p&gt;</span>
+<span class="source-line-no">347</span><span id="line-347">    * Vertical dimension.</span>
+<span class="source-line-no">348</span><span id="line-348">    *</span>
+<span class="source-line-no">349</span><span id="line-349">    * @param height</span>
+<span class="source-line-no">350</span><span id="line-350">    *    The new value for this attribute.</span>
+<span class="source-line-no">351</span><span id="line-351">    *    Typically a {@link Number} or {@link String}.</span>
+<span class="source-line-no">352</span><span id="line-352">    * @return This object.</span>
+<span class="source-line-no">353</span><span id="line-353">    */</span>
+<span class="source-line-no">354</span><span id="line-354">   public Input height(Object value) {</span>
+<span class="source-line-no">355</span><span id="line-355">      attr("height", value);</span>
+<span class="source-line-no">356</span><span id="line-356">      return this;</span>
+<span class="source-line-no">357</span><span id="line-357">   }</span>
+<span class="source-line-no">358</span><span id="line-358"></span>
+<span class="source-line-no">359</span><span id="line-359">   /**</span>
+<span class="source-line-no">360</span><span id="line-360">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-input-inputmode"&gt;inputmode&lt;/a&gt;</span>
+<span class="source-line-no">361</span><span id="line-361">    * attribute.</span>
+<span class="source-line-no">362</span><span id="line-362">    *</span>
+<span class="source-line-no">363</span><span id="line-363">    * &lt;p&gt;</span>
+<span class="source-line-no">364</span><span id="line-364">    * Provides a hint to browsers about the type of virtual keyboard to display on mobile devices.</span>
+<span class="source-line-no">365</span><span id="line-365">    *</span>
+<span class="source-line-no">366</span><span id="line-366">    * &lt;p&gt;</span>
+<span class="source-line-no">367</span><span id="line-367">    * Possible values:</span>
+<span class="source-line-no">368</span><span id="line-368">    * &lt;ul&gt;</span>
+<span class="source-line-no">369</span><span id="line-369">    *    &lt;li&gt;&lt;js&gt;"none"&lt;/js&gt; - No virtual keyboard&lt;/li&gt;</span>
+<span class="source-line-no">370</span><span id="line-370">    *    &lt;li&gt;&lt;js&gt;"text"&lt;/js&gt; - Standard text keyboard (default)&lt;/li&gt;</span>
+<span class="source-line-no">371</span><span id="line-371">    *    &lt;li&gt;&lt;js&gt;"tel"&lt;/js&gt; - Numeric keypad for telephone numbers&lt;/li&gt;</span>
+<span class="source-line-no">372</span><span id="line-372">    *    &lt;li&gt;&lt;js&gt;"url"&lt;/js&gt; - Keyboard optimized for URLs&lt;/li&gt;</span>
+<span class="source-line-no">373</span><span id="line-373">    *    &lt;li&gt;&lt;js&gt;"email"&lt;/js&gt; - Keyboard optimized for email addresses&lt;/li&gt;</span>
+<span class="source-line-no">374</span><span id="line-374">    *    &lt;li&gt;&lt;js&gt;"numeric"&lt;/js&gt; - Numeric keypad&lt;/li&gt;</span>
+<span class="source-line-no">375</span><span id="line-375">    *    &lt;li&gt;&lt;js&gt;"decimal"&lt;/js&gt; - Numeric keypad with decimal point&lt;/li&gt;</span>
+<span class="source-line-no">376</span><span id="line-376">    *    &lt;li&gt;&lt;js&gt;"search"&lt;/js&gt; - Keyboard optimized for search&lt;/li&gt;</span>
+<span class="source-line-no">377</span><span id="line-377">    * &lt;/ul&gt;</span>
+<span class="source-line-no">378</span><span id="line-378">    *</span>
+<span class="source-line-no">379</span><span id="line-379">    * @param inputmode The input modality hint for mobile keyboards.</span>
+<span class="source-line-no">380</span><span id="line-380">    * @return This object.</span>
+<span class="source-line-no">381</span><span id="line-381">    */</span>
+<span class="source-line-no">382</span><span id="line-382">   public Input inputmode(String value) {</span>
+<span class="source-line-no">383</span><span id="line-383">      attr("inputmode", value);</span>
+<span class="source-line-no">384</span><span id="line-384">      return this;</span>
+<span class="source-line-no">385</span><span id="line-385">   }</span>
+<span class="source-line-no">386</span><span id="line-386"></span>
+<span class="source-line-no">387</span><span id="line-387">   /**</span>
+<span class="source-line-no">388</span><span id="line-388">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-list"&gt;list&lt;/a&gt; attribute.</span>
+<span class="source-line-no">389</span><span id="line-389">    *</span>
+<span class="source-line-no">390</span><span id="line-390">    * &lt;p&gt;</span>
+<span class="source-line-no">391</span><span id="line-391">    * References a &lt;c&gt;&amp;lt;datalist&amp;gt;&lt;/c&gt; element that provides predefined options</span>
+<span class="source-line-no">392</span><span id="line-392">    * for the input field. Creates a dropdown with autocomplete suggestions.</span>
+<span class="source-line-no">393</span><span id="line-393">    *</span>
+<span class="source-line-no">394</span><span id="line-394">    * @param list The ID of a datalist element (without the # prefix).</span>
+<span class="source-line-no">395</span><span id="line-395">    * @return This object.</span>
+<span class="source-line-no">396</span><span id="line-396">    */</span>
+<span class="source-line-no">397</span><span id="line-397">   public Input list(String value) {</span>
+<span class="source-line-no">398</span><span id="line-398">      attr("list", value);</span>
+<span class="source-line-no">399</span><span id="line-399">      return this;</span>
+<span class="source-line-no">400</span><span id="line-400">   }</span>
+<span class="source-line-no">401</span><span id="line-401"></span>
+<span class="source-line-no">402</span><span id="line-402">   /**</span>
+<span class="source-line-no">403</span><span id="line-403">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-max"&gt;max&lt;/a&gt; attribute.</span>
+<span class="source-line-no">404</span><span id="line-404">    *</span>
+<span class="source-line-no">405</span><span id="line-405">    * &lt;p&gt;</span>
+<span class="source-line-no">406</span><span id="line-406">    * Maximum value.</span>
+<span class="source-line-no">407</span><span id="line-407">    *</span>
+<span class="source-line-no">408</span><span id="line-408">    * @param max</span>
+<span class="source-line-no">409</span><span id="line-409">    *    The new value for this attribute.</span>
+<span class="source-line-no">410</span><span id="line-410">    *    Typically a {@link Number} or {@link String}.</span>
+<span class="source-line-no">411</span><span id="line-411">    * @return This object.</span>
+<span class="source-line-no">412</span><span id="line-412">    */</span>
+<span class="source-line-no">413</span><span id="line-413">   public Input max(Object value) {</span>
+<span class="source-line-no">414</span><span id="line-414">      attr("max", value);</span>
+<span class="source-line-no">415</span><span id="line-415">      return this;</span>
+<span class="source-line-no">416</span><span id="line-416">   }</span>
+<span class="source-line-no">417</span><span id="line-417"></span>
+<span class="source-line-no">418</span><span id="line-418">   /**</span>
+<span class="source-line-no">419</span><span id="line-419">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-maxlength"&gt;maxlength&lt;/a&gt; attribute.</span>
+<span class="source-line-no">420</span><span id="line-420">    * Maximum length of value.</span>
+<span class="source-line-no">421</span><span id="line-421">    *</span>
+<span class="source-line-no">422</span><span id="line-422">    * @param maxlength The new value for this attribute.</span>
+<span class="source-line-no">423</span><span id="line-423">    * Typically a {@link Number} or {@link String}.</span>
+<span class="source-line-no">424</span><span id="line-424">    * @return This object.</span>
+<span class="source-line-no">425</span><span id="line-425">    */</span>
+<span class="source-line-no">426</span><span id="line-426">   public Input maxlength(Object value) {</span>
+<span class="source-line-no">427</span><span id="line-427">      attr("maxlength", value);</span>
+<span class="source-line-no">428</span><span id="line-428">      return this;</span>
+<span class="source-line-no">429</span><span id="line-429">   }</span>
+<span class="source-line-no">430</span><span id="line-430"></span>
+<span class="source-line-no">431</span><span id="line-431">   /**</span>
+<span class="source-line-no">432</span><span id="line-432">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-min"&gt;min&lt;/a&gt; attribute.</span>
+<span class="source-line-no">433</span><span id="line-433">    *</span>
+<span class="source-line-no">434</span><span id="line-434">    * &lt;p&gt;</span>
+<span class="source-line-no">435</span><span id="line-435">    * Minimum value.</span>
+<span class="source-line-no">436</span><span id="line-436">    *</span>
+<span class="source-line-no">437</span><span id="line-437">    * @param min</span>
+<span class="source-line-no">438</span><span id="line-438">    *    The new value for this attribute.</span>
+<span class="source-line-no">439</span><span id="line-439">    *    Typically a {@link Number} or {@link String}.</span>
+<span class="source-line-no">440</span><span id="line-440">    * @return This object.</span>
+<span class="source-line-no">441</span><span id="line-441">    */</span>
+<span class="source-line-no">442</span><span id="line-442">   public Input min(Object value) {</span>
+<span class="source-line-no">443</span><span id="line-443">      attr("min", value);</span>
+<span class="source-line-no">444</span><span id="line-444">      return this;</span>
+<span class="source-line-no">445</span><span id="line-445">   }</span>
+<span class="source-line-no">446</span><span id="line-446"></span>
+<span class="source-line-no">447</span><span id="line-447">   /**</span>
+<span class="source-line-no">448</span><span id="line-448">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-minlength"&gt;minlength&lt;/a&gt; attribute.</span>
+<span class="source-line-no">449</span><span id="line-449">    *</span>
+<span class="source-line-no">450</span><span id="line-450">    * &lt;p&gt;</span>
+<span class="source-line-no">451</span><span id="line-451">    * Minimum length of value.</span>
+<span class="source-line-no">452</span><span id="line-452">    *</span>
+<span class="source-line-no">453</span><span id="line-453">    * @param minlength</span>
+<span class="source-line-no">454</span><span id="line-454">    *    The new value for this attribute.</span>
+<span class="source-line-no">455</span><span id="line-455">    *    Typically a {@link Number} or {@link String}.</span>
+<span class="source-line-no">456</span><span id="line-456">    * @return This object.</span>
+<span class="source-line-no">457</span><span id="line-457">    */</span>
+<span class="source-line-no">458</span><span id="line-458">   public Input minlength(Object value) {</span>
+<span class="source-line-no">459</span><span id="line-459">      attr("minlength", value);</span>
+<span class="source-line-no">460</span><span id="line-460">      return this;</span>
+<span class="source-line-no">461</span><span id="line-461">   }</span>
+<span class="source-line-no">462</span><span id="line-462"></span>
+<span class="source-line-no">463</span><span id="line-463">   /**</span>
+<span class="source-line-no">464</span><span id="line-464">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-multiple"&gt;multiple&lt;/a&gt; attribute.</span>
+<span class="source-line-no">465</span><span id="line-465">    *</span>
+<span class="source-line-no">466</span><span id="line-466">    * &lt;p&gt;</span>
+<span class="source-line-no">467</span><span id="line-467">    * Whether to allow multiple values.</span>
+<span class="source-line-no">468</span><span id="line-468">    *</span>
+<span class="source-line-no">469</span><span id="line-469">    * &lt;p&gt;</span>
+<span class="source-line-no">470</span><span id="line-470">    * This attribute uses deminimized values:</span>
+<span class="source-line-no">471</span><span id="line-471">    * &lt;ul&gt;</span>
+<span class="source-line-no">472</span><span id="line-472">    *    &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt; - Attribute is not added&lt;/li&gt;</span>
+<span class="source-line-no">473</span><span id="line-473">    *    &lt;li&gt;&lt;jk&gt;true&lt;/jk&gt; - Attribute is added as &lt;js&gt;"multiple"&lt;/js&gt;&lt;/li&gt;</span>
+<span class="source-line-no">474</span><span id="line-474">    *    &lt;li&gt;Other values - Passed through as-is&lt;/li&gt;</span>
+<span class="source-line-no">475</span><span id="line-475">    * &lt;/ul&gt;</span>
+<span class="source-line-no">476</span><span id="line-476">    *</span>
+<span class="source-line-no">477</span><span id="line-477">    * @param multiple</span>
+<span class="source-line-no">478</span><span id="line-478">    *    The new value for this attribute.</span>
+<span class="source-line-no">479</span><span id="line-479">    *    Typically a {@link Boolean} or {@link String}.</span>
+<span class="source-line-no">480</span><span id="line-480">    * @return This object.</span>
+<span class="source-line-no">481</span><span id="line-481">    */</span>
+<span class="source-line-no">482</span><span id="line-482">   public Input multiple(Object value) {</span>
+<span class="source-line-no">483</span><span id="line-483">      attr("multiple", deminimize(value, "multiple"));</span>
+<span class="source-line-no">484</span><span id="line-484">      return this;</span>
+<span class="source-line-no">485</span><span id="line-485">   }</span>
+<span class="source-line-no">486</span><span id="line-486"></span>
+<span class="source-line-no">487</span><span id="line-487">   /**</span>
+<span class="source-line-no">488</span><span id="line-488">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name"&gt;name&lt;/a&gt; attribute.</span>
+<span class="source-line-no">489</span><span id="line-489">    *</span>
+<span class="source-line-no">490</span><span id="line-490">    * &lt;p&gt;</span>
+<span class="source-line-no">491</span><span id="line-491">    * Name of form control to use for form submission and in the form.elements API.</span>
+<span class="source-line-no">492</span><span id="line-492">    *</span>
+<span class="source-line-no">493</span><span id="line-493">    * @param name The new value for this attribute.</span>
+<span class="source-line-no">494</span><span id="line-494">    * @return This object.</span>
+<span class="source-line-no">495</span><span id="line-495">    */</span>
+<span class="source-line-no">496</span><span id="line-496">   public Input name(String value) {</span>
+<span class="source-line-no">497</span><span id="line-497">      attr("name", value);</span>
+<span class="source-line-no">498</span><span id="line-498">      return this;</span>
+<span class="source-line-no">499</span><span id="line-499">   }</span>
+<span class="source-line-no">500</span><span id="line-500"></span>
+<span class="source-line-no">501</span><span id="line-501">   /**</span>
+<span class="source-line-no">502</span><span id="line-502">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-pattern"&gt;pattern&lt;/a&gt; attribute.</span>
+<span class="source-line-no">503</span><span id="line-503">    *</span>
+<span class="source-line-no">504</span><span id="line-504">    * &lt;p&gt;</span>
+<span class="source-line-no">505</span><span id="line-505">    * Specifies a regular expression that the input's value must match for the form to be valid.</span>
+<span class="source-line-no">506</span><span id="line-506">    * Works with the &lt;c&gt;title&lt;/c&gt; attribute to provide user feedback.</span>
+<span class="source-line-no">507</span><span id="line-507">    *</span>
+<span class="source-line-no">508</span><span id="line-508">    * @param pattern A regular expression pattern (e.g., &lt;js&gt;"[0-9]{3}-[0-9]{3}-[0-9]{4}"&lt;/js&gt; for phone numbers).</span>
+<span class="source-line-no">509</span><span id="line-509">    * @return This object.</span>
+<span class="source-line-no">510</span><span id="line-510">    */</span>
+<span class="source-line-no">511</span><span id="line-511">   public Input pattern(String value) {</span>
+<span class="source-line-no">512</span><span id="line-512">      attr("pattern", value);</span>
+<span class="source-line-no">513</span><span id="line-513">      return this;</span>
+<span class="source-line-no">514</span><span id="line-514">   }</span>
+<span class="source-line-no">515</span><span id="line-515"></span>
+<span class="source-line-no">516</span><span id="line-516">   /**</span>
+<span class="source-line-no">517</span><span id="line-517">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-placeholder"&gt;placeholder&lt;/a&gt; attribute.</span>
+<span class="source-line-no">518</span><span id="line-518">    *</span>
+<span class="source-line-no">519</span><span id="line-519">    * &lt;p&gt;</span>
+<span class="source-line-no">520</span><span id="line-520">    * Provides a hint to the user about what to enter in the input field.</span>
+<span class="source-line-no">521</span><span id="line-521">    * The placeholder text appears when the field is empty and disappears when the user starts typing.</span>
+<span class="source-line-no">522</span><span id="line-522">    *</span>
+<span class="source-line-no">523</span><span id="line-523">    * @param placeholder Hint text to display in the empty input field.</span>
+<span class="source-line-no">524</span><span id="line-524">    * @return This object.</span>
+<span class="source-line-no">525</span><span id="line-525">    */</span>
+<span class="source-line-no">526</span><span id="line-526">   public Input placeholder(String value) {</span>
+<span class="source-line-no">527</span><span id="line-527">      attr("placeholder", value);</span>
+<span class="source-line-no">528</span><span id="line-528">      return this;</span>
+<span class="source-line-no">529</span><span id="line-529">   }</span>
+<span class="source-line-no">530</span><span id="line-530"></span>
+<span class="source-line-no">531</span><span id="line-531">   /**</span>
+<span class="source-line-no">532</span><span id="line-532">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly"&gt;readonly&lt;/a&gt; attribute.</span>
+<span class="source-line-no">533</span><span id="line-533">    *</span>
+<span class="source-line-no">534</span><span id="line-534">    * &lt;p&gt;</span>
+<span class="source-line-no">535</span><span id="line-535">    * Makes the input field read-only, preventing user modification while still allowing</span>
+<span class="source-line-no">536</span><span id="line-536">    * the value to be submitted with the form.</span>
+<span class="source-line-no">537</span><span id="line-537">    *</span>
+<span class="source-line-no">538</span><span id="line-538">    * @param readonly If &lt;jk&gt;true&lt;/jk&gt;, makes the input read-only.</span>
+<span class="source-line-no">539</span><span id="line-539">    * @return This object.</span>
+<span class="source-line-no">540</span><span id="line-540">    */</span>
+<span class="source-line-no">541</span><span id="line-541">   public Input readonly(Object value) {</span>
+<span class="source-line-no">542</span><span id="line-542">      attr("readonly", value);</span>
+<span class="source-line-no">543</span><span id="line-543">      return this;</span>
+<span class="source-line-no">544</span><span id="line-544">   }</span>
+<span class="source-line-no">545</span><span id="line-545"></span>
 <span class="source-line-no">546</span><span id="line-546"></span>
-<span class="source-line-no">547</span><span id="line-547"></span>
-<span class="source-line-no">548</span><span id="line-548">   /**</span>
-<span class="source-line-no">549</span><span id="line-549">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly"&gt;readonly&lt;/a&gt; attribute.</span>
-<span class="source-line-no">550</span><span id="line-550">    *</span>
-<span class="source-line-no">551</span><span id="line-551">    * &lt;p&gt;</span>
-<span class="source-line-no">552</span><span id="line-552">    * Whether to allow the value to be edited by the user.</span>
-<span class="source-line-no">553</span><span id="line-553">    *</span>
-<span class="source-line-no">554</span><span id="line-554">    * @param value If &lt;jk&gt;true&lt;/jk&gt;, adds &lt;c&gt;readonly="readonly"&lt;/c&gt;.</span>
-<span class="source-line-no">555</span><span id="line-555">    * @return This object.</span>
-<span class="source-line-no">556</span><span id="line-556">    */</span>
-<span class="source-line-no">557</span><span id="line-557">   public Input readonly(boolean value) {</span>
-<span class="source-line-no">558</span><span id="line-558">      if (value)</span>
-<span class="source-line-no">559</span><span id="line-559">         value("value");</span>
-<span class="source-line-no">560</span><span id="line-560">      return this;</span>
-<span class="source-line-no">561</span><span id="line-561">   }</span>
-<span class="source-line-no">562</span><span id="line-562"></span>
-<span class="source-line-no">563</span><span id="line-563">   /**</span>
-<span class="source-line-no">564</span><span id="line-564">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly"&gt;required&lt;/a&gt; attribute.</span>
-<span class="source-line-no">565</span><span id="line-565">    *</span>
-<span class="source-line-no">566</span><span id="line-566">    * &lt;p&gt;</span>
-<span class="source-line-no">567</span><span id="line-567">    * Indicates that the input field must be filled out before the form can be submitted.</span>
-<span class="source-line-no">568</span><span id="line-568">    * Browsers will show validation messages for empty required fields.</span>
-<span class="source-line-no">569</span><span id="line-569">    *</span>
-<span class="source-line-no">570</span><span id="line-570">    * @param required If &lt;jk&gt;true&lt;/jk&gt;, makes the input required for form submission.</span>
-<span class="source-line-no">571</span><span id="line-571">    * @return This object.</span>
-<span class="source-line-no">572</span><span id="line-572">    */</span>
-<span class="source-line-no">573</span><span id="line-573">   public Input required(Object value) {</span>
-<span class="source-line-no">574</span><span id="line-574">      attr("required", value);</span>
-<span class="source-line-no">575</span><span id="line-575">      return this;</span>
-<span class="source-line-no">576</span><span id="line-576">   }</span>
-<span class="source-line-no">577</span><span id="line-577"></span>
-<span class="source-line-no">578</span><span id="line-578">   /**</span>
-<span class="source-line-no">579</span><span id="line-579">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-size"&gt;size&lt;/a&gt; attribute.</span>
-<span class="source-line-no">580</span><span id="line-580">    *</span>
-<span class="source-line-no">581</span><span id="line-581">    * &lt;p&gt;</span>
-<span class="source-line-no">582</span><span id="line-582">    * Size of the control.</span>
-<span class="source-line-no">583</span><span id="line-583">    *</span>
-<span class="source-line-no">584</span><span id="line-584">    * @param size</span>
-<span class="source-line-no">585</span><span id="line-585">    *    The new value for this attribute.</span>
-<span class="source-line-no">586</span><span id="line-586">    *    Typically a {@link Number} or {@link String}.</span>
-<span class="source-line-no">587</span><span id="line-587">    * @return This object.</span>
-<span class="source-line-no">588</span><span id="line-588">    */</span>
-<span class="source-line-no">589</span><span id="line-589">   public Input size(Object value) {</span>
-<span class="source-line-no">590</span><span id="line-590">      attr("size", value);</span>
-<span class="source-line-no">591</span><span id="line-591">      return this;</span>
-<span class="source-line-no">592</span><span id="line-592">   }</span>
-<span class="source-line-no">593</span><span id="line-593"></span>
-<span class="source-line-no">594</span><span id="line-594">   /**</span>
-<span class="source-line-no">595</span><span id="line-595">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-src"&gt;src&lt;/a&gt; attribute.</span>
-<span class="source-line-no">596</span><span id="line-596">    *</span>
-<span class="source-line-no">597</span><span id="line-597">    * &lt;p&gt;</span>
-<span class="source-line-no">598</span><span id="line-598">    * Address of the resource.</span>
-<span class="source-line-no">599</span><span id="line-599">    *</span>
-<span class="source-line-no">600</span><span id="line-600">    * @param src</span>
-<span class="source-line-no">601</span><span id="line-601">    *    The new value for this attribute.</span>
-<span class="source-line-no">602</span><span id="line-602">    *    Typically a {@link URL} or {@link String}.</span>
-<span class="source-line-no">603</span><span id="line-603">    * @return This object.</span>
-<span class="source-line-no">604</span><span id="line-604">    */</span>
-<span class="source-line-no">605</span><span id="line-605">   public Input src(Object value) {</span>
-<span class="source-line-no">606</span><span id="line-606">      attr("src", value);</span>
-<span class="source-line-no">607</span><span id="line-607">      return this;</span>
-<span class="source-line-no">608</span><span id="line-608">   }</span>
-<span class="source-line-no">609</span><span id="line-609"></span>
-<span class="source-line-no">610</span><span id="line-610">   /**</span>
-<span class="source-line-no">611</span><span id="line-611">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-step"&gt;step&lt;/a&gt; attribute.</span>
-<span class="source-line-no">612</span><span id="line-612">    *</span>
-<span class="source-line-no">613</span><span id="line-613">    * &lt;p&gt;</span>
-<span class="source-line-no">614</span><span id="line-614">    * Granularity to be matched by the form control's value.</span>
-<span class="source-line-no">615</span><span id="line-615">    *</span>
-<span class="source-line-no">616</span><span id="line-616">    * @param step The new value for this attribute.</span>
-<span class="source-line-no">617</span><span id="line-617">    * @return This object.</span>
-<span class="source-line-no">618</span><span id="line-618">    */</span>
-<span class="source-line-no">619</span><span id="line-619">   public Input step(String value) {</span>
-<span class="source-line-no">620</span><span id="line-620">      attr("step", value);</span>
-<span class="source-line-no">621</span><span id="line-621">      return this;</span>
-<span class="source-line-no">622</span><span id="line-622">   }</span>
-<span class="source-line-no">623</span><span id="line-623"></span>
-<span class="source-line-no">624</span><span id="line-624">   /**</span>
-<span class="source-line-no">625</span><span id="line-625">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-type"&gt;type&lt;/a&gt; attribute.</span>
-<span class="source-line-no">626</span><span id="line-626">    *</span>
-<span class="source-line-no">627</span><span id="line-627">    * &lt;p&gt;</span>
-<span class="source-line-no">628</span><span id="line-628">    * Specifies the type of form control to display.</span>
-<span class="source-line-no">629</span><span id="line-629">    *</span>
-<span class="source-line-no">630</span><span id="line-630">    * &lt;p&gt;</span>
-<span class="source-line-no">631</span><span id="line-631">    * Common values:</span>
-<span class="source-line-no">632</span><span id="line-632">    * &lt;ul&gt;</span>
-<span class="source-line-no">633</span><span id="line-633">    *    &lt;li&gt;&lt;js&gt;"text"&lt;/js&gt; - Single-line text input (default)&lt;/li&gt;</span>
-<span class="source-line-no">634</span><span id="line-634">    *    &lt;li&gt;&lt;js&gt;"password"&lt;/js&gt; - Password input (characters are masked)&lt;/li&gt;</span>
-<span class="source-line-no">635</span><span id="line-635">    *    &lt;li&gt;&lt;js&gt;"email"&lt;/js&gt; - Email address input with validation&lt;/li&gt;</span>
-<span class="source-line-no">636</span><span id="line-636">    *    &lt;li&gt;&lt;js&gt;"number"&lt;/js&gt; - Numeric input with spinner controls&lt;/li&gt;</span>
-<span class="source-line-no">637</span><span id="line-637">    *    &lt;li&gt;&lt;js&gt;"tel"&lt;/js&gt; - Telephone number input&lt;/li&gt;</span>
-<span class="source-line-no">638</span><span id="line-638">    *    &lt;li&gt;&lt;js&gt;"url"&lt;/js&gt; - URL input with validation&lt;/li&gt;</span>
-<span class="source-line-no">639</span><span id="line-639">    *    &lt;li&gt;&lt;js&gt;"search"&lt;/js&gt; - Search input field&lt;/li&gt;</span>
-<span class="source-line-no">640</span><span id="line-640">    *    &lt;li&gt;&lt;js&gt;"date"&lt;/js&gt; - Date picker&lt;/li&gt;</span>
-<span class="source-line-no">641</span><span id="line-641">    *    &lt;li&gt;&lt;js&gt;"time"&lt;/js&gt; - Time picker&lt;/li&gt;</span>
-<span class="source-line-no">642</span><span id="line-642">    *    &lt;li&gt;&lt;js&gt;"datetime-local"&lt;/js&gt; - Date and time picker&lt;/li&gt;</span>
-<span class="source-line-no">643</span><span id="line-643">    *    &lt;li&gt;&lt;js&gt;"checkbox"&lt;/js&gt; - Checkbox input&lt;/li&gt;</span>
-<span class="source-line-no">644</span><span id="line-644">    *    &lt;li&gt;&lt;js&gt;"radio"&lt;/js&gt; - Radio button input&lt;/li&gt;</span>
-<span class="source-line-no">645</span><span id="line-645">    *    &lt;li&gt;&lt;js&gt;"file"&lt;/js&gt; - File upload input&lt;/li&gt;</span>
-<span class="source-line-no">646</span><span id="line-646">    *    &lt;li&gt;&lt;js&gt;"submit"&lt;/js&gt; - Submit button&lt;/li&gt;</span>
-<span class="source-line-no">647</span><span id="line-647">    *    &lt;li&gt;&lt;js&gt;"button"&lt;/js&gt; - Generic button&lt;/li&gt;</span>
-<span class="source-line-no">648</span><span id="line-648">    *    &lt;li&gt;&lt;js&gt;"reset"&lt;/js&gt; - Reset form button&lt;/li&gt;</span>
-<span class="source-line-no">649</span><span id="line-649">    *    &lt;li&gt;&lt;js&gt;"hidden"&lt;/js&gt; - Hidden input field&lt;/li&gt;</span>
-<span class="source-line-no">650</span><span id="line-650">    * &lt;/ul&gt;</span>
-<span class="source-line-no">651</span><span id="line-651">    *</span>
-<span class="source-line-no">652</span><span id="line-652">    * @param type The input type for the form control.</span>
-<span class="source-line-no">653</span><span id="line-653">    * @return This object.</span>
-<span class="source-line-no">654</span><span id="line-654">    */</span>
-<span class="source-line-no">655</span><span id="line-655">   public Input type(String value) {</span>
-<span class="source-line-no">656</span><span id="line-656">      attr("type", value);</span>
-<span class="source-line-no">657</span><span id="line-657">      return this;</span>
-<span class="source-line-no">658</span><span id="line-658">   }</span>
-<span class="source-line-no">659</span><span id="line-659"></span>
-<span class="source-line-no">660</span><span id="line-660">   /**</span>
-<span class="source-line-no">661</span><span id="line-661">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-value"&gt;value&lt;/a&gt; attribute.</span>
-<span class="source-line-no">662</span><span id="line-662">    *</span>
-<span class="source-line-no">663</span><span id="line-663">    * &lt;p&gt;</span>
-<span class="source-line-no">664</span><span id="line-664">    * Value of the form control.</span>
-<span class="source-line-no">665</span><span id="line-665">    *</span>
-<span class="source-line-no">666</span><span id="line-666">    * @param value</span>
-<span class="source-line-no">667</span><span id="line-667">    *    The new value for this attribute.</span>
-<span class="source-line-no">668</span><span id="line-668">    *    Typically a {@link Number} or {@link String}.</span>
-<span class="source-line-no">669</span><span id="line-669">    * @return This object.</span>
-<span class="source-line-no">670</span><span id="line-670">    */</span>
-<span class="source-line-no">671</span><span id="line-671">   public Input value(Object value) {</span>
-<span class="source-line-no">672</span><span id="line-672">      attr("value", value);</span>
-<span class="source-line-no">673</span><span id="line-673">      return this;</span>
-<span class="source-line-no">674</span><span id="line-674">   }</span>
-<span class="source-line-no">675</span><span id="line-675"></span>
-<span class="source-line-no">676</span><span id="line-676">   /**</span>
-<span class="source-line-no">677</span><span id="line-677">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width"&gt;width&lt;/a&gt; attribute.</span>
-<span class="source-line-no">678</span><span id="line-678">    *</span>
-<span class="source-line-no">679</span><span id="line-679">    * &lt;p&gt;</span>
-<span class="source-line-no">680</span><span id="line-680">    * Horizontal dimension.</span>
-<span class="source-line-no">681</span><span id="line-681">    *</span>
-<span class="source-line-no">682</span><span id="line-682">    * @param width</span>
-<span class="source-line-no">683</span><span id="line-683">    *    The new value for this attribute.</span>
-<span class="source-line-no">684</span><span id="line-684">    *    Typically a {@link Number} or {@link String}.</span>
-<span class="source-line-no">685</span><span id="line-685">    * @return This object.</span>
-<span class="source-line-no">686</span><span id="line-686">    */</span>
-<span class="source-line-no">687</span><span id="line-687">   public Input width(Object value) {</span>
-<span class="source-line-no">688</span><span id="line-688">      attr("width", value);</span>
-<span class="source-line-no">689</span><span id="line-689">      return this;</span>
-<span class="source-line-no">690</span><span id="line-690">   }</span>
-<span class="source-line-no">691</span><span id="line-691"></span>
-<span class="source-line-no">692</span><span id="line-692">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">693</span><span id="line-693">   // Overridden methods</span>
-<span class="source-line-no">694</span><span id="line-694">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">695</span><span id="line-695"></span>
-<span class="source-line-no">696</span><span id="line-696">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">697</span><span id="line-697"></span>
-<span class="source-line-no">698</span><span id="line-698">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">699</span><span id="line-699">   public Input _class(String value) {  // NOSONAR - Intentional naming.</span>
-<span class="source-line-no">700</span><span id="line-700">      super._class(value);</span>
-<span class="source-line-no">701</span><span id="line-701">      return this;</span>
-<span class="source-line-no">702</span><span id="line-702">   }</span>
-<span class="source-line-no">703</span><span id="line-703"></span>
-<span class="source-line-no">704</span><span id="line-704">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">705</span><span id="line-705">   public Input accesskey(String value) {</span>
-<span class="source-line-no">706</span><span id="line-706">      super.accesskey(value);</span>
-<span class="source-line-no">707</span><span id="line-707">      return this;</span>
-<span class="source-line-no">708</span><span id="line-708">   }</span>
-<span class="source-line-no">709</span><span id="line-709"></span>
-<span class="source-line-no">710</span><span id="line-710">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">711</span><span id="line-711">   public Input contenteditable(Object value) {</span>
-<span class="source-line-no">712</span><span id="line-712">      super.contenteditable(value);</span>
-<span class="source-line-no">713</span><span id="line-713">      return this;</span>
-<span class="source-line-no">714</span><span id="line-714">   }</span>
-<span class="source-line-no">715</span><span id="line-715"></span>
-<span class="source-line-no">716</span><span id="line-716">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">717</span><span id="line-717">   public Input dir(String value) {</span>
-<span class="source-line-no">718</span><span id="line-718">      super.dir(value);</span>
-<span class="source-line-no">719</span><span id="line-719">      return this;</span>
-<span class="source-line-no">720</span><span id="line-720">   }</span>
-<span class="source-line-no">721</span><span id="line-721"></span>
-<span class="source-line-no">722</span><span id="line-722">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">723</span><span id="line-723">   public Input hidden(Object value) {</span>
-<span class="source-line-no">724</span><span id="line-724">      super.hidden(value);</span>
-<span class="source-line-no">725</span><span id="line-725">      return this;</span>
-<span class="source-line-no">726</span><span id="line-726">   }</span>
-<span class="source-line-no">727</span><span id="line-727"></span>
-<span class="source-line-no">728</span><span id="line-728">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">729</span><span id="line-729">   public Input id(String value) {</span>
-<span class="source-line-no">730</span><span id="line-730">      super.id(value);</span>
-<span class="source-line-no">731</span><span id="line-731">      return this;</span>
-<span class="source-line-no">732</span><span id="line-732">   }</span>
-<span class="source-line-no">733</span><span id="line-733"></span>
-<span class="source-line-no">734</span><span id="line-734">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">735</span><span id="line-735">   public Input lang(String value) {</span>
-<span class="source-line-no">736</span><span id="line-736">      super.lang(value);</span>
-<span class="source-line-no">737</span><span id="line-737">      return this;</span>
-<span class="source-line-no">738</span><span id="line-738">   }</span>
-<span class="source-line-no">739</span><span id="line-739"></span>
-<span class="source-line-no">740</span><span id="line-740">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">741</span><span id="line-741">   public Input onabort(String value) {</span>
-<span class="source-line-no">742</span><span id="line-742">      super.onabort(value);</span>
-<span class="source-line-no">743</span><span id="line-743">      return this;</span>
-<span class="source-line-no">744</span><span id="line-744">   }</span>
-<span class="source-line-no">745</span><span id="line-745"></span>
-<span class="source-line-no">746</span><span id="line-746">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">747</span><span id="line-747">   public Input onblur(String value) {</span>
-<span class="source-line-no">748</span><span id="line-748">      super.onblur(value);</span>
-<span class="source-line-no">749</span><span id="line-749">      return this;</span>
-<span class="source-line-no">750</span><span id="line-750">   }</span>
-<span class="source-line-no">751</span><span id="line-751"></span>
-<span class="source-line-no">752</span><span id="line-752">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">753</span><span id="line-753">   public Input oncancel(String value) {</span>
-<span class="source-line-no">754</span><span id="line-754">      super.oncancel(value);</span>
-<span class="source-line-no">755</span><span id="line-755">      return this;</span>
-<span class="source-line-no">756</span><span id="line-756">   }</span>
-<span class="source-line-no">757</span><span id="line-757"></span>
-<span class="source-line-no">758</span><span id="line-758">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">759</span><span id="line-759">   public Input oncanplay(String value) {</span>
-<span class="source-line-no">760</span><span id="line-760">      super.oncanplay(value);</span>
-<span class="source-line-no">761</span><span id="line-761">      return this;</span>
-<span class="source-line-no">762</span><span id="line-762">   }</span>
-<span class="source-line-no">763</span><span id="line-763"></span>
-<span class="source-line-no">764</span><span id="line-764">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">765</span><span id="line-765">   public Input oncanplaythrough(String value) {</span>
-<span class="source-line-no">766</span><span id="line-766">      super.oncanplaythrough(value);</span>
-<span class="source-line-no">767</span><span id="line-767">      return this;</span>
-<span class="source-line-no">768</span><span id="line-768">   }</span>
-<span class="source-line-no">769</span><span id="line-769"></span>
-<span class="source-line-no">770</span><span id="line-770">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">771</span><span id="line-771">   public Input onchange(String value) {</span>
-<span class="source-line-no">772</span><span id="line-772">      super.onchange(value);</span>
-<span class="source-line-no">773</span><span id="line-773">      return this;</span>
-<span class="source-line-no">774</span><span id="line-774">   }</span>
-<span class="source-line-no">775</span><span id="line-775"></span>
-<span class="source-line-no">776</span><span id="line-776">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">777</span><span id="line-777">   public Input onclick(String value) {</span>
-<span class="source-line-no">778</span><span id="line-778">      super.onclick(value);</span>
-<span class="source-line-no">779</span><span id="line-779">      return this;</span>
-<span class="source-line-no">780</span><span id="line-780">   }</span>
-<span class="source-line-no">781</span><span id="line-781"></span>
-<span class="source-line-no">782</span><span id="line-782">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">783</span><span id="line-783">   public Input oncuechange(String value) {</span>
-<span class="source-line-no">784</span><span id="line-784">      super.oncuechange(value);</span>
-<span class="source-line-no">785</span><span id="line-785">      return this;</span>
-<span class="source-line-no">786</span><span id="line-786">   }</span>
-<span class="source-line-no">787</span><span id="line-787"></span>
-<span class="source-line-no">788</span><span id="line-788">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">789</span><span id="line-789">   public Input ondblclick(String value) {</span>
-<span class="source-line-no">790</span><span id="line-790">      super.ondblclick(value);</span>
-<span class="source-line-no">791</span><span id="line-791">      return this;</span>
-<span class="source-line-no">792</span><span id="line-792">   }</span>
-<span class="source-line-no">793</span><span id="line-793"></span>
-<span class="source-line-no">794</span><span id="line-794">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">795</span><span id="line-795">   public Input ondurationchange(String value) {</span>
-<span class="source-line-no">796</span><span id="line-796">      super.ondurationchange(value);</span>
-<span class="source-line-no">797</span><span id="line-797">      return this;</span>
-<span class="source-line-no">798</span><span id="line-798">   }</span>
-<span class="source-line-no">799</span><span id="line-799"></span>
-<span class="source-line-no">800</span><span id="line-800">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">801</span><span id="line-801">   public Input onemptied(String value) {</span>
-<span class="source-line-no">802</span><span id="line-802">      super.onemptied(value);</span>
-<span class="source-line-no">803</span><span id="line-803">      return this;</span>
-<span class="source-line-no">804</span><span id="line-804">   }</span>
-<span class="source-line-no">805</span><span id="line-805"></span>
-<span class="source-line-no">806</span><span id="line-806">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">807</span><span id="line-807">   public Input onended(String value) {</span>
-<span class="source-line-no">808</span><span id="line-808">      super.onended(value);</span>
-<span class="source-line-no">809</span><span id="line-809">      return this;</span>
-<span class="source-line-no">810</span><span id="line-810">   }</span>
-<span class="source-line-no">811</span><span id="line-811"></span>
-<span class="source-line-no">812</span><span id="line-812">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">813</span><span id="line-813">   public Input onerror(String value) {</span>
-<span class="source-line-no">814</span><span id="line-814">      super.onerror(value);</span>
-<span class="source-line-no">815</span><span id="line-815">      return this;</span>
-<span class="source-line-no">816</span><span id="line-816">   }</span>
-<span class="source-line-no">817</span><span id="line-817"></span>
-<span class="source-line-no">818</span><span id="line-818">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">819</span><span id="line-819">   public Input onfocus(String value) {</span>
-<span class="source-line-no">820</span><span id="line-820">      super.onfocus(value);</span>
-<span class="source-line-no">821</span><span id="line-821">      return this;</span>
-<span class="source-line-no">822</span><span id="line-822">   }</span>
-<span class="source-line-no">823</span><span id="line-823"></span>
-<span class="source-line-no">824</span><span id="line-824">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">825</span><span id="line-825">   public Input oninput(String value) {</span>
-<span class="source-line-no">826</span><span id="line-826">      super.oninput(value);</span>
-<span class="source-line-no">827</span><span id="line-827">      return this;</span>
-<span class="source-line-no">828</span><span id="line-828">   }</span>
-<span class="source-line-no">829</span><span id="line-829"></span>
-<span class="source-line-no">830</span><span id="line-830">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">831</span><span id="line-831">   public Input oninvalid(String value) {</span>
-<span class="source-line-no">832</span><span id="line-832">      super.oninvalid(value);</span>
-<span class="source-line-no">833</span><span id="line-833">      return this;</span>
-<span class="source-line-no">834</span><span id="line-834">   }</span>
-<span class="source-line-no">835</span><span id="line-835"></span>
-<span class="source-line-no">836</span><span id="line-836">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">837</span><span id="line-837">   public Input onkeydown(String value) {</span>
-<span class="source-line-no">838</span><span id="line-838">      super.onkeydown(value);</span>
-<span class="source-line-no">839</span><span id="line-839">      return this;</span>
-<span class="source-line-no">840</span><span id="line-840">   }</span>
-<span class="source-line-no">841</span><span id="line-841"></span>
-<span class="source-line-no">842</span><span id="line-842">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">843</span><span id="line-843">   public Input onkeypress(String value) {</span>
-<span class="source-line-no">844</span><span id="line-844">      super.onkeypress(value);</span>
-<span class="source-line-no">845</span><span id="line-845">      return this;</span>
-<span class="source-line-no">846</span><span id="line-846">   }</span>
-<span class="source-line-no">847</span><span id="line-847"></span>
-<span class="source-line-no">848</span><span id="line-848">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">849</span><span id="line-849">   public Input onkeyup(String value) {</span>
-<span class="source-line-no">850</span><span id="line-850">      super.onkeyup(value);</span>
-<span class="source-line-no">851</span><span id="line-851">      return this;</span>
-<span class="source-line-no">852</span><span id="line-852">   }</span>
-<span class="source-line-no">853</span><span id="line-853"></span>
-<span class="source-line-no">854</span><span id="line-854">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">855</span><span id="line-855">   public Input onload(String value) {</span>
-<span class="source-line-no">856</span><span id="line-856">      super.onload(value);</span>
-<span class="source-line-no">857</span><span id="line-857">      return this;</span>
-<span class="source-line-no">858</span><span id="line-858">   }</span>
-<span class="source-line-no">859</span><span id="line-859"></span>
-<span class="source-line-no">860</span><span id="line-860">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">861</span><span id="line-861">   public Input onloadeddata(String value) {</span>
-<span class="source-line-no">862</span><span id="line-862">      super.onloadeddata(value);</span>
-<span class="source-line-no">863</span><span id="line-863">      return this;</span>
-<span class="source-line-no">864</span><span id="line-864">   }</span>
-<span class="source-line-no">865</span><span id="line-865"></span>
-<span class="source-line-no">866</span><span id="line-866">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">867</span><span id="line-867">   public Input onloadedmetadata(String value) {</span>
-<span class="source-line-no">868</span><span id="line-868">      super.onloadedmetadata(value);</span>
-<span class="source-line-no">869</span><span id="line-869">      return this;</span>
-<span class="source-line-no">870</span><span id="line-870">   }</span>
-<span class="source-line-no">871</span><span id="line-871"></span>
-<span class="source-line-no">872</span><span id="line-872">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">873</span><span id="line-873">   public Input onloadstart(String value) {</span>
-<span class="source-line-no">874</span><span id="line-874">      super.onloadstart(value);</span>
-<span class="source-line-no">875</span><span id="line-875">      return this;</span>
-<span class="source-line-no">876</span><span id="line-876">   }</span>
-<span class="source-line-no">877</span><span id="line-877"></span>
-<span class="source-line-no">878</span><span id="line-878">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">879</span><span id="line-879">   public Input onmousedown(String value) {</span>
-<span class="source-line-no">880</span><span id="line-880">      super.onmousedown(value);</span>
-<span class="source-line-no">881</span><span id="line-881">      return this;</span>
-<span class="source-line-no">882</span><span id="line-882">   }</span>
-<span class="source-line-no">883</span><span id="line-883"></span>
-<span class="source-line-no">884</span><span id="line-884">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">885</span><span id="line-885">   public Input onmouseenter(String value) {</span>
-<span class="source-line-no">886</span><span id="line-886">      super.onmouseenter(value);</span>
-<span class="source-line-no">887</span><span id="line-887">      return this;</span>
-<span class="source-line-no">888</span><span id="line-888">   }</span>
-<span class="source-line-no">889</span><span id="line-889"></span>
-<span class="source-line-no">890</span><span id="line-890">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">891</span><span id="line-891">   public Input onmouseleave(String value) {</span>
-<span class="source-line-no">892</span><span id="line-892">      super.onmouseleave(value);</span>
-<span class="source-line-no">893</span><span id="line-893">      return this;</span>
-<span class="source-line-no">894</span><span id="line-894">   }</span>
-<span class="source-line-no">895</span><span id="line-895"></span>
-<span class="source-line-no">896</span><span id="line-896">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">897</span><span id="line-897">   public Input onmousemove(String value) {</span>
-<span class="source-line-no">898</span><span id="line-898">      super.onmousemove(value);</span>
-<span class="source-line-no">899</span><span id="line-899">      return this;</span>
-<span class="source-line-no">900</span><span id="line-900">   }</span>
-<span class="source-line-no">901</span><span id="line-901"></span>
-<span class="source-line-no">902</span><span id="line-902">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">903</span><span id="line-903">   public Input onmouseout(String value) {</span>
-<span class="source-line-no">904</span><span id="line-904">      super.onmouseout(value);</span>
-<span class="source-line-no">905</span><span id="line-905">      return this;</span>
-<span class="source-line-no">906</span><span id="line-906">   }</span>
-<span class="source-line-no">907</span><span id="line-907"></span>
-<span class="source-line-no">908</span><span id="line-908">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">909</span><span id="line-909">   public Input onmouseover(String value) {</span>
-<span class="source-line-no">910</span><span id="line-910">      super.onmouseover(value);</span>
-<span class="source-line-no">911</span><span id="line-911">      return this;</span>
-<span class="source-line-no">912</span><span id="line-912">   }</span>
-<span class="source-line-no">913</span><span id="line-913"></span>
-<span class="source-line-no">914</span><span id="line-914">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">915</span><span id="line-915">   public Input onmouseup(String value) {</span>
-<span class="source-line-no">916</span><span id="line-916">      super.onmouseup(value);</span>
-<span class="source-line-no">917</span><span id="line-917">      return this;</span>
-<span class="source-line-no">918</span><span id="line-918">   }</span>
-<span class="source-line-no">919</span><span id="line-919"></span>
-<span class="source-line-no">920</span><span id="line-920">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">921</span><span id="line-921">   public Input onmousewheel(String value) {</span>
-<span class="source-line-no">922</span><span id="line-922">      super.onmousewheel(value);</span>
-<span class="source-line-no">923</span><span id="line-923">      return this;</span>
-<span class="source-line-no">924</span><span id="line-924">   }</span>
-<span class="source-line-no">925</span><span id="line-925"></span>
-<span class="source-line-no">926</span><span id="line-926">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">927</span><span id="line-927">   public Input onpause(String value) {</span>
-<span class="source-line-no">928</span><span id="line-928">      super.onpause(value);</span>
-<span class="source-line-no">929</span><span id="line-929">      return this;</span>
-<span class="source-line-no">930</span><span id="line-930">   }</span>
-<span class="source-line-no">931</span><span id="line-931"></span>
-<span class="source-line-no">932</span><span id="line-932">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">933</span><span id="line-933">   public Input onplay(String value) {</span>
-<span class="source-line-no">934</span><span id="line-934">      super.onplay(value);</span>
-<span class="source-line-no">935</span><span id="line-935">      return this;</span>
-<span class="source-line-no">936</span><span id="line-936">   }</span>
-<span class="source-line-no">937</span><span id="line-937"></span>
-<span class="source-line-no">938</span><span id="line-938">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">939</span><span id="line-939">   public Input onplaying(String value) {</span>
-<span class="source-line-no">940</span><span id="line-940">      super.onplaying(value);</span>
-<span class="source-line-no">941</span><span id="line-941">      return this;</span>
-<span class="source-line-no">942</span><span id="line-942">   }</span>
-<span class="source-line-no">943</span><span id="line-943"></span>
-<span class="source-line-no">944</span><span id="line-944">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">945</span><span id="line-945">   public Input onprogress(String value) {</span>
-<span class="source-line-no">946</span><span id="line-946">      super.onprogress(value);</span>
-<span class="source-line-no">947</span><span id="line-947">      return this;</span>
-<span class="source-line-no">948</span><span id="line-948">   }</span>
-<span class="source-line-no">949</span><span id="line-949"></span>
-<span class="source-line-no">950</span><span id="line-950">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">951</span><span id="line-951">   public Input onratechange(String value) {</span>
-<span class="source-line-no">952</span><span id="line-952">      super.onratechange(value);</span>
-<span class="source-line-no">953</span><span id="line-953">      return this;</span>
-<span class="source-line-no">954</span><span id="line-954">   }</span>
-<span class="source-line-no">955</span><span id="line-955"></span>
-<span class="source-line-no">956</span><span id="line-956">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">957</span><span id="line-957">   public Input onreset(String value) {</span>
-<span class="source-line-no">958</span><span id="line-958">      super.onreset(value);</span>
-<span class="source-line-no">959</span><span id="line-959">      return this;</span>
-<span class="source-line-no">960</span><span id="line-960">   }</span>
-<span class="source-line-no">961</span><span id="line-961"></span>
-<span class="source-line-no">962</span><span id="line-962">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">963</span><span id="line-963">   public Input onresize(String value) {</span>
-<span class="source-line-no">964</span><span id="line-964">      super.onresize(value);</span>
-<span class="source-line-no">965</span><span id="line-965">      return this;</span>
-<span class="source-line-no">966</span><span id="line-966">   }</span>
-<span class="source-line-no">967</span><span id="line-967"></span>
-<span class="source-line-no">968</span><span id="line-968">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">969</span><span id="line-969">   public Input onscroll(String value) {</span>
-<span class="source-line-no">970</span><span id="line-970">      super.onscroll(value);</span>
-<span class="source-line-no">971</span><span id="line-971">      return this;</span>
-<span class="source-line-no">972</span><span id="line-972">   }</span>
-<span class="source-line-no">973</span><span id="line-973"></span>
-<span class="source-line-no">974</span><span id="line-974">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">975</span><span id="line-975">   public Input onseeked(String value) {</span>
-<span class="source-line-no">976</span><span id="line-976">      super.onseeked(value);</span>
-<span class="source-line-no">977</span><span id="line-977">      return this;</span>
-<span class="source-line-no">978</span><span id="line-978">   }</span>
-<span class="source-line-no">979</span><span id="line-979"></span>
-<span class="source-line-no">980</span><span id="line-980">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">981</span><span id="line-981">   public Input onseeking(String value) {</span>
-<span class="source-line-no">982</span><span id="line-982">      super.onseeking(value);</span>
-<span class="source-line-no">983</span><span id="line-983">      return this;</span>
-<span class="source-line-no">984</span><span id="line-984">   }</span>
-<span class="source-line-no">985</span><span id="line-985"></span>
-<span class="source-line-no">986</span><span id="line-986">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">987</span><span id="line-987">   public Input onselect(String value) {</span>
-<span class="source-line-no">988</span><span id="line-988">      super.onselect(value);</span>
-<span class="source-line-no">989</span><span id="line-989">      return this;</span>
-<span class="source-line-no">990</span><span id="line-990">   }</span>
-<span class="source-line-no">991</span><span id="line-991"></span>
-<span class="source-line-no">992</span><span id="line-992">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">993</span><span id="line-993">   public Input onshow(String value) {</span>
-<span class="source-line-no">994</span><span id="line-994">      super.onshow(value);</span>
-<span class="source-line-no">995</span><span id="line-995">      return this;</span>
-<span class="source-line-no">996</span><span id="line-996">   }</span>
-<span class="source-line-no">997</span><span id="line-997"></span>
-<span class="source-line-no">998</span><span id="line-998">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">999</span><span id="line-999">   public Input onstalled(String value) {</span>
-<span class="source-line-no">1000</span><span id="line-1000">      super.onstalled(value);</span>
-<span class="source-line-no">1001</span><span id="line-1001">      return this;</span>
-<span class="source-line-no">1002</span><span id="line-1002">   }</span>
-<span class="source-line-no">1003</span><span id="line-1003"></span>
-<span class="source-line-no">1004</span><span id="line-1004">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">1005</span><span id="line-1005">   public Input onsubmit(String value) {</span>
-<span class="source-line-no">1006</span><span id="line-1006">      super.onsubmit(value);</span>
-<span class="source-line-no">1007</span><span id="line-1007">      return this;</span>
-<span class="source-line-no">1008</span><span id="line-1008">   }</span>
-<span class="source-line-no">1009</span><span id="line-1009"></span>
-<span class="source-line-no">1010</span><span id="line-1010">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">1011</span><span id="line-1011">   public Input onsuspend(String value) {</span>
-<span class="source-line-no">1012</span><span id="line-1012">      super.onsuspend(value);</span>
-<span class="source-line-no">1013</span><span id="line-1013">      return this;</span>
-<span class="source-line-no">1014</span><span id="line-1014">   }</span>
-<span class="source-line-no">1015</span><span id="line-1015"></span>
-<span class="source-line-no">1016</span><span id="line-1016">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">1017</span><span id="line-1017">   public Input ontimeupdate(String value) {</span>
-<span class="source-line-no">1018</span><span id="line-1018">      super.ontimeupdate(value);</span>
-<span class="source-line-no">1019</span><span id="line-1019">      return this;</span>
-<span class="source-line-no">1020</span><span id="line-1020">   }</span>
-<span class="source-line-no">1021</span><span id="line-1021"></span>
-<span class="source-line-no">1022</span><span id="line-1022">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">1023</span><span id="line-1023">   public Input ontoggle(String value) {</span>
-<span class="source-line-no">1024</span><span id="line-1024">      super.ontoggle(value);</span>
-<span class="source-line-no">1025</span><span id="line-1025">      return this;</span>
-<span class="source-line-no">1026</span><span id="line-1026">   }</span>
-<span class="source-line-no">1027</span><span id="line-1027"></span>
-<span class="source-line-no">1028</span><span id="line-1028">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">1029</span><span id="line-1029">   public Input onvolumechange(String value) {</span>
-<span class="source-line-no">1030</span><span id="line-1030">      super.onvolumechange(value);</span>
-<span class="source-line-no">1031</span><span id="line-1031">      return this;</span>
-<span class="source-line-no">1032</span><span id="line-1032">   }</span>
-<span class="source-line-no">1033</span><span id="line-1033"></span>
-<span class="source-line-no">1034</span><span id="line-1034">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">1035</span><span id="line-1035">   public Input onwaiting(String value) {</span>
-<span class="source-line-no">1036</span><span id="line-1036">      super.onwaiting(value);</span>
-<span class="source-line-no">1037</span><span id="line-1037">      return this;</span>
-<span class="source-line-no">1038</span><span id="line-1038">   }</span>
-<span class="source-line-no">1039</span><span id="line-1039"></span>
-<span class="source-line-no">1040</span><span id="line-1040">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">1041</span><span id="line-1041">   public Input spellcheck(Object value) {</span>
-<span class="source-line-no">1042</span><span id="line-1042">      super.spellcheck(value);</span>
-<span class="source-line-no">1043</span><span id="line-1043">      return this;</span>
-<span class="source-line-no">1044</span><span id="line-1044">   }</span>
-<span class="source-line-no">1045</span><span id="line-1045"></span>
-<span class="source-line-no">1046</span><span id="line-1046">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">1047</span><span id="line-1047">   public Input style(String value) {</span>
-<span class="source-line-no">1048</span><span id="line-1048">      super.style(value);</span>
-<span class="source-line-no">1049</span><span id="line-1049">      return this;</span>
-<span class="source-line-no">1050</span><span id="line-1050">   }</span>
-<span class="source-line-no">1051</span><span id="line-1051"></span>
-<span class="source-line-no">1052</span><span id="line-1052">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">1053</span><span id="line-1053">   public Input tabindex(Object value) {</span>
-<span class="source-line-no">1054</span><span id="line-1054">      super.tabindex(value);</span>
-<span class="source-line-no">1055</span><span id="line-1055">      return this;</span>
-<span class="source-line-no">1056</span><span id="line-1056">   }</span>
-<span class="source-line-no">1057</span><span id="line-1057"></span>
-<span class="source-line-no">1058</span><span id="line-1058">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">1059</span><span id="line-1059">   public Input title(String value) {</span>
-<span class="source-line-no">1060</span><span id="line-1060">      super.title(value);</span>
-<span class="source-line-no">1061</span><span id="line-1061">      return this;</span>
-<span class="source-line-no">1062</span><span id="line-1062">   }</span>
-<span class="source-line-no">1063</span><span id="line-1063"></span>
-<span class="source-line-no">1064</span><span id="line-1064">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">1065</span><span id="line-1065">   public Input translate(Object value) {</span>
-<span class="source-line-no">1066</span><span id="line-1066">      super.translate(value);</span>
-<span class="source-line-no">1067</span><span id="line-1067">      return this;</span>
-<span class="source-line-no">1068</span><span id="line-1068">   }</span>
-<span class="source-line-no">1069</span><span id="line-1069"></span>
-<span class="source-line-no">1070</span><span id="line-1070">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">1071</span><span id="line-1071">}</span>
+<span class="source-line-no">547</span><span id="line-547">   /**</span>
+<span class="source-line-no">548</span><span id="line-548">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly"&gt;readonly&lt;/a&gt; attribute.</span>
+<span class="source-line-no">549</span><span id="line-549">    *</span>
+<span class="source-line-no">550</span><span id="line-550">    * &lt;p&gt;</span>
+<span class="source-line-no">551</span><span id="line-551">    * Whether to allow the value to be edited by the user.</span>
+<span class="source-line-no">552</span><span id="line-552">    *</span>
+<span class="source-line-no">553</span><span id="line-553">    * @param value If &lt;jk&gt;true&lt;/jk&gt;, adds &lt;c&gt;readonly="readonly"&lt;/c&gt;.</span>
+<span class="source-line-no">554</span><span id="line-554">    * @return This object.</span>
+<span class="source-line-no">555</span><span id="line-555">    */</span>
+<span class="source-line-no">556</span><span id="line-556">   public Input readonly(boolean value) {</span>
+<span class="source-line-no">557</span><span id="line-557">      if (value)</span>
+<span class="source-line-no">558</span><span id="line-558">         value("value");</span>
+<span class="source-line-no">559</span><span id="line-559">      return this;</span>
+<span class="source-line-no">560</span><span id="line-560">   }</span>
+<span class="source-line-no">561</span><span id="line-561"></span>
+<span class="source-line-no">562</span><span id="line-562">   /**</span>
+<span class="source-line-no">563</span><span id="line-563">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly"&gt;required&lt;/a&gt; attribute.</span>
+<span class="source-line-no">564</span><span id="line-564">    *</span>
+<span class="source-line-no">565</span><span id="line-565">    * &lt;p&gt;</span>
+<span class="source-line-no">566</span><span id="line-566">    * Indicates that the input field must be filled out before the form can be submitted.</span>
+<span class="source-line-no">567</span><span id="line-567">    * Browsers will show validation messages for empty required fields.</span>
+<span class="source-line-no">568</span><span id="line-568">    *</span>
+<span class="source-line-no">569</span><span id="line-569">    * @param required If &lt;jk&gt;true&lt;/jk&gt;, makes the input required for form submission.</span>
+<span class="source-line-no">570</span><span id="line-570">    * @return This object.</span>
+<span class="source-line-no">571</span><span id="line-571">    */</span>
+<span class="source-line-no">572</span><span id="line-572">   public Input required(Object value) {</span>
+<span class="source-line-no">573</span><span id="line-573">      attr("required", value);</span>
+<span class="source-line-no">574</span><span id="line-574">      return this;</span>
+<span class="source-line-no">575</span><span id="line-575">   }</span>
+<span class="source-line-no">576</span><span id="line-576"></span>
+<span class="source-line-no">577</span><span id="line-577">   /**</span>
+<span class="source-line-no">578</span><span id="line-578">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-size"&gt;size&lt;/a&gt; attribute.</span>
+<span class="source-line-no">579</span><span id="line-579">    *</span>
+<span class="source-line-no">580</span><span id="line-580">    * &lt;p&gt;</span>
+<span class="source-line-no">581</span><span id="line-581">    * Size of the control.</span>
+<span class="source-line-no">582</span><span id="line-582">    *</span>
+<span class="source-line-no">583</span><span id="line-583">    * @param size</span>
+<span class="source-line-no">584</span><span id="line-584">    *    The new value for this attribute.</span>
+<span class="source-line-no">585</span><span id="line-585">    *    Typically a {@link Number} or {@link String}.</span>
+<span class="source-line-no">586</span><span id="line-586">    * @return This object.</span>
+<span class="source-line-no">587</span><span id="line-587">    */</span>
+<span class="source-line-no">588</span><span id="line-588">   public Input size(Object value) {</span>
+<span class="source-line-no">589</span><span id="line-589">      attr("size", value);</span>
+<span class="source-line-no">590</span><span id="line-590">      return this;</span>
+<span class="source-line-no">591</span><span id="line-591">   }</span>
+<span class="source-line-no">592</span><span id="line-592"></span>
+<span class="source-line-no">593</span><span id="line-593">   /**</span>
+<span class="source-line-no">594</span><span id="line-594">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-src"&gt;src&lt;/a&gt; attribute.</span>
+<span class="source-line-no">595</span><span id="line-595">    *</span>
+<span class="source-line-no">596</span><span id="line-596">    * &lt;p&gt;</span>
+<span class="source-line-no">597</span><span id="line-597">    * Address of the resource.</span>
+<span class="source-line-no">598</span><span id="line-598">    *</span>
+<span class="source-line-no">599</span><span id="line-599">    * @param src</span>
+<span class="source-line-no">600</span><span id="line-600">    *    The new value for this attribute.</span>
+<span class="source-line-no">601</span><span id="line-601">    *    Typically a {@link URL} or {@link String}.</span>
+<span class="source-line-no">602</span><span id="line-602">    * @return This object.</span>
+<span class="source-line-no">603</span><span id="line-603">    */</span>
+<span class="source-line-no">604</span><span id="line-604">   public Input src(Object value) {</span>
+<span class="source-line-no">605</span><span id="line-605">      attr("src", value);</span>
+<span class="source-line-no">606</span><span id="line-606">      return this;</span>
+<span class="source-line-no">607</span><span id="line-607">   }</span>
+<span class="source-line-no">608</span><span id="line-608"></span>
+<span class="source-line-no">609</span><span id="line-609">   /**</span>
+<span class="source-line-no">610</span><span id="line-610">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-step"&gt;step&lt;/a&gt; attribute.</span>
+<span class="source-line-no">611</span><span id="line-611">    *</span>
+<span class="source-line-no">612</span><span id="line-612">    * &lt;p&gt;</span>
+<span class="source-line-no">613</span><span id="line-613">    * Granularity to be matched by the form control's value.</span>
+<span class="source-line-no">614</span><span id="line-614">    *</span>
+<span class="source-line-no">615</span><span id="line-615">    * @param step The new value for this attribute.</span>
+<span class="source-line-no">616</span><span id="line-616">    * @return This object.</span>
+<span class="source-line-no">617</span><span id="line-617">    */</span>
+<span class="source-line-no">618</span><span id="line-618">   public Input step(String value) {</span>
+<span class="source-line-no">619</span><span id="line-619">      attr("step", value);</span>
+<span class="source-line-no">620</span><span id="line-620">      return this;</span>
+<span class="source-line-no">621</span><span id="line-621">   }</span>
+<span class="source-line-no">622</span><span id="line-622"></span>
+<span class="source-line-no">623</span><span id="line-623">   /**</span>
+<span class="source-line-no">624</span><span id="line-624">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-type"&gt;type&lt;/a&gt; attribute.</span>
+<span class="source-line-no">625</span><span id="line-625">    *</span>
+<span class="source-line-no">626</span><span id="line-626">    * &lt;p&gt;</span>
+<span class="source-line-no">627</span><span id="line-627">    * Specifies the type of form control to display.</span>
+<span class="source-line-no">628</span><span id="line-628">    *</span>
+<span class="source-line-no">629</span><span id="line-629">    * &lt;p&gt;</span>
+<span class="source-line-no">630</span><span id="line-630">    * Common values:</span>
+<span class="source-line-no">631</span><span id="line-631">    * &lt;ul&gt;</span>
+<span class="source-line-no">632</span><span id="line-632">    *    &lt;li&gt;&lt;js&gt;"text"&lt;/js&gt; - Single-line text input (default)&lt;/li&gt;</span>
+<span class="source-line-no">633</span><span id="line-633">    *    &lt;li&gt;&lt;js&gt;"password"&lt;/js&gt; - Password input (characters are masked)&lt;/li&gt;</span>
+<span class="source-line-no">634</span><span id="line-634">    *    &lt;li&gt;&lt;js&gt;"email"&lt;/js&gt; - Email address input with validation&lt;/li&gt;</span>
+<span class="source-line-no">635</span><span id="line-635">    *    &lt;li&gt;&lt;js&gt;"number"&lt;/js&gt; - Numeric input with spinner controls&lt;/li&gt;</span>
+<span class="source-line-no">636</span><span id="line-636">    *    &lt;li&gt;&lt;js&gt;"tel"&lt;/js&gt; - Telephone number input&lt;/li&gt;</span>
+<span class="source-line-no">637</span><span id="line-637">    *    &lt;li&gt;&lt;js&gt;"url"&lt;/js&gt; - URL input with validation&lt;/li&gt;</span>
+<span class="source-line-no">638</span><span id="line-638">    *    &lt;li&gt;&lt;js&gt;"search"&lt;/js&gt; - Search input field&lt;/li&gt;</span>
+<span class="source-line-no">639</span><span id="line-639">    *    &lt;li&gt;&lt;js&gt;"date"&lt;/js&gt; - Date picker&lt;/li&gt;</span>
+<span class="source-line-no">640</span><span id="line-640">    *    &lt;li&gt;&lt;js&gt;"time"&lt;/js&gt; - Time picker&lt;/li&gt;</span>
+<span class="source-line-no">641</span><span id="line-641">    *    &lt;li&gt;&lt;js&gt;"datetime-local"&lt;/js&gt; - Date and time picker&lt;/li&gt;</span>
+<span class="source-line-no">642</span><span id="line-642">    *    &lt;li&gt;&lt;js&gt;"checkbox"&lt;/js&gt; - Checkbox input&lt;/li&gt;</span>
+<span class="source-line-no">643</span><span id="line-643">    *    &lt;li&gt;&lt;js&gt;"radio"&lt;/js&gt; - Radio button input&lt;/li&gt;</span>
+<span class="source-line-no">644</span><span id="line-644">    *    &lt;li&gt;&lt;js&gt;"file"&lt;/js&gt; - File upload input&lt;/li&gt;</span>
+<span class="source-line-no">645</span><span id="line-645">    *    &lt;li&gt;&lt;js&gt;"submit"&lt;/js&gt; - Submit button&lt;/li&gt;</span>
+<span class="source-line-no">646</span><span id="line-646">    *    &lt;li&gt;&lt;js&gt;"button"&lt;/js&gt; - Generic button&lt;/li&gt;</span>
+<span class="source-line-no">647</span><span id="line-647">    *    &lt;li&gt;&lt;js&gt;"reset"&lt;/js&gt; - Reset form button&lt;/li&gt;</span>
+<span class="source-line-no">648</span><span id="line-648">    *    &lt;li&gt;&lt;js&gt;"hidden"&lt;/js&gt; - Hidden input field&lt;/li&gt;</span>
+<span class="source-line-no">649</span><span id="line-649">    * &lt;/ul&gt;</span>
+<span class="source-line-no">650</span><span id="line-650">    *</span>
+<span class="source-line-no">651</span><span id="line-651">    * @param type The input type for the form control.</span>
+<span class="source-line-no">652</span><span id="line-652">    * @return This object.</span>
+<span class="source-line-no">653</span><span id="line-653">    */</span>
+<span class="source-line-no">654</span><span id="line-654">   public Input type(String value) {</span>
+<span class="source-line-no">655</span><span id="line-655">      attr("type", value);</span>
+<span class="source-line-no">656</span><span id="line-656">      return this;</span>
+<span class="source-line-no">657</span><span id="line-657">   }</span>
+<span class="source-line-no">658</span><span id="line-658"></span>
+<span class="source-line-no">659</span><span id="line-659">   /**</span>
+<span class="source-line-no">660</span><span id="line-660">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-value"&gt;value&lt;/a&gt; attribute.</span>
+<span class="source-line-no">661</span><span id="line-661">    *</span>
+<span class="source-line-no">662</span><span id="line-662">    * &lt;p&gt;</span>
+<span class="source-line-no">663</span><span id="line-663">    * Value of the form control.</span>
+<span class="source-line-no">664</span><span id="line-664">    *</span>
+<span class="source-line-no">665</span><span id="line-665">    * @param value</span>
+<span class="source-line-no">666</span><span id="line-666">    *    The new value for this attribute.</span>
+<span class="source-line-no">667</span><span id="line-667">    *    Typically a {@link Number} or {@link String}.</span>
+<span class="source-line-no">668</span><span id="line-668">    * @return This object.</span>
+<span class="source-line-no">669</span><span id="line-669">    */</span>
+<span class="source-line-no">670</span><span id="line-670">   public Input value(Object value) {</span>
+<span class="source-line-no">671</span><span id="line-671">      attr("value", value);</span>
+<span class="source-line-no">672</span><span id="line-672">      return this;</span>
+<span class="source-line-no">673</span><span id="line-673">   }</span>
+<span class="source-line-no">674</span><span id="line-674"></span>
+<span class="source-line-no">675</span><span id="line-675">   /**</span>
+<span class="source-line-no">676</span><span id="line-676">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width"&gt;width&lt;/a&gt; attribute.</span>
+<span class="source-line-no">677</span><span id="line-677">    *</span>
+<span class="source-line-no">678</span><span id="line-678">    * &lt;p&gt;</span>
+<span class="source-line-no">679</span><span id="line-679">    * Horizontal dimension.</span>
+<span class="source-line-no">680</span><span id="line-680">    *</span>
+<span class="source-line-no">681</span><span id="line-681">    * @param width</span>
+<span class="source-line-no">682</span><span id="line-682">    *    The new value for this attribute.</span>
+<span class="source-line-no">683</span><span id="line-683">    *    Typically a {@link Number} or {@link String}.</span>
+<span class="source-line-no">684</span><span id="line-684">    * @return This object.</span>
+<span class="source-line-no">685</span><span id="line-685">    */</span>
+<span class="source-line-no">686</span><span id="line-686">   public Input width(Object value) {</span>
+<span class="source-line-no">687</span><span id="line-687">      attr("width", value);</span>
+<span class="source-line-no">688</span><span id="line-688">      return this;</span>
+<span class="source-line-no">689</span><span id="line-689">   }</span>
+<span class="source-line-no">690</span><span id="line-690"></span>
+<span class="source-line-no">691</span><span id="line-691">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">692</span><span id="line-692">   // Overridden methods</span>
+<span class="source-line-no">693</span><span id="line-693">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">694</span><span id="line-694">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">695</span><span id="line-695">   public Input _class(String value) {  // NOSONAR - Intentional naming.</span>
+<span class="source-line-no">696</span><span id="line-696">      super._class(value);</span>
+<span class="source-line-no">697</span><span id="line-697">      return this;</span>
+<span class="source-line-no">698</span><span id="line-698">   }</span>
+<span class="source-line-no">699</span><span id="line-699"></span>
+<span class="source-line-no">700</span><span id="line-700">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">701</span><span id="line-701">   public Input accesskey(String value) {</span>
+<span class="source-line-no">702</span><span id="line-702">      super.accesskey(value);</span>
+<span class="source-line-no">703</span><span id="line-703">      return this;</span>
+<span class="source-line-no">704</span><span id="line-704">   }</span>
+<span class="source-line-no">705</span><span id="line-705"></span>
+<span class="source-line-no">706</span><span id="line-706">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">707</span><span id="line-707">   public Input contenteditable(Object value) {</span>
+<span class="source-line-no">708</span><span id="line-708">      super.contenteditable(value);</span>
+<span class="source-line-no">709</span><span id="line-709">      return this;</span>
+<span class="source-line-no">710</span><span id="line-710">   }</span>
+<span class="source-line-no">711</span><span id="line-711"></span>
+<span class="source-line-no">712</span><span id="line-712">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">713</span><span id="line-713">   public Input dir(String value) {</span>
+<span class="source-line-no">714</span><span id="line-714">      super.dir(value);</span>
+<span class="source-line-no">715</span><span id="line-715">      return this;</span>
+<span class="source-line-no">716</span><span id="line-716">   }</span>
+<span class="source-line-no">717</span><span id="line-717"></span>
+<span class="source-line-no">718</span><span id="line-718">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">719</span><span id="line-719">   public Input hidden(Object value) {</span>
+<span class="source-line-no">720</span><span id="line-720">      super.hidden(value);</span>
+<span class="source-line-no">721</span><span id="line-721">      return this;</span>
+<span class="source-line-no">722</span><span id="line-722">   }</span>
+<span class="source-line-no">723</span><span id="line-723"></span>
+<span class="source-line-no">724</span><span id="line-724">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">725</span><span id="line-725">   public Input id(String value) {</span>
+<span class="source-line-no">726</span><span id="line-726">      super.id(value);</span>
+<span class="source-line-no">727</span><span id="line-727">      return this;</span>
+<span class="source-line-no">728</span><span id="line-728">   }</span>
+<span class="source-line-no">729</span><span id="line-729"></span>
+<span class="source-line-no">730</span><span id="line-730">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">731</span><span id="line-731">   public Input lang(String value) {</span>
+<span class="source-line-no">732</span><span id="line-732">      super.lang(value);</span>
+<span class="source-line-no">733</span><span id="line-733">      return this;</span>
+<span class="source-line-no">734</span><span id="line-734">   }</span>
+<span class="source-line-no">735</span><span id="line-735"></span>
+<span class="source-line-no">736</span><span id="line-736">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">737</span><span id="line-737">   public Input onabort(String value) {</span>
+<span class="source-line-no">738</span><span id="line-738">      super.onabort(value);</span>
+<span class="source-line-no">739</span><span id="line-739">      return this;</span>
+<span class="source-line-no">740</span><span id="line-740">   }</span>
+<span class="source-line-no">741</span><span id="line-741"></span>
+<span class="source-line-no">742</span><span id="line-742">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">743</span><span id="line-743">   public Input onblur(String value) {</span>
+<span class="source-line-no">744</span><span id="line-744">      super.onblur(value);</span>
+<span class="source-line-no">745</span><span id="line-745">      return this;</span>
+<span class="source-line-no">746</span><span id="line-746">   }</span>
+<span class="source-line-no">747</span><span id="line-747"></span>
+<span class="source-line-no">748</span><span id="line-748">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">749</span><span id="line-749">   public Input oncancel(String value) {</span>
+<span class="source-line-no">750</span><span id="line-750">      super.oncancel(value);</span>
+<span class="source-line-no">751</span><span id="line-751">      return this;</span>
+<span class="source-line-no">752</span><span id="line-752">   }</span>
+<span class="source-line-no">753</span><span id="line-753"></span>
+<span class="source-line-no">754</span><span id="line-754">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">755</span><span id="line-755">   public Input oncanplay(String value) {</span>
+<span class="source-line-no">756</span><span id="line-756">      super.oncanplay(value);</span>
+<span class="source-line-no">757</span><span id="line-757">      return this;</span>
+<span class="source-line-no">758</span><span id="line-758">   }</span>
+<span class="source-line-no">759</span><span id="line-759"></span>
+<span class="source-line-no">760</span><span id="line-760">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">761</span><span id="line-761">   public Input oncanplaythrough(String value) {</span>
+<span class="source-line-no">762</span><span id="line-762">      super.oncanplaythrough(value);</span>
+<span class="source-line-no">763</span><span id="line-763">      return this;</span>
+<span class="source-line-no">764</span><span id="line-764">   }</span>
+<span class="source-line-no">765</span><span id="line-765"></span>
+<span class="source-line-no">766</span><span id="line-766">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">767</span><span id="line-767">   public Input onchange(String value) {</span>
+<span class="source-line-no">768</span><span id="line-768">      super.onchange(value);</span>
+<span class="source-line-no">769</span><span id="line-769">      return this;</span>
+<span class="source-line-no">770</span><span id="line-770">   }</span>
+<span class="source-line-no">771</span><span id="line-771"></span>
+<span class="source-line-no">772</span><span id="line-772">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">773</span><span id="line-773">   public Input onclick(String value) {</span>
+<span class="source-line-no">774</span><span id="line-774">      super.onclick(value);</span>
+<span class="source-line-no">775</span><span id="line-775">      return this;</span>
+<span class="source-line-no">776</span><span id="line-776">   }</span>
+<span class="source-line-no">777</span><span id="line-777"></span>
+<span class="source-line-no">778</span><span id="line-778">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">779</span><span id="line-779">   public Input oncuechange(String value) {</span>
+<span class="source-line-no">780</span><span id="line-780">      super.oncuechange(value);</span>
+<span class="source-line-no">781</span><span id="line-781">      return this;</span>
+<span class="source-line-no">782</span><span id="line-782">   }</span>
+<span class="source-line-no">783</span><span id="line-783"></span>
+<span class="source-line-no">784</span><span id="line-784">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">785</span><span id="line-785">   public Input ondblclick(String value) {</span>
+<span class="source-line-no">786</span><span id="line-786">      super.ondblclick(value);</span>
+<span class="source-line-no">787</span><span id="line-787">      return this;</span>
+<span class="source-line-no">788</span><span id="line-788">   }</span>
+<span class="source-line-no">789</span><span id="line-789"></span>
+<span class="source-line-no">790</span><span id="line-790">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">791</span><span id="line-791">   public Input ondurationchange(String value) {</span>
+<span class="source-line-no">792</span><span id="line-792">      super.ondurationchange(value);</span>
+<span class="source-line-no">793</span><span id="line-793">      return this;</span>
+<span class="source-line-no">794</span><span id="line-794">   }</span>
+<span class="source-line-no">795</span><span id="line-795"></span>
+<span class="source-line-no">796</span><span id="line-796">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">797</span><span id="line-797">   public Input onemptied(String value) {</span>
+<span class="source-line-no">798</span><span id="line-798">      super.onemptied(value);</span>
+<span class="source-line-no">799</span><span id="line-799">      return this;</span>
+<span class="source-line-no">800</span><span id="line-800">   }</span>
+<span class="source-line-no">801</span><span id="line-801"></span>
+<span class="source-line-no">802</span><span id="line-802">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">803</span><span id="line-803">   public Input onended(String value) {</span>
+<span class="source-line-no">804</span><span id="line-804">      super.onended(value);</span>
+<span class="source-line-no">805</span><span id="line-805">      return this;</span>
+<span class="source-line-no">806</span><span id="line-806">   }</span>
+<span class="source-line-no">807</span><span id="line-807"></span>
+<span class="source-line-no">808</span><span id="line-808">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">809</span><span id="line-809">   public Input onerror(String value) {</span>
+<span class="source-line-no">810</span><span id="line-810">      super.onerror(value);</span>
+<span class="source-line-no">811</span><span id="line-811">      return this;</span>
+<span class="source-line-no">812</span><span id="line-812">   }</span>
+<span class="source-line-no">813</span><span id="line-813"></span>
+<span class="source-line-no">814</span><span id="line-814">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">815</span><span id="line-815">   public Input onfocus(String value) {</span>
+<span class="source-line-no">816</span><span id="line-816">      super.onfocus(value);</span>
+<span class="source-line-no">817</span><span id="line-817">      return this;</span>
+<span class="source-line-no">818</span><span id="line-818">   }</span>
+<span class="source-line-no">819</span><span id="line-819"></span>
+<span class="source-line-no">820</span><span id="line-820">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">821</span><span id="line-821">   public Input oninput(String value) {</span>
+<span class="source-line-no">822</span><span id="line-822">      super.oninput(value);</span>
+<span class="source-line-no">823</span><span id="line-823">      return this;</span>
+<span class="source-line-no">824</span><span id="line-824">   }</span>
+<span class="source-line-no">825</span><span id="line-825"></span>
+<span class="source-line-no">826</span><span id="line-826">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">827</span><span id="line-827">   public Input oninvalid(String value) {</span>
+<span class="source-line-no">828</span><span id="line-828">      super.oninvalid(value);</span>
+<span class="source-line-no">829</span><span id="line-829">      return this;</span>
+<span class="source-line-no">830</span><span id="line-830">   }</span>
+<span class="source-line-no">831</span><span id="line-831"></span>
+<span class="source-line-no">832</span><span id="line-832">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">833</span><span id="line-833">   public Input onkeydown(String value) {</span>
+<span class="source-line-no">834</span><span id="line-834">      super.onkeydown(value);</span>
+<span class="source-line-no">835</span><span id="line-835">      return this;</span>
+<span class="source-line-no">836</span><span id="line-836">   }</span>
+<span class="source-line-no">837</span><span id="line-837"></span>
+<span class="source-line-no">838</span><span id="line-838">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">839</span><span id="line-839">   public Input onkeypress(String value) {</span>
+<span class="source-line-no">840</span><span id="line-840">      super.onkeypress(value);</span>
+<span class="source-line-no">841</span><span id="line-841">      return this;</span>
+<span class="source-line-no">842</span><span id="line-842">   }</span>
+<span class="source-line-no">843</span><span id="line-843"></span>
+<span class="source-line-no">844</span><span id="line-844">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">845</span><span id="line-845">   public Input onkeyup(String value) {</span>
+<span class="source-line-no">846</span><span id="line-846">      super.onkeyup(value);</span>
+<span class="source-line-no">847</span><span id="line-847">      return this;</span>
+<span class="source-line-no">848</span><span id="line-848">   }</span>
+<span class="source-line-no">849</span><span id="line-849"></span>
+<span class="source-line-no">850</span><span id="line-850">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">851</span><span id="line-851">   public Input onload(String value) {</span>
+<span class="source-line-no">852</span><span id="line-852">      super.onload(value);</span>
+<span class="source-line-no">853</span><span id="line-853">      return this;</span>
+<span class="source-line-no">854</span><span id="line-854">   }</span>
+<span class="source-line-no">855</span><span id="line-855"></span>
+<span class="source-line-no">856</span><span id="line-856">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">857</span><span id="line-857">   public Input onloadeddata(String value) {</span>
+<span class="source-line-no">858</span><span id="line-858">      super.onloadeddata(value);</span>
+<span class="source-line-no">859</span><span id="line-859">      return this;</span>
+<span class="source-line-no">860</span><span id="line-860">   }</span>
+<span class="source-line-no">861</span><span id="line-861"></span>
+<span class="source-line-no">862</span><span id="line-862">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">863</span><span id="line-863">   public Input onloadedmetadata(String value) {</span>
+<span class="source-line-no">864</span><span id="line-864">      super.onloadedmetadata(value);</span>
+<span class="source-line-no">865</span><span id="line-865">      return this;</span>
+<span class="source-line-no">866</span><span id="line-866">   }</span>
+<span class="source-line-no">867</span><span id="line-867"></span>
+<span class="source-line-no">868</span><span id="line-868">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">869</span><span id="line-869">   public Input onloadstart(String value) {</span>
+<span class="source-line-no">870</span><span id="line-870">      super.onloadstart(value);</span>
+<span class="source-line-no">871</span><span id="line-871">      return this;</span>
+<span class="source-line-no">872</span><span id="line-872">   }</span>
+<span class="source-line-no">873</span><span id="line-873"></span>
+<span class="source-line-no">874</span><span id="line-874">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">875</span><span id="line-875">   public Input onmousedown(String value) {</span>
+<span class="source-line-no">876</span><span id="line-876">      super.onmousedown(value);</span>
+<span class="source-line-no">877</span><span id="line-877">      return this;</span>
+<span class="source-line-no">878</span><span id="line-878">   }</span>
+<span class="source-line-no">879</span><span id="line-879"></span>
+<span class="source-line-no">880</span><span id="line-880">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">881</span><span id="line-881">   public Input onmouseenter(String value) {</span>
+<span class="source-line-no">882</span><span id="line-882">      super.onmouseenter(value);</span>
+<span class="source-line-no">883</span><span id="line-883">      return this;</span>
+<span class="source-line-no">884</span><span id="line-884">   }</span>
+<span class="source-line-no">885</span><span id="line-885"></span>
+<span class="source-line-no">886</span><span id="line-886">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">887</span><span id="line-887">   public Input onmouseleave(String value) {</span>
+<span class="source-line-no">888</span><span id="line-888">      super.onmouseleave(value);</span>
+<span class="source-line-no">889</span><span id="line-889">      return this;</span>
+<span class="source-line-no">890</span><span id="line-890">   }</span>
+<span class="source-line-no">891</span><span id="line-891"></span>
+<span class="source-line-no">892</span><span id="line-892">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">893</span><span id="line-893">   public Input onmousemove(String value) {</span>
+<span class="source-line-no">894</span><span id="line-894">      super.onmousemove(value);</span>
+<span class="source-line-no">895</span><span id="line-895">      return this;</span>
+<span class="source-line-no">896</span><span id="line-896">   }</span>
+<span class="source-line-no">897</span><span id="line-897"></span>
+<span class="source-line-no">898</span><span id="line-898">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">899</span><span id="line-899">   public Input onmouseout(String value) {</span>
+<span class="source-line-no">900</span><span id="line-900">      super.onmouseout(value);</span>
+<span class="source-line-no">901</span><span id="line-901">      return this;</span>
+<span class="source-line-no">902</span><span id="line-902">   }</span>
+<span class="source-line-no">903</span><span id="line-903"></span>
+<span class="source-line-no">904</span><span id="line-904">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">905</span><span id="line-905">   public Input onmouseover(String value) {</span>
+<span class="source-line-no">906</span><span id="line-906">      super.onmouseover(value);</span>
+<span class="source-line-no">907</span><span id="line-907">      return this;</span>
+<span class="source-line-no">908</span><span id="line-908">   }</span>
+<span class="source-line-no">909</span><span id="line-909"></span>
+<span class="source-line-no">910</span><span id="line-910">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">911</span><span id="line-911">   public Input onmouseup(String value) {</span>
+<span class="source-line-no">912</span><span id="line-912">      super.onmouseup(value);</span>
+<span class="source-line-no">913</span><span id="line-913">      return this;</span>
+<span class="source-line-no">914</span><span id="line-914">   }</span>
+<span class="source-line-no">915</span><span id="line-915"></span>
+<span class="source-line-no">916</span><span id="line-916">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">917</span><span id="line-917">   public Input onmousewheel(String value) {</span>
+<span class="source-line-no">918</span><span id="line-918">      super.onmousewheel(value);</span>
+<span class="source-line-no">919</span><span id="line-919">      return this;</span>
+<span class="source-line-no">920</span><span id="line-920">   }</span>
+<span class="source-line-no">921</span><span id="line-921"></span>
+<span class="source-line-no">922</span><span id="line-922">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">923</span><span id="line-923">   public Input onpause(String value) {</span>
+<span class="source-line-no">924</span><span id="line-924">      super.onpause(value);</span>
+<span class="source-line-no">925</span><span id="line-925">      return this;</span>
+<span class="source-line-no">926</span><span id="line-926">   }</span>
+<span class="source-line-no">927</span><span id="line-927"></span>
+<span class="source-line-no">928</span><span id="line-928">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">929</span><span id="line-929">   public Input onplay(String value) {</span>
+<span class="source-line-no">930</span><span id="line-930">      super.onplay(value);</span>
+<span class="source-line-no">931</span><span id="line-931">      return this;</span>
+<span class="source-line-no">932</span><span id="line-932">   }</span>
+<span class="source-line-no">933</span><span id="line-933"></span>
+<span class="source-line-no">934</span><span id="line-934">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">935</span><span id="line-935">   public Input onplaying(String value) {</span>
+<span class="source-line-no">936</span><span id="line-936">      super.onplaying(value);</span>
+<span class="source-line-no">937</span><span id="line-937">      return this;</span>
+<span class="source-line-no">938</span><span id="line-938">   }</span>
+<span class="source-line-no">939</span><span id="line-939"></span>
+<span class="source-line-no">940</span><span id="line-940">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">941</span><span id="line-941">   public Input onprogress(String value) {</span>
+<span class="source-line-no">942</span><span id="line-942">      super.onprogress(value);</span>
+<span class="source-line-no">943</span><span id="line-943">      return this;</span>
+<span class="source-line-no">944</span><span id="line-944">   }</span>
+<span class="source-line-no">945</span><span id="line-945"></span>
+<span class="source-line-no">946</span><span id="line-946">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">947</span><span id="line-947">   public Input onratechange(String value) {</span>
+<span class="source-line-no">948</span><span id="line-948">      super.onratechange(value);</span>
+<span class="source-line-no">949</span><span id="line-949">      return this;</span>
+<span class="source-line-no">950</span><span id="line-950">   }</span>
+<span class="source-line-no">951</span><span id="line-951"></span>
+<span class="source-line-no">952</span><span id="line-952">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">953</span><span id="line-953">   public Input onreset(String value) {</span>
+<span class="source-line-no">954</span><span id="line-954">      super.onreset(value);</span>
+<span class="source-line-no">955</span><span id="line-955">      return this;</span>
+<span class="source-line-no">956</span><span id="line-956">   }</span>
+<span class="source-line-no">957</span><span id="line-957"></span>
+<span class="source-line-no">958</span><span id="line-958">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">959</span><span id="line-959">   public Input onresize(String value) {</span>
+<span class="source-line-no">960</span><span id="line-960">      super.onresize(value);</span>
+<span class="source-line-no">961</span><span id="line-961">      return this;</span>
+<span class="source-line-no">962</span><span id="line-962">   }</span>
+<span class="source-line-no">963</span><span id="line-963"></span>
+<span class="source-line-no">964</span><span id="line-964">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">965</span><span id="line-965">   public Input onscroll(String value) {</span>
+<span class="source-line-no">966</span><span id="line-966">      super.onscroll(value);</span>
+<span class="source-line-no">967</span><span id="line-967">      return this;</span>
+<span class="source-line-no">968</span><span id="line-968">   }</span>
+<span class="source-line-no">969</span><span id="line-969"></span>
+<span class="source-line-no">970</span><span id="line-970">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">971</span><span id="line-971">   public Input onseeked(String value) {</span>
+<span class="source-line-no">972</span><span id="line-972">      super.onseeked(value);</span>
+<span class="source-line-no">973</span><span id="line-973">      return this;</span>
+<span class="source-line-no">974</span><span id="line-974">   }</span>
+<span class="source-line-no">975</span><span id="line-975"></span>
+<span class="source-line-no">976</span><span id="line-976">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">977</span><span id="line-977">   public Input onseeking(String value) {</span>
+<span class="source-line-no">978</span><span id="line-978">      super.onseeking(value);</span>
+<span class="source-line-no">979</span><span id="line-979">      return this;</span>
+<span class="source-line-no">980</span><span id="line-980">   }</span>
+<span class="source-line-no">981</span><span id="line-981"></span>
+<span class="source-line-no">982</span><span id="line-982">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">983</span><span id="line-983">   public Input onselect(String value) {</span>
+<span class="source-line-no">984</span><span id="line-984">      super.onselect(value);</span>
+<span class="source-line-no">985</span><span id="line-985">      return this;</span>
+<span class="source-line-no">986</span><span id="line-986">   }</span>
+<span class="source-line-no">987</span><span id="line-987"></span>
+<span class="source-line-no">988</span><span id="line-988">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">989</span><span id="line-989">   public Input onshow(String value) {</span>
+<span class="source-line-no">990</span><span id="line-990">      super.onshow(value);</span>
+<span class="source-line-no">991</span><span id="line-991">      return this;</span>
+<span class="source-line-no">992</span><span id="line-992">   }</span>
+<span class="source-line-no">993</span><span id="line-993"></span>
+<span class="source-line-no">994</span><span id="line-994">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">995</span><span id="line-995">   public Input onstalled(String value) {</span>
+<span class="source-line-no">996</span><span id="line-996">      super.onstalled(value);</span>
+<span class="source-line-no">997</span><span id="line-997">      return this;</span>
+<span class="source-line-no">998</span><span id="line-998">   }</span>
+<span class="source-line-no">999</span><span id="line-999"></span>
+<span class="source-line-no">1000</span><span id="line-1000">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">1001</span><span id="line-1001">   public Input onsubmit(String value) {</span>
+<span class="source-line-no">1002</span><span id="line-1002">      super.onsubmit(value);</span>
+<span class="source-line-no">1003</span><span id="line-1003">      return this;</span>
+<span class="source-line-no">1004</span><span id="line-1004">   }</span>
+<span class="source-line-no">1005</span><span id="line-1005"></span>
+<span class="source-line-no">1006</span><span id="line-1006">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">1007</span><span id="line-1007">   public Input onsuspend(String value) {</span>
+<span class="source-line-no">1008</span><span id="line-1008">      super.onsuspend(value);</span>
+<span class="source-line-no">1009</span><span id="line-1009">      return this;</span>
+<span class="source-line-no">1010</span><span id="line-1010">   }</span>
+<span class="source-line-no">1011</span><span id="line-1011"></span>
+<span class="source-line-no">1012</span><span id="line-1012">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">1013</span><span id="line-1013">   public Input ontimeupdate(String value) {</span>
+<span class="source-line-no">1014</span><span id="line-1014">      super.ontimeupdate(value);</span>
+<span class="source-line-no">1015</span><span id="line-1015">      return this;</span>
+<span class="source-line-no">1016</span><span id="line-1016">   }</span>
+<span class="source-line-no">1017</span><span id="line-1017"></span>
+<span class="source-line-no">1018</span><span id="line-1018">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">1019</span><span id="line-1019">   public Input ontoggle(String value) {</span>
+<span class="source-line-no">1020</span><span id="line-1020">      super.ontoggle(value);</span>
+<span class="source-line-no">1021</span><span id="line-1021">      return this;</span>
+<span class="source-line-no">1022</span><span id="line-1022">   }</span>
+<span class="source-line-no">1023</span><span id="line-1023"></span>
+<span class="source-line-no">1024</span><span id="line-1024">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">1025</span><span id="line-1025">   public Input onvolumechange(String value) {</span>
+<span class="source-line-no">1026</span><span id="line-1026">      super.onvolumechange(value);</span>
+<span class="source-line-no">1027</span><span id="line-1027">      return this;</span>
+<span class="source-line-no">1028</span><span id="line-1028">   }</span>
+<span class="source-line-no">1029</span><span id="line-1029"></span>
+<span class="source-line-no">1030</span><span id="line-1030">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">1031</span><span id="line-1031">   public Input onwaiting(String value) {</span>
+<span class="source-line-no">1032</span><span id="line-1032">      super.onwaiting(value);</span>
+<span class="source-line-no">1033</span><span id="line-1033">      return this;</span>
+<span class="source-line-no">1034</span><span id="line-1034">   }</span>
+<span class="source-line-no">1035</span><span id="line-1035"></span>
+<span class="source-line-no">1036</span><span id="line-1036">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">1037</span><span id="line-1037">   public Input spellcheck(Object value) {</span>
+<span class="source-line-no">1038</span><span id="line-1038">      super.spellcheck(value);</span>
+<span class="source-line-no">1039</span><span id="line-1039">      return this;</span>
+<span class="source-line-no">1040</span><span id="line-1040">   }</span>
+<span class="source-line-no">1041</span><span id="line-1041"></span>
+<span class="source-line-no">1042</span><span id="line-1042">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">1043</span><span id="line-1043">   public Input style(String value) {</span>
+<span class="source-line-no">1044</span><span id="line-1044">      super.style(value);</span>
+<span class="source-line-no">1045</span><span id="line-1045">      return this;</span>
+<span class="source-line-no">1046</span><span id="line-1046">   }</span>
+<span class="source-line-no">1047</span><span id="line-1047"></span>
+<span class="source-line-no">1048</span><span id="line-1048">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">1049</span><span id="line-1049">   public Input tabindex(Object value) {</span>
+<span class="source-line-no">1050</span><span id="line-1050">      super.tabindex(value);</span>
+<span class="source-line-no">1051</span><span id="line-1051">      return this;</span>
+<span class="source-line-no">1052</span><span id="line-1052">   }</span>
+<span class="source-line-no">1053</span><span id="line-1053"></span>
+<span class="source-line-no">1054</span><span id="line-1054">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">1055</span><span id="line-1055">   public Input title(String value) {</span>
+<span class="source-line-no">1056</span><span id="line-1056">      super.title(value);</span>
+<span class="source-line-no">1057</span><span id="line-1057">      return this;</span>
+<span class="source-line-no">1058</span><span id="line-1058">   }</span>
+<span class="source-line-no">1059</span><span id="line-1059"></span>
+<span class="source-line-no">1060</span><span id="line-1060">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">1061</span><span id="line-1061">   public Input translate(Object value) {</span>
+<span class="source-line-no">1062</span><span id="line-1062">      super.translate(value);</span>
+<span class="source-line-no">1063</span><span id="line-1063">      return this;</span>
+<span class="source-line-no">1064</span><span id="line-1064">   }</span>
+<span class="source-line-no">1065</span><span id="line-1065">}</span>
 
 
 

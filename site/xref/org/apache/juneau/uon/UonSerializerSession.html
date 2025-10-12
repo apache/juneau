@@ -76,459 +76,452 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * Builder class.</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@FluentSetters
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> <strong class="jxr_keyword">extends</strong> WriterSerializerSession.Builder {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		UonSerializer ctx;
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">boolean</strong> encoding;
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">		 * Constructor</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">		 * @param ctx The context creating this session.</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">protected</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a>(<a name="UonSerializer" href="../../../../org/apache/juneau/uon/UonSerializer.html#UonSerializer">UonSerializer</a> ctx) {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">super</strong>(ctx);
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">this</strong>.ctx = ctx;
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			encoding = ctx.encoding;
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		}
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		@Override
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">public</strong> <a name="UonSerializerSession" href="../../../../org/apache/juneau/uon/UonSerializerSession.html#UonSerializerSession">UonSerializerSession</a> build() {
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="UonSerializerSession" href="../../../../org/apache/juneau/uon/UonSerializerSession.html#UonSerializerSession">UonSerializerSession</a>(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		}
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">		 * Overrides the encoding setting for this session.</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">		 * @param value The new value for this setting.</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		@FluentSetter
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> encoding(<strong class="jxr_keyword">boolean</strong> value) {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			encoding = value;
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		}
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<em class="jxr_comment">// &lt;FluentSetters&gt;</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.ContextSession.Builder */</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">public</strong> &lt;T&gt; <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> apply(Class&lt;T&gt; type, Consumer&lt;T&gt; apply) {
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">super</strong>.apply(type, apply);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		}
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.ContextSession.Builder */</em>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> debug(Boolean value) {
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">super</strong>.debug(value);
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		}
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.ContextSession.Builder */</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> properties(Map&lt;String,Object&gt; value) {
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			<strong class="jxr_keyword">super</strong>.properties(value);
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		}
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.ContextSession.Builder */</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> property(String key, Object value) {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">super</strong>.property(key, value);
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		}
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.ContextSession.Builder */</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> unmodifiable() {
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">super</strong>.unmodifiable();
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		}
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.BeanSession.Builder */</em>
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> locale(Locale value) {
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">super</strong>.locale(value);
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		}
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.BeanSession.Builder */</em>
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> localeDefault(Locale value) {
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">super</strong>.localeDefault(value);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		}
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.BeanSession.Builder */</em>
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> mediaType(<a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> value) {
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">super</strong>.mediaType(value);
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		}
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.BeanSession.Builder */</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> mediaTypeDefault(<a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> value) {
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">super</strong>.mediaTypeDefault(value);
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		}
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.BeanSession.Builder */</em>
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> timeZone(TimeZone value) {
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">super</strong>.timeZone(value);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		}
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.BeanSession.Builder */</em>
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> timeZoneDefault(TimeZone value) {
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">super</strong>.timeZoneDefault(value);
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		}
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.serializer.SerializerSession.Builder */</em>
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> javaMethod(Method value) {
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			<strong class="jxr_keyword">super</strong>.javaMethod(value);
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		}
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.serializer.SerializerSession.Builder */</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> resolver(<a name="VarResolverSession" href="../../../../org/apache/juneau/svl/VarResolverSession.html#VarResolverSession">VarResolverSession</a> value) {
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<strong class="jxr_keyword">super</strong>.resolver(value);
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		}
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.serializer.SerializerSession.Builder */</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> schema(<a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> value) {
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">super</strong>.schema(value);
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		}
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.serializer.SerializerSession.Builder */</em>
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> schemaDefault(<a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> value) {
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">super</strong>.schemaDefault(value);
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		}
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.serializer.SerializerSession.Builder */</em>
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> uriContext(<a name="UriContext" href="../../../../org/apache/juneau/UriContext.html#UriContext">UriContext</a> value) {
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">super</strong>.uriContext(value);
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		}
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.serializer.WriterSerializerSession.Builder */</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> fileCharset(Charset value) {
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<strong class="jxr_keyword">super</strong>.fileCharset(value);
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		}
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.serializer.WriterSerializerSession.Builder */</em>
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> streamCharset(Charset value) {
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<strong class="jxr_keyword">super</strong>.streamCharset(value);
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		}
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		@Override <em class="jxr_comment">/* GENERATED - org.apache.juneau.serializer.WriterSerializerSession.Builder */</em>
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> useWhitespace(Boolean value) {
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">super</strong>.useWhitespace(value);
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		}
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> <strong class="jxr_keyword">extends</strong> WriterSerializerSession.Builder {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		UonSerializer ctx;
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">boolean</strong> encoding;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">		 * Constructor</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">		 * @param ctx The context creating this session.</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">protected</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a>(<a name="UonSerializer" href="../../../../org/apache/juneau/uon/UonSerializer.html#UonSerializer">UonSerializer</a> ctx) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<strong class="jxr_keyword">super</strong>(ctx);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">this</strong>.ctx = ctx;
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			encoding = ctx.encoding;
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		@Override
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">public</strong> <a name="UonSerializerSession" href="../../../../org/apache/juneau/uon/UonSerializerSession.html#UonSerializerSession">UonSerializerSession</a> build() {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="UonSerializerSession" href="../../../../org/apache/juneau/uon/UonSerializerSession.html#UonSerializerSession">UonSerializerSession</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">		 * Overrides the encoding setting for this session.</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">		 * @param value The new value for this setting.</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> encoding(<strong class="jxr_keyword">boolean</strong> value) {
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			encoding = value;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		}
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">public</strong> &lt;T&gt; <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> apply(Class&lt;T&gt; type, Consumer&lt;T&gt; apply) {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			<strong class="jxr_keyword">super</strong>.apply(type, apply);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		}
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> debug(Boolean value) {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">super</strong>.debug(value);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		}
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> properties(Map&lt;String,Object&gt; value) {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<strong class="jxr_keyword">super</strong>.properties(value);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		}
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> property(String key, Object value) {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<strong class="jxr_keyword">super</strong>.property(key, value);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		}
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> unmodifiable() {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">super</strong>.unmodifiable();
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> locale(Locale value) {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">super</strong>.locale(value);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		}
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> localeDefault(Locale value) {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">super</strong>.localeDefault(value);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		}
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> mediaType(<a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> value) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">super</strong>.mediaType(value);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		}
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> mediaTypeDefault(<a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> value) {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">super</strong>.mediaTypeDefault(value);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		}
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> timeZone(TimeZone value) {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">super</strong>.timeZone(value);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		}
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> timeZoneDefault(TimeZone value) {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">super</strong>.timeZoneDefault(value);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		}
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> javaMethod(Method value) {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">super</strong>.javaMethod(value);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		}
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> resolver(<a name="VarResolverSession" href="../../../../org/apache/juneau/svl/VarResolverSession.html#VarResolverSession">VarResolverSession</a> value) {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">super</strong>.resolver(value);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		}
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> schema(<a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> value) {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">super</strong>.schema(value);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> schemaDefault(<a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> value) {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			<strong class="jxr_keyword">super</strong>.schemaDefault(value);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		}
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> uriContext(<a name="UriContext" href="../../../../org/apache/juneau/UriContext.html#UriContext">UriContext</a> value) {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">super</strong>.uriContext(value);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		}
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> fileCharset(Charset value) {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">super</strong>.fileCharset(value);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		}
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> streamCharset(Charset value) {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">super</strong>.streamCharset(value);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		}
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		@Override <em class="jxr_comment">/* Overridden from Builder */</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> useWhitespace(Boolean value) {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">super</strong>.useWhitespace(value);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		}
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	}
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_comment">// Instance</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<em class="jxr_comment">// &lt;/FluentSetters&gt;</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	}
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="UonSerializer" href="../../../../org/apache/juneau/uon/UonSerializer.html#UonSerializer">UonSerializer</a> ctx;
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> plainTextParams;
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<em class="jxr_comment">// Instance</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="UonSerializer" href="../../../../org/apache/juneau/uon/UonSerializer.html#UonSerializer">UonSerializer</a> ctx;
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> plainTextParams;
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">public</strong> <a name="UonSerializerSession" href="../../../../org/apache/juneau/uon/UonSerializerSession.html#UonSerializerSession">UonSerializerSession</a>(<a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> builder) {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">super</strong>(builder);
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		ctx = builder.ctx;
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		plainTextParams = ctx.getParamFormat() == ParamFormat.PLAINTEXT;
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * Converts the specified output target object to an {@link UonWriter}.</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * @param out The output target object.</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 * @return The output target object wrapped in an {@link UonWriter}.</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> getUonWriter(<a name="SerializerPipe" href="../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> out) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		Object output = out.getRawOutput();
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">if</strong> (output instanceof <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a>)
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">return</strong> (<a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a>)output;
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		UonWriter w = <strong class="jxr_keyword">new</strong> <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a>(<strong class="jxr_keyword">this</strong>, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		out.setWriter(w);
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">return</strong> w;
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	}
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> getUonWriter(Writer out) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a>(<strong class="jxr_keyword">this</strong>, out, isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	}
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	@Override <em class="jxr_comment">/* Serializer */</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> doSerialize(<a name="SerializerPipe" href="../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> out, Object o) <strong class="jxr_keyword">throws</strong> IOException, <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		serializeAnything(getUonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), <span class="jxr_string">"root"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	}
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * Workhorse method.</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 * Determines the type of object, and then calls the appropriate type-specific serialization method.</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * @param out The writer to serialize to.</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * @param o The object being serialized.</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 * @param eType The expected type of the object if this is a bean property.</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 * @param attrName</em>
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 * 	The bean property name if this is a bean property.</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;null&lt;/jk&gt; if this isn't a bean property being serialized.</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * @param pMeta The bean property metadata.</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 * @return The same writer passed in.</em>
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 * @throws SerializeException Generic serialization error occurred.</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span> })
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	<strong class="jxr_keyword">protected</strong> <a name="SerializerWriter" href="../../../../org/apache/juneau/serializer/SerializerWriter.html#SerializerWriter">SerializerWriter</a> serializeAnything(<a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> out, Object o, ClassMeta&lt;?&gt; eType, String attrName, BeanPropertyMeta pMeta) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			out.appendObject(<strong class="jxr_keyword">null</strong>, false);
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			<strong class="jxr_keyword">return</strong> out;
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		}
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			eType = object();
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		ClassMeta&lt;?&gt; aType;			<em class="jxr_comment">// The actual type</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		ClassMeta&lt;?&gt; sType;			<em class="jxr_comment">// The serialized type</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		aType = push2(attrName, o, eType);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">boolean</strong> isRecursion = aType == <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<em class="jxr_comment">// Handle recursion</em>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">if</strong> (aType == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			o = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			aType = object();
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	<strong class="jxr_keyword">public</strong> <a name="UonSerializerSession" href="../../../../org/apache/juneau/uon/UonSerializerSession.html#UonSerializerSession">UonSerializerSession</a>(<a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> builder) {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">super</strong>(builder);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		ctx = builder.ctx;
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		plainTextParams = ctx.getParamFormat() == ParamFormat.PLAINTEXT;
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	}
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * Converts the specified output target object to an {@link UonWriter}.</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * @param out The output target object.</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 * @return The output target object wrapped in an {@link UonWriter}.</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> getUonWriter(<a name="SerializerPipe" href="../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> out) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		Object output = out.getRawOutput();
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">if</strong> (output instanceof <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a>)
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			<strong class="jxr_keyword">return</strong> (<a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a>)output;
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		UonWriter w = <strong class="jxr_keyword">new</strong> <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a>(<strong class="jxr_keyword">this</strong>, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		out.setWriter(w);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">return</strong> w;
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	}
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> getUonWriter(Writer out) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a>(<strong class="jxr_keyword">this</strong>, out, isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	}
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	@Override <em class="jxr_comment">/* Serializer */</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> doSerialize(<a name="SerializerPipe" href="../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> out, Object o) <strong class="jxr_keyword">throws</strong> IOException, <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		serializeAnything(getUonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), <span class="jxr_string">"root"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	}
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 * Workhorse method.</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * Determines the type of object, and then calls the appropriate type-specific serialization method.</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 * @param out The writer to serialize to.</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * @param o The object being serialized.</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * @param eType The expected type of the object if this is a bean property.</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * @param attrName</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * 	The bean property name if this is a bean property.</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;null&lt;/jk&gt; if this isn't a bean property being serialized.</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 * @param pMeta The bean property metadata.</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * @return The same writer passed in.</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * @throws SerializeException Generic serialization error occurred.</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span> })
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	<strong class="jxr_keyword">protected</strong> <a name="SerializerWriter" href="../../../../org/apache/juneau/serializer/SerializerWriter.html#SerializerWriter">SerializerWriter</a> serializeAnything(<a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> out, Object o, ClassMeta&lt;?&gt; eType, String attrName, BeanPropertyMeta pMeta) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			out.appendObject(<strong class="jxr_keyword">null</strong>, false);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		}
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			eType = object();
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		ClassMeta&lt;?&gt; aType;			<em class="jxr_comment">// The actual type</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		ClassMeta&lt;?&gt; sType;			<em class="jxr_comment">// The serialized type</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		aType = push2(attrName, o, eType);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">boolean</strong> isRecursion = aType == <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<em class="jxr_comment">// Handle recursion</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">if</strong> (aType == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			o = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			aType = object();
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		}
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<em class="jxr_comment">// Handle Optional&lt;X&gt;</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">if</strong> (isOptional(aType)) {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			o = getOptionalValue(o);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			eType = getOptionalType(eType);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			aType = getClassMetaForObject(o, object());
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 		}
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<em class="jxr_comment">// Handle Optional&lt;X&gt;</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">if</strong> (isOptional(aType)) {
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			o = getOptionalValue(o);
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			eType = getOptionalType(eType);
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			aType = getClassMetaForObject(o, object());
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		}
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		sType = aType;
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		String typeName = getBeanTypeName(<strong class="jxr_keyword">this</strong>, eType, aType, pMeta);
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<em class="jxr_comment">// Swap if necessary</em>
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		ObjectSwap swap = aType.getSwap(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">if</strong> (swap != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			o = swap(swap, o);
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			sType = swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			<em class="jxr_comment">// If the getSwapClass() method returns Object, we need to figure out</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<em class="jxr_comment">// the actual type now.</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<strong class="jxr_keyword">if</strong> (sType.isObject())
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 				sType = getClassMetaForObject(o);
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		}
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<em class="jxr_comment">// '\0' characters are considered null.</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong> || (sType.isChar() &amp;&amp; ((Character)o).charValue() == 0))
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			out.appendObject(<strong class="jxr_keyword">null</strong>, false);
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isBoolean())
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			out.appendBoolean(o);
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isNumber())
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			out.appendNumber(o);
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isBean())
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			serializeBeanMap(out, toBeanMap(o), typeName);
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isUri() || (pMeta != <strong class="jxr_keyword">null</strong> &amp;&amp; pMeta.isUri()))
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			out.appendUri(o);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isMap()) {
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			<strong class="jxr_keyword">if</strong> (o instanceof <a name="BeanMap" href="../../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>)
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 				serializeBeanMap(out, (<a name="BeanMap" href="../../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>)o, typeName);
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 				serializeMap(out, (Map)o, eType);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		}
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isCollection()) {
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			serializeCollection(out, (Collection) o, eType);
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		}
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isArray()) {
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		}
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isReader()) {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			pipe((Reader)o, out, SerializerSession::handleThrown);
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		}
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isInputStream()) {
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			pipe((InputStream)o, out, SerializerSession::handleThrown);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		}
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			out.appendObject(o, false);
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		}
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">if</strong> (! isRecursion)
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			pop();
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">return</strong> out;
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	}
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"unchecked"</span> })
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	<strong class="jxr_keyword">private</strong> <a name="SerializerWriter" href="../../../../org/apache/juneau/serializer/SerializerWriter.html#SerializerWriter">SerializerWriter</a> serializeMap(<a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> out, Map m, ClassMeta&lt;?&gt; type) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		ClassMeta&lt;?&gt; keyType = type.getKeyType(), valueType = type.getValueType();
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			out.append('(');
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		Flag addComma = Flag.create();
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		forEachEntry(m, x -&gt; {
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			addComma.ifSet(()-&gt;out.append(',')).set();
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			Object value = x.getValue();
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			Object key = generalize(x.getKey(), keyType);
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			out.cr(indent).appendObject(key, false).append('=');
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			serializeAnything(out, value, valueType, toString(key), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		});
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		addComma.ifSet(()-&gt;out.cre(indent-1));
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			out.append(')');
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">return</strong> out;
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	}
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		sType = aType;
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		String typeName = getBeanTypeName(<strong class="jxr_keyword">this</strong>, eType, aType, pMeta);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<em class="jxr_comment">// Swap if necessary</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		ObjectSwap swap = aType.getSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">if</strong> (swap != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			o = swap(swap, o);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			sType = swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<em class="jxr_comment">// If the getSwapClass() method returns Object, we need to figure out</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<em class="jxr_comment">// the actual type now.</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<strong class="jxr_keyword">if</strong> (sType.isObject())
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 				sType = getClassMetaForObject(o);
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		}
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<em class="jxr_comment">// '\0' characters are considered null.</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong> || (sType.isChar() &amp;&amp; ((Character)o).charValue() == 0))
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			out.appendObject(<strong class="jxr_keyword">null</strong>, false);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isBoolean())
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			out.appendBoolean(o);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isNumber())
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			out.appendNumber(o);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isBean())
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			serializeBeanMap(out, toBeanMap(o), typeName);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isUri() || (pMeta != <strong class="jxr_keyword">null</strong> &amp;&amp; pMeta.isUri()))
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			out.appendUri(o);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isMap()) {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">if</strong> (o instanceof <a name="BeanMap" href="../../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>)
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 				serializeBeanMap(out, (<a name="BeanMap" href="../../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>)o, typeName);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 				serializeMap(out, (Map)o, eType);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		}
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isCollection()) {
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			serializeCollection(out, (Collection) o, eType);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		}
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isArray()) {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		}
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isReader()) {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			pipe((Reader)o, out, SerializerSession::handleThrown);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		}
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isInputStream()) {
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			pipe((InputStream)o, out, SerializerSession::handleThrown);
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		}
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			out.appendObject(o, false);
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		}
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">if</strong> (! isRecursion)
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			pop();
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	}
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"unchecked"</span> })
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<strong class="jxr_keyword">private</strong> <a name="SerializerWriter" href="../../../../org/apache/juneau/serializer/SerializerWriter.html#SerializerWriter">SerializerWriter</a> serializeMap(<a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> out, Map m, ClassMeta&lt;?&gt; type) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		ClassMeta&lt;?&gt; keyType = type.getKeyType(), valueType = type.getValueType();
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			out.append('(');
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		Flag addComma = Flag.create();
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		forEachEntry(m, x -&gt; {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			addComma.ifSet(()-&gt;out.append(',')).set();
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			Object value = x.getValue();
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			Object key = generalize(x.getKey(), keyType);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			out.cr(indent).appendObject(key, false).append('=');
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			serializeAnything(out, value, valueType, toString(key), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		});
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		addComma.ifSet(()-&gt;out.cre(indent-1));
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			out.append(')');
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<strong class="jxr_keyword">private</strong> <a name="SerializerWriter" href="../../../../org/apache/juneau/serializer/SerializerWriter.html#SerializerWriter">SerializerWriter</a> serializeBeanMap(<a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> out, BeanMap&lt;?&gt; m, String typeName) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			out.append('(');
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		Flag addComma = Flag.create();
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	<strong class="jxr_keyword">private</strong> <a name="SerializerWriter" href="../../../../org/apache/juneau/serializer/SerializerWriter.html#SerializerWriter">SerializerWriter</a> serializeBeanMap(<a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> out, BeanMap&lt;?&gt; m, String typeName) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			out.append('(');
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		Flag addComma = Flag.create();
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">if</strong> (typeName != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			out.cr(indent).appendObject(pm.getName(), false).append('=').appendObject(typeName, false);
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			addComma.set();
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<strong class="jxr_keyword">if</strong> (typeName != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			out.cr(indent).appendObject(pm.getName(), false).append('=').appendObject(typeName, false);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			addComma.set();
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		}
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		Predicate&lt;Object&gt; checkNull = x -&gt; isKeepNullProperties() || x != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		m.forEachValue(checkNull, (pMeta,key,value,thrown) -&gt; {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			ClassMeta&lt;?&gt; cMeta = pMeta.getClassMeta();
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<strong class="jxr_keyword">if</strong> (thrown != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 				onBeanGetterException(pMeta, thrown);
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		Predicate&lt;Object&gt; checkNull = x -&gt; isKeepNullProperties() || x != <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		m.forEachValue(checkNull, (pMeta,key,value,thrown) -&gt; {
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			ClassMeta&lt;?&gt; cMeta = pMeta.getClassMeta();
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<strong class="jxr_keyword">if</strong> (thrown != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 				onBeanGetterException(pMeta, thrown);
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">if</strong> (canIgnoreValue(cMeta, key, value))
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			addComma.ifSet(() -&gt; out.append(',')).set();
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			out.cr(indent).appendObject(key, false).append('=');
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			<strong class="jxr_keyword">if</strong> (canIgnoreValue(cMeta, key, value))
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			serializeAnything(out, value, cMeta, key, pMeta);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		});
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			addComma.ifSet(() -&gt; out.append(',')).set();
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			out.cr(indent).appendObject(key, false).append('=');
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			serializeAnything(out, value, cMeta, key, pMeta);
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		});
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">if</strong> (m.size() &gt; 0)
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			out.cre(indent-1);
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			out.append(')');
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">return</strong> out;
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	}
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"unchecked"</span> })
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	<strong class="jxr_keyword">private</strong> <a name="SerializerWriter" href="../../../../org/apache/juneau/serializer/SerializerWriter.html#SerializerWriter">SerializerWriter</a> serializeCollection(<a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> out, Collection c, ClassMeta&lt;?&gt; type) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		ClassMeta&lt;?&gt; elementType = type.getElementType();
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			out.append('@').append('(');
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">if</strong> (m.size() &gt; 0)
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			out.cre(indent-1);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			out.append(')');
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	}
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"unchecked"</span> })
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	<strong class="jxr_keyword">private</strong> <a name="SerializerWriter" href="../../../../org/apache/juneau/serializer/SerializerWriter.html#SerializerWriter">SerializerWriter</a> serializeCollection(<a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> out, Collection c, ClassMeta&lt;?&gt; type) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		ClassMeta&lt;?&gt; elementType = type.getElementType();
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			out.append('@').append('(');
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		Flag addComma = Flag.create();
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		forEachEntry(c, x -&gt; {
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			addComma.ifSet(()-&gt;out.append(',')).set();
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			out.cr(indent);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			serializeAnything(out, x, elementType, <span class="jxr_string">"&lt;iterator&gt;"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		});
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		Flag addComma = Flag.create();
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		forEachEntry(c, x -&gt; {
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			addComma.ifSet(()-&gt;out.append(',')).set();
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			out.cr(indent);
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			serializeAnything(out, x, elementType, <span class="jxr_string">"&lt;iterator&gt;"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		});
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		addComma.ifSet(()-&gt;out.cre(indent-1));
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			out.append(')');
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	}
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		addComma.ifSet(()-&gt;out.cre(indent-1));
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			out.append(')');
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">return</strong> out;
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	}
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	@Override <em class="jxr_comment">/* HttpPartSerializer */</em>
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	<strong class="jxr_keyword">public</strong> String serialize(<a name="HttpPartType" href="../../../../org/apache/juneau/httppart/HttpPartType.html#HttpPartType">HttpPartType</a> type, <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema, Object value) <strong class="jxr_keyword">throws</strong> SerializeException, <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a> {
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			<em class="jxr_comment">// Shortcut for simple types.</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			ClassMeta&lt;?&gt; cm = getClassMetaForObject(value);
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">if</strong> (cm != <strong class="jxr_keyword">null</strong> &amp;&amp; (schema == <strong class="jxr_keyword">null</strong> || schema.getType() == HttpPartDataType.NO_TYPE)) {
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 				<strong class="jxr_keyword">if</strong> (cm.isNumber() || cm.isBoolean())
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 					<strong class="jxr_keyword">return</strong> Mutaters.toString(value);
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 				<strong class="jxr_keyword">if</strong> (cm.isString()) {
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 					String s = Mutaters.toString(value);
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 					<strong class="jxr_keyword">if</strong> (s.isEmpty() || ! UonUtils.needsQuotes(s))
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 						<strong class="jxr_keyword">return</strong> s;
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 				}
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 			}
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			StringWriter w = <strong class="jxr_keyword">new</strong> StringWriter();
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			serializeAnything(getUonWriter(w).i(getInitialDepth()), value, getExpectedRootType(value), <span class="jxr_string">"root"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			<strong class="jxr_keyword">return</strong> w.toString();
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		}
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	}
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	<em class="jxr_comment">// Properties</em>
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</em>
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * @see UonSerializer.Builder#addBeanTypesUon()</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if &lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</em>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * 	through reflection.</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 	@Override
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAddBeanTypes() {
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">return</strong> ctx.isAddBeanTypes();
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	}
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * Encode non-valid URI characters.</em>
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * @see UonSerializer.Builder#encoding()</em>
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if non-valid URI characters should be encoded with &lt;js&gt;"%xx"&lt;/js&gt; constructs.</em>
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isEncoding() {
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">return</strong> ctx.isEncoding();
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 	}
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 * Format to use for query/form-data/header values.</em>
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * @see UonSerializer.Builder#paramFormat(ParamFormat)</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 * 	Specifies the format to use for URL GET parameter keys and values.</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="ParamFormat" href="../../../../org/apache/juneau/uon/ParamFormat.html#ParamFormat">ParamFormat</a> getParamFormat() {
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		<strong class="jxr_keyword">return</strong> ctx.getParamFormat();
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	}
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">	 * Quote character.</em>
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 * @see UonSerializer.Builder#quoteCharUon(char)</em>
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 * 	The character used for quoting attributes and values.</em>
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	@Override
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">char</strong> getQuoteChar() {
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		<strong class="jxr_keyword">return</strong> ctx.getQuoteChar();
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 	}
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> }
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	@Override <em class="jxr_comment">/* HttpPartSerializer */</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<strong class="jxr_keyword">public</strong> String serialize(<a name="HttpPartType" href="../../../../org/apache/juneau/httppart/HttpPartType.html#HttpPartType">HttpPartType</a> type, <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema, Object value) <strong class="jxr_keyword">throws</strong> SerializeException, <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a> {
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			<em class="jxr_comment">// Shortcut for simple types.</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			ClassMeta&lt;?&gt; cm = getClassMetaForObject(value);
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">if</strong> (cm != <strong class="jxr_keyword">null</strong> &amp;&amp; (schema == <strong class="jxr_keyword">null</strong> || schema.getType() == HttpPartDataType.NO_TYPE)) {
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				<strong class="jxr_keyword">if</strong> (cm.isNumber() || cm.isBoolean())
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 					<strong class="jxr_keyword">return</strong> Mutaters.toString(value);
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 				<strong class="jxr_keyword">if</strong> (cm.isString()) {
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 					String s = Mutaters.toString(value);
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 					<strong class="jxr_keyword">if</strong> (s.isEmpty() || ! UonUtils.needsQuotes(s))
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 						<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 				}
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			}
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			StringWriter w = <strong class="jxr_keyword">new</strong> StringWriter();
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			serializeAnything(getUonWriter(w).i(getInitialDepth()), value, getExpectedRootType(value), <span class="jxr_string">"root"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 			<strong class="jxr_keyword">return</strong> w.toString();
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		}
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	}
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	<em class="jxr_comment">// Properties</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * @see UonSerializer.Builder#addBeanTypesUon()</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if &lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 * 	through reflection.</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 	@Override
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAddBeanTypes() {
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		<strong class="jxr_keyword">return</strong> ctx.isAddBeanTypes();
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	}
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * Encode non-valid URI characters.</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * @see UonSerializer.Builder#encoding()</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if non-valid URI characters should be encoded with &lt;js&gt;"%xx"&lt;/js&gt; constructs.</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isEncoding() {
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">return</strong> ctx.isEncoding();
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 	}
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 * Format to use for query/form-data/header values.</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 * @see UonSerializer.Builder#paramFormat(ParamFormat)</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 * 	Specifies the format to use for URL GET parameter keys and values.</em>
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="ParamFormat" href="../../../../org/apache/juneau/uon/ParamFormat.html#ParamFormat">ParamFormat</a> getParamFormat() {
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">return</strong> ctx.getParamFormat();
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 	}
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 * Quote character.</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">	 * @see UonSerializer.Builder#quoteCharUon(char)</em>
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">	 * 	The character used for quoting attributes and values.</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 	@Override
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">char</strong> getQuoteChar() {
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		<strong class="jxr_keyword">return</strong> ctx.getQuoteChar();
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 	}
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -229,7 +229,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.serializer.OutputStreamSerializerSession.Builder)">
 <h3>OutputStreamSerializerSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/OutputStreamSerializerSession.html#line-204">OutputStreamSerializerSession</a></span><wbr><span class="parameters">(<a href="OutputStreamSerializerSession.Builder.html" title="class in org.apache.juneau.serializer">OutputStreamSerializerSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/OutputStreamSerializerSession.html#line-198">OutputStreamSerializerSession</a></span><wbr><span class="parameters">(<a href="OutputStreamSerializerSession.Builder.html" title="class in org.apache.juneau.serializer">OutputStreamSerializerSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -261,7 +261,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isWriterSerializer()">
 <h3>isWriterSerializer</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/OutputStreamSerializerSession.html#line-209">isWriterSerializer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/OutputStreamSerializerSession.html#line-203">isWriterSerializer</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SerializerSession.html#isWriterSerializer()">SerializerSession</a></code></span></div>
 <div class="block">Returns <jk>true</jk> if this serializer subclasses from <a href="WriterSerializer.html" title="class in org.apache.juneau.serializer"><code>WriterSerializer</code></a>.</div>
 <dl class="notes">
@@ -275,7 +275,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createPipe(java.lang.Object)">
 <h3>createPipe</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="SerializerPipe.html" title="class in org.apache.juneau.serializer">SerializerPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/OutputStreamSerializerSession.html#line-214">createPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="SerializerPipe.html" title="class in org.apache.juneau.serializer">SerializerPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/OutputStreamSerializerSession.html#line-208">createPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SerializerSession.html#createPipe(java.lang.Object)">SerializerSession</a></code></span></div>
 <div class="block">Wraps the specified input object into a <a href="../parser/ParserPipe.html" title="class in org.apache.juneau.parser"><code>ParserPipe</code></a> object so that it can be easily converted into
  a stream or reader.</div>
@@ -304,7 +304,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serialize(java.lang.Object)">
 <h3>serialize</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/OutputStreamSerializerSession.html#line-226">serialize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/OutputStreamSerializerSession.html#line-220">serialize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
                        throws <span class="exceptions"><a href="SerializeException.html" title="class in org.apache.juneau.serializer">SerializeException</a></span></div>
 <div class="block">Convenience method for serializing an object to a <code><jk>byte</jk></code>.</div>
 <dl class="notes">
@@ -322,7 +322,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializeToString(java.lang.Object)">
 <h3>serializeToString</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/OutputStreamSerializerSession.html#line-238">serializeToString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/OutputStreamSerializerSession.html#line-232">serializeToString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
                                throws <span class="exceptions"><a href="SerializeException.html" title="class in org.apache.juneau.serializer">SerializeException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SerializerSession.html#serializeToString(java.lang.Object)">SerializerSession</a></code></span></div>
 <div class="block">Shortcut method for serializing an object to a String.</div>
@@ -343,7 +343,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBinaryFormat()">
 <h3>getBinaryFormat</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../BinaryFormat.html" title="enum class in org.apache.juneau">BinaryFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/OutputStreamSerializerSession.html#line-260">getBinaryFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../BinaryFormat.html" title="enum class in org.apache.juneau">BinaryFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/OutputStreamSerializerSession.html#line-254">getBinaryFormat</a></span>()</div>
 <div class="block">Binary output format.</div>
 <dl class="notes">
 <dt>Returns:</dt>

@@ -107,78 +107,72 @@
 <span class="source-line-no">094</span><span id="line-94"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview"&gt;Juneau Ecosystem Overview&lt;/a&gt;</span>
 <span class="source-line-no">095</span><span id="line-95"> * &lt;/ul&gt;</span>
 <span class="source-line-no">096</span><span id="line-96"> */</span>
-<span class="source-line-no">097</span><span id="line-97">@FluentSetters(returns="BooleanAssertion")</span>
-<span class="source-line-no">098</span><span id="line-98">public class BooleanAssertion extends FluentBooleanAssertion&lt;BooleanAssertion&gt; {</span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">101</span><span id="line-101">   // Static</span>
-<span class="source-line-no">102</span><span id="line-102">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">103</span><span id="line-103"></span>
-<span class="source-line-no">104</span><span id="line-104">   /**</span>
-<span class="source-line-no">105</span><span id="line-105">    * Static creator.</span>
-<span class="source-line-no">106</span><span id="line-106">    *</span>
-<span class="source-line-no">107</span><span id="line-107">    * @param value</span>
-<span class="source-line-no">108</span><span id="line-108">    *    The object being tested.</span>
-<span class="source-line-no">109</span><span id="line-109">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">110</span><span id="line-110">    * @return A new assertion object.</span>
-<span class="source-line-no">111</span><span id="line-111">    */</span>
-<span class="source-line-no">112</span><span id="line-112">   public static BooleanAssertion create(Boolean value) {</span>
-<span class="source-line-no">113</span><span id="line-113">      return new BooleanAssertion(value);</span>
-<span class="source-line-no">114</span><span id="line-114">   }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">117</span><span id="line-117">   // Instance</span>
-<span class="source-line-no">118</span><span id="line-118">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   /**</span>
-<span class="source-line-no">121</span><span id="line-121">    * Constructor.</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * @param value</span>
-<span class="source-line-no">124</span><span id="line-124">    *    The object being tested.</span>
-<span class="source-line-no">125</span><span id="line-125">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">126</span><span id="line-126">    */</span>
-<span class="source-line-no">127</span><span id="line-127">   public BooleanAssertion(Boolean value) {</span>
-<span class="source-line-no">128</span><span id="line-128">      super(value, null);</span>
-<span class="source-line-no">129</span><span id="line-129">   }</span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">132</span><span id="line-132">   // Fluent setters</span>
-<span class="source-line-no">133</span><span id="line-133">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">136</span><span id="line-136"></span>
-<span class="source-line-no">137</span><span id="line-137">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">138</span><span id="line-138">   public BooleanAssertion setMsg(String msg, Object...args) {</span>
-<span class="source-line-no">139</span><span id="line-139">      super.setMsg(msg, args);</span>
-<span class="source-line-no">140</span><span id="line-140">      return this;</span>
-<span class="source-line-no">141</span><span id="line-141">   }</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">144</span><span id="line-144">   public BooleanAssertion setOut(PrintStream value) {</span>
-<span class="source-line-no">145</span><span id="line-145">      super.setOut(value);</span>
-<span class="source-line-no">146</span><span id="line-146">      return this;</span>
-<span class="source-line-no">147</span><span id="line-147">   }</span>
-<span class="source-line-no">148</span><span id="line-148"></span>
-<span class="source-line-no">149</span><span id="line-149">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">150</span><span id="line-150">   public BooleanAssertion setSilent() {</span>
-<span class="source-line-no">151</span><span id="line-151">      super.setSilent();</span>
-<span class="source-line-no">152</span><span id="line-152">      return this;</span>
-<span class="source-line-no">153</span><span id="line-153">   }</span>
-<span class="source-line-no">154</span><span id="line-154"></span>
-<span class="source-line-no">155</span><span id="line-155">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">156</span><span id="line-156">   public BooleanAssertion setStdOut() {</span>
-<span class="source-line-no">157</span><span id="line-157">      super.setStdOut();</span>
-<span class="source-line-no">158</span><span id="line-158">      return this;</span>
-<span class="source-line-no">159</span><span id="line-159">   }</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">162</span><span id="line-162">   public BooleanAssertion setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
-<span class="source-line-no">163</span><span id="line-163">      super.setThrowable(value);</span>
-<span class="source-line-no">164</span><span id="line-164">      return this;</span>
-<span class="source-line-no">165</span><span id="line-165">   }</span>
-<span class="source-line-no">166</span><span id="line-166"></span>
-<span class="source-line-no">167</span><span id="line-167">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">168</span><span id="line-168">}</span>
+<span class="source-line-no">097</span><span id="line-97">public class BooleanAssertion extends FluentBooleanAssertion&lt;BooleanAssertion&gt; {</span>
+<span class="source-line-no">098</span><span id="line-98"></span>
+<span class="source-line-no">099</span><span id="line-99">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">100</span><span id="line-100">   // Static</span>
+<span class="source-line-no">101</span><span id="line-101">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">102</span><span id="line-102"></span>
+<span class="source-line-no">103</span><span id="line-103">   /**</span>
+<span class="source-line-no">104</span><span id="line-104">    * Static creator.</span>
+<span class="source-line-no">105</span><span id="line-105">    *</span>
+<span class="source-line-no">106</span><span id="line-106">    * @param value</span>
+<span class="source-line-no">107</span><span id="line-107">    *    The object being tested.</span>
+<span class="source-line-no">108</span><span id="line-108">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">109</span><span id="line-109">    * @return A new assertion object.</span>
+<span class="source-line-no">110</span><span id="line-110">    */</span>
+<span class="source-line-no">111</span><span id="line-111">   public static BooleanAssertion create(Boolean value) {</span>
+<span class="source-line-no">112</span><span id="line-112">      return new BooleanAssertion(value);</span>
+<span class="source-line-no">113</span><span id="line-113">   }</span>
+<span class="source-line-no">114</span><span id="line-114"></span>
+<span class="source-line-no">115</span><span id="line-115">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">116</span><span id="line-116">   // Instance</span>
+<span class="source-line-no">117</span><span id="line-117">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">   /**</span>
+<span class="source-line-no">120</span><span id="line-120">    * Constructor.</span>
+<span class="source-line-no">121</span><span id="line-121">    *</span>
+<span class="source-line-no">122</span><span id="line-122">    * @param value</span>
+<span class="source-line-no">123</span><span id="line-123">    *    The object being tested.</span>
+<span class="source-line-no">124</span><span id="line-124">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">125</span><span id="line-125">    */</span>
+<span class="source-line-no">126</span><span id="line-126">   public BooleanAssertion(Boolean value) {</span>
+<span class="source-line-no">127</span><span id="line-127">      super(value, null);</span>
+<span class="source-line-no">128</span><span id="line-128">   }</span>
+<span class="source-line-no">129</span><span id="line-129"></span>
+<span class="source-line-no">130</span><span id="line-130">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">131</span><span id="line-131">   // Fluent setters</span>
+<span class="source-line-no">132</span><span id="line-132">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">133</span><span id="line-133">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">134</span><span id="line-134">   public BooleanAssertion setMsg(String msg, Object...args) {</span>
+<span class="source-line-no">135</span><span id="line-135">      super.setMsg(msg, args);</span>
+<span class="source-line-no">136</span><span id="line-136">      return this;</span>
+<span class="source-line-no">137</span><span id="line-137">   }</span>
+<span class="source-line-no">138</span><span id="line-138"></span>
+<span class="source-line-no">139</span><span id="line-139">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">140</span><span id="line-140">   public BooleanAssertion setOut(PrintStream value) {</span>
+<span class="source-line-no">141</span><span id="line-141">      super.setOut(value);</span>
+<span class="source-line-no">142</span><span id="line-142">      return this;</span>
+<span class="source-line-no">143</span><span id="line-143">   }</span>
+<span class="source-line-no">144</span><span id="line-144"></span>
+<span class="source-line-no">145</span><span id="line-145">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">146</span><span id="line-146">   public BooleanAssertion setSilent() {</span>
+<span class="source-line-no">147</span><span id="line-147">      super.setSilent();</span>
+<span class="source-line-no">148</span><span id="line-148">      return this;</span>
+<span class="source-line-no">149</span><span id="line-149">   }</span>
+<span class="source-line-no">150</span><span id="line-150"></span>
+<span class="source-line-no">151</span><span id="line-151">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">152</span><span id="line-152">   public BooleanAssertion setStdOut() {</span>
+<span class="source-line-no">153</span><span id="line-153">      super.setStdOut();</span>
+<span class="source-line-no">154</span><span id="line-154">      return this;</span>
+<span class="source-line-no">155</span><span id="line-155">   }</span>
+<span class="source-line-no">156</span><span id="line-156"></span>
+<span class="source-line-no">157</span><span id="line-157">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">158</span><span id="line-158">   public BooleanAssertion setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
+<span class="source-line-no">159</span><span id="line-159">      super.setThrowable(value);</span>
+<span class="source-line-no">160</span><span id="line-160">      return this;</span>
+<span class="source-line-no">161</span><span id="line-161">   }</span>
+<span class="source-line-no">162</span><span id="line-162">}</span>
 
 
 

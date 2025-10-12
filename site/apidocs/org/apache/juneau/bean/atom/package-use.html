@@ -75,59 +75,59 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="class-use/Category.html#org.apache.juneau.bean.atom">Category</a></div>
 <div class="col-last even-row-color">
-<div class="block">Represents an <c>atomCategory</c> construct in the RFC4287 specification.</div>
+<div class="block">Represents a category or tag associated with a feed or entry.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/Common.html#org.apache.juneau.bean.atom">Common</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Represents an <c>atomCommonAttributes</c> construct in the RFC4287 specification.</div>
+<div class="block">Base class for all Atom elements, providing common attributes.</div>
 </div>
 <div class="col-first even-row-color"><a href="class-use/CommonEntry.html#org.apache.juneau.bean.atom">CommonEntry</a></div>
 <div class="col-last even-row-color">
-<div class="block">Parent class of <a href="Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a>, <a href="Feed.html" title="class in org.apache.juneau.bean.atom"><code>Feed</code></a>, and <a href="Source.html" title="class in org.apache.juneau.bean.atom"><code>Source</code></a>.</div>
+<div class="block">Base class for feed-level and entry-level Atom elements.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/Content.html#org.apache.juneau.bean.atom">Content</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Represents an <c>atomContent</c> construct in the RFC4287 specification.</div>
+<div class="block">Represents the content of an Atom entry.</div>
 </div>
 <div class="col-first even-row-color"><a href="class-use/Entry.html#org.apache.juneau.bean.atom">Entry</a></div>
 <div class="col-last even-row-color">
-<div class="block">Represents an <c>atomEntry</c> construct in the RFC4287 specification.</div>
+<div class="block">Represents an individual entry within an Atom feed or as a standalone Atom document.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/Feed.html#org.apache.juneau.bean.atom">Feed</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Top-level ATOM feed object.</div>
+<div class="block">Represents a top-level Atom feed document.</div>
 </div>
 <div class="col-first even-row-color"><a href="class-use/Generator.html#org.apache.juneau.bean.atom">Generator</a></div>
 <div class="col-last even-row-color">
-<div class="block">Represents an <c>atomGenerator</c> construct in the RFC4287 specification.</div>
+<div class="block">Identifies the software agent used to generate an Atom feed.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/Icon.html#org.apache.juneau.bean.atom">Icon</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Represents an <c>atomIcon</c> construct in the RFC4287 specification.</div>
+<div class="block">Represents a small icon image for visual identification of a feed.</div>
 </div>
 <div class="col-first even-row-color"><a href="class-use/Id.html#org.apache.juneau.bean.atom">Id</a></div>
 <div class="col-last even-row-color">
-<div class="block">Represents an <c>atomId</c> construct in the RFC4287 specification.</div>
+<div class="block">Represents a permanent, universally unique identifier for a feed or entry.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/Link.html#org.apache.juneau.bean.atom">Link</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Represents an <c>atomLink</c> construct in the RFC4287 specification.</div>
+<div class="block">Represents a reference from an entry or feed to a Web resource.</div>
 </div>
 <div class="col-first even-row-color"><a href="class-use/Logo.html#org.apache.juneau.bean.atom">Logo</a></div>
 <div class="col-last even-row-color">
-<div class="block">Represents an <c>atomLogo</c> construct in the RFC4287 specification.</div>
+<div class="block">Represents a larger logo image for visual identification of a feed.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/Person.html#org.apache.juneau.bean.atom">Person</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Represents an <c>atomPersonConstruct</c> construct in the RFC4287 specification.</div>
+<div class="block">Represents a person, corporation, or similar entity in an Atom document.</div>
 </div>
 <div class="col-first even-row-color"><a href="class-use/Source.html#org.apache.juneau.bean.atom">Source</a></div>
 <div class="col-last even-row-color">
-<div class="block">Represents an <c>atomSource</c> construct in the RFC4287 specification.</div>
+<div class="block">Represents metadata from the source feed when an entry is copied from one feed to another.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/Text.html#org.apache.juneau.bean.atom">Text</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Represents an <c>atomTextConstruct</c> construct in the RFC4287 specification.</div>
+<div class="block">Represents human-readable text in an Atom document.</div>
 </div>
 </div>
 </section>
@@ -140,7 +140,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="class-use/Feed.html#org.apache.juneau.examples.bean.atom">Feed</a></div>
 <div class="col-last even-row-color">
-<div class="block">Top-level ATOM feed object.</div>
+<div class="block">Represents a top-level Atom feed document.</div>
 </div>
 </div>
 </section>
@@ -153,7 +153,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="class-use/Feed.html#org.apache.juneau.examples.rest.dto">Feed</a></div>
 <div class="col-last even-row-color">
-<div class="block">Top-level ATOM feed object.</div>
+<div class="block">Represents a top-level Atom feed document.</div>
 </div>
 </div>
 </section>

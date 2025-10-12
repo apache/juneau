@@ -422,7 +422,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.cp.BeanStore)">
 <h3>CallLogger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-531">CallLogger</a></span><wbr><span class="parameters">(<a href="../../cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-526">CallLogger</a></span><wbr><span class="parameters">(<a href="../../cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Constructor.
  <p>
  Subclasses typically override the <a href="#init(org.apache.juneau.cp.BeanStore)"><code>init(BeanStore)</code></a> method when using this constructor.</div>
@@ -435,7 +435,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.logger.CallLogger.Builder)">
 <h3>CallLogger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-549">CallLogger</a></span><wbr><span class="parameters">(<a href="CallLogger.Builder.html" title="class in org.apache.juneau.rest.logger">CallLogger.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-544">CallLogger</a></span><wbr><span class="parameters">(<a href="CallLogger.Builder.html" title="class in org.apache.juneau.rest.logger">CallLogger.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -467,7 +467,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="init(org.apache.juneau.cp.BeanStore)">
 <h3>init</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="CallLogger.Builder.html" title="class in org.apache.juneau.rest.logger">CallLogger.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-569">init</a></span><wbr><span class="parameters">(<a href="../../cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="CallLogger.Builder.html" title="class in org.apache.juneau.rest.logger">CallLogger.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-564">init</a></span><wbr><span class="parameters">(<a href="../../cp/BeanStore.html" title="class in org.apache.juneau.cp">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Initializer.
  <p>
  Subclasses should override this method to make modifications to the builder used to create this logger.</div>
@@ -482,7 +482,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="log(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)">
 <h3>log</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-581">log</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-576">log</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</span></div>
 <div class="block">Called at the end of a servlet request to log the request.</div>
 <dl class="notes">
@@ -495,7 +495,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRule(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)">
 <h3>getRule</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="CallLoggerRule.html" title="class in org.apache.juneau.rest.logger">CallLoggerRule</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-704">getRule</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="CallLoggerRule.html" title="class in org.apache.juneau.rest.logger">CallLoggerRule</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-699">getRule</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</span></div>
 <div class="block">Given the specified servlet request/response, find the rule that applies to it.
 
@@ -513,7 +513,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isDebug(jakarta.servlet.http.HttpServletRequest)">
 <h3>isDebug</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-726">isDebug</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-721">isDebug</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
 <div class="block">Returns <jk>true</jk> if debug is enabled on this request.
 
  <p>
@@ -540,7 +540,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isEnabled(org.apache.juneau.rest.logger.CallLoggerRule,jakarta.servlet.http.HttpServletRequest)">
 <h3>isEnabled</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-744">isEnabled</a></span><wbr><span class="parameters">(<a href="CallLoggerRule.html" title="class in org.apache.juneau.rest.logger">CallLoggerRule</a>&nbsp;rule,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-739">isEnabled</a></span><wbr><span class="parameters">(<a href="CallLoggerRule.html" title="class in org.apache.juneau.rest.logger">CallLoggerRule</a>&nbsp;rule,
  jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
 <div class="block">Returns <jk>true</jk> if logging is enabled for this request.
 
@@ -562,7 +562,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLogger()">
 <h3>getLogger</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-765">getLogger</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-760">getLogger</a></span>()</div>
 <div class="block">Returns the logger to use for logging REST calls.
 
  <p>
@@ -579,7 +579,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="log(java.util.logging.Level,java.lang.String,java.lang.Throwable)">
 <h3>log</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-779">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-774">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;e)</span></div>
 <div class="block">Logs the specified message to the logger.
@@ -597,7 +597,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-801">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/logger/CallLogger.html#line-796">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

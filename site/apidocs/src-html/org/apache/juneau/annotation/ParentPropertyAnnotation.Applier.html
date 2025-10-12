@@ -116,72 +116,68 @@
 <span class="source-line-no">103</span><span id="line-103">         return new Impl(this);</span>
 <span class="source-line-no">104</span><span id="line-104">      }</span>
 <span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">      // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">106</span><span id="line-106">   }</span>
 <span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108"></span>
-<span class="source-line-no">109</span><span id="line-109">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">110</span><span id="line-110">   }</span>
+<span class="source-line-no">108</span><span id="line-108">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">109</span><span id="line-109">   // Implementation</span>
+<span class="source-line-no">110</span><span id="line-110">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">111</span><span id="line-111"></span>
-<span class="source-line-no">112</span><span id="line-112">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">113</span><span id="line-113">   // Implementation</span>
-<span class="source-line-no">114</span><span id="line-114">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   private static class Impl extends TargetedAnnotationImpl implements ParentProperty {</span>
-<span class="source-line-no">117</span><span id="line-117"></span>
-<span class="source-line-no">118</span><span id="line-118">      Impl(Builder b) {</span>
-<span class="source-line-no">119</span><span id="line-119">         super(b);</span>
-<span class="source-line-no">120</span><span id="line-120">         postConstruct();</span>
-<span class="source-line-no">121</span><span id="line-121">      }</span>
-<span class="source-line-no">122</span><span id="line-122">   }</span>
+<span class="source-line-no">112</span><span id="line-112">   private static class Impl extends TargetedAnnotationImpl implements ParentProperty {</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">      Impl(Builder b) {</span>
+<span class="source-line-no">115</span><span id="line-115">         super(b);</span>
+<span class="source-line-no">116</span><span id="line-116">         postConstruct();</span>
+<span class="source-line-no">117</span><span id="line-117">      }</span>
+<span class="source-line-no">118</span><span id="line-118">   }</span>
+<span class="source-line-no">119</span><span id="line-119"></span>
+<span class="source-line-no">120</span><span id="line-120">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">121</span><span id="line-121">   // Appliers</span>
+<span class="source-line-no">122</span><span id="line-122">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">123</span><span id="line-123"></span>
-<span class="source-line-no">124</span><span id="line-124">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">125</span><span id="line-125">   // Appliers</span>
-<span class="source-line-no">126</span><span id="line-126">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">127</span><span id="line-127"></span>
-<span class="source-line-no">128</span><span id="line-128">   /**</span>
-<span class="source-line-no">129</span><span id="line-129">    * Applies targeted {@link ParentProperty} annotations to a {@link org.apache.juneau.BeanContext.Builder}.</span>
-<span class="source-line-no">130</span><span id="line-130">    */</span>
-<span class="source-line-no">131</span><span id="line-131">   public static class Applier extends AnnotationApplier&lt;ParentProperty,BeanContext.Builder&gt; {</span>
-<span class="source-line-no">132</span><span id="line-132"></span>
-<span class="source-line-no">133</span><span id="line-133">      /**</span>
-<span class="source-line-no">134</span><span id="line-134">       * Constructor.</span>
-<span class="source-line-no">135</span><span id="line-135">       *</span>
-<span class="source-line-no">136</span><span id="line-136">       * @param vr The resolver for resolving values in annotations.</span>
-<span class="source-line-no">137</span><span id="line-137">       */</span>
-<span class="source-line-no">138</span><span id="line-138">      public Applier(VarResolverSession vr) {</span>
-<span class="source-line-no">139</span><span id="line-139">         super(ParentProperty.class, BeanContext.Builder.class, vr);</span>
-<span class="source-line-no">140</span><span id="line-140">      }</span>
-<span class="source-line-no">141</span><span id="line-141"></span>
-<span class="source-line-no">142</span><span id="line-142">      @Override</span>
-<span class="source-line-no">143</span><span id="line-143">      public void apply(AnnotationInfo&lt;ParentProperty&gt; ai, BeanContext.Builder b) {</span>
-<span class="source-line-no">144</span><span id="line-144">         ParentProperty a = ai.inner();</span>
-<span class="source-line-no">145</span><span id="line-145">         if (isEmptyArray(a.on()))</span>
-<span class="source-line-no">146</span><span id="line-146">            return;</span>
-<span class="source-line-no">147</span><span id="line-147">         b.annotations(copy(a, vr()));</span>
-<span class="source-line-no">148</span><span id="line-148">      }</span>
-<span class="source-line-no">149</span><span id="line-149">   }</span>
+<span class="source-line-no">124</span><span id="line-124">   /**</span>
+<span class="source-line-no">125</span><span id="line-125">    * Applies targeted {@link ParentProperty} annotations to a {@link org.apache.juneau.BeanContext.Builder}.</span>
+<span class="source-line-no">126</span><span id="line-126">    */</span>
+<span class="source-line-no">127</span><span id="line-127">   public static class Applier extends AnnotationApplier&lt;ParentProperty,BeanContext.Builder&gt; {</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">      /**</span>
+<span class="source-line-no">130</span><span id="line-130">       * Constructor.</span>
+<span class="source-line-no">131</span><span id="line-131">       *</span>
+<span class="source-line-no">132</span><span id="line-132">       * @param vr The resolver for resolving values in annotations.</span>
+<span class="source-line-no">133</span><span id="line-133">       */</span>
+<span class="source-line-no">134</span><span id="line-134">      public Applier(VarResolverSession vr) {</span>
+<span class="source-line-no">135</span><span id="line-135">         super(ParentProperty.class, BeanContext.Builder.class, vr);</span>
+<span class="source-line-no">136</span><span id="line-136">      }</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">      @Override</span>
+<span class="source-line-no">139</span><span id="line-139">      public void apply(AnnotationInfo&lt;ParentProperty&gt; ai, BeanContext.Builder b) {</span>
+<span class="source-line-no">140</span><span id="line-140">         ParentProperty a = ai.inner();</span>
+<span class="source-line-no">141</span><span id="line-141">         if (isEmptyArray(a.on()))</span>
+<span class="source-line-no">142</span><span id="line-142">            return;</span>
+<span class="source-line-no">143</span><span id="line-143">         b.annotations(copy(a, vr()));</span>
+<span class="source-line-no">144</span><span id="line-144">      }</span>
+<span class="source-line-no">145</span><span id="line-145">   }</span>
+<span class="source-line-no">146</span><span id="line-146"></span>
+<span class="source-line-no">147</span><span id="line-147">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">148</span><span id="line-148">   // Other</span>
+<span class="source-line-no">149</span><span id="line-149">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">150</span><span id="line-150"></span>
-<span class="source-line-no">151</span><span id="line-151">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">152</span><span id="line-152">   // Other</span>
-<span class="source-line-no">153</span><span id="line-153">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">154</span><span id="line-154"></span>
-<span class="source-line-no">155</span><span id="line-155">   /**</span>
-<span class="source-line-no">156</span><span id="line-156">    * A collection of {@link ParentProperty @ParentProperty annotations}.</span>
-<span class="source-line-no">157</span><span id="line-157">    */</span>
-<span class="source-line-no">158</span><span id="line-158">   @Documented</span>
-<span class="source-line-no">159</span><span id="line-159">   @Target({METHOD,TYPE})</span>
-<span class="source-line-no">160</span><span id="line-160">   @Retention(RUNTIME)</span>
-<span class="source-line-no">161</span><span id="line-161">   @Inherited</span>
-<span class="source-line-no">162</span><span id="line-162">   public static @interface Array {</span>
-<span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">      /**</span>
-<span class="source-line-no">165</span><span id="line-165">       * The child annotations.</span>
-<span class="source-line-no">166</span><span id="line-166">       *</span>
-<span class="source-line-no">167</span><span id="line-167">       * @return The annotation value.</span>
-<span class="source-line-no">168</span><span id="line-168">       */</span>
-<span class="source-line-no">169</span><span id="line-169">      ParentProperty[] value();</span>
-<span class="source-line-no">170</span><span id="line-170">   }</span>
-<span class="source-line-no">171</span><span id="line-171">}</span>
+<span class="source-line-no">151</span><span id="line-151">   /**</span>
+<span class="source-line-no">152</span><span id="line-152">    * A collection of {@link ParentProperty @ParentProperty annotations}.</span>
+<span class="source-line-no">153</span><span id="line-153">    */</span>
+<span class="source-line-no">154</span><span id="line-154">   @Documented</span>
+<span class="source-line-no">155</span><span id="line-155">   @Target({METHOD,TYPE})</span>
+<span class="source-line-no">156</span><span id="line-156">   @Retention(RUNTIME)</span>
+<span class="source-line-no">157</span><span id="line-157">   @Inherited</span>
+<span class="source-line-no">158</span><span id="line-158">   public static @interface Array {</span>
+<span class="source-line-no">159</span><span id="line-159"></span>
+<span class="source-line-no">160</span><span id="line-160">      /**</span>
+<span class="source-line-no">161</span><span id="line-161">       * The child annotations.</span>
+<span class="source-line-no">162</span><span id="line-162">       *</span>
+<span class="source-line-no">163</span><span id="line-163">       * @return The annotation value.</span>
+<span class="source-line-no">164</span><span id="line-164">       */</span>
+<span class="source-line-no">165</span><span id="line-165">      ParentProperty[] value();</span>
+<span class="source-line-no">166</span><span id="line-166">   }</span>
+<span class="source-line-no">167</span><span id="line-167">}</span>
 
 
 

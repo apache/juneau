@@ -272,7 +272,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.jsonschema.JsonSchemaGeneratorSession.Builder)">
 <h3>JsonSchemaGeneratorSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-176">JsonSchemaGeneratorSession</a></span><wbr><span class="parameters">(<a href="JsonSchemaGeneratorSession.Builder.html" title="class in org.apache.juneau.jsonschema">JsonSchemaGeneratorSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-170">JsonSchemaGeneratorSession</a></span><wbr><span class="parameters">(<a href="JsonSchemaGeneratorSession.Builder.html" title="class in org.apache.juneau.jsonschema">JsonSchemaGeneratorSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -304,7 +304,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSchema(java.lang.Object)">
 <h3>getSchema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-192">getSchema</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-186">getSchema</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
                   throws <span class="exceptions"><a href="../BeanRecursionException.html" title="class in org.apache.juneau">BeanRecursionException</a>,
 <a href="../serializer/SerializeException.html" title="class in org.apache.juneau.serializer">SerializeException</a></span></div>
 <div class="block">Returns the JSON-schema for the specified object.</div>
@@ -323,7 +323,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSchema(java.lang.reflect.Type)">
 <h3>getSchema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-204">getSchema</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-198">getSchema</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type)</span>
                   throws <span class="exceptions"><a href="../BeanRecursionException.html" title="class in org.apache.juneau">BeanRecursionException</a>,
 <a href="../serializer/SerializeException.html" title="class in org.apache.juneau.serializer">SerializeException</a></span></div>
 <div class="block">Returns the JSON-schema for the specified type.</div>
@@ -341,7 +341,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSchema(org.apache.juneau.ClassMeta)">
 <h3>getSchema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-216">getSchema</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-210">getSchema</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span>
                   throws <span class="exceptions"><a href="../BeanRecursionException.html" title="class in org.apache.juneau">BeanRecursionException</a>,
 <a href="../serializer/SerializeException.html" title="class in org.apache.juneau.serializer">SerializeException</a></span></div>
 <div class="block">Returns the JSON-schema for the specified type.</div>
@@ -359,7 +359,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanDefId(org.apache.juneau.ClassMeta)">
 <h3>getBeanDefId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-429">getBeanDefId</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-423">getBeanDefId</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Returns the definition ID for the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -372,7 +372,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanDefUri(org.apache.juneau.ClassMeta)">
 <h3>getBeanDefUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-439">getBeanDefUri</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-433">getBeanDefUri</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Returns the definition URI for the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -385,7 +385,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanDefUri(java.lang.String)">
 <h3>getBeanDefUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-449">getBeanDefUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-443">getBeanDefUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
 <div class="block">Returns the definition URI for the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -398,7 +398,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanDefs()">
 <h3>getBeanDefs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-462">getBeanDefs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-456">getBeanDefs</a></span>()</div>
 <div class="block">Returns the definitions that were gathered during this session.
 
  <p>
@@ -412,7 +412,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addBeanDef(java.lang.String,org.apache.juneau.collections.JsonMap)">
 <h3>addBeanDef</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchemaGeneratorSession.html" title="class in org.apache.juneau.jsonschema">JsonSchemaGeneratorSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-473">addBeanDef</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchemaGeneratorSession.html" title="class in org.apache.juneau.jsonschema">JsonSchemaGeneratorSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-467">addBeanDef</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a>&nbsp;def)</span></div>
 <div class="block">Adds a schema definition to this session.</div>
 <dl class="notes">
@@ -427,7 +427,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAddDescriptionsTo()">
 <h3>getAddDescriptionsTo</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TypeCategory.html" title="enum class in org.apache.juneau.jsonschema">TypeCategory</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-490">getAddDescriptionsTo</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TypeCategory.html" title="enum class in org.apache.juneau.jsonschema">TypeCategory</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-484">getAddDescriptionsTo</a></span>()</div>
 <div class="block">Add descriptions to types.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -444,7 +444,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAddExamplesTo()">
 <h3>getAddExamplesTo</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TypeCategory.html" title="enum class in org.apache.juneau.jsonschema">TypeCategory</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-501">getAddExamplesTo</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TypeCategory.html" title="enum class in org.apache.juneau.jsonschema">TypeCategory</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-495">getAddExamplesTo</a></span>()</div>
 <div class="block">Add examples.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -461,7 +461,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isAllowNestedDescriptions()">
 <h3>isAllowNestedDescriptions</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-512">isAllowNestedDescriptions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-506">isAllowNestedDescriptions</a></span>()</div>
 <div class="block">Allow nested descriptions.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -478,7 +478,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isAllowNestedExamples()">
 <h3>isAllowNestedExamples</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-523">isAllowNestedExamples</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-517">isAllowNestedExamples</a></span>()</div>
 <div class="block">Allow nested examples.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -495,7 +495,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanDefMapper()">
 <h3>getBeanDefMapper</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="BeanDefMapper.html" title="interface in org.apache.juneau.jsonschema">BeanDefMapper</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-534">getBeanDefMapper</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="BeanDefMapper.html" title="interface in org.apache.juneau.jsonschema">BeanDefMapper</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-528">getBeanDefMapper</a></span>()</div>
 <div class="block">Bean schema definition mapper.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -512,7 +512,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getIgnoreTypes()">
 <h3>getIgnoreTypes</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html" title="class or interface in java.util.regex" class="external-link">Pattern</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-545">getIgnoreTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html" title="class or interface in java.util.regex" class="external-link">Pattern</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-539">getIgnoreTypes</a></span>()</div>
 <div class="block">Ignore types from schema definitions.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -529,7 +529,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isUseBeanDefs()">
 <h3>isUseBeanDefs</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-556">isUseBeanDefs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-550">isUseBeanDefs</a></span>()</div>
 <div class="block">Use bean definitions.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -546,7 +546,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getJsonSchemaClassMeta(org.apache.juneau.ClassMeta)">
 <h3>getJsonSchemaClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchemaClassMeta.html" title="class in org.apache.juneau.jsonschema">JsonSchemaClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-570">getJsonSchemaClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchemaClassMeta.html" title="class in org.apache.juneau.jsonschema">JsonSchemaClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-564">getJsonSchemaClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -559,7 +559,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getJsonSchemaBeanPropertyMeta(org.apache.juneau.BeanPropertyMeta)">
 <h3>getJsonSchemaBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchemaBeanPropertyMeta.html" title="class in org.apache.juneau.jsonschema">JsonSchemaBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-580">getJsonSchemaBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchemaBeanPropertyMeta.html" title="class in org.apache.juneau.jsonschema">JsonSchemaBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#line-574">getJsonSchemaBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

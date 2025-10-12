@@ -105,119 +105,113 @@
 <span class="source-line-no">092</span><span id="line-92"> *</span>
 <span class="source-line-no">093</span><span id="line-93"> * @param &lt;R&gt; The return type.</span>
 <span class="source-line-no">094</span><span id="line-94"> */</span>
-<span class="source-line-no">095</span><span id="line-95">@FluentSetters(returns="FluentRequestLineAssertion&lt;R&gt;")</span>
-<span class="source-line-no">096</span><span id="line-96">public class FluentRequestLineAssertion&lt;R&gt; extends FluentObjectAssertion&lt;RequestLine,R&gt; {</span>
-<span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">099</span><span id="line-99">   // Constructors</span>
-<span class="source-line-no">100</span><span id="line-100">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">   /**</span>
-<span class="source-line-no">103</span><span id="line-103">    * Constructor.</span>
-<span class="source-line-no">104</span><span id="line-104">    *</span>
-<span class="source-line-no">105</span><span id="line-105">    * @param value</span>
-<span class="source-line-no">106</span><span id="line-106">    *    The object being tested.</span>
-<span class="source-line-no">107</span><span id="line-107">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">108</span><span id="line-108">    * @param returns</span>
-<span class="source-line-no">109</span><span id="line-109">    *    The object to return after a test method is called.</span>
-<span class="source-line-no">110</span><span id="line-110">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
-<span class="source-line-no">111</span><span id="line-111">    * used on the same assertion.</span>
-<span class="source-line-no">112</span><span id="line-112">    */</span>
-<span class="source-line-no">113</span><span id="line-113">   public FluentRequestLineAssertion(RequestLine value, R returns) {</span>
-<span class="source-line-no">114</span><span id="line-114">      this(null, value, returns);</span>
-<span class="source-line-no">115</span><span id="line-115">   }</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   /**</span>
-<span class="source-line-no">118</span><span id="line-118">    * Chained constructor.</span>
-<span class="source-line-no">119</span><span id="line-119">    *</span>
-<span class="source-line-no">120</span><span id="line-120">    * &lt;p&gt;</span>
-<span class="source-line-no">121</span><span id="line-121">    * Used when transforming one assertion into another so that the assertion config can be used by the new assertion.</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * @param creator</span>
-<span class="source-line-no">124</span><span id="line-124">    *    The assertion that created this assertion.</span>
-<span class="source-line-no">125</span><span id="line-125">    *    &lt;br&gt;Should be &lt;jk&gt;null&lt;/jk&gt; if this is the top-level assertion.</span>
-<span class="source-line-no">126</span><span id="line-126">    * @param value</span>
-<span class="source-line-no">127</span><span id="line-127">    *    The object being tested.</span>
-<span class="source-line-no">128</span><span id="line-128">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">129</span><span id="line-129">    * @param returns</span>
-<span class="source-line-no">130</span><span id="line-130">    *    The object to return after a test method is called.</span>
-<span class="source-line-no">131</span><span id="line-131">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
-<span class="source-line-no">132</span><span id="line-132">    * used on the same assertion.</span>
-<span class="source-line-no">133</span><span id="line-133">    */</span>
-<span class="source-line-no">134</span><span id="line-134">   public FluentRequestLineAssertion(Assertion creator, RequestLine value, R returns) {</span>
-<span class="source-line-no">135</span><span id="line-135">      super(creator, value, returns);</span>
-<span class="source-line-no">136</span><span id="line-136">      setThrowable(BadRequest.class);</span>
-<span class="source-line-no">137</span><span id="line-137">   }</span>
-<span class="source-line-no">138</span><span id="line-138"></span>
-<span class="source-line-no">139</span><span id="line-139">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">140</span><span id="line-140">   // Transform methods</span>
-<span class="source-line-no">141</span><span id="line-141">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">   /**</span>
-<span class="source-line-no">144</span><span id="line-144">    * Returns the request line method string as a new assertion.</span>
-<span class="source-line-no">145</span><span id="line-145">    *</span>
-<span class="source-line-no">146</span><span id="line-146">    * @return A new assertion.</span>
-<span class="source-line-no">147</span><span id="line-147">    */</span>
-<span class="source-line-no">148</span><span id="line-148">   public FluentStringAssertion&lt;R&gt; asMethod() {</span>
-<span class="source-line-no">149</span><span id="line-149">      return new FluentStringAssertion&lt;&gt;(value().getMethod(), returns());</span>
-<span class="source-line-no">150</span><span id="line-150">   }</span>
-<span class="source-line-no">151</span><span id="line-151"></span>
-<span class="source-line-no">152</span><span id="line-152">   /**</span>
-<span class="source-line-no">153</span><span id="line-153">    * Returns the request line uri string as a new assertion.</span>
-<span class="source-line-no">154</span><span id="line-154">    *</span>
-<span class="source-line-no">155</span><span id="line-155">    * @return A new assertion.</span>
-<span class="source-line-no">156</span><span id="line-156">    */</span>
-<span class="source-line-no">157</span><span id="line-157">   public FluentStringAssertion&lt;R&gt; asUri() {</span>
-<span class="source-line-no">158</span><span id="line-158">      return new FluentStringAssertion&lt;&gt;(value().getUri(), returns());</span>
-<span class="source-line-no">159</span><span id="line-159">   }</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">   /**</span>
-<span class="source-line-no">162</span><span id="line-162">    * Returns the request line protocol version as a new assertion.</span>
-<span class="source-line-no">163</span><span id="line-163">    *</span>
-<span class="source-line-no">164</span><span id="line-164">    * @return A new assertion.</span>
-<span class="source-line-no">165</span><span id="line-165">    */</span>
-<span class="source-line-no">166</span><span id="line-166">   public FluentProtocolVersionAssertion&lt;R&gt; asProtocolVersion() {</span>
-<span class="source-line-no">167</span><span id="line-167">      return new FluentProtocolVersionAssertion&lt;&gt;(value().getProtocolVersion(), returns());</span>
-<span class="source-line-no">168</span><span id="line-168">   }</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">171</span><span id="line-171">   // Fluent setters</span>
-<span class="source-line-no">172</span><span id="line-172">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">173</span><span id="line-173"></span>
-<span class="source-line-no">174</span><span id="line-174">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">175</span><span id="line-175"></span>
-<span class="source-line-no">176</span><span id="line-176">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">177</span><span id="line-177">   public FluentRequestLineAssertion&lt;R&gt; setMsg(String msg, Object...args) {</span>
-<span class="source-line-no">178</span><span id="line-178">      super.setMsg(msg, args);</span>
-<span class="source-line-no">179</span><span id="line-179">      return this;</span>
-<span class="source-line-no">180</span><span id="line-180">   }</span>
-<span class="source-line-no">181</span><span id="line-181"></span>
-<span class="source-line-no">182</span><span id="line-182">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">183</span><span id="line-183">   public FluentRequestLineAssertion&lt;R&gt; setOut(PrintStream value) {</span>
-<span class="source-line-no">184</span><span id="line-184">      super.setOut(value);</span>
-<span class="source-line-no">185</span><span id="line-185">      return this;</span>
-<span class="source-line-no">186</span><span id="line-186">   }</span>
-<span class="source-line-no">187</span><span id="line-187"></span>
-<span class="source-line-no">188</span><span id="line-188">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">189</span><span id="line-189">   public FluentRequestLineAssertion&lt;R&gt; setSilent() {</span>
-<span class="source-line-no">190</span><span id="line-190">      super.setSilent();</span>
-<span class="source-line-no">191</span><span id="line-191">      return this;</span>
-<span class="source-line-no">192</span><span id="line-192">   }</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">195</span><span id="line-195">   public FluentRequestLineAssertion&lt;R&gt; setStdOut() {</span>
-<span class="source-line-no">196</span><span id="line-196">      super.setStdOut();</span>
-<span class="source-line-no">197</span><span id="line-197">      return this;</span>
-<span class="source-line-no">198</span><span id="line-198">   }</span>
-<span class="source-line-no">199</span><span id="line-199"></span>
-<span class="source-line-no">200</span><span id="line-200">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">201</span><span id="line-201">   public FluentRequestLineAssertion&lt;R&gt; setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
-<span class="source-line-no">202</span><span id="line-202">      super.setThrowable(value);</span>
-<span class="source-line-no">203</span><span id="line-203">      return this;</span>
-<span class="source-line-no">204</span><span id="line-204">   }</span>
-<span class="source-line-no">205</span><span id="line-205"></span>
-<span class="source-line-no">206</span><span id="line-206">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">207</span><span id="line-207">}</span>
+<span class="source-line-no">095</span><span id="line-95">public class FluentRequestLineAssertion&lt;R&gt; extends FluentObjectAssertion&lt;RequestLine,R&gt; {</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">098</span><span id="line-98">   // Constructors</span>
+<span class="source-line-no">099</span><span id="line-99">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">100</span><span id="line-100"></span>
+<span class="source-line-no">101</span><span id="line-101">   /**</span>
+<span class="source-line-no">102</span><span id="line-102">    * Constructor.</span>
+<span class="source-line-no">103</span><span id="line-103">    *</span>
+<span class="source-line-no">104</span><span id="line-104">    * @param value</span>
+<span class="source-line-no">105</span><span id="line-105">    *    The object being tested.</span>
+<span class="source-line-no">106</span><span id="line-106">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">107</span><span id="line-107">    * @param returns</span>
+<span class="source-line-no">108</span><span id="line-108">    *    The object to return after a test method is called.</span>
+<span class="source-line-no">109</span><span id="line-109">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
+<span class="source-line-no">110</span><span id="line-110">    * used on the same assertion.</span>
+<span class="source-line-no">111</span><span id="line-111">    */</span>
+<span class="source-line-no">112</span><span id="line-112">   public FluentRequestLineAssertion(RequestLine value, R returns) {</span>
+<span class="source-line-no">113</span><span id="line-113">      this(null, value, returns);</span>
+<span class="source-line-no">114</span><span id="line-114">   }</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   /**</span>
+<span class="source-line-no">117</span><span id="line-117">    * Chained constructor.</span>
+<span class="source-line-no">118</span><span id="line-118">    *</span>
+<span class="source-line-no">119</span><span id="line-119">    * &lt;p&gt;</span>
+<span class="source-line-no">120</span><span id="line-120">    * Used when transforming one assertion into another so that the assertion config can be used by the new assertion.</span>
+<span class="source-line-no">121</span><span id="line-121">    *</span>
+<span class="source-line-no">122</span><span id="line-122">    * @param creator</span>
+<span class="source-line-no">123</span><span id="line-123">    *    The assertion that created this assertion.</span>
+<span class="source-line-no">124</span><span id="line-124">    *    &lt;br&gt;Should be &lt;jk&gt;null&lt;/jk&gt; if this is the top-level assertion.</span>
+<span class="source-line-no">125</span><span id="line-125">    * @param value</span>
+<span class="source-line-no">126</span><span id="line-126">    *    The object being tested.</span>
+<span class="source-line-no">127</span><span id="line-127">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">128</span><span id="line-128">    * @param returns</span>
+<span class="source-line-no">129</span><span id="line-129">    *    The object to return after a test method is called.</span>
+<span class="source-line-no">130</span><span id="line-130">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
+<span class="source-line-no">131</span><span id="line-131">    * used on the same assertion.</span>
+<span class="source-line-no">132</span><span id="line-132">    */</span>
+<span class="source-line-no">133</span><span id="line-133">   public FluentRequestLineAssertion(Assertion creator, RequestLine value, R returns) {</span>
+<span class="source-line-no">134</span><span id="line-134">      super(creator, value, returns);</span>
+<span class="source-line-no">135</span><span id="line-135">      setThrowable(BadRequest.class);</span>
+<span class="source-line-no">136</span><span id="line-136">   }</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">139</span><span id="line-139">   // Transform methods</span>
+<span class="source-line-no">140</span><span id="line-140">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">141</span><span id="line-141"></span>
+<span class="source-line-no">142</span><span id="line-142">   /**</span>
+<span class="source-line-no">143</span><span id="line-143">    * Returns the request line method string as a new assertion.</span>
+<span class="source-line-no">144</span><span id="line-144">    *</span>
+<span class="source-line-no">145</span><span id="line-145">    * @return A new assertion.</span>
+<span class="source-line-no">146</span><span id="line-146">    */</span>
+<span class="source-line-no">147</span><span id="line-147">   public FluentStringAssertion&lt;R&gt; asMethod() {</span>
+<span class="source-line-no">148</span><span id="line-148">      return new FluentStringAssertion&lt;&gt;(value().getMethod(), returns());</span>
+<span class="source-line-no">149</span><span id="line-149">   }</span>
+<span class="source-line-no">150</span><span id="line-150"></span>
+<span class="source-line-no">151</span><span id="line-151">   /**</span>
+<span class="source-line-no">152</span><span id="line-152">    * Returns the request line uri string as a new assertion.</span>
+<span class="source-line-no">153</span><span id="line-153">    *</span>
+<span class="source-line-no">154</span><span id="line-154">    * @return A new assertion.</span>
+<span class="source-line-no">155</span><span id="line-155">    */</span>
+<span class="source-line-no">156</span><span id="line-156">   public FluentStringAssertion&lt;R&gt; asUri() {</span>
+<span class="source-line-no">157</span><span id="line-157">      return new FluentStringAssertion&lt;&gt;(value().getUri(), returns());</span>
+<span class="source-line-no">158</span><span id="line-158">   }</span>
+<span class="source-line-no">159</span><span id="line-159"></span>
+<span class="source-line-no">160</span><span id="line-160">   /**</span>
+<span class="source-line-no">161</span><span id="line-161">    * Returns the request line protocol version as a new assertion.</span>
+<span class="source-line-no">162</span><span id="line-162">    *</span>
+<span class="source-line-no">163</span><span id="line-163">    * @return A new assertion.</span>
+<span class="source-line-no">164</span><span id="line-164">    */</span>
+<span class="source-line-no">165</span><span id="line-165">   public FluentProtocolVersionAssertion&lt;R&gt; asProtocolVersion() {</span>
+<span class="source-line-no">166</span><span id="line-166">      return new FluentProtocolVersionAssertion&lt;&gt;(value().getProtocolVersion(), returns());</span>
+<span class="source-line-no">167</span><span id="line-167">   }</span>
+<span class="source-line-no">168</span><span id="line-168"></span>
+<span class="source-line-no">169</span><span id="line-169">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">170</span><span id="line-170">   // Fluent setters</span>
+<span class="source-line-no">171</span><span id="line-171">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">172</span><span id="line-172">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">173</span><span id="line-173">   public FluentRequestLineAssertion&lt;R&gt; setMsg(String msg, Object...args) {</span>
+<span class="source-line-no">174</span><span id="line-174">      super.setMsg(msg, args);</span>
+<span class="source-line-no">175</span><span id="line-175">      return this;</span>
+<span class="source-line-no">176</span><span id="line-176">   }</span>
+<span class="source-line-no">177</span><span id="line-177"></span>
+<span class="source-line-no">178</span><span id="line-178">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">179</span><span id="line-179">   public FluentRequestLineAssertion&lt;R&gt; setOut(PrintStream value) {</span>
+<span class="source-line-no">180</span><span id="line-180">      super.setOut(value);</span>
+<span class="source-line-no">181</span><span id="line-181">      return this;</span>
+<span class="source-line-no">182</span><span id="line-182">   }</span>
+<span class="source-line-no">183</span><span id="line-183"></span>
+<span class="source-line-no">184</span><span id="line-184">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">185</span><span id="line-185">   public FluentRequestLineAssertion&lt;R&gt; setSilent() {</span>
+<span class="source-line-no">186</span><span id="line-186">      super.setSilent();</span>
+<span class="source-line-no">187</span><span id="line-187">      return this;</span>
+<span class="source-line-no">188</span><span id="line-188">   }</span>
+<span class="source-line-no">189</span><span id="line-189"></span>
+<span class="source-line-no">190</span><span id="line-190">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">191</span><span id="line-191">   public FluentRequestLineAssertion&lt;R&gt; setStdOut() {</span>
+<span class="source-line-no">192</span><span id="line-192">      super.setStdOut();</span>
+<span class="source-line-no">193</span><span id="line-193">      return this;</span>
+<span class="source-line-no">194</span><span id="line-194">   }</span>
+<span class="source-line-no">195</span><span id="line-195"></span>
+<span class="source-line-no">196</span><span id="line-196">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">197</span><span id="line-197">   public FluentRequestLineAssertion&lt;R&gt; setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
+<span class="source-line-no">198</span><span id="line-198">      super.setThrowable(value);</span>
+<span class="source-line-no">199</span><span id="line-199">      return this;</span>
+<span class="source-line-no">200</span><span id="line-200">   }</span>
+<span class="source-line-no">201</span><span id="line-201">}</span>
 
 
 

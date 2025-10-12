@@ -73,910 +73,890 @@
 <span class="source-line-no">060</span><span id="line-60"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;/ul&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> */</span>
-<span class="source-line-no">063</span><span id="line-63">@FluentSetters</span>
-<span class="source-line-no">064</span><span id="line-64">public class HeaderList extends ControlledArrayList&lt;Header&gt; {</span>
-<span class="source-line-no">065</span><span id="line-65"></span>
-<span class="source-line-no">066</span><span id="line-66">   private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">069</span><span id="line-69">   // Static</span>
-<span class="source-line-no">070</span><span id="line-70">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">071</span><span id="line-71"></span>
-<span class="source-line-no">072</span><span id="line-72">   /** Represents no header list in annotations. */</span>
-<span class="source-line-no">073</span><span id="line-73">   public static final class Void extends HeaderList {</span>
-<span class="source-line-no">074</span><span id="line-74">      private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">075</span><span id="line-75">   }</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">   /**</span>
-<span class="source-line-no">078</span><span id="line-78">    * Instantiates a new list.</span>
-<span class="source-line-no">079</span><span id="line-79">    *</span>
-<span class="source-line-no">080</span><span id="line-80">    * @return A new list.</span>
-<span class="source-line-no">081</span><span id="line-81">    */</span>
-<span class="source-line-no">082</span><span id="line-82">   public static HeaderList create() {</span>
-<span class="source-line-no">083</span><span id="line-83">      return new HeaderList();</span>
-<span class="source-line-no">084</span><span id="line-84">   }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   /**</span>
-<span class="source-line-no">087</span><span id="line-87">    * Creates a new {@link HeaderList} initialized with the specified headers.</span>
-<span class="source-line-no">088</span><span id="line-88">    *</span>
-<span class="source-line-no">089</span><span id="line-89">    * @param headers</span>
-<span class="source-line-no">090</span><span id="line-90">    *    The headers to add to the list.</span>
-<span class="source-line-no">091</span><span id="line-91">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">092</span><span id="line-92">    *    &lt;br&gt;&lt;jk&gt;null&lt;/jk&gt; entries are ignored.</span>
-<span class="source-line-no">093</span><span id="line-93">    * @return A new unmodifiable instance, never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">094</span><span id="line-94">    */</span>
-<span class="source-line-no">095</span><span id="line-95">   public static HeaderList of(List&lt;Header&gt; headers) {</span>
-<span class="source-line-no">096</span><span id="line-96">      return new HeaderList().append(headers);</span>
-<span class="source-line-no">097</span><span id="line-97">   }</span>
-<span class="source-line-no">098</span><span id="line-98"></span>
-<span class="source-line-no">099</span><span id="line-99">   /**</span>
-<span class="source-line-no">100</span><span id="line-100">    * Creates a new {@link HeaderList} initialized with the specified headers.</span>
-<span class="source-line-no">101</span><span id="line-101">    *</span>
-<span class="source-line-no">102</span><span id="line-102">    * @param headers</span>
-<span class="source-line-no">103</span><span id="line-103">    *    The headers to add to the list.</span>
-<span class="source-line-no">104</span><span id="line-104">    *    &lt;br&gt;&lt;jk&gt;null&lt;/jk&gt; entries are ignored.</span>
-<span class="source-line-no">105</span><span id="line-105">    * @return A new unmodifiable instance, never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">106</span><span id="line-106">    */</span>
-<span class="source-line-no">107</span><span id="line-107">   public static HeaderList of(Header...headers) {</span>
-<span class="source-line-no">108</span><span id="line-108">      return new HeaderList().append(headers);</span>
-<span class="source-line-no">109</span><span id="line-109">   }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   /**</span>
-<span class="source-line-no">112</span><span id="line-112">    * Creates a new {@link HeaderList} initialized with the specified name/value pairs.</span>
-<span class="source-line-no">113</span><span id="line-113">    *</span>
-<span class="source-line-no">114</span><span id="line-114">    * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
-<span class="source-line-no">115</span><span id="line-115">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">116</span><span id="line-116">    *    HeaderList &lt;jv&gt;headers&lt;/jv&gt; = HeaderList.&lt;jsm&gt;ofPairs&lt;/jsm&gt;(&lt;js&gt;"Accept"&lt;/js&gt;, &lt;js&gt;"text/xml"&lt;/js&gt;, &lt;js&gt;"Content-Type"&lt;/js&gt;, &lt;js&gt;"text/xml"&lt;/js&gt;);</span>
-<span class="source-line-no">117</span><span id="line-117">    * &lt;/p&gt;</span>
-<span class="source-line-no">118</span><span id="line-118">    *</span>
-<span class="source-line-no">119</span><span id="line-119">    * @param pairs</span>
-<span class="source-line-no">120</span><span id="line-120">    *    Initial list of pairs.</span>
-<span class="source-line-no">121</span><span id="line-121">    *    &lt;br&gt;Must be an even number of parameters representing key/value pairs.</span>
-<span class="source-line-no">122</span><span id="line-122">    * @throws RuntimeException If odd number of parameters were specified.</span>
-<span class="source-line-no">123</span><span id="line-123">    * @return A new instance.</span>
-<span class="source-line-no">124</span><span id="line-124">    */</span>
-<span class="source-line-no">125</span><span id="line-125">   public static HeaderList ofPairs(String... pairs) {</span>
-<span class="source-line-no">126</span><span id="line-126">      HeaderList x = new HeaderList();</span>
-<span class="source-line-no">127</span><span id="line-127">      if (pairs == null)</span>
-<span class="source-line-no">128</span><span id="line-128">         pairs = new String[0];</span>
-<span class="source-line-no">129</span><span id="line-129">      if (pairs.length % 2 != 0)</span>
-<span class="source-line-no">130</span><span id="line-130">         throw new IllegalArgumentException("Odd number of parameters passed into HeaderList.ofPairs()");</span>
-<span class="source-line-no">131</span><span id="line-131">      for (int i = 0; i &lt; pairs.length; i+=2)</span>
-<span class="source-line-no">132</span><span id="line-132">         x.add(BasicHeader.of(pairs[i], pairs[i+1]));</span>
-<span class="source-line-no">133</span><span id="line-133">      return x;</span>
-<span class="source-line-no">134</span><span id="line-134">   }</span>
-<span class="source-line-no">135</span><span id="line-135"></span>
-<span class="source-line-no">136</span><span id="line-136">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">137</span><span id="line-137">   // Instance</span>
-<span class="source-line-no">138</span><span id="line-138">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">139</span><span id="line-139"></span>
-<span class="source-line-no">140</span><span id="line-140">   private VarResolver varResolver;</span>
-<span class="source-line-no">141</span><span id="line-141">   boolean caseSensitive;</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">   /**</span>
-<span class="source-line-no">144</span><span id="line-144">    * Constructor.</span>
-<span class="source-line-no">145</span><span id="line-145">    */</span>
-<span class="source-line-no">146</span><span id="line-146">   public HeaderList() {</span>
-<span class="source-line-no">147</span><span id="line-147">      super(false);</span>
-<span class="source-line-no">148</span><span id="line-148">   }</span>
-<span class="source-line-no">149</span><span id="line-149"></span>
-<span class="source-line-no">150</span><span id="line-150">   /**</span>
-<span class="source-line-no">151</span><span id="line-151">    * Copy constructor.</span>
-<span class="source-line-no">152</span><span id="line-152">    *</span>
-<span class="source-line-no">153</span><span id="line-153">    * @param copyFrom The bean to copy.</span>
-<span class="source-line-no">154</span><span id="line-154">    */</span>
-<span class="source-line-no">155</span><span id="line-155">   protected HeaderList(HeaderList copyFrom) {</span>
-<span class="source-line-no">156</span><span id="line-156">      super(false, copyFrom);</span>
-<span class="source-line-no">157</span><span id="line-157">      caseSensitive = copyFrom.caseSensitive;</span>
-<span class="source-line-no">158</span><span id="line-158">   }</span>
-<span class="source-line-no">159</span><span id="line-159"></span>
-<span class="source-line-no">160</span><span id="line-160">   /**</span>
-<span class="source-line-no">161</span><span id="line-161">    * Makes a copy of this list.</span>
-<span class="source-line-no">162</span><span id="line-162">    *</span>
-<span class="source-line-no">163</span><span id="line-163">    * @return A new copy of this list.</span>
-<span class="source-line-no">164</span><span id="line-164">    */</span>
-<span class="source-line-no">165</span><span id="line-165">   public HeaderList copy() {</span>
-<span class="source-line-no">166</span><span id="line-166">      return new HeaderList(this);</span>
-<span class="source-line-no">167</span><span id="line-167">   }</span>
-<span class="source-line-no">168</span><span id="line-168"></span>
-<span class="source-line-no">169</span><span id="line-169">   /**</span>
-<span class="source-line-no">170</span><span id="line-170">    * Adds a collection of default headers.</span>
-<span class="source-line-no">171</span><span id="line-171">    *</span>
-<span class="source-line-no">172</span><span id="line-172">    * &lt;p&gt;</span>
-<span class="source-line-no">173</span><span id="line-173">    * Default headers are set if they're not already in the list.</span>
-<span class="source-line-no">174</span><span id="line-174">    *</span>
-<span class="source-line-no">175</span><span id="line-175">    * @param headers The list of default headers.</span>
-<span class="source-line-no">176</span><span id="line-176">    * @return This object.</span>
-<span class="source-line-no">177</span><span id="line-177">    */</span>
-<span class="source-line-no">178</span><span id="line-178">   public HeaderList setDefault(List&lt;Header&gt; headers) {</span>
-<span class="source-line-no">179</span><span id="line-179">      if (headers != null)</span>
-<span class="source-line-no">180</span><span id="line-180">         headers.stream().filter(x -&gt; x != null &amp;&amp; ! contains(x.getName())).forEach(this::set);</span>
-<span class="source-line-no">181</span><span id="line-181">      return this;</span>
-<span class="source-line-no">182</span><span id="line-182">   }</span>
-<span class="source-line-no">183</span><span id="line-183"></span>
-<span class="source-line-no">184</span><span id="line-184">   /**</span>
-<span class="source-line-no">185</span><span id="line-185">    * Replaces the first occurrence of the headers with the same name.</span>
-<span class="source-line-no">186</span><span id="line-186">    *</span>
-<span class="source-line-no">187</span><span id="line-187">    * @param name The header name.</span>
-<span class="source-line-no">188</span><span id="line-188">    * @param value The header value.</span>
-<span class="source-line-no">189</span><span id="line-189">    * @return This object.</span>
-<span class="source-line-no">190</span><span id="line-190">    */</span>
-<span class="source-line-no">191</span><span id="line-191">   public HeaderList setDefault(String name, Object value) {</span>
-<span class="source-line-no">192</span><span id="line-192">      return setDefault(createPart(name, value));</span>
-<span class="source-line-no">193</span><span id="line-193">   }</span>
-<span class="source-line-no">194</span><span id="line-194"></span>
-<span class="source-line-no">195</span><span id="line-195">   /**</span>
-<span class="source-line-no">196</span><span id="line-196">    * Replaces the first occurrence of the headers with the same name.</span>
-<span class="source-line-no">197</span><span id="line-197">    *</span>
-<span class="source-line-no">198</span><span id="line-198">    * @param name The header name.</span>
-<span class="source-line-no">199</span><span id="line-199">    * @param value The header value.</span>
-<span class="source-line-no">200</span><span id="line-200">    * @return This object.</span>
-<span class="source-line-no">201</span><span id="line-201">    */</span>
-<span class="source-line-no">202</span><span id="line-202">   public HeaderList setDefault(String name, Supplier&lt;?&gt; value) {</span>
-<span class="source-line-no">203</span><span id="line-203">      return setDefault(createPart(name, value));</span>
-<span class="source-line-no">204</span><span id="line-204">   }</span>
-<span class="source-line-no">205</span><span id="line-205"></span>
-<span class="source-line-no">206</span><span id="line-206">   /**</span>
-<span class="source-line-no">207</span><span id="line-207">    * Makes a copy of this list of headers and adds a collection of default headers.</span>
-<span class="source-line-no">208</span><span id="line-208">    *</span>
-<span class="source-line-no">209</span><span id="line-209">    * &lt;p&gt;</span>
-<span class="source-line-no">210</span><span id="line-210">    * Default headers are set if they're not already in the list.</span>
-<span class="source-line-no">211</span><span id="line-211">    *</span>
-<span class="source-line-no">212</span><span id="line-212">    * @param headers The list of default headers.</span>
-<span class="source-line-no">213</span><span id="line-213">    * @return A new list, or the same list if the headers were empty.</span>
-<span class="source-line-no">214</span><span id="line-214">    */</span>
-<span class="source-line-no">215</span><span id="line-215">   public HeaderList setDefault(Header...headers) {</span>
-<span class="source-line-no">216</span><span id="line-216">      if (headers != null)</span>
-<span class="source-line-no">217</span><span id="line-217">         setDefault(Arrays.asList(headers));</span>
-<span class="source-line-no">218</span><span id="line-218">      return this;</span>
-<span class="source-line-no">219</span><span id="line-219">   }</span>
-<span class="source-line-no">220</span><span id="line-220"></span>
-<span class="source-line-no">221</span><span id="line-221">   //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">222</span><span id="line-222">   // Properties</span>
-<span class="source-line-no">223</span><span id="line-223">   //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">224</span><span id="line-224"></span>
-<span class="source-line-no">225</span><span id="line-225">   /**</span>
-<span class="source-line-no">226</span><span id="line-226">    * Allows header values to contain SVL variables.</span>
-<span class="source-line-no">227</span><span id="line-227">    *</span>
-<span class="source-line-no">228</span><span id="line-228">    * &lt;p&gt;</span>
-<span class="source-line-no">229</span><span id="line-229">    * Resolves variables in header values when using the following methods:</span>
-<span class="source-line-no">230</span><span id="line-230">    * &lt;ul&gt;</span>
-<span class="source-line-no">231</span><span id="line-231">    *    &lt;li class='jm'&gt;{@link #append(String, Object) append(String,Object)}</span>
-<span class="source-line-no">232</span><span id="line-232">    *    &lt;li class='jm'&gt;{@link #append(String, Supplier) append(String,Supplier&amp;lt;?&amp;gt;)}</span>
-<span class="source-line-no">233</span><span id="line-233">    *    &lt;li class='jm'&gt;{@link #prepend(String, Object) prepend(String,Object)}</span>
-<span class="source-line-no">234</span><span id="line-234">    *    &lt;li class='jm'&gt;{@link #prepend(String, Supplier) prepend(String,Supplier&amp;lt;?&amp;gt;)}</span>
-<span class="source-line-no">235</span><span id="line-235">    *    &lt;li class='jm'&gt;{@link #set(String, Object) set(String,Object)}</span>
-<span class="source-line-no">236</span><span id="line-236">    *    &lt;li class='jm'&gt;{@link #set(String, Supplier) set(String,Supplier&amp;lt;?&amp;gt;)}</span>
-<span class="source-line-no">237</span><span id="line-237">    * &lt;/ul&gt;</span>
-<span class="source-line-no">238</span><span id="line-238">    *</span>
-<span class="source-line-no">239</span><span id="line-239">    * &lt;p&gt;</span>
-<span class="source-line-no">240</span><span id="line-240">    * Uses {@link VarResolver#DEFAULT} to resolve variables.</span>
-<span class="source-line-no">241</span><span id="line-241">    *</span>
-<span class="source-line-no">242</span><span id="line-242">    * @return This object.</span>
-<span class="source-line-no">243</span><span id="line-243">    */</span>
-<span class="source-line-no">244</span><span id="line-244">   public HeaderList resolving() {</span>
-<span class="source-line-no">245</span><span id="line-245">      return resolving(VarResolver.DEFAULT);</span>
-<span class="source-line-no">246</span><span id="line-246">   }</span>
-<span class="source-line-no">247</span><span id="line-247"></span>
-<span class="source-line-no">248</span><span id="line-248">   /**</span>
-<span class="source-line-no">249</span><span id="line-249">    * Allows header values to contain SVL variables.</span>
-<span class="source-line-no">250</span><span id="line-250">    *</span>
-<span class="source-line-no">251</span><span id="line-251">    * &lt;p&gt;</span>
-<span class="source-line-no">252</span><span id="line-252">    * Resolves variables in header values when using the following methods:</span>
-<span class="source-line-no">253</span><span id="line-253">    * &lt;ul&gt;</span>
-<span class="source-line-no">254</span><span id="line-254">    *    &lt;li class='jm'&gt;{@link #append(String, Object) append(String,Object)}</span>
-<span class="source-line-no">255</span><span id="line-255">    *    &lt;li class='jm'&gt;{@link #append(String, Supplier) append(String,Supplier&amp;lt;?&amp;gt;)}</span>
-<span class="source-line-no">256</span><span id="line-256">    *    &lt;li class='jm'&gt;{@link #prepend(String, Object) prepend(String,Object)}</span>
-<span class="source-line-no">257</span><span id="line-257">    *    &lt;li class='jm'&gt;{@link #prepend(String, Supplier) prepend(String,Supplier&amp;lt;?&amp;gt;)}</span>
-<span class="source-line-no">258</span><span id="line-258">    *    &lt;li class='jm'&gt;{@link #set(String, Object) set(String,Object)}</span>
-<span class="source-line-no">259</span><span id="line-259">    *    &lt;li class='jm'&gt;{@link #set(String, Supplier) set(String,Supplier&amp;lt;?&amp;gt;)}</span>
-<span class="source-line-no">260</span><span id="line-260">    * &lt;/ul&gt;</span>
-<span class="source-line-no">261</span><span id="line-261">    *</span>
-<span class="source-line-no">262</span><span id="line-262">    * @param varResolver The variable resolver to use for resolving variables.</span>
-<span class="source-line-no">263</span><span id="line-263">    * @return This object.</span>
-<span class="source-line-no">264</span><span id="line-264">    */</span>
-<span class="source-line-no">265</span><span id="line-265">   public HeaderList resolving(VarResolver varResolver) {</span>
-<span class="source-line-no">266</span><span id="line-266">      assertModifiable();</span>
-<span class="source-line-no">267</span><span id="line-267">      this.varResolver = varResolver;</span>
-<span class="source-line-no">268</span><span id="line-268">      return this;</span>
-<span class="source-line-no">269</span><span id="line-269">   }</span>
-<span class="source-line-no">270</span><span id="line-270"></span>
-<span class="source-line-no">271</span><span id="line-271">   /**</span>
-<span class="source-line-no">272</span><span id="line-272">    * Specifies that the headers in this list should be treated as case-sensitive.</span>
-<span class="source-line-no">273</span><span id="line-273">    *</span>
-<span class="source-line-no">274</span><span id="line-274">    * &lt;p&gt;</span>
-<span class="source-line-no">275</span><span id="line-275">    * The default behavior is case-insensitive.</span>
-<span class="source-line-no">276</span><span id="line-276">    *</span>
-<span class="source-line-no">277</span><span id="line-277">    * @param value The new value for this setting.</span>
-<span class="source-line-no">278</span><span id="line-278">    * @return This object.</span>
-<span class="source-line-no">279</span><span id="line-279">    */</span>
-<span class="source-line-no">280</span><span id="line-280">   public HeaderList caseSensitive(boolean value) {</span>
-<span class="source-line-no">281</span><span id="line-281">      assertModifiable();</span>
-<span class="source-line-no">282</span><span id="line-282">      caseSensitive = value;</span>
-<span class="source-line-no">283</span><span id="line-283">      return this;</span>
-<span class="source-line-no">284</span><span id="line-284">   }</span>
-<span class="source-line-no">285</span><span id="line-285"></span>
-<span class="source-line-no">286</span><span id="line-286">   /**</span>
-<span class="source-line-no">287</span><span id="line-287">    * Adds the specified header to the end of the headers in this list.</span>
-<span class="source-line-no">288</span><span id="line-288">    *</span>
-<span class="source-line-no">289</span><span id="line-289">    * @param value The header to add.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
-<span class="source-line-no">290</span><span id="line-290">    * @return This object.</span>
-<span class="source-line-no">291</span><span id="line-291">    */</span>
-<span class="source-line-no">292</span><span id="line-292">   @FluentSetter</span>
-<span class="source-line-no">293</span><span id="line-293">   public HeaderList append(Header value) {</span>
-<span class="source-line-no">294</span><span id="line-294">      if (value != null)</span>
-<span class="source-line-no">295</span><span id="line-295">         add(value);</span>
-<span class="source-line-no">296</span><span id="line-296">      return this;</span>
-<span class="source-line-no">297</span><span id="line-297">   }</span>
-<span class="source-line-no">298</span><span id="line-298"></span>
-<span class="source-line-no">299</span><span id="line-299">   /**</span>
-<span class="source-line-no">300</span><span id="line-300">    * Appends the specified header to the end of this list.</span>
-<span class="source-line-no">301</span><span id="line-301">    *</span>
-<span class="source-line-no">302</span><span id="line-302">    * &lt;p&gt;</span>
-<span class="source-line-no">303</span><span id="line-303">    * The header is added as a {@link BasicHeader}.</span>
-<span class="source-line-no">304</span><span id="line-304">    *</span>
-<span class="source-line-no">305</span><span id="line-305">    * @param name The header name.</span>
-<span class="source-line-no">306</span><span id="line-306">    * @param value The header value.</span>
-<span class="source-line-no">307</span><span id="line-307">    * @return This object.</span>
-<span class="source-line-no">308</span><span id="line-308">    */</span>
-<span class="source-line-no">309</span><span id="line-309">   public HeaderList append(String name, Object value) {</span>
-<span class="source-line-no">310</span><span id="line-310">      return append(createPart(name, value));</span>
-<span class="source-line-no">311</span><span id="line-311">   }</span>
-<span class="source-line-no">312</span><span id="line-312"></span>
-<span class="source-line-no">313</span><span id="line-313">   /**</span>
-<span class="source-line-no">314</span><span id="line-314">    * Appends the specified header to the end of this list using a value supplier.</span>
-<span class="source-line-no">315</span><span id="line-315">    *</span>
-<span class="source-line-no">316</span><span id="line-316">    * &lt;p&gt;</span>
-<span class="source-line-no">317</span><span id="line-317">    * The header is added as a {@link BasicHeader}.</span>
-<span class="source-line-no">318</span><span id="line-318">    *</span>
-<span class="source-line-no">319</span><span id="line-319">    * &lt;p&gt;</span>
-<span class="source-line-no">320</span><span id="line-320">    * Value is re-evaluated on each call to {@link BasicHeader#getValue()}.</span>
-<span class="source-line-no">321</span><span id="line-321">    *</span>
-<span class="source-line-no">322</span><span id="line-322">    * @param name The header name.</span>
-<span class="source-line-no">323</span><span id="line-323">    * @param value The header value supplier.</span>
-<span class="source-line-no">324</span><span id="line-324">    * @return This object.</span>
-<span class="source-line-no">325</span><span id="line-325">    */</span>
-<span class="source-line-no">326</span><span id="line-326">   public HeaderList append(String name, Supplier&lt;?&gt; value) {</span>
-<span class="source-line-no">327</span><span id="line-327">      return append(createPart(name, value));</span>
-<span class="source-line-no">328</span><span id="line-328">   }</span>
-<span class="source-line-no">329</span><span id="line-329"></span>
-<span class="source-line-no">330</span><span id="line-330">   /**</span>
-<span class="source-line-no">331</span><span id="line-331">    * Adds the specified headers to the end of the headers in this list.</span>
-<span class="source-line-no">332</span><span id="line-332">    *</span>
-<span class="source-line-no">333</span><span id="line-333">    * @param values The headers to add.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
-<span class="source-line-no">334</span><span id="line-334">    * @return This object.</span>
-<span class="source-line-no">335</span><span id="line-335">    */</span>
-<span class="source-line-no">336</span><span id="line-336">   @FluentSetter</span>
-<span class="source-line-no">337</span><span id="line-337">   public HeaderList append(Header...values) {</span>
-<span class="source-line-no">338</span><span id="line-338">      if (values != null)</span>
-<span class="source-line-no">339</span><span id="line-339">            for (Header value : values)</span>
-<span class="source-line-no">340</span><span id="line-340">                if (value != null)</span>
-<span class="source-line-no">341</span><span id="line-341">               append(value);</span>
-<span class="source-line-no">342</span><span id="line-342">      return this;</span>
-<span class="source-line-no">343</span><span id="line-343">   }</span>
-<span class="source-line-no">344</span><span id="line-344"></span>
-<span class="source-line-no">345</span><span id="line-345">   /**</span>
-<span class="source-line-no">346</span><span id="line-346">    * Adds the specified headers to the end of the headers in this list.</span>
-<span class="source-line-no">347</span><span id="line-347">    *</span>
-<span class="source-line-no">348</span><span id="line-348">    * @param values The headers to add.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
-<span class="source-line-no">349</span><span id="line-349">    * @return This object.</span>
-<span class="source-line-no">350</span><span id="line-350">    */</span>
-<span class="source-line-no">351</span><span id="line-351">   @FluentSetter</span>
-<span class="source-line-no">352</span><span id="line-352">   public HeaderList append(List&lt;Header&gt; values) {</span>
-<span class="source-line-no">353</span><span id="line-353">      if (values != null)</span>
-<span class="source-line-no">354</span><span id="line-354">         values.forEach(this::append);</span>
-<span class="source-line-no">355</span><span id="line-355">      return this;</span>
-<span class="source-line-no">356</span><span id="line-356">   }</span>
-<span class="source-line-no">357</span><span id="line-357"></span>
-<span class="source-line-no">358</span><span id="line-358">   /**</span>
-<span class="source-line-no">359</span><span id="line-359">    * Adds the specified header to the beginning of the headers in this list.</span>
-<span class="source-line-no">360</span><span id="line-360">    *</span>
-<span class="source-line-no">361</span><span id="line-361">    * @param value The header to add.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
-<span class="source-line-no">362</span><span id="line-362">    * @return This object.</span>
-<span class="source-line-no">363</span><span id="line-363">    */</span>
-<span class="source-line-no">364</span><span id="line-364">   @FluentSetter</span>
-<span class="source-line-no">365</span><span id="line-365">   public HeaderList prepend(Header value) {</span>
-<span class="source-line-no">366</span><span id="line-366">      if (value != null)</span>
-<span class="source-line-no">367</span><span id="line-367">         add(0, value);</span>
-<span class="source-line-no">368</span><span id="line-368">      return this;</span>
-<span class="source-line-no">369</span><span id="line-369">   }</span>
-<span class="source-line-no">370</span><span id="line-370"></span>
-<span class="source-line-no">371</span><span id="line-371">   /**</span>
-<span class="source-line-no">372</span><span id="line-372">    * Appends the specified header to the beginning of this list.</span>
-<span class="source-line-no">373</span><span id="line-373">    *</span>
-<span class="source-line-no">374</span><span id="line-374">    * &lt;p&gt;</span>
-<span class="source-line-no">375</span><span id="line-375">    * The header is added as a {@link BasicHeader}.</span>
-<span class="source-line-no">376</span><span id="line-376">    *</span>
-<span class="source-line-no">377</span><span id="line-377">    * @param name The header name.</span>
-<span class="source-line-no">378</span><span id="line-378">    * @param value The header value.</span>
-<span class="source-line-no">379</span><span id="line-379">    * @return This object.</span>
-<span class="source-line-no">380</span><span id="line-380">    */</span>
-<span class="source-line-no">381</span><span id="line-381">   public HeaderList prepend(String name, Object value) {</span>
-<span class="source-line-no">382</span><span id="line-382">      return prepend(createPart(name, value));</span>
-<span class="source-line-no">383</span><span id="line-383">   }</span>
-<span class="source-line-no">384</span><span id="line-384"></span>
-<span class="source-line-no">385</span><span id="line-385">   /**</span>
-<span class="source-line-no">386</span><span id="line-386">    * Appends the specified header to the beginning of this list using a value supplier.</span>
-<span class="source-line-no">387</span><span id="line-387">    *</span>
-<span class="source-line-no">388</span><span id="line-388">    * &lt;p&gt;</span>
-<span class="source-line-no">389</span><span id="line-389">    * The header is added as a {@link BasicHeader}.</span>
-<span class="source-line-no">390</span><span id="line-390">    *</span>
-<span class="source-line-no">391</span><span id="line-391">    * &lt;p&gt;</span>
-<span class="source-line-no">392</span><span id="line-392">    * Value is re-evaluated on each call to {@link BasicHeader#getValue()}.</span>
-<span class="source-line-no">393</span><span id="line-393">    *</span>
-<span class="source-line-no">394</span><span id="line-394">    * @param name The header name.</span>
-<span class="source-line-no">395</span><span id="line-395">    * @param value The header value supplier.</span>
-<span class="source-line-no">396</span><span id="line-396">    * @return This object.</span>
-<span class="source-line-no">397</span><span id="line-397">    */</span>
-<span class="source-line-no">398</span><span id="line-398">   public HeaderList prepend(String name, Supplier&lt;?&gt; value) {</span>
-<span class="source-line-no">399</span><span id="line-399">      return prepend(createPart(name, value));</span>
-<span class="source-line-no">400</span><span id="line-400">   }</span>
-<span class="source-line-no">401</span><span id="line-401"></span>
-<span class="source-line-no">402</span><span id="line-402">   /**</span>
-<span class="source-line-no">403</span><span id="line-403">    * Adds the specified headers to the beginning of the headers in this list.</span>
-<span class="source-line-no">404</span><span id="line-404">    *</span>
-<span class="source-line-no">405</span><span id="line-405">    * @param values The headers to add.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
-<span class="source-line-no">406</span><span id="line-406">    * @return This object.</span>
-<span class="source-line-no">407</span><span id="line-407">    */</span>
-<span class="source-line-no">408</span><span id="line-408">   @FluentSetter</span>
-<span class="source-line-no">409</span><span id="line-409">   public HeaderList prepend(Header...values) {</span>
-<span class="source-line-no">410</span><span id="line-410">      if (values != null)</span>
-<span class="source-line-no">411</span><span id="line-411">         prepend(alist(values));</span>
-<span class="source-line-no">412</span><span id="line-412">      return this;</span>
-<span class="source-line-no">413</span><span id="line-413">   }</span>
-<span class="source-line-no">414</span><span id="line-414"></span>
-<span class="source-line-no">415</span><span id="line-415">   /**</span>
-<span class="source-line-no">416</span><span id="line-416">    * Adds the specified headers to the beginning of the headers in this list.</span>
-<span class="source-line-no">417</span><span id="line-417">    *</span>
-<span class="source-line-no">418</span><span id="line-418">    * @param values The headers to add.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
-<span class="source-line-no">419</span><span id="line-419">    * @return This object.</span>
-<span class="source-line-no">420</span><span id="line-420">    */</span>
-<span class="source-line-no">421</span><span id="line-421">   @FluentSetter</span>
-<span class="source-line-no">422</span><span id="line-422">   public HeaderList prepend(List&lt;Header&gt; values) {</span>
-<span class="source-line-no">423</span><span id="line-423">      if (values != null)</span>
-<span class="source-line-no">424</span><span id="line-424">         addAll(0, values);</span>
-<span class="source-line-no">425</span><span id="line-425">      return this;</span>
-<span class="source-line-no">426</span><span id="line-426">   }</span>
-<span class="source-line-no">427</span><span id="line-427"></span>
-<span class="source-line-no">428</span><span id="line-428">   /**</span>
-<span class="source-line-no">429</span><span id="line-429">    * Removes the specified header from this list.</span>
-<span class="source-line-no">430</span><span id="line-430">    *</span>
-<span class="source-line-no">431</span><span id="line-431">    * @param value The header to remove.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
-<span class="source-line-no">432</span><span id="line-432">    * @return This object.</span>
-<span class="source-line-no">433</span><span id="line-433">    */</span>
-<span class="source-line-no">434</span><span id="line-434">   @FluentSetter</span>
-<span class="source-line-no">435</span><span id="line-435">   public HeaderList remove(Header value) {</span>
-<span class="source-line-no">436</span><span id="line-436">      if (value != null)</span>
-<span class="source-line-no">437</span><span id="line-437">         removeIf(x -&gt; eq(x.getName(), value.getName()) &amp;&amp; eq(x.getValue(), value.getValue()));</span>
-<span class="source-line-no">438</span><span id="line-438">      return this;</span>
-<span class="source-line-no">439</span><span id="line-439">   }</span>
-<span class="source-line-no">440</span><span id="line-440"></span>
-<span class="source-line-no">441</span><span id="line-441">   /**</span>
-<span class="source-line-no">442</span><span id="line-442">    * Removes the specified headers from this list.</span>
-<span class="source-line-no">443</span><span id="line-443">    *</span>
-<span class="source-line-no">444</span><span id="line-444">    * @param values The headers to remove.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
-<span class="source-line-no">445</span><span id="line-445">    * @return This object.</span>
-<span class="source-line-no">446</span><span id="line-446">    */</span>
-<span class="source-line-no">447</span><span id="line-447">   @FluentSetter</span>
-<span class="source-line-no">448</span><span id="line-448">   public HeaderList remove(Header...values) {</span>
-<span class="source-line-no">449</span><span id="line-449">      for (Header value : values)</span>
-<span class="source-line-no">450</span><span id="line-450">            remove(value);</span>
-<span class="source-line-no">451</span><span id="line-451">      return this;</span>
-<span class="source-line-no">452</span><span id="line-452">   }</span>
-<span class="source-line-no">453</span><span id="line-453"></span>
-<span class="source-line-no">454</span><span id="line-454">   /**</span>
-<span class="source-line-no">455</span><span id="line-455">    * Removes the specified headers from this list.</span>
-<span class="source-line-no">456</span><span id="line-456">    *</span>
-<span class="source-line-no">457</span><span id="line-457">    * @param values The headers to remove.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
-<span class="source-line-no">458</span><span id="line-458">    * @return This object.</span>
-<span class="source-line-no">459</span><span id="line-459">    */</span>
-<span class="source-line-no">460</span><span id="line-460">   @FluentSetter</span>
-<span class="source-line-no">461</span><span id="line-461">   public HeaderList remove(List&lt;Header&gt; values) {</span>
-<span class="source-line-no">462</span><span id="line-462">      if (values != null)</span>
-<span class="source-line-no">463</span><span id="line-463">         values.forEach(this::remove);</span>
-<span class="source-line-no">464</span><span id="line-464">      return this;</span>
-<span class="source-line-no">465</span><span id="line-465">   }</span>
-<span class="source-line-no">466</span><span id="line-466"></span>
-<span class="source-line-no">467</span><span id="line-467">   /**</span>
-<span class="source-line-no">468</span><span id="line-468">    * Removes the header with the specified name from this list.</span>
-<span class="source-line-no">469</span><span id="line-469">    *</span>
-<span class="source-line-no">470</span><span id="line-470">    * @param name The header name.</span>
-<span class="source-line-no">471</span><span id="line-471">    * @return This object.</span>
-<span class="source-line-no">472</span><span id="line-472">    */</span>
-<span class="source-line-no">473</span><span id="line-473">   @FluentSetter</span>
-<span class="source-line-no">474</span><span id="line-474">   public HeaderList remove(String name) {</span>
-<span class="source-line-no">475</span><span id="line-475">      removeIf(x -&gt; eq(x.getName(), name));</span>
-<span class="source-line-no">476</span><span id="line-476">      return this;</span>
-<span class="source-line-no">477</span><span id="line-477">   }</span>
-<span class="source-line-no">478</span><span id="line-478"></span>
-<span class="source-line-no">479</span><span id="line-479">   /**</span>
-<span class="source-line-no">480</span><span id="line-480">    * Removes the header with the specified name from this list.</span>
-<span class="source-line-no">481</span><span id="line-481">    *</span>
-<span class="source-line-no">482</span><span id="line-482">    * @param names The header name.</span>
-<span class="source-line-no">483</span><span id="line-483">    * @return This object.</span>
-<span class="source-line-no">484</span><span id="line-484">    */</span>
-<span class="source-line-no">485</span><span id="line-485">   @FluentSetter</span>
-<span class="source-line-no">486</span><span id="line-486">   public HeaderList remove(String...names) {</span>
-<span class="source-line-no">487</span><span id="line-487">      if (names != null)</span>
-<span class="source-line-no">488</span><span id="line-488">            for (String name : names)</span>
-<span class="source-line-no">489</span><span id="line-489">                remove(name);</span>
-<span class="source-line-no">490</span><span id="line-490">      return this;</span>
-<span class="source-line-no">491</span><span id="line-491">   }</span>
-<span class="source-line-no">492</span><span id="line-492"></span>
-<span class="source-line-no">493</span><span id="line-493">   /**</span>
-<span class="source-line-no">494</span><span id="line-494">    * Removes all headers from this list.</span>
-<span class="source-line-no">495</span><span id="line-495">    *</span>
-<span class="source-line-no">496</span><span id="line-496">    * @return This object.</span>
-<span class="source-line-no">497</span><span id="line-497">    */</span>
-<span class="source-line-no">498</span><span id="line-498">   public HeaderList removeAll() {</span>
-<span class="source-line-no">499</span><span id="line-499">      clear();</span>
-<span class="source-line-no">500</span><span id="line-500">      return this;</span>
-<span class="source-line-no">501</span><span id="line-501">   }</span>
-<span class="source-line-no">502</span><span id="line-502"></span>
-<span class="source-line-no">503</span><span id="line-503">   /**</span>
-<span class="source-line-no">504</span><span id="line-504">    * Adds or replaces the header(s) with the same name.</span>
-<span class="source-line-no">505</span><span id="line-505">    *</span>
-<span class="source-line-no">506</span><span id="line-506">    * &lt;p&gt;</span>
-<span class="source-line-no">507</span><span id="line-507">    * If no header with the same name is found the given header is added to the end of the list.</span>
-<span class="source-line-no">508</span><span id="line-508">    *</span>
-<span class="source-line-no">509</span><span id="line-509">    * @param value The headers to replace.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
-<span class="source-line-no">510</span><span id="line-510">    * @return This object.</span>
-<span class="source-line-no">511</span><span id="line-511">    */</span>
-<span class="source-line-no">512</span><span id="line-512">   @FluentSetter</span>
-<span class="source-line-no">513</span><span id="line-513">   public HeaderList set(Header value) {</span>
-<span class="source-line-no">514</span><span id="line-514">      if (value != null) {</span>
-<span class="source-line-no">515</span><span id="line-515">         boolean replaced = false;</span>
-<span class="source-line-no">516</span><span id="line-516">         for (int i = 0, j = size(); i &lt; j; i++) {</span>
-<span class="source-line-no">517</span><span id="line-517">            Header x = get(i);</span>
-<span class="source-line-no">518</span><span id="line-518">            if (eq(x.getName(), value.getName())) {</span>
-<span class="source-line-no">519</span><span id="line-519">               if (replaced) {</span>
-<span class="source-line-no">520</span><span id="line-520">                  remove(i);</span>
-<span class="source-line-no">521</span><span id="line-521">                  j--;</span>
-<span class="source-line-no">522</span><span id="line-522">               } else {</span>
-<span class="source-line-no">523</span><span id="line-523">                  set(i, value);</span>
-<span class="source-line-no">524</span><span id="line-524">                  replaced = true;</span>
-<span class="source-line-no">525</span><span id="line-525">               }</span>
-<span class="source-line-no">526</span><span id="line-526">            }</span>
-<span class="source-line-no">527</span><span id="line-527">         }</span>
-<span class="source-line-no">528</span><span id="line-528"></span>
-<span class="source-line-no">529</span><span id="line-529">         if (! replaced)</span>
-<span class="source-line-no">530</span><span id="line-530">            add(value);</span>
-<span class="source-line-no">531</span><span id="line-531">      }</span>
-<span class="source-line-no">532</span><span id="line-532"></span>
-<span class="source-line-no">533</span><span id="line-533">      return this;</span>
-<span class="source-line-no">534</span><span id="line-534">   }</span>
-<span class="source-line-no">535</span><span id="line-535"></span>
-<span class="source-line-no">536</span><span id="line-536">   /**</span>
-<span class="source-line-no">537</span><span id="line-537">    * Adds or replaces the header(s) with the same name.</span>
-<span class="source-line-no">538</span><span id="line-538">    *</span>
-<span class="source-line-no">539</span><span id="line-539">    * &lt;p&gt;</span>
-<span class="source-line-no">540</span><span id="line-540">    * If no header with the same name is found the given header is added to the end of the list.</span>
-<span class="source-line-no">541</span><span id="line-541">    *</span>
-<span class="source-line-no">542</span><span id="line-542">    * @param values The headers to replace.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
+<span class="source-line-no">063</span><span id="line-63">public class HeaderList extends ControlledArrayList&lt;Header&gt; {</span>
+<span class="source-line-no">064</span><span id="line-64"></span>
+<span class="source-line-no">065</span><span id="line-65">   private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">066</span><span id="line-66"></span>
+<span class="source-line-no">067</span><span id="line-67">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">068</span><span id="line-68">   // Static</span>
+<span class="source-line-no">069</span><span id="line-69">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">   /** Represents no header list in annotations. */</span>
+<span class="source-line-no">072</span><span id="line-72">   public static final class Void extends HeaderList {</span>
+<span class="source-line-no">073</span><span id="line-73">      private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">074</span><span id="line-74">   }</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">   /**</span>
+<span class="source-line-no">077</span><span id="line-77">    * Instantiates a new list.</span>
+<span class="source-line-no">078</span><span id="line-78">    *</span>
+<span class="source-line-no">079</span><span id="line-79">    * @return A new list.</span>
+<span class="source-line-no">080</span><span id="line-80">    */</span>
+<span class="source-line-no">081</span><span id="line-81">   public static HeaderList create() {</span>
+<span class="source-line-no">082</span><span id="line-82">      return new HeaderList();</span>
+<span class="source-line-no">083</span><span id="line-83">   }</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">   /**</span>
+<span class="source-line-no">086</span><span id="line-86">    * Creates a new {@link HeaderList} initialized with the specified headers.</span>
+<span class="source-line-no">087</span><span id="line-87">    *</span>
+<span class="source-line-no">088</span><span id="line-88">    * @param headers</span>
+<span class="source-line-no">089</span><span id="line-89">    *    The headers to add to the list.</span>
+<span class="source-line-no">090</span><span id="line-90">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">091</span><span id="line-91">    *    &lt;br&gt;&lt;jk&gt;null&lt;/jk&gt; entries are ignored.</span>
+<span class="source-line-no">092</span><span id="line-92">    * @return A new unmodifiable instance, never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">093</span><span id="line-93">    */</span>
+<span class="source-line-no">094</span><span id="line-94">   public static HeaderList of(List&lt;Header&gt; headers) {</span>
+<span class="source-line-no">095</span><span id="line-95">      return new HeaderList().append(headers);</span>
+<span class="source-line-no">096</span><span id="line-96">   }</span>
+<span class="source-line-no">097</span><span id="line-97"></span>
+<span class="source-line-no">098</span><span id="line-98">   /**</span>
+<span class="source-line-no">099</span><span id="line-99">    * Creates a new {@link HeaderList} initialized with the specified headers.</span>
+<span class="source-line-no">100</span><span id="line-100">    *</span>
+<span class="source-line-no">101</span><span id="line-101">    * @param headers</span>
+<span class="source-line-no">102</span><span id="line-102">    *    The headers to add to the list.</span>
+<span class="source-line-no">103</span><span id="line-103">    *    &lt;br&gt;&lt;jk&gt;null&lt;/jk&gt; entries are ignored.</span>
+<span class="source-line-no">104</span><span id="line-104">    * @return A new unmodifiable instance, never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">105</span><span id="line-105">    */</span>
+<span class="source-line-no">106</span><span id="line-106">   public static HeaderList of(Header...headers) {</span>
+<span class="source-line-no">107</span><span id="line-107">      return new HeaderList().append(headers);</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   /**</span>
+<span class="source-line-no">111</span><span id="line-111">    * Creates a new {@link HeaderList} initialized with the specified name/value pairs.</span>
+<span class="source-line-no">112</span><span id="line-112">    *</span>
+<span class="source-line-no">113</span><span id="line-113">    * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
+<span class="source-line-no">114</span><span id="line-114">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">115</span><span id="line-115">    *    HeaderList &lt;jv&gt;headers&lt;/jv&gt; = HeaderList.&lt;jsm&gt;ofPairs&lt;/jsm&gt;(&lt;js&gt;"Accept"&lt;/js&gt;, &lt;js&gt;"text/xml"&lt;/js&gt;, &lt;js&gt;"Content-Type"&lt;/js&gt;, &lt;js&gt;"text/xml"&lt;/js&gt;);</span>
+<span class="source-line-no">116</span><span id="line-116">    * &lt;/p&gt;</span>
+<span class="source-line-no">117</span><span id="line-117">    *</span>
+<span class="source-line-no">118</span><span id="line-118">    * @param pairs</span>
+<span class="source-line-no">119</span><span id="line-119">    *    Initial list of pairs.</span>
+<span class="source-line-no">120</span><span id="line-120">    *    &lt;br&gt;Must be an even number of parameters representing key/value pairs.</span>
+<span class="source-line-no">121</span><span id="line-121">    * @throws RuntimeException If odd number of parameters were specified.</span>
+<span class="source-line-no">122</span><span id="line-122">    * @return A new instance.</span>
+<span class="source-line-no">123</span><span id="line-123">    */</span>
+<span class="source-line-no">124</span><span id="line-124">   public static HeaderList ofPairs(String... pairs) {</span>
+<span class="source-line-no">125</span><span id="line-125">      HeaderList x = new HeaderList();</span>
+<span class="source-line-no">126</span><span id="line-126">      if (pairs == null)</span>
+<span class="source-line-no">127</span><span id="line-127">         pairs = new String[0];</span>
+<span class="source-line-no">128</span><span id="line-128">      if (pairs.length % 2 != 0)</span>
+<span class="source-line-no">129</span><span id="line-129">         throw new IllegalArgumentException("Odd number of parameters passed into HeaderList.ofPairs()");</span>
+<span class="source-line-no">130</span><span id="line-130">      for (int i = 0; i &lt; pairs.length; i+=2)</span>
+<span class="source-line-no">131</span><span id="line-131">         x.add(BasicHeader.of(pairs[i], pairs[i+1]));</span>
+<span class="source-line-no">132</span><span id="line-132">      return x;</span>
+<span class="source-line-no">133</span><span id="line-133">   }</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">136</span><span id="line-136">   // Instance</span>
+<span class="source-line-no">137</span><span id="line-137">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">138</span><span id="line-138"></span>
+<span class="source-line-no">139</span><span id="line-139">   private VarResolver varResolver;</span>
+<span class="source-line-no">140</span><span id="line-140">   boolean caseSensitive;</span>
+<span class="source-line-no">141</span><span id="line-141"></span>
+<span class="source-line-no">142</span><span id="line-142">   /**</span>
+<span class="source-line-no">143</span><span id="line-143">    * Constructor.</span>
+<span class="source-line-no">144</span><span id="line-144">    */</span>
+<span class="source-line-no">145</span><span id="line-145">   public HeaderList() {</span>
+<span class="source-line-no">146</span><span id="line-146">      super(false);</span>
+<span class="source-line-no">147</span><span id="line-147">   }</span>
+<span class="source-line-no">148</span><span id="line-148"></span>
+<span class="source-line-no">149</span><span id="line-149">   /**</span>
+<span class="source-line-no">150</span><span id="line-150">    * Copy constructor.</span>
+<span class="source-line-no">151</span><span id="line-151">    *</span>
+<span class="source-line-no">152</span><span id="line-152">    * @param copyFrom The bean to copy.</span>
+<span class="source-line-no">153</span><span id="line-153">    */</span>
+<span class="source-line-no">154</span><span id="line-154">   protected HeaderList(HeaderList copyFrom) {</span>
+<span class="source-line-no">155</span><span id="line-155">      super(false, copyFrom);</span>
+<span class="source-line-no">156</span><span id="line-156">      caseSensitive = copyFrom.caseSensitive;</span>
+<span class="source-line-no">157</span><span id="line-157">   }</span>
+<span class="source-line-no">158</span><span id="line-158"></span>
+<span class="source-line-no">159</span><span id="line-159">   /**</span>
+<span class="source-line-no">160</span><span id="line-160">    * Makes a copy of this list.</span>
+<span class="source-line-no">161</span><span id="line-161">    *</span>
+<span class="source-line-no">162</span><span id="line-162">    * @return A new copy of this list.</span>
+<span class="source-line-no">163</span><span id="line-163">    */</span>
+<span class="source-line-no">164</span><span id="line-164">   public HeaderList copy() {</span>
+<span class="source-line-no">165</span><span id="line-165">      return new HeaderList(this);</span>
+<span class="source-line-no">166</span><span id="line-166">   }</span>
+<span class="source-line-no">167</span><span id="line-167"></span>
+<span class="source-line-no">168</span><span id="line-168">   /**</span>
+<span class="source-line-no">169</span><span id="line-169">    * Adds a collection of default headers.</span>
+<span class="source-line-no">170</span><span id="line-170">    *</span>
+<span class="source-line-no">171</span><span id="line-171">    * &lt;p&gt;</span>
+<span class="source-line-no">172</span><span id="line-172">    * Default headers are set if they're not already in the list.</span>
+<span class="source-line-no">173</span><span id="line-173">    *</span>
+<span class="source-line-no">174</span><span id="line-174">    * @param headers The list of default headers.</span>
+<span class="source-line-no">175</span><span id="line-175">    * @return This object.</span>
+<span class="source-line-no">176</span><span id="line-176">    */</span>
+<span class="source-line-no">177</span><span id="line-177">   public HeaderList setDefault(List&lt;Header&gt; headers) {</span>
+<span class="source-line-no">178</span><span id="line-178">      if (headers != null)</span>
+<span class="source-line-no">179</span><span id="line-179">         headers.stream().filter(x -&gt; x != null &amp;&amp; ! contains(x.getName())).forEach(this::set);</span>
+<span class="source-line-no">180</span><span id="line-180">      return this;</span>
+<span class="source-line-no">181</span><span id="line-181">   }</span>
+<span class="source-line-no">182</span><span id="line-182"></span>
+<span class="source-line-no">183</span><span id="line-183">   /**</span>
+<span class="source-line-no">184</span><span id="line-184">    * Replaces the first occurrence of the headers with the same name.</span>
+<span class="source-line-no">185</span><span id="line-185">    *</span>
+<span class="source-line-no">186</span><span id="line-186">    * @param name The header name.</span>
+<span class="source-line-no">187</span><span id="line-187">    * @param value The header value.</span>
+<span class="source-line-no">188</span><span id="line-188">    * @return This object.</span>
+<span class="source-line-no">189</span><span id="line-189">    */</span>
+<span class="source-line-no">190</span><span id="line-190">   public HeaderList setDefault(String name, Object value) {</span>
+<span class="source-line-no">191</span><span id="line-191">      return setDefault(createPart(name, value));</span>
+<span class="source-line-no">192</span><span id="line-192">   }</span>
+<span class="source-line-no">193</span><span id="line-193"></span>
+<span class="source-line-no">194</span><span id="line-194">   /**</span>
+<span class="source-line-no">195</span><span id="line-195">    * Replaces the first occurrence of the headers with the same name.</span>
+<span class="source-line-no">196</span><span id="line-196">    *</span>
+<span class="source-line-no">197</span><span id="line-197">    * @param name The header name.</span>
+<span class="source-line-no">198</span><span id="line-198">    * @param value The header value.</span>
+<span class="source-line-no">199</span><span id="line-199">    * @return This object.</span>
+<span class="source-line-no">200</span><span id="line-200">    */</span>
+<span class="source-line-no">201</span><span id="line-201">   public HeaderList setDefault(String name, Supplier&lt;?&gt; value) {</span>
+<span class="source-line-no">202</span><span id="line-202">      return setDefault(createPart(name, value));</span>
+<span class="source-line-no">203</span><span id="line-203">   }</span>
+<span class="source-line-no">204</span><span id="line-204"></span>
+<span class="source-line-no">205</span><span id="line-205">   /**</span>
+<span class="source-line-no">206</span><span id="line-206">    * Makes a copy of this list of headers and adds a collection of default headers.</span>
+<span class="source-line-no">207</span><span id="line-207">    *</span>
+<span class="source-line-no">208</span><span id="line-208">    * &lt;p&gt;</span>
+<span class="source-line-no">209</span><span id="line-209">    * Default headers are set if they're not already in the list.</span>
+<span class="source-line-no">210</span><span id="line-210">    *</span>
+<span class="source-line-no">211</span><span id="line-211">    * @param headers The list of default headers.</span>
+<span class="source-line-no">212</span><span id="line-212">    * @return A new list, or the same list if the headers were empty.</span>
+<span class="source-line-no">213</span><span id="line-213">    */</span>
+<span class="source-line-no">214</span><span id="line-214">   public HeaderList setDefault(Header...headers) {</span>
+<span class="source-line-no">215</span><span id="line-215">      if (headers != null)</span>
+<span class="source-line-no">216</span><span id="line-216">         setDefault(Arrays.asList(headers));</span>
+<span class="source-line-no">217</span><span id="line-217">      return this;</span>
+<span class="source-line-no">218</span><span id="line-218">   }</span>
+<span class="source-line-no">219</span><span id="line-219"></span>
+<span class="source-line-no">220</span><span id="line-220">   //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">221</span><span id="line-221">   // Properties</span>
+<span class="source-line-no">222</span><span id="line-222">   //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">223</span><span id="line-223"></span>
+<span class="source-line-no">224</span><span id="line-224">   /**</span>
+<span class="source-line-no">225</span><span id="line-225">    * Allows header values to contain SVL variables.</span>
+<span class="source-line-no">226</span><span id="line-226">    *</span>
+<span class="source-line-no">227</span><span id="line-227">    * &lt;p&gt;</span>
+<span class="source-line-no">228</span><span id="line-228">    * Resolves variables in header values when using the following methods:</span>
+<span class="source-line-no">229</span><span id="line-229">    * &lt;ul&gt;</span>
+<span class="source-line-no">230</span><span id="line-230">    *    &lt;li class='jm'&gt;{@link #append(String, Object) append(String,Object)}</span>
+<span class="source-line-no">231</span><span id="line-231">    *    &lt;li class='jm'&gt;{@link #append(String, Supplier) append(String,Supplier&amp;lt;?&amp;gt;)}</span>
+<span class="source-line-no">232</span><span id="line-232">    *    &lt;li class='jm'&gt;{@link #prepend(String, Object) prepend(String,Object)}</span>
+<span class="source-line-no">233</span><span id="line-233">    *    &lt;li class='jm'&gt;{@link #prepend(String, Supplier) prepend(String,Supplier&amp;lt;?&amp;gt;)}</span>
+<span class="source-line-no">234</span><span id="line-234">    *    &lt;li class='jm'&gt;{@link #set(String, Object) set(String,Object)}</span>
+<span class="source-line-no">235</span><span id="line-235">    *    &lt;li class='jm'&gt;{@link #set(String, Supplier) set(String,Supplier&amp;lt;?&amp;gt;)}</span>
+<span class="source-line-no">236</span><span id="line-236">    * &lt;/ul&gt;</span>
+<span class="source-line-no">237</span><span id="line-237">    *</span>
+<span class="source-line-no">238</span><span id="line-238">    * &lt;p&gt;</span>
+<span class="source-line-no">239</span><span id="line-239">    * Uses {@link VarResolver#DEFAULT} to resolve variables.</span>
+<span class="source-line-no">240</span><span id="line-240">    *</span>
+<span class="source-line-no">241</span><span id="line-241">    * @return This object.</span>
+<span class="source-line-no">242</span><span id="line-242">    */</span>
+<span class="source-line-no">243</span><span id="line-243">   public HeaderList resolving() {</span>
+<span class="source-line-no">244</span><span id="line-244">      return resolving(VarResolver.DEFAULT);</span>
+<span class="source-line-no">245</span><span id="line-245">   }</span>
+<span class="source-line-no">246</span><span id="line-246"></span>
+<span class="source-line-no">247</span><span id="line-247">   /**</span>
+<span class="source-line-no">248</span><span id="line-248">    * Allows header values to contain SVL variables.</span>
+<span class="source-line-no">249</span><span id="line-249">    *</span>
+<span class="source-line-no">250</span><span id="line-250">    * &lt;p&gt;</span>
+<span class="source-line-no">251</span><span id="line-251">    * Resolves variables in header values when using the following methods:</span>
+<span class="source-line-no">252</span><span id="line-252">    * &lt;ul&gt;</span>
+<span class="source-line-no">253</span><span id="line-253">    *    &lt;li class='jm'&gt;{@link #append(String, Object) append(String,Object)}</span>
+<span class="source-line-no">254</span><span id="line-254">    *    &lt;li class='jm'&gt;{@link #append(String, Supplier) append(String,Supplier&amp;lt;?&amp;gt;)}</span>
+<span class="source-line-no">255</span><span id="line-255">    *    &lt;li class='jm'&gt;{@link #prepend(String, Object) prepend(String,Object)}</span>
+<span class="source-line-no">256</span><span id="line-256">    *    &lt;li class='jm'&gt;{@link #prepend(String, Supplier) prepend(String,Supplier&amp;lt;?&amp;gt;)}</span>
+<span class="source-line-no">257</span><span id="line-257">    *    &lt;li class='jm'&gt;{@link #set(String, Object) set(String,Object)}</span>
+<span class="source-line-no">258</span><span id="line-258">    *    &lt;li class='jm'&gt;{@link #set(String, Supplier) set(String,Supplier&amp;lt;?&amp;gt;)}</span>
+<span class="source-line-no">259</span><span id="line-259">    * &lt;/ul&gt;</span>
+<span class="source-line-no">260</span><span id="line-260">    *</span>
+<span class="source-line-no">261</span><span id="line-261">    * @param varResolver The variable resolver to use for resolving variables.</span>
+<span class="source-line-no">262</span><span id="line-262">    * @return This object.</span>
+<span class="source-line-no">263</span><span id="line-263">    */</span>
+<span class="source-line-no">264</span><span id="line-264">   public HeaderList resolving(VarResolver varResolver) {</span>
+<span class="source-line-no">265</span><span id="line-265">      assertModifiable();</span>
+<span class="source-line-no">266</span><span id="line-266">      this.varResolver = varResolver;</span>
+<span class="source-line-no">267</span><span id="line-267">      return this;</span>
+<span class="source-line-no">268</span><span id="line-268">   }</span>
+<span class="source-line-no">269</span><span id="line-269"></span>
+<span class="source-line-no">270</span><span id="line-270">   /**</span>
+<span class="source-line-no">271</span><span id="line-271">    * Specifies that the headers in this list should be treated as case-sensitive.</span>
+<span class="source-line-no">272</span><span id="line-272">    *</span>
+<span class="source-line-no">273</span><span id="line-273">    * &lt;p&gt;</span>
+<span class="source-line-no">274</span><span id="line-274">    * The default behavior is case-insensitive.</span>
+<span class="source-line-no">275</span><span id="line-275">    *</span>
+<span class="source-line-no">276</span><span id="line-276">    * @param value The new value for this setting.</span>
+<span class="source-line-no">277</span><span id="line-277">    * @return This object.</span>
+<span class="source-line-no">278</span><span id="line-278">    */</span>
+<span class="source-line-no">279</span><span id="line-279">   public HeaderList caseSensitive(boolean value) {</span>
+<span class="source-line-no">280</span><span id="line-280">      assertModifiable();</span>
+<span class="source-line-no">281</span><span id="line-281">      caseSensitive = value;</span>
+<span class="source-line-no">282</span><span id="line-282">      return this;</span>
+<span class="source-line-no">283</span><span id="line-283">   }</span>
+<span class="source-line-no">284</span><span id="line-284"></span>
+<span class="source-line-no">285</span><span id="line-285">   /**</span>
+<span class="source-line-no">286</span><span id="line-286">    * Adds the specified header to the end of the headers in this list.</span>
+<span class="source-line-no">287</span><span id="line-287">    *</span>
+<span class="source-line-no">288</span><span id="line-288">    * @param value The header to add.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
+<span class="source-line-no">289</span><span id="line-289">    * @return This object.</span>
+<span class="source-line-no">290</span><span id="line-290">    */</span>
+<span class="source-line-no">291</span><span id="line-291">   public HeaderList append(Header value) {</span>
+<span class="source-line-no">292</span><span id="line-292">      if (value != null)</span>
+<span class="source-line-no">293</span><span id="line-293">         add(value);</span>
+<span class="source-line-no">294</span><span id="line-294">      return this;</span>
+<span class="source-line-no">295</span><span id="line-295">   }</span>
+<span class="source-line-no">296</span><span id="line-296"></span>
+<span class="source-line-no">297</span><span id="line-297">   /**</span>
+<span class="source-line-no">298</span><span id="line-298">    * Appends the specified header to the end of this list.</span>
+<span class="source-line-no">299</span><span id="line-299">    *</span>
+<span class="source-line-no">300</span><span id="line-300">    * &lt;p&gt;</span>
+<span class="source-line-no">301</span><span id="line-301">    * The header is added as a {@link BasicHeader}.</span>
+<span class="source-line-no">302</span><span id="line-302">    *</span>
+<span class="source-line-no">303</span><span id="line-303">    * @param name The header name.</span>
+<span class="source-line-no">304</span><span id="line-304">    * @param value The header value.</span>
+<span class="source-line-no">305</span><span id="line-305">    * @return This object.</span>
+<span class="source-line-no">306</span><span id="line-306">    */</span>
+<span class="source-line-no">307</span><span id="line-307">   public HeaderList append(String name, Object value) {</span>
+<span class="source-line-no">308</span><span id="line-308">      return append(createPart(name, value));</span>
+<span class="source-line-no">309</span><span id="line-309">   }</span>
+<span class="source-line-no">310</span><span id="line-310"></span>
+<span class="source-line-no">311</span><span id="line-311">   /**</span>
+<span class="source-line-no">312</span><span id="line-312">    * Appends the specified header to the end of this list using a value supplier.</span>
+<span class="source-line-no">313</span><span id="line-313">    *</span>
+<span class="source-line-no">314</span><span id="line-314">    * &lt;p&gt;</span>
+<span class="source-line-no">315</span><span id="line-315">    * The header is added as a {@link BasicHeader}.</span>
+<span class="source-line-no">316</span><span id="line-316">    *</span>
+<span class="source-line-no">317</span><span id="line-317">    * &lt;p&gt;</span>
+<span class="source-line-no">318</span><span id="line-318">    * Value is re-evaluated on each call to {@link BasicHeader#getValue()}.</span>
+<span class="source-line-no">319</span><span id="line-319">    *</span>
+<span class="source-line-no">320</span><span id="line-320">    * @param name The header name.</span>
+<span class="source-line-no">321</span><span id="line-321">    * @param value The header value supplier.</span>
+<span class="source-line-no">322</span><span id="line-322">    * @return This object.</span>
+<span class="source-line-no">323</span><span id="line-323">    */</span>
+<span class="source-line-no">324</span><span id="line-324">   public HeaderList append(String name, Supplier&lt;?&gt; value) {</span>
+<span class="source-line-no">325</span><span id="line-325">      return append(createPart(name, value));</span>
+<span class="source-line-no">326</span><span id="line-326">   }</span>
+<span class="source-line-no">327</span><span id="line-327"></span>
+<span class="source-line-no">328</span><span id="line-328">   /**</span>
+<span class="source-line-no">329</span><span id="line-329">    * Adds the specified headers to the end of the headers in this list.</span>
+<span class="source-line-no">330</span><span id="line-330">    *</span>
+<span class="source-line-no">331</span><span id="line-331">    * @param values The headers to add.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
+<span class="source-line-no">332</span><span id="line-332">    * @return This object.</span>
+<span class="source-line-no">333</span><span id="line-333">    */</span>
+<span class="source-line-no">334</span><span id="line-334">   public HeaderList append(Header...values) {</span>
+<span class="source-line-no">335</span><span id="line-335">      if (values != null)</span>
+<span class="source-line-no">336</span><span id="line-336">            for (Header value : values)</span>
+<span class="source-line-no">337</span><span id="line-337">                if (value != null)</span>
+<span class="source-line-no">338</span><span id="line-338">               append(value);</span>
+<span class="source-line-no">339</span><span id="line-339">      return this;</span>
+<span class="source-line-no">340</span><span id="line-340">   }</span>
+<span class="source-line-no">341</span><span id="line-341"></span>
+<span class="source-line-no">342</span><span id="line-342">   /**</span>
+<span class="source-line-no">343</span><span id="line-343">    * Adds the specified headers to the end of the headers in this list.</span>
+<span class="source-line-no">344</span><span id="line-344">    *</span>
+<span class="source-line-no">345</span><span id="line-345">    * @param values The headers to add.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
+<span class="source-line-no">346</span><span id="line-346">    * @return This object.</span>
+<span class="source-line-no">347</span><span id="line-347">    */</span>
+<span class="source-line-no">348</span><span id="line-348">   public HeaderList append(List&lt;Header&gt; values) {</span>
+<span class="source-line-no">349</span><span id="line-349">      if (values != null)</span>
+<span class="source-line-no">350</span><span id="line-350">         values.forEach(this::append);</span>
+<span class="source-line-no">351</span><span id="line-351">      return this;</span>
+<span class="source-line-no">352</span><span id="line-352">   }</span>
+<span class="source-line-no">353</span><span id="line-353"></span>
+<span class="source-line-no">354</span><span id="line-354">   /**</span>
+<span class="source-line-no">355</span><span id="line-355">    * Adds the specified header to the beginning of the headers in this list.</span>
+<span class="source-line-no">356</span><span id="line-356">    *</span>
+<span class="source-line-no">357</span><span id="line-357">    * @param value The header to add.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
+<span class="source-line-no">358</span><span id="line-358">    * @return This object.</span>
+<span class="source-line-no">359</span><span id="line-359">    */</span>
+<span class="source-line-no">360</span><span id="line-360">   public HeaderList prepend(Header value) {</span>
+<span class="source-line-no">361</span><span id="line-361">      if (value != null)</span>
+<span class="source-line-no">362</span><span id="line-362">         add(0, value);</span>
+<span class="source-line-no">363</span><span id="line-363">      return this;</span>
+<span class="source-line-no">364</span><span id="line-364">   }</span>
+<span class="source-line-no">365</span><span id="line-365"></span>
+<span class="source-line-no">366</span><span id="line-366">   /**</span>
+<span class="source-line-no">367</span><span id="line-367">    * Appends the specified header to the beginning of this list.</span>
+<span class="source-line-no">368</span><span id="line-368">    *</span>
+<span class="source-line-no">369</span><span id="line-369">    * &lt;p&gt;</span>
+<span class="source-line-no">370</span><span id="line-370">    * The header is added as a {@link BasicHeader}.</span>
+<span class="source-line-no">371</span><span id="line-371">    *</span>
+<span class="source-line-no">372</span><span id="line-372">    * @param name The header name.</span>
+<span class="source-line-no">373</span><span id="line-373">    * @param value The header value.</span>
+<span class="source-line-no">374</span><span id="line-374">    * @return This object.</span>
+<span class="source-line-no">375</span><span id="line-375">    */</span>
+<span class="source-line-no">376</span><span id="line-376">   public HeaderList prepend(String name, Object value) {</span>
+<span class="source-line-no">377</span><span id="line-377">      return prepend(createPart(name, value));</span>
+<span class="source-line-no">378</span><span id="line-378">   }</span>
+<span class="source-line-no">379</span><span id="line-379"></span>
+<span class="source-line-no">380</span><span id="line-380">   /**</span>
+<span class="source-line-no">381</span><span id="line-381">    * Appends the specified header to the beginning of this list using a value supplier.</span>
+<span class="source-line-no">382</span><span id="line-382">    *</span>
+<span class="source-line-no">383</span><span id="line-383">    * &lt;p&gt;</span>
+<span class="source-line-no">384</span><span id="line-384">    * The header is added as a {@link BasicHeader}.</span>
+<span class="source-line-no">385</span><span id="line-385">    *</span>
+<span class="source-line-no">386</span><span id="line-386">    * &lt;p&gt;</span>
+<span class="source-line-no">387</span><span id="line-387">    * Value is re-evaluated on each call to {@link BasicHeader#getValue()}.</span>
+<span class="source-line-no">388</span><span id="line-388">    *</span>
+<span class="source-line-no">389</span><span id="line-389">    * @param name The header name.</span>
+<span class="source-line-no">390</span><span id="line-390">    * @param value The header value supplier.</span>
+<span class="source-line-no">391</span><span id="line-391">    * @return This object.</span>
+<span class="source-line-no">392</span><span id="line-392">    */</span>
+<span class="source-line-no">393</span><span id="line-393">   public HeaderList prepend(String name, Supplier&lt;?&gt; value) {</span>
+<span class="source-line-no">394</span><span id="line-394">      return prepend(createPart(name, value));</span>
+<span class="source-line-no">395</span><span id="line-395">   }</span>
+<span class="source-line-no">396</span><span id="line-396"></span>
+<span class="source-line-no">397</span><span id="line-397">   /**</span>
+<span class="source-line-no">398</span><span id="line-398">    * Adds the specified headers to the beginning of the headers in this list.</span>
+<span class="source-line-no">399</span><span id="line-399">    *</span>
+<span class="source-line-no">400</span><span id="line-400">    * @param values The headers to add.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
+<span class="source-line-no">401</span><span id="line-401">    * @return This object.</span>
+<span class="source-line-no">402</span><span id="line-402">    */</span>
+<span class="source-line-no">403</span><span id="line-403">   public HeaderList prepend(Header...values) {</span>
+<span class="source-line-no">404</span><span id="line-404">      if (values != null)</span>
+<span class="source-line-no">405</span><span id="line-405">         prepend(alist(values));</span>
+<span class="source-line-no">406</span><span id="line-406">      return this;</span>
+<span class="source-line-no">407</span><span id="line-407">   }</span>
+<span class="source-line-no">408</span><span id="line-408"></span>
+<span class="source-line-no">409</span><span id="line-409">   /**</span>
+<span class="source-line-no">410</span><span id="line-410">    * Adds the specified headers to the beginning of the headers in this list.</span>
+<span class="source-line-no">411</span><span id="line-411">    *</span>
+<span class="source-line-no">412</span><span id="line-412">    * @param values The headers to add.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
+<span class="source-line-no">413</span><span id="line-413">    * @return This object.</span>
+<span class="source-line-no">414</span><span id="line-414">    */</span>
+<span class="source-line-no">415</span><span id="line-415">   public HeaderList prepend(List&lt;Header&gt; values) {</span>
+<span class="source-line-no">416</span><span id="line-416">      if (values != null)</span>
+<span class="source-line-no">417</span><span id="line-417">         addAll(0, values);</span>
+<span class="source-line-no">418</span><span id="line-418">      return this;</span>
+<span class="source-line-no">419</span><span id="line-419">   }</span>
+<span class="source-line-no">420</span><span id="line-420"></span>
+<span class="source-line-no">421</span><span id="line-421">   /**</span>
+<span class="source-line-no">422</span><span id="line-422">    * Removes the specified header from this list.</span>
+<span class="source-line-no">423</span><span id="line-423">    *</span>
+<span class="source-line-no">424</span><span id="line-424">    * @param value The header to remove.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
+<span class="source-line-no">425</span><span id="line-425">    * @return This object.</span>
+<span class="source-line-no">426</span><span id="line-426">    */</span>
+<span class="source-line-no">427</span><span id="line-427">   public HeaderList remove(Header value) {</span>
+<span class="source-line-no">428</span><span id="line-428">      if (value != null)</span>
+<span class="source-line-no">429</span><span id="line-429">         removeIf(x -&gt; eq(x.getName(), value.getName()) &amp;&amp; eq(x.getValue(), value.getValue()));</span>
+<span class="source-line-no">430</span><span id="line-430">      return this;</span>
+<span class="source-line-no">431</span><span id="line-431">   }</span>
+<span class="source-line-no">432</span><span id="line-432"></span>
+<span class="source-line-no">433</span><span id="line-433">   /**</span>
+<span class="source-line-no">434</span><span id="line-434">    * Removes the specified headers from this list.</span>
+<span class="source-line-no">435</span><span id="line-435">    *</span>
+<span class="source-line-no">436</span><span id="line-436">    * @param values The headers to remove.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
+<span class="source-line-no">437</span><span id="line-437">    * @return This object.</span>
+<span class="source-line-no">438</span><span id="line-438">    */</span>
+<span class="source-line-no">439</span><span id="line-439">   public HeaderList remove(Header...values) {</span>
+<span class="source-line-no">440</span><span id="line-440">      for (Header value : values)</span>
+<span class="source-line-no">441</span><span id="line-441">            remove(value);</span>
+<span class="source-line-no">442</span><span id="line-442">      return this;</span>
+<span class="source-line-no">443</span><span id="line-443">   }</span>
+<span class="source-line-no">444</span><span id="line-444"></span>
+<span class="source-line-no">445</span><span id="line-445">   /**</span>
+<span class="source-line-no">446</span><span id="line-446">    * Removes the specified headers from this list.</span>
+<span class="source-line-no">447</span><span id="line-447">    *</span>
+<span class="source-line-no">448</span><span id="line-448">    * @param values The headers to remove.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
+<span class="source-line-no">449</span><span id="line-449">    * @return This object.</span>
+<span class="source-line-no">450</span><span id="line-450">    */</span>
+<span class="source-line-no">451</span><span id="line-451">   public HeaderList remove(List&lt;Header&gt; values) {</span>
+<span class="source-line-no">452</span><span id="line-452">      if (values != null)</span>
+<span class="source-line-no">453</span><span id="line-453">         values.forEach(this::remove);</span>
+<span class="source-line-no">454</span><span id="line-454">      return this;</span>
+<span class="source-line-no">455</span><span id="line-455">   }</span>
+<span class="source-line-no">456</span><span id="line-456"></span>
+<span class="source-line-no">457</span><span id="line-457">   /**</span>
+<span class="source-line-no">458</span><span id="line-458">    * Removes the header with the specified name from this list.</span>
+<span class="source-line-no">459</span><span id="line-459">    *</span>
+<span class="source-line-no">460</span><span id="line-460">    * @param name The header name.</span>
+<span class="source-line-no">461</span><span id="line-461">    * @return This object.</span>
+<span class="source-line-no">462</span><span id="line-462">    */</span>
+<span class="source-line-no">463</span><span id="line-463">   public HeaderList remove(String name) {</span>
+<span class="source-line-no">464</span><span id="line-464">      removeIf(x -&gt; eq(x.getName(), name));</span>
+<span class="source-line-no">465</span><span id="line-465">      return this;</span>
+<span class="source-line-no">466</span><span id="line-466">   }</span>
+<span class="source-line-no">467</span><span id="line-467"></span>
+<span class="source-line-no">468</span><span id="line-468">   /**</span>
+<span class="source-line-no">469</span><span id="line-469">    * Removes the header with the specified name from this list.</span>
+<span class="source-line-no">470</span><span id="line-470">    *</span>
+<span class="source-line-no">471</span><span id="line-471">    * @param names The header name.</span>
+<span class="source-line-no">472</span><span id="line-472">    * @return This object.</span>
+<span class="source-line-no">473</span><span id="line-473">    */</span>
+<span class="source-line-no">474</span><span id="line-474">   public HeaderList remove(String...names) {</span>
+<span class="source-line-no">475</span><span id="line-475">      if (names != null)</span>
+<span class="source-line-no">476</span><span id="line-476">            for (String name : names)</span>
+<span class="source-line-no">477</span><span id="line-477">                remove(name);</span>
+<span class="source-line-no">478</span><span id="line-478">      return this;</span>
+<span class="source-line-no">479</span><span id="line-479">   }</span>
+<span class="source-line-no">480</span><span id="line-480"></span>
+<span class="source-line-no">481</span><span id="line-481">   /**</span>
+<span class="source-line-no">482</span><span id="line-482">    * Removes all headers from this list.</span>
+<span class="source-line-no">483</span><span id="line-483">    *</span>
+<span class="source-line-no">484</span><span id="line-484">    * @return This object.</span>
+<span class="source-line-no">485</span><span id="line-485">    */</span>
+<span class="source-line-no">486</span><span id="line-486">   public HeaderList removeAll() {</span>
+<span class="source-line-no">487</span><span id="line-487">      clear();</span>
+<span class="source-line-no">488</span><span id="line-488">      return this;</span>
+<span class="source-line-no">489</span><span id="line-489">   }</span>
+<span class="source-line-no">490</span><span id="line-490"></span>
+<span class="source-line-no">491</span><span id="line-491">   /**</span>
+<span class="source-line-no">492</span><span id="line-492">    * Adds or replaces the header(s) with the same name.</span>
+<span class="source-line-no">493</span><span id="line-493">    *</span>
+<span class="source-line-no">494</span><span id="line-494">    * &lt;p&gt;</span>
+<span class="source-line-no">495</span><span id="line-495">    * If no header with the same name is found the given header is added to the end of the list.</span>
+<span class="source-line-no">496</span><span id="line-496">    *</span>
+<span class="source-line-no">497</span><span id="line-497">    * @param value The headers to replace.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
+<span class="source-line-no">498</span><span id="line-498">    * @return This object.</span>
+<span class="source-line-no">499</span><span id="line-499">    */</span>
+<span class="source-line-no">500</span><span id="line-500">   public HeaderList set(Header value) {</span>
+<span class="source-line-no">501</span><span id="line-501">      if (value != null) {</span>
+<span class="source-line-no">502</span><span id="line-502">         boolean replaced = false;</span>
+<span class="source-line-no">503</span><span id="line-503">         for (int i = 0, j = size(); i &lt; j; i++) {</span>
+<span class="source-line-no">504</span><span id="line-504">            Header x = get(i);</span>
+<span class="source-line-no">505</span><span id="line-505">            if (eq(x.getName(), value.getName())) {</span>
+<span class="source-line-no">506</span><span id="line-506">               if (replaced) {</span>
+<span class="source-line-no">507</span><span id="line-507">                  remove(i);</span>
+<span class="source-line-no">508</span><span id="line-508">                  j--;</span>
+<span class="source-line-no">509</span><span id="line-509">               } else {</span>
+<span class="source-line-no">510</span><span id="line-510">                  set(i, value);</span>
+<span class="source-line-no">511</span><span id="line-511">                  replaced = true;</span>
+<span class="source-line-no">512</span><span id="line-512">               }</span>
+<span class="source-line-no">513</span><span id="line-513">            }</span>
+<span class="source-line-no">514</span><span id="line-514">         }</span>
+<span class="source-line-no">515</span><span id="line-515"></span>
+<span class="source-line-no">516</span><span id="line-516">         if (! replaced)</span>
+<span class="source-line-no">517</span><span id="line-517">            add(value);</span>
+<span class="source-line-no">518</span><span id="line-518">      }</span>
+<span class="source-line-no">519</span><span id="line-519"></span>
+<span class="source-line-no">520</span><span id="line-520">      return this;</span>
+<span class="source-line-no">521</span><span id="line-521">   }</span>
+<span class="source-line-no">522</span><span id="line-522"></span>
+<span class="source-line-no">523</span><span id="line-523">   /**</span>
+<span class="source-line-no">524</span><span id="line-524">    * Adds or replaces the header(s) with the same name.</span>
+<span class="source-line-no">525</span><span id="line-525">    *</span>
+<span class="source-line-no">526</span><span id="line-526">    * &lt;p&gt;</span>
+<span class="source-line-no">527</span><span id="line-527">    * If no header with the same name is found the given header is added to the end of the list.</span>
+<span class="source-line-no">528</span><span id="line-528">    *</span>
+<span class="source-line-no">529</span><span id="line-529">    * @param values The headers to replace.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
+<span class="source-line-no">530</span><span id="line-530">    * @return This object.</span>
+<span class="source-line-no">531</span><span id="line-531">    */</span>
+<span class="source-line-no">532</span><span id="line-532">   public HeaderList set(Header...values) {</span>
+<span class="source-line-no">533</span><span id="line-533">      if (values != null)</span>
+<span class="source-line-no">534</span><span id="line-534">         set(alist(values));</span>
+<span class="source-line-no">535</span><span id="line-535">      return this;</span>
+<span class="source-line-no">536</span><span id="line-536">   }</span>
+<span class="source-line-no">537</span><span id="line-537"></span>
+<span class="source-line-no">538</span><span id="line-538">   /**</span>
+<span class="source-line-no">539</span><span id="line-539">    * Replaces the first occurrence of the headers with the same name.</span>
+<span class="source-line-no">540</span><span id="line-540">    *</span>
+<span class="source-line-no">541</span><span id="line-541">    * @param name The header name.</span>
+<span class="source-line-no">542</span><span id="line-542">    * @param value The header value.</span>
 <span class="source-line-no">543</span><span id="line-543">    * @return This object.</span>
 <span class="source-line-no">544</span><span id="line-544">    */</span>
-<span class="source-line-no">545</span><span id="line-545">   @FluentSetter</span>
-<span class="source-line-no">546</span><span id="line-546">   public HeaderList set(Header...values) {</span>
-<span class="source-line-no">547</span><span id="line-547">      if (values != null)</span>
-<span class="source-line-no">548</span><span id="line-548">         set(alist(values));</span>
-<span class="source-line-no">549</span><span id="line-549">      return this;</span>
-<span class="source-line-no">550</span><span id="line-550">   }</span>
-<span class="source-line-no">551</span><span id="line-551"></span>
-<span class="source-line-no">552</span><span id="line-552">   /**</span>
-<span class="source-line-no">553</span><span id="line-553">    * Replaces the first occurrence of the headers with the same name.</span>
-<span class="source-line-no">554</span><span id="line-554">    *</span>
-<span class="source-line-no">555</span><span id="line-555">    * @param name The header name.</span>
-<span class="source-line-no">556</span><span id="line-556">    * @param value The header value.</span>
-<span class="source-line-no">557</span><span id="line-557">    * @return This object.</span>
-<span class="source-line-no">558</span><span id="line-558">    */</span>
-<span class="source-line-no">559</span><span id="line-559">   public HeaderList set(String name, Object value) {</span>
-<span class="source-line-no">560</span><span id="line-560">      return set(createPart(name, value));</span>
-<span class="source-line-no">561</span><span id="line-561">   }</span>
-<span class="source-line-no">562</span><span id="line-562"></span>
-<span class="source-line-no">563</span><span id="line-563">   /**</span>
-<span class="source-line-no">564</span><span id="line-564">    * Replaces the first occurrence of the headers with the same name.</span>
+<span class="source-line-no">545</span><span id="line-545">   public HeaderList set(String name, Object value) {</span>
+<span class="source-line-no">546</span><span id="line-546">      return set(createPart(name, value));</span>
+<span class="source-line-no">547</span><span id="line-547">   }</span>
+<span class="source-line-no">548</span><span id="line-548"></span>
+<span class="source-line-no">549</span><span id="line-549">   /**</span>
+<span class="source-line-no">550</span><span id="line-550">    * Replaces the first occurrence of the headers with the same name.</span>
+<span class="source-line-no">551</span><span id="line-551">    *</span>
+<span class="source-line-no">552</span><span id="line-552">    * @param name The header name.</span>
+<span class="source-line-no">553</span><span id="line-553">    * @param value The header value.</span>
+<span class="source-line-no">554</span><span id="line-554">    * @return This object.</span>
+<span class="source-line-no">555</span><span id="line-555">    */</span>
+<span class="source-line-no">556</span><span id="line-556">   public HeaderList set(String name, Supplier&lt;?&gt; value) {</span>
+<span class="source-line-no">557</span><span id="line-557">      return set(createPart(name, value));</span>
+<span class="source-line-no">558</span><span id="line-558">   }</span>
+<span class="source-line-no">559</span><span id="line-559"></span>
+<span class="source-line-no">560</span><span id="line-560">   /**</span>
+<span class="source-line-no">561</span><span id="line-561">    * Replaces the first occurrence of the headers with the same name.</span>
+<span class="source-line-no">562</span><span id="line-562">    *</span>
+<span class="source-line-no">563</span><span id="line-563">    * &lt;p&gt;</span>
+<span class="source-line-no">564</span><span id="line-564">    * If no header with the same name is found the given header is added to the end of the list.</span>
 <span class="source-line-no">565</span><span id="line-565">    *</span>
-<span class="source-line-no">566</span><span id="line-566">    * @param name The header name.</span>
-<span class="source-line-no">567</span><span id="line-567">    * @param value The header value.</span>
-<span class="source-line-no">568</span><span id="line-568">    * @return This object.</span>
-<span class="source-line-no">569</span><span id="line-569">    */</span>
-<span class="source-line-no">570</span><span id="line-570">   public HeaderList set(String name, Supplier&lt;?&gt; value) {</span>
-<span class="source-line-no">571</span><span id="line-571">      return set(createPart(name, value));</span>
-<span class="source-line-no">572</span><span id="line-572">   }</span>
-<span class="source-line-no">573</span><span id="line-573"></span>
-<span class="source-line-no">574</span><span id="line-574">   /**</span>
-<span class="source-line-no">575</span><span id="line-575">    * Replaces the first occurrence of the headers with the same name.</span>
-<span class="source-line-no">576</span><span id="line-576">    *</span>
-<span class="source-line-no">577</span><span id="line-577">    * &lt;p&gt;</span>
-<span class="source-line-no">578</span><span id="line-578">    * If no header with the same name is found the given header is added to the end of the list.</span>
-<span class="source-line-no">579</span><span id="line-579">    *</span>
-<span class="source-line-no">580</span><span id="line-580">    * @param values The headers to replace.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
-<span class="source-line-no">581</span><span id="line-581">    * @return This object.</span>
-<span class="source-line-no">582</span><span id="line-582">    */</span>
-<span class="source-line-no">583</span><span id="line-583">   @FluentSetter</span>
-<span class="source-line-no">584</span><span id="line-584">   public HeaderList set(List&lt;Header&gt; values) {</span>
-<span class="source-line-no">585</span><span id="line-585"></span>
-<span class="source-line-no">586</span><span id="line-586">      if (values != null) {</span>
-<span class="source-line-no">587</span><span id="line-587">         for (Header h : values) {</span>
-<span class="source-line-no">588</span><span id="line-588">            if (h != null) {</span>
-<span class="source-line-no">589</span><span id="line-589">               for (int i2 = 0, j2 = size(); i2 &lt; j2; i2++) {</span>
-<span class="source-line-no">590</span><span id="line-590">                  Header x = get(i2);</span>
-<span class="source-line-no">591</span><span id="line-591">                  if (eq(x.getName(), h.getName())) {</span>
-<span class="source-line-no">592</span><span id="line-592">                     remove(i2);</span>
-<span class="source-line-no">593</span><span id="line-593">                     j2--;</span>
-<span class="source-line-no">594</span><span id="line-594">                  }</span>
-<span class="source-line-no">595</span><span id="line-595">               }</span>
-<span class="source-line-no">596</span><span id="line-596">            }</span>
-<span class="source-line-no">597</span><span id="line-597">         }</span>
-<span class="source-line-no">598</span><span id="line-598"></span>
-<span class="source-line-no">599</span><span id="line-599">         for (Header x : values) {</span>
-<span class="source-line-no">600</span><span id="line-600">            if (x != null) {</span>
-<span class="source-line-no">601</span><span id="line-601">               add(x);</span>
-<span class="source-line-no">602</span><span id="line-602">            }</span>
-<span class="source-line-no">603</span><span id="line-603">         }</span>
-<span class="source-line-no">604</span><span id="line-604">      }</span>
-<span class="source-line-no">605</span><span id="line-605"></span>
-<span class="source-line-no">606</span><span id="line-606">      return this;</span>
-<span class="source-line-no">607</span><span id="line-607">   }</span>
-<span class="source-line-no">608</span><span id="line-608"></span>
-<span class="source-line-no">609</span><span id="line-609">   /**</span>
-<span class="source-line-no">610</span><span id="line-610">    * Gets the first header with the given name.</span>
-<span class="source-line-no">611</span><span id="line-611">    *</span>
-<span class="source-line-no">612</span><span id="line-612">    * &lt;p&gt;</span>
-<span class="source-line-no">613</span><span id="line-613">    * Header name comparison is case insensitive.</span>
+<span class="source-line-no">566</span><span id="line-566">    * @param values The headers to replace.  &lt;jk&gt;null&lt;/jk&gt; values are ignored.</span>
+<span class="source-line-no">567</span><span id="line-567">    * @return This object.</span>
+<span class="source-line-no">568</span><span id="line-568">    */</span>
+<span class="source-line-no">569</span><span id="line-569">   public HeaderList set(List&lt;Header&gt; values) {</span>
+<span class="source-line-no">570</span><span id="line-570"></span>
+<span class="source-line-no">571</span><span id="line-571">      if (values != null) {</span>
+<span class="source-line-no">572</span><span id="line-572">         for (Header h : values) {</span>
+<span class="source-line-no">573</span><span id="line-573">            if (h != null) {</span>
+<span class="source-line-no">574</span><span id="line-574">               for (int i2 = 0, j2 = size(); i2 &lt; j2; i2++) {</span>
+<span class="source-line-no">575</span><span id="line-575">                  Header x = get(i2);</span>
+<span class="source-line-no">576</span><span id="line-576">                  if (eq(x.getName(), h.getName())) {</span>
+<span class="source-line-no">577</span><span id="line-577">                     remove(i2);</span>
+<span class="source-line-no">578</span><span id="line-578">                     j2--;</span>
+<span class="source-line-no">579</span><span id="line-579">                  }</span>
+<span class="source-line-no">580</span><span id="line-580">               }</span>
+<span class="source-line-no">581</span><span id="line-581">            }</span>
+<span class="source-line-no">582</span><span id="line-582">         }</span>
+<span class="source-line-no">583</span><span id="line-583"></span>
+<span class="source-line-no">584</span><span id="line-584">         for (Header x : values) {</span>
+<span class="source-line-no">585</span><span id="line-585">            if (x != null) {</span>
+<span class="source-line-no">586</span><span id="line-586">               add(x);</span>
+<span class="source-line-no">587</span><span id="line-587">            }</span>
+<span class="source-line-no">588</span><span id="line-588">         }</span>
+<span class="source-line-no">589</span><span id="line-589">      }</span>
+<span class="source-line-no">590</span><span id="line-590"></span>
+<span class="source-line-no">591</span><span id="line-591">      return this;</span>
+<span class="source-line-no">592</span><span id="line-592">   }</span>
+<span class="source-line-no">593</span><span id="line-593"></span>
+<span class="source-line-no">594</span><span id="line-594">   /**</span>
+<span class="source-line-no">595</span><span id="line-595">    * Gets the first header with the given name.</span>
+<span class="source-line-no">596</span><span id="line-596">    *</span>
+<span class="source-line-no">597</span><span id="line-597">    * &lt;p&gt;</span>
+<span class="source-line-no">598</span><span id="line-598">    * Header name comparison is case insensitive.</span>
+<span class="source-line-no">599</span><span id="line-599">    *</span>
+<span class="source-line-no">600</span><span id="line-600">    * @param name The header name.</span>
+<span class="source-line-no">601</span><span id="line-601">    * @return The first matching header, or {@link Optional#empty()} if not found.</span>
+<span class="source-line-no">602</span><span id="line-602">    */</span>
+<span class="source-line-no">603</span><span id="line-603">   public Optional&lt;Header&gt; getFirst(String name) {</span>
+<span class="source-line-no">604</span><span id="line-604">      for (int i = 0; i &lt; size(); i++) {</span>
+<span class="source-line-no">605</span><span id="line-605">         Header x = get(i);</span>
+<span class="source-line-no">606</span><span id="line-606">         if (eq(x.getName(), name))</span>
+<span class="source-line-no">607</span><span id="line-607">            return Utils.opt(x);</span>
+<span class="source-line-no">608</span><span id="line-608">      }</span>
+<span class="source-line-no">609</span><span id="line-609">      return opte();</span>
+<span class="source-line-no">610</span><span id="line-610">   }</span>
+<span class="source-line-no">611</span><span id="line-611"></span>
+<span class="source-line-no">612</span><span id="line-612">   /**</span>
+<span class="source-line-no">613</span><span id="line-613">    * Gets the last header with the given name.</span>
 <span class="source-line-no">614</span><span id="line-614">    *</span>
-<span class="source-line-no">615</span><span id="line-615">    * @param name The header name.</span>
-<span class="source-line-no">616</span><span id="line-616">    * @return The first matching header, or {@link Optional#empty()} if not found.</span>
-<span class="source-line-no">617</span><span id="line-617">    */</span>
-<span class="source-line-no">618</span><span id="line-618">   public Optional&lt;Header&gt; getFirst(String name) {</span>
-<span class="source-line-no">619</span><span id="line-619">      for (int i = 0; i &lt; size(); i++) {</span>
-<span class="source-line-no">620</span><span id="line-620">         Header x = get(i);</span>
-<span class="source-line-no">621</span><span id="line-621">         if (eq(x.getName(), name))</span>
-<span class="source-line-no">622</span><span id="line-622">            return Utils.opt(x);</span>
-<span class="source-line-no">623</span><span id="line-623">      }</span>
-<span class="source-line-no">624</span><span id="line-624">      return opte();</span>
-<span class="source-line-no">625</span><span id="line-625">   }</span>
-<span class="source-line-no">626</span><span id="line-626"></span>
-<span class="source-line-no">627</span><span id="line-627">   /**</span>
-<span class="source-line-no">628</span><span id="line-628">    * Gets the last header with the given name.</span>
-<span class="source-line-no">629</span><span id="line-629">    *</span>
-<span class="source-line-no">630</span><span id="line-630">    * &lt;p&gt;</span>
-<span class="source-line-no">631</span><span id="line-631">    * Header name comparison is case insensitive.</span>
+<span class="source-line-no">615</span><span id="line-615">    * &lt;p&gt;</span>
+<span class="source-line-no">616</span><span id="line-616">    * Header name comparison is case insensitive.</span>
+<span class="source-line-no">617</span><span id="line-617">    *</span>
+<span class="source-line-no">618</span><span id="line-618">    * @param name The header name.</span>
+<span class="source-line-no">619</span><span id="line-619">    * @return The last matching header, or {@link Optional#empty()} if not found.</span>
+<span class="source-line-no">620</span><span id="line-620">    */</span>
+<span class="source-line-no">621</span><span id="line-621">   public Optional&lt;Header&gt; getLast(String name) {</span>
+<span class="source-line-no">622</span><span id="line-622">      for (int i = size() - 1; i &gt;= 0; i--) {</span>
+<span class="source-line-no">623</span><span id="line-623">         Header x = get(i);</span>
+<span class="source-line-no">624</span><span id="line-624">         if (eq(x.getName(), name))</span>
+<span class="source-line-no">625</span><span id="line-625">            return Utils.opt(x);</span>
+<span class="source-line-no">626</span><span id="line-626">      }</span>
+<span class="source-line-no">627</span><span id="line-627">      return opte();</span>
+<span class="source-line-no">628</span><span id="line-628">   }</span>
+<span class="source-line-no">629</span><span id="line-629"></span>
+<span class="source-line-no">630</span><span id="line-630">   /**</span>
+<span class="source-line-no">631</span><span id="line-631">    * Gets a header representing all of the header values with the given name.</span>
 <span class="source-line-no">632</span><span id="line-632">    *</span>
-<span class="source-line-no">633</span><span id="line-633">    * @param name The header name.</span>
-<span class="source-line-no">634</span><span id="line-634">    * @return The last matching header, or {@link Optional#empty()} if not found.</span>
-<span class="source-line-no">635</span><span id="line-635">    */</span>
-<span class="source-line-no">636</span><span id="line-636">   public Optional&lt;Header&gt; getLast(String name) {</span>
-<span class="source-line-no">637</span><span id="line-637">      for (int i = size() - 1; i &gt;= 0; i--) {</span>
-<span class="source-line-no">638</span><span id="line-638">         Header x = get(i);</span>
-<span class="source-line-no">639</span><span id="line-639">         if (eq(x.getName(), name))</span>
-<span class="source-line-no">640</span><span id="line-640">            return Utils.opt(x);</span>
-<span class="source-line-no">641</span><span id="line-641">      }</span>
-<span class="source-line-no">642</span><span id="line-642">      return opte();</span>
-<span class="source-line-no">643</span><span id="line-643">   }</span>
-<span class="source-line-no">644</span><span id="line-644"></span>
-<span class="source-line-no">645</span><span id="line-645">   /**</span>
-<span class="source-line-no">646</span><span id="line-646">    * Gets a header representing all of the header values with the given name.</span>
-<span class="source-line-no">647</span><span id="line-647">    *</span>
-<span class="source-line-no">648</span><span id="line-648">    * &lt;p&gt;</span>
-<span class="source-line-no">649</span><span id="line-649">    * If more that one header with the given name exists the values will be combined with &lt;js&gt;", "&lt;/js&gt; as per</span>
-<span class="source-line-no">650</span><span id="line-650">    * &lt;a href='https://tools.ietf.org/html/rfc2616#section-4.2'&gt;RFC 2616 Section 4.2&lt;/a&gt;.</span>
-<span class="source-line-no">651</span><span id="line-651">    *</span>
-<span class="source-line-no">652</span><span id="line-652">    * @param name The header name.</span>
-<span class="source-line-no">653</span><span id="line-653">    * @return A header with a condensed value, or {@link Optional#empty()} if no headers by the given name are present</span>
-<span class="source-line-no">654</span><span id="line-654">    */</span>
-<span class="source-line-no">655</span><span id="line-655">   public Optional&lt;Header&gt; get(String name) {</span>
-<span class="source-line-no">656</span><span id="line-656"></span>
-<span class="source-line-no">657</span><span id="line-657">      Header first = null;</span>
-<span class="source-line-no">658</span><span id="line-658">      List&lt;Header&gt; rest = null;</span>
-<span class="source-line-no">659</span><span id="line-659">      for (Header x : this) {</span>
-<span class="source-line-no">660</span><span id="line-660">         if (eq(x.getName(), name)) {</span>
-<span class="source-line-no">661</span><span id="line-661">            if (first == null)</span>
-<span class="source-line-no">662</span><span id="line-662">               first = x;</span>
-<span class="source-line-no">663</span><span id="line-663">            else {</span>
-<span class="source-line-no">664</span><span id="line-664">               if (rest == null)</span>
-<span class="source-line-no">665</span><span id="line-665">                  rest = Utils.list();</span>
-<span class="source-line-no">666</span><span id="line-666">               rest.add(x);</span>
-<span class="source-line-no">667</span><span id="line-667">            }</span>
-<span class="source-line-no">668</span><span id="line-668">         }</span>
-<span class="source-line-no">669</span><span id="line-669">      }</span>
-<span class="source-line-no">670</span><span id="line-670"></span>
-<span class="source-line-no">671</span><span id="line-671">      if (first == null)</span>
-<span class="source-line-no">672</span><span id="line-672">         return opte();</span>
-<span class="source-line-no">673</span><span id="line-673"></span>
-<span class="source-line-no">674</span><span id="line-674">      if (rest == null)</span>
-<span class="source-line-no">675</span><span id="line-675">         return Utils.opt(first);</span>
-<span class="source-line-no">676</span><span id="line-676"></span>
-<span class="source-line-no">677</span><span id="line-677">      CharArrayBuffer sb = new CharArrayBuffer(128);</span>
-<span class="source-line-no">678</span><span id="line-678">      sb.append(first.getValue());</span>
-<span class="source-line-no">679</span><span id="line-679">      for (Header element : rest) {</span>
-<span class="source-line-no">680</span><span id="line-680">         sb.append(", ");</span>
-<span class="source-line-no">681</span><span id="line-681">         sb.append(element.getValue());</span>
-<span class="source-line-no">682</span><span id="line-682">      }</span>
-<span class="source-line-no">683</span><span id="line-683"></span>
-<span class="source-line-no">684</span><span id="line-684">      return Utils.opt(new BasicHeader(name, sb.toString()));</span>
-<span class="source-line-no">685</span><span id="line-685">   }</span>
-<span class="source-line-no">686</span><span id="line-686"></span>
-<span class="source-line-no">687</span><span id="line-687">   /**</span>
-<span class="source-line-no">688</span><span id="line-688">    * Gets a header representing all of the header values with the given name.</span>
-<span class="source-line-no">689</span><span id="line-689">    *</span>
-<span class="source-line-no">690</span><span id="line-690">    * &lt;p&gt;</span>
-<span class="source-line-no">691</span><span id="line-691">    * If more that one header with the given name exists the values will be combined with &lt;js&gt;", "&lt;/js&gt; as per</span>
-<span class="source-line-no">692</span><span id="line-692">    * &lt;a href='https://tools.ietf.org/html/rfc2616#section-4.2'&gt;RFC 2616 Section 4.2&lt;/a&gt;.</span>
-<span class="source-line-no">693</span><span id="line-693">    *</span>
-<span class="source-line-no">694</span><span id="line-694">    * &lt;p&gt;</span>
-<span class="source-line-no">695</span><span id="line-695">    * The implementation class must have a public constructor taking in one of the following argument lists:</span>
-<span class="source-line-no">696</span><span id="line-696">    * &lt;ul&gt;</span>
-<span class="source-line-no">697</span><span id="line-697">    *    &lt;li&gt;&lt;c&gt;X(String &lt;jv&gt;value&lt;/jv&gt;)&lt;/c&gt;</span>
-<span class="source-line-no">698</span><span id="line-698">    *    &lt;li&gt;&lt;c&gt;X(Object &lt;jv&gt;value&lt;/jv&gt;)&lt;/c&gt;</span>
-<span class="source-line-no">699</span><span id="line-699">    *    &lt;li&gt;&lt;c&gt;X(String &lt;jv&gt;name&lt;/jv&gt;, String &lt;jv&gt;value&lt;/jv&gt;)&lt;/c&gt;</span>
-<span class="source-line-no">700</span><span id="line-700">    *    &lt;li&gt;&lt;c&gt;X(String &lt;jv&gt;name&lt;/jv&gt;, Object &lt;jv&gt;value&lt;/jv&gt;)&lt;/c&gt;</span>
-<span class="source-line-no">701</span><span id="line-701">    * &lt;/ul&gt;</span>
-<span class="source-line-no">702</span><span id="line-702">    *</span>
-<span class="source-line-no">703</span><span id="line-703">    * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
-<span class="source-line-no">704</span><span id="line-704">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">705</span><span id="line-705">    *    BasicIntegerHeader &lt;jv&gt;age&lt;/jv&gt; = headerList.get(&lt;js&gt;"Age"&lt;/js&gt;, BasicIntegerHeader.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">706</span><span id="line-706">    * &lt;/p&gt;</span>
-<span class="source-line-no">707</span><span id="line-707">    *</span>
-<span class="source-line-no">708</span><span id="line-708">    * @param &lt;T&gt; The header implementation class.</span>
-<span class="source-line-no">709</span><span id="line-709">    * @param name The header name.</span>
-<span class="source-line-no">710</span><span id="line-710">    * @param type The header implementation class.</span>
-<span class="source-line-no">711</span><span id="line-711">    * @return A header with a condensed value or &lt;jk&gt;null&lt;/jk&gt; if no headers by the given name are present</span>
-<span class="source-line-no">712</span><span id="line-712">    */</span>
-<span class="source-line-no">713</span><span id="line-713">   public &lt;T&gt; Optional&lt;T&gt; get(String name, Class&lt;T&gt; type) {</span>
-<span class="source-line-no">714</span><span id="line-714"></span>
-<span class="source-line-no">715</span><span id="line-715">      Header first = null;</span>
-<span class="source-line-no">716</span><span id="line-716">      List&lt;Header&gt; rest = null;</span>
-<span class="source-line-no">717</span><span id="line-717">      for (Header x : this) {</span>
-<span class="source-line-no">718</span><span id="line-718">         if (eq(x.getName(), name)) {</span>
-<span class="source-line-no">719</span><span id="line-719">            if (first == null)</span>
-<span class="source-line-no">720</span><span id="line-720">               first = x;</span>
-<span class="source-line-no">721</span><span id="line-721">            else {</span>
-<span class="source-line-no">722</span><span id="line-722">               if (rest == null)</span>
-<span class="source-line-no">723</span><span id="line-723">                  rest = Utils.list();</span>
-<span class="source-line-no">724</span><span id="line-724">               rest.add(x);</span>
-<span class="source-line-no">725</span><span id="line-725">            }</span>
-<span class="source-line-no">726</span><span id="line-726">         }</span>
-<span class="source-line-no">727</span><span id="line-727">      }</span>
-<span class="source-line-no">728</span><span id="line-728"></span>
-<span class="source-line-no">729</span><span id="line-729">      if (first == null)</span>
-<span class="source-line-no">730</span><span id="line-730">         return opte();</span>
-<span class="source-line-no">731</span><span id="line-731"></span>
-<span class="source-line-no">732</span><span id="line-732">      if (rest == null)</span>
-<span class="source-line-no">733</span><span id="line-733">         return Utils.opt(HeaderBeanMeta.of(type).construct(name, first.getValue()));</span>
-<span class="source-line-no">734</span><span id="line-734"></span>
-<span class="source-line-no">735</span><span id="line-735">      CharArrayBuffer sb = new CharArrayBuffer(128);</span>
-<span class="source-line-no">736</span><span id="line-736">      sb.append(first.getValue());</span>
-<span class="source-line-no">737</span><span id="line-737">      for (Header element : rest) {</span>
-<span class="source-line-no">738</span><span id="line-738">         sb.append(", ");</span>
-<span class="source-line-no">739</span><span id="line-739">         sb.append(element.getValue());</span>
-<span class="source-line-no">740</span><span id="line-740">      }</span>
-<span class="source-line-no">741</span><span id="line-741"></span>
-<span class="source-line-no">742</span><span id="line-742">      return Utils.opt(HeaderBeanMeta.of(type).construct(name, sb.toString()));</span>
-<span class="source-line-no">743</span><span id="line-743">   }</span>
-<span class="source-line-no">744</span><span id="line-744"></span>
-<span class="source-line-no">745</span><span id="line-745">   /**</span>
-<span class="source-line-no">746</span><span id="line-746">    * Gets a header representing all of the header values with the given name.</span>
-<span class="source-line-no">747</span><span id="line-747">    *</span>
-<span class="source-line-no">748</span><span id="line-748">    * &lt;p&gt;</span>
-<span class="source-line-no">749</span><span id="line-749">    * Same as {@link #get(String, Class)} but the header name is pulled from the {@link org.apache.juneau.http.annotation.Header#name()} or</span>
-<span class="source-line-no">750</span><span id="line-750">    *    {@link org.apache.juneau.http.annotation.Header#value()} annotations.</span>
-<span class="source-line-no">751</span><span id="line-751">    *</span>
-<span class="source-line-no">752</span><span id="line-752">    * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
-<span class="source-line-no">753</span><span id="line-753">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">754</span><span id="line-754">    *    Age &lt;jv&gt;age&lt;/jv&gt; = headerList.get(Age.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">755</span><span id="line-755">    * &lt;/p&gt;</span>
-<span class="source-line-no">756</span><span id="line-756">    *</span>
-<span class="source-line-no">757</span><span id="line-757">    * @param &lt;T&gt; The return type.</span>
-<span class="source-line-no">758</span><span id="line-758">    * @param type The header implementation class.</span>
-<span class="source-line-no">759</span><span id="line-759">    * @return A header with a condensed value or &lt;jk&gt;null&lt;/jk&gt; if no headers by the given name are present</span>
-<span class="source-line-no">760</span><span id="line-760">    */</span>
-<span class="source-line-no">761</span><span id="line-761">   public &lt;T&gt; Optional&lt;T&gt; get(Class&lt;T&gt; type) {</span>
-<span class="source-line-no">762</span><span id="line-762">      Utils.assertArgNotNull("type", type);</span>
-<span class="source-line-no">763</span><span id="line-763"></span>
-<span class="source-line-no">764</span><span id="line-764">      String name = HeaderBeanMeta.of(type).getSchema().getName();</span>
-<span class="source-line-no">765</span><span id="line-765">      Utils.assertArg(name != null, "Header name could not be found on bean type ''{0}''", type.getName());</span>
-<span class="source-line-no">766</span><span id="line-766"></span>
-<span class="source-line-no">767</span><span id="line-767">      return get(name, type);</span>
-<span class="source-line-no">768</span><span id="line-768">   }</span>
-<span class="source-line-no">769</span><span id="line-769"></span>
-<span class="source-line-no">770</span><span id="line-770">   /**</span>
-<span class="source-line-no">771</span><span id="line-771">    * Gets all of the headers.</span>
-<span class="source-line-no">772</span><span id="line-772">    *</span>
-<span class="source-line-no">773</span><span id="line-773">    * &lt;p&gt;</span>
-<span class="source-line-no">774</span><span id="line-774">    * The returned array maintains the relative order in which the headers were added.</span>
-<span class="source-line-no">775</span><span id="line-775">    * Each call creates a new array not backed by this list.</span>
-<span class="source-line-no">776</span><span id="line-776">    *</span>
-<span class="source-line-no">777</span><span id="line-777">    * &lt;p&gt;</span>
-<span class="source-line-no">778</span><span id="line-778">    * As a general rule, it's more efficient to use the other methods with consumers to</span>
-<span class="source-line-no">779</span><span id="line-779">    * get headers.</span>
+<span class="source-line-no">633</span><span id="line-633">    * &lt;p&gt;</span>
+<span class="source-line-no">634</span><span id="line-634">    * If more that one header with the given name exists the values will be combined with &lt;js&gt;", "&lt;/js&gt; as per</span>
+<span class="source-line-no">635</span><span id="line-635">    * &lt;a href='https://tools.ietf.org/html/rfc2616#section-4.2'&gt;RFC 2616 Section 4.2&lt;/a&gt;.</span>
+<span class="source-line-no">636</span><span id="line-636">    *</span>
+<span class="source-line-no">637</span><span id="line-637">    * @param name The header name.</span>
+<span class="source-line-no">638</span><span id="line-638">    * @return A header with a condensed value, or {@link Optional#empty()} if no headers by the given name are present</span>
+<span class="source-line-no">639</span><span id="line-639">    */</span>
+<span class="source-line-no">640</span><span id="line-640">   public Optional&lt;Header&gt; get(String name) {</span>
+<span class="source-line-no">641</span><span id="line-641"></span>
+<span class="source-line-no">642</span><span id="line-642">      Header first = null;</span>
+<span class="source-line-no">643</span><span id="line-643">      List&lt;Header&gt; rest = null;</span>
+<span class="source-line-no">644</span><span id="line-644">      for (Header x : this) {</span>
+<span class="source-line-no">645</span><span id="line-645">         if (eq(x.getName(), name)) {</span>
+<span class="source-line-no">646</span><span id="line-646">            if (first == null)</span>
+<span class="source-line-no">647</span><span id="line-647">               first = x;</span>
+<span class="source-line-no">648</span><span id="line-648">            else {</span>
+<span class="source-line-no">649</span><span id="line-649">               if (rest == null)</span>
+<span class="source-line-no">650</span><span id="line-650">                  rest = Utils.list();</span>
+<span class="source-line-no">651</span><span id="line-651">               rest.add(x);</span>
+<span class="source-line-no">652</span><span id="line-652">            }</span>
+<span class="source-line-no">653</span><span id="line-653">         }</span>
+<span class="source-line-no">654</span><span id="line-654">      }</span>
+<span class="source-line-no">655</span><span id="line-655"></span>
+<span class="source-line-no">656</span><span id="line-656">      if (first == null)</span>
+<span class="source-line-no">657</span><span id="line-657">         return opte();</span>
+<span class="source-line-no">658</span><span id="line-658"></span>
+<span class="source-line-no">659</span><span id="line-659">      if (rest == null)</span>
+<span class="source-line-no">660</span><span id="line-660">         return Utils.opt(first);</span>
+<span class="source-line-no">661</span><span id="line-661"></span>
+<span class="source-line-no">662</span><span id="line-662">      CharArrayBuffer sb = new CharArrayBuffer(128);</span>
+<span class="source-line-no">663</span><span id="line-663">      sb.append(first.getValue());</span>
+<span class="source-line-no">664</span><span id="line-664">      for (Header element : rest) {</span>
+<span class="source-line-no">665</span><span id="line-665">         sb.append(", ");</span>
+<span class="source-line-no">666</span><span id="line-666">         sb.append(element.getValue());</span>
+<span class="source-line-no">667</span><span id="line-667">      }</span>
+<span class="source-line-no">668</span><span id="line-668"></span>
+<span class="source-line-no">669</span><span id="line-669">      return Utils.opt(new BasicHeader(name, sb.toString()));</span>
+<span class="source-line-no">670</span><span id="line-670">   }</span>
+<span class="source-line-no">671</span><span id="line-671"></span>
+<span class="source-line-no">672</span><span id="line-672">   /**</span>
+<span class="source-line-no">673</span><span id="line-673">    * Gets a header representing all of the header values with the given name.</span>
+<span class="source-line-no">674</span><span id="line-674">    *</span>
+<span class="source-line-no">675</span><span id="line-675">    * &lt;p&gt;</span>
+<span class="source-line-no">676</span><span id="line-676">    * If more that one header with the given name exists the values will be combined with &lt;js&gt;", "&lt;/js&gt; as per</span>
+<span class="source-line-no">677</span><span id="line-677">    * &lt;a href='https://tools.ietf.org/html/rfc2616#section-4.2'&gt;RFC 2616 Section 4.2&lt;/a&gt;.</span>
+<span class="source-line-no">678</span><span id="line-678">    *</span>
+<span class="source-line-no">679</span><span id="line-679">    * &lt;p&gt;</span>
+<span class="source-line-no">680</span><span id="line-680">    * The implementation class must have a public constructor taking in one of the following argument lists:</span>
+<span class="source-line-no">681</span><span id="line-681">    * &lt;ul&gt;</span>
+<span class="source-line-no">682</span><span id="line-682">    *    &lt;li&gt;&lt;c&gt;X(String &lt;jv&gt;value&lt;/jv&gt;)&lt;/c&gt;</span>
+<span class="source-line-no">683</span><span id="line-683">    *    &lt;li&gt;&lt;c&gt;X(Object &lt;jv&gt;value&lt;/jv&gt;)&lt;/c&gt;</span>
+<span class="source-line-no">684</span><span id="line-684">    *    &lt;li&gt;&lt;c&gt;X(String &lt;jv&gt;name&lt;/jv&gt;, String &lt;jv&gt;value&lt;/jv&gt;)&lt;/c&gt;</span>
+<span class="source-line-no">685</span><span id="line-685">    *    &lt;li&gt;&lt;c&gt;X(String &lt;jv&gt;name&lt;/jv&gt;, Object &lt;jv&gt;value&lt;/jv&gt;)&lt;/c&gt;</span>
+<span class="source-line-no">686</span><span id="line-686">    * &lt;/ul&gt;</span>
+<span class="source-line-no">687</span><span id="line-687">    *</span>
+<span class="source-line-no">688</span><span id="line-688">    * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
+<span class="source-line-no">689</span><span id="line-689">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">690</span><span id="line-690">    *    BasicIntegerHeader &lt;jv&gt;age&lt;/jv&gt; = headerList.get(&lt;js&gt;"Age"&lt;/js&gt;, BasicIntegerHeader.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">691</span><span id="line-691">    * &lt;/p&gt;</span>
+<span class="source-line-no">692</span><span id="line-692">    *</span>
+<span class="source-line-no">693</span><span id="line-693">    * @param &lt;T&gt; The header implementation class.</span>
+<span class="source-line-no">694</span><span id="line-694">    * @param name The header name.</span>
+<span class="source-line-no">695</span><span id="line-695">    * @param type The header implementation class.</span>
+<span class="source-line-no">696</span><span id="line-696">    * @return A header with a condensed value or &lt;jk&gt;null&lt;/jk&gt; if no headers by the given name are present</span>
+<span class="source-line-no">697</span><span id="line-697">    */</span>
+<span class="source-line-no">698</span><span id="line-698">   public &lt;T&gt; Optional&lt;T&gt; get(String name, Class&lt;T&gt; type) {</span>
+<span class="source-line-no">699</span><span id="line-699"></span>
+<span class="source-line-no">700</span><span id="line-700">      Header first = null;</span>
+<span class="source-line-no">701</span><span id="line-701">      List&lt;Header&gt; rest = null;</span>
+<span class="source-line-no">702</span><span id="line-702">      for (Header x : this) {</span>
+<span class="source-line-no">703</span><span id="line-703">         if (eq(x.getName(), name)) {</span>
+<span class="source-line-no">704</span><span id="line-704">            if (first == null)</span>
+<span class="source-line-no">705</span><span id="line-705">               first = x;</span>
+<span class="source-line-no">706</span><span id="line-706">            else {</span>
+<span class="source-line-no">707</span><span id="line-707">               if (rest == null)</span>
+<span class="source-line-no">708</span><span id="line-708">                  rest = Utils.list();</span>
+<span class="source-line-no">709</span><span id="line-709">               rest.add(x);</span>
+<span class="source-line-no">710</span><span id="line-710">            }</span>
+<span class="source-line-no">711</span><span id="line-711">         }</span>
+<span class="source-line-no">712</span><span id="line-712">      }</span>
+<span class="source-line-no">713</span><span id="line-713"></span>
+<span class="source-line-no">714</span><span id="line-714">      if (first == null)</span>
+<span class="source-line-no">715</span><span id="line-715">         return opte();</span>
+<span class="source-line-no">716</span><span id="line-716"></span>
+<span class="source-line-no">717</span><span id="line-717">      if (rest == null)</span>
+<span class="source-line-no">718</span><span id="line-718">         return Utils.opt(HeaderBeanMeta.of(type).construct(name, first.getValue()));</span>
+<span class="source-line-no">719</span><span id="line-719"></span>
+<span class="source-line-no">720</span><span id="line-720">      CharArrayBuffer sb = new CharArrayBuffer(128);</span>
+<span class="source-line-no">721</span><span id="line-721">      sb.append(first.getValue());</span>
+<span class="source-line-no">722</span><span id="line-722">      for (Header element : rest) {</span>
+<span class="source-line-no">723</span><span id="line-723">         sb.append(", ");</span>
+<span class="source-line-no">724</span><span id="line-724">         sb.append(element.getValue());</span>
+<span class="source-line-no">725</span><span id="line-725">      }</span>
+<span class="source-line-no">726</span><span id="line-726"></span>
+<span class="source-line-no">727</span><span id="line-727">      return Utils.opt(HeaderBeanMeta.of(type).construct(name, sb.toString()));</span>
+<span class="source-line-no">728</span><span id="line-728">   }</span>
+<span class="source-line-no">729</span><span id="line-729"></span>
+<span class="source-line-no">730</span><span id="line-730">   /**</span>
+<span class="source-line-no">731</span><span id="line-731">    * Gets a header representing all of the header values with the given name.</span>
+<span class="source-line-no">732</span><span id="line-732">    *</span>
+<span class="source-line-no">733</span><span id="line-733">    * &lt;p&gt;</span>
+<span class="source-line-no">734</span><span id="line-734">    * Same as {@link #get(String, Class)} but the header name is pulled from the {@link org.apache.juneau.http.annotation.Header#name()} or</span>
+<span class="source-line-no">735</span><span id="line-735">    *    {@link org.apache.juneau.http.annotation.Header#value()} annotations.</span>
+<span class="source-line-no">736</span><span id="line-736">    *</span>
+<span class="source-line-no">737</span><span id="line-737">    * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
+<span class="source-line-no">738</span><span id="line-738">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">739</span><span id="line-739">    *    Age &lt;jv&gt;age&lt;/jv&gt; = headerList.get(Age.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">740</span><span id="line-740">    * &lt;/p&gt;</span>
+<span class="source-line-no">741</span><span id="line-741">    *</span>
+<span class="source-line-no">742</span><span id="line-742">    * @param &lt;T&gt; The return type.</span>
+<span class="source-line-no">743</span><span id="line-743">    * @param type The header implementation class.</span>
+<span class="source-line-no">744</span><span id="line-744">    * @return A header with a condensed value or &lt;jk&gt;null&lt;/jk&gt; if no headers by the given name are present</span>
+<span class="source-line-no">745</span><span id="line-745">    */</span>
+<span class="source-line-no">746</span><span id="line-746">   public &lt;T&gt; Optional&lt;T&gt; get(Class&lt;T&gt; type) {</span>
+<span class="source-line-no">747</span><span id="line-747">      Utils.assertArgNotNull("type", type);</span>
+<span class="source-line-no">748</span><span id="line-748"></span>
+<span class="source-line-no">749</span><span id="line-749">      String name = HeaderBeanMeta.of(type).getSchema().getName();</span>
+<span class="source-line-no">750</span><span id="line-750">      Utils.assertArg(name != null, "Header name could not be found on bean type ''{0}''", type.getName());</span>
+<span class="source-line-no">751</span><span id="line-751"></span>
+<span class="source-line-no">752</span><span id="line-752">      return get(name, type);</span>
+<span class="source-line-no">753</span><span id="line-753">   }</span>
+<span class="source-line-no">754</span><span id="line-754"></span>
+<span class="source-line-no">755</span><span id="line-755">   /**</span>
+<span class="source-line-no">756</span><span id="line-756">    * Gets all of the headers.</span>
+<span class="source-line-no">757</span><span id="line-757">    *</span>
+<span class="source-line-no">758</span><span id="line-758">    * &lt;p&gt;</span>
+<span class="source-line-no">759</span><span id="line-759">    * The returned array maintains the relative order in which the headers were added.</span>
+<span class="source-line-no">760</span><span id="line-760">    * Each call creates a new array not backed by this list.</span>
+<span class="source-line-no">761</span><span id="line-761">    *</span>
+<span class="source-line-no">762</span><span id="line-762">    * &lt;p&gt;</span>
+<span class="source-line-no">763</span><span id="line-763">    * As a general rule, it's more efficient to use the other methods with consumers to</span>
+<span class="source-line-no">764</span><span id="line-764">    * get headers.</span>
+<span class="source-line-no">765</span><span id="line-765">    *</span>
+<span class="source-line-no">766</span><span id="line-766">    * @return An array containing all headers, never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">767</span><span id="line-767">    */</span>
+<span class="source-line-no">768</span><span id="line-768">   public Header[] getAll() {</span>
+<span class="source-line-no">769</span><span id="line-769">      return stream().toArray(Header[]::new);</span>
+<span class="source-line-no">770</span><span id="line-770">   }</span>
+<span class="source-line-no">771</span><span id="line-771"></span>
+<span class="source-line-no">772</span><span id="line-772">   /**</span>
+<span class="source-line-no">773</span><span id="line-773">    * Gets all of the headers with the given name.</span>
+<span class="source-line-no">774</span><span id="line-774">    *</span>
+<span class="source-line-no">775</span><span id="line-775">    * &lt;p&gt;</span>
+<span class="source-line-no">776</span><span id="line-776">    * The returned array maintains the relative order in which the headers were added.</span>
+<span class="source-line-no">777</span><span id="line-777">    * Header name comparison is case insensitive.</span>
+<span class="source-line-no">778</span><span id="line-778">    * Headers with null values are ignored.</span>
+<span class="source-line-no">779</span><span id="line-779">    * Each call creates a new array not backed by this list.</span>
 <span class="source-line-no">780</span><span id="line-780">    *</span>
-<span class="source-line-no">781</span><span id="line-781">    * @return An array containing all headers, never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">782</span><span id="line-782">    */</span>
-<span class="source-line-no">783</span><span id="line-783">   public Header[] getAll() {</span>
-<span class="source-line-no">784</span><span id="line-784">      return stream().toArray(Header[]::new);</span>
-<span class="source-line-no">785</span><span id="line-785">   }</span>
-<span class="source-line-no">786</span><span id="line-786"></span>
-<span class="source-line-no">787</span><span id="line-787">   /**</span>
-<span class="source-line-no">788</span><span id="line-788">    * Gets all of the headers with the given name.</span>
-<span class="source-line-no">789</span><span id="line-789">    *</span>
-<span class="source-line-no">790</span><span id="line-790">    * &lt;p&gt;</span>
-<span class="source-line-no">791</span><span id="line-791">    * The returned array maintains the relative order in which the headers were added.</span>
-<span class="source-line-no">792</span><span id="line-792">    * Header name comparison is case insensitive.</span>
-<span class="source-line-no">793</span><span id="line-793">    * Headers with null values are ignored.</span>
-<span class="source-line-no">794</span><span id="line-794">    * Each call creates a new array not backed by this list.</span>
+<span class="source-line-no">781</span><span id="line-781">    * &lt;p&gt;</span>
+<span class="source-line-no">782</span><span id="line-782">    * As a general rule, it's more efficient to use the other methods with consumers to</span>
+<span class="source-line-no">783</span><span id="line-783">    * get headers.</span>
+<span class="source-line-no">784</span><span id="line-784">    *</span>
+<span class="source-line-no">785</span><span id="line-785">    * @param name The header name.</span>
+<span class="source-line-no">786</span><span id="line-786">    *</span>
+<span class="source-line-no">787</span><span id="line-787">    * @return An array containing all matching headers, never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">788</span><span id="line-788">    */</span>
+<span class="source-line-no">789</span><span id="line-789">   public Header[] getAll(String name) {</span>
+<span class="source-line-no">790</span><span id="line-790">      return stream().filter(x -&gt; eq(x.getName(), name)).toArray(Header[]::new);</span>
+<span class="source-line-no">791</span><span id="line-791">   }</span>
+<span class="source-line-no">792</span><span id="line-792"></span>
+<span class="source-line-no">793</span><span id="line-793">   /**</span>
+<span class="source-line-no">794</span><span id="line-794">    * Performs an action on the values for all matching headers in this list.</span>
 <span class="source-line-no">795</span><span id="line-795">    *</span>
-<span class="source-line-no">796</span><span id="line-796">    * &lt;p&gt;</span>
-<span class="source-line-no">797</span><span id="line-797">    * As a general rule, it's more efficient to use the other methods with consumers to</span>
-<span class="source-line-no">798</span><span id="line-798">    * get headers.</span>
-<span class="source-line-no">799</span><span id="line-799">    *</span>
-<span class="source-line-no">800</span><span id="line-800">    * @param name The header name.</span>
-<span class="source-line-no">801</span><span id="line-801">    *</span>
-<span class="source-line-no">802</span><span id="line-802">    * @return An array containing all matching headers, never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">803</span><span id="line-803">    */</span>
-<span class="source-line-no">804</span><span id="line-804">   public Header[] getAll(String name) {</span>
-<span class="source-line-no">805</span><span id="line-805">      return stream().filter(x -&gt; eq(x.getName(), name)).toArray(Header[]::new);</span>
-<span class="source-line-no">806</span><span id="line-806">   }</span>
-<span class="source-line-no">807</span><span id="line-807"></span>
-<span class="source-line-no">808</span><span id="line-808">   /**</span>
-<span class="source-line-no">809</span><span id="line-809">    * Performs an action on the values for all matching headers in this list.</span>
-<span class="source-line-no">810</span><span id="line-810">    *</span>
-<span class="source-line-no">811</span><span id="line-811">    * @param filter A predicate to apply to each element to determine if it should be included.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">812</span><span id="line-812">    * @param action An action to perform on each element.</span>
-<span class="source-line-no">813</span><span id="line-813">    * @return This object.</span>
-<span class="source-line-no">814</span><span id="line-814">    */</span>
-<span class="source-line-no">815</span><span id="line-815">   public HeaderList forEachValue(Predicate&lt;Header&gt; filter, Consumer&lt;String&gt; action) {</span>
-<span class="source-line-no">816</span><span id="line-816">      return forEach(filter, x -&gt; action.accept(x.getValue()));</span>
-<span class="source-line-no">817</span><span id="line-817">   }</span>
-<span class="source-line-no">818</span><span id="line-818"></span>
-<span class="source-line-no">819</span><span id="line-819">   /**</span>
-<span class="source-line-no">820</span><span id="line-820">    * Performs an action on the values of all matching headers in this list.</span>
-<span class="source-line-no">821</span><span id="line-821">    *</span>
-<span class="source-line-no">822</span><span id="line-822">    * @param name The header name.</span>
-<span class="source-line-no">823</span><span id="line-823">    * @param action An action to perform on each element.</span>
-<span class="source-line-no">824</span><span id="line-824">    * @return This object.</span>
-<span class="source-line-no">825</span><span id="line-825">    */</span>
-<span class="source-line-no">826</span><span id="line-826">   public HeaderList forEachValue(String name, Consumer&lt;String&gt; action) {</span>
-<span class="source-line-no">827</span><span id="line-827">      return forEach(name, x -&gt; action.accept(x.getValue()));</span>
-<span class="source-line-no">828</span><span id="line-828">   }</span>
-<span class="source-line-no">829</span><span id="line-829"></span>
-<span class="source-line-no">830</span><span id="line-830">   /**</span>
-<span class="source-line-no">831</span><span id="line-831">    * Returns all the string values for all headers with the specified name.</span>
-<span class="source-line-no">832</span><span id="line-832">    *</span>
-<span class="source-line-no">833</span><span id="line-833">    * @param name The header name.</span>
-<span class="source-line-no">834</span><span id="line-834">    * @return An array containing all values.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">835</span><span id="line-835">    */</span>
-<span class="source-line-no">836</span><span id="line-836">   public String[] getValues(String name) {</span>
-<span class="source-line-no">837</span><span id="line-837">      return stream().filter(x -&gt; eq(x.getName(), name)).map(Header::getValue).toArray(String[]::new);</span>
-<span class="source-line-no">838</span><span id="line-838">   }</span>
-<span class="source-line-no">839</span><span id="line-839"></span>
-<span class="source-line-no">840</span><span id="line-840">   /**</span>
-<span class="source-line-no">841</span><span id="line-841">    * Tests if headers with the given name are contained within this list.</span>
-<span class="source-line-no">842</span><span id="line-842">    *</span>
-<span class="source-line-no">843</span><span id="line-843">    * &lt;p&gt;</span>
-<span class="source-line-no">844</span><span id="line-844">    * Header name comparison is case insensitive.</span>
-<span class="source-line-no">845</span><span id="line-845">    *</span>
-<span class="source-line-no">846</span><span id="line-846">    * @param name The header name.</span>
-<span class="source-line-no">847</span><span id="line-847">    * @return &lt;jk&gt;true&lt;/jk&gt; if at least one header with the name is present.</span>
-<span class="source-line-no">848</span><span id="line-848">    */</span>
-<span class="source-line-no">849</span><span id="line-849">   public boolean contains(String name) {</span>
-<span class="source-line-no">850</span><span id="line-850">      return stream().anyMatch(x -&gt; eq(x.getName(), name));</span>
-<span class="source-line-no">851</span><span id="line-851">   }</span>
-<span class="source-line-no">852</span><span id="line-852"></span>
-<span class="source-line-no">853</span><span id="line-853">   /**</span>
-<span class="source-line-no">854</span><span id="line-854">    * Returns an iterator over this list of headers.</span>
-<span class="source-line-no">855</span><span id="line-855">    *</span>
-<span class="source-line-no">856</span><span id="line-856">    * @return A new iterator over this list of headers.</span>
-<span class="source-line-no">857</span><span id="line-857">    */</span>
-<span class="source-line-no">858</span><span id="line-858">   public HeaderIterator headerIterator() {</span>
-<span class="source-line-no">859</span><span id="line-859">      return new BasicHeaderIterator(toArray(new Header[0]), null, caseSensitive);</span>
-<span class="source-line-no">860</span><span id="line-860">   }</span>
-<span class="source-line-no">861</span><span id="line-861"></span>
-<span class="source-line-no">862</span><span id="line-862">   /**</span>
-<span class="source-line-no">863</span><span id="line-863">    * Returns an iterator over the headers with a given name in this list.</span>
+<span class="source-line-no">796</span><span id="line-796">    * @param filter A predicate to apply to each element to determine if it should be included.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">797</span><span id="line-797">    * @param action An action to perform on each element.</span>
+<span class="source-line-no">798</span><span id="line-798">    * @return This object.</span>
+<span class="source-line-no">799</span><span id="line-799">    */</span>
+<span class="source-line-no">800</span><span id="line-800">   public HeaderList forEachValue(Predicate&lt;Header&gt; filter, Consumer&lt;String&gt; action) {</span>
+<span class="source-line-no">801</span><span id="line-801">      return forEach(filter, x -&gt; action.accept(x.getValue()));</span>
+<span class="source-line-no">802</span><span id="line-802">   }</span>
+<span class="source-line-no">803</span><span id="line-803"></span>
+<span class="source-line-no">804</span><span id="line-804">   /**</span>
+<span class="source-line-no">805</span><span id="line-805">    * Performs an action on the values of all matching headers in this list.</span>
+<span class="source-line-no">806</span><span id="line-806">    *</span>
+<span class="source-line-no">807</span><span id="line-807">    * @param name The header name.</span>
+<span class="source-line-no">808</span><span id="line-808">    * @param action An action to perform on each element.</span>
+<span class="source-line-no">809</span><span id="line-809">    * @return This object.</span>
+<span class="source-line-no">810</span><span id="line-810">    */</span>
+<span class="source-line-no">811</span><span id="line-811">   public HeaderList forEachValue(String name, Consumer&lt;String&gt; action) {</span>
+<span class="source-line-no">812</span><span id="line-812">      return forEach(name, x -&gt; action.accept(x.getValue()));</span>
+<span class="source-line-no">813</span><span id="line-813">   }</span>
+<span class="source-line-no">814</span><span id="line-814"></span>
+<span class="source-line-no">815</span><span id="line-815">   /**</span>
+<span class="source-line-no">816</span><span id="line-816">    * Returns all the string values for all headers with the specified name.</span>
+<span class="source-line-no">817</span><span id="line-817">    *</span>
+<span class="source-line-no">818</span><span id="line-818">    * @param name The header name.</span>
+<span class="source-line-no">819</span><span id="line-819">    * @return An array containing all values.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">820</span><span id="line-820">    */</span>
+<span class="source-line-no">821</span><span id="line-821">   public String[] getValues(String name) {</span>
+<span class="source-line-no">822</span><span id="line-822">      return stream().filter(x -&gt; eq(x.getName(), name)).map(Header::getValue).toArray(String[]::new);</span>
+<span class="source-line-no">823</span><span id="line-823">   }</span>
+<span class="source-line-no">824</span><span id="line-824"></span>
+<span class="source-line-no">825</span><span id="line-825">   /**</span>
+<span class="source-line-no">826</span><span id="line-826">    * Tests if headers with the given name are contained within this list.</span>
+<span class="source-line-no">827</span><span id="line-827">    *</span>
+<span class="source-line-no">828</span><span id="line-828">    * &lt;p&gt;</span>
+<span class="source-line-no">829</span><span id="line-829">    * Header name comparison is case insensitive.</span>
+<span class="source-line-no">830</span><span id="line-830">    *</span>
+<span class="source-line-no">831</span><span id="line-831">    * @param name The header name.</span>
+<span class="source-line-no">832</span><span id="line-832">    * @return &lt;jk&gt;true&lt;/jk&gt; if at least one header with the name is present.</span>
+<span class="source-line-no">833</span><span id="line-833">    */</span>
+<span class="source-line-no">834</span><span id="line-834">   public boolean contains(String name) {</span>
+<span class="source-line-no">835</span><span id="line-835">      return stream().anyMatch(x -&gt; eq(x.getName(), name));</span>
+<span class="source-line-no">836</span><span id="line-836">   }</span>
+<span class="source-line-no">837</span><span id="line-837"></span>
+<span class="source-line-no">838</span><span id="line-838">   /**</span>
+<span class="source-line-no">839</span><span id="line-839">    * Returns an iterator over this list of headers.</span>
+<span class="source-line-no">840</span><span id="line-840">    *</span>
+<span class="source-line-no">841</span><span id="line-841">    * @return A new iterator over this list of headers.</span>
+<span class="source-line-no">842</span><span id="line-842">    */</span>
+<span class="source-line-no">843</span><span id="line-843">   public HeaderIterator headerIterator() {</span>
+<span class="source-line-no">844</span><span id="line-844">      return new BasicHeaderIterator(toArray(new Header[0]), null, caseSensitive);</span>
+<span class="source-line-no">845</span><span id="line-845">   }</span>
+<span class="source-line-no">846</span><span id="line-846"></span>
+<span class="source-line-no">847</span><span id="line-847">   /**</span>
+<span class="source-line-no">848</span><span id="line-848">    * Returns an iterator over the headers with a given name in this list.</span>
+<span class="source-line-no">849</span><span id="line-849">    *</span>
+<span class="source-line-no">850</span><span id="line-850">    * @param name The name of the headers over which to iterate, or &lt;jk&gt;null&lt;/jk&gt; for all headers</span>
+<span class="source-line-no">851</span><span id="line-851">    *</span>
+<span class="source-line-no">852</span><span id="line-852">    * @return A new iterator over the matching headers in this list.</span>
+<span class="source-line-no">853</span><span id="line-853">    */</span>
+<span class="source-line-no">854</span><span id="line-854">   public HeaderIterator headerIterator(String name) {</span>
+<span class="source-line-no">855</span><span id="line-855">      return new BasicHeaderIterator(getAll(name), name, caseSensitive);</span>
+<span class="source-line-no">856</span><span id="line-856">   }</span>
+<span class="source-line-no">857</span><span id="line-857"></span>
+<span class="source-line-no">858</span><span id="line-858">   /**</span>
+<span class="source-line-no">859</span><span id="line-859">    * Performs an action on all headers with the specified name in this list.</span>
+<span class="source-line-no">860</span><span id="line-860">    *</span>
+<span class="source-line-no">861</span><span id="line-861">    * &lt;p&gt;</span>
+<span class="source-line-no">862</span><span id="line-862">    * This is the preferred method for iterating over headers as it does not involve</span>
+<span class="source-line-no">863</span><span id="line-863">    * creation or copy of lists/arrays.</span>
 <span class="source-line-no">864</span><span id="line-864">    *</span>
-<span class="source-line-no">865</span><span id="line-865">    * @param name The name of the headers over which to iterate, or &lt;jk&gt;null&lt;/jk&gt; for all headers</span>
-<span class="source-line-no">866</span><span id="line-866">    *</span>
-<span class="source-line-no">867</span><span id="line-867">    * @return A new iterator over the matching headers in this list.</span>
+<span class="source-line-no">865</span><span id="line-865">    * @param name The header name.</span>
+<span class="source-line-no">866</span><span id="line-866">    * @param action An action to perform on each element.</span>
+<span class="source-line-no">867</span><span id="line-867">    * @return This object.</span>
 <span class="source-line-no">868</span><span id="line-868">    */</span>
-<span class="source-line-no">869</span><span id="line-869">   public HeaderIterator headerIterator(String name) {</span>
-<span class="source-line-no">870</span><span id="line-870">      return new BasicHeaderIterator(getAll(name), name, caseSensitive);</span>
+<span class="source-line-no">869</span><span id="line-869">   public HeaderList forEach(String name, Consumer&lt;Header&gt; action) {</span>
+<span class="source-line-no">870</span><span id="line-870">      return forEach(x -&gt; eq(name, x.getName()), action);</span>
 <span class="source-line-no">871</span><span id="line-871">   }</span>
 <span class="source-line-no">872</span><span id="line-872"></span>
 <span class="source-line-no">873</span><span id="line-873">   /**</span>
-<span class="source-line-no">874</span><span id="line-874">    * Performs an action on all headers with the specified name in this list.</span>
+<span class="source-line-no">874</span><span id="line-874">    * Performs an action on all matching headers in this list.</span>
 <span class="source-line-no">875</span><span id="line-875">    *</span>
 <span class="source-line-no">876</span><span id="line-876">    * &lt;p&gt;</span>
 <span class="source-line-no">877</span><span id="line-877">    * This is the preferred method for iterating over headers as it does not involve</span>
 <span class="source-line-no">878</span><span id="line-878">    * creation or copy of lists/arrays.</span>
 <span class="source-line-no">879</span><span id="line-879">    *</span>
-<span class="source-line-no">880</span><span id="line-880">    * @param name The header name.</span>
+<span class="source-line-no">880</span><span id="line-880">    * @param filter A predicate to apply to each element to determine if it should be included.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">881</span><span id="line-881">    * @param action An action to perform on each element.</span>
 <span class="source-line-no">882</span><span id="line-882">    * @return This object.</span>
 <span class="source-line-no">883</span><span id="line-883">    */</span>
-<span class="source-line-no">884</span><span id="line-884">   public HeaderList forEach(String name, Consumer&lt;Header&gt; action) {</span>
-<span class="source-line-no">885</span><span id="line-885">      return forEach(x -&gt; eq(name, x.getName()), action);</span>
-<span class="source-line-no">886</span><span id="line-886">   }</span>
-<span class="source-line-no">887</span><span id="line-887"></span>
-<span class="source-line-no">888</span><span id="line-888">   /**</span>
-<span class="source-line-no">889</span><span id="line-889">    * Performs an action on all matching headers in this list.</span>
-<span class="source-line-no">890</span><span id="line-890">    *</span>
-<span class="source-line-no">891</span><span id="line-891">    * &lt;p&gt;</span>
-<span class="source-line-no">892</span><span id="line-892">    * This is the preferred method for iterating over headers as it does not involve</span>
-<span class="source-line-no">893</span><span id="line-893">    * creation or copy of lists/arrays.</span>
+<span class="source-line-no">884</span><span id="line-884">   public HeaderList forEach(Predicate&lt;Header&gt; filter, Consumer&lt;Header&gt; action) {</span>
+<span class="source-line-no">885</span><span id="line-885">      forEach(x -&gt; consume(filter, action, x));</span>
+<span class="source-line-no">886</span><span id="line-886">      return this;</span>
+<span class="source-line-no">887</span><span id="line-887">   }</span>
+<span class="source-line-no">888</span><span id="line-888"></span>
+<span class="source-line-no">889</span><span id="line-889">   /**</span>
+<span class="source-line-no">890</span><span id="line-890">    * Returns a stream of the headers in this list with the specified name.</span>
+<span class="source-line-no">891</span><span id="line-891">    *</span>
+<span class="source-line-no">892</span><span id="line-892">    * &lt;p&gt;</span>
+<span class="source-line-no">893</span><span id="line-893">    * This does not involve a copy of the underlying array of &lt;c&gt;Header&lt;/c&gt; objects so should perform well.</span>
 <span class="source-line-no">894</span><span id="line-894">    *</span>
-<span class="source-line-no">895</span><span id="line-895">    * @param filter A predicate to apply to each element to determine if it should be included.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">896</span><span id="line-896">    * @param action An action to perform on each element.</span>
-<span class="source-line-no">897</span><span id="line-897">    * @return This object.</span>
-<span class="source-line-no">898</span><span id="line-898">    */</span>
-<span class="source-line-no">899</span><span id="line-899">   public HeaderList forEach(Predicate&lt;Header&gt; filter, Consumer&lt;Header&gt; action) {</span>
-<span class="source-line-no">900</span><span id="line-900">      forEach(x -&gt; consume(filter, action, x));</span>
-<span class="source-line-no">901</span><span id="line-901">      return this;</span>
-<span class="source-line-no">902</span><span id="line-902">   }</span>
-<span class="source-line-no">903</span><span id="line-903"></span>
-<span class="source-line-no">904</span><span id="line-904">   /**</span>
-<span class="source-line-no">905</span><span id="line-905">    * Returns a stream of the headers in this list with the specified name.</span>
-<span class="source-line-no">906</span><span id="line-906">    *</span>
-<span class="source-line-no">907</span><span id="line-907">    * &lt;p&gt;</span>
-<span class="source-line-no">908</span><span id="line-908">    * This does not involve a copy of the underlying array of &lt;c&gt;Header&lt;/c&gt; objects so should perform well.</span>
-<span class="source-line-no">909</span><span id="line-909">    *</span>
-<span class="source-line-no">910</span><span id="line-910">    * @param name The header name.</span>
-<span class="source-line-no">911</span><span id="line-911">    * @return This object.</span>
+<span class="source-line-no">895</span><span id="line-895">    * @param name The header name.</span>
+<span class="source-line-no">896</span><span id="line-896">    * @return This object.</span>
+<span class="source-line-no">897</span><span id="line-897">    */</span>
+<span class="source-line-no">898</span><span id="line-898">   public Stream&lt;Header&gt; stream(String name) {</span>
+<span class="source-line-no">899</span><span id="line-899">      return stream().filter(x-&gt;eq(name, x.getName()));</span>
+<span class="source-line-no">900</span><span id="line-900">   }</span>
+<span class="source-line-no">901</span><span id="line-901"></span>
+<span class="source-line-no">902</span><span id="line-902">   //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">903</span><span id="line-903">   // Other methods</span>
+<span class="source-line-no">904</span><span id="line-904">   //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">905</span><span id="line-905"></span>
+<span class="source-line-no">906</span><span id="line-906">   /**</span>
+<span class="source-line-no">907</span><span id="line-907">    * Creates a new header out of the specified name/value pair.</span>
+<span class="source-line-no">908</span><span id="line-908">    *</span>
+<span class="source-line-no">909</span><span id="line-909">    * @param name The header name.</span>
+<span class="source-line-no">910</span><span id="line-910">    * @param value The header value.</span>
+<span class="source-line-no">911</span><span id="line-911">    * @return A new header.</span>
 <span class="source-line-no">912</span><span id="line-912">    */</span>
-<span class="source-line-no">913</span><span id="line-913">   public Stream&lt;Header&gt; stream(String name) {</span>
-<span class="source-line-no">914</span><span id="line-914">      return stream().filter(x-&gt;eq(name, x.getName()));</span>
-<span class="source-line-no">915</span><span id="line-915">   }</span>
-<span class="source-line-no">916</span><span id="line-916"></span>
-<span class="source-line-no">917</span><span id="line-917">   //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">918</span><span id="line-918">   // Other methods</span>
-<span class="source-line-no">919</span><span id="line-919">   //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">920</span><span id="line-920"></span>
-<span class="source-line-no">921</span><span id="line-921">   /**</span>
-<span class="source-line-no">922</span><span id="line-922">    * Creates a new header out of the specified name/value pair.</span>
-<span class="source-line-no">923</span><span id="line-923">    *</span>
-<span class="source-line-no">924</span><span id="line-924">    * @param name The header name.</span>
-<span class="source-line-no">925</span><span id="line-925">    * @param value The header value.</span>
-<span class="source-line-no">926</span><span id="line-926">    * @return A new header.</span>
-<span class="source-line-no">927</span><span id="line-927">    */</span>
-<span class="source-line-no">928</span><span id="line-928">   private Header createPart(String name, Object value) {</span>
-<span class="source-line-no">929</span><span id="line-929">      boolean isResolving = varResolver != null;</span>
-<span class="source-line-no">930</span><span id="line-930"></span>
-<span class="source-line-no">931</span><span id="line-931">      if (value instanceof Supplier&lt;?&gt;) {</span>
-<span class="source-line-no">932</span><span id="line-932">         Supplier&lt;?&gt; value2 = (Supplier&lt;?&gt;)value;</span>
-<span class="source-line-no">933</span><span id="line-933">         return isResolving ? new BasicHeader(name, resolver(value2)) : new BasicHeader(name, value2);</span>
-<span class="source-line-no">934</span><span id="line-934">      }</span>
-<span class="source-line-no">935</span><span id="line-935">      return isResolving ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);</span>
-<span class="source-line-no">936</span><span id="line-936">   }</span>
-<span class="source-line-no">937</span><span id="line-937"></span>
-<span class="source-line-no">938</span><span id="line-938">   private Supplier&lt;Object&gt; resolver(Object input) {</span>
-<span class="source-line-no">939</span><span id="line-939">      return ()-&gt;varResolver.resolve(Utils.s(unwrap(input)));</span>
+<span class="source-line-no">913</span><span id="line-913">   private Header createPart(String name, Object value) {</span>
+<span class="source-line-no">914</span><span id="line-914">      boolean isResolving = varResolver != null;</span>
+<span class="source-line-no">915</span><span id="line-915"></span>
+<span class="source-line-no">916</span><span id="line-916">      if (value instanceof Supplier&lt;?&gt;) {</span>
+<span class="source-line-no">917</span><span id="line-917">         Supplier&lt;?&gt; value2 = (Supplier&lt;?&gt;)value;</span>
+<span class="source-line-no">918</span><span id="line-918">         return isResolving ? new BasicHeader(name, resolver(value2)) : new BasicHeader(name, value2);</span>
+<span class="source-line-no">919</span><span id="line-919">      }</span>
+<span class="source-line-no">920</span><span id="line-920">      return isResolving ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);</span>
+<span class="source-line-no">921</span><span id="line-921">   }</span>
+<span class="source-line-no">922</span><span id="line-922"></span>
+<span class="source-line-no">923</span><span id="line-923">   private Supplier&lt;Object&gt; resolver(Object input) {</span>
+<span class="source-line-no">924</span><span id="line-924">      return ()-&gt;varResolver.resolve(Utils.s(unwrap(input)));</span>
+<span class="source-line-no">925</span><span id="line-925">   }</span>
+<span class="source-line-no">926</span><span id="line-926"></span>
+<span class="source-line-no">927</span><span id="line-927">   private Object unwrap(Object o) {</span>
+<span class="source-line-no">928</span><span id="line-928">      while (o instanceof Supplier)</span>
+<span class="source-line-no">929</span><span id="line-929">         o = ((Supplier&lt;?&gt;)o).get();</span>
+<span class="source-line-no">930</span><span id="line-930">      return o;</span>
+<span class="source-line-no">931</span><span id="line-931">   }</span>
+<span class="source-line-no">932</span><span id="line-932"></span>
+<span class="source-line-no">933</span><span id="line-933">   private boolean eq(String s1, String s2) {</span>
+<span class="source-line-no">934</span><span id="line-934">      return caseSensitive ? Utils.eq(s1, s2) : Utils.eqic(s1, s2);</span>
+<span class="source-line-no">935</span><span id="line-935">   }</span>
+<span class="source-line-no">936</span><span id="line-936"></span>
+<span class="source-line-no">937</span><span id="line-937">   @Override /* Object */</span>
+<span class="source-line-no">938</span><span id="line-938">   public String toString() {</span>
+<span class="source-line-no">939</span><span id="line-939">      return "[" + Utils.join(this, ", ") + "]";</span>
 <span class="source-line-no">940</span><span id="line-940">   }</span>
-<span class="source-line-no">941</span><span id="line-941"></span>
-<span class="source-line-no">942</span><span id="line-942">   private Object unwrap(Object o) {</span>
-<span class="source-line-no">943</span><span id="line-943">      while (o instanceof Supplier)</span>
-<span class="source-line-no">944</span><span id="line-944">         o = ((Supplier&lt;?&gt;)o).get();</span>
-<span class="source-line-no">945</span><span id="line-945">      return o;</span>
-<span class="source-line-no">946</span><span id="line-946">   }</span>
-<span class="source-line-no">947</span><span id="line-947"></span>
-<span class="source-line-no">948</span><span id="line-948">   private boolean eq(String s1, String s2) {</span>
-<span class="source-line-no">949</span><span id="line-949">      return caseSensitive ? Utils.eq(s1, s2) : Utils.eqic(s1, s2);</span>
-<span class="source-line-no">950</span><span id="line-950">   }</span>
-<span class="source-line-no">951</span><span id="line-951"></span>
-<span class="source-line-no">952</span><span id="line-952">   @Override /* Object */</span>
-<span class="source-line-no">953</span><span id="line-953">   public String toString() {</span>
-<span class="source-line-no">954</span><span id="line-954">      return "[" + Utils.join(this, ", ") + "]";</span>
-<span class="source-line-no">955</span><span id="line-955">   }</span>
-<span class="source-line-no">956</span><span id="line-956"></span>
-<span class="source-line-no">957</span><span id="line-957">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">958</span><span id="line-958"></span>
-<span class="source-line-no">959</span><span id="line-959">   @Override /* GENERATED - org.apache.juneau.collections.ControlledArrayList */</span>
-<span class="source-line-no">960</span><span id="line-960">   public HeaderList setUnmodifiable() {</span>
-<span class="source-line-no">961</span><span id="line-961">      super.setUnmodifiable();</span>
-<span class="source-line-no">962</span><span id="line-962">      return this;</span>
-<span class="source-line-no">963</span><span id="line-963">   }</span>
-<span class="source-line-no">964</span><span id="line-964"></span>
-<span class="source-line-no">965</span><span id="line-965">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">966</span><span id="line-966">}</span>
+<span class="source-line-no">941</span><span id="line-941">   @Override /* Overridden from ControlledArrayList */</span>
+<span class="source-line-no">942</span><span id="line-942">   public HeaderList setUnmodifiable() {</span>
+<span class="source-line-no">943</span><span id="line-943">      super.setUnmodifiable();</span>
+<span class="source-line-no">944</span><span id="line-944">      return this;</span>
+<span class="source-line-no">945</span><span id="line-945">   }</span>
+<span class="source-line-no">946</span><span id="line-946">}</span>
 
 
 

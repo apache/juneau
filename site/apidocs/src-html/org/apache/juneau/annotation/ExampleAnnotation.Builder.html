@@ -141,80 +141,76 @@
 <span class="source-line-no">128</span><span id="line-128">         return this;</span>
 <span class="source-line-no">129</span><span id="line-129">      }</span>
 <span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">      // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">131</span><span id="line-131">   }</span>
 <span class="source-line-no">132</span><span id="line-132"></span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">135</span><span id="line-135">   }</span>
+<span class="source-line-no">133</span><span id="line-133">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">134</span><span id="line-134">   // Implementation</span>
+<span class="source-line-no">135</span><span id="line-135">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">136</span><span id="line-136"></span>
-<span class="source-line-no">137</span><span id="line-137">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">138</span><span id="line-138">   // Implementation</span>
-<span class="source-line-no">139</span><span id="line-139">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">137</span><span id="line-137">   private static class Impl extends TargetedAnnotationTImpl implements Example {</span>
+<span class="source-line-no">138</span><span id="line-138"></span>
+<span class="source-line-no">139</span><span id="line-139">      private final String value;</span>
 <span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   private static class Impl extends TargetedAnnotationTImpl implements Example {</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">      private final String value;</span>
-<span class="source-line-no">144</span><span id="line-144"></span>
-<span class="source-line-no">145</span><span id="line-145">      Impl(Builder b) {</span>
-<span class="source-line-no">146</span><span id="line-146">         super(b);</span>
-<span class="source-line-no">147</span><span id="line-147">         this.value = b.value;</span>
-<span class="source-line-no">148</span><span id="line-148">         postConstruct();</span>
-<span class="source-line-no">149</span><span id="line-149">      }</span>
-<span class="source-line-no">150</span><span id="line-150"></span>
-<span class="source-line-no">151</span><span id="line-151">      @Override /* Example */</span>
-<span class="source-line-no">152</span><span id="line-152">      public String value() {</span>
-<span class="source-line-no">153</span><span id="line-153">         return value;</span>
-<span class="source-line-no">154</span><span id="line-154">      }</span>
-<span class="source-line-no">155</span><span id="line-155">   }</span>
+<span class="source-line-no">141</span><span id="line-141">      Impl(Builder b) {</span>
+<span class="source-line-no">142</span><span id="line-142">         super(b);</span>
+<span class="source-line-no">143</span><span id="line-143">         this.value = b.value;</span>
+<span class="source-line-no">144</span><span id="line-144">         postConstruct();</span>
+<span class="source-line-no">145</span><span id="line-145">      }</span>
+<span class="source-line-no">146</span><span id="line-146"></span>
+<span class="source-line-no">147</span><span id="line-147">      @Override /* Example */</span>
+<span class="source-line-no">148</span><span id="line-148">      public String value() {</span>
+<span class="source-line-no">149</span><span id="line-149">         return value;</span>
+<span class="source-line-no">150</span><span id="line-150">      }</span>
+<span class="source-line-no">151</span><span id="line-151">   }</span>
+<span class="source-line-no">152</span><span id="line-152"></span>
+<span class="source-line-no">153</span><span id="line-153">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">154</span><span id="line-154">   // Appliers</span>
+<span class="source-line-no">155</span><span id="line-155">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">156</span><span id="line-156"></span>
-<span class="source-line-no">157</span><span id="line-157">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">158</span><span id="line-158">   // Appliers</span>
-<span class="source-line-no">159</span><span id="line-159">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">   /**</span>
-<span class="source-line-no">162</span><span id="line-162">    * Applies targeted {@link Example} annotations to a {@link org.apache.juneau.BeanContext.Builder}.</span>
-<span class="source-line-no">163</span><span id="line-163">    */</span>
-<span class="source-line-no">164</span><span id="line-164">   public static class Applier extends AnnotationApplier&lt;Example,BeanContext.Builder&gt; {</span>
-<span class="source-line-no">165</span><span id="line-165"></span>
-<span class="source-line-no">166</span><span id="line-166">      /**</span>
-<span class="source-line-no">167</span><span id="line-167">       * Constructor.</span>
-<span class="source-line-no">168</span><span id="line-168">       *</span>
-<span class="source-line-no">169</span><span id="line-169">       * @param vr The resolver for resolving values in annotations.</span>
-<span class="source-line-no">170</span><span id="line-170">       */</span>
-<span class="source-line-no">171</span><span id="line-171">      public Applier(VarResolverSession vr) {</span>
-<span class="source-line-no">172</span><span id="line-172">         super(Example.class, BeanContext.Builder.class, vr);</span>
-<span class="source-line-no">173</span><span id="line-173">      }</span>
-<span class="source-line-no">174</span><span id="line-174"></span>
-<span class="source-line-no">175</span><span id="line-175">      @Override</span>
-<span class="source-line-no">176</span><span id="line-176">      public void apply(AnnotationInfo&lt;Example&gt; ai, BeanContext.Builder b) {</span>
-<span class="source-line-no">177</span><span id="line-177">         Example a = ai.inner();</span>
-<span class="source-line-no">178</span><span id="line-178">         if (isEmptyArray(a.on(), a.onClass()))</span>
-<span class="source-line-no">179</span><span id="line-179">            return;</span>
-<span class="source-line-no">180</span><span id="line-180">         b.annotations(copy(a, vr()));</span>
-<span class="source-line-no">181</span><span id="line-181">      }</span>
-<span class="source-line-no">182</span><span id="line-182">   }</span>
+<span class="source-line-no">157</span><span id="line-157">   /**</span>
+<span class="source-line-no">158</span><span id="line-158">    * Applies targeted {@link Example} annotations to a {@link org.apache.juneau.BeanContext.Builder}.</span>
+<span class="source-line-no">159</span><span id="line-159">    */</span>
+<span class="source-line-no">160</span><span id="line-160">   public static class Applier extends AnnotationApplier&lt;Example,BeanContext.Builder&gt; {</span>
+<span class="source-line-no">161</span><span id="line-161"></span>
+<span class="source-line-no">162</span><span id="line-162">      /**</span>
+<span class="source-line-no">163</span><span id="line-163">       * Constructor.</span>
+<span class="source-line-no">164</span><span id="line-164">       *</span>
+<span class="source-line-no">165</span><span id="line-165">       * @param vr The resolver for resolving values in annotations.</span>
+<span class="source-line-no">166</span><span id="line-166">       */</span>
+<span class="source-line-no">167</span><span id="line-167">      public Applier(VarResolverSession vr) {</span>
+<span class="source-line-no">168</span><span id="line-168">         super(Example.class, BeanContext.Builder.class, vr);</span>
+<span class="source-line-no">169</span><span id="line-169">      }</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
+<span class="source-line-no">171</span><span id="line-171">      @Override</span>
+<span class="source-line-no">172</span><span id="line-172">      public void apply(AnnotationInfo&lt;Example&gt; ai, BeanContext.Builder b) {</span>
+<span class="source-line-no">173</span><span id="line-173">         Example a = ai.inner();</span>
+<span class="source-line-no">174</span><span id="line-174">         if (isEmptyArray(a.on(), a.onClass()))</span>
+<span class="source-line-no">175</span><span id="line-175">            return;</span>
+<span class="source-line-no">176</span><span id="line-176">         b.annotations(copy(a, vr()));</span>
+<span class="source-line-no">177</span><span id="line-177">      }</span>
+<span class="source-line-no">178</span><span id="line-178">   }</span>
+<span class="source-line-no">179</span><span id="line-179"></span>
+<span class="source-line-no">180</span><span id="line-180">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">181</span><span id="line-181">   // Other</span>
+<span class="source-line-no">182</span><span id="line-182">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">183</span><span id="line-183"></span>
-<span class="source-line-no">184</span><span id="line-184">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">185</span><span id="line-185">   // Other</span>
-<span class="source-line-no">186</span><span id="line-186">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">187</span><span id="line-187"></span>
-<span class="source-line-no">188</span><span id="line-188">   /**</span>
-<span class="source-line-no">189</span><span id="line-189">    * A collection of {@link Example @Example annotations}.</span>
-<span class="source-line-no">190</span><span id="line-190">    */</span>
-<span class="source-line-no">191</span><span id="line-191">   @Documented</span>
-<span class="source-line-no">192</span><span id="line-192">   @Target({METHOD,TYPE})</span>
-<span class="source-line-no">193</span><span id="line-193">   @Retention(RUNTIME)</span>
-<span class="source-line-no">194</span><span id="line-194">   @Inherited</span>
-<span class="source-line-no">195</span><span id="line-195">   public static @interface Array {</span>
-<span class="source-line-no">196</span><span id="line-196"></span>
-<span class="source-line-no">197</span><span id="line-197">      /**</span>
-<span class="source-line-no">198</span><span id="line-198">       * The child annotations.</span>
-<span class="source-line-no">199</span><span id="line-199">       *</span>
-<span class="source-line-no">200</span><span id="line-200">       * @return The annotation value.</span>
-<span class="source-line-no">201</span><span id="line-201">       */</span>
-<span class="source-line-no">202</span><span id="line-202">      Example[] value();</span>
-<span class="source-line-no">203</span><span id="line-203">   }</span>
-<span class="source-line-no">204</span><span id="line-204">}</span>
+<span class="source-line-no">184</span><span id="line-184">   /**</span>
+<span class="source-line-no">185</span><span id="line-185">    * A collection of {@link Example @Example annotations}.</span>
+<span class="source-line-no">186</span><span id="line-186">    */</span>
+<span class="source-line-no">187</span><span id="line-187">   @Documented</span>
+<span class="source-line-no">188</span><span id="line-188">   @Target({METHOD,TYPE})</span>
+<span class="source-line-no">189</span><span id="line-189">   @Retention(RUNTIME)</span>
+<span class="source-line-no">190</span><span id="line-190">   @Inherited</span>
+<span class="source-line-no">191</span><span id="line-191">   public static @interface Array {</span>
+<span class="source-line-no">192</span><span id="line-192"></span>
+<span class="source-line-no">193</span><span id="line-193">      /**</span>
+<span class="source-line-no">194</span><span id="line-194">       * The child annotations.</span>
+<span class="source-line-no">195</span><span id="line-195">       *</span>
+<span class="source-line-no">196</span><span id="line-196">       * @return The annotation value.</span>
+<span class="source-line-no">197</span><span id="line-197">       */</span>
+<span class="source-line-no">198</span><span id="line-198">      Example[] value();</span>
+<span class="source-line-no">199</span><span id="line-199">   }</span>
+<span class="source-line-no">200</span><span id="line-200">}</span>
 
 
 

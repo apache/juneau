@@ -90,45 +90,41 @@
 <span class="source-line-no">077</span><span id="line-77">         return new Impl(this);</span>
 <span class="source-line-no">078</span><span id="line-78">      }</span>
 <span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">      // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">080</span><span id="line-80">   }</span>
 <span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">084</span><span id="line-84">   }</span>
+<span class="source-line-no">082</span><span id="line-82">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">083</span><span id="line-83">   // Implementation</span>
+<span class="source-line-no">084</span><span id="line-84">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">087</span><span id="line-87">   // Implementation</span>
-<span class="source-line-no">088</span><span id="line-88">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">   private static class Impl extends TargetedAnnotationImpl implements RestPostCall {</span>
-<span class="source-line-no">091</span><span id="line-91"></span>
-<span class="source-line-no">092</span><span id="line-92">      Impl(Builder b) {</span>
-<span class="source-line-no">093</span><span id="line-93">         super(b);</span>
-<span class="source-line-no">094</span><span id="line-94">         postConstruct();</span>
-<span class="source-line-no">095</span><span id="line-95">      }</span>
-<span class="source-line-no">096</span><span id="line-96">   }</span>
+<span class="source-line-no">086</span><span id="line-86">   private static class Impl extends TargetedAnnotationImpl implements RestPostCall {</span>
+<span class="source-line-no">087</span><span id="line-87"></span>
+<span class="source-line-no">088</span><span id="line-88">      Impl(Builder b) {</span>
+<span class="source-line-no">089</span><span id="line-89">         super(b);</span>
+<span class="source-line-no">090</span><span id="line-90">         postConstruct();</span>
+<span class="source-line-no">091</span><span id="line-91">      }</span>
+<span class="source-line-no">092</span><span id="line-92">   }</span>
+<span class="source-line-no">093</span><span id="line-93"></span>
+<span class="source-line-no">094</span><span id="line-94">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">095</span><span id="line-95">   // Other</span>
+<span class="source-line-no">096</span><span id="line-96">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">099</span><span id="line-99">   // Other</span>
-<span class="source-line-no">100</span><span id="line-100">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">   /**</span>
-<span class="source-line-no">103</span><span id="line-103">    * A collection of {@link RestPostCall @RestPostCall annotations}.</span>
-<span class="source-line-no">104</span><span id="line-104">    */</span>
-<span class="source-line-no">105</span><span id="line-105">   @Documented</span>
-<span class="source-line-no">106</span><span id="line-106">   @Target({METHOD,TYPE})</span>
-<span class="source-line-no">107</span><span id="line-107">   @Retention(RUNTIME)</span>
-<span class="source-line-no">108</span><span id="line-108">   @Inherited</span>
-<span class="source-line-no">109</span><span id="line-109">   public static @interface Array {</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">      /**</span>
-<span class="source-line-no">112</span><span id="line-112">       * The child annotations.</span>
-<span class="source-line-no">113</span><span id="line-113">       *</span>
-<span class="source-line-no">114</span><span id="line-114">       * @return The annotation value.</span>
-<span class="source-line-no">115</span><span id="line-115">       */</span>
-<span class="source-line-no">116</span><span id="line-116">      RestPostCall[] value();</span>
-<span class="source-line-no">117</span><span id="line-117">   }</span>
-<span class="source-line-no">118</span><span id="line-118">}</span>
+<span class="source-line-no">098</span><span id="line-98">   /**</span>
+<span class="source-line-no">099</span><span id="line-99">    * A collection of {@link RestPostCall @RestPostCall annotations}.</span>
+<span class="source-line-no">100</span><span id="line-100">    */</span>
+<span class="source-line-no">101</span><span id="line-101">   @Documented</span>
+<span class="source-line-no">102</span><span id="line-102">   @Target({METHOD,TYPE})</span>
+<span class="source-line-no">103</span><span id="line-103">   @Retention(RUNTIME)</span>
+<span class="source-line-no">104</span><span id="line-104">   @Inherited</span>
+<span class="source-line-no">105</span><span id="line-105">   public static @interface Array {</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">      /**</span>
+<span class="source-line-no">108</span><span id="line-108">       * The child annotations.</span>
+<span class="source-line-no">109</span><span id="line-109">       *</span>
+<span class="source-line-no">110</span><span id="line-110">       * @return The annotation value.</span>
+<span class="source-line-no">111</span><span id="line-111">       */</span>
+<span class="source-line-no">112</span><span id="line-112">      RestPostCall[] value();</span>
+<span class="source-line-no">113</span><span id="line-113">   }</span>
+<span class="source-line-no">114</span><span id="line-114">}</span>
 
 
 

@@ -41,48 +41,42 @@
 <span class="source-line-no">028</span><span id="line-28"> *</span>
 <span class="source-line-no">029</span><span id="line-29"> * @param &lt;B&gt; The actual builder class.</span>
 <span class="source-line-no">030</span><span id="line-30"> */</span>
-<span class="source-line-no">031</span><span id="line-31">@FluentSetters</span>
-<span class="source-line-no">032</span><span id="line-32">public class AnnotationBuilder&lt;B extends AnnotationBuilder&lt;B&gt;&gt; {</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">   Class&lt;? extends Annotation&gt; annotationType;</span>
-<span class="source-line-no">035</span><span id="line-35">   String[] description = {};</span>
-<span class="source-line-no">036</span><span id="line-36"></span>
-<span class="source-line-no">037</span><span id="line-37">   /**</span>
-<span class="source-line-no">038</span><span id="line-38">    * Constructor.</span>
-<span class="source-line-no">039</span><span id="line-39">    *</span>
-<span class="source-line-no">040</span><span id="line-40">    * @param annotationType The annotation type of the annotation implementation class.</span>
-<span class="source-line-no">041</span><span id="line-41">    */</span>
-<span class="source-line-no">042</span><span id="line-42">   public AnnotationBuilder(Class&lt;? extends Annotation&gt; annotationType) {</span>
-<span class="source-line-no">043</span><span id="line-43">      this.annotationType = annotationType;</span>
-<span class="source-line-no">044</span><span id="line-44">   }</span>
-<span class="source-line-no">045</span><span id="line-45"></span>
-<span class="source-line-no">046</span><span id="line-46">   /**</span>
-<span class="source-line-no">047</span><span id="line-47">    * Returns this instance typed as {@code B}.</span>
-<span class="source-line-no">048</span><span id="line-48">    *</span>
-<span class="source-line-no">049</span><span id="line-49">    * @return this instance typed as {@code B}.</span>
-<span class="source-line-no">050</span><span id="line-50">    * @since 9.2.0</span>
-<span class="source-line-no">051</span><span id="line-51">    */</span>
-<span class="source-line-no">052</span><span id="line-52">    @SuppressWarnings("unchecked")</span>
-<span class="source-line-no">053</span><span id="line-53">    protected B asThis() {</span>
-<span class="source-line-no">054</span><span id="line-54">        return (B) this;</span>
-<span class="source-line-no">055</span><span id="line-55">    }</span>
-<span class="source-line-no">056</span><span id="line-56"></span>
-<span class="source-line-no">057</span><span id="line-57">    // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">   /**</span>
-<span class="source-line-no">060</span><span id="line-60">     * Sets the {@link AnnotationImpl#description()} property on the target annotation.</span>
-<span class="source-line-no">061</span><span id="line-61">     *</span>
-<span class="source-line-no">062</span><span id="line-62">     * @param value The new value for this property.</span>
-<span class="source-line-no">063</span><span id="line-63">     * @return This object.</span>
-<span class="source-line-no">064</span><span id="line-64">     * @since 9.2.0</span>
-<span class="source-line-no">065</span><span id="line-65">     */</span>
-<span class="source-line-no">066</span><span id="line-66">    public B description(final String...value) {</span>
-<span class="source-line-no">067</span><span id="line-67">        this.description = value;</span>
-<span class="source-line-no">068</span><span id="line-68">        return asThis();</span>
-<span class="source-line-no">069</span><span id="line-69">    }</span>
-<span class="source-line-no">070</span><span id="line-70"></span>
-<span class="source-line-no">071</span><span id="line-71">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">072</span><span id="line-72">}</span>
+<span class="source-line-no">031</span><span id="line-31">public class AnnotationBuilder&lt;B extends AnnotationBuilder&lt;B&gt;&gt; {</span>
+<span class="source-line-no">032</span><span id="line-32"></span>
+<span class="source-line-no">033</span><span id="line-33">   Class&lt;? extends Annotation&gt; annotationType;</span>
+<span class="source-line-no">034</span><span id="line-34">   String[] description = {};</span>
+<span class="source-line-no">035</span><span id="line-35"></span>
+<span class="source-line-no">036</span><span id="line-36">   /**</span>
+<span class="source-line-no">037</span><span id="line-37">    * Constructor.</span>
+<span class="source-line-no">038</span><span id="line-38">    *</span>
+<span class="source-line-no">039</span><span id="line-39">    * @param annotationType The annotation type of the annotation implementation class.</span>
+<span class="source-line-no">040</span><span id="line-40">    */</span>
+<span class="source-line-no">041</span><span id="line-41">   public AnnotationBuilder(Class&lt;? extends Annotation&gt; annotationType) {</span>
+<span class="source-line-no">042</span><span id="line-42">      this.annotationType = annotationType;</span>
+<span class="source-line-no">043</span><span id="line-43">   }</span>
+<span class="source-line-no">044</span><span id="line-44"></span>
+<span class="source-line-no">045</span><span id="line-45">   /**</span>
+<span class="source-line-no">046</span><span id="line-46">    * Returns this instance typed as {@code B}.</span>
+<span class="source-line-no">047</span><span id="line-47">    *</span>
+<span class="source-line-no">048</span><span id="line-48">    * @return this instance typed as {@code B}.</span>
+<span class="source-line-no">049</span><span id="line-49">    * @since 9.2.0</span>
+<span class="source-line-no">050</span><span id="line-50">    */</span>
+<span class="source-line-no">051</span><span id="line-51">    @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">052</span><span id="line-52">    protected B asThis() {</span>
+<span class="source-line-no">053</span><span id="line-53">        return (B) this;</span>
+<span class="source-line-no">054</span><span id="line-54">    }</span>
+<span class="source-line-no">055</span><span id="line-55">   /**</span>
+<span class="source-line-no">056</span><span id="line-56">     * Sets the {@link AnnotationImpl#description()} property on the target annotation.</span>
+<span class="source-line-no">057</span><span id="line-57">     *</span>
+<span class="source-line-no">058</span><span id="line-58">     * @param value The new value for this property.</span>
+<span class="source-line-no">059</span><span id="line-59">     * @return This object.</span>
+<span class="source-line-no">060</span><span id="line-60">     * @since 9.2.0</span>
+<span class="source-line-no">061</span><span id="line-61">     */</span>
+<span class="source-line-no">062</span><span id="line-62">    public B description(final String...value) {</span>
+<span class="source-line-no">063</span><span id="line-63">        this.description = value;</span>
+<span class="source-line-no">064</span><span id="line-64">        return asThis();</span>
+<span class="source-line-no">065</span><span id="line-65">    }</span>
+<span class="source-line-no">066</span><span id="line-66">}</span>
 
 
 

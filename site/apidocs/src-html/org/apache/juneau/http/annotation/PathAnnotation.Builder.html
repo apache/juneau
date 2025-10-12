@@ -224,113 +224,109 @@
 <span class="source-line-no">211</span><span id="line-211">         return this;</span>
 <span class="source-line-no">212</span><span id="line-212">      }</span>
 <span class="source-line-no">213</span><span id="line-213"></span>
-<span class="source-line-no">214</span><span id="line-214">      // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">214</span><span id="line-214">   }</span>
 <span class="source-line-no">215</span><span id="line-215"></span>
-<span class="source-line-no">216</span><span id="line-216"></span>
-<span class="source-line-no">217</span><span id="line-217">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">218</span><span id="line-218">   }</span>
+<span class="source-line-no">216</span><span id="line-216">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">217</span><span id="line-217">   // Implementation</span>
+<span class="source-line-no">218</span><span id="line-218">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">219</span><span id="line-219"></span>
-<span class="source-line-no">220</span><span id="line-220">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">221</span><span id="line-221">   // Implementation</span>
-<span class="source-line-no">222</span><span id="line-222">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">223</span><span id="line-223"></span>
-<span class="source-line-no">224</span><span id="line-224">   private static class Impl extends TargetedAnnotationTImpl implements Path {</span>
-<span class="source-line-no">225</span><span id="line-225"></span>
-<span class="source-line-no">226</span><span id="line-226">      private final Class&lt;? extends HttpPartParser&gt; parser;</span>
-<span class="source-line-no">227</span><span id="line-227">      private final Class&lt;? extends HttpPartSerializer&gt; serializer;</span>
-<span class="source-line-no">228</span><span id="line-228">      private final String  name, value, def;</span>
-<span class="source-line-no">229</span><span id="line-229">      private final Schema schema;</span>
-<span class="source-line-no">230</span><span id="line-230"></span>
-<span class="source-line-no">231</span><span id="line-231">      Impl(Builder b) {</span>
-<span class="source-line-no">232</span><span id="line-232">         super(b);</span>
-<span class="source-line-no">233</span><span id="line-233">         this.def = b.def;</span>
-<span class="source-line-no">234</span><span id="line-234">         this.name = b.name;</span>
-<span class="source-line-no">235</span><span id="line-235">         this.parser = b.parser;</span>
-<span class="source-line-no">236</span><span id="line-236">         this.schema = b.schema;</span>
-<span class="source-line-no">237</span><span id="line-237">         this.serializer = b.serializer;</span>
-<span class="source-line-no">238</span><span id="line-238">         this.value = b.value;</span>
-<span class="source-line-no">239</span><span id="line-239">         postConstruct();</span>
-<span class="source-line-no">240</span><span id="line-240">      }</span>
-<span class="source-line-no">241</span><span id="line-241"></span>
-<span class="source-line-no">242</span><span id="line-242">      @Override /* Path */</span>
-<span class="source-line-no">243</span><span id="line-243">      public String name() {</span>
-<span class="source-line-no">244</span><span id="line-244">         return name;</span>
-<span class="source-line-no">245</span><span id="line-245">      }</span>
-<span class="source-line-no">246</span><span id="line-246"></span>
-<span class="source-line-no">247</span><span id="line-247">      @Override /* Path */</span>
-<span class="source-line-no">248</span><span id="line-248">      public String def() {</span>
-<span class="source-line-no">249</span><span id="line-249">         return def;</span>
-<span class="source-line-no">250</span><span id="line-250">      }</span>
-<span class="source-line-no">251</span><span id="line-251"></span>
-<span class="source-line-no">252</span><span id="line-252">      @Override /* Path */</span>
-<span class="source-line-no">253</span><span id="line-253">      public Class&lt;? extends HttpPartParser&gt; parser() {</span>
-<span class="source-line-no">254</span><span id="line-254">         return parser;</span>
-<span class="source-line-no">255</span><span id="line-255">      }</span>
-<span class="source-line-no">256</span><span id="line-256"></span>
-<span class="source-line-no">257</span><span id="line-257">      @Override /* Path */</span>
-<span class="source-line-no">258</span><span id="line-258">      public Schema schema() {</span>
-<span class="source-line-no">259</span><span id="line-259">         return schema;</span>
-<span class="source-line-no">260</span><span id="line-260">      }</span>
-<span class="source-line-no">261</span><span id="line-261"></span>
-<span class="source-line-no">262</span><span id="line-262">      @Override /* Path */</span>
-<span class="source-line-no">263</span><span id="line-263">      public Class&lt;? extends HttpPartSerializer&gt; serializer() {</span>
-<span class="source-line-no">264</span><span id="line-264">         return serializer;</span>
-<span class="source-line-no">265</span><span id="line-265">      }</span>
-<span class="source-line-no">266</span><span id="line-266"></span>
-<span class="source-line-no">267</span><span id="line-267">      @Override /* Path */</span>
-<span class="source-line-no">268</span><span id="line-268">      public String value() {</span>
-<span class="source-line-no">269</span><span id="line-269">         return value;</span>
-<span class="source-line-no">270</span><span id="line-270">      }</span>
-<span class="source-line-no">271</span><span id="line-271">   }</span>
+<span class="source-line-no">220</span><span id="line-220">   private static class Impl extends TargetedAnnotationTImpl implements Path {</span>
+<span class="source-line-no">221</span><span id="line-221"></span>
+<span class="source-line-no">222</span><span id="line-222">      private final Class&lt;? extends HttpPartParser&gt; parser;</span>
+<span class="source-line-no">223</span><span id="line-223">      private final Class&lt;? extends HttpPartSerializer&gt; serializer;</span>
+<span class="source-line-no">224</span><span id="line-224">      private final String  name, value, def;</span>
+<span class="source-line-no">225</span><span id="line-225">      private final Schema schema;</span>
+<span class="source-line-no">226</span><span id="line-226"></span>
+<span class="source-line-no">227</span><span id="line-227">      Impl(Builder b) {</span>
+<span class="source-line-no">228</span><span id="line-228">         super(b);</span>
+<span class="source-line-no">229</span><span id="line-229">         this.def = b.def;</span>
+<span class="source-line-no">230</span><span id="line-230">         this.name = b.name;</span>
+<span class="source-line-no">231</span><span id="line-231">         this.parser = b.parser;</span>
+<span class="source-line-no">232</span><span id="line-232">         this.schema = b.schema;</span>
+<span class="source-line-no">233</span><span id="line-233">         this.serializer = b.serializer;</span>
+<span class="source-line-no">234</span><span id="line-234">         this.value = b.value;</span>
+<span class="source-line-no">235</span><span id="line-235">         postConstruct();</span>
+<span class="source-line-no">236</span><span id="line-236">      }</span>
+<span class="source-line-no">237</span><span id="line-237"></span>
+<span class="source-line-no">238</span><span id="line-238">      @Override /* Path */</span>
+<span class="source-line-no">239</span><span id="line-239">      public String name() {</span>
+<span class="source-line-no">240</span><span id="line-240">         return name;</span>
+<span class="source-line-no">241</span><span id="line-241">      }</span>
+<span class="source-line-no">242</span><span id="line-242"></span>
+<span class="source-line-no">243</span><span id="line-243">      @Override /* Path */</span>
+<span class="source-line-no">244</span><span id="line-244">      public String def() {</span>
+<span class="source-line-no">245</span><span id="line-245">         return def;</span>
+<span class="source-line-no">246</span><span id="line-246">      }</span>
+<span class="source-line-no">247</span><span id="line-247"></span>
+<span class="source-line-no">248</span><span id="line-248">      @Override /* Path */</span>
+<span class="source-line-no">249</span><span id="line-249">      public Class&lt;? extends HttpPartParser&gt; parser() {</span>
+<span class="source-line-no">250</span><span id="line-250">         return parser;</span>
+<span class="source-line-no">251</span><span id="line-251">      }</span>
+<span class="source-line-no">252</span><span id="line-252"></span>
+<span class="source-line-no">253</span><span id="line-253">      @Override /* Path */</span>
+<span class="source-line-no">254</span><span id="line-254">      public Schema schema() {</span>
+<span class="source-line-no">255</span><span id="line-255">         return schema;</span>
+<span class="source-line-no">256</span><span id="line-256">      }</span>
+<span class="source-line-no">257</span><span id="line-257"></span>
+<span class="source-line-no">258</span><span id="line-258">      @Override /* Path */</span>
+<span class="source-line-no">259</span><span id="line-259">      public Class&lt;? extends HttpPartSerializer&gt; serializer() {</span>
+<span class="source-line-no">260</span><span id="line-260">         return serializer;</span>
+<span class="source-line-no">261</span><span id="line-261">      }</span>
+<span class="source-line-no">262</span><span id="line-262"></span>
+<span class="source-line-no">263</span><span id="line-263">      @Override /* Path */</span>
+<span class="source-line-no">264</span><span id="line-264">      public String value() {</span>
+<span class="source-line-no">265</span><span id="line-265">         return value;</span>
+<span class="source-line-no">266</span><span id="line-266">      }</span>
+<span class="source-line-no">267</span><span id="line-267">   }</span>
+<span class="source-line-no">268</span><span id="line-268"></span>
+<span class="source-line-no">269</span><span id="line-269">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">270</span><span id="line-270">   // Appliers</span>
+<span class="source-line-no">271</span><span id="line-271">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">272</span><span id="line-272"></span>
-<span class="source-line-no">273</span><span id="line-273">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">274</span><span id="line-274">   // Appliers</span>
-<span class="source-line-no">275</span><span id="line-275">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">276</span><span id="line-276"></span>
-<span class="source-line-no">277</span><span id="line-277">   /**</span>
-<span class="source-line-no">278</span><span id="line-278">    * Applies targeted {@link Path} annotations to a {@link org.apache.juneau.BeanContext.Builder}.</span>
-<span class="source-line-no">279</span><span id="line-279">    */</span>
-<span class="source-line-no">280</span><span id="line-280">   public static class Applier extends AnnotationApplier&lt;Path,BeanContext.Builder&gt; {</span>
-<span class="source-line-no">281</span><span id="line-281"></span>
-<span class="source-line-no">282</span><span id="line-282">      /**</span>
-<span class="source-line-no">283</span><span id="line-283">       * Constructor.</span>
-<span class="source-line-no">284</span><span id="line-284">       *</span>
-<span class="source-line-no">285</span><span id="line-285">       * @param vr The resolver for resolving values in annotations.</span>
-<span class="source-line-no">286</span><span id="line-286">       */</span>
-<span class="source-line-no">287</span><span id="line-287">      public Applier(VarResolverSession vr) {</span>
-<span class="source-line-no">288</span><span id="line-288">         super(Path.class, BeanContext.Builder.class, vr);</span>
-<span class="source-line-no">289</span><span id="line-289">      }</span>
-<span class="source-line-no">290</span><span id="line-290"></span>
-<span class="source-line-no">291</span><span id="line-291">      @Override</span>
-<span class="source-line-no">292</span><span id="line-292">      public void apply(AnnotationInfo&lt;Path&gt; ai, BeanContext.Builder b) {</span>
-<span class="source-line-no">293</span><span id="line-293">         Path a = ai.inner();</span>
-<span class="source-line-no">294</span><span id="line-294">         if (isEmptyArray(a.on(), a.onClass()))</span>
-<span class="source-line-no">295</span><span id="line-295">            return;</span>
-<span class="source-line-no">296</span><span id="line-296">         b.annotations(a);</span>
-<span class="source-line-no">297</span><span id="line-297">      }</span>
-<span class="source-line-no">298</span><span id="line-298">   }</span>
+<span class="source-line-no">273</span><span id="line-273">   /**</span>
+<span class="source-line-no">274</span><span id="line-274">    * Applies targeted {@link Path} annotations to a {@link org.apache.juneau.BeanContext.Builder}.</span>
+<span class="source-line-no">275</span><span id="line-275">    */</span>
+<span class="source-line-no">276</span><span id="line-276">   public static class Applier extends AnnotationApplier&lt;Path,BeanContext.Builder&gt; {</span>
+<span class="source-line-no">277</span><span id="line-277"></span>
+<span class="source-line-no">278</span><span id="line-278">      /**</span>
+<span class="source-line-no">279</span><span id="line-279">       * Constructor.</span>
+<span class="source-line-no">280</span><span id="line-280">       *</span>
+<span class="source-line-no">281</span><span id="line-281">       * @param vr The resolver for resolving values in annotations.</span>
+<span class="source-line-no">282</span><span id="line-282">       */</span>
+<span class="source-line-no">283</span><span id="line-283">      public Applier(VarResolverSession vr) {</span>
+<span class="source-line-no">284</span><span id="line-284">         super(Path.class, BeanContext.Builder.class, vr);</span>
+<span class="source-line-no">285</span><span id="line-285">      }</span>
+<span class="source-line-no">286</span><span id="line-286"></span>
+<span class="source-line-no">287</span><span id="line-287">      @Override</span>
+<span class="source-line-no">288</span><span id="line-288">      public void apply(AnnotationInfo&lt;Path&gt; ai, BeanContext.Builder b) {</span>
+<span class="source-line-no">289</span><span id="line-289">         Path a = ai.inner();</span>
+<span class="source-line-no">290</span><span id="line-290">         if (isEmptyArray(a.on(), a.onClass()))</span>
+<span class="source-line-no">291</span><span id="line-291">            return;</span>
+<span class="source-line-no">292</span><span id="line-292">         b.annotations(a);</span>
+<span class="source-line-no">293</span><span id="line-293">      }</span>
+<span class="source-line-no">294</span><span id="line-294">   }</span>
+<span class="source-line-no">295</span><span id="line-295"></span>
+<span class="source-line-no">296</span><span id="line-296">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">297</span><span id="line-297">   // Other</span>
+<span class="source-line-no">298</span><span id="line-298">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">299</span><span id="line-299"></span>
-<span class="source-line-no">300</span><span id="line-300">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">301</span><span id="line-301">   // Other</span>
-<span class="source-line-no">302</span><span id="line-302">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">303</span><span id="line-303"></span>
-<span class="source-line-no">304</span><span id="line-304">   /**</span>
-<span class="source-line-no">305</span><span id="line-305">    * A collection of {@link Path @Path annotations}.</span>
-<span class="source-line-no">306</span><span id="line-306">    */</span>
-<span class="source-line-no">307</span><span id="line-307">   @Documented</span>
-<span class="source-line-no">308</span><span id="line-308">   @Target({METHOD,TYPE})</span>
-<span class="source-line-no">309</span><span id="line-309">   @Retention(RUNTIME)</span>
-<span class="source-line-no">310</span><span id="line-310">   @Inherited</span>
-<span class="source-line-no">311</span><span id="line-311">   public static @interface Array {</span>
-<span class="source-line-no">312</span><span id="line-312"></span>
-<span class="source-line-no">313</span><span id="line-313">      /**</span>
-<span class="source-line-no">314</span><span id="line-314">       * The child annotations.</span>
-<span class="source-line-no">315</span><span id="line-315">       *</span>
-<span class="source-line-no">316</span><span id="line-316">       * @return The annotation value.</span>
-<span class="source-line-no">317</span><span id="line-317">       */</span>
-<span class="source-line-no">318</span><span id="line-318">      Path[] value();</span>
-<span class="source-line-no">319</span><span id="line-319">   }</span>
-<span class="source-line-no">320</span><span id="line-320">}</span>
+<span class="source-line-no">300</span><span id="line-300">   /**</span>
+<span class="source-line-no">301</span><span id="line-301">    * A collection of {@link Path @Path annotations}.</span>
+<span class="source-line-no">302</span><span id="line-302">    */</span>
+<span class="source-line-no">303</span><span id="line-303">   @Documented</span>
+<span class="source-line-no">304</span><span id="line-304">   @Target({METHOD,TYPE})</span>
+<span class="source-line-no">305</span><span id="line-305">   @Retention(RUNTIME)</span>
+<span class="source-line-no">306</span><span id="line-306">   @Inherited</span>
+<span class="source-line-no">307</span><span id="line-307">   public static @interface Array {</span>
+<span class="source-line-no">308</span><span id="line-308"></span>
+<span class="source-line-no">309</span><span id="line-309">      /**</span>
+<span class="source-line-no">310</span><span id="line-310">       * The child annotations.</span>
+<span class="source-line-no">311</span><span id="line-311">       *</span>
+<span class="source-line-no">312</span><span id="line-312">       * @return The annotation value.</span>
+<span class="source-line-no">313</span><span id="line-313">       */</span>
+<span class="source-line-no">314</span><span id="line-314">      Path[] value();</span>
+<span class="source-line-no">315</span><span id="line-315">   }</span>
+<span class="source-line-no">316</span><span id="line-316">}</span>
 
 
 

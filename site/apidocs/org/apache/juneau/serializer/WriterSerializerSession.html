@@ -255,7 +255,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.serializer.WriterSerializerSession.Builder)">
 <h3>WriterSerializerSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-281">WriterSerializerSession</a></span><wbr><span class="parameters">(<a href="WriterSerializerSession.Builder.html" title="class in org.apache.juneau.serializer">WriterSerializerSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-272">WriterSerializerSession</a></span><wbr><span class="parameters">(<a href="WriterSerializerSession.Builder.html" title="class in org.apache.juneau.serializer">WriterSerializerSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -287,7 +287,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isWriterSerializer()">
 <h3>isWriterSerializer</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-289">isWriterSerializer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-280">isWriterSerializer</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SerializerSession.html#isWriterSerializer()">SerializerSession</a></code></span></div>
 <div class="block">Returns <jk>true</jk> if this serializer subclasses from <a href="WriterSerializer.html" title="class in org.apache.juneau.serializer"><code>WriterSerializer</code></a>.</div>
 <dl class="notes">
@@ -301,7 +301,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createPipe(java.lang.Object)">
 <h3>createPipe</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="SerializerPipe.html" title="class in org.apache.juneau.serializer">SerializerPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-294">createPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="SerializerPipe.html" title="class in org.apache.juneau.serializer">SerializerPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-285">createPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SerializerSession.html#createPipe(java.lang.Object)">SerializerSession</a></code></span></div>
 <div class="block">Wraps the specified input object into a <a href="../parser/ParserPipe.html" title="class in org.apache.juneau.parser"><code>ParserPipe</code></a> object so that it can be easily converted into
  a stream or reader.</div>
@@ -330,7 +330,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serialize(java.lang.Object)">
 <h3>serialize</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-306">serialize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-297">serialize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
                        throws <span class="exceptions"><a href="SerializeException.html" title="class in org.apache.juneau.serializer">SerializeException</a></span></div>
 <div class="block">Convenience method for serializing an object to a <c>String</c>.</div>
 <dl class="notes">
@@ -348,7 +348,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializeToString(java.lang.Object)">
 <h3>serializeToString</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-317">serializeToString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-308">serializeToString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
                                throws <span class="exceptions"><a href="SerializeException.html" title="class in org.apache.juneau.serializer">SerializeException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SerializerSession.html#serializeToString(java.lang.Object)">SerializerSession</a></code></span></div>
 <div class="block">Shortcut method for serializing an object to a String.</div>
@@ -369,7 +369,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMaxIndent()">
 <h3>getMaxIndent</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-333">getMaxIndent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-324">getMaxIndent</a></span>()</div>
 <div class="block">Maximum indentation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -386,7 +386,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getQuoteChar()">
 <h3>getQuoteChar</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">char</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-344">getQuoteChar</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">char</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-335">getQuoteChar</a></span>()</div>
 <div class="block">Quote character.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -403,7 +403,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isUseWhitespace()">
 <h3>isUseWhitespace</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-355">isUseWhitespace</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-346">isUseWhitespace</a></span>()</div>
 <div class="block">Use whitespace.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -420,7 +420,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getFileCharset()">
 <h3>getFileCharset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-364">getFileCharset</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-355">getFileCharset</a></span>()</div>
 <div class="block">Returns the file charset defined on this session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -431,7 +431,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStreamCharset()">
 <h3>getStreamCharset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-373">getStreamCharset</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-364">getStreamCharset</a></span>()</div>
 <div class="block">Returns the stream charset defined on this session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -442,7 +442,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-381">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/serializer/WriterSerializerSession.html#line-372">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../ContextSession.html#properties()">ContextSession</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

@@ -197,244 +197,239 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Same as <a href="../RestRequest.html#complete()"><code>RestRequest.complete()</code></a> but allows you to run the call asynchronously.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestResponse.</span><code><a href="../RestResponse.html#consume()" class="member-name-link">consume</a>()</code></div>
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#contentString(java.lang.Object)" class="member-name-link">contentString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Consumes the response body.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#contentString(java.lang.Object)" class="member-name-link">contentString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
-<div class="col-last even-row-color">
 <div class="block">Sets the body of this request as straight text bypassing the serializer.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#contentType(java.lang.String)" class="member-name-link">contentType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#contentType(java.lang.String)" class="member-name-link">contentType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the value for the <c>Content-Type</c> request header.</div>
 </div>
-<div class="col-first even-row-color"><code>protected <a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#createRequest(java.net.URI,java.lang.String,boolean)" class="member-name-link">createRequest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri,
+<div class="col-first odd-row-color"><code>protected <a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#createRequest(java.net.URI,java.lang.String,boolean)" class="member-name-link">createRequest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  boolean&nbsp;hasBody)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Creates a <a href="../RestRequest.html" title="class in org.apache.juneau.rest.client"><code>RestRequest</code></a> object from the specified <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpRequest.html" title="class or interface in org.apache.http" class="external-link"><code>HttpRequest</code></a> object.</div>
 </div>
-<div class="col-first odd-row-color"><code>protected <a href="../RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#createResponse(org.apache.juneau.rest.client.RestRequest,org.apache.http.HttpResponse,org.apache.juneau.parser.Parser)" class="member-name-link">createResponse</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;request,
+<div class="col-first even-row-color"><code>protected <a href="../RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#createResponse(org.apache.juneau.rest.client.RestRequest,org.apache.http.HttpResponse,org.apache.juneau.parser.Parser)" class="member-name-link">createResponse</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;request,
  <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;httpResponse,
  <a href="../../../parser/Parser.html" title="class in org.apache.juneau.parser">Parser</a>&nbsp;parser)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Creates a <a href="../RestResponse.html" title="class in org.apache.juneau.rest.client"><code>RestResponse</code></a> object from the specified <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link"><code>HttpResponse</code></a> object.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#debug()" class="member-name-link">debug</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#debug()" class="member-name-link">debug</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets <c>Debug: value</c> header on this request.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#delete(java.lang.Object)" class="member-name-link">delete</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#delete(java.lang.Object)" class="member-name-link">delete</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Perform a <c>DELETE</c> request against the specified URI.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#formDataPairs(java.lang.String...)" class="member-name-link">formDataPairs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#formDataPairs(java.lang.String...)" class="member-name-link">formDataPairs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Adds form-data parameters to the request body using free-form key/value pairs.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#formPost(java.lang.Object)" class="member-name-link">formPost</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#formPost(java.lang.Object)" class="member-name-link">formPost</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Same as <a href="../RestClient.html#formPost(java.lang.Object,java.lang.Object)"><code>RestClient.formPost(Object, Object)</code></a> but doesn't specify the input yet.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#formPost(java.lang.Object,java.lang.Object)" class="member-name-link">formPost</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Perform a <c>POST</c> request with a content type of <c>application/x-www-form-urlencoded</c>
- against the specified URI.</div>
-</div>
 <div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#formPostPairs(java.lang.Object,java.lang.String...)" class="member-name-link">formPostPairs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;parameters)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#formPost(java.lang.Object,java.lang.Object)" class="member-name-link">formPost</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Perform a <c>POST</c> request with a content type of <c>application/x-www-form-urlencoded</c>
  against the specified URI.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#get()" class="member-name-link">get</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#formPostPairs(java.lang.Object,java.lang.String...)" class="member-name-link">formPostPairs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;parameters)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Perform a <c>POST</c> request with a content type of <c>application/x-www-form-urlencoded</c>
+ against the specified URI.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#get()" class="member-name-link">get</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Perform a <c>GET</c> request against the root URI.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#get(java.lang.Object)" class="member-name-link">get</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#get(java.lang.Object)" class="member-name-link">get</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Perform a <c>GET</c> request against the specified URI.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestResponse.</span><code><a href="../RestResponse.html#getCharacterEncoding()" class="member-name-link">getCharacterEncoding</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestResponse.</span><code><a href="../RestResponse.html#getCharacterEncoding()" class="member-name-link">getCharacterEncoding</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Shortcut for retrieving the response charset from the <l>Content-Type</l> header.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../http/header/ContentType.html" title="class in org.apache.juneau.http.header">ContentType</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestResponse.</span><code><a href="../RestResponse.html#getContentType()" class="member-name-link">getContentType</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../http/header/ContentType.html" title="class in org.apache.juneau.http.header">ContentType</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestResponse.</span><code><a href="../RestResponse.html#getContentType()" class="member-name-link">getContentType</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Shortcut for retrieving the response content type from the <l>Content-Type</l> header.</div>
 </div>
-<div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#getResponse(java.lang.Class)" class="member-name-link">getResponse</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#getResponse(java.lang.Class)" class="member-name-link">getResponse</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">A shortcut for calling <c>run().getContent().as(<js>type</js>)</c>.</div>
 </div>
-<div class="col-first odd-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#getResponse(java.lang.reflect.Type,java.lang.reflect.Type...)" class="member-name-link">getResponse</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
+<div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#getResponse(java.lang.reflect.Type,java.lang.reflect.Type...)" class="member-name-link">getResponse</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">A shortcut for calling <c>run().getContent().as(<js>type</js>,<js>args</js>)</c>.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#getResponseAsString()" class="member-name-link">getResponseAsString</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#getResponseAsString()" class="member-name-link">getResponseAsString</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">A shortcut for calling <c>run().getContent().asString()</c>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#head(java.lang.Object)" class="member-name-link">head</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#head(java.lang.Object)" class="member-name-link">head</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Perform a <c>HEAD</c> request against the specified URI.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#interceptors(org.apache.juneau.rest.client.RestCallInterceptor...)" class="member-name-link">interceptors</a><wbr>(<a href="../RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a>...&nbsp;interceptors)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#interceptors(org.apache.juneau.rest.client.RestCallInterceptor...)" class="member-name-link">interceptors</a><wbr>(<a href="../RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a>...&nbsp;interceptors)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Add one or more interceptors for this call only.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#mediaType(java.lang.String)" class="member-name-link">mediaType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#mediaType(java.lang.String)" class="member-name-link">mediaType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Shortcut for setting the <c>Accept</c> and <c>Content-Type</c> headers on a request.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#noTrace()" class="member-name-link">noTrace</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#noTrace()" class="member-name-link">noTrace</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">When called, <c>No-Trace: true</c> is added to requests.</div>
 </div>
-<div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#onCallClose(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)" class="member-name-link">onCallClose</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+<div class="col-first even-row-color"><code>protected void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#onCallClose(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)" class="member-name-link">onCallClose</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Interceptor method called immediately after the RestRequest object is created and all headers/query/form-data has been set on the request from the client.</div>
 </div>
-<div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#onCallConnect(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)" class="member-name-link">onCallConnect</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+<div class="col-first odd-row-color"><code>protected void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#onCallConnect(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)" class="member-name-link">onCallConnect</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Interceptor method called immediately after an HTTP response has been received.</div>
 </div>
-<div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#onCallInit(org.apache.juneau.rest.client.RestRequest)" class="member-name-link">onCallInit</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>protected void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#onCallInit(org.apache.juneau.rest.client.RestRequest)" class="member-name-link">onCallInit</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Interceptor method called immediately after the RestRequest object is created and all headers/query/form-data has been copied from the client.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#options(java.lang.Object)" class="member-name-link">options</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#options(java.lang.Object)" class="member-name-link">options</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Perform an <c>OPTIONS</c> request against the specified URI.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#patch(java.lang.Object)" class="member-name-link">patch</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#patch(java.lang.Object)" class="member-name-link">patch</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Same as <a href="../RestClient.html#patch(java.lang.Object,java.lang.Object)"><code>RestClient.patch(Object, Object)</code></a> but don't specify the input yet.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#patch(java.lang.Object,java.lang.Object)" class="member-name-link">patch</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#patch(java.lang.Object,java.lang.Object)" class="member-name-link">patch</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Perform a <c>PATCH</c> request against the specified URI.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#patch(java.lang.Object,java.lang.String,org.apache.juneau.http.header.ContentType)" class="member-name-link">patch</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#patch(java.lang.Object,java.lang.String,org.apache.juneau.http.header.ContentType)" class="member-name-link">patch</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;body,
  <a href="../../../http/header/ContentType.html" title="class in org.apache.juneau.http.header">ContentType</a>&nbsp;contentType)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Perform a <c>PATCH</c> request against the specified URI as a plain text body bypassing the serializer.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#post(java.lang.Object)" class="member-name-link">post</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#post(java.lang.Object)" class="member-name-link">post</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Same as <a href="../RestClient.html#post(java.lang.Object,java.lang.Object)"><code>RestClient.post(Object, Object)</code></a> but don't specify the input yet.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#post(java.lang.Object,java.lang.Object)" class="member-name-link">post</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#post(java.lang.Object,java.lang.Object)" class="member-name-link">post</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Perform a <c>POST</c> request against the specified URI.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#post(java.lang.Object,java.lang.String,org.apache.juneau.http.header.ContentType)" class="member-name-link">post</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#post(java.lang.Object,java.lang.String,org.apache.juneau.http.header.ContentType)" class="member-name-link">post</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;body,
  <a href="../../../http/header/ContentType.html" title="class in org.apache.juneau.http.header">ContentType</a>&nbsp;contentType)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Perform a <c>POST</c> request against the specified URI as a plain text body bypassing the serializer.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#put(java.lang.Object)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#put(java.lang.Object)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Same as <a href="../RestClient.html#put(java.lang.Object,java.lang.Object)"><code>RestClient.put(Object, Object)</code></a> but don't specify the input yet.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#put(java.lang.Object,java.lang.Object)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#put(java.lang.Object,java.lang.Object)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Perform a <c>PUT</c> request against the specified URI.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#put(java.lang.Object,java.lang.String,org.apache.juneau.http.header.ContentType)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#put(java.lang.Object,java.lang.String,org.apache.juneau.http.header.ContentType)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;body,
  <a href="../../../http/header/ContentType.html" title="class in org.apache.juneau.http.header">ContentType</a>&nbsp;contentType)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Perform a <c>PUT</c> request against the specified URI using a plain text body bypassing the serializer.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#queryDataPairs(java.lang.String...)" class="member-name-link">queryDataPairs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#queryDataPairs(java.lang.String...)" class="member-name-link">queryDataPairs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Adds query parameters to the URI query using free-form key/value pairs..</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#request(java.lang.String,java.lang.Object)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#request(java.lang.String,java.lang.Object)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Perform a generic REST call.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#request(java.lang.String,java.lang.Object,boolean)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
+ boolean&nbsp;hasBody)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Perform a generic REST call.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#request(java.lang.String,java.lang.Object,boolean)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
- boolean&nbsp;hasBody)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Perform a generic REST call.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#request(java.lang.String,java.lang.Object,java.lang.Object)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#request(java.lang.String,java.lang.Object,java.lang.Object)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Perform a generic REST call.</div>
 </div>
-<div class="col-first even-row-color"><code>protected <a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#request(org.apache.juneau.rest.client.RestOperation)" class="member-name-link">request</a><wbr>(<a href="../RestOperation.html" title="class in org.apache.juneau.rest.client">RestOperation</a>&nbsp;op)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>protected <a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#request(org.apache.juneau.rest.client.RestOperation)" class="member-name-link">request</a><wbr>(<a href="../RestOperation.html" title="class in org.apache.juneau.rest.client">RestOperation</a>&nbsp;op)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Perform an arbitrary request against the specified URI.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#run()" class="member-name-link">run</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#run()" class="member-name-link">run</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Runs this request and returns the resulting response object.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Future.html" title="class or interface in java.util.concurrent" class="external-link">Future</a>&lt;<a href="../RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#runFuture()" class="member-name-link">runFuture</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Future.html" title="class or interface in java.util.concurrent" class="external-link">Future</a>&lt;<a href="../RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#runFuture()" class="member-name-link">runFuture</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Same as <a href="../RestRequest.html#run()"><code>RestRequest.run()</code></a> but allows you to run the call asynchronously.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#uri(java.lang.Object)" class="member-name-link">uri</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#uri(java.lang.Object)" class="member-name-link">uri</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the URI for this request.</div>
 </div>
 </div>
@@ -493,125 +488,122 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#callback(java.lang.String)" class="member-name-link">callback</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callString)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../../mock/MockRestResponse.html" title="class in org.apache.juneau.rest.mock">MockRestResponse</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestResponse.</span><code><a href="../../mock/MockRestResponse.html#consume()" class="member-name-link">consume</a>()</code></div>
+<div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#contentString(java.lang.Object)" class="member-name-link">contentString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#contentString(java.lang.Object)" class="member-name-link">contentString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#contentType(java.lang.String)" class="member-name-link">contentType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#contentType(java.lang.String)" class="member-name-link">contentType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected <a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#createRequest(java.net.URI,java.lang.String,boolean)" class="member-name-link">createRequest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri,
+<div class="col-first odd-row-color"><code>protected <a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#createRequest(java.net.URI,java.lang.String,boolean)" class="member-name-link">createRequest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  boolean&nbsp;hasBody)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected <a href="../../mock/MockRestResponse.html" title="class in org.apache.juneau.rest.mock">MockRestResponse</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#createResponse(org.apache.juneau.rest.client.RestRequest,org.apache.http.HttpResponse,org.apache.juneau.parser.Parser)" class="member-name-link">createResponse</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>protected <a href="../../mock/MockRestResponse.html" title="class in org.apache.juneau.rest.mock">MockRestResponse</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#createResponse(org.apache.juneau.rest.client.RestRequest,org.apache.http.HttpResponse,org.apache.juneau.parser.Parser)" class="member-name-link">createResponse</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
  <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;httpResponse,
  <a href="../../../parser/Parser.html" title="class in org.apache.juneau.parser">Parser</a>&nbsp;parser)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#debug()" class="member-name-link">debug</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#delete(java.lang.Object)" class="member-name-link">delete</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#debug()" class="member-name-link">debug</a>()</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#formDataPairs(java.lang.String...)" class="member-name-link">formDataPairs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#delete(java.lang.Object)" class="member-name-link">delete</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#formPost(java.lang.Object)" class="member-name-link">formPost</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#formDataPairs(java.lang.String...)" class="member-name-link">formDataPairs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#formPost(java.lang.Object,java.lang.Object)" class="member-name-link">formPost</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#formPost(java.lang.Object)" class="member-name-link">formPost</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#formPost(java.lang.Object,java.lang.Object)" class="member-name-link">formPost</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#formPostPairs(java.lang.Object,java.lang.String...)" class="member-name-link">formPostPairs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#formPostPairs(java.lang.Object,java.lang.String...)" class="member-name-link">formPostPairs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;parameters)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#get()" class="member-name-link">get</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#get(java.lang.Object)" class="member-name-link">get</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#get()" class="member-name-link">get</a>()</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#head(java.lang.Object)" class="member-name-link">head</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#get(java.lang.Object)" class="member-name-link">get</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#interceptors(org.apache.juneau.rest.client.RestCallInterceptor...)" class="member-name-link">interceptors</a><wbr>(<a href="../RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a>...&nbsp;interceptors)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#head(java.lang.Object)" class="member-name-link">head</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#mediaType(java.lang.String)" class="member-name-link">mediaType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#interceptors(org.apache.juneau.rest.client.RestCallInterceptor...)" class="member-name-link">interceptors</a><wbr>(<a href="../RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a>...&nbsp;interceptors)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#noTrace()" class="member-name-link">noTrace</a>()</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#mediaType(java.lang.String)" class="member-name-link">mediaType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#options(java.lang.Object)" class="member-name-link">options</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#noTrace()" class="member-name-link">noTrace</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#patch(java.lang.Object)" class="member-name-link">patch</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#options(java.lang.Object)" class="member-name-link">options</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#patch(java.lang.Object,java.lang.Object)" class="member-name-link">patch</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#patch(java.lang.Object)" class="member-name-link">patch</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#patch(java.lang.Object,java.lang.String,org.apache.juneau.http.header.ContentType)" class="member-name-link">patch</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;body,
- <a href="../../../http/header/ContentType.html" title="class in org.apache.juneau.http.header">ContentType</a>&nbsp;contentType)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#post(java.lang.Object)" class="member-name-link">post</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#post(java.lang.Object,java.lang.Object)" class="member-name-link">post</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#patch(java.lang.Object,java.lang.Object)" class="member-name-link">patch</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#post(java.lang.Object,java.lang.String,org.apache.juneau.http.header.ContentType)" class="member-name-link">post</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#patch(java.lang.Object,java.lang.String,org.apache.juneau.http.header.ContentType)" class="member-name-link">patch</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;body,
  <a href="../../../http/header/ContentType.html" title="class in org.apache.juneau.http.header">ContentType</a>&nbsp;contentType)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#put(java.lang.Object)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#post(java.lang.Object)" class="member-name-link">post</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#put(java.lang.Object,java.lang.Object)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#post(java.lang.Object,java.lang.Object)" class="member-name-link">post</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#put(java.lang.Object,java.lang.String,org.apache.juneau.http.header.ContentType)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#post(java.lang.Object,java.lang.String,org.apache.juneau.http.header.ContentType)" class="member-name-link">post</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;body,
  <a href="../../../http/header/ContentType.html" title="class in org.apache.juneau.http.header">ContentType</a>&nbsp;contentType)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#queryDataPairs(java.lang.String...)" class="member-name-link">queryDataPairs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#put(java.lang.Object)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#request(java.lang.String,java.lang.Object)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#put(java.lang.Object,java.lang.Object)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#put(java.lang.Object,java.lang.String,org.apache.juneau.http.header.ContentType)" class="member-name-link">put</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;body,
+ <a href="../../../http/header/ContentType.html" title="class in org.apache.juneau.http.header">ContentType</a>&nbsp;contentType)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#queryDataPairs(java.lang.String...)" class="member-name-link">queryDataPairs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#request(java.lang.String,java.lang.Object)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#request(java.lang.String,java.lang.Object,boolean)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#request(java.lang.String,java.lang.Object,boolean)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  boolean&nbsp;hasBody)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#request(java.lang.String,java.lang.Object,java.lang.Object)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#request(org.apache.juneau.rest.client.RestOperation)" class="member-name-link">request</a><wbr>(<a href="../RestOperation.html" title="class in org.apache.juneau.rest.client">RestOperation</a>&nbsp;op)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#request(java.lang.String,java.lang.Object,java.lang.Object)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#uri(java.lang.Object)" class="member-name-link">uri</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.</span><code><a href="../../mock/MockRestClient.html#request(org.apache.juneau.rest.client.RestOperation)" class="member-name-link">request</a><wbr>(<a href="../RestOperation.html" title="class in org.apache.juneau.rest.client">RestOperation</a>&nbsp;op)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../mock/MockRestRequest.html" title="class in org.apache.juneau.rest.mock">MockRestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestRequest.</span><code><a href="../../mock/MockRestRequest.html#uri(java.lang.Object)" class="member-name-link">uri</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Constructors in <a href="../../mock/package-summary.html">org.apache.juneau.rest.mock</a> that throw <a href="../RestCallException.html" title="class in org.apache.juneau.rest.client">RestCallException</a></span></div>
 <div class="summary-table three-column-summary">

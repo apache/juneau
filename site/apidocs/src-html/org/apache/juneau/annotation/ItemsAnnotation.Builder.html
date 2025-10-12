@@ -476,232 +476,230 @@
 <span class="source-line-no">463</span><span id="line-463">         return this;</span>
 <span class="source-line-no">464</span><span id="line-464">      }</span>
 <span class="source-line-no">465</span><span id="line-465"></span>
-<span class="source-line-no">466</span><span id="line-466">      // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">467</span><span id="line-467">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">468</span><span id="line-468">   }</span>
-<span class="source-line-no">469</span><span id="line-469"></span>
+<span class="source-line-no">466</span><span id="line-466">   }</span>
+<span class="source-line-no">467</span><span id="line-467"></span>
+<span class="source-line-no">468</span><span id="line-468">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">469</span><span id="line-469">   // Implementation</span>
 <span class="source-line-no">470</span><span id="line-470">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">471</span><span id="line-471">   // Implementation</span>
-<span class="source-line-no">472</span><span id="line-472">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">471</span><span id="line-471"></span>
+<span class="source-line-no">472</span><span id="line-472">   private static class Impl extends AnnotationImpl implements Items {</span>
 <span class="source-line-no">473</span><span id="line-473"></span>
-<span class="source-line-no">474</span><span id="line-474">   private static class Impl extends AnnotationImpl implements Items {</span>
-<span class="source-line-no">475</span><span id="line-475"></span>
-<span class="source-line-no">476</span><span id="line-476">      private final boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;</span>
-<span class="source-line-no">477</span><span id="line-477">      private final long maxi, maxItems, maxl, maxLength, mini, minItems, minl, minLength;</span>
-<span class="source-line-no">478</span><span id="line-478">      private final String $ref, cf, collectionFormat, f, format, max, maximum, min, minimum, mo, multipleOf, p, pattern, t, type;</span>
-<span class="source-line-no">479</span><span id="line-479">      private final String[] _default, _enum, df, e;</span>
-<span class="source-line-no">480</span><span id="line-480">      private final SubItems items;</span>
-<span class="source-line-no">481</span><span id="line-481"></span>
-<span class="source-line-no">482</span><span id="line-482">      Impl(Builder b) {</span>
-<span class="source-line-no">483</span><span id="line-483">         super(b);</span>
-<span class="source-line-no">484</span><span id="line-484">         this.$ref = b.$ref;</span>
-<span class="source-line-no">485</span><span id="line-485">         this._default = copyOf(b._default);</span>
-<span class="source-line-no">486</span><span id="line-486">         this._enum = copyOf(b._enum);</span>
-<span class="source-line-no">487</span><span id="line-487">         this.cf = b.cf;</span>
-<span class="source-line-no">488</span><span id="line-488">         this.collectionFormat = b.collectionFormat;</span>
-<span class="source-line-no">489</span><span id="line-489">         this.df = copyOf(b.df);</span>
-<span class="source-line-no">490</span><span id="line-490">         this.e = copyOf(b.e);</span>
-<span class="source-line-no">491</span><span id="line-491">         this.emax = b.emax;</span>
-<span class="source-line-no">492</span><span id="line-492">         this.emin = b.emin;</span>
-<span class="source-line-no">493</span><span id="line-493">         this.exclusiveMaximum = b.exclusiveMaximum;</span>
-<span class="source-line-no">494</span><span id="line-494">         this.exclusiveMinimum = b.exclusiveMinimum;</span>
-<span class="source-line-no">495</span><span id="line-495">         this.f = b.f;</span>
-<span class="source-line-no">496</span><span id="line-496">         this.format = b.format;</span>
-<span class="source-line-no">497</span><span id="line-497">         this.items = b.items;</span>
-<span class="source-line-no">498</span><span id="line-498">         this.max = b.max;</span>
-<span class="source-line-no">499</span><span id="line-499">         this.maxi = b.maxi;</span>
-<span class="source-line-no">500</span><span id="line-500">         this.maximum = b.maximum;</span>
-<span class="source-line-no">501</span><span id="line-501">         this.maxItems = b.maxItems;</span>
-<span class="source-line-no">502</span><span id="line-502">         this.maxl = b.maxl;</span>
-<span class="source-line-no">503</span><span id="line-503">         this.maxLength = b.maxLength;</span>
-<span class="source-line-no">504</span><span id="line-504">         this.min = b.min;</span>
-<span class="source-line-no">505</span><span id="line-505">         this.mini = b.mini;</span>
-<span class="source-line-no">506</span><span id="line-506">         this.minimum = b.minimum;</span>
-<span class="source-line-no">507</span><span id="line-507">         this.minItems = b.minItems;</span>
-<span class="source-line-no">508</span><span id="line-508">         this.minl = b.minl;</span>
-<span class="source-line-no">509</span><span id="line-509">         this.minLength = b.minLength;</span>
-<span class="source-line-no">510</span><span id="line-510">         this.mo = b.mo;</span>
-<span class="source-line-no">511</span><span id="line-511">         this.multipleOf = b.multipleOf;</span>
-<span class="source-line-no">512</span><span id="line-512">         this.p = b.p;</span>
-<span class="source-line-no">513</span><span id="line-513">         this.pattern = b.pattern;</span>
-<span class="source-line-no">514</span><span id="line-514">         this.t = b.t;</span>
-<span class="source-line-no">515</span><span id="line-515">         this.type = b.type;</span>
-<span class="source-line-no">516</span><span id="line-516">         this.ui = b.ui;</span>
-<span class="source-line-no">517</span><span id="line-517">         this.uniqueItems = b.uniqueItems;</span>
-<span class="source-line-no">518</span><span id="line-518">         postConstruct();</span>
-<span class="source-line-no">519</span><span id="line-519">      }</span>
-<span class="source-line-no">520</span><span id="line-520"></span>
-<span class="source-line-no">521</span><span id="line-521">      @Override /* Items */</span>
-<span class="source-line-no">522</span><span id="line-522">      public String[] _default() {</span>
-<span class="source-line-no">523</span><span id="line-523">         return _default;</span>
-<span class="source-line-no">524</span><span id="line-524">      }</span>
-<span class="source-line-no">525</span><span id="line-525"></span>
-<span class="source-line-no">526</span><span id="line-526">      @Override /* Items */</span>
-<span class="source-line-no">527</span><span id="line-527">      public String[] _enum() {</span>
-<span class="source-line-no">528</span><span id="line-528">         return _enum;</span>
-<span class="source-line-no">529</span><span id="line-529">      }</span>
-<span class="source-line-no">530</span><span id="line-530"></span>
-<span class="source-line-no">531</span><span id="line-531">      @Override /* Items */</span>
-<span class="source-line-no">532</span><span id="line-532">      public String $ref() {</span>
-<span class="source-line-no">533</span><span id="line-533">         return $ref;</span>
-<span class="source-line-no">534</span><span id="line-534">      }</span>
-<span class="source-line-no">535</span><span id="line-535"></span>
-<span class="source-line-no">536</span><span id="line-536">      @Override /* Items */</span>
-<span class="source-line-no">537</span><span id="line-537">      public String cf() {</span>
-<span class="source-line-no">538</span><span id="line-538">         return cf;</span>
-<span class="source-line-no">539</span><span id="line-539">      }</span>
-<span class="source-line-no">540</span><span id="line-540"></span>
-<span class="source-line-no">541</span><span id="line-541">      @Override /* Items */</span>
-<span class="source-line-no">542</span><span id="line-542">      public String collectionFormat() {</span>
-<span class="source-line-no">543</span><span id="line-543">         return collectionFormat;</span>
-<span class="source-line-no">544</span><span id="line-544">      }</span>
-<span class="source-line-no">545</span><span id="line-545"></span>
-<span class="source-line-no">546</span><span id="line-546">      @Override /* Items */</span>
-<span class="source-line-no">547</span><span id="line-547">      public String[] df() {</span>
-<span class="source-line-no">548</span><span id="line-548">         return df;</span>
-<span class="source-line-no">549</span><span id="line-549">      }</span>
-<span class="source-line-no">550</span><span id="line-550"></span>
-<span class="source-line-no">551</span><span id="line-551">      @Override /* Items */</span>
-<span class="source-line-no">552</span><span id="line-552">      public String[] e() {</span>
-<span class="source-line-no">553</span><span id="line-553">         return e;</span>
-<span class="source-line-no">554</span><span id="line-554">      }</span>
-<span class="source-line-no">555</span><span id="line-555"></span>
-<span class="source-line-no">556</span><span id="line-556">      @Override /* Items */</span>
-<span class="source-line-no">557</span><span id="line-557">      public boolean emax() {</span>
-<span class="source-line-no">558</span><span id="line-558">         return emax;</span>
-<span class="source-line-no">559</span><span id="line-559">      }</span>
-<span class="source-line-no">560</span><span id="line-560"></span>
-<span class="source-line-no">561</span><span id="line-561">      @Override /* Items */</span>
-<span class="source-line-no">562</span><span id="line-562">      public boolean emin() {</span>
-<span class="source-line-no">563</span><span id="line-563">         return emin;</span>
-<span class="source-line-no">564</span><span id="line-564">      }</span>
-<span class="source-line-no">565</span><span id="line-565"></span>
-<span class="source-line-no">566</span><span id="line-566">      @Override /* Items */</span>
-<span class="source-line-no">567</span><span id="line-567">      public boolean exclusiveMaximum() {</span>
-<span class="source-line-no">568</span><span id="line-568">         return exclusiveMaximum;</span>
-<span class="source-line-no">569</span><span id="line-569">      }</span>
-<span class="source-line-no">570</span><span id="line-570"></span>
-<span class="source-line-no">571</span><span id="line-571">      @Override /* Items */</span>
-<span class="source-line-no">572</span><span id="line-572">      public boolean exclusiveMinimum() {</span>
-<span class="source-line-no">573</span><span id="line-573">         return exclusiveMinimum;</span>
-<span class="source-line-no">574</span><span id="line-574">      }</span>
-<span class="source-line-no">575</span><span id="line-575"></span>
-<span class="source-line-no">576</span><span id="line-576">      @Override /* Items */</span>
-<span class="source-line-no">577</span><span id="line-577">      public String f() {</span>
-<span class="source-line-no">578</span><span id="line-578">         return f;</span>
-<span class="source-line-no">579</span><span id="line-579">      }</span>
-<span class="source-line-no">580</span><span id="line-580"></span>
-<span class="source-line-no">581</span><span id="line-581">      @Override /* Items */</span>
-<span class="source-line-no">582</span><span id="line-582">      public String format() {</span>
-<span class="source-line-no">583</span><span id="line-583">         return format;</span>
-<span class="source-line-no">584</span><span id="line-584">      }</span>
-<span class="source-line-no">585</span><span id="line-585"></span>
-<span class="source-line-no">586</span><span id="line-586">      @Override /* Items */</span>
-<span class="source-line-no">587</span><span id="line-587">      public SubItems items() {</span>
-<span class="source-line-no">588</span><span id="line-588">         return items;</span>
-<span class="source-line-no">589</span><span id="line-589">      }</span>
-<span class="source-line-no">590</span><span id="line-590"></span>
-<span class="source-line-no">591</span><span id="line-591">      @Override /* Items */</span>
-<span class="source-line-no">592</span><span id="line-592">      public String max() {</span>
-<span class="source-line-no">593</span><span id="line-593">         return max;</span>
-<span class="source-line-no">594</span><span id="line-594">      }</span>
-<span class="source-line-no">595</span><span id="line-595"></span>
-<span class="source-line-no">596</span><span id="line-596">      @Override /* Items */</span>
-<span class="source-line-no">597</span><span id="line-597">      public long maxi() {</span>
-<span class="source-line-no">598</span><span id="line-598">         return maxi;</span>
-<span class="source-line-no">599</span><span id="line-599">      }</span>
-<span class="source-line-no">600</span><span id="line-600"></span>
-<span class="source-line-no">601</span><span id="line-601">      @Override /* Items */</span>
-<span class="source-line-no">602</span><span id="line-602">      public String maximum() {</span>
-<span class="source-line-no">603</span><span id="line-603">         return maximum;</span>
-<span class="source-line-no">604</span><span id="line-604">      }</span>
-<span class="source-line-no">605</span><span id="line-605"></span>
-<span class="source-line-no">606</span><span id="line-606">      @Override /* Items */</span>
-<span class="source-line-no">607</span><span id="line-607">      public long maxItems() {</span>
-<span class="source-line-no">608</span><span id="line-608">         return maxItems;</span>
-<span class="source-line-no">609</span><span id="line-609">      }</span>
-<span class="source-line-no">610</span><span id="line-610"></span>
-<span class="source-line-no">611</span><span id="line-611">      @Override /* Items */</span>
-<span class="source-line-no">612</span><span id="line-612">      public long maxl() {</span>
-<span class="source-line-no">613</span><span id="line-613">         return maxl;</span>
-<span class="source-line-no">614</span><span id="line-614">      }</span>
-<span class="source-line-no">615</span><span id="line-615"></span>
-<span class="source-line-no">616</span><span id="line-616">      @Override /* Items */</span>
-<span class="source-line-no">617</span><span id="line-617">      public long maxLength() {</span>
-<span class="source-line-no">618</span><span id="line-618">         return maxLength;</span>
-<span class="source-line-no">619</span><span id="line-619">      }</span>
-<span class="source-line-no">620</span><span id="line-620"></span>
-<span class="source-line-no">621</span><span id="line-621">      @Override /* Items */</span>
-<span class="source-line-no">622</span><span id="line-622">      public String min() {</span>
-<span class="source-line-no">623</span><span id="line-623">         return min;</span>
-<span class="source-line-no">624</span><span id="line-624">      }</span>
-<span class="source-line-no">625</span><span id="line-625"></span>
-<span class="source-line-no">626</span><span id="line-626">      @Override /* Items */</span>
-<span class="source-line-no">627</span><span id="line-627">      public long mini() {</span>
-<span class="source-line-no">628</span><span id="line-628">         return mini;</span>
-<span class="source-line-no">629</span><span id="line-629">      }</span>
-<span class="source-line-no">630</span><span id="line-630"></span>
-<span class="source-line-no">631</span><span id="line-631">      @Override /* Items */</span>
-<span class="source-line-no">632</span><span id="line-632">      public String minimum() {</span>
-<span class="source-line-no">633</span><span id="line-633">         return minimum;</span>
-<span class="source-line-no">634</span><span id="line-634">      }</span>
-<span class="source-line-no">635</span><span id="line-635"></span>
-<span class="source-line-no">636</span><span id="line-636">      @Override /* Items */</span>
-<span class="source-line-no">637</span><span id="line-637">      public long minItems() {</span>
-<span class="source-line-no">638</span><span id="line-638">         return minItems;</span>
-<span class="source-line-no">639</span><span id="line-639">      }</span>
-<span class="source-line-no">640</span><span id="line-640"></span>
-<span class="source-line-no">641</span><span id="line-641">      @Override /* Items */</span>
-<span class="source-line-no">642</span><span id="line-642">      public long minl() {</span>
-<span class="source-line-no">643</span><span id="line-643">         return minl;</span>
-<span class="source-line-no">644</span><span id="line-644">      }</span>
-<span class="source-line-no">645</span><span id="line-645"></span>
-<span class="source-line-no">646</span><span id="line-646">      @Override /* Items */</span>
-<span class="source-line-no">647</span><span id="line-647">      public long minLength() {</span>
-<span class="source-line-no">648</span><span id="line-648">         return minLength;</span>
-<span class="source-line-no">649</span><span id="line-649">      }</span>
-<span class="source-line-no">650</span><span id="line-650"></span>
-<span class="source-line-no">651</span><span id="line-651">      @Override /* Items */</span>
-<span class="source-line-no">652</span><span id="line-652">      public String mo() {</span>
-<span class="source-line-no">653</span><span id="line-653">         return mo;</span>
-<span class="source-line-no">654</span><span id="line-654">      }</span>
-<span class="source-line-no">655</span><span id="line-655"></span>
-<span class="source-line-no">656</span><span id="line-656">      @Override /* Items */</span>
-<span class="source-line-no">657</span><span id="line-657">      public String multipleOf() {</span>
-<span class="source-line-no">658</span><span id="line-658">         return multipleOf;</span>
-<span class="source-line-no">659</span><span id="line-659">      }</span>
-<span class="source-line-no">660</span><span id="line-660"></span>
-<span class="source-line-no">661</span><span id="line-661">      @Override /* Items */</span>
-<span class="source-line-no">662</span><span id="line-662">      public String p() {</span>
-<span class="source-line-no">663</span><span id="line-663">         return p;</span>
-<span class="source-line-no">664</span><span id="line-664">      }</span>
-<span class="source-line-no">665</span><span id="line-665"></span>
-<span class="source-line-no">666</span><span id="line-666">      @Override /* Items */</span>
-<span class="source-line-no">667</span><span id="line-667">      public String pattern() {</span>
-<span class="source-line-no">668</span><span id="line-668">         return pattern;</span>
-<span class="source-line-no">669</span><span id="line-669">      }</span>
-<span class="source-line-no">670</span><span id="line-670"></span>
-<span class="source-line-no">671</span><span id="line-671">      @Override /* Items */</span>
-<span class="source-line-no">672</span><span id="line-672">      public String t() {</span>
-<span class="source-line-no">673</span><span id="line-673">         return t;</span>
-<span class="source-line-no">674</span><span id="line-674">      }</span>
-<span class="source-line-no">675</span><span id="line-675"></span>
-<span class="source-line-no">676</span><span id="line-676">      @Override /* Items */</span>
-<span class="source-line-no">677</span><span id="line-677">      public String type() {</span>
-<span class="source-line-no">678</span><span id="line-678">         return type;</span>
-<span class="source-line-no">679</span><span id="line-679">      }</span>
-<span class="source-line-no">680</span><span id="line-680"></span>
-<span class="source-line-no">681</span><span id="line-681">      @Override /* Items */</span>
-<span class="source-line-no">682</span><span id="line-682">      public boolean ui() {</span>
-<span class="source-line-no">683</span><span id="line-683">         return ui;</span>
-<span class="source-line-no">684</span><span id="line-684">      }</span>
-<span class="source-line-no">685</span><span id="line-685"></span>
-<span class="source-line-no">686</span><span id="line-686">      @Override /* Items */</span>
-<span class="source-line-no">687</span><span id="line-687">      public boolean uniqueItems() {</span>
-<span class="source-line-no">688</span><span id="line-688">         return uniqueItems;</span>
-<span class="source-line-no">689</span><span id="line-689">      }</span>
-<span class="source-line-no">690</span><span id="line-690">   }</span>
-<span class="source-line-no">691</span><span id="line-691">}</span>
+<span class="source-line-no">474</span><span id="line-474">      private final boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;</span>
+<span class="source-line-no">475</span><span id="line-475">      private final long maxi, maxItems, maxl, maxLength, mini, minItems, minl, minLength;</span>
+<span class="source-line-no">476</span><span id="line-476">      private final String $ref, cf, collectionFormat, f, format, max, maximum, min, minimum, mo, multipleOf, p, pattern, t, type;</span>
+<span class="source-line-no">477</span><span id="line-477">      private final String[] _default, _enum, df, e;</span>
+<span class="source-line-no">478</span><span id="line-478">      private final SubItems items;</span>
+<span class="source-line-no">479</span><span id="line-479"></span>
+<span class="source-line-no">480</span><span id="line-480">      Impl(Builder b) {</span>
+<span class="source-line-no">481</span><span id="line-481">         super(b);</span>
+<span class="source-line-no">482</span><span id="line-482">         this.$ref = b.$ref;</span>
+<span class="source-line-no">483</span><span id="line-483">         this._default = copyOf(b._default);</span>
+<span class="source-line-no">484</span><span id="line-484">         this._enum = copyOf(b._enum);</span>
+<span class="source-line-no">485</span><span id="line-485">         this.cf = b.cf;</span>
+<span class="source-line-no">486</span><span id="line-486">         this.collectionFormat = b.collectionFormat;</span>
+<span class="source-line-no">487</span><span id="line-487">         this.df = copyOf(b.df);</span>
+<span class="source-line-no">488</span><span id="line-488">         this.e = copyOf(b.e);</span>
+<span class="source-line-no">489</span><span id="line-489">         this.emax = b.emax;</span>
+<span class="source-line-no">490</span><span id="line-490">         this.emin = b.emin;</span>
+<span class="source-line-no">491</span><span id="line-491">         this.exclusiveMaximum = b.exclusiveMaximum;</span>
+<span class="source-line-no">492</span><span id="line-492">         this.exclusiveMinimum = b.exclusiveMinimum;</span>
+<span class="source-line-no">493</span><span id="line-493">         this.f = b.f;</span>
+<span class="source-line-no">494</span><span id="line-494">         this.format = b.format;</span>
+<span class="source-line-no">495</span><span id="line-495">         this.items = b.items;</span>
+<span class="source-line-no">496</span><span id="line-496">         this.max = b.max;</span>
+<span class="source-line-no">497</span><span id="line-497">         this.maxi = b.maxi;</span>
+<span class="source-line-no">498</span><span id="line-498">         this.maximum = b.maximum;</span>
+<span class="source-line-no">499</span><span id="line-499">         this.maxItems = b.maxItems;</span>
+<span class="source-line-no">500</span><span id="line-500">         this.maxl = b.maxl;</span>
+<span class="source-line-no">501</span><span id="line-501">         this.maxLength = b.maxLength;</span>
+<span class="source-line-no">502</span><span id="line-502">         this.min = b.min;</span>
+<span class="source-line-no">503</span><span id="line-503">         this.mini = b.mini;</span>
+<span class="source-line-no">504</span><span id="line-504">         this.minimum = b.minimum;</span>
+<span class="source-line-no">505</span><span id="line-505">         this.minItems = b.minItems;</span>
+<span class="source-line-no">506</span><span id="line-506">         this.minl = b.minl;</span>
+<span class="source-line-no">507</span><span id="line-507">         this.minLength = b.minLength;</span>
+<span class="source-line-no">508</span><span id="line-508">         this.mo = b.mo;</span>
+<span class="source-line-no">509</span><span id="line-509">         this.multipleOf = b.multipleOf;</span>
+<span class="source-line-no">510</span><span id="line-510">         this.p = b.p;</span>
+<span class="source-line-no">511</span><span id="line-511">         this.pattern = b.pattern;</span>
+<span class="source-line-no">512</span><span id="line-512">         this.t = b.t;</span>
+<span class="source-line-no">513</span><span id="line-513">         this.type = b.type;</span>
+<span class="source-line-no">514</span><span id="line-514">         this.ui = b.ui;</span>
+<span class="source-line-no">515</span><span id="line-515">         this.uniqueItems = b.uniqueItems;</span>
+<span class="source-line-no">516</span><span id="line-516">         postConstruct();</span>
+<span class="source-line-no">517</span><span id="line-517">      }</span>
+<span class="source-line-no">518</span><span id="line-518"></span>
+<span class="source-line-no">519</span><span id="line-519">      @Override /* Items */</span>
+<span class="source-line-no">520</span><span id="line-520">      public String[] _default() {</span>
+<span class="source-line-no">521</span><span id="line-521">         return _default;</span>
+<span class="source-line-no">522</span><span id="line-522">      }</span>
+<span class="source-line-no">523</span><span id="line-523"></span>
+<span class="source-line-no">524</span><span id="line-524">      @Override /* Items */</span>
+<span class="source-line-no">525</span><span id="line-525">      public String[] _enum() {</span>
+<span class="source-line-no">526</span><span id="line-526">         return _enum;</span>
+<span class="source-line-no">527</span><span id="line-527">      }</span>
+<span class="source-line-no">528</span><span id="line-528"></span>
+<span class="source-line-no">529</span><span id="line-529">      @Override /* Items */</span>
+<span class="source-line-no">530</span><span id="line-530">      public String $ref() {</span>
+<span class="source-line-no">531</span><span id="line-531">         return $ref;</span>
+<span class="source-line-no">532</span><span id="line-532">      }</span>
+<span class="source-line-no">533</span><span id="line-533"></span>
+<span class="source-line-no">534</span><span id="line-534">      @Override /* Items */</span>
+<span class="source-line-no">535</span><span id="line-535">      public String cf() {</span>
+<span class="source-line-no">536</span><span id="line-536">         return cf;</span>
+<span class="source-line-no">537</span><span id="line-537">      }</span>
+<span class="source-line-no">538</span><span id="line-538"></span>
+<span class="source-line-no">539</span><span id="line-539">      @Override /* Items */</span>
+<span class="source-line-no">540</span><span id="line-540">      public String collectionFormat() {</span>
+<span class="source-line-no">541</span><span id="line-541">         return collectionFormat;</span>
+<span class="source-line-no">542</span><span id="line-542">      }</span>
+<span class="source-line-no">543</span><span id="line-543"></span>
+<span class="source-line-no">544</span><span id="line-544">      @Override /* Items */</span>
+<span class="source-line-no">545</span><span id="line-545">      public String[] df() {</span>
+<span class="source-line-no">546</span><span id="line-546">         return df;</span>
+<span class="source-line-no">547</span><span id="line-547">      }</span>
+<span class="source-line-no">548</span><span id="line-548"></span>
+<span class="source-line-no">549</span><span id="line-549">      @Override /* Items */</span>
+<span class="source-line-no">550</span><span id="line-550">      public String[] e() {</span>
+<span class="source-line-no">551</span><span id="line-551">         return e;</span>
+<span class="source-line-no">552</span><span id="line-552">      }</span>
+<span class="source-line-no">553</span><span id="line-553"></span>
+<span class="source-line-no">554</span><span id="line-554">      @Override /* Items */</span>
+<span class="source-line-no">555</span><span id="line-555">      public boolean emax() {</span>
+<span class="source-line-no">556</span><span id="line-556">         return emax;</span>
+<span class="source-line-no">557</span><span id="line-557">      }</span>
+<span class="source-line-no">558</span><span id="line-558"></span>
+<span class="source-line-no">559</span><span id="line-559">      @Override /* Items */</span>
+<span class="source-line-no">560</span><span id="line-560">      public boolean emin() {</span>
+<span class="source-line-no">561</span><span id="line-561">         return emin;</span>
+<span class="source-line-no">562</span><span id="line-562">      }</span>
+<span class="source-line-no">563</span><span id="line-563"></span>
+<span class="source-line-no">564</span><span id="line-564">      @Override /* Items */</span>
+<span class="source-line-no">565</span><span id="line-565">      public boolean exclusiveMaximum() {</span>
+<span class="source-line-no">566</span><span id="line-566">         return exclusiveMaximum;</span>
+<span class="source-line-no">567</span><span id="line-567">      }</span>
+<span class="source-line-no">568</span><span id="line-568"></span>
+<span class="source-line-no">569</span><span id="line-569">      @Override /* Items */</span>
+<span class="source-line-no">570</span><span id="line-570">      public boolean exclusiveMinimum() {</span>
+<span class="source-line-no">571</span><span id="line-571">         return exclusiveMinimum;</span>
+<span class="source-line-no">572</span><span id="line-572">      }</span>
+<span class="source-line-no">573</span><span id="line-573"></span>
+<span class="source-line-no">574</span><span id="line-574">      @Override /* Items */</span>
+<span class="source-line-no">575</span><span id="line-575">      public String f() {</span>
+<span class="source-line-no">576</span><span id="line-576">         return f;</span>
+<span class="source-line-no">577</span><span id="line-577">      }</span>
+<span class="source-line-no">578</span><span id="line-578"></span>
+<span class="source-line-no">579</span><span id="line-579">      @Override /* Items */</span>
+<span class="source-line-no">580</span><span id="line-580">      public String format() {</span>
+<span class="source-line-no">581</span><span id="line-581">         return format;</span>
+<span class="source-line-no">582</span><span id="line-582">      }</span>
+<span class="source-line-no">583</span><span id="line-583"></span>
+<span class="source-line-no">584</span><span id="line-584">      @Override /* Items */</span>
+<span class="source-line-no">585</span><span id="line-585">      public SubItems items() {</span>
+<span class="source-line-no">586</span><span id="line-586">         return items;</span>
+<span class="source-line-no">587</span><span id="line-587">      }</span>
+<span class="source-line-no">588</span><span id="line-588"></span>
+<span class="source-line-no">589</span><span id="line-589">      @Override /* Items */</span>
+<span class="source-line-no">590</span><span id="line-590">      public String max() {</span>
+<span class="source-line-no">591</span><span id="line-591">         return max;</span>
+<span class="source-line-no">592</span><span id="line-592">      }</span>
+<span class="source-line-no">593</span><span id="line-593"></span>
+<span class="source-line-no">594</span><span id="line-594">      @Override /* Items */</span>
+<span class="source-line-no">595</span><span id="line-595">      public long maxi() {</span>
+<span class="source-line-no">596</span><span id="line-596">         return maxi;</span>
+<span class="source-line-no">597</span><span id="line-597">      }</span>
+<span class="source-line-no">598</span><span id="line-598"></span>
+<span class="source-line-no">599</span><span id="line-599">      @Override /* Items */</span>
+<span class="source-line-no">600</span><span id="line-600">      public String maximum() {</span>
+<span class="source-line-no">601</span><span id="line-601">         return maximum;</span>
+<span class="source-line-no">602</span><span id="line-602">      }</span>
+<span class="source-line-no">603</span><span id="line-603"></span>
+<span class="source-line-no">604</span><span id="line-604">      @Override /* Items */</span>
+<span class="source-line-no">605</span><span id="line-605">      public long maxItems() {</span>
+<span class="source-line-no">606</span><span id="line-606">         return maxItems;</span>
+<span class="source-line-no">607</span><span id="line-607">      }</span>
+<span class="source-line-no">608</span><span id="line-608"></span>
+<span class="source-line-no">609</span><span id="line-609">      @Override /* Items */</span>
+<span class="source-line-no">610</span><span id="line-610">      public long maxl() {</span>
+<span class="source-line-no">611</span><span id="line-611">         return maxl;</span>
+<span class="source-line-no">612</span><span id="line-612">      }</span>
+<span class="source-line-no">613</span><span id="line-613"></span>
+<span class="source-line-no">614</span><span id="line-614">      @Override /* Items */</span>
+<span class="source-line-no">615</span><span id="line-615">      public long maxLength() {</span>
+<span class="source-line-no">616</span><span id="line-616">         return maxLength;</span>
+<span class="source-line-no">617</span><span id="line-617">      }</span>
+<span class="source-line-no">618</span><span id="line-618"></span>
+<span class="source-line-no">619</span><span id="line-619">      @Override /* Items */</span>
+<span class="source-line-no">620</span><span id="line-620">      public String min() {</span>
+<span class="source-line-no">621</span><span id="line-621">         return min;</span>
+<span class="source-line-no">622</span><span id="line-622">      }</span>
+<span class="source-line-no">623</span><span id="line-623"></span>
+<span class="source-line-no">624</span><span id="line-624">      @Override /* Items */</span>
+<span class="source-line-no">625</span><span id="line-625">      public long mini() {</span>
+<span class="source-line-no">626</span><span id="line-626">         return mini;</span>
+<span class="source-line-no">627</span><span id="line-627">      }</span>
+<span class="source-line-no">628</span><span id="line-628"></span>
+<span class="source-line-no">629</span><span id="line-629">      @Override /* Items */</span>
+<span class="source-line-no">630</span><span id="line-630">      public String minimum() {</span>
+<span class="source-line-no">631</span><span id="line-631">         return minimum;</span>
+<span class="source-line-no">632</span><span id="line-632">      }</span>
+<span class="source-line-no">633</span><span id="line-633"></span>
+<span class="source-line-no">634</span><span id="line-634">      @Override /* Items */</span>
+<span class="source-line-no">635</span><span id="line-635">      public long minItems() {</span>
+<span class="source-line-no">636</span><span id="line-636">         return minItems;</span>
+<span class="source-line-no">637</span><span id="line-637">      }</span>
+<span class="source-line-no">638</span><span id="line-638"></span>
+<span class="source-line-no">639</span><span id="line-639">      @Override /* Items */</span>
+<span class="source-line-no">640</span><span id="line-640">      public long minl() {</span>
+<span class="source-line-no">641</span><span id="line-641">         return minl;</span>
+<span class="source-line-no">642</span><span id="line-642">      }</span>
+<span class="source-line-no">643</span><span id="line-643"></span>
+<span class="source-line-no">644</span><span id="line-644">      @Override /* Items */</span>
+<span class="source-line-no">645</span><span id="line-645">      public long minLength() {</span>
+<span class="source-line-no">646</span><span id="line-646">         return minLength;</span>
+<span class="source-line-no">647</span><span id="line-647">      }</span>
+<span class="source-line-no">648</span><span id="line-648"></span>
+<span class="source-line-no">649</span><span id="line-649">      @Override /* Items */</span>
+<span class="source-line-no">650</span><span id="line-650">      public String mo() {</span>
+<span class="source-line-no">651</span><span id="line-651">         return mo;</span>
+<span class="source-line-no">652</span><span id="line-652">      }</span>
+<span class="source-line-no">653</span><span id="line-653"></span>
+<span class="source-line-no">654</span><span id="line-654">      @Override /* Items */</span>
+<span class="source-line-no">655</span><span id="line-655">      public String multipleOf() {</span>
+<span class="source-line-no">656</span><span id="line-656">         return multipleOf;</span>
+<span class="source-line-no">657</span><span id="line-657">      }</span>
+<span class="source-line-no">658</span><span id="line-658"></span>
+<span class="source-line-no">659</span><span id="line-659">      @Override /* Items */</span>
+<span class="source-line-no">660</span><span id="line-660">      public String p() {</span>
+<span class="source-line-no">661</span><span id="line-661">         return p;</span>
+<span class="source-line-no">662</span><span id="line-662">      }</span>
+<span class="source-line-no">663</span><span id="line-663"></span>
+<span class="source-line-no">664</span><span id="line-664">      @Override /* Items */</span>
+<span class="source-line-no">665</span><span id="line-665">      public String pattern() {</span>
+<span class="source-line-no">666</span><span id="line-666">         return pattern;</span>
+<span class="source-line-no">667</span><span id="line-667">      }</span>
+<span class="source-line-no">668</span><span id="line-668"></span>
+<span class="source-line-no">669</span><span id="line-669">      @Override /* Items */</span>
+<span class="source-line-no">670</span><span id="line-670">      public String t() {</span>
+<span class="source-line-no">671</span><span id="line-671">         return t;</span>
+<span class="source-line-no">672</span><span id="line-672">      }</span>
+<span class="source-line-no">673</span><span id="line-673"></span>
+<span class="source-line-no">674</span><span id="line-674">      @Override /* Items */</span>
+<span class="source-line-no">675</span><span id="line-675">      public String type() {</span>
+<span class="source-line-no">676</span><span id="line-676">         return type;</span>
+<span class="source-line-no">677</span><span id="line-677">      }</span>
+<span class="source-line-no">678</span><span id="line-678"></span>
+<span class="source-line-no">679</span><span id="line-679">      @Override /* Items */</span>
+<span class="source-line-no">680</span><span id="line-680">      public boolean ui() {</span>
+<span class="source-line-no">681</span><span id="line-681">         return ui;</span>
+<span class="source-line-no">682</span><span id="line-682">      }</span>
+<span class="source-line-no">683</span><span id="line-683"></span>
+<span class="source-line-no">684</span><span id="line-684">      @Override /* Items */</span>
+<span class="source-line-no">685</span><span id="line-685">      public boolean uniqueItems() {</span>
+<span class="source-line-no">686</span><span id="line-686">         return uniqueItems;</span>
+<span class="source-line-no">687</span><span id="line-687">      }</span>
+<span class="source-line-no">688</span><span id="line-688">   }</span>
+<span class="source-line-no">689</span><span id="line-689">}</span>
 
 
 

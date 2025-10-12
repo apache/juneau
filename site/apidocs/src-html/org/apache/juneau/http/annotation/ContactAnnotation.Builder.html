@@ -132,43 +132,40 @@
 <span class="source-line-no">119</span><span id="line-119">         return this;</span>
 <span class="source-line-no">120</span><span id="line-120">      }</span>
 <span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">      // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">122</span><span id="line-122">   }</span>
 <span class="source-line-no">123</span><span id="line-123"></span>
-<span class="source-line-no">124</span><span id="line-124">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">125</span><span id="line-125">   }</span>
-<span class="source-line-no">126</span><span id="line-126"></span>
-<span class="source-line-no">127</span><span id="line-127">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">128</span><span id="line-128">   // Implementation</span>
-<span class="source-line-no">129</span><span id="line-129">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">   private static class Impl extends AnnotationImpl implements Contact {</span>
-<span class="source-line-no">132</span><span id="line-132"></span>
-<span class="source-line-no">133</span><span id="line-133">      private final String email, name, url;</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">      Impl(Builder b) {</span>
-<span class="source-line-no">136</span><span id="line-136">         super(b);</span>
-<span class="source-line-no">137</span><span id="line-137">         this.email = b.email;</span>
-<span class="source-line-no">138</span><span id="line-138">         this.name = b.name;</span>
-<span class="source-line-no">139</span><span id="line-139">         this.url = b.url;</span>
-<span class="source-line-no">140</span><span id="line-140">         postConstruct();</span>
-<span class="source-line-no">141</span><span id="line-141">      }</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">      @Override /* Contact */</span>
-<span class="source-line-no">144</span><span id="line-144">      public String email() {</span>
-<span class="source-line-no">145</span><span id="line-145">         return email;</span>
-<span class="source-line-no">146</span><span id="line-146">      }</span>
-<span class="source-line-no">147</span><span id="line-147"></span>
-<span class="source-line-no">148</span><span id="line-148">      @Override /* Contact */</span>
-<span class="source-line-no">149</span><span id="line-149">      public String name() {</span>
-<span class="source-line-no">150</span><span id="line-150">         return name;</span>
-<span class="source-line-no">151</span><span id="line-151">      }</span>
-<span class="source-line-no">152</span><span id="line-152"></span>
-<span class="source-line-no">153</span><span id="line-153">      @Override /* Contact */</span>
-<span class="source-line-no">154</span><span id="line-154">      public String url() {</span>
-<span class="source-line-no">155</span><span id="line-155">         return url;</span>
-<span class="source-line-no">156</span><span id="line-156">      }</span>
-<span class="source-line-no">157</span><span id="line-157">   }</span>
-<span class="source-line-no">158</span><span id="line-158">}</span>
+<span class="source-line-no">124</span><span id="line-124">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">125</span><span id="line-125">   // Implementation</span>
+<span class="source-line-no">126</span><span id="line-126">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">127</span><span id="line-127"></span>
+<span class="source-line-no">128</span><span id="line-128">   private static class Impl extends AnnotationImpl implements Contact {</span>
+<span class="source-line-no">129</span><span id="line-129"></span>
+<span class="source-line-no">130</span><span id="line-130">      private final String email, name, url;</span>
+<span class="source-line-no">131</span><span id="line-131"></span>
+<span class="source-line-no">132</span><span id="line-132">      Impl(Builder b) {</span>
+<span class="source-line-no">133</span><span id="line-133">         super(b);</span>
+<span class="source-line-no">134</span><span id="line-134">         this.email = b.email;</span>
+<span class="source-line-no">135</span><span id="line-135">         this.name = b.name;</span>
+<span class="source-line-no">136</span><span id="line-136">         this.url = b.url;</span>
+<span class="source-line-no">137</span><span id="line-137">         postConstruct();</span>
+<span class="source-line-no">138</span><span id="line-138">      }</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">      @Override /* Contact */</span>
+<span class="source-line-no">141</span><span id="line-141">      public String email() {</span>
+<span class="source-line-no">142</span><span id="line-142">         return email;</span>
+<span class="source-line-no">143</span><span id="line-143">      }</span>
+<span class="source-line-no">144</span><span id="line-144"></span>
+<span class="source-line-no">145</span><span id="line-145">      @Override /* Contact */</span>
+<span class="source-line-no">146</span><span id="line-146">      public String name() {</span>
+<span class="source-line-no">147</span><span id="line-147">         return name;</span>
+<span class="source-line-no">148</span><span id="line-148">      }</span>
+<span class="source-line-no">149</span><span id="line-149"></span>
+<span class="source-line-no">150</span><span id="line-150">      @Override /* Contact */</span>
+<span class="source-line-no">151</span><span id="line-151">      public String url() {</span>
+<span class="source-line-no">152</span><span id="line-152">         return url;</span>
+<span class="source-line-no">153</span><span id="line-153">      }</span>
+<span class="source-line-no">154</span><span id="line-154">   }</span>
+<span class="source-line-no">155</span><span id="line-155">}</span>
 
 
 

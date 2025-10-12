@@ -139,66 +139,62 @@
 <span class="source-line-no">126</span><span id="line-126">         return this;</span>
 <span class="source-line-no">127</span><span id="line-127">      }</span>
 <span class="source-line-no">128</span><span id="line-128"></span>
-<span class="source-line-no">129</span><span id="line-129">      // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">129</span><span id="line-129">   }</span>
 <span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">133</span><span id="line-133">   }</span>
+<span class="source-line-no">131</span><span id="line-131">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">132</span><span id="line-132">   // Implementation</span>
+<span class="source-line-no">133</span><span id="line-133">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">136</span><span id="line-136">   // Implementation</span>
-<span class="source-line-no">137</span><span id="line-137">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">138</span><span id="line-138"></span>
-<span class="source-line-no">139</span><span id="line-139">   private static class Impl extends TargetedAnnotationImpl implements RestInject {</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">      private final String name, value;</span>
-<span class="source-line-no">142</span><span id="line-142">      private final String[] methodScope;</span>
-<span class="source-line-no">143</span><span id="line-143"></span>
-<span class="source-line-no">144</span><span id="line-144">      Impl(Builder b) {</span>
-<span class="source-line-no">145</span><span id="line-145">         super(b);</span>
-<span class="source-line-no">146</span><span id="line-146">         this.name = b.name;</span>
-<span class="source-line-no">147</span><span id="line-147">         this.value = b.value;</span>
-<span class="source-line-no">148</span><span id="line-148">         this.methodScope = b.methodScope;</span>
-<span class="source-line-no">149</span><span id="line-149">         postConstruct();</span>
-<span class="source-line-no">150</span><span id="line-150">      }</span>
-<span class="source-line-no">151</span><span id="line-151"></span>
-<span class="source-line-no">152</span><span id="line-152">      @Override /* RestInject */</span>
-<span class="source-line-no">153</span><span id="line-153">      public String name() {</span>
-<span class="source-line-no">154</span><span id="line-154">         return name;</span>
-<span class="source-line-no">155</span><span id="line-155">      }</span>
-<span class="source-line-no">156</span><span id="line-156"></span>
-<span class="source-line-no">157</span><span id="line-157">      @Override /* RestInject */</span>
-<span class="source-line-no">158</span><span id="line-158">      public String value() {</span>
-<span class="source-line-no">159</span><span id="line-159">         return value;</span>
-<span class="source-line-no">160</span><span id="line-160">      }</span>
-<span class="source-line-no">161</span><span id="line-161"></span>
-<span class="source-line-no">162</span><span id="line-162">      @Override /* RestInject */</span>
-<span class="source-line-no">163</span><span id="line-163">      public String[] methodScope() {</span>
-<span class="source-line-no">164</span><span id="line-164">         return methodScope;</span>
-<span class="source-line-no">165</span><span id="line-165">      }</span>
-<span class="source-line-no">166</span><span id="line-166">   }</span>
+<span class="source-line-no">135</span><span id="line-135">   private static class Impl extends TargetedAnnotationImpl implements RestInject {</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">      private final String name, value;</span>
+<span class="source-line-no">138</span><span id="line-138">      private final String[] methodScope;</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">      Impl(Builder b) {</span>
+<span class="source-line-no">141</span><span id="line-141">         super(b);</span>
+<span class="source-line-no">142</span><span id="line-142">         this.name = b.name;</span>
+<span class="source-line-no">143</span><span id="line-143">         this.value = b.value;</span>
+<span class="source-line-no">144</span><span id="line-144">         this.methodScope = b.methodScope;</span>
+<span class="source-line-no">145</span><span id="line-145">         postConstruct();</span>
+<span class="source-line-no">146</span><span id="line-146">      }</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">      @Override /* RestInject */</span>
+<span class="source-line-no">149</span><span id="line-149">      public String name() {</span>
+<span class="source-line-no">150</span><span id="line-150">         return name;</span>
+<span class="source-line-no">151</span><span id="line-151">      }</span>
+<span class="source-line-no">152</span><span id="line-152"></span>
+<span class="source-line-no">153</span><span id="line-153">      @Override /* RestInject */</span>
+<span class="source-line-no">154</span><span id="line-154">      public String value() {</span>
+<span class="source-line-no">155</span><span id="line-155">         return value;</span>
+<span class="source-line-no">156</span><span id="line-156">      }</span>
+<span class="source-line-no">157</span><span id="line-157"></span>
+<span class="source-line-no">158</span><span id="line-158">      @Override /* RestInject */</span>
+<span class="source-line-no">159</span><span id="line-159">      public String[] methodScope() {</span>
+<span class="source-line-no">160</span><span id="line-160">         return methodScope;</span>
+<span class="source-line-no">161</span><span id="line-161">      }</span>
+<span class="source-line-no">162</span><span id="line-162">   }</span>
+<span class="source-line-no">163</span><span id="line-163"></span>
+<span class="source-line-no">164</span><span id="line-164">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">165</span><span id="line-165">   // Other</span>
+<span class="source-line-no">166</span><span id="line-166">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">167</span><span id="line-167"></span>
-<span class="source-line-no">168</span><span id="line-168">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">169</span><span id="line-169">   // Other</span>
-<span class="source-line-no">170</span><span id="line-170">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">171</span><span id="line-171"></span>
-<span class="source-line-no">172</span><span id="line-172">   /**</span>
-<span class="source-line-no">173</span><span id="line-173">    * A collection of {@link RestInject @RestInject annotations}.</span>
-<span class="source-line-no">174</span><span id="line-174">    */</span>
-<span class="source-line-no">175</span><span id="line-175">   @Documented</span>
-<span class="source-line-no">176</span><span id="line-176">   @Target({FIELD,METHOD,TYPE})</span>
-<span class="source-line-no">177</span><span id="line-177">   @Retention(RUNTIME)</span>
-<span class="source-line-no">178</span><span id="line-178">   @Inherited</span>
-<span class="source-line-no">179</span><span id="line-179">   public static @interface Array {</span>
-<span class="source-line-no">180</span><span id="line-180"></span>
-<span class="source-line-no">181</span><span id="line-181">      /**</span>
-<span class="source-line-no">182</span><span id="line-182">       * The child annotations.</span>
-<span class="source-line-no">183</span><span id="line-183">       *</span>
-<span class="source-line-no">184</span><span id="line-184">       * @return The annotation value.</span>
-<span class="source-line-no">185</span><span id="line-185">       */</span>
-<span class="source-line-no">186</span><span id="line-186">      RestInject[] value();</span>
-<span class="source-line-no">187</span><span id="line-187">   }</span>
-<span class="source-line-no">188</span><span id="line-188">}</span>
+<span class="source-line-no">168</span><span id="line-168">   /**</span>
+<span class="source-line-no">169</span><span id="line-169">    * A collection of {@link RestInject @RestInject annotations}.</span>
+<span class="source-line-no">170</span><span id="line-170">    */</span>
+<span class="source-line-no">171</span><span id="line-171">   @Documented</span>
+<span class="source-line-no">172</span><span id="line-172">   @Target({FIELD,METHOD,TYPE})</span>
+<span class="source-line-no">173</span><span id="line-173">   @Retention(RUNTIME)</span>
+<span class="source-line-no">174</span><span id="line-174">   @Inherited</span>
+<span class="source-line-no">175</span><span id="line-175">   public static @interface Array {</span>
+<span class="source-line-no">176</span><span id="line-176"></span>
+<span class="source-line-no">177</span><span id="line-177">      /**</span>
+<span class="source-line-no">178</span><span id="line-178">       * The child annotations.</span>
+<span class="source-line-no">179</span><span id="line-179">       *</span>
+<span class="source-line-no">180</span><span id="line-180">       * @return The annotation value.</span>
+<span class="source-line-no">181</span><span id="line-181">       */</span>
+<span class="source-line-no">182</span><span id="line-182">      RestInject[] value();</span>
+<span class="source-line-no">183</span><span id="line-183">   }</span>
+<span class="source-line-no">184</span><span id="line-184">}</span>
 
 
 

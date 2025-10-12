@@ -69,87 +69,81 @@
 <span class="source-line-no">056</span><span id="line-56">   /**</span>
 <span class="source-line-no">057</span><span id="line-57">    * Builder class.</span>
 <span class="source-line-no">058</span><span id="line-58">    */</span>
-<span class="source-line-no">059</span><span id="line-59">   @FluentSetters</span>
-<span class="source-line-no">060</span><span id="line-60">   public static class Builder extends BeanBuilder&lt;RestOpArgList&gt; {</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">      List&lt;Class&lt;? extends RestOpArg&gt;&gt; entries;</span>
-<span class="source-line-no">063</span><span id="line-63"></span>
-<span class="source-line-no">064</span><span id="line-64">      /**</span>
-<span class="source-line-no">065</span><span id="line-65">       * Constructor.</span>
-<span class="source-line-no">066</span><span id="line-66">       *</span>
-<span class="source-line-no">067</span><span id="line-67">       * @param beanStore The bean store to use for creating beans.</span>
-<span class="source-line-no">068</span><span id="line-68">       */</span>
-<span class="source-line-no">069</span><span id="line-69">      protected Builder(BeanStore beanStore) {</span>
-<span class="source-line-no">070</span><span id="line-70">         super(RestOpArgList.class, beanStore);</span>
-<span class="source-line-no">071</span><span id="line-71">         entries = list();</span>
-<span class="source-line-no">072</span><span id="line-72">      }</span>
-<span class="source-line-no">073</span><span id="line-73"></span>
-<span class="source-line-no">074</span><span id="line-74">      @Override /* BeanBuilder */</span>
-<span class="source-line-no">075</span><span id="line-75">      protected RestOpArgList buildDefault() {</span>
-<span class="source-line-no">076</span><span id="line-76">         return new RestOpArgList(this);</span>
-<span class="source-line-no">077</span><span id="line-77">      }</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">      //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">080</span><span id="line-80">      // Properties</span>
-<span class="source-line-no">081</span><span id="line-81">      //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">      /**</span>
-<span class="source-line-no">084</span><span id="line-84">       * Prepends the specified rest op arg classes to the list.</span>
-<span class="source-line-no">085</span><span id="line-85">       *</span>
-<span class="source-line-no">086</span><span id="line-86">       * @param values The values to add.</span>
-<span class="source-line-no">087</span><span id="line-87">       * @return This object.</span>
-<span class="source-line-no">088</span><span id="line-88">       * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.</span>
-<span class="source-line-no">089</span><span id="line-89">       */</span>
-<span class="source-line-no">090</span><span id="line-90">      public Builder add(Class&lt;?&gt;...values) {</span>
-<span class="source-line-no">091</span><span id="line-91">         prependAll(entries, Utils.assertClassArrayArgIsType("values", RestOpArg.class, values));</span>
-<span class="source-line-no">092</span><span id="line-92">         return this;</span>
-<span class="source-line-no">093</span><span id="line-93">      }</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">      // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">      @Override /* GENERATED - org.apache.juneau.BeanBuilder */</span>
-<span class="source-line-no">098</span><span id="line-98">      public Builder impl(Object value) {</span>
-<span class="source-line-no">099</span><span id="line-99">         super.impl(value);</span>
-<span class="source-line-no">100</span><span id="line-100">         return this;</span>
-<span class="source-line-no">101</span><span id="line-101">      }</span>
-<span class="source-line-no">102</span><span id="line-102"></span>
-<span class="source-line-no">103</span><span id="line-103">      @Override /* GENERATED - org.apache.juneau.BeanBuilder */</span>
-<span class="source-line-no">104</span><span id="line-104">      public Builder type(Class&lt;?&gt; value) {</span>
-<span class="source-line-no">105</span><span id="line-105">         super.type(value);</span>
-<span class="source-line-no">106</span><span id="line-106">         return this;</span>
-<span class="source-line-no">107</span><span id="line-107">      }</span>
-<span class="source-line-no">108</span><span id="line-108"></span>
-<span class="source-line-no">109</span><span id="line-109">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">110</span><span id="line-110">   }</span>
+<span class="source-line-no">059</span><span id="line-59">   public static class Builder extends BeanBuilder&lt;RestOpArgList&gt; {</span>
+<span class="source-line-no">060</span><span id="line-60"></span>
+<span class="source-line-no">061</span><span id="line-61">      List&lt;Class&lt;? extends RestOpArg&gt;&gt; entries;</span>
+<span class="source-line-no">062</span><span id="line-62"></span>
+<span class="source-line-no">063</span><span id="line-63">      /**</span>
+<span class="source-line-no">064</span><span id="line-64">       * Constructor.</span>
+<span class="source-line-no">065</span><span id="line-65">       *</span>
+<span class="source-line-no">066</span><span id="line-66">       * @param beanStore The bean store to use for creating beans.</span>
+<span class="source-line-no">067</span><span id="line-67">       */</span>
+<span class="source-line-no">068</span><span id="line-68">      protected Builder(BeanStore beanStore) {</span>
+<span class="source-line-no">069</span><span id="line-69">         super(RestOpArgList.class, beanStore);</span>
+<span class="source-line-no">070</span><span id="line-70">         entries = list();</span>
+<span class="source-line-no">071</span><span id="line-71">      }</span>
+<span class="source-line-no">072</span><span id="line-72"></span>
+<span class="source-line-no">073</span><span id="line-73">      @Override /* BeanBuilder */</span>
+<span class="source-line-no">074</span><span id="line-74">      protected RestOpArgList buildDefault() {</span>
+<span class="source-line-no">075</span><span id="line-75">         return new RestOpArgList(this);</span>
+<span class="source-line-no">076</span><span id="line-76">      }</span>
+<span class="source-line-no">077</span><span id="line-77"></span>
+<span class="source-line-no">078</span><span id="line-78">      //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">079</span><span id="line-79">      // Properties</span>
+<span class="source-line-no">080</span><span id="line-80">      //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">081</span><span id="line-81"></span>
+<span class="source-line-no">082</span><span id="line-82">      /**</span>
+<span class="source-line-no">083</span><span id="line-83">       * Prepends the specified rest op arg classes to the list.</span>
+<span class="source-line-no">084</span><span id="line-84">       *</span>
+<span class="source-line-no">085</span><span id="line-85">       * @param values The values to add.</span>
+<span class="source-line-no">086</span><span id="line-86">       * @return This object.</span>
+<span class="source-line-no">087</span><span id="line-87">       * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.</span>
+<span class="source-line-no">088</span><span id="line-88">       */</span>
+<span class="source-line-no">089</span><span id="line-89">      public Builder add(Class&lt;?&gt;...values) {</span>
+<span class="source-line-no">090</span><span id="line-90">         prependAll(entries, Utils.assertClassArrayArgIsType("values", RestOpArg.class, values));</span>
+<span class="source-line-no">091</span><span id="line-91">         return this;</span>
+<span class="source-line-no">092</span><span id="line-92">      }</span>
+<span class="source-line-no">093</span><span id="line-93">      @Override /* Overridden from BeanBuilder */</span>
+<span class="source-line-no">094</span><span id="line-94">      public Builder impl(Object value) {</span>
+<span class="source-line-no">095</span><span id="line-95">         super.impl(value);</span>
+<span class="source-line-no">096</span><span id="line-96">         return this;</span>
+<span class="source-line-no">097</span><span id="line-97">      }</span>
+<span class="source-line-no">098</span><span id="line-98"></span>
+<span class="source-line-no">099</span><span id="line-99">      @Override /* Overridden from BeanBuilder */</span>
+<span class="source-line-no">100</span><span id="line-100">      public Builder type(Class&lt;?&gt; value) {</span>
+<span class="source-line-no">101</span><span id="line-101">         super.type(value);</span>
+<span class="source-line-no">102</span><span id="line-102">         return this;</span>
+<span class="source-line-no">103</span><span id="line-103">      }</span>
+<span class="source-line-no">104</span><span id="line-104">   }</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">107</span><span id="line-107">   // Instance</span>
+<span class="source-line-no">108</span><span id="line-108">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   private final Class&lt;? extends RestOpArg&gt;[] entries;</span>
 <span class="source-line-no">111</span><span id="line-111"></span>
-<span class="source-line-no">112</span><span id="line-112">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">113</span><span id="line-113">   // Instance</span>
-<span class="source-line-no">114</span><span id="line-114">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   private final Class&lt;? extends RestOpArg&gt;[] entries;</span>
-<span class="source-line-no">117</span><span id="line-117"></span>
-<span class="source-line-no">118</span><span id="line-118">   /**</span>
-<span class="source-line-no">119</span><span id="line-119">    * Constructor.</span>
-<span class="source-line-no">120</span><span id="line-120">    *</span>
-<span class="source-line-no">121</span><span id="line-121">    * @param builder The builder containing the contents for this list.</span>
-<span class="source-line-no">122</span><span id="line-122">    */</span>
-<span class="source-line-no">123</span><span id="line-123">   protected RestOpArgList(Builder builder) {</span>
-<span class="source-line-no">124</span><span id="line-124">      entries =</span>
-<span class="source-line-no">125</span><span id="line-125">         builder</span>
-<span class="source-line-no">126</span><span id="line-126">            .entries</span>
-<span class="source-line-no">127</span><span id="line-127">            .stream()</span>
-<span class="source-line-no">128</span><span id="line-128">            .toArray(Class[]::new);</span>
-<span class="source-line-no">129</span><span id="line-129">   }</span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">   /**</span>
-<span class="source-line-no">132</span><span id="line-132">    * Returns the contents of this list as a {@link Class} array.</span>
-<span class="source-line-no">133</span><span id="line-133">    *</span>
-<span class="source-line-no">134</span><span id="line-134">    * @return The contents of this list as a {@link Class} array.</span>
-<span class="source-line-no">135</span><span id="line-135">    */</span>
-<span class="source-line-no">136</span><span id="line-136">   public Class&lt;? extends RestOpArg&gt;[] asArray() {</span>
-<span class="source-line-no">137</span><span id="line-137">      return entries;</span>
-<span class="source-line-no">138</span><span id="line-138">   }</span>
-<span class="source-line-no">139</span><span id="line-139">}</span>
+<span class="source-line-no">112</span><span id="line-112">   /**</span>
+<span class="source-line-no">113</span><span id="line-113">    * Constructor.</span>
+<span class="source-line-no">114</span><span id="line-114">    *</span>
+<span class="source-line-no">115</span><span id="line-115">    * @param builder The builder containing the contents for this list.</span>
+<span class="source-line-no">116</span><span id="line-116">    */</span>
+<span class="source-line-no">117</span><span id="line-117">   protected RestOpArgList(Builder builder) {</span>
+<span class="source-line-no">118</span><span id="line-118">      entries =</span>
+<span class="source-line-no">119</span><span id="line-119">         builder</span>
+<span class="source-line-no">120</span><span id="line-120">            .entries</span>
+<span class="source-line-no">121</span><span id="line-121">            .stream()</span>
+<span class="source-line-no">122</span><span id="line-122">            .toArray(Class[]::new);</span>
+<span class="source-line-no">123</span><span id="line-123">   }</span>
+<span class="source-line-no">124</span><span id="line-124"></span>
+<span class="source-line-no">125</span><span id="line-125">   /**</span>
+<span class="source-line-no">126</span><span id="line-126">    * Returns the contents of this list as a {@link Class} array.</span>
+<span class="source-line-no">127</span><span id="line-127">    *</span>
+<span class="source-line-no">128</span><span id="line-128">    * @return The contents of this list as a {@link Class} array.</span>
+<span class="source-line-no">129</span><span id="line-129">    */</span>
+<span class="source-line-no">130</span><span id="line-130">   public Class&lt;? extends RestOpArg&gt;[] asArray() {</span>
+<span class="source-line-no">131</span><span id="line-131">      return entries;</span>
+<span class="source-line-no">132</span><span id="line-132">   }</span>
+<span class="source-line-no">133</span><span id="line-133">}</span>
 
 
 

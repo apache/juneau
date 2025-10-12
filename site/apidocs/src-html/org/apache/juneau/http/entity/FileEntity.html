@@ -47,190 +47,184 @@
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;/ul&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> */</span>
-<span class="source-line-no">037</span><span id="line-37">@FluentSetters</span>
-<span class="source-line-no">038</span><span id="line-38">public class FileEntity extends BasicHttpEntity {</span>
-<span class="source-line-no">039</span><span id="line-39"></span>
-<span class="source-line-no">040</span><span id="line-40">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">041</span><span id="line-41">   // Instance</span>
-<span class="source-line-no">042</span><span id="line-42">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">043</span><span id="line-43"></span>
-<span class="source-line-no">044</span><span id="line-44">   private byte[] byteCache;</span>
-<span class="source-line-no">045</span><span id="line-45">   private String stringCache;</span>
-<span class="source-line-no">046</span><span id="line-46"></span>
-<span class="source-line-no">047</span><span id="line-47">   /**</span>
-<span class="source-line-no">048</span><span id="line-48">    * Constructor.</span>
-<span class="source-line-no">049</span><span id="line-49">    */</span>
-<span class="source-line-no">050</span><span id="line-50">   public FileEntity() {</span>
-<span class="source-line-no">051</span><span id="line-51">   }</span>
-<span class="source-line-no">052</span><span id="line-52"></span>
-<span class="source-line-no">053</span><span id="line-53">   /**</span>
-<span class="source-line-no">054</span><span id="line-54">    * Constructor.</span>
-<span class="source-line-no">055</span><span id="line-55">    *</span>
-<span class="source-line-no">056</span><span id="line-56">    * @param contentType The entity content type.</span>
-<span class="source-line-no">057</span><span id="line-57">    * @param content The entity contents.</span>
-<span class="source-line-no">058</span><span id="line-58">    */</span>
-<span class="source-line-no">059</span><span id="line-59">   public FileEntity(ContentType contentType, File content) {</span>
-<span class="source-line-no">060</span><span id="line-60">      super(contentType, content);</span>
-<span class="source-line-no">061</span><span id="line-61">   }</span>
-<span class="source-line-no">062</span><span id="line-62"></span>
-<span class="source-line-no">063</span><span id="line-63">   /**</span>
-<span class="source-line-no">064</span><span id="line-64">    * Copy constructor.</span>
-<span class="source-line-no">065</span><span id="line-65">    *</span>
-<span class="source-line-no">066</span><span id="line-66">    * @param copyFrom The bean being copied.</span>
-<span class="source-line-no">067</span><span id="line-67">    */</span>
-<span class="source-line-no">068</span><span id="line-68">   protected FileEntity(FileEntity copyFrom) {</span>
-<span class="source-line-no">069</span><span id="line-69">      super(copyFrom);</span>
-<span class="source-line-no">070</span><span id="line-70">   }</span>
-<span class="source-line-no">071</span><span id="line-71"></span>
-<span class="source-line-no">072</span><span id="line-72">   @Override</span>
-<span class="source-line-no">073</span><span id="line-73">   public FileEntity copy() {</span>
-<span class="source-line-no">074</span><span id="line-74">      return new FileEntity(this);</span>
-<span class="source-line-no">075</span><span id="line-75">   }</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">078</span><span id="line-78">   // Other methods</span>
-<span class="source-line-no">079</span><span id="line-79">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   private File content() {</span>
-<span class="source-line-no">082</span><span id="line-82">      File f = contentOrElse((File)null);</span>
-<span class="source-line-no">083</span><span id="line-83">      Objects.requireNonNull(f, "File");</span>
-<span class="source-line-no">084</span><span id="line-84">      if (! f.exists())</span>
-<span class="source-line-no">085</span><span id="line-85">         throw new IllegalStateException("File " + f.getAbsolutePath() + " does not exist.");</span>
-<span class="source-line-no">086</span><span id="line-86">      if (! f.canRead())</span>
-<span class="source-line-no">087</span><span id="line-87">         throw new IllegalStateException("File " + f.getAbsolutePath() + " is not readable.");</span>
-<span class="source-line-no">088</span><span id="line-88">      return f;</span>
-<span class="source-line-no">089</span><span id="line-89">   }</span>
-<span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">   @Override /* AbstractHttpEntity */</span>
-<span class="source-line-no">092</span><span id="line-92">   public String asString() throws IOException {</span>
-<span class="source-line-no">093</span><span id="line-93">      if (isCached() &amp;&amp; stringCache == null)</span>
-<span class="source-line-no">094</span><span id="line-94">         stringCache = read(new InputStreamReader(new FileInputStream(content()), getCharset()), getMaxLength());</span>
-<span class="source-line-no">095</span><span id="line-95">      if (stringCache != null)</span>
-<span class="source-line-no">096</span><span id="line-96">         return stringCache;</span>
-<span class="source-line-no">097</span><span id="line-97">      return read(new InputStreamReader(new FileInputStream(content()), getCharset()), getMaxLength());</span>
-<span class="source-line-no">098</span><span id="line-98">   }</span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">   @Override /* AbstractHttpEntity */</span>
-<span class="source-line-no">101</span><span id="line-101">   public byte[] asBytes() throws IOException {</span>
-<span class="source-line-no">102</span><span id="line-102">      if (isCached() &amp;&amp; byteCache == null)</span>
-<span class="source-line-no">103</span><span id="line-103">         byteCache = readBytes(content(), getMaxLength());</span>
-<span class="source-line-no">104</span><span id="line-104">      if (byteCache != null)</span>
-<span class="source-line-no">105</span><span id="line-105">         return byteCache;</span>
-<span class="source-line-no">106</span><span id="line-106">      return readBytes(content());</span>
-<span class="source-line-no">107</span><span id="line-107">   }</span>
-<span class="source-line-no">108</span><span id="line-108"></span>
-<span class="source-line-no">109</span><span id="line-109">   @Override /* HttpEntity */</span>
-<span class="source-line-no">110</span><span id="line-110">   public boolean isRepeatable() {</span>
-<span class="source-line-no">111</span><span id="line-111">      return true;</span>
-<span class="source-line-no">112</span><span id="line-112">   }</span>
-<span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114">   @Override /* HttpEntity */</span>
-<span class="source-line-no">115</span><span id="line-115">   public long getContentLength() {</span>
-<span class="source-line-no">116</span><span id="line-116">      return content().length();</span>
-<span class="source-line-no">117</span><span id="line-117">   }</span>
-<span class="source-line-no">118</span><span id="line-118"></span>
-<span class="source-line-no">119</span><span id="line-119">   @Override /* HttpEntity */</span>
-<span class="source-line-no">120</span><span id="line-120">   public InputStream getContent() throws IOException {</span>
-<span class="source-line-no">121</span><span id="line-121">      if (isCached())</span>
-<span class="source-line-no">122</span><span id="line-122">         return new ByteArrayInputStream(asBytes());</span>
-<span class="source-line-no">123</span><span id="line-123">      return new FileInputStream(content());</span>
-<span class="source-line-no">124</span><span id="line-124">   }</span>
-<span class="source-line-no">125</span><span id="line-125"></span>
-<span class="source-line-no">126</span><span id="line-126">   @Override /* HttpEntity */</span>
-<span class="source-line-no">127</span><span id="line-127">   public void writeTo(OutputStream out) throws IOException {</span>
-<span class="source-line-no">128</span><span id="line-128">      Utils.assertArgNotNull("out", out);</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">      if (isCached()) {</span>
-<span class="source-line-no">131</span><span id="line-131">         out.write(asBytes());</span>
-<span class="source-line-no">132</span><span id="line-132">      } else {</span>
-<span class="source-line-no">133</span><span id="line-133">         try (InputStream is = getContent()) {</span>
-<span class="source-line-no">134</span><span id="line-134">            IOUtils.pipe(is, out, getMaxLength());</span>
-<span class="source-line-no">135</span><span id="line-135">         }</span>
-<span class="source-line-no">136</span><span id="line-136">      }</span>
-<span class="source-line-no">137</span><span id="line-137">   }</span>
-<span class="source-line-no">138</span><span id="line-138"></span>
-<span class="source-line-no">139</span><span id="line-139">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   @Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */</span>
-<span class="source-line-no">142</span><span id="line-142">   public FileEntity setCached() throws IOException{</span>
-<span class="source-line-no">143</span><span id="line-143">      super.setCached();</span>
-<span class="source-line-no">144</span><span id="line-144">      return this;</span>
-<span class="source-line-no">145</span><span id="line-145">   }</span>
-<span class="source-line-no">146</span><span id="line-146"></span>
-<span class="source-line-no">147</span><span id="line-147">   @Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */</span>
-<span class="source-line-no">148</span><span id="line-148">   public FileEntity setCharset(Charset value) {</span>
-<span class="source-line-no">149</span><span id="line-149">      super.setCharset(value);</span>
-<span class="source-line-no">150</span><span id="line-150">      return this;</span>
-<span class="source-line-no">151</span><span id="line-151">   }</span>
-<span class="source-line-no">152</span><span id="line-152"></span>
-<span class="source-line-no">153</span><span id="line-153">   @Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */</span>
-<span class="source-line-no">154</span><span id="line-154">   public FileEntity setChunked() {</span>
-<span class="source-line-no">155</span><span id="line-155">      super.setChunked();</span>
-<span class="source-line-no">156</span><span id="line-156">      return this;</span>
-<span class="source-line-no">157</span><span id="line-157">   }</span>
-<span class="source-line-no">158</span><span id="line-158"></span>
-<span class="source-line-no">159</span><span id="line-159">   @Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */</span>
-<span class="source-line-no">160</span><span id="line-160">   public FileEntity setChunked(boolean value) {</span>
-<span class="source-line-no">161</span><span id="line-161">      super.setChunked(value);</span>
-<span class="source-line-no">162</span><span id="line-162">      return this;</span>
-<span class="source-line-no">163</span><span id="line-163">   }</span>
-<span class="source-line-no">164</span><span id="line-164"></span>
-<span class="source-line-no">165</span><span id="line-165">   @Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */</span>
-<span class="source-line-no">166</span><span id="line-166">   public FileEntity setContent(Object value) {</span>
-<span class="source-line-no">167</span><span id="line-167">      super.setContent(value);</span>
-<span class="source-line-no">168</span><span id="line-168">      return this;</span>
-<span class="source-line-no">169</span><span id="line-169">   }</span>
-<span class="source-line-no">170</span><span id="line-170"></span>
-<span class="source-line-no">171</span><span id="line-171">   @Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */</span>
-<span class="source-line-no">172</span><span id="line-172">   public FileEntity setContent(Supplier&lt;?&gt; value) {</span>
-<span class="source-line-no">173</span><span id="line-173">      super.setContent(value);</span>
-<span class="source-line-no">174</span><span id="line-174">      return this;</span>
-<span class="source-line-no">175</span><span id="line-175">   }</span>
-<span class="source-line-no">176</span><span id="line-176"></span>
-<span class="source-line-no">177</span><span id="line-177">   @Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */</span>
-<span class="source-line-no">178</span><span id="line-178">   public FileEntity setContentEncoding(String value) {</span>
-<span class="source-line-no">179</span><span id="line-179">      super.setContentEncoding(value);</span>
-<span class="source-line-no">180</span><span id="line-180">      return this;</span>
-<span class="source-line-no">181</span><span id="line-181">   }</span>
-<span class="source-line-no">182</span><span id="line-182"></span>
-<span class="source-line-no">183</span><span id="line-183">   @Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */</span>
-<span class="source-line-no">184</span><span id="line-184">   public FileEntity setContentEncoding(ContentEncoding value) {</span>
-<span class="source-line-no">185</span><span id="line-185">      super.setContentEncoding(value);</span>
-<span class="source-line-no">186</span><span id="line-186">      return this;</span>
-<span class="source-line-no">187</span><span id="line-187">   }</span>
-<span class="source-line-no">188</span><span id="line-188"></span>
-<span class="source-line-no">189</span><span id="line-189">   @Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */</span>
-<span class="source-line-no">190</span><span id="line-190">   public FileEntity setContentLength(long value) {</span>
-<span class="source-line-no">191</span><span id="line-191">      super.setContentLength(value);</span>
-<span class="source-line-no">192</span><span id="line-192">      return this;</span>
-<span class="source-line-no">193</span><span id="line-193">   }</span>
-<span class="source-line-no">194</span><span id="line-194"></span>
-<span class="source-line-no">195</span><span id="line-195">   @Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */</span>
-<span class="source-line-no">196</span><span id="line-196">   public FileEntity setContentType(String value) {</span>
-<span class="source-line-no">197</span><span id="line-197">      super.setContentType(value);</span>
-<span class="source-line-no">198</span><span id="line-198">      return this;</span>
-<span class="source-line-no">199</span><span id="line-199">   }</span>
-<span class="source-line-no">200</span><span id="line-200"></span>
-<span class="source-line-no">201</span><span id="line-201">   @Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */</span>
-<span class="source-line-no">202</span><span id="line-202">   public FileEntity setContentType(ContentType value) {</span>
-<span class="source-line-no">203</span><span id="line-203">      super.setContentType(value);</span>
-<span class="source-line-no">204</span><span id="line-204">      return this;</span>
-<span class="source-line-no">205</span><span id="line-205">   }</span>
-<span class="source-line-no">206</span><span id="line-206"></span>
-<span class="source-line-no">207</span><span id="line-207">   @Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */</span>
-<span class="source-line-no">208</span><span id="line-208">   public FileEntity setMaxLength(int value) {</span>
-<span class="source-line-no">209</span><span id="line-209">      super.setMaxLength(value);</span>
-<span class="source-line-no">210</span><span id="line-210">      return this;</span>
-<span class="source-line-no">211</span><span id="line-211">   }</span>
-<span class="source-line-no">212</span><span id="line-212"></span>
-<span class="source-line-no">213</span><span id="line-213">   @Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */</span>
-<span class="source-line-no">214</span><span id="line-214">   public FileEntity setUnmodifiable() {</span>
-<span class="source-line-no">215</span><span id="line-215">      super.setUnmodifiable();</span>
-<span class="source-line-no">216</span><span id="line-216">      return this;</span>
-<span class="source-line-no">217</span><span id="line-217">   }</span>
-<span class="source-line-no">218</span><span id="line-218"></span>
-<span class="source-line-no">219</span><span id="line-219">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">220</span><span id="line-220">}</span>
+<span class="source-line-no">037</span><span id="line-37">public class FileEntity extends BasicHttpEntity {</span>
+<span class="source-line-no">038</span><span id="line-38"></span>
+<span class="source-line-no">039</span><span id="line-39">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">040</span><span id="line-40">   // Instance</span>
+<span class="source-line-no">041</span><span id="line-41">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">042</span><span id="line-42"></span>
+<span class="source-line-no">043</span><span id="line-43">   private byte[] byteCache;</span>
+<span class="source-line-no">044</span><span id="line-44">   private String stringCache;</span>
+<span class="source-line-no">045</span><span id="line-45"></span>
+<span class="source-line-no">046</span><span id="line-46">   /**</span>
+<span class="source-line-no">047</span><span id="line-47">    * Constructor.</span>
+<span class="source-line-no">048</span><span id="line-48">    */</span>
+<span class="source-line-no">049</span><span id="line-49">   public FileEntity() {</span>
+<span class="source-line-no">050</span><span id="line-50">   }</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">   /**</span>
+<span class="source-line-no">053</span><span id="line-53">    * Constructor.</span>
+<span class="source-line-no">054</span><span id="line-54">    *</span>
+<span class="source-line-no">055</span><span id="line-55">    * @param contentType The entity content type.</span>
+<span class="source-line-no">056</span><span id="line-56">    * @param content The entity contents.</span>
+<span class="source-line-no">057</span><span id="line-57">    */</span>
+<span class="source-line-no">058</span><span id="line-58">   public FileEntity(ContentType contentType, File content) {</span>
+<span class="source-line-no">059</span><span id="line-59">      super(contentType, content);</span>
+<span class="source-line-no">060</span><span id="line-60">   }</span>
+<span class="source-line-no">061</span><span id="line-61"></span>
+<span class="source-line-no">062</span><span id="line-62">   /**</span>
+<span class="source-line-no">063</span><span id="line-63">    * Copy constructor.</span>
+<span class="source-line-no">064</span><span id="line-64">    *</span>
+<span class="source-line-no">065</span><span id="line-65">    * @param copyFrom The bean being copied.</span>
+<span class="source-line-no">066</span><span id="line-66">    */</span>
+<span class="source-line-no">067</span><span id="line-67">   protected FileEntity(FileEntity copyFrom) {</span>
+<span class="source-line-no">068</span><span id="line-68">      super(copyFrom);</span>
+<span class="source-line-no">069</span><span id="line-69">   }</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">   @Override</span>
+<span class="source-line-no">072</span><span id="line-72">   public FileEntity copy() {</span>
+<span class="source-line-no">073</span><span id="line-73">      return new FileEntity(this);</span>
+<span class="source-line-no">074</span><span id="line-74">   }</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">077</span><span id="line-77">   // Other methods</span>
+<span class="source-line-no">078</span><span id="line-78">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">079</span><span id="line-79"></span>
+<span class="source-line-no">080</span><span id="line-80">   private File content() {</span>
+<span class="source-line-no">081</span><span id="line-81">      File f = contentOrElse((File)null);</span>
+<span class="source-line-no">082</span><span id="line-82">      Objects.requireNonNull(f, "File");</span>
+<span class="source-line-no">083</span><span id="line-83">      if (! f.exists())</span>
+<span class="source-line-no">084</span><span id="line-84">         throw new IllegalStateException("File " + f.getAbsolutePath() + " does not exist.");</span>
+<span class="source-line-no">085</span><span id="line-85">      if (! f.canRead())</span>
+<span class="source-line-no">086</span><span id="line-86">         throw new IllegalStateException("File " + f.getAbsolutePath() + " is not readable.");</span>
+<span class="source-line-no">087</span><span id="line-87">      return f;</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   @Override /* AbstractHttpEntity */</span>
+<span class="source-line-no">091</span><span id="line-91">   public String asString() throws IOException {</span>
+<span class="source-line-no">092</span><span id="line-92">      if (isCached() &amp;&amp; stringCache == null)</span>
+<span class="source-line-no">093</span><span id="line-93">         stringCache = read(new InputStreamReader(new FileInputStream(content()), getCharset()), getMaxLength());</span>
+<span class="source-line-no">094</span><span id="line-94">      if (stringCache != null)</span>
+<span class="source-line-no">095</span><span id="line-95">         return stringCache;</span>
+<span class="source-line-no">096</span><span id="line-96">      return read(new InputStreamReader(new FileInputStream(content()), getCharset()), getMaxLength());</span>
+<span class="source-line-no">097</span><span id="line-97">   }</span>
+<span class="source-line-no">098</span><span id="line-98"></span>
+<span class="source-line-no">099</span><span id="line-99">   @Override /* AbstractHttpEntity */</span>
+<span class="source-line-no">100</span><span id="line-100">   public byte[] asBytes() throws IOException {</span>
+<span class="source-line-no">101</span><span id="line-101">      if (isCached() &amp;&amp; byteCache == null)</span>
+<span class="source-line-no">102</span><span id="line-102">         byteCache = readBytes(content(), getMaxLength());</span>
+<span class="source-line-no">103</span><span id="line-103">      if (byteCache != null)</span>
+<span class="source-line-no">104</span><span id="line-104">         return byteCache;</span>
+<span class="source-line-no">105</span><span id="line-105">      return readBytes(content());</span>
+<span class="source-line-no">106</span><span id="line-106">   }</span>
+<span class="source-line-no">107</span><span id="line-107"></span>
+<span class="source-line-no">108</span><span id="line-108">   @Override /* HttpEntity */</span>
+<span class="source-line-no">109</span><span id="line-109">   public boolean isRepeatable() {</span>
+<span class="source-line-no">110</span><span id="line-110">      return true;</span>
+<span class="source-line-no">111</span><span id="line-111">   }</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">   @Override /* HttpEntity */</span>
+<span class="source-line-no">114</span><span id="line-114">   public long getContentLength() {</span>
+<span class="source-line-no">115</span><span id="line-115">      return content().length();</span>
+<span class="source-line-no">116</span><span id="line-116">   }</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">   @Override /* HttpEntity */</span>
+<span class="source-line-no">119</span><span id="line-119">   public InputStream getContent() throws IOException {</span>
+<span class="source-line-no">120</span><span id="line-120">      if (isCached())</span>
+<span class="source-line-no">121</span><span id="line-121">         return new ByteArrayInputStream(asBytes());</span>
+<span class="source-line-no">122</span><span id="line-122">      return new FileInputStream(content());</span>
+<span class="source-line-no">123</span><span id="line-123">   }</span>
+<span class="source-line-no">124</span><span id="line-124"></span>
+<span class="source-line-no">125</span><span id="line-125">   @Override /* HttpEntity */</span>
+<span class="source-line-no">126</span><span id="line-126">   public void writeTo(OutputStream out) throws IOException {</span>
+<span class="source-line-no">127</span><span id="line-127">      Utils.assertArgNotNull("out", out);</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">      if (isCached()) {</span>
+<span class="source-line-no">130</span><span id="line-130">         out.write(asBytes());</span>
+<span class="source-line-no">131</span><span id="line-131">      } else {</span>
+<span class="source-line-no">132</span><span id="line-132">         try (InputStream is = getContent()) {</span>
+<span class="source-line-no">133</span><span id="line-133">            IOUtils.pipe(is, out, getMaxLength());</span>
+<span class="source-line-no">134</span><span id="line-134">         }</span>
+<span class="source-line-no">135</span><span id="line-135">      }</span>
+<span class="source-line-no">136</span><span id="line-136">   }</span>
+<span class="source-line-no">137</span><span id="line-137">   @Override /* Overridden from BasicHttpEntity */</span>
+<span class="source-line-no">138</span><span id="line-138">   public FileEntity setCached() throws IOException{</span>
+<span class="source-line-no">139</span><span id="line-139">      super.setCached();</span>
+<span class="source-line-no">140</span><span id="line-140">      return this;</span>
+<span class="source-line-no">141</span><span id="line-141">   }</span>
+<span class="source-line-no">142</span><span id="line-142"></span>
+<span class="source-line-no">143</span><span id="line-143">   @Override /* Overridden from BasicHttpEntity */</span>
+<span class="source-line-no">144</span><span id="line-144">   public FileEntity setCharset(Charset value) {</span>
+<span class="source-line-no">145</span><span id="line-145">      super.setCharset(value);</span>
+<span class="source-line-no">146</span><span id="line-146">      return this;</span>
+<span class="source-line-no">147</span><span id="line-147">   }</span>
+<span class="source-line-no">148</span><span id="line-148"></span>
+<span class="source-line-no">149</span><span id="line-149">   @Override /* Overridden from BasicHttpEntity */</span>
+<span class="source-line-no">150</span><span id="line-150">   public FileEntity setChunked() {</span>
+<span class="source-line-no">151</span><span id="line-151">      super.setChunked();</span>
+<span class="source-line-no">152</span><span id="line-152">      return this;</span>
+<span class="source-line-no">153</span><span id="line-153">   }</span>
+<span class="source-line-no">154</span><span id="line-154"></span>
+<span class="source-line-no">155</span><span id="line-155">   @Override /* Overridden from BasicHttpEntity */</span>
+<span class="source-line-no">156</span><span id="line-156">   public FileEntity setChunked(boolean value) {</span>
+<span class="source-line-no">157</span><span id="line-157">      super.setChunked(value);</span>
+<span class="source-line-no">158</span><span id="line-158">      return this;</span>
+<span class="source-line-no">159</span><span id="line-159">   }</span>
+<span class="source-line-no">160</span><span id="line-160"></span>
+<span class="source-line-no">161</span><span id="line-161">   @Override /* Overridden from BasicHttpEntity */</span>
+<span class="source-line-no">162</span><span id="line-162">   public FileEntity setContent(Object value) {</span>
+<span class="source-line-no">163</span><span id="line-163">      super.setContent(value);</span>
+<span class="source-line-no">164</span><span id="line-164">      return this;</span>
+<span class="source-line-no">165</span><span id="line-165">   }</span>
+<span class="source-line-no">166</span><span id="line-166"></span>
+<span class="source-line-no">167</span><span id="line-167">   @Override /* Overridden from BasicHttpEntity */</span>
+<span class="source-line-no">168</span><span id="line-168">   public FileEntity setContent(Supplier&lt;?&gt; value) {</span>
+<span class="source-line-no">169</span><span id="line-169">      super.setContent(value);</span>
+<span class="source-line-no">170</span><span id="line-170">      return this;</span>
+<span class="source-line-no">171</span><span id="line-171">   }</span>
+<span class="source-line-no">172</span><span id="line-172"></span>
+<span class="source-line-no">173</span><span id="line-173">   @Override /* Overridden from BasicHttpEntity */</span>
+<span class="source-line-no">174</span><span id="line-174">   public FileEntity setContentEncoding(String value) {</span>
+<span class="source-line-no">175</span><span id="line-175">      super.setContentEncoding(value);</span>
+<span class="source-line-no">176</span><span id="line-176">      return this;</span>
+<span class="source-line-no">177</span><span id="line-177">   }</span>
+<span class="source-line-no">178</span><span id="line-178"></span>
+<span class="source-line-no">179</span><span id="line-179">   @Override /* Overridden from BasicHttpEntity */</span>
+<span class="source-line-no">180</span><span id="line-180">   public FileEntity setContentEncoding(ContentEncoding value) {</span>
+<span class="source-line-no">181</span><span id="line-181">      super.setContentEncoding(value);</span>
+<span class="source-line-no">182</span><span id="line-182">      return this;</span>
+<span class="source-line-no">183</span><span id="line-183">   }</span>
+<span class="source-line-no">184</span><span id="line-184"></span>
+<span class="source-line-no">185</span><span id="line-185">   @Override /* Overridden from BasicHttpEntity */</span>
+<span class="source-line-no">186</span><span id="line-186">   public FileEntity setContentLength(long value) {</span>
+<span class="source-line-no">187</span><span id="line-187">      super.setContentLength(value);</span>
+<span class="source-line-no">188</span><span id="line-188">      return this;</span>
+<span class="source-line-no">189</span><span id="line-189">   }</span>
+<span class="source-line-no">190</span><span id="line-190"></span>
+<span class="source-line-no">191</span><span id="line-191">   @Override /* Overridden from BasicHttpEntity */</span>
+<span class="source-line-no">192</span><span id="line-192">   public FileEntity setContentType(String value) {</span>
+<span class="source-line-no">193</span><span id="line-193">      super.setContentType(value);</span>
+<span class="source-line-no">194</span><span id="line-194">      return this;</span>
+<span class="source-line-no">195</span><span id="line-195">   }</span>
+<span class="source-line-no">196</span><span id="line-196"></span>
+<span class="source-line-no">197</span><span id="line-197">   @Override /* Overridden from BasicHttpEntity */</span>
+<span class="source-line-no">198</span><span id="line-198">   public FileEntity setContentType(ContentType value) {</span>
+<span class="source-line-no">199</span><span id="line-199">      super.setContentType(value);</span>
+<span class="source-line-no">200</span><span id="line-200">      return this;</span>
+<span class="source-line-no">201</span><span id="line-201">   }</span>
+<span class="source-line-no">202</span><span id="line-202"></span>
+<span class="source-line-no">203</span><span id="line-203">   @Override /* Overridden from BasicHttpEntity */</span>
+<span class="source-line-no">204</span><span id="line-204">   public FileEntity setMaxLength(int value) {</span>
+<span class="source-line-no">205</span><span id="line-205">      super.setMaxLength(value);</span>
+<span class="source-line-no">206</span><span id="line-206">      return this;</span>
+<span class="source-line-no">207</span><span id="line-207">   }</span>
+<span class="source-line-no">208</span><span id="line-208"></span>
+<span class="source-line-no">209</span><span id="line-209">   @Override /* Overridden from BasicHttpEntity */</span>
+<span class="source-line-no">210</span><span id="line-210">   public FileEntity setUnmodifiable() {</span>
+<span class="source-line-no">211</span><span id="line-211">      super.setUnmodifiable();</span>
+<span class="source-line-no">212</span><span id="line-212">      return this;</span>
+<span class="source-line-no">213</span><span id="line-213">   }</span>
+<span class="source-line-no">214</span><span id="line-214">}</span>
 
 
 

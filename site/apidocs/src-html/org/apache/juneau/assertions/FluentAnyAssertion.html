@@ -149,392 +149,385 @@
 <span class="source-line-no">136</span><span id="line-136"> * @param &lt;T&gt; The object type.</span>
 <span class="source-line-no">137</span><span id="line-137"> * @param &lt;R&gt; The return type.</span>
 <span class="source-line-no">138</span><span id="line-138"> */</span>
-<span class="source-line-no">139</span><span id="line-139">@FluentSetters(returns="FluentAnyAssertion&lt;T,R&gt;")</span>
-<span class="source-line-no">140</span><span id="line-140">public class FluentAnyAssertion&lt;T,R&gt; extends FluentObjectAssertion&lt;T,R&gt; {</span>
-<span class="source-line-no">141</span><span id="line-141"></span>
-<span class="source-line-no">142</span><span id="line-142">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">143</span><span id="line-143">   // Static</span>
-<span class="source-line-no">144</span><span id="line-144">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">145</span><span id="line-145"></span>
-<span class="source-line-no">146</span><span id="line-146">   private static final Messages MESSAGES = Messages.of(FluentAnyAssertion.class, "Messages");</span>
-<span class="source-line-no">147</span><span id="line-147">   private static final String</span>
-<span class="source-line-no">148</span><span id="line-148">      MSG_objectWasNotType = MESSAGES.getString("objectWasNotType");</span>
-<span class="source-line-no">149</span><span id="line-149"></span>
-<span class="source-line-no">150</span><span id="line-150">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">151</span><span id="line-151">   // Instance</span>
-<span class="source-line-no">152</span><span id="line-152">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">153</span><span id="line-153"></span>
-<span class="source-line-no">154</span><span id="line-154">   /**</span>
-<span class="source-line-no">155</span><span id="line-155">    * Constructor.</span>
-<span class="source-line-no">156</span><span id="line-156">    *</span>
-<span class="source-line-no">157</span><span id="line-157">    * @param value</span>
-<span class="source-line-no">158</span><span id="line-158">    *    The object being tested.</span>
-<span class="source-line-no">159</span><span id="line-159">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">160</span><span id="line-160">    * @param returns</span>
-<span class="source-line-no">161</span><span id="line-161">    *    The object to return after a test method is called.</span>
-<span class="source-line-no">162</span><span id="line-162">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
-<span class="source-line-no">163</span><span id="line-163">    * used on the same assertion.</span>
-<span class="source-line-no">164</span><span id="line-164">    */</span>
-<span class="source-line-no">165</span><span id="line-165">   public FluentAnyAssertion(T value, R returns) {</span>
-<span class="source-line-no">166</span><span id="line-166">      this(null, value, returns);</span>
-<span class="source-line-no">167</span><span id="line-167">   }</span>
-<span class="source-line-no">168</span><span id="line-168"></span>
-<span class="source-line-no">169</span><span id="line-169">   /**</span>
-<span class="source-line-no">170</span><span id="line-170">    * Chained constructor.</span>
-<span class="source-line-no">171</span><span id="line-171">    *</span>
-<span class="source-line-no">172</span><span id="line-172">    * &lt;p&gt;</span>
-<span class="source-line-no">173</span><span id="line-173">    * Used when transforming one assertion into another so that the assertion config can be used by the new assertion.</span>
-<span class="source-line-no">174</span><span id="line-174">    *</span>
-<span class="source-line-no">175</span><span id="line-175">    * @param creator</span>
-<span class="source-line-no">176</span><span id="line-176">    *    The assertion that created this assertion.</span>
-<span class="source-line-no">177</span><span id="line-177">    *    &lt;br&gt;Should be &lt;jk&gt;null&lt;/jk&gt; if this is the top-level assertion.</span>
-<span class="source-line-no">178</span><span id="line-178">    * @param value</span>
-<span class="source-line-no">179</span><span id="line-179">    *    The object being tested.</span>
-<span class="source-line-no">180</span><span id="line-180">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">181</span><span id="line-181">    * @param returns</span>
-<span class="source-line-no">182</span><span id="line-182">    *    The object to return after a test method is called.</span>
-<span class="source-line-no">183</span><span id="line-183">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
-<span class="source-line-no">184</span><span id="line-184">    * used on the same assertion.</span>
-<span class="source-line-no">185</span><span id="line-185">    */</span>
-<span class="source-line-no">186</span><span id="line-186">   public FluentAnyAssertion(Assertion creator, T value, R returns) {</span>
-<span class="source-line-no">187</span><span id="line-187">      super(creator, value, returns);</span>
-<span class="source-line-no">188</span><span id="line-188">   }</span>
-<span class="source-line-no">189</span><span id="line-189"></span>
-<span class="source-line-no">190</span><span id="line-190">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">191</span><span id="line-191">   // Transform methods</span>
-<span class="source-line-no">192</span><span id="line-192">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">   /**</span>
-<span class="source-line-no">195</span><span id="line-195">    * Converts this object assertion into an array assertion.</span>
-<span class="source-line-no">196</span><span id="line-196">    *</span>
-<span class="source-line-no">197</span><span id="line-197">    * @param &lt;E&gt; The element type of the array.</span>
-<span class="source-line-no">198</span><span id="line-198">    * @param elementType The element type of the array.</span>
-<span class="source-line-no">199</span><span id="line-199">    * @return A new assertion.</span>
-<span class="source-line-no">200</span><span id="line-200">    * @throws AssertionError If object is not an array.</span>
-<span class="source-line-no">201</span><span id="line-201">    */</span>
-<span class="source-line-no">202</span><span id="line-202">   public &lt;E&gt; FluentArrayAssertion&lt;E,R&gt; asArray(Class&lt;E&gt; elementType) throws AssertionError {</span>
-<span class="source-line-no">203</span><span id="line-203">      Utils.assertArgNotNull("elementType", elementType);</span>
-<span class="source-line-no">204</span><span id="line-204">      return new FluentArrayAssertion&lt;&gt;(this, cast(arrayClass(elementType)), returns());</span>
-<span class="source-line-no">205</span><span id="line-205">   }</span>
-<span class="source-line-no">206</span><span id="line-206"></span>
-<span class="source-line-no">207</span><span id="line-207">   /**</span>
-<span class="source-line-no">208</span><span id="line-208">    * Converts this object assertion into a primitive int array assertion.</span>
-<span class="source-line-no">209</span><span id="line-209">    *</span>
-<span class="source-line-no">210</span><span id="line-210">    * @return A new assertion.</span>
-<span class="source-line-no">211</span><span id="line-211">    * @throws AssertionError If object is not an int array.</span>
-<span class="source-line-no">212</span><span id="line-212">    */</span>
-<span class="source-line-no">213</span><span id="line-213">   public FluentPrimitiveArrayAssertion&lt;Integer,int[],R&gt; asIntArray() throws AssertionError {</span>
-<span class="source-line-no">214</span><span id="line-214">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(int[].class), returns());</span>
-<span class="source-line-no">215</span><span id="line-215">   }</span>
-<span class="source-line-no">216</span><span id="line-216"></span>
-<span class="source-line-no">217</span><span id="line-217">   /**</span>
-<span class="source-line-no">218</span><span id="line-218">    * Converts this object assertion into a primitive long array assertion.</span>
-<span class="source-line-no">219</span><span id="line-219">    *</span>
-<span class="source-line-no">220</span><span id="line-220">    * @return A new assertion.</span>
-<span class="source-line-no">221</span><span id="line-221">    * @throws AssertionError If object is not an long array.</span>
-<span class="source-line-no">222</span><span id="line-222">    */</span>
-<span class="source-line-no">223</span><span id="line-223">   public FluentPrimitiveArrayAssertion&lt;Long,long[],R&gt; asLongArray() throws AssertionError {</span>
-<span class="source-line-no">224</span><span id="line-224">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(long[].class), returns());</span>
-<span class="source-line-no">225</span><span id="line-225">   }</span>
-<span class="source-line-no">226</span><span id="line-226"></span>
-<span class="source-line-no">227</span><span id="line-227">   /**</span>
-<span class="source-line-no">228</span><span id="line-228">    * Converts this object assertion into a primitive short array assertion.</span>
-<span class="source-line-no">229</span><span id="line-229">    *</span>
-<span class="source-line-no">230</span><span id="line-230">    * @return A new assertion.</span>
-<span class="source-line-no">231</span><span id="line-231">    * @throws AssertionError If object is not an short array.</span>
-<span class="source-line-no">232</span><span id="line-232">    */</span>
-<span class="source-line-no">233</span><span id="line-233">   public FluentPrimitiveArrayAssertion&lt;Short,short[],R&gt; asShortArray() throws AssertionError {</span>
-<span class="source-line-no">234</span><span id="line-234">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(short[].class), returns());</span>
-<span class="source-line-no">235</span><span id="line-235">   }</span>
-<span class="source-line-no">236</span><span id="line-236"></span>
-<span class="source-line-no">237</span><span id="line-237">   /**</span>
-<span class="source-line-no">238</span><span id="line-238">    * Converts this object assertion into a primitive float array assertion.</span>
-<span class="source-line-no">239</span><span id="line-239">    *</span>
-<span class="source-line-no">240</span><span id="line-240">    * @return A new assertion.</span>
-<span class="source-line-no">241</span><span id="line-241">    * @throws AssertionError If object is not an float array.</span>
-<span class="source-line-no">242</span><span id="line-242">    */</span>
-<span class="source-line-no">243</span><span id="line-243">   public FluentPrimitiveArrayAssertion&lt;Float,float[],R&gt; asFloatArray() throws AssertionError {</span>
-<span class="source-line-no">244</span><span id="line-244">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(float[].class), returns());</span>
-<span class="source-line-no">245</span><span id="line-245">   }</span>
-<span class="source-line-no">246</span><span id="line-246"></span>
-<span class="source-line-no">247</span><span id="line-247">   /**</span>
-<span class="source-line-no">248</span><span id="line-248">    * Converts this object assertion into a primitive double array assertion.</span>
-<span class="source-line-no">249</span><span id="line-249">    *</span>
-<span class="source-line-no">250</span><span id="line-250">    * @return A new assertion.</span>
-<span class="source-line-no">251</span><span id="line-251">    * @throws AssertionError If object is not an double array.</span>
-<span class="source-line-no">252</span><span id="line-252">    */</span>
-<span class="source-line-no">253</span><span id="line-253">   public FluentPrimitiveArrayAssertion&lt;Double,double[],R&gt; asDoubleArray() throws AssertionError {</span>
-<span class="source-line-no">254</span><span id="line-254">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(double[].class), returns());</span>
-<span class="source-line-no">255</span><span id="line-255">   }</span>
-<span class="source-line-no">256</span><span id="line-256"></span>
-<span class="source-line-no">257</span><span id="line-257">   /**</span>
-<span class="source-line-no">258</span><span id="line-258">    * Converts this object assertion into a primitive char array assertion.</span>
-<span class="source-line-no">259</span><span id="line-259">    *</span>
-<span class="source-line-no">260</span><span id="line-260">    * @return A new assertion.</span>
-<span class="source-line-no">261</span><span id="line-261">    * @throws AssertionError If object is not an char array.</span>
-<span class="source-line-no">262</span><span id="line-262">    */</span>
-<span class="source-line-no">263</span><span id="line-263">   public FluentPrimitiveArrayAssertion&lt;Character,char[],R&gt; asCharArray() throws AssertionError {</span>
-<span class="source-line-no">264</span><span id="line-264">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(char[].class), returns());</span>
-<span class="source-line-no">265</span><span id="line-265">   }</span>
-<span class="source-line-no">266</span><span id="line-266"></span>
-<span class="source-line-no">267</span><span id="line-267">   /**</span>
-<span class="source-line-no">268</span><span id="line-268">    * Converts this object assertion into a primitive byte array assertion.</span>
-<span class="source-line-no">269</span><span id="line-269">    *</span>
-<span class="source-line-no">270</span><span id="line-270">    * @return A new assertion.</span>
-<span class="source-line-no">271</span><span id="line-271">    * @throws AssertionError If object is not an byte array.</span>
-<span class="source-line-no">272</span><span id="line-272">    */</span>
-<span class="source-line-no">273</span><span id="line-273">   public FluentPrimitiveArrayAssertion&lt;Byte,byte[],R&gt; asByteArray() throws AssertionError {</span>
-<span class="source-line-no">274</span><span id="line-274">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(byte[].class), returns());</span>
-<span class="source-line-no">275</span><span id="line-275">   }</span>
-<span class="source-line-no">276</span><span id="line-276"></span>
-<span class="source-line-no">277</span><span id="line-277">   /**</span>
-<span class="source-line-no">278</span><span id="line-278">    * Converts this object assertion into a primitive boolean array assertion.</span>
-<span class="source-line-no">279</span><span id="line-279">    *</span>
-<span class="source-line-no">280</span><span id="line-280">    * @return A new assertion.</span>
-<span class="source-line-no">281</span><span id="line-281">    * @throws AssertionError If object is not an boolean array.</span>
-<span class="source-line-no">282</span><span id="line-282">    */</span>
-<span class="source-line-no">283</span><span id="line-283">   public FluentPrimitiveArrayAssertion&lt;Boolean,boolean[],R&gt; asBooleanArray() throws AssertionError {</span>
-<span class="source-line-no">284</span><span id="line-284">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(boolean[].class), returns());</span>
-<span class="source-line-no">285</span><span id="line-285">   }</span>
-<span class="source-line-no">286</span><span id="line-286"></span>
-<span class="source-line-no">287</span><span id="line-287">   /**</span>
-<span class="source-line-no">288</span><span id="line-288">    * Converts this object assertion into a boolean assertion.</span>
-<span class="source-line-no">289</span><span id="line-289">    *</span>
-<span class="source-line-no">290</span><span id="line-290">    * @return A new assertion.</span>
-<span class="source-line-no">291</span><span id="line-291">    * @throws AssertionError If object is not a boolean.</span>
-<span class="source-line-no">292</span><span id="line-292">    */</span>
-<span class="source-line-no">293</span><span id="line-293">   public FluentBooleanAssertion&lt;R&gt; asBoolean() {</span>
-<span class="source-line-no">294</span><span id="line-294">      return new FluentBooleanAssertion&lt;&gt;(this, cast(Boolean.class), returns());</span>
-<span class="source-line-no">295</span><span id="line-295">   }</span>
-<span class="source-line-no">296</span><span id="line-296"></span>
-<span class="source-line-no">297</span><span id="line-297">   /**</span>
-<span class="source-line-no">298</span><span id="line-298">    * Converts this object assertion into a byte array assertion.</span>
-<span class="source-line-no">299</span><span id="line-299">    *</span>
-<span class="source-line-no">300</span><span id="line-300">    * @return A new assertion.</span>
-<span class="source-line-no">301</span><span id="line-301">    * @throws AssertionError If object is not a byte array.</span>
-<span class="source-line-no">302</span><span id="line-302">    */</span>
-<span class="source-line-no">303</span><span id="line-303">   public FluentByteArrayAssertion&lt;R&gt; asBytes() {</span>
-<span class="source-line-no">304</span><span id="line-304">      return new FluentByteArrayAssertion&lt;&gt;(this, cast(byte[].class), returns());</span>
-<span class="source-line-no">305</span><span id="line-305">   }</span>
-<span class="source-line-no">306</span><span id="line-306"></span>
-<span class="source-line-no">307</span><span id="line-307">   /**</span>
-<span class="source-line-no">308</span><span id="line-308">    * Converts this object assertion into a collection assertion.</span>
-<span class="source-line-no">309</span><span id="line-309">    *</span>
-<span class="source-line-no">310</span><span id="line-310">    * @return A new assertion.</span>
-<span class="source-line-no">311</span><span id="line-311">    * @throws AssertionError If object is not a collection.</span>
-<span class="source-line-no">312</span><span id="line-312">    */</span>
-<span class="source-line-no">313</span><span id="line-313">   public FluentCollectionAssertion&lt;Object,R&gt; asCollection() {</span>
-<span class="source-line-no">314</span><span id="line-314">      return asCollection(Object.class);</span>
-<span class="source-line-no">315</span><span id="line-315">   }</span>
-<span class="source-line-no">316</span><span id="line-316"></span>
-<span class="source-line-no">317</span><span id="line-317">   /**</span>
-<span class="source-line-no">318</span><span id="line-318">    * Converts this object assertion into a collection assertion.</span>
-<span class="source-line-no">319</span><span id="line-319">    *</span>
-<span class="source-line-no">320</span><span id="line-320">    * @param &lt;E&gt; The element type of the collection.</span>
-<span class="source-line-no">321</span><span id="line-321">    * @param elementType The element type of the collection.</span>
-<span class="source-line-no">322</span><span id="line-322">    * @return A new assertion.</span>
-<span class="source-line-no">323</span><span id="line-323">    * @throws AssertionError If object is not a collection.</span>
-<span class="source-line-no">324</span><span id="line-324">    */</span>
-<span class="source-line-no">325</span><span id="line-325">   public &lt;E&gt; FluentCollectionAssertion&lt;E,R&gt; asCollection(Class&lt;E&gt; elementType) {</span>
-<span class="source-line-no">326</span><span id="line-326">      Utils.assertArgNotNull("elementType", elementType);</span>
-<span class="source-line-no">327</span><span id="line-327">      return new FluentCollectionAssertion&lt;&gt;(this, cast(Collection.class), returns());</span>
-<span class="source-line-no">328</span><span id="line-328">   }</span>
-<span class="source-line-no">329</span><span id="line-329"></span>
-<span class="source-line-no">330</span><span id="line-330">   /**</span>
-<span class="source-line-no">331</span><span id="line-331">    * Converts this object assertion into a collection assertion.</span>
-<span class="source-line-no">332</span><span id="line-332">    *</span>
-<span class="source-line-no">333</span><span id="line-333">    * @return A new assertion.</span>
-<span class="source-line-no">334</span><span id="line-334">    * @throws AssertionError If object is not a collection.</span>
-<span class="source-line-no">335</span><span id="line-335">    */</span>
-<span class="source-line-no">336</span><span id="line-336">   public FluentStringListAssertion&lt;R&gt; asStringList() {</span>
-<span class="source-line-no">337</span><span id="line-337">      return new FluentStringListAssertion&lt;&gt;(this, cast(List.class), returns());</span>
-<span class="source-line-no">338</span><span id="line-338">   }</span>
-<span class="source-line-no">339</span><span id="line-339"></span>
-<span class="source-line-no">340</span><span id="line-340">   /**</span>
-<span class="source-line-no">341</span><span id="line-341">    * Converts this object assertion into a comparable object assertion.</span>
-<span class="source-line-no">342</span><span id="line-342">    *</span>
-<span class="source-line-no">343</span><span id="line-343">    * @param &lt;T2&gt; The comparable type.</span>
-<span class="source-line-no">344</span><span id="line-344">    * @return A new assertion.</span>
-<span class="source-line-no">345</span><span id="line-345">    * @throws AssertionError If object is not an instance of {@link Comparable}.</span>
-<span class="source-line-no">346</span><span id="line-346">    */</span>
-<span class="source-line-no">347</span><span id="line-347">   public &lt;T2 extends Comparable&lt;T2&gt;&gt; FluentComparableAssertion&lt;T2,R&gt; asComparable() {</span>
-<span class="source-line-no">348</span><span id="line-348">      return new FluentComparableAssertion&lt;&gt;(this, (T2)cast(Comparable.class), returns());</span>
-<span class="source-line-no">349</span><span id="line-349">   }</span>
-<span class="source-line-no">350</span><span id="line-350"></span>
-<span class="source-line-no">351</span><span id="line-351">   /**</span>
-<span class="source-line-no">352</span><span id="line-352">    * Converts this object assertion into a date assertion.</span>
-<span class="source-line-no">353</span><span id="line-353">    *</span>
-<span class="source-line-no">354</span><span id="line-354">    * @return A new assertion.</span>
-<span class="source-line-no">355</span><span id="line-355">    * @throws AssertionError If object is not a date.</span>
-<span class="source-line-no">356</span><span id="line-356">    */</span>
-<span class="source-line-no">357</span><span id="line-357">   public FluentDateAssertion&lt;R&gt; asDate() {</span>
-<span class="source-line-no">358</span><span id="line-358">      return new FluentDateAssertion&lt;&gt;(this, cast(Date.class), returns());</span>
-<span class="source-line-no">359</span><span id="line-359">   }</span>
-<span class="source-line-no">360</span><span id="line-360"></span>
-<span class="source-line-no">361</span><span id="line-361">   /**</span>
-<span class="source-line-no">362</span><span id="line-362">    * Converts this object assertion into an integer assertion.</span>
-<span class="source-line-no">363</span><span id="line-363">    *</span>
-<span class="source-line-no">364</span><span id="line-364">    * @return A new assertion.</span>
-<span class="source-line-no">365</span><span id="line-365">    * @throws AssertionError If object is not an integer.</span>
-<span class="source-line-no">366</span><span id="line-366">    */</span>
-<span class="source-line-no">367</span><span id="line-367">   public FluentIntegerAssertion&lt;R&gt; asInteger() {</span>
-<span class="source-line-no">368</span><span id="line-368">      return new FluentIntegerAssertion&lt;&gt;(this, cast(Integer.class), returns());</span>
-<span class="source-line-no">369</span><span id="line-369">   }</span>
-<span class="source-line-no">370</span><span id="line-370"></span>
-<span class="source-line-no">371</span><span id="line-371">   /**</span>
-<span class="source-line-no">372</span><span id="line-372">    * Converts this object assertion into a long assertion.</span>
-<span class="source-line-no">373</span><span id="line-373">    *</span>
-<span class="source-line-no">374</span><span id="line-374">    * @return A new assertion.</span>
-<span class="source-line-no">375</span><span id="line-375">    * @throws AssertionError If object is not a long.</span>
-<span class="source-line-no">376</span><span id="line-376">    */</span>
-<span class="source-line-no">377</span><span id="line-377">   public FluentLongAssertion&lt;R&gt; asLong() {</span>
-<span class="source-line-no">378</span><span id="line-378">      return new FluentLongAssertion&lt;&gt;(this, cast(Long.class), returns());</span>
-<span class="source-line-no">379</span><span id="line-379">   }</span>
-<span class="source-line-no">380</span><span id="line-380"></span>
-<span class="source-line-no">381</span><span id="line-381">   /**</span>
-<span class="source-line-no">382</span><span id="line-382">    * Converts this object assertion into a list assertion.</span>
-<span class="source-line-no">383</span><span id="line-383">    *</span>
-<span class="source-line-no">384</span><span id="line-384">    * @return A new assertion.</span>
-<span class="source-line-no">385</span><span id="line-385">    * @throws AssertionError If object is not a list.</span>
-<span class="source-line-no">386</span><span id="line-386">    */</span>
-<span class="source-line-no">387</span><span id="line-387">   public FluentListAssertion&lt;Object,R&gt; asList() {</span>
-<span class="source-line-no">388</span><span id="line-388">      return asList(Object.class);</span>
-<span class="source-line-no">389</span><span id="line-389">   }</span>
-<span class="source-line-no">390</span><span id="line-390"></span>
-<span class="source-line-no">391</span><span id="line-391">   /**</span>
-<span class="source-line-no">392</span><span id="line-392">    * Converts this object assertion into a list assertion.</span>
-<span class="source-line-no">393</span><span id="line-393">    *</span>
-<span class="source-line-no">394</span><span id="line-394">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">395</span><span id="line-395">    * @param elementType The element type.</span>
-<span class="source-line-no">396</span><span id="line-396">    * @return A new assertion.</span>
-<span class="source-line-no">397</span><span id="line-397">    * @throws AssertionError If object is not a list.</span>
-<span class="source-line-no">398</span><span id="line-398">    */</span>
-<span class="source-line-no">399</span><span id="line-399">   public &lt;E&gt; FluentListAssertion&lt;E,R&gt; asList(Class&lt;E&gt; elementType) {</span>
-<span class="source-line-no">400</span><span id="line-400">      Utils.assertArgNotNull("elementType", elementType);</span>
-<span class="source-line-no">401</span><span id="line-401">      return new FluentListAssertion&lt;&gt;(this, cast(List.class), returns());</span>
-<span class="source-line-no">402</span><span id="line-402">   }</span>
-<span class="source-line-no">403</span><span id="line-403"></span>
-<span class="source-line-no">404</span><span id="line-404">   /**</span>
-<span class="source-line-no">405</span><span id="line-405">    * Converts this object assertion into a map assertion.</span>
-<span class="source-line-no">406</span><span id="line-406">    *</span>
-<span class="source-line-no">407</span><span id="line-407">    * @return A new assertion.</span>
-<span class="source-line-no">408</span><span id="line-408">    * @throws AssertionError If object is not a map.</span>
-<span class="source-line-no">409</span><span id="line-409">    */</span>
-<span class="source-line-no">410</span><span id="line-410">   public FluentMapAssertion&lt;String,Object,R&gt; asMap() {</span>
-<span class="source-line-no">411</span><span id="line-411">      return asMap(String.class,Object.class);</span>
-<span class="source-line-no">412</span><span id="line-412">   }</span>
-<span class="source-line-no">413</span><span id="line-413"></span>
-<span class="source-line-no">414</span><span id="line-414">   /**</span>
-<span class="source-line-no">415</span><span id="line-415">    * Converts this object assertion into a map assertion with the specified key and value types.</span>
-<span class="source-line-no">416</span><span id="line-416">    *</span>
-<span class="source-line-no">417</span><span id="line-417">    * @param &lt;K&gt; The key type.</span>
-<span class="source-line-no">418</span><span id="line-418">    * @param &lt;V&gt; The value type.</span>
-<span class="source-line-no">419</span><span id="line-419">    * @param keyType The key type.</span>
-<span class="source-line-no">420</span><span id="line-420">    * @param valueType The value type.</span>
-<span class="source-line-no">421</span><span id="line-421">    * @return A new assertion.</span>
-<span class="source-line-no">422</span><span id="line-422">    * @throws AssertionError If object is not a map.</span>
-<span class="source-line-no">423</span><span id="line-423">    */</span>
-<span class="source-line-no">424</span><span id="line-424">   public &lt;K,V&gt; FluentMapAssertion&lt;K,V,R&gt; asMap(Class&lt;K&gt; keyType, Class&lt;V&gt; valueType) {</span>
-<span class="source-line-no">425</span><span id="line-425">      Utils.assertArgNotNull("keyType", keyType);</span>
-<span class="source-line-no">426</span><span id="line-426">      Utils.assertArgNotNull("valueType", valueType);</span>
-<span class="source-line-no">427</span><span id="line-427">      return new FluentMapAssertion&lt;&gt;(this, cast(Map.class), returns());</span>
-<span class="source-line-no">428</span><span id="line-428">   }</span>
-<span class="source-line-no">429</span><span id="line-429"></span>
-<span class="source-line-no">430</span><span id="line-430">   /**</span>
-<span class="source-line-no">431</span><span id="line-431">    * Converts this object assertion into a bean assertion.</span>
-<span class="source-line-no">432</span><span id="line-432">    *</span>
-<span class="source-line-no">433</span><span id="line-433">    * @param &lt;T2&gt; The bean type.</span>
-<span class="source-line-no">434</span><span id="line-434">    * @param beanType The bean type.</span>
-<span class="source-line-no">435</span><span id="line-435">    * @return A new assertion.</span>
-<span class="source-line-no">436</span><span id="line-436">    * @throws AssertionError If object is not a bean.</span>
-<span class="source-line-no">437</span><span id="line-437">    */</span>
-<span class="source-line-no">438</span><span id="line-438">   public &lt;T2&gt; FluentBeanAssertion&lt;T2,R&gt; asBean(Class&lt;T2&gt; beanType) {</span>
-<span class="source-line-no">439</span><span id="line-439">      Utils.assertArgNotNull("beanType", beanType);</span>
-<span class="source-line-no">440</span><span id="line-440">      return new FluentBeanAssertion&lt;&gt;(this, cast(beanType), returns());</span>
-<span class="source-line-no">441</span><span id="line-441">   }</span>
-<span class="source-line-no">442</span><span id="line-442"></span>
-<span class="source-line-no">443</span><span id="line-443">   /**</span>
-<span class="source-line-no">444</span><span id="line-444">    * Converts this object assertion into a bean assertion.</span>
-<span class="source-line-no">445</span><span id="line-445">    *</span>
-<span class="source-line-no">446</span><span id="line-446">    * @return A new assertion.</span>
-<span class="source-line-no">447</span><span id="line-447">    * @throws AssertionError If object is not a bean.</span>
-<span class="source-line-no">448</span><span id="line-448">    */</span>
-<span class="source-line-no">449</span><span id="line-449">   public FluentBeanAssertion&lt;T,R&gt; asBean() {</span>
-<span class="source-line-no">450</span><span id="line-450">      return new FluentBeanAssertion&lt;&gt;(this, orElse(null), returns());</span>
-<span class="source-line-no">451</span><span id="line-451">   }</span>
-<span class="source-line-no">452</span><span id="line-452"></span>
-<span class="source-line-no">453</span><span id="line-453">   /**</span>
-<span class="source-line-no">454</span><span id="line-454">    * Converts this object assertion into a list-of-beans assertion.</span>
-<span class="source-line-no">455</span><span id="line-455">    *</span>
-<span class="source-line-no">456</span><span id="line-456">    * @param &lt;T2&gt; The bean type.</span>
-<span class="source-line-no">457</span><span id="line-457">    * @param beanType The bean type.</span>
-<span class="source-line-no">458</span><span id="line-458">    * @return A new assertion.</span>
-<span class="source-line-no">459</span><span id="line-459">    * @throws AssertionError If object is not a bean.</span>
-<span class="source-line-no">460</span><span id="line-460">    */</span>
-<span class="source-line-no">461</span><span id="line-461">   public &lt;T2&gt; FluentBeanListAssertion&lt;T2,R&gt; asBeanList(Class&lt;T2&gt; beanType) {</span>
-<span class="source-line-no">462</span><span id="line-462">      Utils.assertArgNotNull("beanType", beanType);</span>
-<span class="source-line-no">463</span><span id="line-463">      return new FluentBeanListAssertion&lt;&gt;(this, cast(List.class), returns());</span>
-<span class="source-line-no">464</span><span id="line-464">   }</span>
-<span class="source-line-no">465</span><span id="line-465"></span>
-<span class="source-line-no">466</span><span id="line-466">   /**</span>
-<span class="source-line-no">467</span><span id="line-467">    * Converts this object assertion into a zoned-datetime assertion.</span>
-<span class="source-line-no">468</span><span id="line-468">    *</span>
-<span class="source-line-no">469</span><span id="line-469">    * @return A new assertion.</span>
-<span class="source-line-no">470</span><span id="line-470">    * @throws AssertionError If object is not a zoned-datetime.</span>
-<span class="source-line-no">471</span><span id="line-471">    */</span>
-<span class="source-line-no">472</span><span id="line-472">   public FluentZonedDateTimeAssertion&lt;R&gt; asZonedDateTime() {</span>
-<span class="source-line-no">473</span><span id="line-473">      return new FluentZonedDateTimeAssertion&lt;&gt;(this, cast(ZonedDateTime.class), returns());</span>
-<span class="source-line-no">474</span><span id="line-474">   }</span>
-<span class="source-line-no">475</span><span id="line-475"></span>
-<span class="source-line-no">476</span><span id="line-476">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">477</span><span id="line-477">   // Fluent setters</span>
-<span class="source-line-no">478</span><span id="line-478">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">479</span><span id="line-479"></span>
-<span class="source-line-no">480</span><span id="line-480">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">481</span><span id="line-481"></span>
-<span class="source-line-no">482</span><span id="line-482">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">483</span><span id="line-483">   public FluentAnyAssertion&lt;T,R&gt; setMsg(String msg, Object...args) {</span>
-<span class="source-line-no">484</span><span id="line-484">      super.setMsg(msg, args);</span>
-<span class="source-line-no">485</span><span id="line-485">      return this;</span>
-<span class="source-line-no">486</span><span id="line-486">   }</span>
-<span class="source-line-no">487</span><span id="line-487"></span>
-<span class="source-line-no">488</span><span id="line-488">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">489</span><span id="line-489">   public FluentAnyAssertion&lt;T,R&gt; setOut(PrintStream value) {</span>
-<span class="source-line-no">490</span><span id="line-490">      super.setOut(value);</span>
-<span class="source-line-no">491</span><span id="line-491">      return this;</span>
-<span class="source-line-no">492</span><span id="line-492">   }</span>
-<span class="source-line-no">493</span><span id="line-493"></span>
-<span class="source-line-no">494</span><span id="line-494">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">495</span><span id="line-495">   public FluentAnyAssertion&lt;T,R&gt; setSilent() {</span>
-<span class="source-line-no">496</span><span id="line-496">      super.setSilent();</span>
-<span class="source-line-no">497</span><span id="line-497">      return this;</span>
-<span class="source-line-no">498</span><span id="line-498">   }</span>
-<span class="source-line-no">499</span><span id="line-499"></span>
-<span class="source-line-no">500</span><span id="line-500">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">501</span><span id="line-501">   public FluentAnyAssertion&lt;T,R&gt; setStdOut() {</span>
-<span class="source-line-no">502</span><span id="line-502">      super.setStdOut();</span>
-<span class="source-line-no">503</span><span id="line-503">      return this;</span>
-<span class="source-line-no">504</span><span id="line-504">   }</span>
-<span class="source-line-no">505</span><span id="line-505"></span>
-<span class="source-line-no">506</span><span id="line-506">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">507</span><span id="line-507">   public FluentAnyAssertion&lt;T,R&gt; setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
-<span class="source-line-no">508</span><span id="line-508">      super.setThrowable(value);</span>
-<span class="source-line-no">509</span><span id="line-509">      return this;</span>
-<span class="source-line-no">510</span><span id="line-510">   }</span>
-<span class="source-line-no">511</span><span id="line-511"></span>
-<span class="source-line-no">512</span><span id="line-512">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">513</span><span id="line-513"></span>
-<span class="source-line-no">514</span><span id="line-514">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">515</span><span id="line-515">   // Utility methods</span>
-<span class="source-line-no">516</span><span id="line-516">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">517</span><span id="line-517"></span>
-<span class="source-line-no">518</span><span id="line-518">   private &lt;T2&gt; T2 cast(Class&lt;T2&gt; c) throws AssertionError {</span>
-<span class="source-line-no">519</span><span id="line-519">      Object o = orElse(null);</span>
-<span class="source-line-no">520</span><span id="line-520">      if (o == null || c.isInstance(o))</span>
-<span class="source-line-no">521</span><span id="line-521">         return c.cast(o);</span>
-<span class="source-line-no">522</span><span id="line-522">      throw new BasicAssertionError(MSG_objectWasNotType, ClassInfo.of(c).getFullName(), o.getClass());</span>
-<span class="source-line-no">523</span><span id="line-523">   }</span>
-<span class="source-line-no">524</span><span id="line-524">}</span>
+<span class="source-line-no">139</span><span id="line-139">public class FluentAnyAssertion&lt;T,R&gt; extends FluentObjectAssertion&lt;T,R&gt; {</span>
+<span class="source-line-no">140</span><span id="line-140"></span>
+<span class="source-line-no">141</span><span id="line-141">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">142</span><span id="line-142">   // Static</span>
+<span class="source-line-no">143</span><span id="line-143">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">144</span><span id="line-144"></span>
+<span class="source-line-no">145</span><span id="line-145">   private static final Messages MESSAGES = Messages.of(FluentAnyAssertion.class, "Messages");</span>
+<span class="source-line-no">146</span><span id="line-146">   private static final String</span>
+<span class="source-line-no">147</span><span id="line-147">      MSG_objectWasNotType = MESSAGES.getString("objectWasNotType");</span>
+<span class="source-line-no">148</span><span id="line-148"></span>
+<span class="source-line-no">149</span><span id="line-149">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">150</span><span id="line-150">   // Instance</span>
+<span class="source-line-no">151</span><span id="line-151">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">152</span><span id="line-152"></span>
+<span class="source-line-no">153</span><span id="line-153">   /**</span>
+<span class="source-line-no">154</span><span id="line-154">    * Constructor.</span>
+<span class="source-line-no">155</span><span id="line-155">    *</span>
+<span class="source-line-no">156</span><span id="line-156">    * @param value</span>
+<span class="source-line-no">157</span><span id="line-157">    *    The object being tested.</span>
+<span class="source-line-no">158</span><span id="line-158">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">159</span><span id="line-159">    * @param returns</span>
+<span class="source-line-no">160</span><span id="line-160">    *    The object to return after a test method is called.</span>
+<span class="source-line-no">161</span><span id="line-161">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
+<span class="source-line-no">162</span><span id="line-162">    * used on the same assertion.</span>
+<span class="source-line-no">163</span><span id="line-163">    */</span>
+<span class="source-line-no">164</span><span id="line-164">   public FluentAnyAssertion(T value, R returns) {</span>
+<span class="source-line-no">165</span><span id="line-165">      this(null, value, returns);</span>
+<span class="source-line-no">166</span><span id="line-166">   }</span>
+<span class="source-line-no">167</span><span id="line-167"></span>
+<span class="source-line-no">168</span><span id="line-168">   /**</span>
+<span class="source-line-no">169</span><span id="line-169">    * Chained constructor.</span>
+<span class="source-line-no">170</span><span id="line-170">    *</span>
+<span class="source-line-no">171</span><span id="line-171">    * &lt;p&gt;</span>
+<span class="source-line-no">172</span><span id="line-172">    * Used when transforming one assertion into another so that the assertion config can be used by the new assertion.</span>
+<span class="source-line-no">173</span><span id="line-173">    *</span>
+<span class="source-line-no">174</span><span id="line-174">    * @param creator</span>
+<span class="source-line-no">175</span><span id="line-175">    *    The assertion that created this assertion.</span>
+<span class="source-line-no">176</span><span id="line-176">    *    &lt;br&gt;Should be &lt;jk&gt;null&lt;/jk&gt; if this is the top-level assertion.</span>
+<span class="source-line-no">177</span><span id="line-177">    * @param value</span>
+<span class="source-line-no">178</span><span id="line-178">    *    The object being tested.</span>
+<span class="source-line-no">179</span><span id="line-179">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">180</span><span id="line-180">    * @param returns</span>
+<span class="source-line-no">181</span><span id="line-181">    *    The object to return after a test method is called.</span>
+<span class="source-line-no">182</span><span id="line-182">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
+<span class="source-line-no">183</span><span id="line-183">    * used on the same assertion.</span>
+<span class="source-line-no">184</span><span id="line-184">    */</span>
+<span class="source-line-no">185</span><span id="line-185">   public FluentAnyAssertion(Assertion creator, T value, R returns) {</span>
+<span class="source-line-no">186</span><span id="line-186">      super(creator, value, returns);</span>
+<span class="source-line-no">187</span><span id="line-187">   }</span>
+<span class="source-line-no">188</span><span id="line-188"></span>
+<span class="source-line-no">189</span><span id="line-189">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">190</span><span id="line-190">   // Transform methods</span>
+<span class="source-line-no">191</span><span id="line-191">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">192</span><span id="line-192"></span>
+<span class="source-line-no">193</span><span id="line-193">   /**</span>
+<span class="source-line-no">194</span><span id="line-194">    * Converts this object assertion into an array assertion.</span>
+<span class="source-line-no">195</span><span id="line-195">    *</span>
+<span class="source-line-no">196</span><span id="line-196">    * @param &lt;E&gt; The element type of the array.</span>
+<span class="source-line-no">197</span><span id="line-197">    * @param elementType The element type of the array.</span>
+<span class="source-line-no">198</span><span id="line-198">    * @return A new assertion.</span>
+<span class="source-line-no">199</span><span id="line-199">    * @throws AssertionError If object is not an array.</span>
+<span class="source-line-no">200</span><span id="line-200">    */</span>
+<span class="source-line-no">201</span><span id="line-201">   public &lt;E&gt; FluentArrayAssertion&lt;E,R&gt; asArray(Class&lt;E&gt; elementType) throws AssertionError {</span>
+<span class="source-line-no">202</span><span id="line-202">      Utils.assertArgNotNull("elementType", elementType);</span>
+<span class="source-line-no">203</span><span id="line-203">      return new FluentArrayAssertion&lt;&gt;(this, cast(arrayClass(elementType)), returns());</span>
+<span class="source-line-no">204</span><span id="line-204">   }</span>
+<span class="source-line-no">205</span><span id="line-205"></span>
+<span class="source-line-no">206</span><span id="line-206">   /**</span>
+<span class="source-line-no">207</span><span id="line-207">    * Converts this object assertion into a primitive int array assertion.</span>
+<span class="source-line-no">208</span><span id="line-208">    *</span>
+<span class="source-line-no">209</span><span id="line-209">    * @return A new assertion.</span>
+<span class="source-line-no">210</span><span id="line-210">    * @throws AssertionError If object is not an int array.</span>
+<span class="source-line-no">211</span><span id="line-211">    */</span>
+<span class="source-line-no">212</span><span id="line-212">   public FluentPrimitiveArrayAssertion&lt;Integer,int[],R&gt; asIntArray() throws AssertionError {</span>
+<span class="source-line-no">213</span><span id="line-213">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(int[].class), returns());</span>
+<span class="source-line-no">214</span><span id="line-214">   }</span>
+<span class="source-line-no">215</span><span id="line-215"></span>
+<span class="source-line-no">216</span><span id="line-216">   /**</span>
+<span class="source-line-no">217</span><span id="line-217">    * Converts this object assertion into a primitive long array assertion.</span>
+<span class="source-line-no">218</span><span id="line-218">    *</span>
+<span class="source-line-no">219</span><span id="line-219">    * @return A new assertion.</span>
+<span class="source-line-no">220</span><span id="line-220">    * @throws AssertionError If object is not an long array.</span>
+<span class="source-line-no">221</span><span id="line-221">    */</span>
+<span class="source-line-no">222</span><span id="line-222">   public FluentPrimitiveArrayAssertion&lt;Long,long[],R&gt; asLongArray() throws AssertionError {</span>
+<span class="source-line-no">223</span><span id="line-223">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(long[].class), returns());</span>
+<span class="source-line-no">224</span><span id="line-224">   }</span>
+<span class="source-line-no">225</span><span id="line-225"></span>
+<span class="source-line-no">226</span><span id="line-226">   /**</span>
+<span class="source-line-no">227</span><span id="line-227">    * Converts this object assertion into a primitive short array assertion.</span>
+<span class="source-line-no">228</span><span id="line-228">    *</span>
+<span class="source-line-no">229</span><span id="line-229">    * @return A new assertion.</span>
+<span class="source-line-no">230</span><span id="line-230">    * @throws AssertionError If object is not an short array.</span>
+<span class="source-line-no">231</span><span id="line-231">    */</span>
+<span class="source-line-no">232</span><span id="line-232">   public FluentPrimitiveArrayAssertion&lt;Short,short[],R&gt; asShortArray() throws AssertionError {</span>
+<span class="source-line-no">233</span><span id="line-233">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(short[].class), returns());</span>
+<span class="source-line-no">234</span><span id="line-234">   }</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">   /**</span>
+<span class="source-line-no">237</span><span id="line-237">    * Converts this object assertion into a primitive float array assertion.</span>
+<span class="source-line-no">238</span><span id="line-238">    *</span>
+<span class="source-line-no">239</span><span id="line-239">    * @return A new assertion.</span>
+<span class="source-line-no">240</span><span id="line-240">    * @throws AssertionError If object is not an float array.</span>
+<span class="source-line-no">241</span><span id="line-241">    */</span>
+<span class="source-line-no">242</span><span id="line-242">   public FluentPrimitiveArrayAssertion&lt;Float,float[],R&gt; asFloatArray() throws AssertionError {</span>
+<span class="source-line-no">243</span><span id="line-243">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(float[].class), returns());</span>
+<span class="source-line-no">244</span><span id="line-244">   }</span>
+<span class="source-line-no">245</span><span id="line-245"></span>
+<span class="source-line-no">246</span><span id="line-246">   /**</span>
+<span class="source-line-no">247</span><span id="line-247">    * Converts this object assertion into a primitive double array assertion.</span>
+<span class="source-line-no">248</span><span id="line-248">    *</span>
+<span class="source-line-no">249</span><span id="line-249">    * @return A new assertion.</span>
+<span class="source-line-no">250</span><span id="line-250">    * @throws AssertionError If object is not an double array.</span>
+<span class="source-line-no">251</span><span id="line-251">    */</span>
+<span class="source-line-no">252</span><span id="line-252">   public FluentPrimitiveArrayAssertion&lt;Double,double[],R&gt; asDoubleArray() throws AssertionError {</span>
+<span class="source-line-no">253</span><span id="line-253">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(double[].class), returns());</span>
+<span class="source-line-no">254</span><span id="line-254">   }</span>
+<span class="source-line-no">255</span><span id="line-255"></span>
+<span class="source-line-no">256</span><span id="line-256">   /**</span>
+<span class="source-line-no">257</span><span id="line-257">    * Converts this object assertion into a primitive char array assertion.</span>
+<span class="source-line-no">258</span><span id="line-258">    *</span>
+<span class="source-line-no">259</span><span id="line-259">    * @return A new assertion.</span>
+<span class="source-line-no">260</span><span id="line-260">    * @throws AssertionError If object is not an char array.</span>
+<span class="source-line-no">261</span><span id="line-261">    */</span>
+<span class="source-line-no">262</span><span id="line-262">   public FluentPrimitiveArrayAssertion&lt;Character,char[],R&gt; asCharArray() throws AssertionError {</span>
+<span class="source-line-no">263</span><span id="line-263">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(char[].class), returns());</span>
+<span class="source-line-no">264</span><span id="line-264">   }</span>
+<span class="source-line-no">265</span><span id="line-265"></span>
+<span class="source-line-no">266</span><span id="line-266">   /**</span>
+<span class="source-line-no">267</span><span id="line-267">    * Converts this object assertion into a primitive byte array assertion.</span>
+<span class="source-line-no">268</span><span id="line-268">    *</span>
+<span class="source-line-no">269</span><span id="line-269">    * @return A new assertion.</span>
+<span class="source-line-no">270</span><span id="line-270">    * @throws AssertionError If object is not an byte array.</span>
+<span class="source-line-no">271</span><span id="line-271">    */</span>
+<span class="source-line-no">272</span><span id="line-272">   public FluentPrimitiveArrayAssertion&lt;Byte,byte[],R&gt; asByteArray() throws AssertionError {</span>
+<span class="source-line-no">273</span><span id="line-273">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(byte[].class), returns());</span>
+<span class="source-line-no">274</span><span id="line-274">   }</span>
+<span class="source-line-no">275</span><span id="line-275"></span>
+<span class="source-line-no">276</span><span id="line-276">   /**</span>
+<span class="source-line-no">277</span><span id="line-277">    * Converts this object assertion into a primitive boolean array assertion.</span>
+<span class="source-line-no">278</span><span id="line-278">    *</span>
+<span class="source-line-no">279</span><span id="line-279">    * @return A new assertion.</span>
+<span class="source-line-no">280</span><span id="line-280">    * @throws AssertionError If object is not an boolean array.</span>
+<span class="source-line-no">281</span><span id="line-281">    */</span>
+<span class="source-line-no">282</span><span id="line-282">   public FluentPrimitiveArrayAssertion&lt;Boolean,boolean[],R&gt; asBooleanArray() throws AssertionError {</span>
+<span class="source-line-no">283</span><span id="line-283">      return new FluentPrimitiveArrayAssertion&lt;&gt;(this, cast(boolean[].class), returns());</span>
+<span class="source-line-no">284</span><span id="line-284">   }</span>
+<span class="source-line-no">285</span><span id="line-285"></span>
+<span class="source-line-no">286</span><span id="line-286">   /**</span>
+<span class="source-line-no">287</span><span id="line-287">    * Converts this object assertion into a boolean assertion.</span>
+<span class="source-line-no">288</span><span id="line-288">    *</span>
+<span class="source-line-no">289</span><span id="line-289">    * @return A new assertion.</span>
+<span class="source-line-no">290</span><span id="line-290">    * @throws AssertionError If object is not a boolean.</span>
+<span class="source-line-no">291</span><span id="line-291">    */</span>
+<span class="source-line-no">292</span><span id="line-292">   public FluentBooleanAssertion&lt;R&gt; asBoolean() {</span>
+<span class="source-line-no">293</span><span id="line-293">      return new FluentBooleanAssertion&lt;&gt;(this, cast(Boolean.class), returns());</span>
+<span class="source-line-no">294</span><span id="line-294">   }</span>
+<span class="source-line-no">295</span><span id="line-295"></span>
+<span class="source-line-no">296</span><span id="line-296">   /**</span>
+<span class="source-line-no">297</span><span id="line-297">    * Converts this object assertion into a byte array assertion.</span>
+<span class="source-line-no">298</span><span id="line-298">    *</span>
+<span class="source-line-no">299</span><span id="line-299">    * @return A new assertion.</span>
+<span class="source-line-no">300</span><span id="line-300">    * @throws AssertionError If object is not a byte array.</span>
+<span class="source-line-no">301</span><span id="line-301">    */</span>
+<span class="source-line-no">302</span><span id="line-302">   public FluentByteArrayAssertion&lt;R&gt; asBytes() {</span>
+<span class="source-line-no">303</span><span id="line-303">      return new FluentByteArrayAssertion&lt;&gt;(this, cast(byte[].class), returns());</span>
+<span class="source-line-no">304</span><span id="line-304">   }</span>
+<span class="source-line-no">305</span><span id="line-305"></span>
+<span class="source-line-no">306</span><span id="line-306">   /**</span>
+<span class="source-line-no">307</span><span id="line-307">    * Converts this object assertion into a collection assertion.</span>
+<span class="source-line-no">308</span><span id="line-308">    *</span>
+<span class="source-line-no">309</span><span id="line-309">    * @return A new assertion.</span>
+<span class="source-line-no">310</span><span id="line-310">    * @throws AssertionError If object is not a collection.</span>
+<span class="source-line-no">311</span><span id="line-311">    */</span>
+<span class="source-line-no">312</span><span id="line-312">   public FluentCollectionAssertion&lt;Object,R&gt; asCollection() {</span>
+<span class="source-line-no">313</span><span id="line-313">      return asCollection(Object.class);</span>
+<span class="source-line-no">314</span><span id="line-314">   }</span>
+<span class="source-line-no">315</span><span id="line-315"></span>
+<span class="source-line-no">316</span><span id="line-316">   /**</span>
+<span class="source-line-no">317</span><span id="line-317">    * Converts this object assertion into a collection assertion.</span>
+<span class="source-line-no">318</span><span id="line-318">    *</span>
+<span class="source-line-no">319</span><span id="line-319">    * @param &lt;E&gt; The element type of the collection.</span>
+<span class="source-line-no">320</span><span id="line-320">    * @param elementType The element type of the collection.</span>
+<span class="source-line-no">321</span><span id="line-321">    * @return A new assertion.</span>
+<span class="source-line-no">322</span><span id="line-322">    * @throws AssertionError If object is not a collection.</span>
+<span class="source-line-no">323</span><span id="line-323">    */</span>
+<span class="source-line-no">324</span><span id="line-324">   public &lt;E&gt; FluentCollectionAssertion&lt;E,R&gt; asCollection(Class&lt;E&gt; elementType) {</span>
+<span class="source-line-no">325</span><span id="line-325">      Utils.assertArgNotNull("elementType", elementType);</span>
+<span class="source-line-no">326</span><span id="line-326">      return new FluentCollectionAssertion&lt;&gt;(this, cast(Collection.class), returns());</span>
+<span class="source-line-no">327</span><span id="line-327">   }</span>
+<span class="source-line-no">328</span><span id="line-328"></span>
+<span class="source-line-no">329</span><span id="line-329">   /**</span>
+<span class="source-line-no">330</span><span id="line-330">    * Converts this object assertion into a collection assertion.</span>
+<span class="source-line-no">331</span><span id="line-331">    *</span>
+<span class="source-line-no">332</span><span id="line-332">    * @return A new assertion.</span>
+<span class="source-line-no">333</span><span id="line-333">    * @throws AssertionError If object is not a collection.</span>
+<span class="source-line-no">334</span><span id="line-334">    */</span>
+<span class="source-line-no">335</span><span id="line-335">   public FluentStringListAssertion&lt;R&gt; asStringList() {</span>
+<span class="source-line-no">336</span><span id="line-336">      return new FluentStringListAssertion&lt;&gt;(this, cast(List.class), returns());</span>
+<span class="source-line-no">337</span><span id="line-337">   }</span>
+<span class="source-line-no">338</span><span id="line-338"></span>
+<span class="source-line-no">339</span><span id="line-339">   /**</span>
+<span class="source-line-no">340</span><span id="line-340">    * Converts this object assertion into a comparable object assertion.</span>
+<span class="source-line-no">341</span><span id="line-341">    *</span>
+<span class="source-line-no">342</span><span id="line-342">    * @param &lt;T2&gt; The comparable type.</span>
+<span class="source-line-no">343</span><span id="line-343">    * @return A new assertion.</span>
+<span class="source-line-no">344</span><span id="line-344">    * @throws AssertionError If object is not an instance of {@link Comparable}.</span>
+<span class="source-line-no">345</span><span id="line-345">    */</span>
+<span class="source-line-no">346</span><span id="line-346">   public &lt;T2 extends Comparable&lt;T2&gt;&gt; FluentComparableAssertion&lt;T2,R&gt; asComparable() {</span>
+<span class="source-line-no">347</span><span id="line-347">      return new FluentComparableAssertion&lt;&gt;(this, (T2)cast(Comparable.class), returns());</span>
+<span class="source-line-no">348</span><span id="line-348">   }</span>
+<span class="source-line-no">349</span><span id="line-349"></span>
+<span class="source-line-no">350</span><span id="line-350">   /**</span>
+<span class="source-line-no">351</span><span id="line-351">    * Converts this object assertion into a date assertion.</span>
+<span class="source-line-no">352</span><span id="line-352">    *</span>
+<span class="source-line-no">353</span><span id="line-353">    * @return A new assertion.</span>
+<span class="source-line-no">354</span><span id="line-354">    * @throws AssertionError If object is not a date.</span>
+<span class="source-line-no">355</span><span id="line-355">    */</span>
+<span class="source-line-no">356</span><span id="line-356">   public FluentDateAssertion&lt;R&gt; asDate() {</span>
+<span class="source-line-no">357</span><span id="line-357">      return new FluentDateAssertion&lt;&gt;(this, cast(Date.class), returns());</span>
+<span class="source-line-no">358</span><span id="line-358">   }</span>
+<span class="source-line-no">359</span><span id="line-359"></span>
+<span class="source-line-no">360</span><span id="line-360">   /**</span>
+<span class="source-line-no">361</span><span id="line-361">    * Converts this object assertion into an integer assertion.</span>
+<span class="source-line-no">362</span><span id="line-362">    *</span>
+<span class="source-line-no">363</span><span id="line-363">    * @return A new assertion.</span>
+<span class="source-line-no">364</span><span id="line-364">    * @throws AssertionError If object is not an integer.</span>
+<span class="source-line-no">365</span><span id="line-365">    */</span>
+<span class="source-line-no">366</span><span id="line-366">   public FluentIntegerAssertion&lt;R&gt; asInteger() {</span>
+<span class="source-line-no">367</span><span id="line-367">      return new FluentIntegerAssertion&lt;&gt;(this, cast(Integer.class), returns());</span>
+<span class="source-line-no">368</span><span id="line-368">   }</span>
+<span class="source-line-no">369</span><span id="line-369"></span>
+<span class="source-line-no">370</span><span id="line-370">   /**</span>
+<span class="source-line-no">371</span><span id="line-371">    * Converts this object assertion into a long assertion.</span>
+<span class="source-line-no">372</span><span id="line-372">    *</span>
+<span class="source-line-no">373</span><span id="line-373">    * @return A new assertion.</span>
+<span class="source-line-no">374</span><span id="line-374">    * @throws AssertionError If object is not a long.</span>
+<span class="source-line-no">375</span><span id="line-375">    */</span>
+<span class="source-line-no">376</span><span id="line-376">   public FluentLongAssertion&lt;R&gt; asLong() {</span>
+<span class="source-line-no">377</span><span id="line-377">      return new FluentLongAssertion&lt;&gt;(this, cast(Long.class), returns());</span>
+<span class="source-line-no">378</span><span id="line-378">   }</span>
+<span class="source-line-no">379</span><span id="line-379"></span>
+<span class="source-line-no">380</span><span id="line-380">   /**</span>
+<span class="source-line-no">381</span><span id="line-381">    * Converts this object assertion into a list assertion.</span>
+<span class="source-line-no">382</span><span id="line-382">    *</span>
+<span class="source-line-no">383</span><span id="line-383">    * @return A new assertion.</span>
+<span class="source-line-no">384</span><span id="line-384">    * @throws AssertionError If object is not a list.</span>
+<span class="source-line-no">385</span><span id="line-385">    */</span>
+<span class="source-line-no">386</span><span id="line-386">   public FluentListAssertion&lt;Object,R&gt; asList() {</span>
+<span class="source-line-no">387</span><span id="line-387">      return asList(Object.class);</span>
+<span class="source-line-no">388</span><span id="line-388">   }</span>
+<span class="source-line-no">389</span><span id="line-389"></span>
+<span class="source-line-no">390</span><span id="line-390">   /**</span>
+<span class="source-line-no">391</span><span id="line-391">    * Converts this object assertion into a list assertion.</span>
+<span class="source-line-no">392</span><span id="line-392">    *</span>
+<span class="source-line-no">393</span><span id="line-393">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">394</span><span id="line-394">    * @param elementType The element type.</span>
+<span class="source-line-no">395</span><span id="line-395">    * @return A new assertion.</span>
+<span class="source-line-no">396</span><span id="line-396">    * @throws AssertionError If object is not a list.</span>
+<span class="source-line-no">397</span><span id="line-397">    */</span>
+<span class="source-line-no">398</span><span id="line-398">   public &lt;E&gt; FluentListAssertion&lt;E,R&gt; asList(Class&lt;E&gt; elementType) {</span>
+<span class="source-line-no">399</span><span id="line-399">      Utils.assertArgNotNull("elementType", elementType);</span>
+<span class="source-line-no">400</span><span id="line-400">      return new FluentListAssertion&lt;&gt;(this, cast(List.class), returns());</span>
+<span class="source-line-no">401</span><span id="line-401">   }</span>
+<span class="source-line-no">402</span><span id="line-402"></span>
+<span class="source-line-no">403</span><span id="line-403">   /**</span>
+<span class="source-line-no">404</span><span id="line-404">    * Converts this object assertion into a map assertion.</span>
+<span class="source-line-no">405</span><span id="line-405">    *</span>
+<span class="source-line-no">406</span><span id="line-406">    * @return A new assertion.</span>
+<span class="source-line-no">407</span><span id="line-407">    * @throws AssertionError If object is not a map.</span>
+<span class="source-line-no">408</span><span id="line-408">    */</span>
+<span class="source-line-no">409</span><span id="line-409">   public FluentMapAssertion&lt;String,Object,R&gt; asMap() {</span>
+<span class="source-line-no">410</span><span id="line-410">      return asMap(String.class,Object.class);</span>
+<span class="source-line-no">411</span><span id="line-411">   }</span>
+<span class="source-line-no">412</span><span id="line-412"></span>
+<span class="source-line-no">413</span><span id="line-413">   /**</span>
+<span class="source-line-no">414</span><span id="line-414">    * Converts this object assertion into a map assertion with the specified key and value types.</span>
+<span class="source-line-no">415</span><span id="line-415">    *</span>
+<span class="source-line-no">416</span><span id="line-416">    * @param &lt;K&gt; The key type.</span>
+<span class="source-line-no">417</span><span id="line-417">    * @param &lt;V&gt; The value type.</span>
+<span class="source-line-no">418</span><span id="line-418">    * @param keyType The key type.</span>
+<span class="source-line-no">419</span><span id="line-419">    * @param valueType The value type.</span>
+<span class="source-line-no">420</span><span id="line-420">    * @return A new assertion.</span>
+<span class="source-line-no">421</span><span id="line-421">    * @throws AssertionError If object is not a map.</span>
+<span class="source-line-no">422</span><span id="line-422">    */</span>
+<span class="source-line-no">423</span><span id="line-423">   public &lt;K,V&gt; FluentMapAssertion&lt;K,V,R&gt; asMap(Class&lt;K&gt; keyType, Class&lt;V&gt; valueType) {</span>
+<span class="source-line-no">424</span><span id="line-424">      Utils.assertArgNotNull("keyType", keyType);</span>
+<span class="source-line-no">425</span><span id="line-425">      Utils.assertArgNotNull("valueType", valueType);</span>
+<span class="source-line-no">426</span><span id="line-426">      return new FluentMapAssertion&lt;&gt;(this, cast(Map.class), returns());</span>
+<span class="source-line-no">427</span><span id="line-427">   }</span>
+<span class="source-line-no">428</span><span id="line-428"></span>
+<span class="source-line-no">429</span><span id="line-429">   /**</span>
+<span class="source-line-no">430</span><span id="line-430">    * Converts this object assertion into a bean assertion.</span>
+<span class="source-line-no">431</span><span id="line-431">    *</span>
+<span class="source-line-no">432</span><span id="line-432">    * @param &lt;T2&gt; The bean type.</span>
+<span class="source-line-no">433</span><span id="line-433">    * @param beanType The bean type.</span>
+<span class="source-line-no">434</span><span id="line-434">    * @return A new assertion.</span>
+<span class="source-line-no">435</span><span id="line-435">    * @throws AssertionError If object is not a bean.</span>
+<span class="source-line-no">436</span><span id="line-436">    */</span>
+<span class="source-line-no">437</span><span id="line-437">   public &lt;T2&gt; FluentBeanAssertion&lt;T2,R&gt; asBean(Class&lt;T2&gt; beanType) {</span>
+<span class="source-line-no">438</span><span id="line-438">      Utils.assertArgNotNull("beanType", beanType);</span>
+<span class="source-line-no">439</span><span id="line-439">      return new FluentBeanAssertion&lt;&gt;(this, cast(beanType), returns());</span>
+<span class="source-line-no">440</span><span id="line-440">   }</span>
+<span class="source-line-no">441</span><span id="line-441"></span>
+<span class="source-line-no">442</span><span id="line-442">   /**</span>
+<span class="source-line-no">443</span><span id="line-443">    * Converts this object assertion into a bean assertion.</span>
+<span class="source-line-no">444</span><span id="line-444">    *</span>
+<span class="source-line-no">445</span><span id="line-445">    * @return A new assertion.</span>
+<span class="source-line-no">446</span><span id="line-446">    * @throws AssertionError If object is not a bean.</span>
+<span class="source-line-no">447</span><span id="line-447">    */</span>
+<span class="source-line-no">448</span><span id="line-448">   public FluentBeanAssertion&lt;T,R&gt; asBean() {</span>
+<span class="source-line-no">449</span><span id="line-449">      return new FluentBeanAssertion&lt;&gt;(this, orElse(null), returns());</span>
+<span class="source-line-no">450</span><span id="line-450">   }</span>
+<span class="source-line-no">451</span><span id="line-451"></span>
+<span class="source-line-no">452</span><span id="line-452">   /**</span>
+<span class="source-line-no">453</span><span id="line-453">    * Converts this object assertion into a list-of-beans assertion.</span>
+<span class="source-line-no">454</span><span id="line-454">    *</span>
+<span class="source-line-no">455</span><span id="line-455">    * @param &lt;T2&gt; The bean type.</span>
+<span class="source-line-no">456</span><span id="line-456">    * @param beanType The bean type.</span>
+<span class="source-line-no">457</span><span id="line-457">    * @return A new assertion.</span>
+<span class="source-line-no">458</span><span id="line-458">    * @throws AssertionError If object is not a bean.</span>
+<span class="source-line-no">459</span><span id="line-459">    */</span>
+<span class="source-line-no">460</span><span id="line-460">   public &lt;T2&gt; FluentBeanListAssertion&lt;T2,R&gt; asBeanList(Class&lt;T2&gt; beanType) {</span>
+<span class="source-line-no">461</span><span id="line-461">      Utils.assertArgNotNull("beanType", beanType);</span>
+<span class="source-line-no">462</span><span id="line-462">      return new FluentBeanListAssertion&lt;&gt;(this, cast(List.class), returns());</span>
+<span class="source-line-no">463</span><span id="line-463">   }</span>
+<span class="source-line-no">464</span><span id="line-464"></span>
+<span class="source-line-no">465</span><span id="line-465">   /**</span>
+<span class="source-line-no">466</span><span id="line-466">    * Converts this object assertion into a zoned-datetime assertion.</span>
+<span class="source-line-no">467</span><span id="line-467">    *</span>
+<span class="source-line-no">468</span><span id="line-468">    * @return A new assertion.</span>
+<span class="source-line-no">469</span><span id="line-469">    * @throws AssertionError If object is not a zoned-datetime.</span>
+<span class="source-line-no">470</span><span id="line-470">    */</span>
+<span class="source-line-no">471</span><span id="line-471">   public FluentZonedDateTimeAssertion&lt;R&gt; asZonedDateTime() {</span>
+<span class="source-line-no">472</span><span id="line-472">      return new FluentZonedDateTimeAssertion&lt;&gt;(this, cast(ZonedDateTime.class), returns());</span>
+<span class="source-line-no">473</span><span id="line-473">   }</span>
+<span class="source-line-no">474</span><span id="line-474"></span>
+<span class="source-line-no">475</span><span id="line-475">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">476</span><span id="line-476">   // Fluent setters</span>
+<span class="source-line-no">477</span><span id="line-477">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">478</span><span id="line-478">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">479</span><span id="line-479">   public FluentAnyAssertion&lt;T,R&gt; setMsg(String msg, Object...args) {</span>
+<span class="source-line-no">480</span><span id="line-480">      super.setMsg(msg, args);</span>
+<span class="source-line-no">481</span><span id="line-481">      return this;</span>
+<span class="source-line-no">482</span><span id="line-482">   }</span>
+<span class="source-line-no">483</span><span id="line-483"></span>
+<span class="source-line-no">484</span><span id="line-484">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">485</span><span id="line-485">   public FluentAnyAssertion&lt;T,R&gt; setOut(PrintStream value) {</span>
+<span class="source-line-no">486</span><span id="line-486">      super.setOut(value);</span>
+<span class="source-line-no">487</span><span id="line-487">      return this;</span>
+<span class="source-line-no">488</span><span id="line-488">   }</span>
+<span class="source-line-no">489</span><span id="line-489"></span>
+<span class="source-line-no">490</span><span id="line-490">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">491</span><span id="line-491">   public FluentAnyAssertion&lt;T,R&gt; setSilent() {</span>
+<span class="source-line-no">492</span><span id="line-492">      super.setSilent();</span>
+<span class="source-line-no">493</span><span id="line-493">      return this;</span>
+<span class="source-line-no">494</span><span id="line-494">   }</span>
+<span class="source-line-no">495</span><span id="line-495"></span>
+<span class="source-line-no">496</span><span id="line-496">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">497</span><span id="line-497">   public FluentAnyAssertion&lt;T,R&gt; setStdOut() {</span>
+<span class="source-line-no">498</span><span id="line-498">      super.setStdOut();</span>
+<span class="source-line-no">499</span><span id="line-499">      return this;</span>
+<span class="source-line-no">500</span><span id="line-500">   }</span>
+<span class="source-line-no">501</span><span id="line-501"></span>
+<span class="source-line-no">502</span><span id="line-502">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">503</span><span id="line-503">   public FluentAnyAssertion&lt;T,R&gt; setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
+<span class="source-line-no">504</span><span id="line-504">      super.setThrowable(value);</span>
+<span class="source-line-no">505</span><span id="line-505">      return this;</span>
+<span class="source-line-no">506</span><span id="line-506">   }</span>
+<span class="source-line-no">507</span><span id="line-507">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">508</span><span id="line-508">   // Utility methods</span>
+<span class="source-line-no">509</span><span id="line-509">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">510</span><span id="line-510"></span>
+<span class="source-line-no">511</span><span id="line-511">   private &lt;T2&gt; T2 cast(Class&lt;T2&gt; c) throws AssertionError {</span>
+<span class="source-line-no">512</span><span id="line-512">      Object o = orElse(null);</span>
+<span class="source-line-no">513</span><span id="line-513">      if (o == null || c.isInstance(o))</span>
+<span class="source-line-no">514</span><span id="line-514">         return c.cast(o);</span>
+<span class="source-line-no">515</span><span id="line-515">      throw new BasicAssertionError(MSG_objectWasNotType, ClassInfo.of(c).getFullName(), o.getClass());</span>
+<span class="source-line-no">516</span><span id="line-516">   }</span>
+<span class="source-line-no">517</span><span id="line-517">}</span>
 
 
 

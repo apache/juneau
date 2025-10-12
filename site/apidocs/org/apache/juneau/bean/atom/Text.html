@@ -84,9 +84,28 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Content.html" title="class in org.apache.juneau.bean.atom">Content</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-52">Text</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-91">Text</a></span>
 <span class="extends-implements">extends <a href="Common.html" title="class in org.apache.juneau.bean.atom">Common</a></span></div>
-<div class="block">Represents an <c>atomTextConstruct</c> construct in the RFC4287 specification.
+<div class="block">Represents human-readable text in an Atom document.
+
+ <p>
+ Text constructs are used throughout Atom for elements that contain human-readable text 
+ such as titles, summaries, rights statements, and subtitles. They support three content types:
+
+ <ul class='spaced-list'>
+   <li><c>"text"</c> - Plain text with no markup (default)
+   <li><c>"html"</c> - HTML markup, entity-escaped
+   <li><c>"xhtml"</c> - Well-formed XHTML in a div container
+ </ul>
+
+ <p>
+ Text constructs are the base class for <a href="Content.html" title="class in org.apache.juneau.bean.atom"><code>Content</code></a> and are used directly for:
+ <ul class='spaced-list'>
+   <li><c>atom:title</c> - Entry and feed titles
+   <li><c>atom:subtitle</c> - Feed subtitles
+   <li><c>atom:summary</c> - Entry summaries
+   <li><c>atom:rights</c> - Copyright and rights statements
+ </ul>
 
  <h5 class='figure'>Schema</h5>
  <p class='bschema'>
@@ -109,8 +128,29 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
+ <h5 class='section'>Examples:</h5>
+ <p class='bjava'>
+   <jc>// Plain text</jc>
+   Text <jv>t1</jv> = <jk>new</jk> Text(<js>"text"</js>)
+      .setText(<js>"Plain text title"</js>);
+
+   <jc>// HTML (entity-escaped)</jc>
+   Text <jv>t2</jv> = <jk>new</jk> Text(<js>"html"</js>)
+      .setText(<js>"Title with &lt;em&gt;emphasis&lt;/em&gt;"</js>);
+
+   <jc>// XHTML</jc>
+   Text <jv>t3</jv> = <jk>new</jk> Text(<js>"xhtml"</js>)
+      .setText(<js>"&lt;div xmlns='http://www.w3.org/1999/xhtml'&gt;&lt;p&gt;XHTML title&lt;/p&gt;&lt;/div&gt;"</js>);
+ </p>
+
+ <h5 class='section'>Specification:</h5>
+ <p>
+ Represents an <c>atomTextConstruct</c> in the 
+ <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-3.1">RFC 4287 - Section 3.1</a> specification.
+
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
+   <li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  </ul></div>
 </section>
 <section class="summary">
@@ -158,7 +198,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBase(java.lang.Object)" class="member-name-link">setBase</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Bean property setter:  <property>term</property>.</div>
+<div class="block">Bean property setter:  <property>base</property>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLang(java.lang.String)" class="member-name-link">setLang</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
@@ -198,7 +238,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String)">
 <h3>Text</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-63">Text</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-101">Text</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
 <div class="block">Normal content.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -209,7 +249,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Text</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-68">Text</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-106">Text</a></span>()</div>
 <div class="block">Bean constructor.</div>
 </section>
 </li>
@@ -225,7 +265,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getType()">
 <h3>getType</h3>
 <div class="member-signature"><span class="annotations"><a href="../../xml/annotation/Xml.html" title="annotation interface in org.apache.juneau.xml.annotation">@Xml</a>(<a href="../../xml/annotation/Xml.html#format()">format</a>=<a href="../../xml/annotation/XmlFormat.html#ATTR">ATTR</a>)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-83">getType</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-121">getType</a></span>()</div>
 <div class="block">Bean property getter:  <property>type</property>.
 
  <p>
@@ -239,7 +279,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setType(java.lang.String)">
 <h3>setType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-108">setType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-146">setType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>type</property>.
 
  <p>
@@ -266,7 +306,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getText()">
 <h3>getText</h3>
 <div class="member-signature"><span class="annotations"><a href="../../xml/annotation/Xml.html" title="annotation interface in org.apache.juneau.xml.annotation">@Xml</a>(<a href="../../xml/annotation/Xml.html#format()">format</a>=<a href="../../xml/annotation/XmlFormat.html#XMLTEXT">XMLTEXT</a>)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-121">getText</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-159">getText</a></span>()</div>
 <div class="block">Bean property getter:  <property>text</property>.
 
  <p>
@@ -280,7 +320,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setText(java.lang.String)">
 <h3>setText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-137">setText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-175">setText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>text</property>.
 
  <p>
@@ -297,16 +337,22 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setBase(java.lang.Object)">
 <h3>setBase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-148">setBase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-184">setBase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Common.html#setBase(java.lang.Object)">Common</a></code></span></div>
-<div class="block">Bean property setter:  <property>term</property>.
+<div class="block">Bean property setter:  <property>base</property>.
 
  <p>
- The URI base of this object.
+ Sets the base URI for resolving relative URI references (xml:base attribute).
 
  <p>
  The value can be of any of the following types: <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link"><code>URI</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URL.html" title="class or interface in java.net" class="external-link"><code>URL</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>.
- Strings must be valid URIs.</div>
+ Strings must be valid URIs.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
+      .setBase(<js>"http://example.org/"</js>);
+ </p></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="Common.html#setBase(java.lang.Object)">setBase</a></code>&nbsp;in class&nbsp;<code><a href="Common.html" title="class in org.apache.juneau.bean.atom">Common</a></code></dd>
@@ -314,27 +360,34 @@ loadScripts(document, 'script');</script>
 <dd><code>value</code> - The new value for this property.
    <br>Can be <jk>null</jk> to unset the property.</dd>
 <dt>Returns:</dt>
-<dd>This object</dd>
+<dd>This object.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="setLang(java.lang.String)">
 <h3>setLang</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-154">setLang</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Text.html#line-190">setLang</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Common.html#setLang(java.lang.String)">Common</a></code></span></div>
 <div class="block">Bean property setter:  <property>lang</property>.
 
  <p>
- The language of this object.</div>
+ Sets the natural language of the element's content (xml:lang attribute).
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   Text <jv>title</jv> = <jk>new</jk> Text(<js>"text"</js>)
+      .setText(<js>"Mon Blog"</js>)
+      .setLang(<js>"fr"</js>);
+ </p></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="Common.html#setLang(java.lang.String)">setLang</a></code>&nbsp;in class&nbsp;<code><a href="Common.html" title="class in org.apache.juneau.bean.atom">Common</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.
+<dd><code>value</code> - The new value for this property (e.g., "en", "fr", "de", "en-US").
    <br>Can be <jk>null</jk> to unset the property.</dd>
 <dt>Returns:</dt>
-<dd>This object</dd>
+<dd>This object.</dd>
 </dl>
 </section>
 </li>

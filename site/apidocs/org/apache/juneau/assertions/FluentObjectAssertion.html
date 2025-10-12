@@ -411,7 +411,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(T,R)">
 <h3 id="&lt;init&gt;(java.lang.Object,java.lang.Object)">FluentObjectAssertion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-144">FluentObjectAssertion</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-143">FluentObjectAssertion</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&nbsp;value,
  <a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&nbsp;returns)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -427,7 +427,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.assertions.Assertion,T,R)">
 <h3 id="&lt;init&gt;(org.apache.juneau.assertions.Assertion,java.lang.Object,java.lang.Object)">FluentObjectAssertion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-165">FluentObjectAssertion</a></span><wbr><span class="parameters">(<a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a>&nbsp;creator,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-164">FluentObjectAssertion</a></span><wbr><span class="parameters">(<a href="Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a>&nbsp;creator,
  <a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&nbsp;value,
  <a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&nbsp;returns)</span></div>
 <div class="block">Chained constructor.
@@ -457,7 +457,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asString()">
 <h3>asString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-187">asString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-186">asString</a></span>()</div>
 <div class="block">Converts this object to a string using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link"><code>Object.toString()</code></a> and returns it as a new assertion.
 
  <h5 class='section'>Example:</h5>
@@ -476,7 +476,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asString(org.apache.juneau.serializer.WriterSerializer)">
 <h3>asString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-205">asString</a></span><wbr><span class="parameters">(<a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.serializer">WriterSerializer</a>&nbsp;ws)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-204">asString</a></span><wbr><span class="parameters">(<a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.serializer">WriterSerializer</a>&nbsp;ws)</span></div>
 <div class="block">Converts this object to text using the specified serializer and returns it as a new assertion.
 
  <h5 class='section'>Example:</h5>
@@ -497,7 +497,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asString(java.util.function.Function)">
 <h3>asString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-227">asString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;function)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-226">asString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;function)</span></div>
 <div class="block">Converts this object to a string using the specified function and returns it as a new assertion.
 
  <h5 class='section'>Example:</h5>
@@ -518,7 +518,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asJson()">
 <h3>asJson</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-244">asJson</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-243">asJson</a></span>()</div>
 <div class="block">Converts this object to simplified JSON and returns it as a new assertion.
 
  <h5 class='section'>Example:</h5>
@@ -537,7 +537,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asJsonSorted()">
 <h3>asJsonSorted</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-261">asJsonSorted</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-260">asJsonSorted</a></span>()</div>
 <div class="block">Converts this object to sorted simplified JSON and returns it as a new assertion.
 
  <h5 class='section'>Example:</h5>
@@ -556,7 +556,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asTransformed(java.util.function.Function)">
 <h3>asTransformed</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-271">asTransformed</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&gt;&nbsp;function)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-270">asTransformed</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&gt;&nbsp;function)</span></div>
 <div class="block">Applies a transform on the inner object and returns a new inner object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -569,7 +569,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asTransformedTo(java.util.function.Function)">
 <h3>asTransformedTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;T2,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-282">asTransformedTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr>T2&gt;&nbsp;function)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;T2,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-281">asTransformedTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr>T2&gt;&nbsp;function)</span></div>
 <div class="block">Applies a transform on the inner object and returns a new inner object.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -584,7 +584,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asAny()">
 <h3>asAny</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-291">asAny</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-290">asAny</a></span>()</div>
 <div class="block">Converts this assertion into an <a href="FluentAnyAssertion.html" title="class in org.apache.juneau.assertions"><code>FluentAnyAssertion</code></a> so that it can be converted to other assertion types.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -595,7 +595,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isExists()">
 <h3>isExists</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-308">isExists</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-307">isExists</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Asserts that the object is not null.
 
@@ -612,7 +612,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isNull()">
 <h3>isNull</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-321">isNull</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-320">isNull</a></span>()
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Asserts that the object i null.
 
@@ -629,7 +629,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isNotNull()">
 <h3>isNotNull</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-336">isNotNull</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-335">isNotNull</a></span>()
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Asserts that the object is not null.
 
@@ -646,7 +646,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="is(T)">
 <h3 id="is(java.lang.Object)">is</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-349">is</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-348">is</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&nbsp;value)</span>
      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Asserts that the value equals the specified value.</div>
 <dl class="notes">
@@ -662,7 +662,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isString(java.lang.String)">
 <h3>isString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-364">isString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-363">isString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Asserts that the value converted to a string equals the specified value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -677,7 +677,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isNot(T)">
 <h3 id="isNot(java.lang.Object)">isNot</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-375">isNot</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-374">isNot</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&nbsp;value)</span>
         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Asserts that the value does not equal the specified value.</div>
 <dl class="notes">
@@ -694,7 +694,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="isAny(T...)">
 <h3 id="isAny(java.lang.Object[])">isAny</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-388">isAny</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>...&nbsp;values)</span>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-387">isAny</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>...&nbsp;values)</span>
               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Asserts that the value is one of the specified values.</div>
 <dl class="notes">
@@ -711,7 +711,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="isNotAny(T...)">
 <h3 id="isNotAny(java.lang.Object[])">isNotAny</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-403">isNotAny</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>...&nbsp;values)</span>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-402">isNotAny</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>...&nbsp;values)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Asserts that the value is not one of the specified values.</div>
 <dl class="notes">
@@ -727,7 +727,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isSame(T)">
 <h3 id="isSame(java.lang.Object)">isSame</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-418">isSame</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-417">isSame</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&nbsp;value)</span>
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Asserts that the specified object is the same object as this object.</div>
 <dl class="notes">
@@ -743,7 +743,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isSameJsonAs(java.lang.Object)">
 <h3>isSameJsonAs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-431">isSameJsonAs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-430">isSameJsonAs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Verifies that two objects are equivalent after converting them both to JSON.</div>
 <dl class="notes">
@@ -759,7 +759,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isSameSortedJsonAs(java.lang.Object)">
 <h3>isSameSortedJsonAs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-445">isSameSortedJsonAs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-444">isSameSortedJsonAs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Verifies that two objects are equivalent after converting them both to sorted JSON.
 
  <p>
@@ -777,7 +777,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isSameSerializedAs(java.lang.Object,org.apache.juneau.serializer.WriterSerializer)">
 <h3>isSameSerializedAs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-457">isSameSerializedAs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-456">isSameSerializedAs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.serializer">WriterSerializer</a>&nbsp;serializer)</span></div>
 <div class="block">Asserts that the specified object is the same as this object after converting both to strings using the specified serializer.</div>
 <dl class="notes">
@@ -794,7 +794,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isType(java.lang.Class)">
 <h3>isType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-478">isType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;parent)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-477">isType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;parent)</span>
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Asserts that the object is an instance of the specified class.
 
@@ -816,7 +816,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isExactType(java.lang.Class)">
 <h3>isExactType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-498">isExactType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;type)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-497">isExactType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;type)</span>
               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Asserts that the object is an instance of the specified class.
 
@@ -838,7 +838,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="is(java.util.function.Predicate)">
 <h3>is</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-512">is</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&gt;&nbsp;test)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-511">is</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&gt;&nbsp;test)</span>
      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Asserts that the value passes the specified predicate test.</div>
 <dl class="notes">
@@ -854,7 +854,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isJson(java.lang.String)">
 <h3>isJson</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-532">isJson</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-531">isJson</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Converts this object to simplified JSON and runs the <a href="FluentStringAssertion.html#is(java.lang.String)"><code>FluentStringAssertion.is(String)</code></a> on the result.
 
  <h5 class='section'>Example:</h5>
@@ -875,7 +875,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setMsg(java.lang.String,java.lang.Object...)">
 <h3>setMsg</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-542">setMsg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-538">setMsg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setMsg(java.lang.String,java.lang.Object...)">Assertion</a></code></span></div>
 <div class="block">Allows you to override the assertion failure message.
@@ -906,7 +906,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setOut(java.io.PrintStream)">
 <h3>setOut</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-548">setOut</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintStream.html" title="class or interface in java.io" class="external-link">PrintStream</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-544">setOut</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintStream.html" title="class or interface in java.io" class="external-link">PrintStream</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setOut(java.io.PrintStream)">Assertion</a></code></span></div>
 <div class="block">If an error occurs, send the error message to the specified stream instead of STDERR.</div>
 <dl class="notes">
@@ -923,7 +923,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setSilent()">
 <h3>setSilent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-554">setSilent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-550">setSilent</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setSilent()">Assertion</a></code></span></div>
 <div class="block">Suppresses output to STDERR.
 
@@ -940,7 +940,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setStdOut()">
 <h3>setStdOut</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-560">setStdOut</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-556">setStdOut</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setStdOut()">Assertion</a></code></span></div>
 <div class="block">If an error occurs, send the error message to STDOUT instead of STDERR.</div>
 <dl class="notes">
@@ -954,7 +954,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setThrowable(java.lang.Class)">
 <h3>setThrowable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-566">setThrowable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-562">setThrowable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setThrowable(java.lang.Class)">Assertion</a></code></span></div>
 <div class="block">If an error occurs, throw this exception instead of the standard <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link"><code>AssertionError</code></a>.
 
@@ -990,7 +990,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="value()">
 <h3>value</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-584">value</a></span>()
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-577">value</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></span></div>
 <div class="block">Returns the inner value after asserting it is not <jk>null</jk>.</div>
 <dl class="notes">
@@ -1004,7 +1004,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="valueAsString()">
 <h3>valueAsString</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-594">valueAsString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-587">valueAsString</a></span>()</div>
 <div class="block">Returns the inner value as a string.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1015,7 +1015,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="orElse(T)">
 <h3 id="orElse(java.lang.Object)">orElse</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-604">orElse</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&nbsp;other)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-597">orElse</a></span><wbr><span class="parameters">(<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&nbsp;other)</span></div>
 <div class="block">Returns the inner value or the other value if the value is <jk>null</jk>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1028,7 +1028,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="valueIsNull()">
 <h3>valueIsNull</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-613">valueIsNull</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-606">valueIsNull</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if the inner value is null.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1039,7 +1039,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="valueIsNotNull()">
 <h3>valueIsNotNull</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-622">valueIsNotNull</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-615">valueIsNotNull</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if the inner value is not null.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1050,7 +1050,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="opt()">
 <h3>opt</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-631">opt</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-624">opt</a></span>()</div>
 <div class="block">Returns the value wrapped in an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1061,7 +1061,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="map(java.util.function.Function)">
 <h3>map</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T2&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-642">map</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super <a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr>? extends T2&gt;&nbsp;mapper)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T2&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-635">map</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super <a href="FluentObjectAssertion.html" title="type parameter in FluentObjectAssertion">T</a>,<wbr>? extends T2&gt;&nbsp;mapper)</span></div>
 <div class="block">Returns the result of running the specified function against the value and returns the result.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -1076,7 +1076,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getFailureMessage(java.util.function.Predicate,java.lang.Object)">
 <h3>getFailureMessage</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-657">getFailureMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;?&gt;&nbsp;p,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-650">getFailureMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;?&gt;&nbsp;p,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Returns the predicate failure message.
 
@@ -1095,7 +1095,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="equals(java.lang.Object,java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-670">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o1,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-663">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o1,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o2)</span></div>
 <div class="block">Checks two objects for equality.</div>
 <dl class="notes">
@@ -1110,7 +1110,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-686">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/assertions/FluentObjectAssertion.html#line-679">toString</a></span>()</div>
 <div class="block">Returns the string form of the inner object.
  Subclasses can override this method to affect the <a href="#asString()"><code>asString()</code></a> method (and related).</div>
 <dl class="notes">

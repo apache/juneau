@@ -141,79 +141,73 @@
 <span class="source-line-no">128</span><span id="line-128"> *</span>
 <span class="source-line-no">129</span><span id="line-129"> * @param &lt;E&gt; The bean type.</span>
 <span class="source-line-no">130</span><span id="line-130"> */</span>
-<span class="source-line-no">131</span><span id="line-131">@FluentSetters(returns="BeanListAssertion&lt;E&gt;")</span>
-<span class="source-line-no">132</span><span id="line-132">public class BeanListAssertion&lt;E&gt; extends FluentBeanListAssertion&lt;E,BeanListAssertion&lt;E&gt;&gt; {</span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">135</span><span id="line-135">   // Static</span>
-<span class="source-line-no">136</span><span id="line-136">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">137</span><span id="line-137"></span>
-<span class="source-line-no">138</span><span id="line-138">   /**</span>
-<span class="source-line-no">139</span><span id="line-139">    * Static creator.</span>
-<span class="source-line-no">140</span><span id="line-140">    *</span>
-<span class="source-line-no">141</span><span id="line-141">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">142</span><span id="line-142">    * @param value</span>
-<span class="source-line-no">143</span><span id="line-143">    *    The object being tested.</span>
-<span class="source-line-no">144</span><span id="line-144">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">145</span><span id="line-145">    * @return A new assertion object.</span>
-<span class="source-line-no">146</span><span id="line-146">    */</span>
-<span class="source-line-no">147</span><span id="line-147">   public static &lt;E&gt; BeanListAssertion&lt;E&gt; create(List&lt;E&gt; value) {</span>
-<span class="source-line-no">148</span><span id="line-148">      return new BeanListAssertion&lt;&gt;(value);</span>
-<span class="source-line-no">149</span><span id="line-149">   }</span>
-<span class="source-line-no">150</span><span id="line-150"></span>
-<span class="source-line-no">151</span><span id="line-151">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">152</span><span id="line-152">   // Instance</span>
-<span class="source-line-no">153</span><span id="line-153">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">154</span><span id="line-154"></span>
-<span class="source-line-no">155</span><span id="line-155">   /**</span>
-<span class="source-line-no">156</span><span id="line-156">    * Constructor.</span>
-<span class="source-line-no">157</span><span id="line-157">    *</span>
-<span class="source-line-no">158</span><span id="line-158">    * @param value</span>
-<span class="source-line-no">159</span><span id="line-159">    *    The object being tested.</span>
-<span class="source-line-no">160</span><span id="line-160">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">161</span><span id="line-161">    */</span>
-<span class="source-line-no">162</span><span id="line-162">   public BeanListAssertion(List&lt;E&gt; value) {</span>
-<span class="source-line-no">163</span><span id="line-163">      super(value, null);</span>
-<span class="source-line-no">164</span><span id="line-164">   }</span>
-<span class="source-line-no">165</span><span id="line-165"></span>
-<span class="source-line-no">166</span><span id="line-166">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">167</span><span id="line-167">   // Fluent setters</span>
-<span class="source-line-no">168</span><span id="line-168">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">171</span><span id="line-171"></span>
-<span class="source-line-no">172</span><span id="line-172">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">173</span><span id="line-173">   public BeanListAssertion&lt;E&gt; setMsg(String msg, Object...args) {</span>
-<span class="source-line-no">174</span><span id="line-174">      super.setMsg(msg, args);</span>
-<span class="source-line-no">175</span><span id="line-175">      return this;</span>
-<span class="source-line-no">176</span><span id="line-176">   }</span>
-<span class="source-line-no">177</span><span id="line-177"></span>
-<span class="source-line-no">178</span><span id="line-178">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">179</span><span id="line-179">   public BeanListAssertion&lt;E&gt; setOut(PrintStream value) {</span>
-<span class="source-line-no">180</span><span id="line-180">      super.setOut(value);</span>
-<span class="source-line-no">181</span><span id="line-181">      return this;</span>
-<span class="source-line-no">182</span><span id="line-182">   }</span>
-<span class="source-line-no">183</span><span id="line-183"></span>
-<span class="source-line-no">184</span><span id="line-184">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">185</span><span id="line-185">   public BeanListAssertion&lt;E&gt; setSilent() {</span>
-<span class="source-line-no">186</span><span id="line-186">      super.setSilent();</span>
-<span class="source-line-no">187</span><span id="line-187">      return this;</span>
-<span class="source-line-no">188</span><span id="line-188">   }</span>
-<span class="source-line-no">189</span><span id="line-189"></span>
-<span class="source-line-no">190</span><span id="line-190">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">191</span><span id="line-191">   public BeanListAssertion&lt;E&gt; setStdOut() {</span>
-<span class="source-line-no">192</span><span id="line-192">      super.setStdOut();</span>
-<span class="source-line-no">193</span><span id="line-193">      return this;</span>
-<span class="source-line-no">194</span><span id="line-194">   }</span>
-<span class="source-line-no">195</span><span id="line-195"></span>
-<span class="source-line-no">196</span><span id="line-196">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">197</span><span id="line-197">   public BeanListAssertion&lt;E&gt; setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
-<span class="source-line-no">198</span><span id="line-198">      super.setThrowable(value);</span>
-<span class="source-line-no">199</span><span id="line-199">      return this;</span>
-<span class="source-line-no">200</span><span id="line-200">   }</span>
-<span class="source-line-no">201</span><span id="line-201"></span>
-<span class="source-line-no">202</span><span id="line-202">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">203</span><span id="line-203">}</span>
+<span class="source-line-no">131</span><span id="line-131">public class BeanListAssertion&lt;E&gt; extends FluentBeanListAssertion&lt;E,BeanListAssertion&lt;E&gt;&gt; {</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">134</span><span id="line-134">   // Static</span>
+<span class="source-line-no">135</span><span id="line-135">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">   /**</span>
+<span class="source-line-no">138</span><span id="line-138">    * Static creator.</span>
+<span class="source-line-no">139</span><span id="line-139">    *</span>
+<span class="source-line-no">140</span><span id="line-140">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">141</span><span id="line-141">    * @param value</span>
+<span class="source-line-no">142</span><span id="line-142">    *    The object being tested.</span>
+<span class="source-line-no">143</span><span id="line-143">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">144</span><span id="line-144">    * @return A new assertion object.</span>
+<span class="source-line-no">145</span><span id="line-145">    */</span>
+<span class="source-line-no">146</span><span id="line-146">   public static &lt;E&gt; BeanListAssertion&lt;E&gt; create(List&lt;E&gt; value) {</span>
+<span class="source-line-no">147</span><span id="line-147">      return new BeanListAssertion&lt;&gt;(value);</span>
+<span class="source-line-no">148</span><span id="line-148">   }</span>
+<span class="source-line-no">149</span><span id="line-149"></span>
+<span class="source-line-no">150</span><span id="line-150">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">151</span><span id="line-151">   // Instance</span>
+<span class="source-line-no">152</span><span id="line-152">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">153</span><span id="line-153"></span>
+<span class="source-line-no">154</span><span id="line-154">   /**</span>
+<span class="source-line-no">155</span><span id="line-155">    * Constructor.</span>
+<span class="source-line-no">156</span><span id="line-156">    *</span>
+<span class="source-line-no">157</span><span id="line-157">    * @param value</span>
+<span class="source-line-no">158</span><span id="line-158">    *    The object being tested.</span>
+<span class="source-line-no">159</span><span id="line-159">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">160</span><span id="line-160">    */</span>
+<span class="source-line-no">161</span><span id="line-161">   public BeanListAssertion(List&lt;E&gt; value) {</span>
+<span class="source-line-no">162</span><span id="line-162">      super(value, null);</span>
+<span class="source-line-no">163</span><span id="line-163">   }</span>
+<span class="source-line-no">164</span><span id="line-164"></span>
+<span class="source-line-no">165</span><span id="line-165">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">166</span><span id="line-166">   // Fluent setters</span>
+<span class="source-line-no">167</span><span id="line-167">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">168</span><span id="line-168">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">169</span><span id="line-169">   public BeanListAssertion&lt;E&gt; setMsg(String msg, Object...args) {</span>
+<span class="source-line-no">170</span><span id="line-170">      super.setMsg(msg, args);</span>
+<span class="source-line-no">171</span><span id="line-171">      return this;</span>
+<span class="source-line-no">172</span><span id="line-172">   }</span>
+<span class="source-line-no">173</span><span id="line-173"></span>
+<span class="source-line-no">174</span><span id="line-174">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">175</span><span id="line-175">   public BeanListAssertion&lt;E&gt; setOut(PrintStream value) {</span>
+<span class="source-line-no">176</span><span id="line-176">      super.setOut(value);</span>
+<span class="source-line-no">177</span><span id="line-177">      return this;</span>
+<span class="source-line-no">178</span><span id="line-178">   }</span>
+<span class="source-line-no">179</span><span id="line-179"></span>
+<span class="source-line-no">180</span><span id="line-180">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">181</span><span id="line-181">   public BeanListAssertion&lt;E&gt; setSilent() {</span>
+<span class="source-line-no">182</span><span id="line-182">      super.setSilent();</span>
+<span class="source-line-no">183</span><span id="line-183">      return this;</span>
+<span class="source-line-no">184</span><span id="line-184">   }</span>
+<span class="source-line-no">185</span><span id="line-185"></span>
+<span class="source-line-no">186</span><span id="line-186">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">187</span><span id="line-187">   public BeanListAssertion&lt;E&gt; setStdOut() {</span>
+<span class="source-line-no">188</span><span id="line-188">      super.setStdOut();</span>
+<span class="source-line-no">189</span><span id="line-189">      return this;</span>
+<span class="source-line-no">190</span><span id="line-190">   }</span>
+<span class="source-line-no">191</span><span id="line-191"></span>
+<span class="source-line-no">192</span><span id="line-192">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">193</span><span id="line-193">   public BeanListAssertion&lt;E&gt; setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
+<span class="source-line-no">194</span><span id="line-194">      super.setThrowable(value);</span>
+<span class="source-line-no">195</span><span id="line-195">      return this;</span>
+<span class="source-line-no">196</span><span id="line-196">   }</span>
+<span class="source-line-no">197</span><span id="line-197">}</span>
 
 
 

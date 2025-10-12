@@ -223,130 +223,126 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		}
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<em class="jxr_comment">// &lt;FluentSetters&gt;</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	}
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<em class="jxr_comment">// &lt;/FluentSetters&gt;</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	}
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<em class="jxr_comment">// Implementation</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<em class="jxr_comment">// Implementation</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="TargetedAnnotationImpl" href="../../../../org/apache/juneau/annotation/TargetedAnnotationImpl.html#TargetedAnnotationImpl">TargetedAnnotationImpl</a> <strong class="jxr_keyword">implements</strong> Beanp {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Impl <strong class="jxr_keyword">extends</strong> <a name="TargetedAnnotationImpl" href="../../../../org/apache/juneau/annotation/TargetedAnnotationImpl.html#TargetedAnnotationImpl">TargetedAnnotationImpl</a> <strong class="jxr_keyword">implements</strong> Beanp {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt; type;
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt;[] params, dictionary;
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String name, value, properties, format, ro, wo;
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt; type;
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt;[] params, dictionary;
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String name, value, properties, format, ro, wo;
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		Impl(Builder b) {
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<strong class="jxr_keyword">super</strong>(b);
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			<strong class="jxr_keyword">this</strong>.dictionary = copyOf(b.dictionary);
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">this</strong>.format = b.format;
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">this</strong>.name = b.name;
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">this</strong>.params = copyOf(b.params);
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			<strong class="jxr_keyword">this</strong>.properties = b.properties;
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			<strong class="jxr_keyword">this</strong>.ro = b.ro;
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			<strong class="jxr_keyword">this</strong>.type = b.type;
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			<strong class="jxr_keyword">this</strong>.value = b.value;
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<strong class="jxr_keyword">this</strong>.wo = b.wo;
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			postConstruct();
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		}
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">public</strong> Class&lt;?&gt;[] dictionary() {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<strong class="jxr_keyword">return</strong> dictionary;
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		}
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">public</strong> String format() {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<strong class="jxr_keyword">return</strong> format;
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		}
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">public</strong> String name() {
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">return</strong> name;
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		}
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">public</strong> Class&lt;?&gt;[] params() {
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			<strong class="jxr_keyword">return</strong> params;
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		}
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">public</strong> String properties() {
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">return</strong> properties;
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		}
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">public</strong> String ro() {
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">return</strong> ro;
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		}
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">public</strong> Class&lt;?&gt; type() {
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">return</strong> type;
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		}
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">public</strong> String value() {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			<strong class="jxr_keyword">return</strong> value;
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		}
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">public</strong> String wo() {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			<strong class="jxr_keyword">return</strong> wo;
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		}
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		Impl(Builder b) {
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<strong class="jxr_keyword">super</strong>(b);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">this</strong>.dictionary = copyOf(b.dictionary);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">this</strong>.format = b.format;
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<strong class="jxr_keyword">this</strong>.name = b.name;
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<strong class="jxr_keyword">this</strong>.params = copyOf(b.params);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			<strong class="jxr_keyword">this</strong>.properties = b.properties;
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">this</strong>.ro = b.ro;
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">this</strong>.type = b.type;
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">this</strong>.value = b.value;
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			<strong class="jxr_keyword">this</strong>.wo = b.wo;
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			postConstruct();
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		}
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">public</strong> Class&lt;?&gt;[] dictionary() {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<strong class="jxr_keyword">return</strong> dictionary;
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		}
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">public</strong> String format() {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">return</strong> format;
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		}
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">public</strong> String name() {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">return</strong> name;
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		}
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">public</strong> Class&lt;?&gt;[] params() {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<strong class="jxr_keyword">return</strong> params;
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		}
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">public</strong> String properties() {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">return</strong> properties;
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		}
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">public</strong> String ro() {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">return</strong> ro;
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		}
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">public</strong> Class&lt;?&gt; type() {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">return</strong> type;
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		}
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">public</strong> String value() {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">return</strong> value;
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		}
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		@Override <em class="jxr_comment">/* Beanp */</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">public</strong> String wo() {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">return</strong> wo;
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		}
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	}
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	<em class="jxr_comment">// Appliers</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<em class="jxr_comment">// Appliers</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 * Applies targeted {@link Beanp} annotations to a {@link org.apache.juneau.BeanContext.Builder}.</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Applier <strong class="jxr_keyword">extends</strong> AnnotationApplier&lt;Beanp,BeanContext.Builder&gt; {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">		 * Constructor.</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">		 * @param vr The resolver for resolving values in annotations.</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">public</strong> Applier(<a name="VarResolverSession" href="../../../../org/apache/juneau/svl/VarResolverSession.html#VarResolverSession">VarResolverSession</a> vr) {
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">super</strong>(Beanp.<strong class="jxr_keyword">class</strong>, BeanContext.Builder.<strong class="jxr_keyword">class</strong>, vr);
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		}
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		@Override
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> apply(AnnotationInfo&lt;Beanp&gt; ai, BeanContext.Builder b) {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			Beanp a = ai.<strong class="jxr_keyword">inner</strong>();
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">if</strong> (isEmptyArray(a.on()))
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 				<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			b.annotations(copy(a, vr()));
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		}
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	}
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * Applies targeted {@link Beanp} annotations to a {@link org.apache.juneau.BeanContext.Builder}.</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Applier <strong class="jxr_keyword">extends</strong> AnnotationApplier&lt;Beanp,BeanContext.Builder&gt; {
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">		 * Constructor.</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">		 * @param vr The resolver for resolving values in annotations.</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">public</strong> Applier(<a name="VarResolverSession" href="../../../../org/apache/juneau/svl/VarResolverSession.html#VarResolverSession">VarResolverSession</a> vr) {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">super</strong>(Beanp.<strong class="jxr_keyword">class</strong>, BeanContext.Builder.<strong class="jxr_keyword">class</strong>, vr);
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		}
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		@Override
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> apply(AnnotationInfo&lt;Beanp&gt; ai, BeanContext.Builder b) {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			Beanp a = ai.<strong class="jxr_keyword">inner</strong>();
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">if</strong> (isEmptyArray(a.on()))
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			b.annotations(copy(a, vr()));
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		}
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	}
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<em class="jxr_comment">// Other</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<em class="jxr_comment">// Other</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">	 * A collection of {@link Beanp @Beanp annotations}.</em>
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	@Documented
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	@Target({METHOD,TYPE})
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	@Retention(RUNTIME)
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	@Inherited
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> @<strong class="jxr_keyword">interface</strong> Array {
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">		 * The child annotations.</em>
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">		 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		Beanp[] value();
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	}
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> }
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * A collection of {@link Beanp @Beanp annotations}.</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	@Documented
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	@Target({METHOD,TYPE})
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	@Retention(RUNTIME)
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	@Inherited
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> @<strong class="jxr_keyword">interface</strong> Array {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">		 * The child annotations.</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">		 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		Beanp[] value();
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	}
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

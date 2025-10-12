@@ -351,16 +351,52 @@
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 			assertEquals(<span class="jxr_string">"string"</span>, result.getItems().getType());
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 			assertNull(result.getItems().getRef()); <em class="jxr_comment">// ref should be resolved</em>
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 		}
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	<em class="jxr_comment">// Helper methods</em>
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HeaderInfo bean() {
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">return</strong> headerInfo();
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	}
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> }
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		@Test <strong class="jxr_keyword">void</strong> d06_resolveRefs_circularReference() {
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			<em class="jxr_comment">// Test circular reference detection (covers the refStack.contains(ref) branch)</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			<strong class="jxr_keyword">var</strong> swagger = swagger()
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 				.addDefinition(<span class="jxr_string">"Header1"</span>, JsonMap.of(<span class="jxr_string">"$ref"</span>, <span class="jxr_string">"#/definitions/Header2"</span>))
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 				.addDefinition(<span class="jxr_string">"Header2"</span>, JsonMap.of(<span class="jxr_string">"$ref"</span>, <span class="jxr_string">"#/definitions/Header1"</span>));
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<strong class="jxr_keyword">var</strong> refStack = <strong class="jxr_keyword">new</strong> ArrayDeque&lt;String&gt;();
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			refStack.add(<span class="jxr_string">"#/definitions/Header1"</span>); <em class="jxr_comment">// Pre-populate the stack to simulate circular reference</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<strong class="jxr_keyword">var</strong> header = headerInfo().setRef(<span class="jxr_string">"#/definitions/Header1"</span>);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			<strong class="jxr_keyword">var</strong> result = header.resolveRefs(swagger, refStack, 10);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			<em class="jxr_comment">// Should return the original object without resolving (circular reference detected)</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			assertSame(header, result);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			assertEquals(<span class="jxr_string">"#/definitions/Header1"</span>, result.getRef());
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		}
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		@Test <strong class="jxr_keyword">void</strong> d07_resolveRefs_maxDepthDirect() {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			<em class="jxr_comment">// Test max depth directly (covers the refStack.size() &gt;= maxDepth branch directly)</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">var</strong> swagger = swagger()
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				.addDefinition(<span class="jxr_string">"MyHeader"</span>, JsonMap.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"string"</span>));
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			<em class="jxr_comment">// Create a refStack that's already at max depth</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			<strong class="jxr_keyword">var</strong> refStack = <strong class="jxr_keyword">new</strong> ArrayDeque&lt;String&gt;();
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			refStack.add(<span class="jxr_string">"dummy1"</span>);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			refStack.add(<span class="jxr_string">"dummy2"</span>);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			refStack.add(<span class="jxr_string">"dummy3"</span>);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<strong class="jxr_keyword">var</strong> header = headerInfo().setRef(<span class="jxr_string">"#/definitions/MyHeader"</span>);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">var</strong> result = header.resolveRefs(swagger, refStack, 3); <em class="jxr_comment">// maxDepth = 3, refStack.size() = 3</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			<em class="jxr_comment">// Should return the original object without resolving (max depth reached)</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			assertSame(header, result);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			assertEquals(<span class="jxr_string">"#/definitions/MyHeader"</span>, result.getRef());
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		}
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	<em class="jxr_comment">// Helper methods</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HeaderInfo bean() {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">return</strong> headerInfo();
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

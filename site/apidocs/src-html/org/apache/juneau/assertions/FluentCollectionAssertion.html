@@ -117,249 +117,242 @@
 <span class="source-line-no">104</span><span id="line-104"> * @param &lt;E&gt; The element type.</span>
 <span class="source-line-no">105</span><span id="line-105"> * @param &lt;R&gt; The return type.</span>
 <span class="source-line-no">106</span><span id="line-106"> */</span>
-<span class="source-line-no">107</span><span id="line-107">@FluentSetters(returns="FluentCollectionAssertion&lt;E,R&gt;")</span>
-<span class="source-line-no">108</span><span id="line-108">public class FluentCollectionAssertion&lt;E,R&gt; extends FluentObjectAssertion&lt;Collection&lt;E&gt;,R&gt; {</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">111</span><span id="line-111">   // Static</span>
-<span class="source-line-no">112</span><span id="line-112">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114">   private static final Messages MESSAGES = Messages.of(FluentCollectionAssertion.class, "Messages");</span>
-<span class="source-line-no">115</span><span id="line-115">   private static final String</span>
-<span class="source-line-no">116</span><span id="line-116">      MSG_collectionWasNotEmpty = MESSAGES.getString("collectionWasNotEmpty"),</span>
-<span class="source-line-no">117</span><span id="line-117">      MSG_collectionDidNotContainExpectedValue = MESSAGES.getString("collectionDidNotContainExpectedValue"),</span>
-<span class="source-line-no">118</span><span id="line-118">      MSG_collectionDidNotContainTestedValue = MESSAGES.getString("collectionDidNotContainTestedValue"),</span>
-<span class="source-line-no">119</span><span id="line-119">      MSG_collectionContainedUnexpectedValue = MESSAGES.getString("collectionContainedUnexpectedValue"),</span>
-<span class="source-line-no">120</span><span id="line-120">      MSG_collectionWasEmpty = MESSAGES.getString("collectionWasEmpty"),</span>
-<span class="source-line-no">121</span><span id="line-121">      MSG_collectionDidNotHaveExpectedSize = MESSAGES.getString("collectionDidNotHaveExpectedSize");</span>
-<span class="source-line-no">122</span><span id="line-122"></span>
-<span class="source-line-no">123</span><span id="line-123">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">124</span><span id="line-124">   // Instance</span>
-<span class="source-line-no">125</span><span id="line-125">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">126</span><span id="line-126"></span>
-<span class="source-line-no">127</span><span id="line-127">   /**</span>
-<span class="source-line-no">128</span><span id="line-128">    * Constructor.</span>
-<span class="source-line-no">129</span><span id="line-129">    *</span>
-<span class="source-line-no">130</span><span id="line-130">    * @param value</span>
-<span class="source-line-no">131</span><span id="line-131">    *    The object being tested.</span>
-<span class="source-line-no">132</span><span id="line-132">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">133</span><span id="line-133">    * @param returns</span>
-<span class="source-line-no">134</span><span id="line-134">    *    The object to return after a test method is called.</span>
-<span class="source-line-no">135</span><span id="line-135">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
-<span class="source-line-no">136</span><span id="line-136">    * used on the same assertion.</span>
-<span class="source-line-no">137</span><span id="line-137">    */</span>
-<span class="source-line-no">138</span><span id="line-138">   public FluentCollectionAssertion(Collection&lt;E&gt; value, R returns) {</span>
-<span class="source-line-no">139</span><span id="line-139">      this(null, value, returns);</span>
-<span class="source-line-no">140</span><span id="line-140">   }</span>
-<span class="source-line-no">141</span><span id="line-141"></span>
-<span class="source-line-no">142</span><span id="line-142">   /**</span>
-<span class="source-line-no">143</span><span id="line-143">    * Chained constructor.</span>
-<span class="source-line-no">144</span><span id="line-144">    *</span>
-<span class="source-line-no">145</span><span id="line-145">    * &lt;p&gt;</span>
-<span class="source-line-no">146</span><span id="line-146">    * Used when transforming one assertion into another so that the assertion config can be used by the new assertion.</span>
-<span class="source-line-no">147</span><span id="line-147">    *</span>
-<span class="source-line-no">148</span><span id="line-148">    * @param creator</span>
-<span class="source-line-no">149</span><span id="line-149">    *    The assertion that created this assertion.</span>
-<span class="source-line-no">150</span><span id="line-150">    *    &lt;br&gt;Should be &lt;jk&gt;null&lt;/jk&gt; if this is the top-level assertion.</span>
-<span class="source-line-no">151</span><span id="line-151">    * @param value</span>
-<span class="source-line-no">152</span><span id="line-152">    *    The object being tested.</span>
-<span class="source-line-no">153</span><span id="line-153">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">154</span><span id="line-154">    * @param returns</span>
-<span class="source-line-no">155</span><span id="line-155">    *    The object to return after a test method is called.</span>
-<span class="source-line-no">156</span><span id="line-156">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
-<span class="source-line-no">157</span><span id="line-157">    * used on the same assertion.</span>
-<span class="source-line-no">158</span><span id="line-158">    */</span>
-<span class="source-line-no">159</span><span id="line-159">   public FluentCollectionAssertion(Assertion creator, Collection&lt;E&gt; value, R returns) {</span>
-<span class="source-line-no">160</span><span id="line-160">      super(creator, value, returns);</span>
-<span class="source-line-no">161</span><span id="line-161">   }</span>
-<span class="source-line-no">162</span><span id="line-162"></span>
-<span class="source-line-no">163</span><span id="line-163">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">164</span><span id="line-164">   // Transform methods</span>
-<span class="source-line-no">165</span><span id="line-165">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">166</span><span id="line-166"></span>
-<span class="source-line-no">167</span><span id="line-167">   @Override /* FluentObjectAssertion */</span>
-<span class="source-line-no">168</span><span id="line-168">   public FluentCollectionAssertion&lt;E,R&gt; asTransformed(Function&lt;Collection&lt;E&gt;,Collection&lt;E&gt;&gt; function) {  // NOSONAR - Intentional.</span>
-<span class="source-line-no">169</span><span id="line-169">      return new FluentCollectionAssertion&lt;&gt;(this, function.apply(orElse(null)), returns());</span>
-<span class="source-line-no">170</span><span id="line-170">   }</span>
-<span class="source-line-no">171</span><span id="line-171"></span>
-<span class="source-line-no">172</span><span id="line-172">   /**</span>
-<span class="source-line-no">173</span><span id="line-173">    * Converts this assertion into a {@link FluentListAssertion} of strings.</span>
-<span class="source-line-no">174</span><span id="line-174">    *</span>
-<span class="source-line-no">175</span><span id="line-175">    * @return A new fluent string assertion.</span>
-<span class="source-line-no">176</span><span id="line-176">    */</span>
-<span class="source-line-no">177</span><span id="line-177">   public FluentStringListAssertion&lt;R&gt; asStrings() {</span>
-<span class="source-line-no">178</span><span id="line-178">      return new FluentStringListAssertion&lt;&gt;(this, valueIsNull() ? null : value().stream().map(o -&gt; s(o)).toList(), returns());</span>
-<span class="source-line-no">179</span><span id="line-179">   }</span>
+<span class="source-line-no">107</span><span id="line-107">public class FluentCollectionAssertion&lt;E,R&gt; extends FluentObjectAssertion&lt;Collection&lt;E&gt;,R&gt; {</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">110</span><span id="line-110">   // Static</span>
+<span class="source-line-no">111</span><span id="line-111">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">   private static final Messages MESSAGES = Messages.of(FluentCollectionAssertion.class, "Messages");</span>
+<span class="source-line-no">114</span><span id="line-114">   private static final String</span>
+<span class="source-line-no">115</span><span id="line-115">      MSG_collectionWasNotEmpty = MESSAGES.getString("collectionWasNotEmpty"),</span>
+<span class="source-line-no">116</span><span id="line-116">      MSG_collectionDidNotContainExpectedValue = MESSAGES.getString("collectionDidNotContainExpectedValue"),</span>
+<span class="source-line-no">117</span><span id="line-117">      MSG_collectionDidNotContainTestedValue = MESSAGES.getString("collectionDidNotContainTestedValue"),</span>
+<span class="source-line-no">118</span><span id="line-118">      MSG_collectionContainedUnexpectedValue = MESSAGES.getString("collectionContainedUnexpectedValue"),</span>
+<span class="source-line-no">119</span><span id="line-119">      MSG_collectionWasEmpty = MESSAGES.getString("collectionWasEmpty"),</span>
+<span class="source-line-no">120</span><span id="line-120">      MSG_collectionDidNotHaveExpectedSize = MESSAGES.getString("collectionDidNotHaveExpectedSize");</span>
+<span class="source-line-no">121</span><span id="line-121"></span>
+<span class="source-line-no">122</span><span id="line-122">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">123</span><span id="line-123">   // Instance</span>
+<span class="source-line-no">124</span><span id="line-124">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">   /**</span>
+<span class="source-line-no">127</span><span id="line-127">    * Constructor.</span>
+<span class="source-line-no">128</span><span id="line-128">    *</span>
+<span class="source-line-no">129</span><span id="line-129">    * @param value</span>
+<span class="source-line-no">130</span><span id="line-130">    *    The object being tested.</span>
+<span class="source-line-no">131</span><span id="line-131">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">132</span><span id="line-132">    * @param returns</span>
+<span class="source-line-no">133</span><span id="line-133">    *    The object to return after a test method is called.</span>
+<span class="source-line-no">134</span><span id="line-134">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
+<span class="source-line-no">135</span><span id="line-135">    * used on the same assertion.</span>
+<span class="source-line-no">136</span><span id="line-136">    */</span>
+<span class="source-line-no">137</span><span id="line-137">   public FluentCollectionAssertion(Collection&lt;E&gt; value, R returns) {</span>
+<span class="source-line-no">138</span><span id="line-138">      this(null, value, returns);</span>
+<span class="source-line-no">139</span><span id="line-139">   }</span>
+<span class="source-line-no">140</span><span id="line-140"></span>
+<span class="source-line-no">141</span><span id="line-141">   /**</span>
+<span class="source-line-no">142</span><span id="line-142">    * Chained constructor.</span>
+<span class="source-line-no">143</span><span id="line-143">    *</span>
+<span class="source-line-no">144</span><span id="line-144">    * &lt;p&gt;</span>
+<span class="source-line-no">145</span><span id="line-145">    * Used when transforming one assertion into another so that the assertion config can be used by the new assertion.</span>
+<span class="source-line-no">146</span><span id="line-146">    *</span>
+<span class="source-line-no">147</span><span id="line-147">    * @param creator</span>
+<span class="source-line-no">148</span><span id="line-148">    *    The assertion that created this assertion.</span>
+<span class="source-line-no">149</span><span id="line-149">    *    &lt;br&gt;Should be &lt;jk&gt;null&lt;/jk&gt; if this is the top-level assertion.</span>
+<span class="source-line-no">150</span><span id="line-150">    * @param value</span>
+<span class="source-line-no">151</span><span id="line-151">    *    The object being tested.</span>
+<span class="source-line-no">152</span><span id="line-152">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">153</span><span id="line-153">    * @param returns</span>
+<span class="source-line-no">154</span><span id="line-154">    *    The object to return after a test method is called.</span>
+<span class="source-line-no">155</span><span id="line-155">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
+<span class="source-line-no">156</span><span id="line-156">    * used on the same assertion.</span>
+<span class="source-line-no">157</span><span id="line-157">    */</span>
+<span class="source-line-no">158</span><span id="line-158">   public FluentCollectionAssertion(Assertion creator, Collection&lt;E&gt; value, R returns) {</span>
+<span class="source-line-no">159</span><span id="line-159">      super(creator, value, returns);</span>
+<span class="source-line-no">160</span><span id="line-160">   }</span>
+<span class="source-line-no">161</span><span id="line-161"></span>
+<span class="source-line-no">162</span><span id="line-162">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">163</span><span id="line-163">   // Transform methods</span>
+<span class="source-line-no">164</span><span id="line-164">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">165</span><span id="line-165"></span>
+<span class="source-line-no">166</span><span id="line-166">   @Override /* FluentObjectAssertion */</span>
+<span class="source-line-no">167</span><span id="line-167">   public FluentCollectionAssertion&lt;E,R&gt; asTransformed(Function&lt;Collection&lt;E&gt;,Collection&lt;E&gt;&gt; function) {  // NOSONAR - Intentional.</span>
+<span class="source-line-no">168</span><span id="line-168">      return new FluentCollectionAssertion&lt;&gt;(this, function.apply(orElse(null)), returns());</span>
+<span class="source-line-no">169</span><span id="line-169">   }</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
+<span class="source-line-no">171</span><span id="line-171">   /**</span>
+<span class="source-line-no">172</span><span id="line-172">    * Converts this assertion into a {@link FluentListAssertion} of strings.</span>
+<span class="source-line-no">173</span><span id="line-173">    *</span>
+<span class="source-line-no">174</span><span id="line-174">    * @return A new fluent string assertion.</span>
+<span class="source-line-no">175</span><span id="line-175">    */</span>
+<span class="source-line-no">176</span><span id="line-176">   public FluentStringListAssertion&lt;R&gt; asStrings() {</span>
+<span class="source-line-no">177</span><span id="line-177">      return new FluentStringListAssertion&lt;&gt;(this, valueIsNull() ? null : value().stream().map(o -&gt; s(o)).toList(), returns());</span>
+<span class="source-line-no">178</span><span id="line-178">   }</span>
+<span class="source-line-no">179</span><span id="line-179"></span>
 <span class="source-line-no">180</span><span id="line-180"></span>
-<span class="source-line-no">181</span><span id="line-181"></span>
-<span class="source-line-no">182</span><span id="line-182">   /**</span>
-<span class="source-line-no">183</span><span id="line-183">    * Returns an integer assertion on the size of this collection.</span>
-<span class="source-line-no">184</span><span id="line-184">    *</span>
-<span class="source-line-no">185</span><span id="line-185">    * &lt;p&gt;</span>
-<span class="source-line-no">186</span><span id="line-186">    * If the collection is &lt;jk&gt;null&lt;/jk&gt;, the returned assertion is a null assertion</span>
-<span class="source-line-no">187</span><span id="line-187">    * (meaning {@link FluentIntegerAssertion#isExists()} returns &lt;jk&gt;false&lt;/jk&gt;).</span>
-<span class="source-line-no">188</span><span id="line-188">    *</span>
-<span class="source-line-no">189</span><span id="line-189">    * @return A new assertion.</span>
-<span class="source-line-no">190</span><span id="line-190">    */</span>
-<span class="source-line-no">191</span><span id="line-191">   public FluentIntegerAssertion&lt;R&gt; asSize() {</span>
-<span class="source-line-no">192</span><span id="line-192">      return new FluentIntegerAssertion&lt;&gt;(this, valueIsNull() ? null : value().size(), returns());</span>
-<span class="source-line-no">193</span><span id="line-193">   }</span>
-<span class="source-line-no">194</span><span id="line-194"></span>
-<span class="source-line-no">195</span><span id="line-195">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">196</span><span id="line-196">   // Test methods</span>
-<span class="source-line-no">197</span><span id="line-197">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">198</span><span id="line-198"></span>
-<span class="source-line-no">199</span><span id="line-199">   /**</span>
-<span class="source-line-no">200</span><span id="line-200">    * Asserts that the collection exists and is empty.</span>
-<span class="source-line-no">201</span><span id="line-201">    *</span>
-<span class="source-line-no">202</span><span id="line-202">    * @return The fluent return object.</span>
-<span class="source-line-no">203</span><span id="line-203">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">204</span><span id="line-204">    */</span>
-<span class="source-line-no">205</span><span id="line-205">   public R isEmpty() throws AssertionError {</span>
-<span class="source-line-no">206</span><span id="line-206">      if (! value().isEmpty())</span>
-<span class="source-line-no">207</span><span id="line-207">         throw error(MSG_collectionWasNotEmpty);</span>
-<span class="source-line-no">208</span><span id="line-208">      return returns();</span>
-<span class="source-line-no">209</span><span id="line-209">   }</span>
-<span class="source-line-no">210</span><span id="line-210"></span>
-<span class="source-line-no">211</span><span id="line-211">   /**</span>
-<span class="source-line-no">212</span><span id="line-212">    * Asserts that the collection exists and is not empty.</span>
-<span class="source-line-no">213</span><span id="line-213">    *</span>
-<span class="source-line-no">214</span><span id="line-214">    * @return The fluent return object.</span>
-<span class="source-line-no">215</span><span id="line-215">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">216</span><span id="line-216">    */</span>
-<span class="source-line-no">217</span><span id="line-217">   public R isNotEmpty() throws AssertionError {</span>
-<span class="source-line-no">218</span><span id="line-218">      if (value().isEmpty())</span>
-<span class="source-line-no">219</span><span id="line-219">         throw error(MSG_collectionWasEmpty);</span>
-<span class="source-line-no">220</span><span id="line-220">      return returns();</span>
-<span class="source-line-no">221</span><span id="line-221">   }</span>
-<span class="source-line-no">222</span><span id="line-222"></span>
-<span class="source-line-no">223</span><span id="line-223">   /**</span>
-<span class="source-line-no">224</span><span id="line-224">    * Asserts that the collection contains the expected value.</span>
-<span class="source-line-no">225</span><span id="line-225">    *</span>
-<span class="source-line-no">226</span><span id="line-226">    * @param entry The value to check for.</span>
-<span class="source-line-no">227</span><span id="line-227">    * @return The fluent return object.</span>
-<span class="source-line-no">228</span><span id="line-228">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">229</span><span id="line-229">    */</span>
-<span class="source-line-no">230</span><span id="line-230">   public R isContains(E entry) throws AssertionError {</span>
-<span class="source-line-no">231</span><span id="line-231">      for (var v : value())</span>
-<span class="source-line-no">232</span><span id="line-232">         if (Utils.eq(v, entry))</span>
-<span class="source-line-no">233</span><span id="line-233">            return returns();</span>
-<span class="source-line-no">234</span><span id="line-234">      throw error(MSG_collectionDidNotContainExpectedValue, entry, value());</span>
-<span class="source-line-no">235</span><span id="line-235">   }</span>
-<span class="source-line-no">236</span><span id="line-236"></span>
-<span class="source-line-no">237</span><span id="line-237">   /**</span>
-<span class="source-line-no">238</span><span id="line-238">    * Asserts that the collection contains the expected value.</span>
-<span class="source-line-no">239</span><span id="line-239">    *</span>
-<span class="source-line-no">240</span><span id="line-240">    * @param entry The value to check for.</span>
-<span class="source-line-no">241</span><span id="line-241">    * @return The fluent return object.</span>
-<span class="source-line-no">242</span><span id="line-242">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">243</span><span id="line-243">    */</span>
-<span class="source-line-no">244</span><span id="line-244">   public R isNotContains(E entry) throws AssertionError {</span>
-<span class="source-line-no">245</span><span id="line-245">      value().forEach(x -&gt; {</span>
-<span class="source-line-no">246</span><span id="line-246">         if (Utils.eq(x, entry))</span>
-<span class="source-line-no">247</span><span id="line-247">            throw error(MSG_collectionContainedUnexpectedValue, entry, value());</span>
-<span class="source-line-no">248</span><span id="line-248">      });</span>
-<span class="source-line-no">249</span><span id="line-249">      return returns();</span>
-<span class="source-line-no">250</span><span id="line-250">   }</span>
-<span class="source-line-no">251</span><span id="line-251"></span>
-<span class="source-line-no">252</span><span id="line-252">   /**</span>
-<span class="source-line-no">253</span><span id="line-253">    * Asserts that at least one value in the collection passes the specified test.</span>
-<span class="source-line-no">254</span><span id="line-254">    *</span>
-<span class="source-line-no">255</span><span id="line-255">    * @param test The predicate test.</span>
-<span class="source-line-no">256</span><span id="line-256">    * @return The fluent return object.</span>
-<span class="source-line-no">257</span><span id="line-257">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">258</span><span id="line-258">    */</span>
-<span class="source-line-no">259</span><span id="line-259">   public R isAny(Predicate&lt;E&gt; test) throws AssertionError {</span>
-<span class="source-line-no">260</span><span id="line-260">      if (test == null)</span>
-<span class="source-line-no">261</span><span id="line-261">         return returns();</span>
-<span class="source-line-no">262</span><span id="line-262">      for (var v : value())</span>
-<span class="source-line-no">263</span><span id="line-263">         if (test.test(v))</span>
-<span class="source-line-no">264</span><span id="line-264">            return returns();</span>
-<span class="source-line-no">265</span><span id="line-265">      throw error(MSG_collectionDidNotContainTestedValue, value());</span>
-<span class="source-line-no">266</span><span id="line-266">   }</span>
-<span class="source-line-no">267</span><span id="line-267"></span>
-<span class="source-line-no">268</span><span id="line-268">   /**</span>
-<span class="source-line-no">269</span><span id="line-269">    * Asserts that all values in the collection pass the specified test.</span>
-<span class="source-line-no">270</span><span id="line-270">    *</span>
-<span class="source-line-no">271</span><span id="line-271">    * @param test The predicate test.</span>
-<span class="source-line-no">272</span><span id="line-272">    * @return The fluent return object.</span>
-<span class="source-line-no">273</span><span id="line-273">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">274</span><span id="line-274">    */</span>
-<span class="source-line-no">275</span><span id="line-275">   public R isAll(Predicate&lt;E&gt; test) throws AssertionError {</span>
-<span class="source-line-no">276</span><span id="line-276">      if (test == null)</span>
-<span class="source-line-no">277</span><span id="line-277">         return returns();</span>
-<span class="source-line-no">278</span><span id="line-278">      value().forEach(x -&gt; {</span>
-<span class="source-line-no">279</span><span id="line-279">         if (! test.test(x))</span>
-<span class="source-line-no">280</span><span id="line-280">            throw error(MSG_collectionDidNotContainTestedValue, value());</span>
-<span class="source-line-no">281</span><span id="line-281">      });</span>
-<span class="source-line-no">282</span><span id="line-282">      return returns();</span>
-<span class="source-line-no">283</span><span id="line-283">   }</span>
-<span class="source-line-no">284</span><span id="line-284"></span>
-<span class="source-line-no">285</span><span id="line-285">   /**</span>
-<span class="source-line-no">286</span><span id="line-286">    * Asserts that the collection exists and is the specified size.</span>
-<span class="source-line-no">287</span><span id="line-287">    *</span>
-<span class="source-line-no">288</span><span id="line-288">    * @param size The expected size.</span>
-<span class="source-line-no">289</span><span id="line-289">    * @return The fluent return object.</span>
-<span class="source-line-no">290</span><span id="line-290">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">291</span><span id="line-291">    */</span>
-<span class="source-line-no">292</span><span id="line-292">   public R isSize(int size) throws AssertionError {</span>
-<span class="source-line-no">293</span><span id="line-293">      if (getSize() != size)</span>
-<span class="source-line-no">294</span><span id="line-294">         throw error(MSG_collectionDidNotHaveExpectedSize, size, getSize());</span>
-<span class="source-line-no">295</span><span id="line-295">      return returns();</span>
-<span class="source-line-no">296</span><span id="line-296">   }</span>
-<span class="source-line-no">297</span><span id="line-297"></span>
-<span class="source-line-no">298</span><span id="line-298">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">299</span><span id="line-299">   // Fluent setters</span>
-<span class="source-line-no">300</span><span id="line-300">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">301</span><span id="line-301"></span>
-<span class="source-line-no">302</span><span id="line-302">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">303</span><span id="line-303"></span>
-<span class="source-line-no">304</span><span id="line-304">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">305</span><span id="line-305">   public FluentCollectionAssertion&lt;E,R&gt; setMsg(String msg, Object...args) {</span>
-<span class="source-line-no">306</span><span id="line-306">      super.setMsg(msg, args);</span>
-<span class="source-line-no">307</span><span id="line-307">      return this;</span>
-<span class="source-line-no">308</span><span id="line-308">   }</span>
-<span class="source-line-no">309</span><span id="line-309"></span>
-<span class="source-line-no">310</span><span id="line-310">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">311</span><span id="line-311">   public FluentCollectionAssertion&lt;E,R&gt; setOut(PrintStream value) {</span>
-<span class="source-line-no">312</span><span id="line-312">      super.setOut(value);</span>
-<span class="source-line-no">313</span><span id="line-313">      return this;</span>
-<span class="source-line-no">314</span><span id="line-314">   }</span>
-<span class="source-line-no">315</span><span id="line-315"></span>
-<span class="source-line-no">316</span><span id="line-316">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">317</span><span id="line-317">   public FluentCollectionAssertion&lt;E,R&gt; setSilent() {</span>
-<span class="source-line-no">318</span><span id="line-318">      super.setSilent();</span>
-<span class="source-line-no">319</span><span id="line-319">      return this;</span>
-<span class="source-line-no">320</span><span id="line-320">   }</span>
-<span class="source-line-no">321</span><span id="line-321"></span>
-<span class="source-line-no">322</span><span id="line-322">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">323</span><span id="line-323">   public FluentCollectionAssertion&lt;E,R&gt; setStdOut() {</span>
-<span class="source-line-no">324</span><span id="line-324">      super.setStdOut();</span>
-<span class="source-line-no">325</span><span id="line-325">      return this;</span>
-<span class="source-line-no">326</span><span id="line-326">   }</span>
-<span class="source-line-no">327</span><span id="line-327"></span>
-<span class="source-line-no">328</span><span id="line-328">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">329</span><span id="line-329">   public FluentCollectionAssertion&lt;E,R&gt; setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
-<span class="source-line-no">330</span><span id="line-330">      super.setThrowable(value);</span>
-<span class="source-line-no">331</span><span id="line-331">      return this;</span>
-<span class="source-line-no">332</span><span id="line-332">   }</span>
-<span class="source-line-no">333</span><span id="line-333"></span>
-<span class="source-line-no">334</span><span id="line-334">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">335</span><span id="line-335"></span>
-<span class="source-line-no">336</span><span id="line-336">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">337</span><span id="line-337">   // Utility methods</span>
-<span class="source-line-no">338</span><span id="line-338">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">339</span><span id="line-339"></span>
-<span class="source-line-no">340</span><span id="line-340">   /**</span>
-<span class="source-line-no">341</span><span id="line-341">    * Returns the size of this collection if it is not &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">342</span><span id="line-342">    *</span>
-<span class="source-line-no">343</span><span id="line-343">    * @return the size of this collection if it is not &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">344</span><span id="line-344">    * @throws AssertionError If value was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">345</span><span id="line-345">    */</span>
-<span class="source-line-no">346</span><span id="line-346">   protected int getSize() throws AssertionError {</span>
-<span class="source-line-no">347</span><span id="line-347">      return value().size();</span>
-<span class="source-line-no">348</span><span id="line-348">   }</span>
-<span class="source-line-no">349</span><span id="line-349">}</span>
+<span class="source-line-no">181</span><span id="line-181">   /**</span>
+<span class="source-line-no">182</span><span id="line-182">    * Returns an integer assertion on the size of this collection.</span>
+<span class="source-line-no">183</span><span id="line-183">    *</span>
+<span class="source-line-no">184</span><span id="line-184">    * &lt;p&gt;</span>
+<span class="source-line-no">185</span><span id="line-185">    * If the collection is &lt;jk&gt;null&lt;/jk&gt;, the returned assertion is a null assertion</span>
+<span class="source-line-no">186</span><span id="line-186">    * (meaning {@link FluentIntegerAssertion#isExists()} returns &lt;jk&gt;false&lt;/jk&gt;).</span>
+<span class="source-line-no">187</span><span id="line-187">    *</span>
+<span class="source-line-no">188</span><span id="line-188">    * @return A new assertion.</span>
+<span class="source-line-no">189</span><span id="line-189">    */</span>
+<span class="source-line-no">190</span><span id="line-190">   public FluentIntegerAssertion&lt;R&gt; asSize() {</span>
+<span class="source-line-no">191</span><span id="line-191">      return new FluentIntegerAssertion&lt;&gt;(this, valueIsNull() ? null : value().size(), returns());</span>
+<span class="source-line-no">192</span><span id="line-192">   }</span>
+<span class="source-line-no">193</span><span id="line-193"></span>
+<span class="source-line-no">194</span><span id="line-194">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">195</span><span id="line-195">   // Test methods</span>
+<span class="source-line-no">196</span><span id="line-196">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">197</span><span id="line-197"></span>
+<span class="source-line-no">198</span><span id="line-198">   /**</span>
+<span class="source-line-no">199</span><span id="line-199">    * Asserts that the collection exists and is empty.</span>
+<span class="source-line-no">200</span><span id="line-200">    *</span>
+<span class="source-line-no">201</span><span id="line-201">    * @return The fluent return object.</span>
+<span class="source-line-no">202</span><span id="line-202">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">203</span><span id="line-203">    */</span>
+<span class="source-line-no">204</span><span id="line-204">   public R isEmpty() throws AssertionError {</span>
+<span class="source-line-no">205</span><span id="line-205">      if (! value().isEmpty())</span>
+<span class="source-line-no">206</span><span id="line-206">         throw error(MSG_collectionWasNotEmpty);</span>
+<span class="source-line-no">207</span><span id="line-207">      return returns();</span>
+<span class="source-line-no">208</span><span id="line-208">   }</span>
+<span class="source-line-no">209</span><span id="line-209"></span>
+<span class="source-line-no">210</span><span id="line-210">   /**</span>
+<span class="source-line-no">211</span><span id="line-211">    * Asserts that the collection exists and is not empty.</span>
+<span class="source-line-no">212</span><span id="line-212">    *</span>
+<span class="source-line-no">213</span><span id="line-213">    * @return The fluent return object.</span>
+<span class="source-line-no">214</span><span id="line-214">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">215</span><span id="line-215">    */</span>
+<span class="source-line-no">216</span><span id="line-216">   public R isNotEmpty() throws AssertionError {</span>
+<span class="source-line-no">217</span><span id="line-217">      if (value().isEmpty())</span>
+<span class="source-line-no">218</span><span id="line-218">         throw error(MSG_collectionWasEmpty);</span>
+<span class="source-line-no">219</span><span id="line-219">      return returns();</span>
+<span class="source-line-no">220</span><span id="line-220">   }</span>
+<span class="source-line-no">221</span><span id="line-221"></span>
+<span class="source-line-no">222</span><span id="line-222">   /**</span>
+<span class="source-line-no">223</span><span id="line-223">    * Asserts that the collection contains the expected value.</span>
+<span class="source-line-no">224</span><span id="line-224">    *</span>
+<span class="source-line-no">225</span><span id="line-225">    * @param entry The value to check for.</span>
+<span class="source-line-no">226</span><span id="line-226">    * @return The fluent return object.</span>
+<span class="source-line-no">227</span><span id="line-227">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">228</span><span id="line-228">    */</span>
+<span class="source-line-no">229</span><span id="line-229">   public R isContains(E entry) throws AssertionError {</span>
+<span class="source-line-no">230</span><span id="line-230">      for (var v : value())</span>
+<span class="source-line-no">231</span><span id="line-231">         if (Utils.eq(v, entry))</span>
+<span class="source-line-no">232</span><span id="line-232">            return returns();</span>
+<span class="source-line-no">233</span><span id="line-233">      throw error(MSG_collectionDidNotContainExpectedValue, entry, value());</span>
+<span class="source-line-no">234</span><span id="line-234">   }</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">   /**</span>
+<span class="source-line-no">237</span><span id="line-237">    * Asserts that the collection contains the expected value.</span>
+<span class="source-line-no">238</span><span id="line-238">    *</span>
+<span class="source-line-no">239</span><span id="line-239">    * @param entry The value to check for.</span>
+<span class="source-line-no">240</span><span id="line-240">    * @return The fluent return object.</span>
+<span class="source-line-no">241</span><span id="line-241">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">242</span><span id="line-242">    */</span>
+<span class="source-line-no">243</span><span id="line-243">   public R isNotContains(E entry) throws AssertionError {</span>
+<span class="source-line-no">244</span><span id="line-244">      value().forEach(x -&gt; {</span>
+<span class="source-line-no">245</span><span id="line-245">         if (Utils.eq(x, entry))</span>
+<span class="source-line-no">246</span><span id="line-246">            throw error(MSG_collectionContainedUnexpectedValue, entry, value());</span>
+<span class="source-line-no">247</span><span id="line-247">      });</span>
+<span class="source-line-no">248</span><span id="line-248">      return returns();</span>
+<span class="source-line-no">249</span><span id="line-249">   }</span>
+<span class="source-line-no">250</span><span id="line-250"></span>
+<span class="source-line-no">251</span><span id="line-251">   /**</span>
+<span class="source-line-no">252</span><span id="line-252">    * Asserts that at least one value in the collection passes the specified test.</span>
+<span class="source-line-no">253</span><span id="line-253">    *</span>
+<span class="source-line-no">254</span><span id="line-254">    * @param test The predicate test.</span>
+<span class="source-line-no">255</span><span id="line-255">    * @return The fluent return object.</span>
+<span class="source-line-no">256</span><span id="line-256">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">257</span><span id="line-257">    */</span>
+<span class="source-line-no">258</span><span id="line-258">   public R isAny(Predicate&lt;E&gt; test) throws AssertionError {</span>
+<span class="source-line-no">259</span><span id="line-259">      if (test == null)</span>
+<span class="source-line-no">260</span><span id="line-260">         return returns();</span>
+<span class="source-line-no">261</span><span id="line-261">      for (var v : value())</span>
+<span class="source-line-no">262</span><span id="line-262">         if (test.test(v))</span>
+<span class="source-line-no">263</span><span id="line-263">            return returns();</span>
+<span class="source-line-no">264</span><span id="line-264">      throw error(MSG_collectionDidNotContainTestedValue, value());</span>
+<span class="source-line-no">265</span><span id="line-265">   }</span>
+<span class="source-line-no">266</span><span id="line-266"></span>
+<span class="source-line-no">267</span><span id="line-267">   /**</span>
+<span class="source-line-no">268</span><span id="line-268">    * Asserts that all values in the collection pass the specified test.</span>
+<span class="source-line-no">269</span><span id="line-269">    *</span>
+<span class="source-line-no">270</span><span id="line-270">    * @param test The predicate test.</span>
+<span class="source-line-no">271</span><span id="line-271">    * @return The fluent return object.</span>
+<span class="source-line-no">272</span><span id="line-272">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">273</span><span id="line-273">    */</span>
+<span class="source-line-no">274</span><span id="line-274">   public R isAll(Predicate&lt;E&gt; test) throws AssertionError {</span>
+<span class="source-line-no">275</span><span id="line-275">      if (test == null)</span>
+<span class="source-line-no">276</span><span id="line-276">         return returns();</span>
+<span class="source-line-no">277</span><span id="line-277">      value().forEach(x -&gt; {</span>
+<span class="source-line-no">278</span><span id="line-278">         if (! test.test(x))</span>
+<span class="source-line-no">279</span><span id="line-279">            throw error(MSG_collectionDidNotContainTestedValue, value());</span>
+<span class="source-line-no">280</span><span id="line-280">      });</span>
+<span class="source-line-no">281</span><span id="line-281">      return returns();</span>
+<span class="source-line-no">282</span><span id="line-282">   }</span>
+<span class="source-line-no">283</span><span id="line-283"></span>
+<span class="source-line-no">284</span><span id="line-284">   /**</span>
+<span class="source-line-no">285</span><span id="line-285">    * Asserts that the collection exists and is the specified size.</span>
+<span class="source-line-no">286</span><span id="line-286">    *</span>
+<span class="source-line-no">287</span><span id="line-287">    * @param size The expected size.</span>
+<span class="source-line-no">288</span><span id="line-288">    * @return The fluent return object.</span>
+<span class="source-line-no">289</span><span id="line-289">    * @throws AssertionError If assertion failed or value was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">290</span><span id="line-290">    */</span>
+<span class="source-line-no">291</span><span id="line-291">   public R isSize(int size) throws AssertionError {</span>
+<span class="source-line-no">292</span><span id="line-292">      if (getSize() != size)</span>
+<span class="source-line-no">293</span><span id="line-293">         throw error(MSG_collectionDidNotHaveExpectedSize, size, getSize());</span>
+<span class="source-line-no">294</span><span id="line-294">      return returns();</span>
+<span class="source-line-no">295</span><span id="line-295">   }</span>
+<span class="source-line-no">296</span><span id="line-296"></span>
+<span class="source-line-no">297</span><span id="line-297">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">298</span><span id="line-298">   // Fluent setters</span>
+<span class="source-line-no">299</span><span id="line-299">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">300</span><span id="line-300">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">301</span><span id="line-301">   public FluentCollectionAssertion&lt;E,R&gt; setMsg(String msg, Object...args) {</span>
+<span class="source-line-no">302</span><span id="line-302">      super.setMsg(msg, args);</span>
+<span class="source-line-no">303</span><span id="line-303">      return this;</span>
+<span class="source-line-no">304</span><span id="line-304">   }</span>
+<span class="source-line-no">305</span><span id="line-305"></span>
+<span class="source-line-no">306</span><span id="line-306">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">307</span><span id="line-307">   public FluentCollectionAssertion&lt;E,R&gt; setOut(PrintStream value) {</span>
+<span class="source-line-no">308</span><span id="line-308">      super.setOut(value);</span>
+<span class="source-line-no">309</span><span id="line-309">      return this;</span>
+<span class="source-line-no">310</span><span id="line-310">   }</span>
+<span class="source-line-no">311</span><span id="line-311"></span>
+<span class="source-line-no">312</span><span id="line-312">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">313</span><span id="line-313">   public FluentCollectionAssertion&lt;E,R&gt; setSilent() {</span>
+<span class="source-line-no">314</span><span id="line-314">      super.setSilent();</span>
+<span class="source-line-no">315</span><span id="line-315">      return this;</span>
+<span class="source-line-no">316</span><span id="line-316">   }</span>
+<span class="source-line-no">317</span><span id="line-317"></span>
+<span class="source-line-no">318</span><span id="line-318">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">319</span><span id="line-319">   public FluentCollectionAssertion&lt;E,R&gt; setStdOut() {</span>
+<span class="source-line-no">320</span><span id="line-320">      super.setStdOut();</span>
+<span class="source-line-no">321</span><span id="line-321">      return this;</span>
+<span class="source-line-no">322</span><span id="line-322">   }</span>
+<span class="source-line-no">323</span><span id="line-323"></span>
+<span class="source-line-no">324</span><span id="line-324">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">325</span><span id="line-325">   public FluentCollectionAssertion&lt;E,R&gt; setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
+<span class="source-line-no">326</span><span id="line-326">      super.setThrowable(value);</span>
+<span class="source-line-no">327</span><span id="line-327">      return this;</span>
+<span class="source-line-no">328</span><span id="line-328">   }</span>
+<span class="source-line-no">329</span><span id="line-329">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">330</span><span id="line-330">   // Utility methods</span>
+<span class="source-line-no">331</span><span id="line-331">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">332</span><span id="line-332"></span>
+<span class="source-line-no">333</span><span id="line-333">   /**</span>
+<span class="source-line-no">334</span><span id="line-334">    * Returns the size of this collection if it is not &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">335</span><span id="line-335">    *</span>
+<span class="source-line-no">336</span><span id="line-336">    * @return the size of this collection if it is not &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">337</span><span id="line-337">    * @throws AssertionError If value was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">338</span><span id="line-338">    */</span>
+<span class="source-line-no">339</span><span id="line-339">   protected int getSize() throws AssertionError {</span>
+<span class="source-line-no">340</span><span id="line-340">      return value().size();</span>
+<span class="source-line-no">341</span><span id="line-341">   }</span>
+<span class="source-line-no">342</span><span id="line-342">}</span>
 
 
 

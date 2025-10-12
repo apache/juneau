@@ -82,88 +82,72 @@
 <span class="source-line-no">069</span><span id="line-69">      }</span>
 <span class="source-line-no">070</span><span id="line-70">   }</span>
 <span class="source-line-no">071</span><span id="line-71"></span>
-<span class="source-line-no">072</span><span id="line-72">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">073</span><span id="line-73"></span>
-<span class="source-line-no">074</span><span id="line-74">   @Override /* SerializerWriter */</span>
-<span class="source-line-no">075</span><span id="line-75">   public CsvWriter appendln(int indent, String text) {</span>
-<span class="source-line-no">076</span><span id="line-76">      super.appendln(indent, text);</span>
-<span class="source-line-no">077</span><span id="line-77">      return this;</span>
-<span class="source-line-no">078</span><span id="line-78">   }</span>
-<span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">   @Override /* SerializerWriter */</span>
-<span class="source-line-no">081</span><span id="line-81">   public CsvWriter appendln(String text) {</span>
-<span class="source-line-no">082</span><span id="line-82">      super.appendln(text);</span>
-<span class="source-line-no">083</span><span id="line-83">      return this;</span>
-<span class="source-line-no">084</span><span id="line-84">   }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   @Override /* SerializerWriter */</span>
-<span class="source-line-no">087</span><span id="line-87">   public CsvWriter append(int indent, String text) {</span>
-<span class="source-line-no">088</span><span id="line-88">      super.append(indent, text);</span>
-<span class="source-line-no">089</span><span id="line-89">      return this;</span>
-<span class="source-line-no">090</span><span id="line-90">   }</span>
-<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">072</span><span id="line-72">   @Override /* SerializerWriter */</span>
+<span class="source-line-no">073</span><span id="line-73">   public CsvWriter appendln(int indent, String text) {</span>
+<span class="source-line-no">074</span><span id="line-74">      super.appendln(indent, text);</span>
+<span class="source-line-no">075</span><span id="line-75">      return this;</span>
+<span class="source-line-no">076</span><span id="line-76">   }</span>
+<span class="source-line-no">077</span><span id="line-77">   @Override /* SerializerWriter */</span>
+<span class="source-line-no">078</span><span id="line-78">   public CsvWriter appendln(String text) {</span>
+<span class="source-line-no">079</span><span id="line-79">      super.appendln(text);</span>
+<span class="source-line-no">080</span><span id="line-80">      return this;</span>
+<span class="source-line-no">081</span><span id="line-81">   }</span>
+<span class="source-line-no">082</span><span id="line-82">   @Override /* SerializerWriter */</span>
+<span class="source-line-no">083</span><span id="line-83">   public CsvWriter append(int indent, String text) {</span>
+<span class="source-line-no">084</span><span id="line-84">      super.append(indent, text);</span>
+<span class="source-line-no">085</span><span id="line-85">      return this;</span>
+<span class="source-line-no">086</span><span id="line-86">   }</span>
+<span class="source-line-no">087</span><span id="line-87">   @Override /* SerializerWriter */</span>
+<span class="source-line-no">088</span><span id="line-88">   public CsvWriter append(int indent, char c) {</span>
+<span class="source-line-no">089</span><span id="line-89">      super.append(indent, c);</span>
+<span class="source-line-no">090</span><span id="line-90">      return this;</span>
+<span class="source-line-no">091</span><span id="line-91">   }</span>
 <span class="source-line-no">092</span><span id="line-92">   @Override /* SerializerWriter */</span>
-<span class="source-line-no">093</span><span id="line-93">   public CsvWriter append(int indent, char c) {</span>
-<span class="source-line-no">094</span><span id="line-94">      super.append(indent, c);</span>
+<span class="source-line-no">093</span><span id="line-93">   public CsvWriter s() {</span>
+<span class="source-line-no">094</span><span id="line-94">      super.s();</span>
 <span class="source-line-no">095</span><span id="line-95">      return this;</span>
 <span class="source-line-no">096</span><span id="line-96">   }</span>
-<span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">   @Override /* SerializerWriter */</span>
-<span class="source-line-no">099</span><span id="line-99">   public CsvWriter s() {</span>
-<span class="source-line-no">100</span><span id="line-100">      super.s();</span>
-<span class="source-line-no">101</span><span id="line-101">      return this;</span>
-<span class="source-line-no">102</span><span id="line-102">   }</span>
-<span class="source-line-no">103</span><span id="line-103"></span>
-<span class="source-line-no">104</span><span id="line-104">   @Override /* SerializerWriter */</span>
-<span class="source-line-no">105</span><span id="line-105">   public CsvWriter q() {</span>
-<span class="source-line-no">106</span><span id="line-106">      super.q();</span>
-<span class="source-line-no">107</span><span id="line-107">      return this;</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   @Override /* SerializerWriter */</span>
-<span class="source-line-no">111</span><span id="line-111">   public CsvWriter i(int indent) {</span>
-<span class="source-line-no">112</span><span id="line-112">      super.i(indent);</span>
-<span class="source-line-no">113</span><span id="line-113">      return this;</span>
-<span class="source-line-no">114</span><span id="line-114">   }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   @Override /* SerializerWriter */</span>
-<span class="source-line-no">117</span><span id="line-117">   public CsvWriter nl(int indent) {</span>
-<span class="source-line-no">118</span><span id="line-118">      super.nl(indent);</span>
-<span class="source-line-no">119</span><span id="line-119">      return this;</span>
-<span class="source-line-no">120</span><span id="line-120">   }</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
+<span class="source-line-no">097</span><span id="line-97">   @Override /* SerializerWriter */</span>
+<span class="source-line-no">098</span><span id="line-98">   public CsvWriter q() {</span>
+<span class="source-line-no">099</span><span id="line-99">      super.q();</span>
+<span class="source-line-no">100</span><span id="line-100">      return this;</span>
+<span class="source-line-no">101</span><span id="line-101">   }</span>
+<span class="source-line-no">102</span><span id="line-102">   @Override /* SerializerWriter */</span>
+<span class="source-line-no">103</span><span id="line-103">   public CsvWriter i(int indent) {</span>
+<span class="source-line-no">104</span><span id="line-104">      super.i(indent);</span>
+<span class="source-line-no">105</span><span id="line-105">      return this;</span>
+<span class="source-line-no">106</span><span id="line-106">   }</span>
+<span class="source-line-no">107</span><span id="line-107">   @Override /* SerializerWriter */</span>
+<span class="source-line-no">108</span><span id="line-108">   public CsvWriter nl(int indent) {</span>
+<span class="source-line-no">109</span><span id="line-109">      super.nl(indent);</span>
+<span class="source-line-no">110</span><span id="line-110">      return this;</span>
+<span class="source-line-no">111</span><span id="line-111">   }</span>
+<span class="source-line-no">112</span><span id="line-112">   @Override /* SerializerWriter */</span>
+<span class="source-line-no">113</span><span id="line-113">   public CsvWriter append(Object text) {</span>
+<span class="source-line-no">114</span><span id="line-114">      super.append(text);</span>
+<span class="source-line-no">115</span><span id="line-115">      return this;</span>
+<span class="source-line-no">116</span><span id="line-116">   }</span>
+<span class="source-line-no">117</span><span id="line-117">   @Override /* SerializerWriter */</span>
+<span class="source-line-no">118</span><span id="line-118">   public CsvWriter append(String text) {</span>
+<span class="source-line-no">119</span><span id="line-119">      super.append(text);</span>
+<span class="source-line-no">120</span><span id="line-120">      return this;</span>
+<span class="source-line-no">121</span><span id="line-121">   }</span>
 <span class="source-line-no">122</span><span id="line-122">   @Override /* SerializerWriter */</span>
-<span class="source-line-no">123</span><span id="line-123">   public CsvWriter append(Object text) {</span>
-<span class="source-line-no">124</span><span id="line-124">      super.append(text);</span>
+<span class="source-line-no">123</span><span id="line-123">   public CsvWriter appendIf(boolean b, String text) {</span>
+<span class="source-line-no">124</span><span id="line-124">      super.appendIf(b, text);</span>
 <span class="source-line-no">125</span><span id="line-125">      return this;</span>
 <span class="source-line-no">126</span><span id="line-126">   }</span>
-<span class="source-line-no">127</span><span id="line-127"></span>
-<span class="source-line-no">128</span><span id="line-128">   @Override /* SerializerWriter */</span>
-<span class="source-line-no">129</span><span id="line-129">   public CsvWriter append(String text) {</span>
-<span class="source-line-no">130</span><span id="line-130">      super.append(text);</span>
-<span class="source-line-no">131</span><span id="line-131">      return this;</span>
-<span class="source-line-no">132</span><span id="line-132">   }</span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">   @Override /* SerializerWriter */</span>
-<span class="source-line-no">135</span><span id="line-135">   public CsvWriter appendIf(boolean b, String text) {</span>
-<span class="source-line-no">136</span><span id="line-136">      super.appendIf(b, text);</span>
-<span class="source-line-no">137</span><span id="line-137">      return this;</span>
-<span class="source-line-no">138</span><span id="line-138">   }</span>
-<span class="source-line-no">139</span><span id="line-139"></span>
-<span class="source-line-no">140</span><span id="line-140">   @Override /* SerializerWriter */</span>
-<span class="source-line-no">141</span><span id="line-141">   public CsvWriter appendIf(boolean b, char c) {</span>
-<span class="source-line-no">142</span><span id="line-142">      super.appendIf(b, c);</span>
-<span class="source-line-no">143</span><span id="line-143">      return this;</span>
-<span class="source-line-no">144</span><span id="line-144">   }</span>
-<span class="source-line-no">145</span><span id="line-145"></span>
-<span class="source-line-no">146</span><span id="line-146">   @Override /* SerializerWriter */</span>
-<span class="source-line-no">147</span><span id="line-147">   public CsvWriter append(char c) {</span>
-<span class="source-line-no">148</span><span id="line-148">      super.append(c);</span>
-<span class="source-line-no">149</span><span id="line-149">      return this;</span>
-<span class="source-line-no">150</span><span id="line-150">   }</span>
-<span class="source-line-no">151</span><span id="line-151"></span>
-<span class="source-line-no">152</span><span id="line-152">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">153</span><span id="line-153">}</span>
+<span class="source-line-no">127</span><span id="line-127">   @Override /* SerializerWriter */</span>
+<span class="source-line-no">128</span><span id="line-128">   public CsvWriter appendIf(boolean b, char c) {</span>
+<span class="source-line-no">129</span><span id="line-129">      super.appendIf(b, c);</span>
+<span class="source-line-no">130</span><span id="line-130">      return this;</span>
+<span class="source-line-no">131</span><span id="line-131">   }</span>
+<span class="source-line-no">132</span><span id="line-132">   @Override /* SerializerWriter */</span>
+<span class="source-line-no">133</span><span id="line-133">   public CsvWriter append(char c) {</span>
+<span class="source-line-no">134</span><span id="line-134">      super.append(c);</span>
+<span class="source-line-no">135</span><span id="line-135">      return this;</span>
+<span class="source-line-no">136</span><span id="line-136">   }</span>
+<span class="source-line-no">137</span><span id="line-137">}</span>
 
 
 

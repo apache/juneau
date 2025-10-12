@@ -103,24 +103,63 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			.tabindex(<span class="jxr_string">"bo"</span>)
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  			.title(<span class="jxr_string">"bp"</span>)
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  			.translate(<span class="jxr_string">"bq"</span>)
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			.children(<span class="jxr_string">"bs"</span>, strong(<span class="jxr_string">"bs"</span>));
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertString(
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			<span class="jxr_string">"&lt;select autofocus='a' disabled='b' form='c' multiple='d' name='e' required='f' size='g' class='h' accesskey='i' contenteditable='j' dir='k' hidden='l' id='m' lang='n' onabort='o' onblur='p' oncancel='q' oncanplay='r' oncanplaythrough='s' onchange='t' onclick='u' oncuechange='v' ondblclick='w' ondurationchange='x' onemptied='y' onended='y' onerror='aa' onfocus='ab' oninput='ac' oninvalid='ad' onkeydown='ae' onkeypress='af' onkeyup='ag' onload='ah' onloadeddata='ai' onloadedmetadata='aj' onloadstart='ak' onmousedown='al' onmouseenter='am' onmouseleave='an' onmousemove='ao' onmouseout='ap' onmouseover='aq' onmouseup='ar' onmousewheel='as' onpause='at' onplay='au' onplaying='av' onprogress='aw' onratechange='ax' onreset='ay' onresize='az' onscroll='ba' onseeked='bb' onseeking='bc' onselect='bd' onshow='be' onstalled='bf' onsubmit='bg' onsuspend='bh' ontimeupdate='bi' ontoggle='bj' onvolumechange='bk' onwaiting='bl' spellcheck='bm' style='bn' tabindex='bo' title='bp' translate='bq'&gt;bs&lt;strong&gt;bs&lt;/strong&gt;&lt;/select&gt;"</span>,
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			x
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> a02_emptyBean() {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertString(<span class="jxr_string">"&lt;select&gt;&lt;/select&gt;"</span>, select());
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@Test <strong class="jxr_keyword">void</strong> a03_otherConstructors() {
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		Select x1 = <strong class="jxr_keyword">new</strong> Select(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b1"</span>, strong(<span class="jxr_string">"b2"</span>));
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertString(<span class="jxr_string">"&lt;select name='a'&gt;b1&lt;strong&gt;b2&lt;/strong&gt;&lt;/select&gt;"</span>, x1);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			.child(<span class="jxr_string">"child1"</span>)
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			.children(<span class="jxr_string">"bs"</span>, strong(<span class="jxr_string">"bs"</span>));
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertString(
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			<span class="jxr_string">"&lt;select autofocus='a' disabled='b' form='c' multiple='d' name='e' required='f' size='g' class='h' accesskey='i' contenteditable='j' dir='k' hidden='l' id='m' lang='n' onabort='o' onblur='p' oncancel='q' oncanplay='r' oncanplaythrough='s' onchange='t' onclick='u' oncuechange='v' ondblclick='w' ondurationchange='x' onemptied='y' onended='y' onerror='aa' onfocus='ab' oninput='ac' oninvalid='ad' onkeydown='ae' onkeypress='af' onkeyup='ag' onload='ah' onloadeddata='ai' onloadedmetadata='aj' onloadstart='ak' onmousedown='al' onmouseenter='am' onmouseleave='an' onmousemove='ao' onmouseout='ap' onmouseover='aq' onmouseup='ar' onmousewheel='as' onpause='at' onplay='au' onplaying='av' onprogress='aw' onratechange='ax' onreset='ay' onresize='az' onscroll='ba' onseeked='bb' onseeking='bc' onselect='bd' onshow='be' onstalled='bf' onsubmit='bg' onsuspend='bh' ontimeupdate='bi' ontoggle='bj' onvolumechange='bk' onwaiting='bl' spellcheck='bm' style='bn' tabindex='bo' title='bp' translate='bq'&gt;child1bs&lt;strong&gt;bs&lt;/strong&gt;&lt;/select&gt;"</span>,
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			x
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	}
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	@Test <strong class="jxr_keyword">void</strong> a02_emptyBean() {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertString(<span class="jxr_string">"&lt;select&gt;&lt;/select&gt;"</span>, select());
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Test <strong class="jxr_keyword">void</strong> a03_otherConstructors() {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		Select x1 = <strong class="jxr_keyword">new</strong> Select(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b1"</span>, strong(<span class="jxr_string">"b2"</span>));
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertString(<span class="jxr_string">"&lt;select name='a'&gt;b1&lt;strong&gt;b2&lt;/strong&gt;&lt;/select&gt;"</span>, x1);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test <strong class="jxr_keyword">void</strong> a04_choose_withValue() {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		Select x = select(<span class="jxr_string">"test"</span>,
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			option(<span class="jxr_string">"val1"</span>, <span class="jxr_string">"Option 1"</span>),
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			option(<span class="jxr_string">"val2"</span>, <span class="jxr_string">"Option 2"</span>),
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			option(<span class="jxr_string">"val3"</span>, <span class="jxr_string">"Option 3"</span>)
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		).choose(<span class="jxr_string">"val2"</span>);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertString(<span class="jxr_string">"&lt;select name='test'&gt;&lt;option value='val1'&gt;Option 1&lt;/option&gt;&lt;option value='val2' selected='selected'&gt;Option 2&lt;/option&gt;&lt;option value='val3'&gt;Option 3&lt;/option&gt;&lt;/select&gt;"</span>, x);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	@Test <strong class="jxr_keyword">void</strong> a04_choose_withNull() {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		Select x = select(<span class="jxr_string">"test"</span>,
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			option(<span class="jxr_string">"val1"</span>, <span class="jxr_string">"Option 1"</span>),
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			option(<span class="jxr_string">"val2"</span>, <span class="jxr_string">"Option 2"</span>)
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		).choose(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertString(<span class="jxr_string">"&lt;select name='test'&gt;&lt;option value='val1'&gt;Option 1&lt;/option&gt;&lt;option value='val2'&gt;Option 2&lt;/option&gt;&lt;/select&gt;"</span>, x);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	}
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@Test <strong class="jxr_keyword">void</strong> a04_choose_withNonMatchingValue() {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		Select x = select(<span class="jxr_string">"test"</span>,
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			option(<span class="jxr_string">"val1"</span>, <span class="jxr_string">"Option 1"</span>),
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			option(<span class="jxr_string">"val2"</span>, <span class="jxr_string">"Option 2"</span>)
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		).choose(<span class="jxr_string">"val3"</span>);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertString(<span class="jxr_string">"&lt;select name='test'&gt;&lt;option value='val1'&gt;Option 1&lt;/option&gt;&lt;option value='val2'&gt;Option 2&lt;/option&gt;&lt;/select&gt;"</span>, x);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	@Test <strong class="jxr_keyword">void</strong> a04_choose_withNonOptionChildren() {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		Select x = select(<span class="jxr_string">"test"</span>,
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			option(<span class="jxr_string">"val1"</span>, <span class="jxr_string">"Option 1"</span>),
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<span class="jxr_string">"plain text"</span>,
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			div(<span class="jxr_string">"not an option"</span>)
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		).choose(<span class="jxr_string">"val1"</span>);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertString(<span class="jxr_string">"&lt;select name='test'&gt;&lt;option value='val1' selected='selected'&gt;Option 1&lt;/option&gt;plain text&lt;div&gt;not an option&lt;/div&gt;&lt;/select&gt;"</span>, x);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -67,101 +67,95 @@
 <span class="source-line-no">054</span><span id="line-54">   /**</span>
 <span class="source-line-no">055</span><span id="line-55">    * Builder class.</span>
 <span class="source-line-no">056</span><span id="line-56">    */</span>
-<span class="source-line-no">057</span><span id="line-57">   @FluentSetters</span>
-<span class="source-line-no">058</span><span id="line-58">   public static class Builder extends BeanBuilder&lt;RestConverterList&gt; {</span>
-<span class="source-line-no">059</span><span id="line-59"></span>
-<span class="source-line-no">060</span><span id="line-60">      List&lt;BeanCreator&lt;RestConverter&gt;&gt; entries;</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">      /**</span>
-<span class="source-line-no">063</span><span id="line-63">       * Create an empty builder.</span>
-<span class="source-line-no">064</span><span id="line-64">       *</span>
-<span class="source-line-no">065</span><span id="line-65">       * @param beanStore The bean store to use for creating beans.</span>
-<span class="source-line-no">066</span><span id="line-66">       */</span>
-<span class="source-line-no">067</span><span id="line-67">      protected Builder(BeanStore beanStore) {</span>
-<span class="source-line-no">068</span><span id="line-68">         super(RestConverterList.class, beanStore);</span>
-<span class="source-line-no">069</span><span id="line-69">         this.entries = list();</span>
-<span class="source-line-no">070</span><span id="line-70">      }</span>
-<span class="source-line-no">071</span><span id="line-71"></span>
-<span class="source-line-no">072</span><span id="line-72">      @Override /* BeanBuilder */</span>
-<span class="source-line-no">073</span><span id="line-73">      protected RestConverterList buildDefault() {</span>
-<span class="source-line-no">074</span><span id="line-74">         return new RestConverterList(this);</span>
-<span class="source-line-no">075</span><span id="line-75">      }</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">      //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">078</span><span id="line-78">      // Properties</span>
-<span class="source-line-no">079</span><span id="line-79">      //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">      /**</span>
-<span class="source-line-no">082</span><span id="line-82">       * Appends the specified rest matcher classes to the list.</span>
-<span class="source-line-no">083</span><span id="line-83">       *</span>
-<span class="source-line-no">084</span><span id="line-84">       * @param values The values to add.</span>
-<span class="source-line-no">085</span><span id="line-85">       * @return This object.</span>
-<span class="source-line-no">086</span><span id="line-86">       */</span>
-<span class="source-line-no">087</span><span id="line-87">      @SuppressWarnings("unchecked")</span>
-<span class="source-line-no">088</span><span id="line-88">      public Builder append(Class&lt;? extends RestConverter&gt;...values) {</span>
-<span class="source-line-no">089</span><span id="line-89">         for (Class&lt;? extends RestConverter&gt; v : values)</span>
-<span class="source-line-no">090</span><span id="line-90">            entries.add(beanStore().createBean(RestConverter.class).type(v));</span>
-<span class="source-line-no">091</span><span id="line-91">         return this;</span>
-<span class="source-line-no">092</span><span id="line-92">      }</span>
-<span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94">      /**</span>
-<span class="source-line-no">095</span><span id="line-95">       * Appends the specified rest matcher objects to the list.</span>
-<span class="source-line-no">096</span><span id="line-96">       *</span>
-<span class="source-line-no">097</span><span id="line-97">       * @param values The values to add.</span>
-<span class="source-line-no">098</span><span id="line-98">       * @return This object.</span>
-<span class="source-line-no">099</span><span id="line-99">       */</span>
-<span class="source-line-no">100</span><span id="line-100">      public Builder append(RestConverter...values) {</span>
-<span class="source-line-no">101</span><span id="line-101">         for (RestConverter v : values)</span>
-<span class="source-line-no">102</span><span id="line-102">            entries.add(beanStore().createBean(RestConverter.class).impl(v));</span>
-<span class="source-line-no">103</span><span id="line-103">         return this;</span>
-<span class="source-line-no">104</span><span id="line-104">      }</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">      // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108">      @Override /* GENERATED - org.apache.juneau.BeanBuilder */</span>
-<span class="source-line-no">109</span><span id="line-109">      public Builder impl(Object value) {</span>
-<span class="source-line-no">110</span><span id="line-110">         super.impl(value);</span>
-<span class="source-line-no">111</span><span id="line-111">         return this;</span>
-<span class="source-line-no">112</span><span id="line-112">      }</span>
-<span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114">      @Override /* GENERATED - org.apache.juneau.BeanBuilder */</span>
-<span class="source-line-no">115</span><span id="line-115">      public Builder type(Class&lt;?&gt; value) {</span>
-<span class="source-line-no">116</span><span id="line-116">         super.type(value);</span>
-<span class="source-line-no">117</span><span id="line-117">         return this;</span>
-<span class="source-line-no">118</span><span id="line-118">      }</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">121</span><span id="line-121">   }</span>
+<span class="source-line-no">057</span><span id="line-57">   public static class Builder extends BeanBuilder&lt;RestConverterList&gt; {</span>
+<span class="source-line-no">058</span><span id="line-58"></span>
+<span class="source-line-no">059</span><span id="line-59">      List&lt;BeanCreator&lt;RestConverter&gt;&gt; entries;</span>
+<span class="source-line-no">060</span><span id="line-60"></span>
+<span class="source-line-no">061</span><span id="line-61">      /**</span>
+<span class="source-line-no">062</span><span id="line-62">       * Create an empty builder.</span>
+<span class="source-line-no">063</span><span id="line-63">       *</span>
+<span class="source-line-no">064</span><span id="line-64">       * @param beanStore The bean store to use for creating beans.</span>
+<span class="source-line-no">065</span><span id="line-65">       */</span>
+<span class="source-line-no">066</span><span id="line-66">      protected Builder(BeanStore beanStore) {</span>
+<span class="source-line-no">067</span><span id="line-67">         super(RestConverterList.class, beanStore);</span>
+<span class="source-line-no">068</span><span id="line-68">         this.entries = list();</span>
+<span class="source-line-no">069</span><span id="line-69">      }</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">      @Override /* BeanBuilder */</span>
+<span class="source-line-no">072</span><span id="line-72">      protected RestConverterList buildDefault() {</span>
+<span class="source-line-no">073</span><span id="line-73">         return new RestConverterList(this);</span>
+<span class="source-line-no">074</span><span id="line-74">      }</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">      //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">077</span><span id="line-77">      // Properties</span>
+<span class="source-line-no">078</span><span id="line-78">      //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">079</span><span id="line-79"></span>
+<span class="source-line-no">080</span><span id="line-80">      /**</span>
+<span class="source-line-no">081</span><span id="line-81">       * Appends the specified rest matcher classes to the list.</span>
+<span class="source-line-no">082</span><span id="line-82">       *</span>
+<span class="source-line-no">083</span><span id="line-83">       * @param values The values to add.</span>
+<span class="source-line-no">084</span><span id="line-84">       * @return This object.</span>
+<span class="source-line-no">085</span><span id="line-85">       */</span>
+<span class="source-line-no">086</span><span id="line-86">      @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">087</span><span id="line-87">      public Builder append(Class&lt;? extends RestConverter&gt;...values) {</span>
+<span class="source-line-no">088</span><span id="line-88">         for (Class&lt;? extends RestConverter&gt; v : values)</span>
+<span class="source-line-no">089</span><span id="line-89">            entries.add(beanStore().createBean(RestConverter.class).type(v));</span>
+<span class="source-line-no">090</span><span id="line-90">         return this;</span>
+<span class="source-line-no">091</span><span id="line-91">      }</span>
+<span class="source-line-no">092</span><span id="line-92"></span>
+<span class="source-line-no">093</span><span id="line-93">      /**</span>
+<span class="source-line-no">094</span><span id="line-94">       * Appends the specified rest matcher objects to the list.</span>
+<span class="source-line-no">095</span><span id="line-95">       *</span>
+<span class="source-line-no">096</span><span id="line-96">       * @param values The values to add.</span>
+<span class="source-line-no">097</span><span id="line-97">       * @return This object.</span>
+<span class="source-line-no">098</span><span id="line-98">       */</span>
+<span class="source-line-no">099</span><span id="line-99">      public Builder append(RestConverter...values) {</span>
+<span class="source-line-no">100</span><span id="line-100">         for (RestConverter v : values)</span>
+<span class="source-line-no">101</span><span id="line-101">            entries.add(beanStore().createBean(RestConverter.class).impl(v));</span>
+<span class="source-line-no">102</span><span id="line-102">         return this;</span>
+<span class="source-line-no">103</span><span id="line-103">      }</span>
+<span class="source-line-no">104</span><span id="line-104">      @Override /* Overridden from BeanBuilder */</span>
+<span class="source-line-no">105</span><span id="line-105">      public Builder impl(Object value) {</span>
+<span class="source-line-no">106</span><span id="line-106">         super.impl(value);</span>
+<span class="source-line-no">107</span><span id="line-107">         return this;</span>
+<span class="source-line-no">108</span><span id="line-108">      }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">      @Override /* Overridden from BeanBuilder */</span>
+<span class="source-line-no">111</span><span id="line-111">      public Builder type(Class&lt;?&gt; value) {</span>
+<span class="source-line-no">112</span><span id="line-112">         super.type(value);</span>
+<span class="source-line-no">113</span><span id="line-113">         return this;</span>
+<span class="source-line-no">114</span><span id="line-114">      }</span>
+<span class="source-line-no">115</span><span id="line-115">   }</span>
+<span class="source-line-no">116</span><span id="line-116"></span>
+<span class="source-line-no">117</span><span id="line-117">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">118</span><span id="line-118">   // Instance</span>
+<span class="source-line-no">119</span><span id="line-119">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">120</span><span id="line-120"></span>
+<span class="source-line-no">121</span><span id="line-121">   private final RestConverter[] entries;</span>
 <span class="source-line-no">122</span><span id="line-122"></span>
-<span class="source-line-no">123</span><span id="line-123">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">124</span><span id="line-124">   // Instance</span>
-<span class="source-line-no">125</span><span id="line-125">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">126</span><span id="line-126"></span>
-<span class="source-line-no">127</span><span id="line-127">   private final RestConverter[] entries;</span>
-<span class="source-line-no">128</span><span id="line-128"></span>
-<span class="source-line-no">129</span><span id="line-129">   /**</span>
-<span class="source-line-no">130</span><span id="line-130">    * Constructor.</span>
-<span class="source-line-no">131</span><span id="line-131">    *</span>
-<span class="source-line-no">132</span><span id="line-132">    * @param builder The builder containing the contents for this list.</span>
-<span class="source-line-no">133</span><span id="line-133">    */</span>
-<span class="source-line-no">134</span><span id="line-134">   protected RestConverterList(Builder builder) {</span>
-<span class="source-line-no">135</span><span id="line-135">      entries =</span>
-<span class="source-line-no">136</span><span id="line-136">         builder</span>
-<span class="source-line-no">137</span><span id="line-137">            .entries</span>
-<span class="source-line-no">138</span><span id="line-138">            .stream()</span>
-<span class="source-line-no">139</span><span id="line-139">            .map(BeanCreator::run)</span>
-<span class="source-line-no">140</span><span id="line-140">            .toArray(RestConverter[]::new);</span>
-<span class="source-line-no">141</span><span id="line-141">   }</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">   /**</span>
-<span class="source-line-no">144</span><span id="line-144">    * Returns the contents of this list as a {@link RestConverter} array.</span>
-<span class="source-line-no">145</span><span id="line-145">    *</span>
-<span class="source-line-no">146</span><span id="line-146">    * @return The contents of this list as a {@link RestConverter} array.</span>
-<span class="source-line-no">147</span><span id="line-147">    */</span>
-<span class="source-line-no">148</span><span id="line-148">   public RestConverter[] asArray() {</span>
-<span class="source-line-no">149</span><span id="line-149">      return entries;</span>
-<span class="source-line-no">150</span><span id="line-150">   }</span>
-<span class="source-line-no">151</span><span id="line-151">}</span>
+<span class="source-line-no">123</span><span id="line-123">   /**</span>
+<span class="source-line-no">124</span><span id="line-124">    * Constructor.</span>
+<span class="source-line-no">125</span><span id="line-125">    *</span>
+<span class="source-line-no">126</span><span id="line-126">    * @param builder The builder containing the contents for this list.</span>
+<span class="source-line-no">127</span><span id="line-127">    */</span>
+<span class="source-line-no">128</span><span id="line-128">   protected RestConverterList(Builder builder) {</span>
+<span class="source-line-no">129</span><span id="line-129">      entries =</span>
+<span class="source-line-no">130</span><span id="line-130">         builder</span>
+<span class="source-line-no">131</span><span id="line-131">            .entries</span>
+<span class="source-line-no">132</span><span id="line-132">            .stream()</span>
+<span class="source-line-no">133</span><span id="line-133">            .map(BeanCreator::run)</span>
+<span class="source-line-no">134</span><span id="line-134">            .toArray(RestConverter[]::new);</span>
+<span class="source-line-no">135</span><span id="line-135">   }</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">   /**</span>
+<span class="source-line-no">138</span><span id="line-138">    * Returns the contents of this list as a {@link RestConverter} array.</span>
+<span class="source-line-no">139</span><span id="line-139">    *</span>
+<span class="source-line-no">140</span><span id="line-140">    * @return The contents of this list as a {@link RestConverter} array.</span>
+<span class="source-line-no">141</span><span id="line-141">    */</span>
+<span class="source-line-no">142</span><span id="line-142">   public RestConverter[] asArray() {</span>
+<span class="source-line-no">143</span><span id="line-143">      return entries;</span>
+<span class="source-line-no">144</span><span id="line-144">   }</span>
+<span class="source-line-no">145</span><span id="line-145">}</span>
 
 
 

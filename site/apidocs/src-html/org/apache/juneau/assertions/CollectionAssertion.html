@@ -118,79 +118,73 @@
 <span class="source-line-no">105</span><span id="line-105"> *</span>
 <span class="source-line-no">106</span><span id="line-106"> * @param &lt;E&gt; The element type.</span>
 <span class="source-line-no">107</span><span id="line-107"> */</span>
-<span class="source-line-no">108</span><span id="line-108">@FluentSetters(returns="CollectionAssertion&lt;E&gt;")</span>
-<span class="source-line-no">109</span><span id="line-109">public class CollectionAssertion&lt;E&gt; extends FluentCollectionAssertion&lt;E,CollectionAssertion&lt;E&gt;&gt; {</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">112</span><span id="line-112">   // Static</span>
-<span class="source-line-no">113</span><span id="line-113">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">114</span><span id="line-114"></span>
-<span class="source-line-no">115</span><span id="line-115">   /**</span>
-<span class="source-line-no">116</span><span id="line-116">    * Static creator.</span>
-<span class="source-line-no">117</span><span id="line-117">    *</span>
-<span class="source-line-no">118</span><span id="line-118">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">119</span><span id="line-119">    * @param value</span>
-<span class="source-line-no">120</span><span id="line-120">    *    The object being tested.</span>
-<span class="source-line-no">121</span><span id="line-121">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">122</span><span id="line-122">    * @return A new assertion object.</span>
-<span class="source-line-no">123</span><span id="line-123">    */</span>
-<span class="source-line-no">124</span><span id="line-124">   public static &lt;E&gt; CollectionAssertion&lt;E&gt; create(Collection&lt;E&gt; value) {</span>
-<span class="source-line-no">125</span><span id="line-125">      return new CollectionAssertion&lt;&gt;(value);</span>
-<span class="source-line-no">126</span><span id="line-126">   }</span>
-<span class="source-line-no">127</span><span id="line-127"></span>
-<span class="source-line-no">128</span><span id="line-128">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">129</span><span id="line-129">   // Instance</span>
-<span class="source-line-no">130</span><span id="line-130">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">   /**</span>
-<span class="source-line-no">133</span><span id="line-133">    * Constructor.</span>
-<span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * @param value</span>
-<span class="source-line-no">136</span><span id="line-136">    *    The object being tested.</span>
-<span class="source-line-no">137</span><span id="line-137">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">138</span><span id="line-138">    */</span>
-<span class="source-line-no">139</span><span id="line-139">   public CollectionAssertion(Collection&lt;E&gt; value) {</span>
-<span class="source-line-no">140</span><span id="line-140">      super(value, null);</span>
-<span class="source-line-no">141</span><span id="line-141">   }</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">144</span><span id="line-144">   // Fluent setters</span>
-<span class="source-line-no">145</span><span id="line-145">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">146</span><span id="line-146"></span>
-<span class="source-line-no">147</span><span id="line-147">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">148</span><span id="line-148"></span>
-<span class="source-line-no">149</span><span id="line-149">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">150</span><span id="line-150">   public CollectionAssertion&lt;E&gt; setMsg(String msg, Object...args) {</span>
-<span class="source-line-no">151</span><span id="line-151">      super.setMsg(msg, args);</span>
-<span class="source-line-no">152</span><span id="line-152">      return this;</span>
-<span class="source-line-no">153</span><span id="line-153">   }</span>
-<span class="source-line-no">154</span><span id="line-154"></span>
-<span class="source-line-no">155</span><span id="line-155">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">156</span><span id="line-156">   public CollectionAssertion&lt;E&gt; setOut(PrintStream value) {</span>
-<span class="source-line-no">157</span><span id="line-157">      super.setOut(value);</span>
-<span class="source-line-no">158</span><span id="line-158">      return this;</span>
-<span class="source-line-no">159</span><span id="line-159">   }</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">162</span><span id="line-162">   public CollectionAssertion&lt;E&gt; setSilent() {</span>
-<span class="source-line-no">163</span><span id="line-163">      super.setSilent();</span>
-<span class="source-line-no">164</span><span id="line-164">      return this;</span>
-<span class="source-line-no">165</span><span id="line-165">   }</span>
-<span class="source-line-no">166</span><span id="line-166"></span>
-<span class="source-line-no">167</span><span id="line-167">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">168</span><span id="line-168">   public CollectionAssertion&lt;E&gt; setStdOut() {</span>
-<span class="source-line-no">169</span><span id="line-169">      super.setStdOut();</span>
-<span class="source-line-no">170</span><span id="line-170">      return this;</span>
-<span class="source-line-no">171</span><span id="line-171">   }</span>
-<span class="source-line-no">172</span><span id="line-172"></span>
-<span class="source-line-no">173</span><span id="line-173">   @Override /* GENERATED - org.apache.juneau.assertions.Assertion */</span>
-<span class="source-line-no">174</span><span id="line-174">   public CollectionAssertion&lt;E&gt; setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
-<span class="source-line-no">175</span><span id="line-175">      super.setThrowable(value);</span>
-<span class="source-line-no">176</span><span id="line-176">      return this;</span>
-<span class="source-line-no">177</span><span id="line-177">   }</span>
-<span class="source-line-no">178</span><span id="line-178"></span>
-<span class="source-line-no">179</span><span id="line-179">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">180</span><span id="line-180">}</span>
+<span class="source-line-no">108</span><span id="line-108">public class CollectionAssertion&lt;E&gt; extends FluentCollectionAssertion&lt;E,CollectionAssertion&lt;E&gt;&gt; {</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">111</span><span id="line-111">   // Static</span>
+<span class="source-line-no">112</span><span id="line-112">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">   /**</span>
+<span class="source-line-no">115</span><span id="line-115">    * Static creator.</span>
+<span class="source-line-no">116</span><span id="line-116">    *</span>
+<span class="source-line-no">117</span><span id="line-117">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">118</span><span id="line-118">    * @param value</span>
+<span class="source-line-no">119</span><span id="line-119">    *    The object being tested.</span>
+<span class="source-line-no">120</span><span id="line-120">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">121</span><span id="line-121">    * @return A new assertion object.</span>
+<span class="source-line-no">122</span><span id="line-122">    */</span>
+<span class="source-line-no">123</span><span id="line-123">   public static &lt;E&gt; CollectionAssertion&lt;E&gt; create(Collection&lt;E&gt; value) {</span>
+<span class="source-line-no">124</span><span id="line-124">      return new CollectionAssertion&lt;&gt;(value);</span>
+<span class="source-line-no">125</span><span id="line-125">   }</span>
+<span class="source-line-no">126</span><span id="line-126"></span>
+<span class="source-line-no">127</span><span id="line-127">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">128</span><span id="line-128">   // Instance</span>
+<span class="source-line-no">129</span><span id="line-129">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">130</span><span id="line-130"></span>
+<span class="source-line-no">131</span><span id="line-131">   /**</span>
+<span class="source-line-no">132</span><span id="line-132">    * Constructor.</span>
+<span class="source-line-no">133</span><span id="line-133">    *</span>
+<span class="source-line-no">134</span><span id="line-134">    * @param value</span>
+<span class="source-line-no">135</span><span id="line-135">    *    The object being tested.</span>
+<span class="source-line-no">136</span><span id="line-136">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">137</span><span id="line-137">    */</span>
+<span class="source-line-no">138</span><span id="line-138">   public CollectionAssertion(Collection&lt;E&gt; value) {</span>
+<span class="source-line-no">139</span><span id="line-139">      super(value, null);</span>
+<span class="source-line-no">140</span><span id="line-140">   }</span>
+<span class="source-line-no">141</span><span id="line-141"></span>
+<span class="source-line-no">142</span><span id="line-142">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">143</span><span id="line-143">   // Fluent setters</span>
+<span class="source-line-no">144</span><span id="line-144">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">145</span><span id="line-145">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">146</span><span id="line-146">   public CollectionAssertion&lt;E&gt; setMsg(String msg, Object...args) {</span>
+<span class="source-line-no">147</span><span id="line-147">      super.setMsg(msg, args);</span>
+<span class="source-line-no">148</span><span id="line-148">      return this;</span>
+<span class="source-line-no">149</span><span id="line-149">   }</span>
+<span class="source-line-no">150</span><span id="line-150"></span>
+<span class="source-line-no">151</span><span id="line-151">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">152</span><span id="line-152">   public CollectionAssertion&lt;E&gt; setOut(PrintStream value) {</span>
+<span class="source-line-no">153</span><span id="line-153">      super.setOut(value);</span>
+<span class="source-line-no">154</span><span id="line-154">      return this;</span>
+<span class="source-line-no">155</span><span id="line-155">   }</span>
+<span class="source-line-no">156</span><span id="line-156"></span>
+<span class="source-line-no">157</span><span id="line-157">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">158</span><span id="line-158">   public CollectionAssertion&lt;E&gt; setSilent() {</span>
+<span class="source-line-no">159</span><span id="line-159">      super.setSilent();</span>
+<span class="source-line-no">160</span><span id="line-160">      return this;</span>
+<span class="source-line-no">161</span><span id="line-161">   }</span>
+<span class="source-line-no">162</span><span id="line-162"></span>
+<span class="source-line-no">163</span><span id="line-163">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">164</span><span id="line-164">   public CollectionAssertion&lt;E&gt; setStdOut() {</span>
+<span class="source-line-no">165</span><span id="line-165">      super.setStdOut();</span>
+<span class="source-line-no">166</span><span id="line-166">      return this;</span>
+<span class="source-line-no">167</span><span id="line-167">   }</span>
+<span class="source-line-no">168</span><span id="line-168"></span>
+<span class="source-line-no">169</span><span id="line-169">   @Override /* Overridden from Assertion */</span>
+<span class="source-line-no">170</span><span id="line-170">   public CollectionAssertion&lt;E&gt; setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
+<span class="source-line-no">171</span><span id="line-171">      super.setThrowable(value);</span>
+<span class="source-line-no">172</span><span id="line-172">      return this;</span>
+<span class="source-line-no">173</span><span id="line-173">   }</span>
+<span class="source-line-no">174</span><span id="line-174">}</span>
 
 
 

@@ -195,78 +195,75 @@
 <span class="source-line-no">182</span><span id="line-182">         return this;</span>
 <span class="source-line-no">183</span><span id="line-183">      }</span>
 <span class="source-line-no">184</span><span id="line-184"></span>
-<span class="source-line-no">185</span><span id="line-185">      // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">185</span><span id="line-185">   }</span>
 <span class="source-line-no">186</span><span id="line-186"></span>
-<span class="source-line-no">187</span><span id="line-187">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">188</span><span id="line-188">   }</span>
-<span class="source-line-no">189</span><span id="line-189"></span>
-<span class="source-line-no">190</span><span id="line-190">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">191</span><span id="line-191">   // Implementation</span>
-<span class="source-line-no">192</span><span id="line-192">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">   private static class Impl extends AnnotationImpl implements Swagger {</span>
-<span class="source-line-no">195</span><span id="line-195"></span>
-<span class="source-line-no">196</span><span id="line-196">      private final Contact contact;</span>
-<span class="source-line-no">197</span><span id="line-197">      private final ExternalDocs externalDocs;</span>
-<span class="source-line-no">198</span><span id="line-198">      private final License license;</span>
-<span class="source-line-no">199</span><span id="line-199">      private final String version;</span>
-<span class="source-line-no">200</span><span id="line-200">      private final String[] termsOfService, title, value;</span>
-<span class="source-line-no">201</span><span id="line-201">      private final Tag[] tags;</span>
-<span class="source-line-no">202</span><span id="line-202"></span>
-<span class="source-line-no">203</span><span id="line-203">      Impl(Builder b) {</span>
-<span class="source-line-no">204</span><span id="line-204">         super(b);</span>
-<span class="source-line-no">205</span><span id="line-205">         this.contact = b.contact;</span>
-<span class="source-line-no">206</span><span id="line-206">         this.externalDocs = b.externalDocs;</span>
-<span class="source-line-no">207</span><span id="line-207">         this.license = b.license;</span>
-<span class="source-line-no">208</span><span id="line-208">         this.tags = copyOf(b.tags);</span>
-<span class="source-line-no">209</span><span id="line-209">         this.termsOfService = copyOf(b.termsOfService);</span>
-<span class="source-line-no">210</span><span id="line-210">         this.title = copyOf(b.title);</span>
-<span class="source-line-no">211</span><span id="line-211">         this.value = copyOf(b.value);</span>
-<span class="source-line-no">212</span><span id="line-212">         this.version = b.version;</span>
-<span class="source-line-no">213</span><span id="line-213">         postConstruct();</span>
-<span class="source-line-no">214</span><span id="line-214">      }</span>
-<span class="source-line-no">215</span><span id="line-215"></span>
-<span class="source-line-no">216</span><span id="line-216">      @Override /* Swagger */</span>
-<span class="source-line-no">217</span><span id="line-217">      public Contact contact() {</span>
-<span class="source-line-no">218</span><span id="line-218">         return contact;</span>
-<span class="source-line-no">219</span><span id="line-219">      }</span>
-<span class="source-line-no">220</span><span id="line-220"></span>
-<span class="source-line-no">221</span><span id="line-221">      @Override /* Swagger */</span>
-<span class="source-line-no">222</span><span id="line-222">      public ExternalDocs externalDocs() {</span>
-<span class="source-line-no">223</span><span id="line-223">         return externalDocs;</span>
-<span class="source-line-no">224</span><span id="line-224">      }</span>
-<span class="source-line-no">225</span><span id="line-225"></span>
-<span class="source-line-no">226</span><span id="line-226">      @Override /* Swagger */</span>
-<span class="source-line-no">227</span><span id="line-227">      public License license() {</span>
-<span class="source-line-no">228</span><span id="line-228">         return license;</span>
-<span class="source-line-no">229</span><span id="line-229">      }</span>
-<span class="source-line-no">230</span><span id="line-230"></span>
-<span class="source-line-no">231</span><span id="line-231">      @Override /* Swagger */</span>
-<span class="source-line-no">232</span><span id="line-232">      public Tag[] tags() {</span>
-<span class="source-line-no">233</span><span id="line-233">         return tags;</span>
-<span class="source-line-no">234</span><span id="line-234">      }</span>
-<span class="source-line-no">235</span><span id="line-235"></span>
-<span class="source-line-no">236</span><span id="line-236">      @Override /* Swagger */</span>
-<span class="source-line-no">237</span><span id="line-237">      public String[] termsOfService() {</span>
-<span class="source-line-no">238</span><span id="line-238">         return termsOfService;</span>
-<span class="source-line-no">239</span><span id="line-239">      }</span>
-<span class="source-line-no">240</span><span id="line-240"></span>
-<span class="source-line-no">241</span><span id="line-241">      @Override /* Swagger */</span>
-<span class="source-line-no">242</span><span id="line-242">      public String[] title() {</span>
-<span class="source-line-no">243</span><span id="line-243">         return title;</span>
-<span class="source-line-no">244</span><span id="line-244">      }</span>
-<span class="source-line-no">245</span><span id="line-245"></span>
-<span class="source-line-no">246</span><span id="line-246">      @Override /* Swagger */</span>
-<span class="source-line-no">247</span><span id="line-247">      public String[] value() {</span>
-<span class="source-line-no">248</span><span id="line-248">         return value;</span>
-<span class="source-line-no">249</span><span id="line-249">      }</span>
-<span class="source-line-no">250</span><span id="line-250"></span>
-<span class="source-line-no">251</span><span id="line-251">      @Override /* Swagger */</span>
-<span class="source-line-no">252</span><span id="line-252">      public String version() {</span>
-<span class="source-line-no">253</span><span id="line-253">         return version;</span>
-<span class="source-line-no">254</span><span id="line-254">      }</span>
-<span class="source-line-no">255</span><span id="line-255">   }</span>
-<span class="source-line-no">256</span><span id="line-256">}</span>
+<span class="source-line-no">187</span><span id="line-187">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">188</span><span id="line-188">   // Implementation</span>
+<span class="source-line-no">189</span><span id="line-189">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">190</span><span id="line-190"></span>
+<span class="source-line-no">191</span><span id="line-191">   private static class Impl extends AnnotationImpl implements Swagger {</span>
+<span class="source-line-no">192</span><span id="line-192"></span>
+<span class="source-line-no">193</span><span id="line-193">      private final Contact contact;</span>
+<span class="source-line-no">194</span><span id="line-194">      private final ExternalDocs externalDocs;</span>
+<span class="source-line-no">195</span><span id="line-195">      private final License license;</span>
+<span class="source-line-no">196</span><span id="line-196">      private final String version;</span>
+<span class="source-line-no">197</span><span id="line-197">      private final String[] termsOfService, title, value;</span>
+<span class="source-line-no">198</span><span id="line-198">      private final Tag[] tags;</span>
+<span class="source-line-no">199</span><span id="line-199"></span>
+<span class="source-line-no">200</span><span id="line-200">      Impl(Builder b) {</span>
+<span class="source-line-no">201</span><span id="line-201">         super(b);</span>
+<span class="source-line-no">202</span><span id="line-202">         this.contact = b.contact;</span>
+<span class="source-line-no">203</span><span id="line-203">         this.externalDocs = b.externalDocs;</span>
+<span class="source-line-no">204</span><span id="line-204">         this.license = b.license;</span>
+<span class="source-line-no">205</span><span id="line-205">         this.tags = copyOf(b.tags);</span>
+<span class="source-line-no">206</span><span id="line-206">         this.termsOfService = copyOf(b.termsOfService);</span>
+<span class="source-line-no">207</span><span id="line-207">         this.title = copyOf(b.title);</span>
+<span class="source-line-no">208</span><span id="line-208">         this.value = copyOf(b.value);</span>
+<span class="source-line-no">209</span><span id="line-209">         this.version = b.version;</span>
+<span class="source-line-no">210</span><span id="line-210">         postConstruct();</span>
+<span class="source-line-no">211</span><span id="line-211">      }</span>
+<span class="source-line-no">212</span><span id="line-212"></span>
+<span class="source-line-no">213</span><span id="line-213">      @Override /* Swagger */</span>
+<span class="source-line-no">214</span><span id="line-214">      public Contact contact() {</span>
+<span class="source-line-no">215</span><span id="line-215">         return contact;</span>
+<span class="source-line-no">216</span><span id="line-216">      }</span>
+<span class="source-line-no">217</span><span id="line-217"></span>
+<span class="source-line-no">218</span><span id="line-218">      @Override /* Swagger */</span>
+<span class="source-line-no">219</span><span id="line-219">      public ExternalDocs externalDocs() {</span>
+<span class="source-line-no">220</span><span id="line-220">         return externalDocs;</span>
+<span class="source-line-no">221</span><span id="line-221">      }</span>
+<span class="source-line-no">222</span><span id="line-222"></span>
+<span class="source-line-no">223</span><span id="line-223">      @Override /* Swagger */</span>
+<span class="source-line-no">224</span><span id="line-224">      public License license() {</span>
+<span class="source-line-no">225</span><span id="line-225">         return license;</span>
+<span class="source-line-no">226</span><span id="line-226">      }</span>
+<span class="source-line-no">227</span><span id="line-227"></span>
+<span class="source-line-no">228</span><span id="line-228">      @Override /* Swagger */</span>
+<span class="source-line-no">229</span><span id="line-229">      public Tag[] tags() {</span>
+<span class="source-line-no">230</span><span id="line-230">         return tags;</span>
+<span class="source-line-no">231</span><span id="line-231">      }</span>
+<span class="source-line-no">232</span><span id="line-232"></span>
+<span class="source-line-no">233</span><span id="line-233">      @Override /* Swagger */</span>
+<span class="source-line-no">234</span><span id="line-234">      public String[] termsOfService() {</span>
+<span class="source-line-no">235</span><span id="line-235">         return termsOfService;</span>
+<span class="source-line-no">236</span><span id="line-236">      }</span>
+<span class="source-line-no">237</span><span id="line-237"></span>
+<span class="source-line-no">238</span><span id="line-238">      @Override /* Swagger */</span>
+<span class="source-line-no">239</span><span id="line-239">      public String[] title() {</span>
+<span class="source-line-no">240</span><span id="line-240">         return title;</span>
+<span class="source-line-no">241</span><span id="line-241">      }</span>
+<span class="source-line-no">242</span><span id="line-242"></span>
+<span class="source-line-no">243</span><span id="line-243">      @Override /* Swagger */</span>
+<span class="source-line-no">244</span><span id="line-244">      public String[] value() {</span>
+<span class="source-line-no">245</span><span id="line-245">         return value;</span>
+<span class="source-line-no">246</span><span id="line-246">      }</span>
+<span class="source-line-no">247</span><span id="line-247"></span>
+<span class="source-line-no">248</span><span id="line-248">      @Override /* Swagger */</span>
+<span class="source-line-no">249</span><span id="line-249">      public String version() {</span>
+<span class="source-line-no">250</span><span id="line-250">         return version;</span>
+<span class="source-line-no">251</span><span id="line-251">      }</span>
+<span class="source-line-no">252</span><span id="line-252">   }</span>
+<span class="source-line-no">253</span><span id="line-253">}</span>
 
 
 

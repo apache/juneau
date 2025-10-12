@@ -31,147 +31,181 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.xml.annotation.XmlFormat.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.internal.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.xml.annotation.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">/**</span>
-<span class="source-line-no">025</span><span id="line-25"> * Represents an &lt;c&gt;atomTextConstruct&lt;/c&gt; construct in the RFC4287 specification.</span>
-<span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;h5 class='figure'&gt;Schema&lt;/h5&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;p class='bschema'&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> *    atomTextConstruct = atomPlainTextConstruct | atomXHTMLTextConstruct</span>
-<span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> *    atomPlainTextConstruct =</span>
-<span class="source-line-no">032</span><span id="line-32"> *       atomCommonAttributes,</span>
-<span class="source-line-no">033</span><span id="line-33"> *       attribute type { "text" | "html" }?,</span>
-<span class="source-line-no">034</span><span id="line-34"> *       text</span>
+<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.xml.annotation.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">/**</span>
+<span class="source-line-no">024</span><span id="line-24"> * Represents human-readable text in an Atom document.</span>
+<span class="source-line-no">025</span><span id="line-25"> *</span>
+<span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
+<span class="source-line-no">027</span><span id="line-27"> * Text constructs are used throughout Atom for elements that contain human-readable text </span>
+<span class="source-line-no">028</span><span id="line-28"> * such as titles, summaries, rights statements, and subtitles. They support three content types:</span>
+<span class="source-line-no">029</span><span id="line-29"> *</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> *    &lt;li&gt;&lt;c&gt;"text"&lt;/c&gt; - Plain text with no markup (default)</span>
+<span class="source-line-no">032</span><span id="line-32"> *    &lt;li&gt;&lt;c&gt;"html"&lt;/c&gt; - HTML markup, entity-escaped</span>
+<span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;&lt;c&gt;"xhtml"&lt;/c&gt; - Well-formed XHTML in a div container</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;/ul&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
-<span class="source-line-no">036</span><span id="line-36"> *    atomXHTMLTextConstruct =</span>
-<span class="source-line-no">037</span><span id="line-37"> *       atomCommonAttributes,</span>
-<span class="source-line-no">038</span><span id="line-38"> *       attribute type { "xhtml" },</span>
-<span class="source-line-no">039</span><span id="line-39"> *       xhtmlDiv</span>
-<span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> *    xhtmlDiv = element xhtml:div {</span>
-<span class="source-line-no">042</span><span id="line-42"> *       (attribute * { text }</span>
-<span class="source-line-no">043</span><span id="line-43"> *       | text</span>
-<span class="source-line-no">044</span><span id="line-44"> *       | anyXHTML)*</span>
-<span class="source-line-no">045</span><span id="line-45"> *    }</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;/p&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> *</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">049</span><span id="line-49"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom"&gt;juneau-bean-atom&lt;/a&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;/ul&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> */</span>
-<span class="source-line-no">052</span><span id="line-52">@FluentSetters</span>
-<span class="source-line-no">053</span><span id="line-53">public class Text extends Common {</span>
-<span class="source-line-no">054</span><span id="line-54"></span>
-<span class="source-line-no">055</span><span id="line-55">   private String type;</span>
-<span class="source-line-no">056</span><span id="line-56">   private String text;  // NOSONAR - Intentional naming.</span>
-<span class="source-line-no">057</span><span id="line-57"></span>
-<span class="source-line-no">058</span><span id="line-58">   /**</span>
-<span class="source-line-no">059</span><span id="line-59">    * Normal content.</span>
-<span class="source-line-no">060</span><span id="line-60">    *</span>
-<span class="source-line-no">061</span><span id="line-61">    * @param type The content type of this content.</span>
-<span class="source-line-no">062</span><span id="line-62">    */</span>
-<span class="source-line-no">063</span><span id="line-63">   public Text(String type) {</span>
-<span class="source-line-no">064</span><span id="line-64">      setType(type);</span>
-<span class="source-line-no">065</span><span id="line-65">   }</span>
-<span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">   /** Bean constructor. */</span>
-<span class="source-line-no">068</span><span id="line-68">   public Text() {}</span>
-<span class="source-line-no">069</span><span id="line-69"></span>
-<span class="source-line-no">070</span><span id="line-70"></span>
-<span class="source-line-no">071</span><span id="line-71">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">072</span><span id="line-72">   // Bean properties</span>
-<span class="source-line-no">073</span><span id="line-73">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">   /**</span>
-<span class="source-line-no">076</span><span id="line-76">    * Bean property getter:  &lt;property&gt;type&lt;/property&gt;.</span>
-<span class="source-line-no">077</span><span id="line-77">    *</span>
-<span class="source-line-no">078</span><span id="line-78">    * &lt;p&gt;</span>
-<span class="source-line-no">079</span><span id="line-79">    * The content type of this content.</span>
-<span class="source-line-no">080</span><span id="line-80">    *</span>
-<span class="source-line-no">081</span><span id="line-81">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">082</span><span id="line-82">    */</span>
-<span class="source-line-no">083</span><span id="line-83">   @Xml(format=ATTR)</span>
-<span class="source-line-no">084</span><span id="line-84">   public String getType() {</span>
-<span class="source-line-no">085</span><span id="line-85">      return type;</span>
-<span class="source-line-no">086</span><span id="line-86">   }</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">   /**</span>
-<span class="source-line-no">089</span><span id="line-89">    * Bean property setter:  &lt;property&gt;type&lt;/property&gt;.</span>
-<span class="source-line-no">090</span><span id="line-90">    *</span>
-<span class="source-line-no">091</span><span id="line-91">    * &lt;p&gt;</span>
-<span class="source-line-no">092</span><span id="line-92">    * The content type of this content.</span>
-<span class="source-line-no">093</span><span id="line-93">    *</span>
-<span class="source-line-no">094</span><span id="line-94">    * &lt;p&gt;</span>
-<span class="source-line-no">095</span><span id="line-95">    * Must be one of the following:</span>
-<span class="source-line-no">096</span><span id="line-96">    * &lt;ul&gt;</span>
-<span class="source-line-no">097</span><span id="line-97">    *    &lt;li&gt;&lt;js&gt;"text"&lt;/js&gt;</span>
-<span class="source-line-no">098</span><span id="line-98">    *    &lt;li&gt;&lt;js&gt;"html"&lt;/js&gt;</span>
-<span class="source-line-no">099</span><span id="line-99">    *    &lt;li&gt;&lt;js&gt;"xhtml"&lt;/js&gt;</span>
-<span class="source-line-no">100</span><span id="line-100">    *    &lt;li&gt;&lt;jk&gt;null&lt;/jk&gt; (defaults to &lt;js&gt;"text"&lt;/js&gt;)</span>
-<span class="source-line-no">101</span><span id="line-101">    * &lt;/ul&gt;</span>
-<span class="source-line-no">102</span><span id="line-102">    *</span>
-<span class="source-line-no">103</span><span id="line-103">    * @param value</span>
-<span class="source-line-no">104</span><span id="line-104">    *    The new value for this property.</span>
-<span class="source-line-no">105</span><span id="line-105">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">106</span><span id="line-106">    * @return This object</span>
-<span class="source-line-no">107</span><span id="line-107">    */</span>
-<span class="source-line-no">108</span><span id="line-108">   public Text setType(String value) {</span>
-<span class="source-line-no">109</span><span id="line-109">      this.type = value;</span>
-<span class="source-line-no">110</span><span id="line-110">      return this;</span>
-<span class="source-line-no">111</span><span id="line-111">   }</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * Text constructs are the base class for {@link Content} and are used directly for:</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;&lt;c&gt;atom:title&lt;/c&gt; - Entry and feed titles</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;&lt;c&gt;atom:subtitle&lt;/c&gt; - Feed subtitles</span>
+<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;&lt;c&gt;atom:summary&lt;/c&gt; - Entry summaries</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;&lt;c&gt;atom:rights&lt;/c&gt; - Copyright and rights statements</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;/ul&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> *</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='figure'&gt;Schema&lt;/h5&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;p class='bschema'&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *    atomTextConstruct = atomPlainTextConstruct | atomXHTMLTextConstruct</span>
+<span class="source-line-no">048</span><span id="line-48"> *</span>
+<span class="source-line-no">049</span><span id="line-49"> *    atomPlainTextConstruct =</span>
+<span class="source-line-no">050</span><span id="line-50"> *       atomCommonAttributes,</span>
+<span class="source-line-no">051</span><span id="line-51"> *       attribute type { "text" | "html" }?,</span>
+<span class="source-line-no">052</span><span id="line-52"> *       text</span>
+<span class="source-line-no">053</span><span id="line-53"> *</span>
+<span class="source-line-no">054</span><span id="line-54"> *    atomXHTMLTextConstruct =</span>
+<span class="source-line-no">055</span><span id="line-55"> *       atomCommonAttributes,</span>
+<span class="source-line-no">056</span><span id="line-56"> *       attribute type { "xhtml" },</span>
+<span class="source-line-no">057</span><span id="line-57"> *       xhtmlDiv</span>
+<span class="source-line-no">058</span><span id="line-58"> *</span>
+<span class="source-line-no">059</span><span id="line-59"> *    xhtmlDiv = element xhtml:div {</span>
+<span class="source-line-no">060</span><span id="line-60"> *       (attribute * { text }</span>
+<span class="source-line-no">061</span><span id="line-61"> *       | text</span>
+<span class="source-line-no">062</span><span id="line-62"> *       | anyXHTML)*</span>
+<span class="source-line-no">063</span><span id="line-63"> *    }</span>
+<span class="source-line-no">064</span><span id="line-64"> * &lt;/p&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> *</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *    &lt;jc&gt;// Plain text&lt;/jc&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> *    Text &lt;jv&gt;t1&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Text(&lt;js&gt;"text"&lt;/js&gt;)</span>
+<span class="source-line-no">070</span><span id="line-70"> *       .setText(&lt;js&gt;"Plain text title"&lt;/js&gt;);</span>
+<span class="source-line-no">071</span><span id="line-71"> *</span>
+<span class="source-line-no">072</span><span id="line-72"> *    &lt;jc&gt;// HTML (entity-escaped)&lt;/jc&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> *    Text &lt;jv&gt;t2&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Text(&lt;js&gt;"html"&lt;/js&gt;)</span>
+<span class="source-line-no">074</span><span id="line-74"> *       .setText(&lt;js&gt;"Title with &amp;lt;em&amp;gt;emphasis&amp;lt;/em&amp;gt;"&lt;/js&gt;);</span>
+<span class="source-line-no">075</span><span id="line-75"> *</span>
+<span class="source-line-no">076</span><span id="line-76"> *    &lt;jc&gt;// XHTML&lt;/jc&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> *    Text &lt;jv&gt;t3&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Text(&lt;js&gt;"xhtml"&lt;/js&gt;)</span>
+<span class="source-line-no">078</span><span id="line-78"> *       .setText(&lt;js&gt;"&amp;lt;div xmlns='http://www.w3.org/1999/xhtml'&amp;gt;&amp;lt;p&amp;gt;XHTML title&amp;lt;/p&amp;gt;&amp;lt;/div&amp;gt;"&lt;/js&gt;);</span>
+<span class="source-line-no">079</span><span id="line-79"> * &lt;/p&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> *</span>
+<span class="source-line-no">081</span><span id="line-81"> * &lt;h5 class='section'&gt;Specification:&lt;/h5&gt;</span>
+<span class="source-line-no">082</span><span id="line-82"> * &lt;p&gt;</span>
+<span class="source-line-no">083</span><span id="line-83"> * Represents an &lt;c&gt;atomTextConstruct&lt;/c&gt; in the </span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-3.1"&gt;RFC 4287 - Section 3.1&lt;/a&gt; specification.</span>
+<span class="source-line-no">085</span><span id="line-85"> *</span>
+<span class="source-line-no">086</span><span id="line-86"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">087</span><span id="line-87"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom"&gt;juneau-bean-atom&lt;/a&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> *    &lt;li class='extlink'&gt;&lt;a class="doclink" href="https://tools.ietf.org/html/rfc4287"&gt;RFC 4287 - The Atom Syndication Format&lt;/a&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> * &lt;/ul&gt;</span>
+<span class="source-line-no">090</span><span id="line-90"> */</span>
+<span class="source-line-no">091</span><span id="line-91">public class Text extends Common {</span>
+<span class="source-line-no">092</span><span id="line-92"></span>
+<span class="source-line-no">093</span><span id="line-93">   private String type;</span>
+<span class="source-line-no">094</span><span id="line-94">   private String text;  // NOSONAR - Intentional naming.</span>
+<span class="source-line-no">095</span><span id="line-95"></span>
+<span class="source-line-no">096</span><span id="line-96">   /**</span>
+<span class="source-line-no">097</span><span id="line-97">    * Normal content.</span>
+<span class="source-line-no">098</span><span id="line-98">    *</span>
+<span class="source-line-no">099</span><span id="line-99">    * @param type The content type of this content.</span>
+<span class="source-line-no">100</span><span id="line-100">    */</span>
+<span class="source-line-no">101</span><span id="line-101">   public Text(String type) {</span>
+<span class="source-line-no">102</span><span id="line-102">      setType(type);</span>
+<span class="source-line-no">103</span><span id="line-103">   }</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">   /** Bean constructor. */</span>
+<span class="source-line-no">106</span><span id="line-106">   public Text() {}</span>
+<span class="source-line-no">107</span><span id="line-107"></span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">110</span><span id="line-110">   // Bean properties</span>
+<span class="source-line-no">111</span><span id="line-111">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">112</span><span id="line-112"></span>
 <span class="source-line-no">113</span><span id="line-113">   /**</span>
-<span class="source-line-no">114</span><span id="line-114">    * Bean property getter:  &lt;property&gt;text&lt;/property&gt;.</span>
+<span class="source-line-no">114</span><span id="line-114">    * Bean property getter:  &lt;property&gt;type&lt;/property&gt;.</span>
 <span class="source-line-no">115</span><span id="line-115">    *</span>
 <span class="source-line-no">116</span><span id="line-116">    * &lt;p&gt;</span>
-<span class="source-line-no">117</span><span id="line-117">    * The content of this content.</span>
+<span class="source-line-no">117</span><span id="line-117">    * The content type of this content.</span>
 <span class="source-line-no">118</span><span id="line-118">    *</span>
 <span class="source-line-no">119</span><span id="line-119">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">120</span><span id="line-120">    */</span>
-<span class="source-line-no">121</span><span id="line-121">   @Xml(format=XMLTEXT)</span>
-<span class="source-line-no">122</span><span id="line-122">   public String getText() {</span>
-<span class="source-line-no">123</span><span id="line-123">      return text;</span>
+<span class="source-line-no">121</span><span id="line-121">   @Xml(format=ATTR)</span>
+<span class="source-line-no">122</span><span id="line-122">   public String getType() {</span>
+<span class="source-line-no">123</span><span id="line-123">      return type;</span>
 <span class="source-line-no">124</span><span id="line-124">   }</span>
 <span class="source-line-no">125</span><span id="line-125"></span>
 <span class="source-line-no">126</span><span id="line-126">   /**</span>
-<span class="source-line-no">127</span><span id="line-127">    * Bean property setter:  &lt;property&gt;text&lt;/property&gt;.</span>
+<span class="source-line-no">127</span><span id="line-127">    * Bean property setter:  &lt;property&gt;type&lt;/property&gt;.</span>
 <span class="source-line-no">128</span><span id="line-128">    *</span>
 <span class="source-line-no">129</span><span id="line-129">    * &lt;p&gt;</span>
-<span class="source-line-no">130</span><span id="line-130">    * The content of this content.</span>
+<span class="source-line-no">130</span><span id="line-130">    * The content type of this content.</span>
 <span class="source-line-no">131</span><span id="line-131">    *</span>
-<span class="source-line-no">132</span><span id="line-132">    * @param value</span>
-<span class="source-line-no">133</span><span id="line-133">    *    The new value for this property.</span>
-<span class="source-line-no">134</span><span id="line-134">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">135</span><span id="line-135">    * @return This object</span>
-<span class="source-line-no">136</span><span id="line-136">    */</span>
-<span class="source-line-no">137</span><span id="line-137">   public Text setText(String value) {</span>
-<span class="source-line-no">138</span><span id="line-138">      this.text = value;</span>
-<span class="source-line-no">139</span><span id="line-139">      return this;</span>
-<span class="source-line-no">140</span><span id="line-140">   }</span>
-<span class="source-line-no">141</span><span id="line-141"></span>
-<span class="source-line-no">142</span><span id="line-142">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">143</span><span id="line-143">   // Overridden setters (to simplify method chaining)</span>
-<span class="source-line-no">144</span><span id="line-144">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">145</span><span id="line-145"></span>
-<span class="source-line-no">146</span><span id="line-146">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">147</span><span id="line-147"></span>
-<span class="source-line-no">148</span><span id="line-148">   @Override /* GENERATED - org.apache.juneau.bean.atom.Common */</span>
-<span class="source-line-no">149</span><span id="line-149">   public Text setBase(Object value) {</span>
-<span class="source-line-no">150</span><span id="line-150">      super.setBase(value);</span>
-<span class="source-line-no">151</span><span id="line-151">      return this;</span>
-<span class="source-line-no">152</span><span id="line-152">   }</span>
-<span class="source-line-no">153</span><span id="line-153"></span>
-<span class="source-line-no">154</span><span id="line-154">   @Override /* GENERATED - org.apache.juneau.bean.atom.Common */</span>
-<span class="source-line-no">155</span><span id="line-155">   public Text setLang(String value) {</span>
-<span class="source-line-no">156</span><span id="line-156">      super.setLang(value);</span>
-<span class="source-line-no">157</span><span id="line-157">      return this;</span>
-<span class="source-line-no">158</span><span id="line-158">   }</span>
-<span class="source-line-no">159</span><span id="line-159"></span>
-<span class="source-line-no">160</span><span id="line-160">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">161</span><span id="line-161">}</span>
+<span class="source-line-no">132</span><span id="line-132">    * &lt;p&gt;</span>
+<span class="source-line-no">133</span><span id="line-133">    * Must be one of the following:</span>
+<span class="source-line-no">134</span><span id="line-134">    * &lt;ul&gt;</span>
+<span class="source-line-no">135</span><span id="line-135">    *    &lt;li&gt;&lt;js&gt;"text"&lt;/js&gt;</span>
+<span class="source-line-no">136</span><span id="line-136">    *    &lt;li&gt;&lt;js&gt;"html"&lt;/js&gt;</span>
+<span class="source-line-no">137</span><span id="line-137">    *    &lt;li&gt;&lt;js&gt;"xhtml"&lt;/js&gt;</span>
+<span class="source-line-no">138</span><span id="line-138">    *    &lt;li&gt;&lt;jk&gt;null&lt;/jk&gt; (defaults to &lt;js&gt;"text"&lt;/js&gt;)</span>
+<span class="source-line-no">139</span><span id="line-139">    * &lt;/ul&gt;</span>
+<span class="source-line-no">140</span><span id="line-140">    *</span>
+<span class="source-line-no">141</span><span id="line-141">    * @param value</span>
+<span class="source-line-no">142</span><span id="line-142">    *    The new value for this property.</span>
+<span class="source-line-no">143</span><span id="line-143">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">144</span><span id="line-144">    * @return This object</span>
+<span class="source-line-no">145</span><span id="line-145">    */</span>
+<span class="source-line-no">146</span><span id="line-146">   public Text setType(String value) {</span>
+<span class="source-line-no">147</span><span id="line-147">      this.type = value;</span>
+<span class="source-line-no">148</span><span id="line-148">      return this;</span>
+<span class="source-line-no">149</span><span id="line-149">   }</span>
+<span class="source-line-no">150</span><span id="line-150"></span>
+<span class="source-line-no">151</span><span id="line-151">   /**</span>
+<span class="source-line-no">152</span><span id="line-152">    * Bean property getter:  &lt;property&gt;text&lt;/property&gt;.</span>
+<span class="source-line-no">153</span><span id="line-153">    *</span>
+<span class="source-line-no">154</span><span id="line-154">    * &lt;p&gt;</span>
+<span class="source-line-no">155</span><span id="line-155">    * The content of this content.</span>
+<span class="source-line-no">156</span><span id="line-156">    *</span>
+<span class="source-line-no">157</span><span id="line-157">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">158</span><span id="line-158">    */</span>
+<span class="source-line-no">159</span><span id="line-159">   @Xml(format=XMLTEXT)</span>
+<span class="source-line-no">160</span><span id="line-160">   public String getText() {</span>
+<span class="source-line-no">161</span><span id="line-161">      return text;</span>
+<span class="source-line-no">162</span><span id="line-162">   }</span>
+<span class="source-line-no">163</span><span id="line-163"></span>
+<span class="source-line-no">164</span><span id="line-164">   /**</span>
+<span class="source-line-no">165</span><span id="line-165">    * Bean property setter:  &lt;property&gt;text&lt;/property&gt;.</span>
+<span class="source-line-no">166</span><span id="line-166">    *</span>
+<span class="source-line-no">167</span><span id="line-167">    * &lt;p&gt;</span>
+<span class="source-line-no">168</span><span id="line-168">    * The content of this content.</span>
+<span class="source-line-no">169</span><span id="line-169">    *</span>
+<span class="source-line-no">170</span><span id="line-170">    * @param value</span>
+<span class="source-line-no">171</span><span id="line-171">    *    The new value for this property.</span>
+<span class="source-line-no">172</span><span id="line-172">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">173</span><span id="line-173">    * @return This object</span>
+<span class="source-line-no">174</span><span id="line-174">    */</span>
+<span class="source-line-no">175</span><span id="line-175">   public Text setText(String value) {</span>
+<span class="source-line-no">176</span><span id="line-176">      this.text = value;</span>
+<span class="source-line-no">177</span><span id="line-177">      return this;</span>
+<span class="source-line-no">178</span><span id="line-178">   }</span>
+<span class="source-line-no">179</span><span id="line-179"></span>
+<span class="source-line-no">180</span><span id="line-180">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">181</span><span id="line-181">   // Overridden setters (to simplify method chaining)</span>
+<span class="source-line-no">182</span><span id="line-182">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">183</span><span id="line-183"></span>
+<span class="source-line-no">184</span><span id="line-184">   @Override /* Overridden from Common */</span>
+<span class="source-line-no">185</span><span id="line-185">   public Text setBase(Object value) {</span>
+<span class="source-line-no">186</span><span id="line-186">      super.setBase(value);</span>
+<span class="source-line-no">187</span><span id="line-187">      return this;</span>
+<span class="source-line-no">188</span><span id="line-188">   }</span>
+<span class="source-line-no">189</span><span id="line-189"></span>
+<span class="source-line-no">190</span><span id="line-190">   @Override /* Overridden from Common */</span>
+<span class="source-line-no">191</span><span id="line-191">   public Text setLang(String value) {</span>
+<span class="source-line-no">192</span><span id="line-192">      super.setLang(value);</span>
+<span class="source-line-no">193</span><span id="line-193">      return this;</span>
+<span class="source-line-no">194</span><span id="line-194">   }</span>
+<span class="source-line-no">195</span><span id="line-195">}</span>
 
 
 

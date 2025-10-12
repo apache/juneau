@@ -410,250 +410,246 @@
 <span class="source-line-no">397</span><span id="line-397">         return this;</span>
 <span class="source-line-no">398</span><span id="line-398">      }</span>
 <span class="source-line-no">399</span><span id="line-399"></span>
-<span class="source-line-no">400</span><span id="line-400">      // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">400</span><span id="line-400">   }</span>
 <span class="source-line-no">401</span><span id="line-401"></span>
-<span class="source-line-no">402</span><span id="line-402"></span>
-<span class="source-line-no">403</span><span id="line-403">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">404</span><span id="line-404">   }</span>
+<span class="source-line-no">402</span><span id="line-402">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">403</span><span id="line-403">   // Implementation</span>
+<span class="source-line-no">404</span><span id="line-404">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">405</span><span id="line-405"></span>
-<span class="source-line-no">406</span><span id="line-406">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">407</span><span id="line-407">   // Implementation</span>
-<span class="source-line-no">408</span><span id="line-408">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">409</span><span id="line-409"></span>
-<span class="source-line-no">410</span><span id="line-410">   private static class Impl extends TargetedAnnotationImpl implements RestOp {</span>
-<span class="source-line-no">411</span><span id="line-411"></span>
-<span class="source-line-no">412</span><span id="line-412">      private final Class&lt;? extends RestConverter&gt;[] converters;</span>
-<span class="source-line-no">413</span><span id="line-413">      private final Class&lt;? extends RestGuard&gt;[] guards;</span>
-<span class="source-line-no">414</span><span id="line-414">      private final Class&lt;? extends RestMatcher&gt;[] matchers;</span>
-<span class="source-line-no">415</span><span id="line-415">      private final Class&lt;? extends Encoder&gt;[] encoders;</span>
-<span class="source-line-no">416</span><span id="line-416">      private final Class&lt;? extends Serializer&gt;[] serializers;</span>
-<span class="source-line-no">417</span><span id="line-417">      private final Class&lt;?&gt;[] parsers;</span>
-<span class="source-line-no">418</span><span id="line-418">      private final OpSwagger swagger;</span>
-<span class="source-line-no">419</span><span id="line-419">      private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, rolesDeclared, roleGuard, summary, value;</span>
-<span class="source-line-no">420</span><span id="line-420">      private final String[] consumes, defaultRequestFormData, defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path, produces;</span>
-<span class="source-line-no">421</span><span id="line-421"></span>
-<span class="source-line-no">422</span><span id="line-422">      Impl(Builder b) {</span>
-<span class="source-line-no">423</span><span id="line-423">         super(b);</span>
-<span class="source-line-no">424</span><span id="line-424">         this.clientVersion = b.clientVersion;</span>
-<span class="source-line-no">425</span><span id="line-425">         this.consumes = copyOf(b.consumes);</span>
-<span class="source-line-no">426</span><span id="line-426">         this.converters = copyOf(b.converters);</span>
-<span class="source-line-no">427</span><span id="line-427">         this.debug = b.debug;</span>
-<span class="source-line-no">428</span><span id="line-428">         this.defaultAccept = b.defaultAccept;</span>
-<span class="source-line-no">429</span><span id="line-429">         this.defaultCharset = b.defaultCharset;</span>
-<span class="source-line-no">430</span><span id="line-430">         this.defaultContentType = b.defaultContentType;</span>
-<span class="source-line-no">431</span><span id="line-431">         this.defaultRequestFormData = copyOf(b.defaultRequestFormData);</span>
-<span class="source-line-no">432</span><span id="line-432">         this.defaultRequestQueryData = copyOf(b.defaultRequestQueryData);</span>
-<span class="source-line-no">433</span><span id="line-433">         this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);</span>
-<span class="source-line-no">434</span><span id="line-434">         this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);</span>
-<span class="source-line-no">435</span><span id="line-435">         this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);</span>
-<span class="source-line-no">436</span><span id="line-436">         this.encoders = copyOf(b.encoders);</span>
-<span class="source-line-no">437</span><span id="line-437">         this.guards = copyOf(b.guards);</span>
-<span class="source-line-no">438</span><span id="line-438">         this.matchers = copyOf(b.matchers);</span>
-<span class="source-line-no">439</span><span id="line-439">         this.maxInput = b.maxInput;</span>
-<span class="source-line-no">440</span><span id="line-440">         this.method = b.method;</span>
-<span class="source-line-no">441</span><span id="line-441">         this.parsers = copyOf(b.parsers);</span>
-<span class="source-line-no">442</span><span id="line-442">         this.path = copyOf(b.path);</span>
-<span class="source-line-no">443</span><span id="line-443">         this.produces = copyOf(b.produces);</span>
-<span class="source-line-no">444</span><span id="line-444">         this.roleGuard = b.roleGuard;</span>
-<span class="source-line-no">445</span><span id="line-445">         this.rolesDeclared = b.rolesDeclared;</span>
-<span class="source-line-no">446</span><span id="line-446">         this.serializers = copyOf(b.serializers);</span>
-<span class="source-line-no">447</span><span id="line-447">         this.summary = b.summary;</span>
-<span class="source-line-no">448</span><span id="line-448">         this.swagger = b.swagger;</span>
-<span class="source-line-no">449</span><span id="line-449">         this.value = b.value;</span>
-<span class="source-line-no">450</span><span id="line-450">         postConstruct();</span>
-<span class="source-line-no">451</span><span id="line-451">      }</span>
-<span class="source-line-no">452</span><span id="line-452"></span>
-<span class="source-line-no">453</span><span id="line-453">      @Override /* RestOp */</span>
-<span class="source-line-no">454</span><span id="line-454">      public String clientVersion() {</span>
-<span class="source-line-no">455</span><span id="line-455">         return clientVersion;</span>
-<span class="source-line-no">456</span><span id="line-456">      }</span>
-<span class="source-line-no">457</span><span id="line-457"></span>
-<span class="source-line-no">458</span><span id="line-458">      @Override /* RestOp */</span>
-<span class="source-line-no">459</span><span id="line-459">      public String[] consumes() {</span>
-<span class="source-line-no">460</span><span id="line-460">         return consumes;</span>
-<span class="source-line-no">461</span><span id="line-461">      }</span>
-<span class="source-line-no">462</span><span id="line-462"></span>
-<span class="source-line-no">463</span><span id="line-463">      @Override /* RestOp */</span>
-<span class="source-line-no">464</span><span id="line-464">      public Class&lt;? extends RestConverter&gt;[] converters() {</span>
-<span class="source-line-no">465</span><span id="line-465">         return converters;</span>
-<span class="source-line-no">466</span><span id="line-466">      }</span>
-<span class="source-line-no">467</span><span id="line-467"></span>
-<span class="source-line-no">468</span><span id="line-468">      @Override /* RestOp */</span>
-<span class="source-line-no">469</span><span id="line-469">      public String debug() {</span>
-<span class="source-line-no">470</span><span id="line-470">         return debug;</span>
-<span class="source-line-no">471</span><span id="line-471">      }</span>
-<span class="source-line-no">472</span><span id="line-472"></span>
-<span class="source-line-no">473</span><span id="line-473">      @Override /* RestOp */</span>
-<span class="source-line-no">474</span><span id="line-474">      public String defaultAccept() {</span>
-<span class="source-line-no">475</span><span id="line-475">         return defaultAccept;</span>
-<span class="source-line-no">476</span><span id="line-476">      }</span>
-<span class="source-line-no">477</span><span id="line-477"></span>
-<span class="source-line-no">478</span><span id="line-478">      @Override /* RestOp */</span>
-<span class="source-line-no">479</span><span id="line-479">      public String defaultCharset() {</span>
-<span class="source-line-no">480</span><span id="line-480">         return defaultCharset;</span>
-<span class="source-line-no">481</span><span id="line-481">      }</span>
-<span class="source-line-no">482</span><span id="line-482"></span>
-<span class="source-line-no">483</span><span id="line-483">      @Override /* RestOp */</span>
-<span class="source-line-no">484</span><span id="line-484">      public String defaultContentType() {</span>
-<span class="source-line-no">485</span><span id="line-485">         return defaultContentType;</span>
-<span class="source-line-no">486</span><span id="line-486">      }</span>
-<span class="source-line-no">487</span><span id="line-487"></span>
-<span class="source-line-no">488</span><span id="line-488">      @Override /* RestOp */</span>
-<span class="source-line-no">489</span><span id="line-489">      public String[] defaultRequestFormData() {</span>
-<span class="source-line-no">490</span><span id="line-490">         return defaultRequestFormData;</span>
-<span class="source-line-no">491</span><span id="line-491">      }</span>
-<span class="source-line-no">492</span><span id="line-492"></span>
-<span class="source-line-no">493</span><span id="line-493">      @Override /* RestOp */</span>
-<span class="source-line-no">494</span><span id="line-494">      public String[] defaultRequestQueryData() {</span>
-<span class="source-line-no">495</span><span id="line-495">         return defaultRequestQueryData;</span>
-<span class="source-line-no">496</span><span id="line-496">      }</span>
-<span class="source-line-no">497</span><span id="line-497"></span>
-<span class="source-line-no">498</span><span id="line-498">      @Override /* RestOp */</span>
-<span class="source-line-no">499</span><span id="line-499">      public String[] defaultRequestAttributes() {</span>
-<span class="source-line-no">500</span><span id="line-500">         return defaultRequestAttributes;</span>
-<span class="source-line-no">501</span><span id="line-501">      }</span>
-<span class="source-line-no">502</span><span id="line-502"></span>
-<span class="source-line-no">503</span><span id="line-503">      @Override /* RestOp */</span>
-<span class="source-line-no">504</span><span id="line-504">      public String[] defaultRequestHeaders() {</span>
-<span class="source-line-no">505</span><span id="line-505">         return defaultRequestHeaders;</span>
-<span class="source-line-no">506</span><span id="line-506">      }</span>
-<span class="source-line-no">507</span><span id="line-507"></span>
-<span class="source-line-no">508</span><span id="line-508">      @Override /* RestOp */</span>
-<span class="source-line-no">509</span><span id="line-509">      public String[] defaultResponseHeaders() {</span>
-<span class="source-line-no">510</span><span id="line-510">         return defaultResponseHeaders;</span>
-<span class="source-line-no">511</span><span id="line-511">      }</span>
-<span class="source-line-no">512</span><span id="line-512"></span>
-<span class="source-line-no">513</span><span id="line-513">      @Override /* RestOp */</span>
-<span class="source-line-no">514</span><span id="line-514">      public Class&lt;? extends Encoder&gt;[] encoders() {</span>
-<span class="source-line-no">515</span><span id="line-515">         return encoders;</span>
-<span class="source-line-no">516</span><span id="line-516">      }</span>
-<span class="source-line-no">517</span><span id="line-517"></span>
-<span class="source-line-no">518</span><span id="line-518">      @Override /* RestOp */</span>
-<span class="source-line-no">519</span><span id="line-519">      public Class&lt;? extends RestGuard&gt;[] guards() {</span>
-<span class="source-line-no">520</span><span id="line-520">         return guards;</span>
-<span class="source-line-no">521</span><span id="line-521">      }</span>
-<span class="source-line-no">522</span><span id="line-522"></span>
-<span class="source-line-no">523</span><span id="line-523">      @Override /* RestOp */</span>
-<span class="source-line-no">524</span><span id="line-524">      public Class&lt;? extends RestMatcher&gt;[] matchers() {</span>
-<span class="source-line-no">525</span><span id="line-525">         return matchers;</span>
-<span class="source-line-no">526</span><span id="line-526">      }</span>
-<span class="source-line-no">527</span><span id="line-527"></span>
-<span class="source-line-no">528</span><span id="line-528">      @Override /* RestOp */</span>
-<span class="source-line-no">529</span><span id="line-529">      public String maxInput() {</span>
-<span class="source-line-no">530</span><span id="line-530">         return maxInput;</span>
-<span class="source-line-no">531</span><span id="line-531">      }</span>
-<span class="source-line-no">532</span><span id="line-532"></span>
-<span class="source-line-no">533</span><span id="line-533">      @Override /* RestOp */</span>
-<span class="source-line-no">534</span><span id="line-534">      public String method() {</span>
-<span class="source-line-no">535</span><span id="line-535">         return method;</span>
-<span class="source-line-no">536</span><span id="line-536">      }</span>
-<span class="source-line-no">537</span><span id="line-537"></span>
-<span class="source-line-no">538</span><span id="line-538">      @Override /* RestOp */</span>
-<span class="source-line-no">539</span><span id="line-539">      public Class&lt;?&gt;[] parsers() {</span>
-<span class="source-line-no">540</span><span id="line-540">         return parsers;</span>
-<span class="source-line-no">541</span><span id="line-541">      }</span>
-<span class="source-line-no">542</span><span id="line-542"></span>
-<span class="source-line-no">543</span><span id="line-543">      @Override /* RestOp */</span>
-<span class="source-line-no">544</span><span id="line-544">      public String[] path() {</span>
-<span class="source-line-no">545</span><span id="line-545">         return path;</span>
-<span class="source-line-no">546</span><span id="line-546">      }</span>
-<span class="source-line-no">547</span><span id="line-547"></span>
-<span class="source-line-no">548</span><span id="line-548">      @Override /* RestOp */</span>
-<span class="source-line-no">549</span><span id="line-549">      public String[] produces() {</span>
-<span class="source-line-no">550</span><span id="line-550">         return produces;</span>
-<span class="source-line-no">551</span><span id="line-551">      }</span>
-<span class="source-line-no">552</span><span id="line-552"></span>
-<span class="source-line-no">553</span><span id="line-553">      @Override /* RestOp */</span>
-<span class="source-line-no">554</span><span id="line-554">      public String roleGuard() {</span>
-<span class="source-line-no">555</span><span id="line-555">         return roleGuard;</span>
-<span class="source-line-no">556</span><span id="line-556">      }</span>
-<span class="source-line-no">557</span><span id="line-557"></span>
-<span class="source-line-no">558</span><span id="line-558">      @Override /* RestOp */</span>
-<span class="source-line-no">559</span><span id="line-559">      public String rolesDeclared() {</span>
-<span class="source-line-no">560</span><span id="line-560">         return rolesDeclared;</span>
-<span class="source-line-no">561</span><span id="line-561">      }</span>
-<span class="source-line-no">562</span><span id="line-562"></span>
-<span class="source-line-no">563</span><span id="line-563">      @Override /* RestOp */</span>
-<span class="source-line-no">564</span><span id="line-564">      public Class&lt;? extends Serializer&gt;[] serializers() {</span>
-<span class="source-line-no">565</span><span id="line-565">         return serializers;</span>
-<span class="source-line-no">566</span><span id="line-566">      }</span>
-<span class="source-line-no">567</span><span id="line-567"></span>
-<span class="source-line-no">568</span><span id="line-568">      @Override /* RestOp */</span>
-<span class="source-line-no">569</span><span id="line-569">      public String summary() {</span>
-<span class="source-line-no">570</span><span id="line-570">         return summary;</span>
-<span class="source-line-no">571</span><span id="line-571">      }</span>
-<span class="source-line-no">572</span><span id="line-572"></span>
-<span class="source-line-no">573</span><span id="line-573">      @Override /* RestOp */</span>
-<span class="source-line-no">574</span><span id="line-574">      public OpSwagger swagger() {</span>
-<span class="source-line-no">575</span><span id="line-575">         return swagger;</span>
-<span class="source-line-no">576</span><span id="line-576">      }</span>
-<span class="source-line-no">577</span><span id="line-577"></span>
-<span class="source-line-no">578</span><span id="line-578">      @Override /* RestOp */</span>
-<span class="source-line-no">579</span><span id="line-579">      public String value() {</span>
-<span class="source-line-no">580</span><span id="line-580">         return value;</span>
-<span class="source-line-no">581</span><span id="line-581">      }</span>
-<span class="source-line-no">582</span><span id="line-582">   }</span>
+<span class="source-line-no">406</span><span id="line-406">   private static class Impl extends TargetedAnnotationImpl implements RestOp {</span>
+<span class="source-line-no">407</span><span id="line-407"></span>
+<span class="source-line-no">408</span><span id="line-408">      private final Class&lt;? extends RestConverter&gt;[] converters;</span>
+<span class="source-line-no">409</span><span id="line-409">      private final Class&lt;? extends RestGuard&gt;[] guards;</span>
+<span class="source-line-no">410</span><span id="line-410">      private final Class&lt;? extends RestMatcher&gt;[] matchers;</span>
+<span class="source-line-no">411</span><span id="line-411">      private final Class&lt;? extends Encoder&gt;[] encoders;</span>
+<span class="source-line-no">412</span><span id="line-412">      private final Class&lt;? extends Serializer&gt;[] serializers;</span>
+<span class="source-line-no">413</span><span id="line-413">      private final Class&lt;?&gt;[] parsers;</span>
+<span class="source-line-no">414</span><span id="line-414">      private final OpSwagger swagger;</span>
+<span class="source-line-no">415</span><span id="line-415">      private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, rolesDeclared, roleGuard, summary, value;</span>
+<span class="source-line-no">416</span><span id="line-416">      private final String[] consumes, defaultRequestFormData, defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path, produces;</span>
+<span class="source-line-no">417</span><span id="line-417"></span>
+<span class="source-line-no">418</span><span id="line-418">      Impl(Builder b) {</span>
+<span class="source-line-no">419</span><span id="line-419">         super(b);</span>
+<span class="source-line-no">420</span><span id="line-420">         this.clientVersion = b.clientVersion;</span>
+<span class="source-line-no">421</span><span id="line-421">         this.consumes = copyOf(b.consumes);</span>
+<span class="source-line-no">422</span><span id="line-422">         this.converters = copyOf(b.converters);</span>
+<span class="source-line-no">423</span><span id="line-423">         this.debug = b.debug;</span>
+<span class="source-line-no">424</span><span id="line-424">         this.defaultAccept = b.defaultAccept;</span>
+<span class="source-line-no">425</span><span id="line-425">         this.defaultCharset = b.defaultCharset;</span>
+<span class="source-line-no">426</span><span id="line-426">         this.defaultContentType = b.defaultContentType;</span>
+<span class="source-line-no">427</span><span id="line-427">         this.defaultRequestFormData = copyOf(b.defaultRequestFormData);</span>
+<span class="source-line-no">428</span><span id="line-428">         this.defaultRequestQueryData = copyOf(b.defaultRequestQueryData);</span>
+<span class="source-line-no">429</span><span id="line-429">         this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);</span>
+<span class="source-line-no">430</span><span id="line-430">         this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);</span>
+<span class="source-line-no">431</span><span id="line-431">         this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);</span>
+<span class="source-line-no">432</span><span id="line-432">         this.encoders = copyOf(b.encoders);</span>
+<span class="source-line-no">433</span><span id="line-433">         this.guards = copyOf(b.guards);</span>
+<span class="source-line-no">434</span><span id="line-434">         this.matchers = copyOf(b.matchers);</span>
+<span class="source-line-no">435</span><span id="line-435">         this.maxInput = b.maxInput;</span>
+<span class="source-line-no">436</span><span id="line-436">         this.method = b.method;</span>
+<span class="source-line-no">437</span><span id="line-437">         this.parsers = copyOf(b.parsers);</span>
+<span class="source-line-no">438</span><span id="line-438">         this.path = copyOf(b.path);</span>
+<span class="source-line-no">439</span><span id="line-439">         this.produces = copyOf(b.produces);</span>
+<span class="source-line-no">440</span><span id="line-440">         this.roleGuard = b.roleGuard;</span>
+<span class="source-line-no">441</span><span id="line-441">         this.rolesDeclared = b.rolesDeclared;</span>
+<span class="source-line-no">442</span><span id="line-442">         this.serializers = copyOf(b.serializers);</span>
+<span class="source-line-no">443</span><span id="line-443">         this.summary = b.summary;</span>
+<span class="source-line-no">444</span><span id="line-444">         this.swagger = b.swagger;</span>
+<span class="source-line-no">445</span><span id="line-445">         this.value = b.value;</span>
+<span class="source-line-no">446</span><span id="line-446">         postConstruct();</span>
+<span class="source-line-no">447</span><span id="line-447">      }</span>
+<span class="source-line-no">448</span><span id="line-448"></span>
+<span class="source-line-no">449</span><span id="line-449">      @Override /* RestOp */</span>
+<span class="source-line-no">450</span><span id="line-450">      public String clientVersion() {</span>
+<span class="source-line-no">451</span><span id="line-451">         return clientVersion;</span>
+<span class="source-line-no">452</span><span id="line-452">      }</span>
+<span class="source-line-no">453</span><span id="line-453"></span>
+<span class="source-line-no">454</span><span id="line-454">      @Override /* RestOp */</span>
+<span class="source-line-no">455</span><span id="line-455">      public String[] consumes() {</span>
+<span class="source-line-no">456</span><span id="line-456">         return consumes;</span>
+<span class="source-line-no">457</span><span id="line-457">      }</span>
+<span class="source-line-no">458</span><span id="line-458"></span>
+<span class="source-line-no">459</span><span id="line-459">      @Override /* RestOp */</span>
+<span class="source-line-no">460</span><span id="line-460">      public Class&lt;? extends RestConverter&gt;[] converters() {</span>
+<span class="source-line-no">461</span><span id="line-461">         return converters;</span>
+<span class="source-line-no">462</span><span id="line-462">      }</span>
+<span class="source-line-no">463</span><span id="line-463"></span>
+<span class="source-line-no">464</span><span id="line-464">      @Override /* RestOp */</span>
+<span class="source-line-no">465</span><span id="line-465">      public String debug() {</span>
+<span class="source-line-no">466</span><span id="line-466">         return debug;</span>
+<span class="source-line-no">467</span><span id="line-467">      }</span>
+<span class="source-line-no">468</span><span id="line-468"></span>
+<span class="source-line-no">469</span><span id="line-469">      @Override /* RestOp */</span>
+<span class="source-line-no">470</span><span id="line-470">      public String defaultAccept() {</span>
+<span class="source-line-no">471</span><span id="line-471">         return defaultAccept;</span>
+<span class="source-line-no">472</span><span id="line-472">      }</span>
+<span class="source-line-no">473</span><span id="line-473"></span>
+<span class="source-line-no">474</span><span id="line-474">      @Override /* RestOp */</span>
+<span class="source-line-no">475</span><span id="line-475">      public String defaultCharset() {</span>
+<span class="source-line-no">476</span><span id="line-476">         return defaultCharset;</span>
+<span class="source-line-no">477</span><span id="line-477">      }</span>
+<span class="source-line-no">478</span><span id="line-478"></span>
+<span class="source-line-no">479</span><span id="line-479">      @Override /* RestOp */</span>
+<span class="source-line-no">480</span><span id="line-480">      public String defaultContentType() {</span>
+<span class="source-line-no">481</span><span id="line-481">         return defaultContentType;</span>
+<span class="source-line-no">482</span><span id="line-482">      }</span>
+<span class="source-line-no">483</span><span id="line-483"></span>
+<span class="source-line-no">484</span><span id="line-484">      @Override /* RestOp */</span>
+<span class="source-line-no">485</span><span id="line-485">      public String[] defaultRequestFormData() {</span>
+<span class="source-line-no">486</span><span id="line-486">         return defaultRequestFormData;</span>
+<span class="source-line-no">487</span><span id="line-487">      }</span>
+<span class="source-line-no">488</span><span id="line-488"></span>
+<span class="source-line-no">489</span><span id="line-489">      @Override /* RestOp */</span>
+<span class="source-line-no">490</span><span id="line-490">      public String[] defaultRequestQueryData() {</span>
+<span class="source-line-no">491</span><span id="line-491">         return defaultRequestQueryData;</span>
+<span class="source-line-no">492</span><span id="line-492">      }</span>
+<span class="source-line-no">493</span><span id="line-493"></span>
+<span class="source-line-no">494</span><span id="line-494">      @Override /* RestOp */</span>
+<span class="source-line-no">495</span><span id="line-495">      public String[] defaultRequestAttributes() {</span>
+<span class="source-line-no">496</span><span id="line-496">         return defaultRequestAttributes;</span>
+<span class="source-line-no">497</span><span id="line-497">      }</span>
+<span class="source-line-no">498</span><span id="line-498"></span>
+<span class="source-line-no">499</span><span id="line-499">      @Override /* RestOp */</span>
+<span class="source-line-no">500</span><span id="line-500">      public String[] defaultRequestHeaders() {</span>
+<span class="source-line-no">501</span><span id="line-501">         return defaultRequestHeaders;</span>
+<span class="source-line-no">502</span><span id="line-502">      }</span>
+<span class="source-line-no">503</span><span id="line-503"></span>
+<span class="source-line-no">504</span><span id="line-504">      @Override /* RestOp */</span>
+<span class="source-line-no">505</span><span id="line-505">      public String[] defaultResponseHeaders() {</span>
+<span class="source-line-no">506</span><span id="line-506">         return defaultResponseHeaders;</span>
+<span class="source-line-no">507</span><span id="line-507">      }</span>
+<span class="source-line-no">508</span><span id="line-508"></span>
+<span class="source-line-no">509</span><span id="line-509">      @Override /* RestOp */</span>
+<span class="source-line-no">510</span><span id="line-510">      public Class&lt;? extends Encoder&gt;[] encoders() {</span>
+<span class="source-line-no">511</span><span id="line-511">         return encoders;</span>
+<span class="source-line-no">512</span><span id="line-512">      }</span>
+<span class="source-line-no">513</span><span id="line-513"></span>
+<span class="source-line-no">514</span><span id="line-514">      @Override /* RestOp */</span>
+<span class="source-line-no">515</span><span id="line-515">      public Class&lt;? extends RestGuard&gt;[] guards() {</span>
+<span class="source-line-no">516</span><span id="line-516">         return guards;</span>
+<span class="source-line-no">517</span><span id="line-517">      }</span>
+<span class="source-line-no">518</span><span id="line-518"></span>
+<span class="source-line-no">519</span><span id="line-519">      @Override /* RestOp */</span>
+<span class="source-line-no">520</span><span id="line-520">      public Class&lt;? extends RestMatcher&gt;[] matchers() {</span>
+<span class="source-line-no">521</span><span id="line-521">         return matchers;</span>
+<span class="source-line-no">522</span><span id="line-522">      }</span>
+<span class="source-line-no">523</span><span id="line-523"></span>
+<span class="source-line-no">524</span><span id="line-524">      @Override /* RestOp */</span>
+<span class="source-line-no">525</span><span id="line-525">      public String maxInput() {</span>
+<span class="source-line-no">526</span><span id="line-526">         return maxInput;</span>
+<span class="source-line-no">527</span><span id="line-527">      }</span>
+<span class="source-line-no">528</span><span id="line-528"></span>
+<span class="source-line-no">529</span><span id="line-529">      @Override /* RestOp */</span>
+<span class="source-line-no">530</span><span id="line-530">      public String method() {</span>
+<span class="source-line-no">531</span><span id="line-531">         return method;</span>
+<span class="source-line-no">532</span><span id="line-532">      }</span>
+<span class="source-line-no">533</span><span id="line-533"></span>
+<span class="source-line-no">534</span><span id="line-534">      @Override /* RestOp */</span>
+<span class="source-line-no">535</span><span id="line-535">      public Class&lt;?&gt;[] parsers() {</span>
+<span class="source-line-no">536</span><span id="line-536">         return parsers;</span>
+<span class="source-line-no">537</span><span id="line-537">      }</span>
+<span class="source-line-no">538</span><span id="line-538"></span>
+<span class="source-line-no">539</span><span id="line-539">      @Override /* RestOp */</span>
+<span class="source-line-no">540</span><span id="line-540">      public String[] path() {</span>
+<span class="source-line-no">541</span><span id="line-541">         return path;</span>
+<span class="source-line-no">542</span><span id="line-542">      }</span>
+<span class="source-line-no">543</span><span id="line-543"></span>
+<span class="source-line-no">544</span><span id="line-544">      @Override /* RestOp */</span>
+<span class="source-line-no">545</span><span id="line-545">      public String[] produces() {</span>
+<span class="source-line-no">546</span><span id="line-546">         return produces;</span>
+<span class="source-line-no">547</span><span id="line-547">      }</span>
+<span class="source-line-no">548</span><span id="line-548"></span>
+<span class="source-line-no">549</span><span id="line-549">      @Override /* RestOp */</span>
+<span class="source-line-no">550</span><span id="line-550">      public String roleGuard() {</span>
+<span class="source-line-no">551</span><span id="line-551">         return roleGuard;</span>
+<span class="source-line-no">552</span><span id="line-552">      }</span>
+<span class="source-line-no">553</span><span id="line-553"></span>
+<span class="source-line-no">554</span><span id="line-554">      @Override /* RestOp */</span>
+<span class="source-line-no">555</span><span id="line-555">      public String rolesDeclared() {</span>
+<span class="source-line-no">556</span><span id="line-556">         return rolesDeclared;</span>
+<span class="source-line-no">557</span><span id="line-557">      }</span>
+<span class="source-line-no">558</span><span id="line-558"></span>
+<span class="source-line-no">559</span><span id="line-559">      @Override /* RestOp */</span>
+<span class="source-line-no">560</span><span id="line-560">      public Class&lt;? extends Serializer&gt;[] serializers() {</span>
+<span class="source-line-no">561</span><span id="line-561">         return serializers;</span>
+<span class="source-line-no">562</span><span id="line-562">      }</span>
+<span class="source-line-no">563</span><span id="line-563"></span>
+<span class="source-line-no">564</span><span id="line-564">      @Override /* RestOp */</span>
+<span class="source-line-no">565</span><span id="line-565">      public String summary() {</span>
+<span class="source-line-no">566</span><span id="line-566">         return summary;</span>
+<span class="source-line-no">567</span><span id="line-567">      }</span>
+<span class="source-line-no">568</span><span id="line-568"></span>
+<span class="source-line-no">569</span><span id="line-569">      @Override /* RestOp */</span>
+<span class="source-line-no">570</span><span id="line-570">      public OpSwagger swagger() {</span>
+<span class="source-line-no">571</span><span id="line-571">         return swagger;</span>
+<span class="source-line-no">572</span><span id="line-572">      }</span>
+<span class="source-line-no">573</span><span id="line-573"></span>
+<span class="source-line-no">574</span><span id="line-574">      @Override /* RestOp */</span>
+<span class="source-line-no">575</span><span id="line-575">      public String value() {</span>
+<span class="source-line-no">576</span><span id="line-576">         return value;</span>
+<span class="source-line-no">577</span><span id="line-577">      }</span>
+<span class="source-line-no">578</span><span id="line-578">   }</span>
+<span class="source-line-no">579</span><span id="line-579"></span>
+<span class="source-line-no">580</span><span id="line-580">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">581</span><span id="line-581">   // Appliers</span>
+<span class="source-line-no">582</span><span id="line-582">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">583</span><span id="line-583"></span>
-<span class="source-line-no">584</span><span id="line-584">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">585</span><span id="line-585">   // Appliers</span>
-<span class="source-line-no">586</span><span id="line-586">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">587</span><span id="line-587"></span>
-<span class="source-line-no">588</span><span id="line-588">   /**</span>
-<span class="source-line-no">589</span><span id="line-589">    * Applies {@link RestOp} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.</span>
-<span class="source-line-no">590</span><span id="line-590">    */</span>
-<span class="source-line-no">591</span><span id="line-591">   public static class RestOpContextApply extends AnnotationApplier&lt;RestOp,RestOpContext.Builder&gt; {</span>
-<span class="source-line-no">592</span><span id="line-592"></span>
-<span class="source-line-no">593</span><span id="line-593">      /**</span>
-<span class="source-line-no">594</span><span id="line-594">       * Constructor.</span>
-<span class="source-line-no">595</span><span id="line-595">       *</span>
-<span class="source-line-no">596</span><span id="line-596">       * @param vr The resolver for resolving values in annotations.</span>
-<span class="source-line-no">597</span><span id="line-597">       */</span>
-<span class="source-line-no">598</span><span id="line-598">      public RestOpContextApply(VarResolverSession vr) {</span>
-<span class="source-line-no">599</span><span id="line-599">         super(RestOp.class, RestOpContext.Builder.class, vr);</span>
-<span class="source-line-no">600</span><span id="line-600">      }</span>
+<span class="source-line-no">584</span><span id="line-584">   /**</span>
+<span class="source-line-no">585</span><span id="line-585">    * Applies {@link RestOp} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.</span>
+<span class="source-line-no">586</span><span id="line-586">    */</span>
+<span class="source-line-no">587</span><span id="line-587">   public static class RestOpContextApply extends AnnotationApplier&lt;RestOp,RestOpContext.Builder&gt; {</span>
+<span class="source-line-no">588</span><span id="line-588"></span>
+<span class="source-line-no">589</span><span id="line-589">      /**</span>
+<span class="source-line-no">590</span><span id="line-590">       * Constructor.</span>
+<span class="source-line-no">591</span><span id="line-591">       *</span>
+<span class="source-line-no">592</span><span id="line-592">       * @param vr The resolver for resolving values in annotations.</span>
+<span class="source-line-no">593</span><span id="line-593">       */</span>
+<span class="source-line-no">594</span><span id="line-594">      public RestOpContextApply(VarResolverSession vr) {</span>
+<span class="source-line-no">595</span><span id="line-595">         super(RestOp.class, RestOpContext.Builder.class, vr);</span>
+<span class="source-line-no">596</span><span id="line-596">      }</span>
+<span class="source-line-no">597</span><span id="line-597"></span>
+<span class="source-line-no">598</span><span id="line-598">      @Override</span>
+<span class="source-line-no">599</span><span id="line-599">      public void apply(AnnotationInfo&lt;RestOp&gt; ai, RestOpContext.Builder b) {</span>
+<span class="source-line-no">600</span><span id="line-600">         RestOp a = ai.inner();</span>
 <span class="source-line-no">601</span><span id="line-601"></span>
-<span class="source-line-no">602</span><span id="line-602">      @Override</span>
-<span class="source-line-no">603</span><span id="line-603">      public void apply(AnnotationInfo&lt;RestOp&gt; ai, RestOpContext.Builder b) {</span>
-<span class="source-line-no">604</span><span id="line-604">         RestOp a = ai.inner();</span>
-<span class="source-line-no">605</span><span id="line-605"></span>
-<span class="source-line-no">606</span><span id="line-606">         classes(a.serializers()).ifPresent(x -&gt; b.serializers().set(x));</span>
-<span class="source-line-no">607</span><span id="line-607">         classes(a.parsers()).ifPresent(x -&gt; b.parsers().set(x));</span>
-<span class="source-line-no">608</span><span id="line-608">         classes(a.encoders()).ifPresent(x -&gt; b.encoders().set(x));</span>
-<span class="source-line-no">609</span><span id="line-609">         stream(a.produces()).map(MediaType::of).forEach(x -&gt; b.produces(x));</span>
-<span class="source-line-no">610</span><span id="line-610">         stream(a.consumes()).map(MediaType::of).forEach(x -&gt; b.consumes(x));</span>
-<span class="source-line-no">611</span><span id="line-611">         stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -&gt; b.defaultRequestHeaders().setDefault(x));</span>
-<span class="source-line-no">612</span><span id="line-612">         stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -&gt; b.defaultResponseHeaders().setDefault(x));</span>
-<span class="source-line-no">613</span><span id="line-613">         stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -&gt; b.defaultRequestAttributes().add(x));</span>
-<span class="source-line-no">614</span><span id="line-614">         stream(a.defaultRequestQueryData()).map(HttpParts::basicPart).forEach(x -&gt; b.defaultRequestQueryData().setDefault(x));</span>
-<span class="source-line-no">615</span><span id="line-615">         stream(a.defaultRequestFormData()).map(HttpParts::basicPart).forEach(x -&gt; b.defaultRequestFormData().setDefault(x));</span>
-<span class="source-line-no">616</span><span id="line-616">         string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -&gt; b.defaultRequestHeaders().setDefault(x));</span>
-<span class="source-line-no">617</span><span id="line-617">         string(a.defaultContentType()).map(HttpHeaders::contentType).ifPresent(x -&gt; b.defaultRequestHeaders().setDefault(x));</span>
-<span class="source-line-no">618</span><span id="line-618">         b.converters().append(a.converters());</span>
-<span class="source-line-no">619</span><span id="line-619">         b.guards().append(a.guards());</span>
-<span class="source-line-no">620</span><span id="line-620">         b.matchers().append(a.matchers());</span>
-<span class="source-line-no">621</span><span id="line-621">         string(a.clientVersion()).ifPresent(x -&gt; b.clientVersion(x));</span>
-<span class="source-line-no">622</span><span id="line-622">         string(a.defaultCharset()).map(Charset::forName).ifPresent(x -&gt; b.defaultCharset(x));</span>
-<span class="source-line-no">623</span><span id="line-623">         string(a.maxInput()).ifPresent(x -&gt; b.maxInput(x));</span>
-<span class="source-line-no">624</span><span id="line-624">         stream(a.path()).forEach(x -&gt; b.path(x));</span>
-<span class="source-line-no">625</span><span id="line-625">         cdl(a.rolesDeclared()).forEach(x -&gt; b.rolesDeclared(x));</span>
-<span class="source-line-no">626</span><span id="line-626">         string(a.roleGuard()).ifPresent(x -&gt; b.roleGuard(x));</span>
-<span class="source-line-no">627</span><span id="line-627"></span>
-<span class="source-line-no">628</span><span id="line-628">         string(a.method()).ifPresent(x -&gt; b.httpMethod(x));</span>
-<span class="source-line-no">629</span><span id="line-629">         string(a.debug()).map(Enablement::fromString).ifPresent(x -&gt; b.debug(x));</span>
-<span class="source-line-no">630</span><span id="line-630"></span>
-<span class="source-line-no">631</span><span id="line-631">         String v = StringUtils.trim(string(a.value()).orElse(null));</span>
-<span class="source-line-no">632</span><span id="line-632">         if (v != null) {</span>
-<span class="source-line-no">633</span><span id="line-633">            int i = v.indexOf(' ');</span>
-<span class="source-line-no">634</span><span id="line-634">            if (i == -1) {</span>
-<span class="source-line-no">635</span><span id="line-635">               b.httpMethod(v);</span>
-<span class="source-line-no">636</span><span id="line-636">            } else {</span>
-<span class="source-line-no">637</span><span id="line-637">               b.httpMethod(v.substring(0, i).trim());</span>
-<span class="source-line-no">638</span><span id="line-638">               b.path(v.substring(i).trim());</span>
-<span class="source-line-no">639</span><span id="line-639">            }</span>
-<span class="source-line-no">640</span><span id="line-640">         }</span>
-<span class="source-line-no">641</span><span id="line-641">      }</span>
-<span class="source-line-no">642</span><span id="line-642">   }</span>
-<span class="source-line-no">643</span><span id="line-643">}</span>
+<span class="source-line-no">602</span><span id="line-602">         classes(a.serializers()).ifPresent(x -&gt; b.serializers().set(x));</span>
+<span class="source-line-no">603</span><span id="line-603">         classes(a.parsers()).ifPresent(x -&gt; b.parsers().set(x));</span>
+<span class="source-line-no">604</span><span id="line-604">         classes(a.encoders()).ifPresent(x -&gt; b.encoders().set(x));</span>
+<span class="source-line-no">605</span><span id="line-605">         stream(a.produces()).map(MediaType::of).forEach(x -&gt; b.produces(x));</span>
+<span class="source-line-no">606</span><span id="line-606">         stream(a.consumes()).map(MediaType::of).forEach(x -&gt; b.consumes(x));</span>
+<span class="source-line-no">607</span><span id="line-607">         stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -&gt; b.defaultRequestHeaders().setDefault(x));</span>
+<span class="source-line-no">608</span><span id="line-608">         stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -&gt; b.defaultResponseHeaders().setDefault(x));</span>
+<span class="source-line-no">609</span><span id="line-609">         stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -&gt; b.defaultRequestAttributes().add(x));</span>
+<span class="source-line-no">610</span><span id="line-610">         stream(a.defaultRequestQueryData()).map(HttpParts::basicPart).forEach(x -&gt; b.defaultRequestQueryData().setDefault(x));</span>
+<span class="source-line-no">611</span><span id="line-611">         stream(a.defaultRequestFormData()).map(HttpParts::basicPart).forEach(x -&gt; b.defaultRequestFormData().setDefault(x));</span>
+<span class="source-line-no">612</span><span id="line-612">         string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -&gt; b.defaultRequestHeaders().setDefault(x));</span>
+<span class="source-line-no">613</span><span id="line-613">         string(a.defaultContentType()).map(HttpHeaders::contentType).ifPresent(x -&gt; b.defaultRequestHeaders().setDefault(x));</span>
+<span class="source-line-no">614</span><span id="line-614">         b.converters().append(a.converters());</span>
+<span class="source-line-no">615</span><span id="line-615">         b.guards().append(a.guards());</span>
+<span class="source-line-no">616</span><span id="line-616">         b.matchers().append(a.matchers());</span>
+<span class="source-line-no">617</span><span id="line-617">         string(a.clientVersion()).ifPresent(x -&gt; b.clientVersion(x));</span>
+<span class="source-line-no">618</span><span id="line-618">         string(a.defaultCharset()).map(Charset::forName).ifPresent(x -&gt; b.defaultCharset(x));</span>
+<span class="source-line-no">619</span><span id="line-619">         string(a.maxInput()).ifPresent(x -&gt; b.maxInput(x));</span>
+<span class="source-line-no">620</span><span id="line-620">         stream(a.path()).forEach(x -&gt; b.path(x));</span>
+<span class="source-line-no">621</span><span id="line-621">         cdl(a.rolesDeclared()).forEach(x -&gt; b.rolesDeclared(x));</span>
+<span class="source-line-no">622</span><span id="line-622">         string(a.roleGuard()).ifPresent(x -&gt; b.roleGuard(x));</span>
+<span class="source-line-no">623</span><span id="line-623"></span>
+<span class="source-line-no">624</span><span id="line-624">         string(a.method()).ifPresent(x -&gt; b.httpMethod(x));</span>
+<span class="source-line-no">625</span><span id="line-625">         string(a.debug()).map(Enablement::fromString).ifPresent(x -&gt; b.debug(x));</span>
+<span class="source-line-no">626</span><span id="line-626"></span>
+<span class="source-line-no">627</span><span id="line-627">         String v = StringUtils.trim(string(a.value()).orElse(null));</span>
+<span class="source-line-no">628</span><span id="line-628">         if (v != null) {</span>
+<span class="source-line-no">629</span><span id="line-629">            int i = v.indexOf(' ');</span>
+<span class="source-line-no">630</span><span id="line-630">            if (i == -1) {</span>
+<span class="source-line-no">631</span><span id="line-631">               b.httpMethod(v);</span>
+<span class="source-line-no">632</span><span id="line-632">            } else {</span>
+<span class="source-line-no">633</span><span id="line-633">               b.httpMethod(v.substring(0, i).trim());</span>
+<span class="source-line-no">634</span><span id="line-634">               b.path(v.substring(i).trim());</span>
+<span class="source-line-no">635</span><span id="line-635">            }</span>
+<span class="source-line-no">636</span><span id="line-636">         }</span>
+<span class="source-line-no">637</span><span id="line-637">      }</span>
+<span class="source-line-no">638</span><span id="line-638">   }</span>
+<span class="source-line-no">639</span><span id="line-639">}</span>
 
 
 

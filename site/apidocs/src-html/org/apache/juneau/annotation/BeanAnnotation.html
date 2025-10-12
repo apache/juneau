@@ -363,193 +363,189 @@
 <span class="source-line-no">350</span><span id="line-350">         return this;</span>
 <span class="source-line-no">351</span><span id="line-351">      }</span>
 <span class="source-line-no">352</span><span id="line-352"></span>
-<span class="source-line-no">353</span><span id="line-353">      // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">353</span><span id="line-353">   }</span>
 <span class="source-line-no">354</span><span id="line-354"></span>
-<span class="source-line-no">355</span><span id="line-355"></span>
-<span class="source-line-no">356</span><span id="line-356">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">357</span><span id="line-357">   }</span>
+<span class="source-line-no">355</span><span id="line-355">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">356</span><span id="line-356">   // Implementation</span>
+<span class="source-line-no">357</span><span id="line-357">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">358</span><span id="line-358"></span>
-<span class="source-line-no">359</span><span id="line-359">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">360</span><span id="line-360">   // Implementation</span>
-<span class="source-line-no">361</span><span id="line-361">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">362</span><span id="line-362"></span>
-<span class="source-line-no">363</span><span id="line-363">   private static class Impl extends TargetedAnnotationTImpl implements Bean {</span>
-<span class="source-line-no">364</span><span id="line-364"></span>
-<span class="source-line-no">365</span><span id="line-365">      private final boolean findFluentSetters, sort;</span>
-<span class="source-line-no">366</span><span id="line-366">      private final Class&lt;? extends BeanInterceptor&lt;?&gt;&gt; interceptor;</span>
-<span class="source-line-no">367</span><span id="line-367">      private final Class&lt;? extends PropertyNamer&gt; propertyNamer;</span>
-<span class="source-line-no">368</span><span id="line-368">      private final Class&lt;?&gt; implClass, interfaceClass, stopClass;</span>
-<span class="source-line-no">369</span><span id="line-369">      private final Class&lt;?&gt;[] dictionary;</span>
-<span class="source-line-no">370</span><span id="line-370">      private final String example, excludeProperties, p, properties, readOnlyProperties, ro, typeName, typePropertyName, wo, writeOnlyProperties, xp;</span>
-<span class="source-line-no">371</span><span id="line-371"></span>
-<span class="source-line-no">372</span><span id="line-372">      Impl(Builder b) {</span>
-<span class="source-line-no">373</span><span id="line-373">         super(b);</span>
-<span class="source-line-no">374</span><span id="line-374">         this.dictionary = copyOf(b.dictionary);</span>
-<span class="source-line-no">375</span><span id="line-375">         this.example = b.example;</span>
-<span class="source-line-no">376</span><span id="line-376">         this.excludeProperties = b.excludeProperties;</span>
-<span class="source-line-no">377</span><span id="line-377">         this.findFluentSetters = b.findFluentSetters;</span>
-<span class="source-line-no">378</span><span id="line-378">         this.implClass = b.implClass;</span>
-<span class="source-line-no">379</span><span id="line-379">         this.interceptor = b.interceptor;</span>
-<span class="source-line-no">380</span><span id="line-380">         this.interfaceClass = b.interfaceClass;</span>
-<span class="source-line-no">381</span><span id="line-381">         this.p = b.p;</span>
-<span class="source-line-no">382</span><span id="line-382">         this.properties = b.properties;</span>
-<span class="source-line-no">383</span><span id="line-383">         this.propertyNamer = b.propertyNamer;</span>
-<span class="source-line-no">384</span><span id="line-384">         this.readOnlyProperties = b.readOnlyProperties;</span>
-<span class="source-line-no">385</span><span id="line-385">         this.ro = b.ro;</span>
-<span class="source-line-no">386</span><span id="line-386">         this.sort = b.sort;</span>
-<span class="source-line-no">387</span><span id="line-387">         this.stopClass = b.stopClass;</span>
-<span class="source-line-no">388</span><span id="line-388">         this.typeName = b.typeName;</span>
-<span class="source-line-no">389</span><span id="line-389">         this.typePropertyName = b.typePropertyName;</span>
-<span class="source-line-no">390</span><span id="line-390">         this.wo = b.wo;</span>
-<span class="source-line-no">391</span><span id="line-391">         this.writeOnlyProperties = b.writeOnlyProperties;</span>
-<span class="source-line-no">392</span><span id="line-392">         this.xp = b.xp;</span>
-<span class="source-line-no">393</span><span id="line-393">         postConstruct();</span>
-<span class="source-line-no">394</span><span id="line-394">      }</span>
-<span class="source-line-no">395</span><span id="line-395"></span>
-<span class="source-line-no">396</span><span id="line-396">      @Override /* Bean */</span>
-<span class="source-line-no">397</span><span id="line-397">      public Class&lt;?&gt;[] dictionary() {</span>
-<span class="source-line-no">398</span><span id="line-398">         return dictionary;</span>
-<span class="source-line-no">399</span><span id="line-399">      }</span>
-<span class="source-line-no">400</span><span id="line-400"></span>
-<span class="source-line-no">401</span><span id="line-401">      @Override /* Bean */</span>
-<span class="source-line-no">402</span><span id="line-402">      public String example() {</span>
-<span class="source-line-no">403</span><span id="line-403">         return example;</span>
-<span class="source-line-no">404</span><span id="line-404">      }</span>
-<span class="source-line-no">405</span><span id="line-405"></span>
-<span class="source-line-no">406</span><span id="line-406">      @Override /* Bean */</span>
-<span class="source-line-no">407</span><span id="line-407">      public String excludeProperties() {</span>
-<span class="source-line-no">408</span><span id="line-408">         return excludeProperties;</span>
-<span class="source-line-no">409</span><span id="line-409">      }</span>
-<span class="source-line-no">410</span><span id="line-410"></span>
-<span class="source-line-no">411</span><span id="line-411">      @Override /* Bean */</span>
-<span class="source-line-no">412</span><span id="line-412">      public boolean findFluentSetters() {</span>
-<span class="source-line-no">413</span><span id="line-413">         return findFluentSetters;</span>
-<span class="source-line-no">414</span><span id="line-414">      }</span>
-<span class="source-line-no">415</span><span id="line-415"></span>
-<span class="source-line-no">416</span><span id="line-416">      @Override /* Bean */</span>
-<span class="source-line-no">417</span><span id="line-417">      public Class&lt;?&gt; implClass() {</span>
-<span class="source-line-no">418</span><span id="line-418">         return implClass;</span>
-<span class="source-line-no">419</span><span id="line-419">      }</span>
-<span class="source-line-no">420</span><span id="line-420"></span>
-<span class="source-line-no">421</span><span id="line-421">      @Override /* Bean */</span>
-<span class="source-line-no">422</span><span id="line-422">      public Class&lt;? extends BeanInterceptor&lt;?&gt;&gt; interceptor() {</span>
-<span class="source-line-no">423</span><span id="line-423">         return interceptor;</span>
-<span class="source-line-no">424</span><span id="line-424">      }</span>
-<span class="source-line-no">425</span><span id="line-425"></span>
-<span class="source-line-no">426</span><span id="line-426">      @Override /* Bean */</span>
-<span class="source-line-no">427</span><span id="line-427">      public Class&lt;?&gt; interfaceClass() {</span>
-<span class="source-line-no">428</span><span id="line-428">         return interfaceClass;</span>
-<span class="source-line-no">429</span><span id="line-429">      }</span>
-<span class="source-line-no">430</span><span id="line-430"></span>
-<span class="source-line-no">431</span><span id="line-431">      @Override /* Bean */</span>
-<span class="source-line-no">432</span><span id="line-432">      public String p() {</span>
-<span class="source-line-no">433</span><span id="line-433">         return p;</span>
-<span class="source-line-no">434</span><span id="line-434">      }</span>
-<span class="source-line-no">435</span><span id="line-435"></span>
-<span class="source-line-no">436</span><span id="line-436">      @Override /* Bean */</span>
-<span class="source-line-no">437</span><span id="line-437">      public String properties() {</span>
-<span class="source-line-no">438</span><span id="line-438">         return properties;</span>
-<span class="source-line-no">439</span><span id="line-439">      }</span>
-<span class="source-line-no">440</span><span id="line-440"></span>
-<span class="source-line-no">441</span><span id="line-441">      @Override /* Bean */</span>
-<span class="source-line-no">442</span><span id="line-442">      public Class&lt;? extends PropertyNamer&gt; propertyNamer() {</span>
-<span class="source-line-no">443</span><span id="line-443">         return propertyNamer;</span>
-<span class="source-line-no">444</span><span id="line-444">      }</span>
-<span class="source-line-no">445</span><span id="line-445"></span>
-<span class="source-line-no">446</span><span id="line-446">      @Override /* Bean */</span>
-<span class="source-line-no">447</span><span id="line-447">      public String readOnlyProperties() {</span>
-<span class="source-line-no">448</span><span id="line-448">         return readOnlyProperties;</span>
-<span class="source-line-no">449</span><span id="line-449">      }</span>
-<span class="source-line-no">450</span><span id="line-450"></span>
-<span class="source-line-no">451</span><span id="line-451">      @Override /* Bean */</span>
-<span class="source-line-no">452</span><span id="line-452">      public String ro() {</span>
-<span class="source-line-no">453</span><span id="line-453">         return ro;</span>
-<span class="source-line-no">454</span><span id="line-454">      }</span>
-<span class="source-line-no">455</span><span id="line-455"></span>
-<span class="source-line-no">456</span><span id="line-456">      @Override /* Bean */</span>
-<span class="source-line-no">457</span><span id="line-457">      public boolean sort() {</span>
-<span class="source-line-no">458</span><span id="line-458">         return sort;</span>
-<span class="source-line-no">459</span><span id="line-459">      }</span>
-<span class="source-line-no">460</span><span id="line-460"></span>
-<span class="source-line-no">461</span><span id="line-461">      @Override /* Bean */</span>
-<span class="source-line-no">462</span><span id="line-462">      public Class&lt;?&gt; stopClass() {</span>
-<span class="source-line-no">463</span><span id="line-463">         return stopClass;</span>
-<span class="source-line-no">464</span><span id="line-464">      }</span>
-<span class="source-line-no">465</span><span id="line-465"></span>
-<span class="source-line-no">466</span><span id="line-466">      @Override /* Bean */</span>
-<span class="source-line-no">467</span><span id="line-467">      public String typeName() {</span>
-<span class="source-line-no">468</span><span id="line-468">         return typeName;</span>
-<span class="source-line-no">469</span><span id="line-469">      }</span>
-<span class="source-line-no">470</span><span id="line-470"></span>
-<span class="source-line-no">471</span><span id="line-471">      @Override /* Bean */</span>
-<span class="source-line-no">472</span><span id="line-472">      public String typePropertyName() {</span>
-<span class="source-line-no">473</span><span id="line-473">         return typePropertyName;</span>
-<span class="source-line-no">474</span><span id="line-474">      }</span>
-<span class="source-line-no">475</span><span id="line-475"></span>
-<span class="source-line-no">476</span><span id="line-476">      @Override /* Bean */</span>
-<span class="source-line-no">477</span><span id="line-477">      public String writeOnlyProperties() {</span>
-<span class="source-line-no">478</span><span id="line-478">         return writeOnlyProperties;</span>
-<span class="source-line-no">479</span><span id="line-479">      }</span>
-<span class="source-line-no">480</span><span id="line-480"></span>
-<span class="source-line-no">481</span><span id="line-481">      @Override /* Bean */</span>
-<span class="source-line-no">482</span><span id="line-482">      public String wo() {</span>
-<span class="source-line-no">483</span><span id="line-483">         return wo;</span>
-<span class="source-line-no">484</span><span id="line-484">      }</span>
-<span class="source-line-no">485</span><span id="line-485"></span>
-<span class="source-line-no">486</span><span id="line-486">      @Override /* Bean */</span>
-<span class="source-line-no">487</span><span id="line-487">      public String xp() {</span>
-<span class="source-line-no">488</span><span id="line-488">         return xp;</span>
-<span class="source-line-no">489</span><span id="line-489">      }</span>
-<span class="source-line-no">490</span><span id="line-490">   }</span>
+<span class="source-line-no">359</span><span id="line-359">   private static class Impl extends TargetedAnnotationTImpl implements Bean {</span>
+<span class="source-line-no">360</span><span id="line-360"></span>
+<span class="source-line-no">361</span><span id="line-361">      private final boolean findFluentSetters, sort;</span>
+<span class="source-line-no">362</span><span id="line-362">      private final Class&lt;? extends BeanInterceptor&lt;?&gt;&gt; interceptor;</span>
+<span class="source-line-no">363</span><span id="line-363">      private final Class&lt;? extends PropertyNamer&gt; propertyNamer;</span>
+<span class="source-line-no">364</span><span id="line-364">      private final Class&lt;?&gt; implClass, interfaceClass, stopClass;</span>
+<span class="source-line-no">365</span><span id="line-365">      private final Class&lt;?&gt;[] dictionary;</span>
+<span class="source-line-no">366</span><span id="line-366">      private final String example, excludeProperties, p, properties, readOnlyProperties, ro, typeName, typePropertyName, wo, writeOnlyProperties, xp;</span>
+<span class="source-line-no">367</span><span id="line-367"></span>
+<span class="source-line-no">368</span><span id="line-368">      Impl(Builder b) {</span>
+<span class="source-line-no">369</span><span id="line-369">         super(b);</span>
+<span class="source-line-no">370</span><span id="line-370">         this.dictionary = copyOf(b.dictionary);</span>
+<span class="source-line-no">371</span><span id="line-371">         this.example = b.example;</span>
+<span class="source-line-no">372</span><span id="line-372">         this.excludeProperties = b.excludeProperties;</span>
+<span class="source-line-no">373</span><span id="line-373">         this.findFluentSetters = b.findFluentSetters;</span>
+<span class="source-line-no">374</span><span id="line-374">         this.implClass = b.implClass;</span>
+<span class="source-line-no">375</span><span id="line-375">         this.interceptor = b.interceptor;</span>
+<span class="source-line-no">376</span><span id="line-376">         this.interfaceClass = b.interfaceClass;</span>
+<span class="source-line-no">377</span><span id="line-377">         this.p = b.p;</span>
+<span class="source-line-no">378</span><span id="line-378">         this.properties = b.properties;</span>
+<span class="source-line-no">379</span><span id="line-379">         this.propertyNamer = b.propertyNamer;</span>
+<span class="source-line-no">380</span><span id="line-380">         this.readOnlyProperties = b.readOnlyProperties;</span>
+<span class="source-line-no">381</span><span id="line-381">         this.ro = b.ro;</span>
+<span class="source-line-no">382</span><span id="line-382">         this.sort = b.sort;</span>
+<span class="source-line-no">383</span><span id="line-383">         this.stopClass = b.stopClass;</span>
+<span class="source-line-no">384</span><span id="line-384">         this.typeName = b.typeName;</span>
+<span class="source-line-no">385</span><span id="line-385">         this.typePropertyName = b.typePropertyName;</span>
+<span class="source-line-no">386</span><span id="line-386">         this.wo = b.wo;</span>
+<span class="source-line-no">387</span><span id="line-387">         this.writeOnlyProperties = b.writeOnlyProperties;</span>
+<span class="source-line-no">388</span><span id="line-388">         this.xp = b.xp;</span>
+<span class="source-line-no">389</span><span id="line-389">         postConstruct();</span>
+<span class="source-line-no">390</span><span id="line-390">      }</span>
+<span class="source-line-no">391</span><span id="line-391"></span>
+<span class="source-line-no">392</span><span id="line-392">      @Override /* Bean */</span>
+<span class="source-line-no">393</span><span id="line-393">      public Class&lt;?&gt;[] dictionary() {</span>
+<span class="source-line-no">394</span><span id="line-394">         return dictionary;</span>
+<span class="source-line-no">395</span><span id="line-395">      }</span>
+<span class="source-line-no">396</span><span id="line-396"></span>
+<span class="source-line-no">397</span><span id="line-397">      @Override /* Bean */</span>
+<span class="source-line-no">398</span><span id="line-398">      public String example() {</span>
+<span class="source-line-no">399</span><span id="line-399">         return example;</span>
+<span class="source-line-no">400</span><span id="line-400">      }</span>
+<span class="source-line-no">401</span><span id="line-401"></span>
+<span class="source-line-no">402</span><span id="line-402">      @Override /* Bean */</span>
+<span class="source-line-no">403</span><span id="line-403">      public String excludeProperties() {</span>
+<span class="source-line-no">404</span><span id="line-404">         return excludeProperties;</span>
+<span class="source-line-no">405</span><span id="line-405">      }</span>
+<span class="source-line-no">406</span><span id="line-406"></span>
+<span class="source-line-no">407</span><span id="line-407">      @Override /* Bean */</span>
+<span class="source-line-no">408</span><span id="line-408">      public boolean findFluentSetters() {</span>
+<span class="source-line-no">409</span><span id="line-409">         return findFluentSetters;</span>
+<span class="source-line-no">410</span><span id="line-410">      }</span>
+<span class="source-line-no">411</span><span id="line-411"></span>
+<span class="source-line-no">412</span><span id="line-412">      @Override /* Bean */</span>
+<span class="source-line-no">413</span><span id="line-413">      public Class&lt;?&gt; implClass() {</span>
+<span class="source-line-no">414</span><span id="line-414">         return implClass;</span>
+<span class="source-line-no">415</span><span id="line-415">      }</span>
+<span class="source-line-no">416</span><span id="line-416"></span>
+<span class="source-line-no">417</span><span id="line-417">      @Override /* Bean */</span>
+<span class="source-line-no">418</span><span id="line-418">      public Class&lt;? extends BeanInterceptor&lt;?&gt;&gt; interceptor() {</span>
+<span class="source-line-no">419</span><span id="line-419">         return interceptor;</span>
+<span class="source-line-no">420</span><span id="line-420">      }</span>
+<span class="source-line-no">421</span><span id="line-421"></span>
+<span class="source-line-no">422</span><span id="line-422">      @Override /* Bean */</span>
+<span class="source-line-no">423</span><span id="line-423">      public Class&lt;?&gt; interfaceClass() {</span>
+<span class="source-line-no">424</span><span id="line-424">         return interfaceClass;</span>
+<span class="source-line-no">425</span><span id="line-425">      }</span>
+<span class="source-line-no">426</span><span id="line-426"></span>
+<span class="source-line-no">427</span><span id="line-427">      @Override /* Bean */</span>
+<span class="source-line-no">428</span><span id="line-428">      public String p() {</span>
+<span class="source-line-no">429</span><span id="line-429">         return p;</span>
+<span class="source-line-no">430</span><span id="line-430">      }</span>
+<span class="source-line-no">431</span><span id="line-431"></span>
+<span class="source-line-no">432</span><span id="line-432">      @Override /* Bean */</span>
+<span class="source-line-no">433</span><span id="line-433">      public String properties() {</span>
+<span class="source-line-no">434</span><span id="line-434">         return properties;</span>
+<span class="source-line-no">435</span><span id="line-435">      }</span>
+<span class="source-line-no">436</span><span id="line-436"></span>
+<span class="source-line-no">437</span><span id="line-437">      @Override /* Bean */</span>
+<span class="source-line-no">438</span><span id="line-438">      public Class&lt;? extends PropertyNamer&gt; propertyNamer() {</span>
+<span class="source-line-no">439</span><span id="line-439">         return propertyNamer;</span>
+<span class="source-line-no">440</span><span id="line-440">      }</span>
+<span class="source-line-no">441</span><span id="line-441"></span>
+<span class="source-line-no">442</span><span id="line-442">      @Override /* Bean */</span>
+<span class="source-line-no">443</span><span id="line-443">      public String readOnlyProperties() {</span>
+<span class="source-line-no">444</span><span id="line-444">         return readOnlyProperties;</span>
+<span class="source-line-no">445</span><span id="line-445">      }</span>
+<span class="source-line-no">446</span><span id="line-446"></span>
+<span class="source-line-no">447</span><span id="line-447">      @Override /* Bean */</span>
+<span class="source-line-no">448</span><span id="line-448">      public String ro() {</span>
+<span class="source-line-no">449</span><span id="line-449">         return ro;</span>
+<span class="source-line-no">450</span><span id="line-450">      }</span>
+<span class="source-line-no">451</span><span id="line-451"></span>
+<span class="source-line-no">452</span><span id="line-452">      @Override /* Bean */</span>
+<span class="source-line-no">453</span><span id="line-453">      public boolean sort() {</span>
+<span class="source-line-no">454</span><span id="line-454">         return sort;</span>
+<span class="source-line-no">455</span><span id="line-455">      }</span>
+<span class="source-line-no">456</span><span id="line-456"></span>
+<span class="source-line-no">457</span><span id="line-457">      @Override /* Bean */</span>
+<span class="source-line-no">458</span><span id="line-458">      public Class&lt;?&gt; stopClass() {</span>
+<span class="source-line-no">459</span><span id="line-459">         return stopClass;</span>
+<span class="source-line-no">460</span><span id="line-460">      }</span>
+<span class="source-line-no">461</span><span id="line-461"></span>
+<span class="source-line-no">462</span><span id="line-462">      @Override /* Bean */</span>
+<span class="source-line-no">463</span><span id="line-463">      public String typeName() {</span>
+<span class="source-line-no">464</span><span id="line-464">         return typeName;</span>
+<span class="source-line-no">465</span><span id="line-465">      }</span>
+<span class="source-line-no">466</span><span id="line-466"></span>
+<span class="source-line-no">467</span><span id="line-467">      @Override /* Bean */</span>
+<span class="source-line-no">468</span><span id="line-468">      public String typePropertyName() {</span>
+<span class="source-line-no">469</span><span id="line-469">         return typePropertyName;</span>
+<span class="source-line-no">470</span><span id="line-470">      }</span>
+<span class="source-line-no">471</span><span id="line-471"></span>
+<span class="source-line-no">472</span><span id="line-472">      @Override /* Bean */</span>
+<span class="source-line-no">473</span><span id="line-473">      public String writeOnlyProperties() {</span>
+<span class="source-line-no">474</span><span id="line-474">         return writeOnlyProperties;</span>
+<span class="source-line-no">475</span><span id="line-475">      }</span>
+<span class="source-line-no">476</span><span id="line-476"></span>
+<span class="source-line-no">477</span><span id="line-477">      @Override /* Bean */</span>
+<span class="source-line-no">478</span><span id="line-478">      public String wo() {</span>
+<span class="source-line-no">479</span><span id="line-479">         return wo;</span>
+<span class="source-line-no">480</span><span id="line-480">      }</span>
+<span class="source-line-no">481</span><span id="line-481"></span>
+<span class="source-line-no">482</span><span id="line-482">      @Override /* Bean */</span>
+<span class="source-line-no">483</span><span id="line-483">      public String xp() {</span>
+<span class="source-line-no">484</span><span id="line-484">         return xp;</span>
+<span class="source-line-no">485</span><span id="line-485">      }</span>
+<span class="source-line-no">486</span><span id="line-486">   }</span>
+<span class="source-line-no">487</span><span id="line-487"></span>
+<span class="source-line-no">488</span><span id="line-488">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">489</span><span id="line-489">   // Appliers</span>
+<span class="source-line-no">490</span><span id="line-490">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">491</span><span id="line-491"></span>
-<span class="source-line-no">492</span><span id="line-492">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">493</span><span id="line-493">   // Appliers</span>
-<span class="source-line-no">494</span><span id="line-494">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">495</span><span id="line-495"></span>
-<span class="source-line-no">496</span><span id="line-496">   /**</span>
-<span class="source-line-no">497</span><span id="line-497">    * Applies targeted {@link Bean} annotations to a {@link org.apache.juneau.BeanContext.Builder}.</span>
-<span class="source-line-no">498</span><span id="line-498">    */</span>
-<span class="source-line-no">499</span><span id="line-499">   public static class Applier extends AnnotationApplier&lt;Bean,BeanContext.Builder&gt; {</span>
-<span class="source-line-no">500</span><span id="line-500"></span>
-<span class="source-line-no">501</span><span id="line-501">      /**</span>
-<span class="source-line-no">502</span><span id="line-502">       * Constructor.</span>
-<span class="source-line-no">503</span><span id="line-503">       *</span>
-<span class="source-line-no">504</span><span id="line-504">       * @param vr The resolver for resolving values in annotations.</span>
-<span class="source-line-no">505</span><span id="line-505">       */</span>
-<span class="source-line-no">506</span><span id="line-506">      public Applier(VarResolverSession vr) {</span>
-<span class="source-line-no">507</span><span id="line-507">         super(Bean.class, BeanContext.Builder.class, vr);</span>
-<span class="source-line-no">508</span><span id="line-508">      }</span>
-<span class="source-line-no">509</span><span id="line-509"></span>
-<span class="source-line-no">510</span><span id="line-510">      @Override</span>
-<span class="source-line-no">511</span><span id="line-511">      public void apply(AnnotationInfo&lt;Bean&gt; ai, BeanContext.Builder b) {</span>
-<span class="source-line-no">512</span><span id="line-512">         Bean a = ai.inner();</span>
-<span class="source-line-no">513</span><span id="line-513">         if (isEmptyArray(a.on(), a.onClass()))</span>
-<span class="source-line-no">514</span><span id="line-514">            return;</span>
-<span class="source-line-no">515</span><span id="line-515">         b.annotations(copy(a, vr()));</span>
-<span class="source-line-no">516</span><span id="line-516">      }</span>
-<span class="source-line-no">517</span><span id="line-517">   }</span>
+<span class="source-line-no">492</span><span id="line-492">   /**</span>
+<span class="source-line-no">493</span><span id="line-493">    * Applies targeted {@link Bean} annotations to a {@link org.apache.juneau.BeanContext.Builder}.</span>
+<span class="source-line-no">494</span><span id="line-494">    */</span>
+<span class="source-line-no">495</span><span id="line-495">   public static class Applier extends AnnotationApplier&lt;Bean,BeanContext.Builder&gt; {</span>
+<span class="source-line-no">496</span><span id="line-496"></span>
+<span class="source-line-no">497</span><span id="line-497">      /**</span>
+<span class="source-line-no">498</span><span id="line-498">       * Constructor.</span>
+<span class="source-line-no">499</span><span id="line-499">       *</span>
+<span class="source-line-no">500</span><span id="line-500">       * @param vr The resolver for resolving values in annotations.</span>
+<span class="source-line-no">501</span><span id="line-501">       */</span>
+<span class="source-line-no">502</span><span id="line-502">      public Applier(VarResolverSession vr) {</span>
+<span class="source-line-no">503</span><span id="line-503">         super(Bean.class, BeanContext.Builder.class, vr);</span>
+<span class="source-line-no">504</span><span id="line-504">      }</span>
+<span class="source-line-no">505</span><span id="line-505"></span>
+<span class="source-line-no">506</span><span id="line-506">      @Override</span>
+<span class="source-line-no">507</span><span id="line-507">      public void apply(AnnotationInfo&lt;Bean&gt; ai, BeanContext.Builder b) {</span>
+<span class="source-line-no">508</span><span id="line-508">         Bean a = ai.inner();</span>
+<span class="source-line-no">509</span><span id="line-509">         if (isEmptyArray(a.on(), a.onClass()))</span>
+<span class="source-line-no">510</span><span id="line-510">            return;</span>
+<span class="source-line-no">511</span><span id="line-511">         b.annotations(copy(a, vr()));</span>
+<span class="source-line-no">512</span><span id="line-512">      }</span>
+<span class="source-line-no">513</span><span id="line-513">   }</span>
+<span class="source-line-no">514</span><span id="line-514"></span>
+<span class="source-line-no">515</span><span id="line-515">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">516</span><span id="line-516">   // Other</span>
+<span class="source-line-no">517</span><span id="line-517">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">518</span><span id="line-518"></span>
-<span class="source-line-no">519</span><span id="line-519">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">520</span><span id="line-520">   // Other</span>
-<span class="source-line-no">521</span><span id="line-521">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">522</span><span id="line-522"></span>
-<span class="source-line-no">523</span><span id="line-523">   /**</span>
-<span class="source-line-no">524</span><span id="line-524">    * A collection of {@link Bean @Bean annotations}.</span>
-<span class="source-line-no">525</span><span id="line-525">    */</span>
-<span class="source-line-no">526</span><span id="line-526">   @Documented</span>
-<span class="source-line-no">527</span><span id="line-527">   @Target({METHOD,TYPE})</span>
-<span class="source-line-no">528</span><span id="line-528">   @Retention(RUNTIME)</span>
-<span class="source-line-no">529</span><span id="line-529">   @Inherited</span>
-<span class="source-line-no">530</span><span id="line-530">   public static @interface Array {</span>
-<span class="source-line-no">531</span><span id="line-531"></span>
-<span class="source-line-no">532</span><span id="line-532">      /**</span>
-<span class="source-line-no">533</span><span id="line-533">       * The child annotations.</span>
-<span class="source-line-no">534</span><span id="line-534">       *</span>
-<span class="source-line-no">535</span><span id="line-535">       * @return The annotation value.</span>
-<span class="source-line-no">536</span><span id="line-536">       */</span>
-<span class="source-line-no">537</span><span id="line-537">      Bean[] value();</span>
-<span class="source-line-no">538</span><span id="line-538">   }</span>
-<span class="source-line-no">539</span><span id="line-539">}</span>
+<span class="source-line-no">519</span><span id="line-519">   /**</span>
+<span class="source-line-no">520</span><span id="line-520">    * A collection of {@link Bean @Bean annotations}.</span>
+<span class="source-line-no">521</span><span id="line-521">    */</span>
+<span class="source-line-no">522</span><span id="line-522">   @Documented</span>
+<span class="source-line-no">523</span><span id="line-523">   @Target({METHOD,TYPE})</span>
+<span class="source-line-no">524</span><span id="line-524">   @Retention(RUNTIME)</span>
+<span class="source-line-no">525</span><span id="line-525">   @Inherited</span>
+<span class="source-line-no">526</span><span id="line-526">   public static @interface Array {</span>
+<span class="source-line-no">527</span><span id="line-527"></span>
+<span class="source-line-no">528</span><span id="line-528">      /**</span>
+<span class="source-line-no">529</span><span id="line-529">       * The child annotations.</span>
+<span class="source-line-no">530</span><span id="line-530">       *</span>
+<span class="source-line-no">531</span><span id="line-531">       * @return The annotation value.</span>
+<span class="source-line-no">532</span><span id="line-532">       */</span>
+<span class="source-line-no">533</span><span id="line-533">      Bean[] value();</span>
+<span class="source-line-no">534</span><span id="line-534">   }</span>
+<span class="source-line-no">535</span><span id="line-535">}</span>
 
 
 

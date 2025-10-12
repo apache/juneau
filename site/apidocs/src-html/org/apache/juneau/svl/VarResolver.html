@@ -125,258 +125,252 @@
 <span class="source-line-no">112</span><span id="line-112">   /**</span>
 <span class="source-line-no">113</span><span id="line-113">    * Builder class.</span>
 <span class="source-line-no">114</span><span id="line-114">    */</span>
-<span class="source-line-no">115</span><span id="line-115">   @FluentSetters</span>
-<span class="source-line-no">116</span><span id="line-116">   public static class Builder extends BeanBuilder&lt;VarResolver&gt; {</span>
-<span class="source-line-no">117</span><span id="line-117"></span>
-<span class="source-line-no">118</span><span id="line-118">      final VarList vars;</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">      /**</span>
-<span class="source-line-no">121</span><span id="line-121">       * Constructor.</span>
-<span class="source-line-no">122</span><span id="line-122">       */</span>
-<span class="source-line-no">123</span><span id="line-123">      protected Builder() {</span>
-<span class="source-line-no">124</span><span id="line-124">         super(VarResolver.class, BeanStore.create().build());</span>
-<span class="source-line-no">125</span><span id="line-125">         vars = VarList.create();</span>
-<span class="source-line-no">126</span><span id="line-126">      }</span>
-<span class="source-line-no">127</span><span id="line-127"></span>
-<span class="source-line-no">128</span><span id="line-128">      /**</span>
-<span class="source-line-no">129</span><span id="line-129">       * Copy constructor.</span>
-<span class="source-line-no">130</span><span id="line-130">       *</span>
-<span class="source-line-no">131</span><span id="line-131">       * @param copyFrom The bean to copy from.</span>
-<span class="source-line-no">132</span><span id="line-132">       */</span>
-<span class="source-line-no">133</span><span id="line-133">      protected Builder(VarResolver copyFrom) {</span>
-<span class="source-line-no">134</span><span id="line-134">         super(copyFrom.getClass(), copyFrom.beanStore);</span>
-<span class="source-line-no">135</span><span id="line-135">         vars = VarList.of(copyFrom.vars);</span>
-<span class="source-line-no">136</span><span id="line-136">      }</span>
-<span class="source-line-no">137</span><span id="line-137"></span>
-<span class="source-line-no">138</span><span id="line-138">      @Override /* BeanBuilder */</span>
-<span class="source-line-no">139</span><span id="line-139">      protected VarResolver buildDefault() {</span>
-<span class="source-line-no">140</span><span id="line-140">         return new VarResolver(this);</span>
-<span class="source-line-no">141</span><span id="line-141">      }</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">      //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">144</span><span id="line-144">      // Properties</span>
-<span class="source-line-no">145</span><span id="line-145">      //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">146</span><span id="line-146"></span>
-<span class="source-line-no">147</span><span id="line-147">      /**</span>
-<span class="source-line-no">148</span><span id="line-148">       * Register new variables with this resolver.</span>
-<span class="source-line-no">149</span><span id="line-149">       *</span>
-<span class="source-line-no">150</span><span id="line-150">       * @param values</span>
-<span class="source-line-no">151</span><span id="line-151">       *    The variable resolver classes.</span>
-<span class="source-line-no">152</span><span id="line-152">       *    These classes must subclass from {@link Var} and have no-arg constructors.</span>
-<span class="source-line-no">153</span><span id="line-153">       * @return This object .</span>
-<span class="source-line-no">154</span><span id="line-154">       */</span>
-<span class="source-line-no">155</span><span id="line-155">      @SafeVarargs</span>
-<span class="source-line-no">156</span><span id="line-156">      public final Builder vars(Class&lt;? extends Var&gt;...values) {</span>
-<span class="source-line-no">157</span><span id="line-157">         vars.append(values);</span>
-<span class="source-line-no">158</span><span id="line-158">         return this;</span>
-<span class="source-line-no">159</span><span id="line-159">      }</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">      /**</span>
-<span class="source-line-no">162</span><span id="line-162">       * Register new variables with this resolver.</span>
-<span class="source-line-no">163</span><span id="line-163">       *</span>
-<span class="source-line-no">164</span><span id="line-164">       * @param values</span>
-<span class="source-line-no">165</span><span id="line-165">       *    The variable resolver classes.</span>
-<span class="source-line-no">166</span><span id="line-166">       *    These classes must subclass from {@link Var} and have no-arg constructors.</span>
-<span class="source-line-no">167</span><span id="line-167">       * @return This object .</span>
-<span class="source-line-no">168</span><span id="line-168">       */</span>
-<span class="source-line-no">169</span><span id="line-169">      public Builder vars(Var...values) {</span>
-<span class="source-line-no">170</span><span id="line-170">         vars.append(values);</span>
-<span class="source-line-no">171</span><span id="line-171">         return this;</span>
-<span class="source-line-no">172</span><span id="line-172">      }</span>
-<span class="source-line-no">173</span><span id="line-173"></span>
-<span class="source-line-no">174</span><span id="line-174">      /**</span>
-<span class="source-line-no">175</span><span id="line-175">       * Register new variables with this resolver.</span>
-<span class="source-line-no">176</span><span id="line-176">       *</span>
-<span class="source-line-no">177</span><span id="line-177">       * @param values</span>
-<span class="source-line-no">178</span><span id="line-178">       *    The variable resolver classes.</span>
-<span class="source-line-no">179</span><span id="line-179">       *    These classes must subclass from {@link Var} and have no-arg constructors.</span>
-<span class="source-line-no">180</span><span id="line-180">       * @return This object .</span>
-<span class="source-line-no">181</span><span id="line-181">       */</span>
-<span class="source-line-no">182</span><span id="line-182">      public Builder vars(VarList values) {</span>
-<span class="source-line-no">183</span><span id="line-183">         vars.append(values);</span>
-<span class="source-line-no">184</span><span id="line-184">         return this;</span>
-<span class="source-line-no">185</span><span id="line-185">      }</span>
-<span class="source-line-no">186</span><span id="line-186"></span>
-<span class="source-line-no">187</span><span id="line-187">      /**</span>
-<span class="source-line-no">188</span><span id="line-188">       * Adds the default variables to this builder.</span>
-<span class="source-line-no">189</span><span id="line-189">       *</span>
-<span class="source-line-no">190</span><span id="line-190">       * &lt;p&gt;</span>
-<span class="source-line-no">191</span><span id="line-191">       * The default variables are:</span>
-<span class="source-line-no">192</span><span id="line-192">       * &lt;ul&gt;</span>
-<span class="source-line-no">193</span><span id="line-193">       *    &lt;li&gt;{@link SystemPropertiesVar}</span>
-<span class="source-line-no">194</span><span id="line-194">       *    &lt;li&gt;{@link EnvVariablesVar}</span>
-<span class="source-line-no">195</span><span id="line-195">       *    &lt;li&gt;{@link ArgsVar}</span>
-<span class="source-line-no">196</span><span id="line-196">       *    &lt;li&gt;{@link ManifestFileVar}</span>
-<span class="source-line-no">197</span><span id="line-197">       *    &lt;li&gt;{@link SwitchVar}</span>
-<span class="source-line-no">198</span><span id="line-198">       *    &lt;li&gt;{@link IfVar}</span>
-<span class="source-line-no">199</span><span id="line-199">       *    &lt;li&gt;{@link CoalesceVar}</span>
-<span class="source-line-no">200</span><span id="line-200">       *    &lt;li&gt;{@link PatternMatchVar}</span>
-<span class="source-line-no">201</span><span id="line-201">       *    &lt;li&gt;{@link PatternReplaceVar}</span>
-<span class="source-line-no">202</span><span id="line-202">       *    &lt;li&gt;{@link PatternExtractVar}</span>
-<span class="source-line-no">203</span><span id="line-203">       *    &lt;li&gt;{@link UpperCaseVar}</span>
-<span class="source-line-no">204</span><span id="line-204">       *    &lt;li&gt;{@link LowerCaseVar}</span>
-<span class="source-line-no">205</span><span id="line-205">       *    &lt;li&gt;{@link NotEmptyVar}</span>
-<span class="source-line-no">206</span><span id="line-206">       *    &lt;li&gt;{@link LenVar}</span>
-<span class="source-line-no">207</span><span id="line-207">       *    &lt;li&gt;{@link SubstringVar}</span>
-<span class="source-line-no">208</span><span id="line-208">       * &lt;/ul&gt;</span>
-<span class="source-line-no">209</span><span id="line-209">       *</span>
-<span class="source-line-no">210</span><span id="line-210">       * @return This object .</span>
-<span class="source-line-no">211</span><span id="line-211">       */</span>
-<span class="source-line-no">212</span><span id="line-212">      public Builder defaultVars() {</span>
-<span class="source-line-no">213</span><span id="line-213">         vars.addDefault();</span>
-<span class="source-line-no">214</span><span id="line-214">         return this;</span>
-<span class="source-line-no">215</span><span id="line-215">      }</span>
-<span class="source-line-no">216</span><span id="line-216"></span>
-<span class="source-line-no">217</span><span id="line-217">      /**</span>
-<span class="source-line-no">218</span><span id="line-218">       * Adds a bean to the bean store in this session.</span>
-<span class="source-line-no">219</span><span id="line-219">       *</span>
-<span class="source-line-no">220</span><span id="line-220">       * @param &lt;T&gt; The bean type.</span>
-<span class="source-line-no">221</span><span id="line-221">       * @param c The bean type.</span>
-<span class="source-line-no">222</span><span id="line-222">       * @param value The bean.</span>
-<span class="source-line-no">223</span><span id="line-223">       * @return This object .</span>
-<span class="source-line-no">224</span><span id="line-224">       */</span>
-<span class="source-line-no">225</span><span id="line-225">      public &lt;T&gt; Builder bean(Class&lt;T&gt; c, T value) {</span>
-<span class="source-line-no">226</span><span id="line-226">         beanStore().addBean(c, value);</span>
-<span class="source-line-no">227</span><span id="line-227">         return this;</span>
-<span class="source-line-no">228</span><span id="line-228">      }</span>
-<span class="source-line-no">229</span><span id="line-229"></span>
-<span class="source-line-no">230</span><span id="line-230">      // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">231</span><span id="line-231"></span>
-<span class="source-line-no">232</span><span id="line-232">      @Override /* GENERATED - org.apache.juneau.BeanBuilder */</span>
-<span class="source-line-no">233</span><span id="line-233">      public Builder impl(Object value) {</span>
-<span class="source-line-no">234</span><span id="line-234">         super.impl(value);</span>
-<span class="source-line-no">235</span><span id="line-235">         return this;</span>
-<span class="source-line-no">236</span><span id="line-236">      }</span>
-<span class="source-line-no">237</span><span id="line-237"></span>
-<span class="source-line-no">238</span><span id="line-238">      @Override /* GENERATED - org.apache.juneau.BeanBuilder */</span>
-<span class="source-line-no">239</span><span id="line-239">      public Builder type(Class&lt;?&gt; value) {</span>
-<span class="source-line-no">240</span><span id="line-240">         super.type(value);</span>
-<span class="source-line-no">241</span><span id="line-241">         return this;</span>
-<span class="source-line-no">242</span><span id="line-242">      }</span>
-<span class="source-line-no">243</span><span id="line-243"></span>
-<span class="source-line-no">244</span><span id="line-244">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">245</span><span id="line-245">   }</span>
-<span class="source-line-no">246</span><span id="line-246"></span>
-<span class="source-line-no">247</span><span id="line-247">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">248</span><span id="line-248">   // Instance</span>
-<span class="source-line-no">249</span><span id="line-249">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">250</span><span id="line-250"></span>
-<span class="source-line-no">251</span><span id="line-251">   final Var[] vars;</span>
-<span class="source-line-no">252</span><span id="line-252">   private final Map&lt;String,Var&gt; varMap;</span>
-<span class="source-line-no">253</span><span id="line-253">   final BeanStore beanStore;</span>
-<span class="source-line-no">254</span><span id="line-254"></span>
-<span class="source-line-no">255</span><span id="line-255">   /**</span>
-<span class="source-line-no">256</span><span id="line-256">    * Constructor.</span>
-<span class="source-line-no">257</span><span id="line-257">    *</span>
-<span class="source-line-no">258</span><span id="line-258">    * @param builder The builder for this object.</span>
-<span class="source-line-no">259</span><span id="line-259">    */</span>
-<span class="source-line-no">260</span><span id="line-260">   protected VarResolver(Builder builder) {</span>
-<span class="source-line-no">261</span><span id="line-261">      this.vars = builder.vars.stream().map(x -&gt; toVar(builder.beanStore(),x)).toArray(Var[]::new);</span>
-<span class="source-line-no">262</span><span id="line-262"></span>
-<span class="source-line-no">263</span><span id="line-263">      Map&lt;String,Var&gt; m = new ConcurrentSkipListMap&lt;&gt;();</span>
-<span class="source-line-no">264</span><span id="line-264">      for (Var v : vars)</span>
-<span class="source-line-no">265</span><span id="line-265">         m.put(v.getName(), v);</span>
-<span class="source-line-no">266</span><span id="line-266"></span>
-<span class="source-line-no">267</span><span id="line-267">      this.varMap = u(m);</span>
-<span class="source-line-no">268</span><span id="line-268">      this.beanStore = BeanStore.of(builder.beanStore());</span>
+<span class="source-line-no">115</span><span id="line-115">   public static class Builder extends BeanBuilder&lt;VarResolver&gt; {</span>
+<span class="source-line-no">116</span><span id="line-116"></span>
+<span class="source-line-no">117</span><span id="line-117">      final VarList vars;</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">      /**</span>
+<span class="source-line-no">120</span><span id="line-120">       * Constructor.</span>
+<span class="source-line-no">121</span><span id="line-121">       */</span>
+<span class="source-line-no">122</span><span id="line-122">      protected Builder() {</span>
+<span class="source-line-no">123</span><span id="line-123">         super(VarResolver.class, BeanStore.create().build());</span>
+<span class="source-line-no">124</span><span id="line-124">         vars = VarList.create();</span>
+<span class="source-line-no">125</span><span id="line-125">      }</span>
+<span class="source-line-no">126</span><span id="line-126"></span>
+<span class="source-line-no">127</span><span id="line-127">      /**</span>
+<span class="source-line-no">128</span><span id="line-128">       * Copy constructor.</span>
+<span class="source-line-no">129</span><span id="line-129">       *</span>
+<span class="source-line-no">130</span><span id="line-130">       * @param copyFrom The bean to copy from.</span>
+<span class="source-line-no">131</span><span id="line-131">       */</span>
+<span class="source-line-no">132</span><span id="line-132">      protected Builder(VarResolver copyFrom) {</span>
+<span class="source-line-no">133</span><span id="line-133">         super(copyFrom.getClass(), copyFrom.beanStore);</span>
+<span class="source-line-no">134</span><span id="line-134">         vars = VarList.of(copyFrom.vars);</span>
+<span class="source-line-no">135</span><span id="line-135">      }</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">      @Override /* BeanBuilder */</span>
+<span class="source-line-no">138</span><span id="line-138">      protected VarResolver buildDefault() {</span>
+<span class="source-line-no">139</span><span id="line-139">         return new VarResolver(this);</span>
+<span class="source-line-no">140</span><span id="line-140">      }</span>
+<span class="source-line-no">141</span><span id="line-141"></span>
+<span class="source-line-no">142</span><span id="line-142">      //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">143</span><span id="line-143">      // Properties</span>
+<span class="source-line-no">144</span><span id="line-144">      //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">145</span><span id="line-145"></span>
+<span class="source-line-no">146</span><span id="line-146">      /**</span>
+<span class="source-line-no">147</span><span id="line-147">       * Register new variables with this resolver.</span>
+<span class="source-line-no">148</span><span id="line-148">       *</span>
+<span class="source-line-no">149</span><span id="line-149">       * @param values</span>
+<span class="source-line-no">150</span><span id="line-150">       *    The variable resolver classes.</span>
+<span class="source-line-no">151</span><span id="line-151">       *    These classes must subclass from {@link Var} and have no-arg constructors.</span>
+<span class="source-line-no">152</span><span id="line-152">       * @return This object .</span>
+<span class="source-line-no">153</span><span id="line-153">       */</span>
+<span class="source-line-no">154</span><span id="line-154">      @SafeVarargs</span>
+<span class="source-line-no">155</span><span id="line-155">      public final Builder vars(Class&lt;? extends Var&gt;...values) {</span>
+<span class="source-line-no">156</span><span id="line-156">         vars.append(values);</span>
+<span class="source-line-no">157</span><span id="line-157">         return this;</span>
+<span class="source-line-no">158</span><span id="line-158">      }</span>
+<span class="source-line-no">159</span><span id="line-159"></span>
+<span class="source-line-no">160</span><span id="line-160">      /**</span>
+<span class="source-line-no">161</span><span id="line-161">       * Register new variables with this resolver.</span>
+<span class="source-line-no">162</span><span id="line-162">       *</span>
+<span class="source-line-no">163</span><span id="line-163">       * @param values</span>
+<span class="source-line-no">164</span><span id="line-164">       *    The variable resolver classes.</span>
+<span class="source-line-no">165</span><span id="line-165">       *    These classes must subclass from {@link Var} and have no-arg constructors.</span>
+<span class="source-line-no">166</span><span id="line-166">       * @return This object .</span>
+<span class="source-line-no">167</span><span id="line-167">       */</span>
+<span class="source-line-no">168</span><span id="line-168">      public Builder vars(Var...values) {</span>
+<span class="source-line-no">169</span><span id="line-169">         vars.append(values);</span>
+<span class="source-line-no">170</span><span id="line-170">         return this;</span>
+<span class="source-line-no">171</span><span id="line-171">      }</span>
+<span class="source-line-no">172</span><span id="line-172"></span>
+<span class="source-line-no">173</span><span id="line-173">      /**</span>
+<span class="source-line-no">174</span><span id="line-174">       * Register new variables with this resolver.</span>
+<span class="source-line-no">175</span><span id="line-175">       *</span>
+<span class="source-line-no">176</span><span id="line-176">       * @param values</span>
+<span class="source-line-no">177</span><span id="line-177">       *    The variable resolver classes.</span>
+<span class="source-line-no">178</span><span id="line-178">       *    These classes must subclass from {@link Var} and have no-arg constructors.</span>
+<span class="source-line-no">179</span><span id="line-179">       * @return This object .</span>
+<span class="source-line-no">180</span><span id="line-180">       */</span>
+<span class="source-line-no">181</span><span id="line-181">      public Builder vars(VarList values) {</span>
+<span class="source-line-no">182</span><span id="line-182">         vars.append(values);</span>
+<span class="source-line-no">183</span><span id="line-183">         return this;</span>
+<span class="source-line-no">184</span><span id="line-184">      }</span>
+<span class="source-line-no">185</span><span id="line-185"></span>
+<span class="source-line-no">186</span><span id="line-186">      /**</span>
+<span class="source-line-no">187</span><span id="line-187">       * Adds the default variables to this builder.</span>
+<span class="source-line-no">188</span><span id="line-188">       *</span>
+<span class="source-line-no">189</span><span id="line-189">       * &lt;p&gt;</span>
+<span class="source-line-no">190</span><span id="line-190">       * The default variables are:</span>
+<span class="source-line-no">191</span><span id="line-191">       * &lt;ul&gt;</span>
+<span class="source-line-no">192</span><span id="line-192">       *    &lt;li&gt;{@link SystemPropertiesVar}</span>
+<span class="source-line-no">193</span><span id="line-193">       *    &lt;li&gt;{@link EnvVariablesVar}</span>
+<span class="source-line-no">194</span><span id="line-194">       *    &lt;li&gt;{@link ArgsVar}</span>
+<span class="source-line-no">195</span><span id="line-195">       *    &lt;li&gt;{@link ManifestFileVar}</span>
+<span class="source-line-no">196</span><span id="line-196">       *    &lt;li&gt;{@link SwitchVar}</span>
+<span class="source-line-no">197</span><span id="line-197">       *    &lt;li&gt;{@link IfVar}</span>
+<span class="source-line-no">198</span><span id="line-198">       *    &lt;li&gt;{@link CoalesceVar}</span>
+<span class="source-line-no">199</span><span id="line-199">       *    &lt;li&gt;{@link PatternMatchVar}</span>
+<span class="source-line-no">200</span><span id="line-200">       *    &lt;li&gt;{@link PatternReplaceVar}</span>
+<span class="source-line-no">201</span><span id="line-201">       *    &lt;li&gt;{@link PatternExtractVar}</span>
+<span class="source-line-no">202</span><span id="line-202">       *    &lt;li&gt;{@link UpperCaseVar}</span>
+<span class="source-line-no">203</span><span id="line-203">       *    &lt;li&gt;{@link LowerCaseVar}</span>
+<span class="source-line-no">204</span><span id="line-204">       *    &lt;li&gt;{@link NotEmptyVar}</span>
+<span class="source-line-no">205</span><span id="line-205">       *    &lt;li&gt;{@link LenVar}</span>
+<span class="source-line-no">206</span><span id="line-206">       *    &lt;li&gt;{@link SubstringVar}</span>
+<span class="source-line-no">207</span><span id="line-207">       * &lt;/ul&gt;</span>
+<span class="source-line-no">208</span><span id="line-208">       *</span>
+<span class="source-line-no">209</span><span id="line-209">       * @return This object .</span>
+<span class="source-line-no">210</span><span id="line-210">       */</span>
+<span class="source-line-no">211</span><span id="line-211">      public Builder defaultVars() {</span>
+<span class="source-line-no">212</span><span id="line-212">         vars.addDefault();</span>
+<span class="source-line-no">213</span><span id="line-213">         return this;</span>
+<span class="source-line-no">214</span><span id="line-214">      }</span>
+<span class="source-line-no">215</span><span id="line-215"></span>
+<span class="source-line-no">216</span><span id="line-216">      /**</span>
+<span class="source-line-no">217</span><span id="line-217">       * Adds a bean to the bean store in this session.</span>
+<span class="source-line-no">218</span><span id="line-218">       *</span>
+<span class="source-line-no">219</span><span id="line-219">       * @param &lt;T&gt; The bean type.</span>
+<span class="source-line-no">220</span><span id="line-220">       * @param c The bean type.</span>
+<span class="source-line-no">221</span><span id="line-221">       * @param value The bean.</span>
+<span class="source-line-no">222</span><span id="line-222">       * @return This object .</span>
+<span class="source-line-no">223</span><span id="line-223">       */</span>
+<span class="source-line-no">224</span><span id="line-224">      public &lt;T&gt; Builder bean(Class&lt;T&gt; c, T value) {</span>
+<span class="source-line-no">225</span><span id="line-225">         beanStore().addBean(c, value);</span>
+<span class="source-line-no">226</span><span id="line-226">         return this;</span>
+<span class="source-line-no">227</span><span id="line-227">      }</span>
+<span class="source-line-no">228</span><span id="line-228">      @Override /* Overridden from BeanBuilder */</span>
+<span class="source-line-no">229</span><span id="line-229">      public Builder impl(Object value) {</span>
+<span class="source-line-no">230</span><span id="line-230">         super.impl(value);</span>
+<span class="source-line-no">231</span><span id="line-231">         return this;</span>
+<span class="source-line-no">232</span><span id="line-232">      }</span>
+<span class="source-line-no">233</span><span id="line-233"></span>
+<span class="source-line-no">234</span><span id="line-234">      @Override /* Overridden from BeanBuilder */</span>
+<span class="source-line-no">235</span><span id="line-235">      public Builder type(Class&lt;?&gt; value) {</span>
+<span class="source-line-no">236</span><span id="line-236">         super.type(value);</span>
+<span class="source-line-no">237</span><span id="line-237">         return this;</span>
+<span class="source-line-no">238</span><span id="line-238">      }</span>
+<span class="source-line-no">239</span><span id="line-239">   }</span>
+<span class="source-line-no">240</span><span id="line-240"></span>
+<span class="source-line-no">241</span><span id="line-241">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">242</span><span id="line-242">   // Instance</span>
+<span class="source-line-no">243</span><span id="line-243">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">244</span><span id="line-244"></span>
+<span class="source-line-no">245</span><span id="line-245">   final Var[] vars;</span>
+<span class="source-line-no">246</span><span id="line-246">   private final Map&lt;String,Var&gt; varMap;</span>
+<span class="source-line-no">247</span><span id="line-247">   final BeanStore beanStore;</span>
+<span class="source-line-no">248</span><span id="line-248"></span>
+<span class="source-line-no">249</span><span id="line-249">   /**</span>
+<span class="source-line-no">250</span><span id="line-250">    * Constructor.</span>
+<span class="source-line-no">251</span><span id="line-251">    *</span>
+<span class="source-line-no">252</span><span id="line-252">    * @param builder The builder for this object.</span>
+<span class="source-line-no">253</span><span id="line-253">    */</span>
+<span class="source-line-no">254</span><span id="line-254">   protected VarResolver(Builder builder) {</span>
+<span class="source-line-no">255</span><span id="line-255">      this.vars = builder.vars.stream().map(x -&gt; toVar(builder.beanStore(),x)).toArray(Var[]::new);</span>
+<span class="source-line-no">256</span><span id="line-256"></span>
+<span class="source-line-no">257</span><span id="line-257">      Map&lt;String,Var&gt; m = new ConcurrentSkipListMap&lt;&gt;();</span>
+<span class="source-line-no">258</span><span id="line-258">      for (Var v : vars)</span>
+<span class="source-line-no">259</span><span id="line-259">         m.put(v.getName(), v);</span>
+<span class="source-line-no">260</span><span id="line-260"></span>
+<span class="source-line-no">261</span><span id="line-261">      this.varMap = u(m);</span>
+<span class="source-line-no">262</span><span id="line-262">      this.beanStore = BeanStore.of(builder.beanStore());</span>
+<span class="source-line-no">263</span><span id="line-263">   }</span>
+<span class="source-line-no">264</span><span id="line-264"></span>
+<span class="source-line-no">265</span><span id="line-265">   private static Var toVar(BeanStore bs, Object o) {</span>
+<span class="source-line-no">266</span><span id="line-266">      if (o instanceof Class)</span>
+<span class="source-line-no">267</span><span id="line-267">         return bs.createBean(Var.class).type((Class&lt;?&gt;)o).run();</span>
+<span class="source-line-no">268</span><span id="line-268">      return (Var)o;</span>
 <span class="source-line-no">269</span><span id="line-269">   }</span>
 <span class="source-line-no">270</span><span id="line-270"></span>
-<span class="source-line-no">271</span><span id="line-271">   private static Var toVar(BeanStore bs, Object o) {</span>
-<span class="source-line-no">272</span><span id="line-272">      if (o instanceof Class)</span>
-<span class="source-line-no">273</span><span id="line-273">         return bs.createBean(Var.class).type((Class&lt;?&gt;)o).run();</span>
-<span class="source-line-no">274</span><span id="line-274">      return (Var)o;</span>
-<span class="source-line-no">275</span><span id="line-275">   }</span>
-<span class="source-line-no">276</span><span id="line-276"></span>
-<span class="source-line-no">277</span><span id="line-277">   /**</span>
-<span class="source-line-no">278</span><span id="line-278">    * Returns a new builder object using the settings in this resolver as a base.</span>
-<span class="source-line-no">279</span><span id="line-279">    *</span>
-<span class="source-line-no">280</span><span id="line-280">    * @return A new var resolver builder.</span>
-<span class="source-line-no">281</span><span id="line-281">    */</span>
-<span class="source-line-no">282</span><span id="line-282">   public Builder copy() {</span>
-<span class="source-line-no">283</span><span id="line-283">      return new Builder(this);</span>
-<span class="source-line-no">284</span><span id="line-284">   }</span>
-<span class="source-line-no">285</span><span id="line-285"></span>
-<span class="source-line-no">286</span><span id="line-286">   /**</span>
-<span class="source-line-no">287</span><span id="line-287">    * Returns an unmodifiable map of {@link Var Vars} associated with this context.</span>
-<span class="source-line-no">288</span><span id="line-288">    *</span>
-<span class="source-line-no">289</span><span id="line-289">    * @return A map whose keys are var names (e.g. &lt;js&gt;"S"&lt;/js&gt;) and values are {@link Var} instances.</span>
-<span class="source-line-no">290</span><span id="line-290">    */</span>
-<span class="source-line-no">291</span><span id="line-291">   protected Map&lt;String,Var&gt; getVarMap() {</span>
-<span class="source-line-no">292</span><span id="line-292">      return varMap;</span>
-<span class="source-line-no">293</span><span id="line-293">   }</span>
-<span class="source-line-no">294</span><span id="line-294"></span>
-<span class="source-line-no">295</span><span id="line-295">   /**</span>
-<span class="source-line-no">296</span><span id="line-296">    * Returns an array of variables define in this variable resolver context.</span>
-<span class="source-line-no">297</span><span id="line-297">    *</span>
-<span class="source-line-no">298</span><span id="line-298">    * @return A new array containing the variables in this context.</span>
-<span class="source-line-no">299</span><span id="line-299">    */</span>
-<span class="source-line-no">300</span><span id="line-300">   protected Var[] getVars() {</span>
-<span class="source-line-no">301</span><span id="line-301">      return Arrays.copyOf(vars, vars.length);</span>
-<span class="source-line-no">302</span><span id="line-302">   }</span>
-<span class="source-line-no">303</span><span id="line-303"></span>
-<span class="source-line-no">304</span><span id="line-304">   /**</span>
-<span class="source-line-no">305</span><span id="line-305">    * Adds a bean to this session.</span>
-<span class="source-line-no">306</span><span id="line-306">    *</span>
-<span class="source-line-no">307</span><span id="line-307">    * @param &lt;T&gt; The bean type.</span>
-<span class="source-line-no">308</span><span id="line-308">    * @param c The bean type.</span>
-<span class="source-line-no">309</span><span id="line-309">    * @param value The bean.</span>
-<span class="source-line-no">310</span><span id="line-310">    * @return This object .</span>
-<span class="source-line-no">311</span><span id="line-311">    */</span>
-<span class="source-line-no">312</span><span id="line-312">   public &lt;T&gt; VarResolver addBean(Class&lt;T&gt; c, T value) {</span>
-<span class="source-line-no">313</span><span id="line-313">      beanStore.addBean(c, value);</span>
-<span class="source-line-no">314</span><span id="line-314">      return this;</span>
-<span class="source-line-no">315</span><span id="line-315">   }</span>
-<span class="source-line-no">316</span><span id="line-316"></span>
-<span class="source-line-no">317</span><span id="line-317">   /**</span>
-<span class="source-line-no">318</span><span id="line-318">    * Creates a new resolver session with no session objects.</span>
-<span class="source-line-no">319</span><span id="line-319">    *</span>
-<span class="source-line-no">320</span><span id="line-320">    * @return A new resolver session.</span>
-<span class="source-line-no">321</span><span id="line-321">    */</span>
-<span class="source-line-no">322</span><span id="line-322">   public VarResolverSession createSession() {</span>
-<span class="source-line-no">323</span><span id="line-323">      return new VarResolverSession(this, null);</span>
-<span class="source-line-no">324</span><span id="line-324">   }</span>
-<span class="source-line-no">325</span><span id="line-325"></span>
-<span class="source-line-no">326</span><span id="line-326">   /**</span>
-<span class="source-line-no">327</span><span id="line-327">    * Same as {@link #createSession()} except allows you to specify a bean store for resolving beans.</span>
-<span class="source-line-no">328</span><span id="line-328">    *</span>
-<span class="source-line-no">329</span><span id="line-329">    * @param beanStore The bean store to associate with this session.</span>
-<span class="source-line-no">330</span><span id="line-330">    * @return A new resolver session.</span>
-<span class="source-line-no">331</span><span id="line-331">    */</span>
-<span class="source-line-no">332</span><span id="line-332">   public VarResolverSession createSession(BeanStore beanStore) {</span>
-<span class="source-line-no">333</span><span id="line-333">      return new VarResolverSession(this, beanStore);</span>
-<span class="source-line-no">334</span><span id="line-334">   }</span>
-<span class="source-line-no">335</span><span id="line-335"></span>
-<span class="source-line-no">336</span><span id="line-336">   /**</span>
-<span class="source-line-no">337</span><span id="line-337">    * Resolve variables in the specified string.</span>
-<span class="source-line-no">338</span><span id="line-338">    *</span>
-<span class="source-line-no">339</span><span id="line-339">    * &lt;p&gt;</span>
-<span class="source-line-no">340</span><span id="line-340">    * This is a shortcut for calling &lt;code&gt;createSession(&lt;jk&gt;null&lt;/jk&gt;).resolve(s);&lt;/code&gt;.</span>
-<span class="source-line-no">341</span><span id="line-341">    * &lt;br&gt;This method can only be used if the string doesn't contain variables that rely on the existence of session</span>
-<span class="source-line-no">342</span><span id="line-342">    * variables.</span>
-<span class="source-line-no">343</span><span id="line-343">    *</span>
-<span class="source-line-no">344</span><span id="line-344">    * @param s The input string.</span>
-<span class="source-line-no">345</span><span id="line-345">    * @return The string with variables resolved, or the same string if it doesn't contain any variables to resolve.</span>
-<span class="source-line-no">346</span><span id="line-346">    */</span>
-<span class="source-line-no">347</span><span id="line-347">   public String resolve(String s) {</span>
-<span class="source-line-no">348</span><span id="line-348">      return createSession(null).resolve(s);</span>
-<span class="source-line-no">349</span><span id="line-349">   }</span>
-<span class="source-line-no">350</span><span id="line-350"></span>
-<span class="source-line-no">351</span><span id="line-351">   /**</span>
-<span class="source-line-no">352</span><span id="line-352">    * Resolve variables in the specified string and sends the results to the specified writer.</span>
-<span class="source-line-no">353</span><span id="line-353">    *</span>
-<span class="source-line-no">354</span><span id="line-354">    * &lt;p&gt;</span>
-<span class="source-line-no">355</span><span id="line-355">    * This is a shortcut for calling &lt;code&gt;createSession(&lt;jk&gt;null&lt;/jk&gt;).resolveTo(s, w);&lt;/code&gt;.</span>
-<span class="source-line-no">356</span><span id="line-356">    * &lt;br&gt;This method can only be used if the string doesn't contain variables that rely on the existence of session</span>
-<span class="source-line-no">357</span><span id="line-357">    * variables.</span>
-<span class="source-line-no">358</span><span id="line-358">    *</span>
-<span class="source-line-no">359</span><span id="line-359">    * @param s The input string.</span>
-<span class="source-line-no">360</span><span id="line-360">    * @param w The writer to send the result to.</span>
-<span class="source-line-no">361</span><span id="line-361">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">362</span><span id="line-362">    */</span>
-<span class="source-line-no">363</span><span id="line-363">   public void resolveTo(String s, Writer w) throws IOException {</span>
-<span class="source-line-no">364</span><span id="line-364">      createSession(null).resolveTo(s, w);</span>
-<span class="source-line-no">365</span><span id="line-365">   }</span>
-<span class="source-line-no">366</span><span id="line-366">}</span>
+<span class="source-line-no">271</span><span id="line-271">   /**</span>
+<span class="source-line-no">272</span><span id="line-272">    * Returns a new builder object using the settings in this resolver as a base.</span>
+<span class="source-line-no">273</span><span id="line-273">    *</span>
+<span class="source-line-no">274</span><span id="line-274">    * @return A new var resolver builder.</span>
+<span class="source-line-no">275</span><span id="line-275">    */</span>
+<span class="source-line-no">276</span><span id="line-276">   public Builder copy() {</span>
+<span class="source-line-no">277</span><span id="line-277">      return new Builder(this);</span>
+<span class="source-line-no">278</span><span id="line-278">   }</span>
+<span class="source-line-no">279</span><span id="line-279"></span>
+<span class="source-line-no">280</span><span id="line-280">   /**</span>
+<span class="source-line-no">281</span><span id="line-281">    * Returns an unmodifiable map of {@link Var Vars} associated with this context.</span>
+<span class="source-line-no">282</span><span id="line-282">    *</span>
+<span class="source-line-no">283</span><span id="line-283">    * @return A map whose keys are var names (e.g. &lt;js&gt;"S"&lt;/js&gt;) and values are {@link Var} instances.</span>
+<span class="source-line-no">284</span><span id="line-284">    */</span>
+<span class="source-line-no">285</span><span id="line-285">   protected Map&lt;String,Var&gt; getVarMap() {</span>
+<span class="source-line-no">286</span><span id="line-286">      return varMap;</span>
+<span class="source-line-no">287</span><span id="line-287">   }</span>
+<span class="source-line-no">288</span><span id="line-288"></span>
+<span class="source-line-no">289</span><span id="line-289">   /**</span>
+<span class="source-line-no">290</span><span id="line-290">    * Returns an array of variables define in this variable resolver context.</span>
+<span class="source-line-no">291</span><span id="line-291">    *</span>
+<span class="source-line-no">292</span><span id="line-292">    * @return A new array containing the variables in this context.</span>
+<span class="source-line-no">293</span><span id="line-293">    */</span>
+<span class="source-line-no">294</span><span id="line-294">   protected Var[] getVars() {</span>
+<span class="source-line-no">295</span><span id="line-295">      return Arrays.copyOf(vars, vars.length);</span>
+<span class="source-line-no">296</span><span id="line-296">   }</span>
+<span class="source-line-no">297</span><span id="line-297"></span>
+<span class="source-line-no">298</span><span id="line-298">   /**</span>
+<span class="source-line-no">299</span><span id="line-299">    * Adds a bean to this session.</span>
+<span class="source-line-no">300</span><span id="line-300">    *</span>
+<span class="source-line-no">301</span><span id="line-301">    * @param &lt;T&gt; The bean type.</span>
+<span class="source-line-no">302</span><span id="line-302">    * @param c The bean type.</span>
+<span class="source-line-no">303</span><span id="line-303">    * @param value The bean.</span>
+<span class="source-line-no">304</span><span id="line-304">    * @return This object .</span>
+<span class="source-line-no">305</span><span id="line-305">    */</span>
+<span class="source-line-no">306</span><span id="line-306">   public &lt;T&gt; VarResolver addBean(Class&lt;T&gt; c, T value) {</span>
+<span class="source-line-no">307</span><span id="line-307">      beanStore.addBean(c, value);</span>
+<span class="source-line-no">308</span><span id="line-308">      return this;</span>
+<span class="source-line-no">309</span><span id="line-309">   }</span>
+<span class="source-line-no">310</span><span id="line-310"></span>
+<span class="source-line-no">311</span><span id="line-311">   /**</span>
+<span class="source-line-no">312</span><span id="line-312">    * Creates a new resolver session with no session objects.</span>
+<span class="source-line-no">313</span><span id="line-313">    *</span>
+<span class="source-line-no">314</span><span id="line-314">    * @return A new resolver session.</span>
+<span class="source-line-no">315</span><span id="line-315">    */</span>
+<span class="source-line-no">316</span><span id="line-316">   public VarResolverSession createSession() {</span>
+<span class="source-line-no">317</span><span id="line-317">      return new VarResolverSession(this, null);</span>
+<span class="source-line-no">318</span><span id="line-318">   }</span>
+<span class="source-line-no">319</span><span id="line-319"></span>
+<span class="source-line-no">320</span><span id="line-320">   /**</span>
+<span class="source-line-no">321</span><span id="line-321">    * Same as {@link #createSession()} except allows you to specify a bean store for resolving beans.</span>
+<span class="source-line-no">322</span><span id="line-322">    *</span>
+<span class="source-line-no">323</span><span id="line-323">    * @param beanStore The bean store to associate with this session.</span>
+<span class="source-line-no">324</span><span id="line-324">    * @return A new resolver session.</span>
+<span class="source-line-no">325</span><span id="line-325">    */</span>
+<span class="source-line-no">326</span><span id="line-326">   public VarResolverSession createSession(BeanStore beanStore) {</span>
+<span class="source-line-no">327</span><span id="line-327">      return new VarResolverSession(this, beanStore);</span>
+<span class="source-line-no">328</span><span id="line-328">   }</span>
+<span class="source-line-no">329</span><span id="line-329"></span>
+<span class="source-line-no">330</span><span id="line-330">   /**</span>
+<span class="source-line-no">331</span><span id="line-331">    * Resolve variables in the specified string.</span>
+<span class="source-line-no">332</span><span id="line-332">    *</span>
+<span class="source-line-no">333</span><span id="line-333">    * &lt;p&gt;</span>
+<span class="source-line-no">334</span><span id="line-334">    * This is a shortcut for calling &lt;code&gt;createSession(&lt;jk&gt;null&lt;/jk&gt;).resolve(s);&lt;/code&gt;.</span>
+<span class="source-line-no">335</span><span id="line-335">    * &lt;br&gt;This method can only be used if the string doesn't contain variables that rely on the existence of session</span>
+<span class="source-line-no">336</span><span id="line-336">    * variables.</span>
+<span class="source-line-no">337</span><span id="line-337">    *</span>
+<span class="source-line-no">338</span><span id="line-338">    * @param s The input string.</span>
+<span class="source-line-no">339</span><span id="line-339">    * @return The string with variables resolved, or the same string if it doesn't contain any variables to resolve.</span>
+<span class="source-line-no">340</span><span id="line-340">    */</span>
+<span class="source-line-no">341</span><span id="line-341">   public String resolve(String s) {</span>
+<span class="source-line-no">342</span><span id="line-342">      return createSession(null).resolve(s);</span>
+<span class="source-line-no">343</span><span id="line-343">   }</span>
+<span class="source-line-no">344</span><span id="line-344"></span>
+<span class="source-line-no">345</span><span id="line-345">   /**</span>
+<span class="source-line-no">346</span><span id="line-346">    * Resolve variables in the specified string and sends the results to the specified writer.</span>
+<span class="source-line-no">347</span><span id="line-347">    *</span>
+<span class="source-line-no">348</span><span id="line-348">    * &lt;p&gt;</span>
+<span class="source-line-no">349</span><span id="line-349">    * This is a shortcut for calling &lt;code&gt;createSession(&lt;jk&gt;null&lt;/jk&gt;).resolveTo(s, w);&lt;/code&gt;.</span>
+<span class="source-line-no">350</span><span id="line-350">    * &lt;br&gt;This method can only be used if the string doesn't contain variables that rely on the existence of session</span>
+<span class="source-line-no">351</span><span id="line-351">    * variables.</span>
+<span class="source-line-no">352</span><span id="line-352">    *</span>
+<span class="source-line-no">353</span><span id="line-353">    * @param s The input string.</span>
+<span class="source-line-no">354</span><span id="line-354">    * @param w The writer to send the result to.</span>
+<span class="source-line-no">355</span><span id="line-355">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">356</span><span id="line-356">    */</span>
+<span class="source-line-no">357</span><span id="line-357">   public void resolveTo(String s, Writer w) throws IOException {</span>
+<span class="source-line-no">358</span><span id="line-358">      createSession(null).resolveTo(s, w);</span>
+<span class="source-line-no">359</span><span id="line-359">   }</span>
+<span class="source-line-no">360</span><span id="line-360">}</span>
 
 
 

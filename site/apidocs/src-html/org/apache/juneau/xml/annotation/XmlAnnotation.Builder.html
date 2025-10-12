@@ -180,99 +180,95 @@
 <span class="source-line-no">167</span><span id="line-167">         return this;</span>
 <span class="source-line-no">168</span><span id="line-168">      }</span>
 <span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">      // &lt;FluentSetters&gt;</span>
+<span class="source-line-no">170</span><span id="line-170">   }</span>
 <span class="source-line-no">171</span><span id="line-171"></span>
-<span class="source-line-no">172</span><span id="line-172"></span>
-<span class="source-line-no">173</span><span id="line-173">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">174</span><span id="line-174">   }</span>
+<span class="source-line-no">172</span><span id="line-172">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">173</span><span id="line-173">   // Implementation</span>
+<span class="source-line-no">174</span><span id="line-174">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">175</span><span id="line-175"></span>
-<span class="source-line-no">176</span><span id="line-176">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">177</span><span id="line-177">   // Implementation</span>
-<span class="source-line-no">178</span><span id="line-178">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">179</span><span id="line-179"></span>
-<span class="source-line-no">180</span><span id="line-180">   private static class Impl extends TargetedAnnotationTImpl implements Xml {</span>
-<span class="source-line-no">181</span><span id="line-181"></span>
-<span class="source-line-no">182</span><span id="line-182">      private final String childName, namespace, prefix;</span>
-<span class="source-line-no">183</span><span id="line-183">      private final XmlFormat format;</span>
-<span class="source-line-no">184</span><span id="line-184"></span>
-<span class="source-line-no">185</span><span id="line-185">      Impl(Builder b) {</span>
-<span class="source-line-no">186</span><span id="line-186">         super(b);</span>
-<span class="source-line-no">187</span><span id="line-187">         this.childName = b.childName;</span>
-<span class="source-line-no">188</span><span id="line-188">         this.format = b.format;</span>
-<span class="source-line-no">189</span><span id="line-189">         this.namespace = b.namespace;</span>
-<span class="source-line-no">190</span><span id="line-190">         this.prefix = b.prefix;</span>
-<span class="source-line-no">191</span><span id="line-191">         postConstruct();</span>
-<span class="source-line-no">192</span><span id="line-192">      }</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">      @Override /* Xml */</span>
-<span class="source-line-no">195</span><span id="line-195">      public String childName() {</span>
-<span class="source-line-no">196</span><span id="line-196">         return childName;</span>
-<span class="source-line-no">197</span><span id="line-197">      }</span>
-<span class="source-line-no">198</span><span id="line-198"></span>
-<span class="source-line-no">199</span><span id="line-199">      @Override /* Xml */</span>
-<span class="source-line-no">200</span><span id="line-200">      public XmlFormat format() {</span>
-<span class="source-line-no">201</span><span id="line-201">         return format;</span>
-<span class="source-line-no">202</span><span id="line-202">      }</span>
-<span class="source-line-no">203</span><span id="line-203"></span>
-<span class="source-line-no">204</span><span id="line-204">      @Override /* Xml */</span>
-<span class="source-line-no">205</span><span id="line-205">      public String namespace() {</span>
-<span class="source-line-no">206</span><span id="line-206">         return namespace;</span>
-<span class="source-line-no">207</span><span id="line-207">      }</span>
-<span class="source-line-no">208</span><span id="line-208"></span>
-<span class="source-line-no">209</span><span id="line-209">      @Override /* Xml */</span>
-<span class="source-line-no">210</span><span id="line-210">      public String prefix() {</span>
-<span class="source-line-no">211</span><span id="line-211">         return prefix;</span>
-<span class="source-line-no">212</span><span id="line-212">      }</span>
-<span class="source-line-no">213</span><span id="line-213">   }</span>
+<span class="source-line-no">176</span><span id="line-176">   private static class Impl extends TargetedAnnotationTImpl implements Xml {</span>
+<span class="source-line-no">177</span><span id="line-177"></span>
+<span class="source-line-no">178</span><span id="line-178">      private final String childName, namespace, prefix;</span>
+<span class="source-line-no">179</span><span id="line-179">      private final XmlFormat format;</span>
+<span class="source-line-no">180</span><span id="line-180"></span>
+<span class="source-line-no">181</span><span id="line-181">      Impl(Builder b) {</span>
+<span class="source-line-no">182</span><span id="line-182">         super(b);</span>
+<span class="source-line-no">183</span><span id="line-183">         this.childName = b.childName;</span>
+<span class="source-line-no">184</span><span id="line-184">         this.format = b.format;</span>
+<span class="source-line-no">185</span><span id="line-185">         this.namespace = b.namespace;</span>
+<span class="source-line-no">186</span><span id="line-186">         this.prefix = b.prefix;</span>
+<span class="source-line-no">187</span><span id="line-187">         postConstruct();</span>
+<span class="source-line-no">188</span><span id="line-188">      }</span>
+<span class="source-line-no">189</span><span id="line-189"></span>
+<span class="source-line-no">190</span><span id="line-190">      @Override /* Xml */</span>
+<span class="source-line-no">191</span><span id="line-191">      public String childName() {</span>
+<span class="source-line-no">192</span><span id="line-192">         return childName;</span>
+<span class="source-line-no">193</span><span id="line-193">      }</span>
+<span class="source-line-no">194</span><span id="line-194"></span>
+<span class="source-line-no">195</span><span id="line-195">      @Override /* Xml */</span>
+<span class="source-line-no">196</span><span id="line-196">      public XmlFormat format() {</span>
+<span class="source-line-no">197</span><span id="line-197">         return format;</span>
+<span class="source-line-no">198</span><span id="line-198">      }</span>
+<span class="source-line-no">199</span><span id="line-199"></span>
+<span class="source-line-no">200</span><span id="line-200">      @Override /* Xml */</span>
+<span class="source-line-no">201</span><span id="line-201">      public String namespace() {</span>
+<span class="source-line-no">202</span><span id="line-202">         return namespace;</span>
+<span class="source-line-no">203</span><span id="line-203">      }</span>
+<span class="source-line-no">204</span><span id="line-204"></span>
+<span class="source-line-no">205</span><span id="line-205">      @Override /* Xml */</span>
+<span class="source-line-no">206</span><span id="line-206">      public String prefix() {</span>
+<span class="source-line-no">207</span><span id="line-207">         return prefix;</span>
+<span class="source-line-no">208</span><span id="line-208">      }</span>
+<span class="source-line-no">209</span><span id="line-209">   }</span>
+<span class="source-line-no">210</span><span id="line-210"></span>
+<span class="source-line-no">211</span><span id="line-211">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">212</span><span id="line-212">   // Appliers</span>
+<span class="source-line-no">213</span><span id="line-213">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">214</span><span id="line-214"></span>
-<span class="source-line-no">215</span><span id="line-215">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">216</span><span id="line-216">   // Appliers</span>
-<span class="source-line-no">217</span><span id="line-217">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">218</span><span id="line-218"></span>
-<span class="source-line-no">219</span><span id="line-219">   /**</span>
-<span class="source-line-no">220</span><span id="line-220">    * Applies targeted {@link Xml} annotations to a {@link org.apache.juneau.Context.Builder}.</span>
-<span class="source-line-no">221</span><span id="line-221">    */</span>
-<span class="source-line-no">222</span><span id="line-222">   public static class Apply extends AnnotationApplier&lt;Xml,Context.Builder&gt; {</span>
-<span class="source-line-no">223</span><span id="line-223"></span>
-<span class="source-line-no">224</span><span id="line-224">      /**</span>
-<span class="source-line-no">225</span><span id="line-225">       * Constructor.</span>
-<span class="source-line-no">226</span><span id="line-226">       *</span>
-<span class="source-line-no">227</span><span id="line-227">       * @param vr The resolver for resolving values in annotations.</span>
-<span class="source-line-no">228</span><span id="line-228">       */</span>
-<span class="source-line-no">229</span><span id="line-229">      public Apply(VarResolverSession vr) {</span>
-<span class="source-line-no">230</span><span id="line-230">         super(Xml.class, Context.Builder.class, vr);</span>
-<span class="source-line-no">231</span><span id="line-231">      }</span>
-<span class="source-line-no">232</span><span id="line-232"></span>
-<span class="source-line-no">233</span><span id="line-233">      @Override</span>
-<span class="source-line-no">234</span><span id="line-234">      public void apply(AnnotationInfo&lt;Xml&gt; ai, Context.Builder b) {</span>
-<span class="source-line-no">235</span><span id="line-235">         Xml a = ai.inner();</span>
-<span class="source-line-no">236</span><span id="line-236">         if (isEmptyArray(a.on(), a.onClass()))</span>
-<span class="source-line-no">237</span><span id="line-237">            return;</span>
-<span class="source-line-no">238</span><span id="line-238">         b.annotations(copy(a, vr()));</span>
-<span class="source-line-no">239</span><span id="line-239">      }</span>
-<span class="source-line-no">240</span><span id="line-240">   }</span>
+<span class="source-line-no">215</span><span id="line-215">   /**</span>
+<span class="source-line-no">216</span><span id="line-216">    * Applies targeted {@link Xml} annotations to a {@link org.apache.juneau.Context.Builder}.</span>
+<span class="source-line-no">217</span><span id="line-217">    */</span>
+<span class="source-line-no">218</span><span id="line-218">   public static class Apply extends AnnotationApplier&lt;Xml,Context.Builder&gt; {</span>
+<span class="source-line-no">219</span><span id="line-219"></span>
+<span class="source-line-no">220</span><span id="line-220">      /**</span>
+<span class="source-line-no">221</span><span id="line-221">       * Constructor.</span>
+<span class="source-line-no">222</span><span id="line-222">       *</span>
+<span class="source-line-no">223</span><span id="line-223">       * @param vr The resolver for resolving values in annotations.</span>
+<span class="source-line-no">224</span><span id="line-224">       */</span>
+<span class="source-line-no">225</span><span id="line-225">      public Apply(VarResolverSession vr) {</span>
+<span class="source-line-no">226</span><span id="line-226">         super(Xml.class, Context.Builder.class, vr);</span>
+<span class="source-line-no">227</span><span id="line-227">      }</span>
+<span class="source-line-no">228</span><span id="line-228"></span>
+<span class="source-line-no">229</span><span id="line-229">      @Override</span>
+<span class="source-line-no">230</span><span id="line-230">      public void apply(AnnotationInfo&lt;Xml&gt; ai, Context.Builder b) {</span>
+<span class="source-line-no">231</span><span id="line-231">         Xml a = ai.inner();</span>
+<span class="source-line-no">232</span><span id="line-232">         if (isEmptyArray(a.on(), a.onClass()))</span>
+<span class="source-line-no">233</span><span id="line-233">            return;</span>
+<span class="source-line-no">234</span><span id="line-234">         b.annotations(copy(a, vr()));</span>
+<span class="source-line-no">235</span><span id="line-235">      }</span>
+<span class="source-line-no">236</span><span id="line-236">   }</span>
+<span class="source-line-no">237</span><span id="line-237"></span>
+<span class="source-line-no">238</span><span id="line-238">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">239</span><span id="line-239">   // Other</span>
+<span class="source-line-no">240</span><span id="line-240">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">241</span><span id="line-241"></span>
-<span class="source-line-no">242</span><span id="line-242">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">243</span><span id="line-243">   // Other</span>
-<span class="source-line-no">244</span><span id="line-244">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">245</span><span id="line-245"></span>
-<span class="source-line-no">246</span><span id="line-246">   /**</span>
-<span class="source-line-no">247</span><span id="line-247">    * A collection of {@link Xml @Xml annotations}.</span>
-<span class="source-line-no">248</span><span id="line-248">    */</span>
-<span class="source-line-no">249</span><span id="line-249">   @Documented</span>
-<span class="source-line-no">250</span><span id="line-250">   @Target({METHOD,TYPE})</span>
-<span class="source-line-no">251</span><span id="line-251">   @Retention(RUNTIME)</span>
-<span class="source-line-no">252</span><span id="line-252">   @Inherited</span>
-<span class="source-line-no">253</span><span id="line-253">   public static @interface Array {</span>
-<span class="source-line-no">254</span><span id="line-254"></span>
-<span class="source-line-no">255</span><span id="line-255">      /**</span>
-<span class="source-line-no">256</span><span id="line-256">       * The child annotations.</span>
-<span class="source-line-no">257</span><span id="line-257">       *</span>
-<span class="source-line-no">258</span><span id="line-258">       * @return The annotation value.</span>
-<span class="source-line-no">259</span><span id="line-259">       */</span>
-<span class="source-line-no">260</span><span id="line-260">      Xml[] value();</span>
-<span class="source-line-no">261</span><span id="line-261">   }</span>
-<span class="source-line-no">262</span><span id="line-262">}</span>
+<span class="source-line-no">242</span><span id="line-242">   /**</span>
+<span class="source-line-no">243</span><span id="line-243">    * A collection of {@link Xml @Xml annotations}.</span>
+<span class="source-line-no">244</span><span id="line-244">    */</span>
+<span class="source-line-no">245</span><span id="line-245">   @Documented</span>
+<span class="source-line-no">246</span><span id="line-246">   @Target({METHOD,TYPE})</span>
+<span class="source-line-no">247</span><span id="line-247">   @Retention(RUNTIME)</span>
+<span class="source-line-no">248</span><span id="line-248">   @Inherited</span>
+<span class="source-line-no">249</span><span id="line-249">   public static @interface Array {</span>
+<span class="source-line-no">250</span><span id="line-250"></span>
+<span class="source-line-no">251</span><span id="line-251">      /**</span>
+<span class="source-line-no">252</span><span id="line-252">       * The child annotations.</span>
+<span class="source-line-no">253</span><span id="line-253">       *</span>
+<span class="source-line-no">254</span><span id="line-254">       * @return The annotation value.</span>
+<span class="source-line-no">255</span><span id="line-255">       */</span>
+<span class="source-line-no">256</span><span id="line-256">      Xml[] value();</span>
+<span class="source-line-no">257</span><span id="line-257">   }</span>
+<span class="source-line-no">258</span><span id="line-258">}</span>
 
 
 

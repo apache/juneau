@@ -259,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.parser.ParserSet.Builder)">
 <h3>ParserSet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-499">ParserSet</a></span><wbr><span class="parameters">(<a href="ParserSet.Builder.html" title="class in org.apache.juneau.parser">ParserSet.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-492">ParserSet</a></span><wbr><span class="parameters">(<a href="ParserSet.Builder.html" title="class in org.apache.juneau.parser">ParserSet.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -302,7 +302,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSet.Builder.html" title="class in org.apache.juneau.parser">ParserSet.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-527">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSet.Builder.html" title="class in org.apache.juneau.parser">ParserSet.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-520">copy</a></span>()</div>
 <div class="block">Creates a copy of this parser group.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -313,7 +313,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParserMatch(java.lang.String)">
 <h3>getParserMatch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserMatch.html" title="class in org.apache.juneau.parser">ParserMatch</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-540">getParserMatch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentTypeHeader)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserMatch.html" title="class in org.apache.juneau.parser">ParserMatch</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-533">getParserMatch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentTypeHeader)</span></div>
 <div class="block">Searches the group for a parser that can handle the specified <l>Content-Type</l> header value.
 
  <p>
@@ -329,7 +329,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParserMatch(org.apache.juneau.MediaType)">
 <h3>getParserMatch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserMatch.html" title="class in org.apache.juneau.parser">ParserMatch</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-562">getParserMatch</a></span><wbr><span class="parameters">(<a href="../MediaType.html" title="class in org.apache.juneau">MediaType</a>&nbsp;mediaType)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserMatch.html" title="class in org.apache.juneau.parser">ParserMatch</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-555">getParserMatch</a></span><wbr><span class="parameters">(<a href="../MediaType.html" title="class in org.apache.juneau">MediaType</a>&nbsp;mediaType)</span></div>
 <div class="block">Same as <a href="#getParserMatch(java.lang.String)"><code>getParserMatch(String)</code></a> but matches using a <a href="../MediaType.html" title="class in org.apache.juneau"><code>MediaType</code></a> instance.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -342,7 +342,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParser(java.lang.String)">
 <h3>getParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.html" title="class in org.apache.juneau.parser">Parser</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-572">getParser</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentTypeHeader)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.html" title="class in org.apache.juneau.parser">Parser</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-565">getParser</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentTypeHeader)</span></div>
 <div class="block">Same as <a href="#getParserMatch(java.lang.String)"><code>getParserMatch(String)</code></a> but returns just the matched parser.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -355,7 +355,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParser(org.apache.juneau.MediaType)">
 <h3>getParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.html" title="class in org.apache.juneau.parser">Parser</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-583">getParser</a></span><wbr><span class="parameters">(<a href="../MediaType.html" title="class in org.apache.juneau">MediaType</a>&nbsp;mediaType)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.html" title="class in org.apache.juneau.parser">Parser</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-576">getParser</a></span><wbr><span class="parameters">(<a href="../MediaType.html" title="class in org.apache.juneau">MediaType</a>&nbsp;mediaType)</span></div>
 <div class="block">Same as <a href="#getParserMatch(org.apache.juneau.MediaType)"><code>getParserMatch(MediaType)</code></a> but returns just the matched parser.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -368,7 +368,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSupportedMediaTypes()">
 <h3>getSupportedMediaTypes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../MediaType.html" title="class in org.apache.juneau">MediaType</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-596">getSupportedMediaTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../MediaType.html" title="class in org.apache.juneau">MediaType</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-589">getSupportedMediaTypes</a></span>()</div>
 <div class="block">Returns the media types that all parsers in this group can handle
 
  <p>
@@ -382,7 +382,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParsers()">
 <h3>getParsers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Parser.html" title="class in org.apache.juneau.parser">Parser</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-605">getParsers</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Parser.html" title="class in org.apache.juneau.parser">Parser</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-598">getParsers</a></span>()</div>
 <div class="block">Returns the parsers in this group.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -393,7 +393,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isEmpty()">
 <h3>isEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-614">isEmpty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/parser/ParserSet.html#line-607">isEmpty</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this group contains no parsers.</div>
 <dl class="notes">
 <dt>Returns:</dt>

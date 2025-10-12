@@ -104,578 +104,572 @@
 <span class="source-line-no">091</span><span id="line-91"> * &lt;/ul&gt;</span>
 <span class="source-line-no">092</span><span id="line-92"> */</span>
 <span class="source-line-no">093</span><span id="line-93">@Bean(typeName="link")</span>
-<span class="source-line-no">094</span><span id="line-94">@FluentSetters</span>
-<span class="source-line-no">095</span><span id="line-95">public class Link extends HtmlElementVoid {</span>
-<span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">   /**</span>
-<span class="source-line-no">098</span><span id="line-98">    * Creates an empty {@link Link} element.</span>
-<span class="source-line-no">099</span><span id="line-99">    */</span>
-<span class="source-line-no">100</span><span id="line-100">   public Link() {}</span>
-<span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">   /**</span>
-<span class="source-line-no">103</span><span id="line-103">    * Creates a {@link Link} element with the specified {@link Link#href(Object)} attribute.</span>
-<span class="source-line-no">104</span><span id="line-104">    *</span>
-<span class="source-line-no">105</span><span id="line-105">    * @param href The {@link Link#href(Object)} attribute.</span>
-<span class="source-line-no">106</span><span id="line-106">    */</span>
-<span class="source-line-no">107</span><span id="line-107">   public Link(Object href) {</span>
-<span class="source-line-no">108</span><span id="line-108">      href(href);</span>
-<span class="source-line-no">109</span><span id="line-109">   }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   /**</span>
-<span class="source-line-no">112</span><span id="line-112">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-crossorigin"&gt;crossorigin&lt;/a&gt;</span>
-<span class="source-line-no">113</span><span id="line-113">    * attribute.</span>
-<span class="source-line-no">114</span><span id="line-114">    *</span>
-<span class="source-line-no">115</span><span id="line-115">    * &lt;p&gt;</span>
-<span class="source-line-no">116</span><span id="line-116">    * Specifies how the element handles cross-origin requests for CORS (Cross-Origin Resource Sharing).</span>
-<span class="source-line-no">117</span><span id="line-117">    *</span>
-<span class="source-line-no">118</span><span id="line-118">    * &lt;p&gt;</span>
-<span class="source-line-no">119</span><span id="line-119">    * Possible values:</span>
-<span class="source-line-no">120</span><span id="line-120">    * &lt;ul&gt;</span>
-<span class="source-line-no">121</span><span id="line-121">    *    &lt;li&gt;&lt;js&gt;"anonymous"&lt;/js&gt; - Cross-origin requests are made without credentials&lt;/li&gt;</span>
-<span class="source-line-no">122</span><span id="line-122">    *    &lt;li&gt;&lt;js&gt;"use-credentials"&lt;/js&gt; - Cross-origin requests include credentials&lt;/li&gt;</span>
-<span class="source-line-no">123</span><span id="line-123">    * &lt;/ul&gt;</span>
-<span class="source-line-no">124</span><span id="line-124">    *</span>
-<span class="source-line-no">125</span><span id="line-125">    * @param crossorigin How to handle cross-origin requests.</span>
-<span class="source-line-no">126</span><span id="line-126">    * @return This object.</span>
-<span class="source-line-no">127</span><span id="line-127">    */</span>
-<span class="source-line-no">128</span><span id="line-128">   public Link crossorigin(String value) {</span>
-<span class="source-line-no">129</span><span id="line-129">      attr("crossorigin", value);</span>
-<span class="source-line-no">130</span><span id="line-130">      return this;</span>
-<span class="source-line-no">131</span><span id="line-131">   }</span>
-<span class="source-line-no">132</span><span id="line-132"></span>
-<span class="source-line-no">133</span><span id="line-133">   /**</span>
-<span class="source-line-no">134</span><span id="line-134">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-href"&gt;href&lt;/a&gt; attribute.</span>
-<span class="source-line-no">135</span><span id="line-135">    *</span>
-<span class="source-line-no">136</span><span id="line-136">    * &lt;p&gt;</span>
-<span class="source-line-no">137</span><span id="line-137">    * Address of the hyperlink.</span>
-<span class="source-line-no">138</span><span id="line-138">    *</span>
-<span class="source-line-no">139</span><span id="line-139">    * &lt;p&gt;</span>
-<span class="source-line-no">140</span><span id="line-140">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
-<span class="source-line-no">141</span><span id="line-141">    * Strings must be valid URIs.</span>
-<span class="source-line-no">142</span><span id="line-142">    *</span>
-<span class="source-line-no">143</span><span id="line-143">    * &lt;p&gt;</span>
-<span class="source-line-no">144</span><span id="line-144">    * URIs defined by {@link UriResolver} can be used for values.</span>
-<span class="source-line-no">145</span><span id="line-145">    *</span>
-<span class="source-line-no">146</span><span id="line-146">    * @param href</span>
-<span class="source-line-no">147</span><span id="line-147">    *    The new value for this attribute.</span>
-<span class="source-line-no">148</span><span id="line-148">    *    Typically a {@link URL} or {@link String}.</span>
-<span class="source-line-no">149</span><span id="line-149">    * @return This object.</span>
-<span class="source-line-no">150</span><span id="line-150">    */</span>
-<span class="source-line-no">151</span><span id="line-151">   public Link href(Object value) {</span>
-<span class="source-line-no">152</span><span id="line-152">      attrUri("href", value);</span>
-<span class="source-line-no">153</span><span id="line-153">      return this;</span>
-<span class="source-line-no">154</span><span id="line-154">   }</span>
-<span class="source-line-no">155</span><span id="line-155"></span>
-<span class="source-line-no">156</span><span id="line-156">   /**</span>
-<span class="source-line-no">157</span><span id="line-157">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-hreflang"&gt;hreflang&lt;/a&gt;</span>
-<span class="source-line-no">158</span><span id="line-158">    * attribute.</span>
-<span class="source-line-no">159</span><span id="line-159">    *</span>
-<span class="source-line-no">160</span><span id="line-160">    * &lt;p&gt;</span>
-<span class="source-line-no">161</span><span id="line-161">    * Specifies the language of the linked resource. Used for SEO and accessibility purposes.</span>
-<span class="source-line-no">162</span><span id="line-162">    *</span>
-<span class="source-line-no">163</span><span id="line-163">    * &lt;p&gt;</span>
-<span class="source-line-no">164</span><span id="line-164">    * Examples:</span>
-<span class="source-line-no">165</span><span id="line-165">    * &lt;ul&gt;</span>
-<span class="source-line-no">166</span><span id="line-166">    *    &lt;li&gt;&lt;js&gt;"en"&lt;/js&gt; - English&lt;/li&gt;</span>
-<span class="source-line-no">167</span><span id="line-167">    *    &lt;li&gt;&lt;js&gt;"es"&lt;/js&gt; - Spanish&lt;/li&gt;</span>
-<span class="source-line-no">168</span><span id="line-168">    *    &lt;li&gt;&lt;js&gt;"fr"&lt;/js&gt; - French&lt;/li&gt;</span>
-<span class="source-line-no">169</span><span id="line-169">    *    &lt;li&gt;&lt;js&gt;"de"&lt;/js&gt; - German&lt;/li&gt;</span>
-<span class="source-line-no">170</span><span id="line-170">    *    &lt;li&gt;&lt;js&gt;"zh"&lt;/js&gt; - Chinese&lt;/li&gt;</span>
-<span class="source-line-no">171</span><span id="line-171">    *    &lt;li&gt;&lt;js&gt;"ja"&lt;/js&gt; - Japanese&lt;/li&gt;</span>
-<span class="source-line-no">172</span><span id="line-172">    * &lt;/ul&gt;</span>
-<span class="source-line-no">173</span><span id="line-173">    *</span>
-<span class="source-line-no">174</span><span id="line-174">    * @param hreflang The language code of the linked resource.</span>
-<span class="source-line-no">175</span><span id="line-175">    * @return This object.</span>
-<span class="source-line-no">176</span><span id="line-176">    */</span>
-<span class="source-line-no">177</span><span id="line-177">   public Link hreflang(String value) {</span>
-<span class="source-line-no">178</span><span id="line-178">      attr("hreflang", value);</span>
-<span class="source-line-no">179</span><span id="line-179">      return this;</span>
-<span class="source-line-no">180</span><span id="line-180">   }</span>
-<span class="source-line-no">181</span><span id="line-181"></span>
-<span class="source-line-no">182</span><span id="line-182">   /**</span>
-<span class="source-line-no">183</span><span id="line-183">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-media"&gt;media&lt;/a&gt; attribute.</span>
-<span class="source-line-no">184</span><span id="line-184">    *</span>
-<span class="source-line-no">185</span><span id="line-185">    * &lt;p&gt;</span>
-<span class="source-line-no">186</span><span id="line-186">    * Specifies which media types the linked resource applies to. Used primarily with stylesheets.</span>
-<span class="source-line-no">187</span><span id="line-187">    *</span>
-<span class="source-line-no">188</span><span id="line-188">    * &lt;p&gt;</span>
-<span class="source-line-no">189</span><span id="line-189">    * Common values:</span>
-<span class="source-line-no">190</span><span id="line-190">    * &lt;ul&gt;</span>
-<span class="source-line-no">191</span><span id="line-191">    *    &lt;li&gt;&lt;js&gt;"all"&lt;/js&gt; - All media types (default)&lt;/li&gt;</span>
-<span class="source-line-no">192</span><span id="line-192">    *    &lt;li&gt;&lt;js&gt;"screen"&lt;/js&gt; - Computer screens&lt;/li&gt;</span>
-<span class="source-line-no">193</span><span id="line-193">    *    &lt;li&gt;&lt;js&gt;"print"&lt;/js&gt; - Printers and print preview&lt;/li&gt;</span>
-<span class="source-line-no">194</span><span id="line-194">    *    &lt;li&gt;&lt;js&gt;"handheld"&lt;/js&gt; - Handheld devices&lt;/li&gt;</span>
-<span class="source-line-no">195</span><span id="line-195">    *    &lt;li&gt;&lt;js&gt;"projection"&lt;/js&gt; - Projectors&lt;/li&gt;</span>
-<span class="source-line-no">196</span><span id="line-196">    *    &lt;li&gt;&lt;js&gt;"(max-width: 768px)"&lt;/js&gt; - Media queries&lt;/li&gt;</span>
-<span class="source-line-no">197</span><span id="line-197">    * &lt;/ul&gt;</span>
-<span class="source-line-no">198</span><span id="line-198">    *</span>
-<span class="source-line-no">199</span><span id="line-199">    * @param media The media types the linked resource applies to.</span>
-<span class="source-line-no">200</span><span id="line-200">    * @return This object.</span>
-<span class="source-line-no">201</span><span id="line-201">    */</span>
-<span class="source-line-no">202</span><span id="line-202">   public Link media(String value) {</span>
-<span class="source-line-no">203</span><span id="line-203">      attr("media", value);</span>
-<span class="source-line-no">204</span><span id="line-204">      return this;</span>
-<span class="source-line-no">205</span><span id="line-205">   }</span>
-<span class="source-line-no">206</span><span id="line-206"></span>
-<span class="source-line-no">207</span><span id="line-207">   /**</span>
-<span class="source-line-no">208</span><span id="line-208">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-rel"&gt;rel&lt;/a&gt; attribute.</span>
-<span class="source-line-no">209</span><span id="line-209">    *</span>
-<span class="source-line-no">210</span><span id="line-210">    * &lt;p&gt;</span>
-<span class="source-line-no">211</span><span id="line-211">    * Specifies the relationship between the current document and the linked resource.</span>
-<span class="source-line-no">212</span><span id="line-212">    *</span>
-<span class="source-line-no">213</span><span id="line-213">    * &lt;p&gt;</span>
-<span class="source-line-no">214</span><span id="line-214">    * Common values:</span>
-<span class="source-line-no">215</span><span id="line-215">    * &lt;ul&gt;</span>
-<span class="source-line-no">216</span><span id="line-216">    *    &lt;li&gt;&lt;js&gt;"stylesheet"&lt;/js&gt; - External CSS stylesheet&lt;/li&gt;</span>
-<span class="source-line-no">217</span><span id="line-217">    *    &lt;li&gt;&lt;js&gt;"icon"&lt;/js&gt; - Favicon or site icon&lt;/li&gt;</span>
-<span class="source-line-no">218</span><span id="line-218">    *    &lt;li&gt;&lt;js&gt;"canonical"&lt;/js&gt; - Canonical URL for SEO&lt;/li&gt;</span>
-<span class="source-line-no">219</span><span id="line-219">    *    &lt;li&gt;&lt;js&gt;"alternate"&lt;/js&gt; - Alternative version of the page&lt;/li&gt;</span>
-<span class="source-line-no">220</span><span id="line-220">    *    &lt;li&gt;&lt;js&gt;"preload"&lt;/js&gt; - Resource to preload&lt;/li&gt;</span>
-<span class="source-line-no">221</span><span id="line-221">    *    &lt;li&gt;&lt;js&gt;"prefetch"&lt;/js&gt; - Resource to prefetch&lt;/li&gt;</span>
-<span class="source-line-no">222</span><span id="line-222">    *    &lt;li&gt;&lt;js&gt;"dns-prefetch"&lt;/js&gt; - DNS lookup to prefetch&lt;/li&gt;</span>
-<span class="source-line-no">223</span><span id="line-223">    *    &lt;li&gt;&lt;js&gt;"next"&lt;/js&gt; - Next page in a sequence&lt;/li&gt;</span>
-<span class="source-line-no">224</span><span id="line-224">    *    &lt;li&gt;&lt;js&gt;"prev"&lt;/js&gt; - Previous page in a sequence&lt;/li&gt;</span>
-<span class="source-line-no">225</span><span id="line-225">    * &lt;/ul&gt;</span>
-<span class="source-line-no">226</span><span id="line-226">    *</span>
-<span class="source-line-no">227</span><span id="line-227">    * @param rel The relationship between the document and linked resource.</span>
-<span class="source-line-no">228</span><span id="line-228">    * @return This object.</span>
-<span class="source-line-no">229</span><span id="line-229">    */</span>
-<span class="source-line-no">230</span><span id="line-230">   public Link rel(String value) {</span>
-<span class="source-line-no">231</span><span id="line-231">      attr("rel", value);</span>
-<span class="source-line-no">232</span><span id="line-232">      return this;</span>
-<span class="source-line-no">233</span><span id="line-233">   }</span>
-<span class="source-line-no">234</span><span id="line-234"></span>
-<span class="source-line-no">235</span><span id="line-235">   /**</span>
-<span class="source-line-no">236</span><span id="line-236">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-link-sizes"&gt;sizes&lt;/a&gt; attribute.</span>
-<span class="source-line-no">237</span><span id="line-237">    *</span>
-<span class="source-line-no">238</span><span id="line-238">    * &lt;p&gt;</span>
-<span class="source-line-no">239</span><span id="line-239">    * Specifies the sizes of icons for different device contexts. Used with &lt;c&gt;rel="icon"&lt;/c&gt; or &lt;c&gt;rel="apple-touch-icon"&lt;/c&gt;.</span>
-<span class="source-line-no">240</span><span id="line-240">    *</span>
-<span class="source-line-no">241</span><span id="line-241">    * &lt;p&gt;</span>
-<span class="source-line-no">242</span><span id="line-242">    * Common values:</span>
-<span class="source-line-no">243</span><span id="line-243">    * &lt;ul&gt;</span>
-<span class="source-line-no">244</span><span id="line-244">    *    &lt;li&gt;&lt;js&gt;"16x16"&lt;/js&gt; - Small favicon&lt;/li&gt;</span>
-<span class="source-line-no">245</span><span id="line-245">    *    &lt;li&gt;&lt;js&gt;"32x32"&lt;/js&gt; - Standard favicon&lt;/li&gt;</span>
-<span class="source-line-no">246</span><span id="line-246">    *    &lt;li&gt;&lt;js&gt;"180x180"&lt;/js&gt; - Apple touch icon&lt;/li&gt;</span>
-<span class="source-line-no">247</span><span id="line-247">    *    &lt;li&gt;&lt;js&gt;"192x192"&lt;/js&gt; - Android icon&lt;/li&gt;</span>
-<span class="source-line-no">248</span><span id="line-248">    *    &lt;li&gt;&lt;js&gt;"512x512"&lt;/js&gt; - Large icon&lt;/li&gt;</span>
-<span class="source-line-no">249</span><span id="line-249">    *    &lt;li&gt;&lt;js&gt;"any"&lt;/js&gt; - Any size&lt;/li&gt;</span>
-<span class="source-line-no">250</span><span id="line-250">    * &lt;/ul&gt;</span>
-<span class="source-line-no">251</span><span id="line-251">    *</span>
-<span class="source-line-no">252</span><span id="line-252">    * @param sizes The sizes of the linked icon resource.</span>
-<span class="source-line-no">253</span><span id="line-253">    * @return This object.</span>
-<span class="source-line-no">254</span><span id="line-254">    */</span>
-<span class="source-line-no">255</span><span id="line-255">   public Link sizes(String value) {</span>
-<span class="source-line-no">256</span><span id="line-256">      attr("sizes", value);</span>
-<span class="source-line-no">257</span><span id="line-257">      return this;</span>
-<span class="source-line-no">258</span><span id="line-258">   }</span>
-<span class="source-line-no">259</span><span id="line-259"></span>
-<span class="source-line-no">260</span><span id="line-260">   /**</span>
-<span class="source-line-no">261</span><span id="line-261">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-type"&gt;type&lt;/a&gt; attribute.</span>
-<span class="source-line-no">262</span><span id="line-262">    *</span>
-<span class="source-line-no">263</span><span id="line-263">    * &lt;p&gt;</span>
-<span class="source-line-no">264</span><span id="line-264">    * Specifies the MIME type of the linked resource. Helps browsers determine how to handle the resource.</span>
-<span class="source-line-no">265</span><span id="line-265">    *</span>
-<span class="source-line-no">266</span><span id="line-266">    * &lt;p&gt;</span>
-<span class="source-line-no">267</span><span id="line-267">    * Common values:</span>
-<span class="source-line-no">268</span><span id="line-268">    * &lt;ul&gt;</span>
-<span class="source-line-no">269</span><span id="line-269">    *    &lt;li&gt;&lt;js&gt;"text/css"&lt;/js&gt; - CSS stylesheet&lt;/li&gt;</span>
-<span class="source-line-no">270</span><span id="line-270">    *    &lt;li&gt;&lt;js&gt;"text/javascript"&lt;/js&gt; - JavaScript file&lt;/li&gt;</span>
-<span class="source-line-no">271</span><span id="line-271">    *    &lt;li&gt;&lt;js&gt;"application/json"&lt;/js&gt; - JSON data&lt;/li&gt;</span>
-<span class="source-line-no">272</span><span id="line-272">    *    &lt;li&gt;&lt;js&gt;"image/png"&lt;/js&gt; - PNG image&lt;/li&gt;</span>
-<span class="source-line-no">273</span><span id="line-273">    *    &lt;li&gt;&lt;js&gt;"image/jpeg"&lt;/js&gt; - JPEG image&lt;/li&gt;</span>
-<span class="source-line-no">274</span><span id="line-274">    *    &lt;li&gt;&lt;js&gt;"image/svg+xml"&lt;/js&gt; - SVG image&lt;/li&gt;</span>
-<span class="source-line-no">275</span><span id="line-275">    *    &lt;li&gt;&lt;js&gt;"font/woff2"&lt;/js&gt; - Web font&lt;/li&gt;</span>
-<span class="source-line-no">276</span><span id="line-276">    * &lt;/ul&gt;</span>
-<span class="source-line-no">277</span><span id="line-277">    *</span>
-<span class="source-line-no">278</span><span id="line-278">    * @param type The MIME type of the linked resource.</span>
-<span class="source-line-no">279</span><span id="line-279">    * @return This object.</span>
-<span class="source-line-no">280</span><span id="line-280">    */</span>
-<span class="source-line-no">281</span><span id="line-281">   public Link type(String value) {</span>
-<span class="source-line-no">282</span><span id="line-282">      attr("type", value);</span>
-<span class="source-line-no">283</span><span id="line-283">      return this;</span>
-<span class="source-line-no">284</span><span id="line-284">   }</span>
-<span class="source-line-no">285</span><span id="line-285"></span>
-<span class="source-line-no">286</span><span id="line-286">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">287</span><span id="line-287">   // Overridden methods</span>
-<span class="source-line-no">288</span><span id="line-288">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">289</span><span id="line-289"></span>
-<span class="source-line-no">290</span><span id="line-290">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">291</span><span id="line-291"></span>
-<span class="source-line-no">292</span><span id="line-292">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">293</span><span id="line-293">   public Link _class(String value) {  // NOSONAR - Intentional naming.</span>
-<span class="source-line-no">294</span><span id="line-294">      super._class(value);</span>
-<span class="source-line-no">295</span><span id="line-295">      return this;</span>
-<span class="source-line-no">296</span><span id="line-296">   }</span>
-<span class="source-line-no">297</span><span id="line-297"></span>
-<span class="source-line-no">298</span><span id="line-298">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">299</span><span id="line-299">   public Link accesskey(String value) {</span>
-<span class="source-line-no">300</span><span id="line-300">      super.accesskey(value);</span>
-<span class="source-line-no">301</span><span id="line-301">      return this;</span>
-<span class="source-line-no">302</span><span id="line-302">   }</span>
-<span class="source-line-no">303</span><span id="line-303"></span>
-<span class="source-line-no">304</span><span id="line-304">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">305</span><span id="line-305">   public Link contenteditable(Object value) {</span>
-<span class="source-line-no">306</span><span id="line-306">      super.contenteditable(value);</span>
-<span class="source-line-no">307</span><span id="line-307">      return this;</span>
-<span class="source-line-no">308</span><span id="line-308">   }</span>
-<span class="source-line-no">309</span><span id="line-309"></span>
-<span class="source-line-no">310</span><span id="line-310">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">311</span><span id="line-311">   public Link dir(String value) {</span>
-<span class="source-line-no">312</span><span id="line-312">      super.dir(value);</span>
-<span class="source-line-no">313</span><span id="line-313">      return this;</span>
-<span class="source-line-no">314</span><span id="line-314">   }</span>
-<span class="source-line-no">315</span><span id="line-315"></span>
-<span class="source-line-no">316</span><span id="line-316">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">317</span><span id="line-317">   public Link hidden(Object value) {</span>
-<span class="source-line-no">318</span><span id="line-318">      super.hidden(value);</span>
-<span class="source-line-no">319</span><span id="line-319">      return this;</span>
-<span class="source-line-no">320</span><span id="line-320">   }</span>
-<span class="source-line-no">321</span><span id="line-321"></span>
-<span class="source-line-no">322</span><span id="line-322">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">323</span><span id="line-323">   public Link id(String value) {</span>
-<span class="source-line-no">324</span><span id="line-324">      super.id(value);</span>
-<span class="source-line-no">325</span><span id="line-325">      return this;</span>
-<span class="source-line-no">326</span><span id="line-326">   }</span>
-<span class="source-line-no">327</span><span id="line-327"></span>
-<span class="source-line-no">328</span><span id="line-328">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">329</span><span id="line-329">   public Link lang(String value) {</span>
-<span class="source-line-no">330</span><span id="line-330">      super.lang(value);</span>
-<span class="source-line-no">331</span><span id="line-331">      return this;</span>
-<span class="source-line-no">332</span><span id="line-332">   }</span>
-<span class="source-line-no">333</span><span id="line-333"></span>
-<span class="source-line-no">334</span><span id="line-334">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">335</span><span id="line-335">   public Link onabort(String value) {</span>
-<span class="source-line-no">336</span><span id="line-336">      super.onabort(value);</span>
-<span class="source-line-no">337</span><span id="line-337">      return this;</span>
-<span class="source-line-no">338</span><span id="line-338">   }</span>
-<span class="source-line-no">339</span><span id="line-339"></span>
-<span class="source-line-no">340</span><span id="line-340">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">341</span><span id="line-341">   public Link onblur(String value) {</span>
-<span class="source-line-no">342</span><span id="line-342">      super.onblur(value);</span>
-<span class="source-line-no">343</span><span id="line-343">      return this;</span>
-<span class="source-line-no">344</span><span id="line-344">   }</span>
-<span class="source-line-no">345</span><span id="line-345"></span>
-<span class="source-line-no">346</span><span id="line-346">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">347</span><span id="line-347">   public Link oncancel(String value) {</span>
-<span class="source-line-no">348</span><span id="line-348">      super.oncancel(value);</span>
-<span class="source-line-no">349</span><span id="line-349">      return this;</span>
-<span class="source-line-no">350</span><span id="line-350">   }</span>
-<span class="source-line-no">351</span><span id="line-351"></span>
-<span class="source-line-no">352</span><span id="line-352">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">353</span><span id="line-353">   public Link oncanplay(String value) {</span>
-<span class="source-line-no">354</span><span id="line-354">      super.oncanplay(value);</span>
-<span class="source-line-no">355</span><span id="line-355">      return this;</span>
-<span class="source-line-no">356</span><span id="line-356">   }</span>
-<span class="source-line-no">357</span><span id="line-357"></span>
-<span class="source-line-no">358</span><span id="line-358">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">359</span><span id="line-359">   public Link oncanplaythrough(String value) {</span>
-<span class="source-line-no">360</span><span id="line-360">      super.oncanplaythrough(value);</span>
-<span class="source-line-no">361</span><span id="line-361">      return this;</span>
-<span class="source-line-no">362</span><span id="line-362">   }</span>
-<span class="source-line-no">363</span><span id="line-363"></span>
-<span class="source-line-no">364</span><span id="line-364">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">365</span><span id="line-365">   public Link onchange(String value) {</span>
-<span class="source-line-no">366</span><span id="line-366">      super.onchange(value);</span>
-<span class="source-line-no">367</span><span id="line-367">      return this;</span>
-<span class="source-line-no">368</span><span id="line-368">   }</span>
-<span class="source-line-no">369</span><span id="line-369"></span>
-<span class="source-line-no">370</span><span id="line-370">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">371</span><span id="line-371">   public Link onclick(String value) {</span>
-<span class="source-line-no">372</span><span id="line-372">      super.onclick(value);</span>
-<span class="source-line-no">373</span><span id="line-373">      return this;</span>
-<span class="source-line-no">374</span><span id="line-374">   }</span>
-<span class="source-line-no">375</span><span id="line-375"></span>
-<span class="source-line-no">376</span><span id="line-376">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">377</span><span id="line-377">   public Link oncuechange(String value) {</span>
-<span class="source-line-no">378</span><span id="line-378">      super.oncuechange(value);</span>
-<span class="source-line-no">379</span><span id="line-379">      return this;</span>
-<span class="source-line-no">380</span><span id="line-380">   }</span>
-<span class="source-line-no">381</span><span id="line-381"></span>
-<span class="source-line-no">382</span><span id="line-382">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">383</span><span id="line-383">   public Link ondblclick(String value) {</span>
-<span class="source-line-no">384</span><span id="line-384">      super.ondblclick(value);</span>
-<span class="source-line-no">385</span><span id="line-385">      return this;</span>
-<span class="source-line-no">386</span><span id="line-386">   }</span>
-<span class="source-line-no">387</span><span id="line-387"></span>
-<span class="source-line-no">388</span><span id="line-388">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">389</span><span id="line-389">   public Link ondurationchange(String value) {</span>
-<span class="source-line-no">390</span><span id="line-390">      super.ondurationchange(value);</span>
-<span class="source-line-no">391</span><span id="line-391">      return this;</span>
-<span class="source-line-no">392</span><span id="line-392">   }</span>
-<span class="source-line-no">393</span><span id="line-393"></span>
-<span class="source-line-no">394</span><span id="line-394">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">395</span><span id="line-395">   public Link onemptied(String value) {</span>
-<span class="source-line-no">396</span><span id="line-396">      super.onemptied(value);</span>
-<span class="source-line-no">397</span><span id="line-397">      return this;</span>
-<span class="source-line-no">398</span><span id="line-398">   }</span>
-<span class="source-line-no">399</span><span id="line-399"></span>
-<span class="source-line-no">400</span><span id="line-400">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">401</span><span id="line-401">   public Link onended(String value) {</span>
-<span class="source-line-no">402</span><span id="line-402">      super.onended(value);</span>
-<span class="source-line-no">403</span><span id="line-403">      return this;</span>
-<span class="source-line-no">404</span><span id="line-404">   }</span>
-<span class="source-line-no">405</span><span id="line-405"></span>
-<span class="source-line-no">406</span><span id="line-406">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">407</span><span id="line-407">   public Link onerror(String value) {</span>
-<span class="source-line-no">408</span><span id="line-408">      super.onerror(value);</span>
-<span class="source-line-no">409</span><span id="line-409">      return this;</span>
-<span class="source-line-no">410</span><span id="line-410">   }</span>
-<span class="source-line-no">411</span><span id="line-411"></span>
-<span class="source-line-no">412</span><span id="line-412">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">413</span><span id="line-413">   public Link onfocus(String value) {</span>
-<span class="source-line-no">414</span><span id="line-414">      super.onfocus(value);</span>
-<span class="source-line-no">415</span><span id="line-415">      return this;</span>
-<span class="source-line-no">416</span><span id="line-416">   }</span>
-<span class="source-line-no">417</span><span id="line-417"></span>
-<span class="source-line-no">418</span><span id="line-418">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">419</span><span id="line-419">   public Link oninput(String value) {</span>
-<span class="source-line-no">420</span><span id="line-420">      super.oninput(value);</span>
-<span class="source-line-no">421</span><span id="line-421">      return this;</span>
-<span class="source-line-no">422</span><span id="line-422">   }</span>
-<span class="source-line-no">423</span><span id="line-423"></span>
-<span class="source-line-no">424</span><span id="line-424">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">425</span><span id="line-425">   public Link oninvalid(String value) {</span>
-<span class="source-line-no">426</span><span id="line-426">      super.oninvalid(value);</span>
-<span class="source-line-no">427</span><span id="line-427">      return this;</span>
-<span class="source-line-no">428</span><span id="line-428">   }</span>
-<span class="source-line-no">429</span><span id="line-429"></span>
-<span class="source-line-no">430</span><span id="line-430">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">431</span><span id="line-431">   public Link onkeydown(String value) {</span>
-<span class="source-line-no">432</span><span id="line-432">      super.onkeydown(value);</span>
-<span class="source-line-no">433</span><span id="line-433">      return this;</span>
-<span class="source-line-no">434</span><span id="line-434">   }</span>
-<span class="source-line-no">435</span><span id="line-435"></span>
-<span class="source-line-no">436</span><span id="line-436">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">437</span><span id="line-437">   public Link onkeypress(String value) {</span>
-<span class="source-line-no">438</span><span id="line-438">      super.onkeypress(value);</span>
-<span class="source-line-no">439</span><span id="line-439">      return this;</span>
-<span class="source-line-no">440</span><span id="line-440">   }</span>
-<span class="source-line-no">441</span><span id="line-441"></span>
-<span class="source-line-no">442</span><span id="line-442">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">443</span><span id="line-443">   public Link onkeyup(String value) {</span>
-<span class="source-line-no">444</span><span id="line-444">      super.onkeyup(value);</span>
-<span class="source-line-no">445</span><span id="line-445">      return this;</span>
-<span class="source-line-no">446</span><span id="line-446">   }</span>
-<span class="source-line-no">447</span><span id="line-447"></span>
-<span class="source-line-no">448</span><span id="line-448">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">449</span><span id="line-449">   public Link onload(String value) {</span>
-<span class="source-line-no">450</span><span id="line-450">      super.onload(value);</span>
-<span class="source-line-no">451</span><span id="line-451">      return this;</span>
-<span class="source-line-no">452</span><span id="line-452">   }</span>
-<span class="source-line-no">453</span><span id="line-453"></span>
-<span class="source-line-no">454</span><span id="line-454">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">455</span><span id="line-455">   public Link onloadeddata(String value) {</span>
-<span class="source-line-no">456</span><span id="line-456">      super.onloadeddata(value);</span>
-<span class="source-line-no">457</span><span id="line-457">      return this;</span>
-<span class="source-line-no">458</span><span id="line-458">   }</span>
-<span class="source-line-no">459</span><span id="line-459"></span>
-<span class="source-line-no">460</span><span id="line-460">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">461</span><span id="line-461">   public Link onloadedmetadata(String value) {</span>
-<span class="source-line-no">462</span><span id="line-462">      super.onloadedmetadata(value);</span>
-<span class="source-line-no">463</span><span id="line-463">      return this;</span>
-<span class="source-line-no">464</span><span id="line-464">   }</span>
-<span class="source-line-no">465</span><span id="line-465"></span>
-<span class="source-line-no">466</span><span id="line-466">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">467</span><span id="line-467">   public Link onloadstart(String value) {</span>
-<span class="source-line-no">468</span><span id="line-468">      super.onloadstart(value);</span>
-<span class="source-line-no">469</span><span id="line-469">      return this;</span>
-<span class="source-line-no">470</span><span id="line-470">   }</span>
-<span class="source-line-no">471</span><span id="line-471"></span>
-<span class="source-line-no">472</span><span id="line-472">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">473</span><span id="line-473">   public Link onmousedown(String value) {</span>
-<span class="source-line-no">474</span><span id="line-474">      super.onmousedown(value);</span>
-<span class="source-line-no">475</span><span id="line-475">      return this;</span>
-<span class="source-line-no">476</span><span id="line-476">   }</span>
-<span class="source-line-no">477</span><span id="line-477"></span>
-<span class="source-line-no">478</span><span id="line-478">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">479</span><span id="line-479">   public Link onmouseenter(String value) {</span>
-<span class="source-line-no">480</span><span id="line-480">      super.onmouseenter(value);</span>
-<span class="source-line-no">481</span><span id="line-481">      return this;</span>
-<span class="source-line-no">482</span><span id="line-482">   }</span>
-<span class="source-line-no">483</span><span id="line-483"></span>
-<span class="source-line-no">484</span><span id="line-484">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">485</span><span id="line-485">   public Link onmouseleave(String value) {</span>
-<span class="source-line-no">486</span><span id="line-486">      super.onmouseleave(value);</span>
-<span class="source-line-no">487</span><span id="line-487">      return this;</span>
-<span class="source-line-no">488</span><span id="line-488">   }</span>
-<span class="source-line-no">489</span><span id="line-489"></span>
-<span class="source-line-no">490</span><span id="line-490">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">491</span><span id="line-491">   public Link onmousemove(String value) {</span>
-<span class="source-line-no">492</span><span id="line-492">      super.onmousemove(value);</span>
-<span class="source-line-no">493</span><span id="line-493">      return this;</span>
-<span class="source-line-no">494</span><span id="line-494">   }</span>
-<span class="source-line-no">495</span><span id="line-495"></span>
-<span class="source-line-no">496</span><span id="line-496">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">497</span><span id="line-497">   public Link onmouseout(String value) {</span>
-<span class="source-line-no">498</span><span id="line-498">      super.onmouseout(value);</span>
-<span class="source-line-no">499</span><span id="line-499">      return this;</span>
-<span class="source-line-no">500</span><span id="line-500">   }</span>
-<span class="source-line-no">501</span><span id="line-501"></span>
-<span class="source-line-no">502</span><span id="line-502">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">503</span><span id="line-503">   public Link onmouseover(String value) {</span>
-<span class="source-line-no">504</span><span id="line-504">      super.onmouseover(value);</span>
-<span class="source-line-no">505</span><span id="line-505">      return this;</span>
-<span class="source-line-no">506</span><span id="line-506">   }</span>
-<span class="source-line-no">507</span><span id="line-507"></span>
-<span class="source-line-no">508</span><span id="line-508">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">509</span><span id="line-509">   public Link onmouseup(String value) {</span>
-<span class="source-line-no">510</span><span id="line-510">      super.onmouseup(value);</span>
-<span class="source-line-no">511</span><span id="line-511">      return this;</span>
-<span class="source-line-no">512</span><span id="line-512">   }</span>
-<span class="source-line-no">513</span><span id="line-513"></span>
-<span class="source-line-no">514</span><span id="line-514">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">515</span><span id="line-515">   public Link onmousewheel(String value) {</span>
-<span class="source-line-no">516</span><span id="line-516">      super.onmousewheel(value);</span>
-<span class="source-line-no">517</span><span id="line-517">      return this;</span>
-<span class="source-line-no">518</span><span id="line-518">   }</span>
-<span class="source-line-no">519</span><span id="line-519"></span>
-<span class="source-line-no">520</span><span id="line-520">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">521</span><span id="line-521">   public Link onpause(String value) {</span>
-<span class="source-line-no">522</span><span id="line-522">      super.onpause(value);</span>
-<span class="source-line-no">523</span><span id="line-523">      return this;</span>
-<span class="source-line-no">524</span><span id="line-524">   }</span>
-<span class="source-line-no">525</span><span id="line-525"></span>
-<span class="source-line-no">526</span><span id="line-526">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">527</span><span id="line-527">   public Link onplay(String value) {</span>
-<span class="source-line-no">528</span><span id="line-528">      super.onplay(value);</span>
-<span class="source-line-no">529</span><span id="line-529">      return this;</span>
-<span class="source-line-no">530</span><span id="line-530">   }</span>
-<span class="source-line-no">531</span><span id="line-531"></span>
-<span class="source-line-no">532</span><span id="line-532">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">533</span><span id="line-533">   public Link onplaying(String value) {</span>
-<span class="source-line-no">534</span><span id="line-534">      super.onplaying(value);</span>
-<span class="source-line-no">535</span><span id="line-535">      return this;</span>
-<span class="source-line-no">536</span><span id="line-536">   }</span>
-<span class="source-line-no">537</span><span id="line-537"></span>
-<span class="source-line-no">538</span><span id="line-538">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">539</span><span id="line-539">   public Link onprogress(String value) {</span>
-<span class="source-line-no">540</span><span id="line-540">      super.onprogress(value);</span>
-<span class="source-line-no">541</span><span id="line-541">      return this;</span>
-<span class="source-line-no">542</span><span id="line-542">   }</span>
-<span class="source-line-no">543</span><span id="line-543"></span>
-<span class="source-line-no">544</span><span id="line-544">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">545</span><span id="line-545">   public Link onratechange(String value) {</span>
-<span class="source-line-no">546</span><span id="line-546">      super.onratechange(value);</span>
-<span class="source-line-no">547</span><span id="line-547">      return this;</span>
-<span class="source-line-no">548</span><span id="line-548">   }</span>
-<span class="source-line-no">549</span><span id="line-549"></span>
-<span class="source-line-no">550</span><span id="line-550">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">551</span><span id="line-551">   public Link onreset(String value) {</span>
-<span class="source-line-no">552</span><span id="line-552">      super.onreset(value);</span>
-<span class="source-line-no">553</span><span id="line-553">      return this;</span>
-<span class="source-line-no">554</span><span id="line-554">   }</span>
-<span class="source-line-no">555</span><span id="line-555"></span>
-<span class="source-line-no">556</span><span id="line-556">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">557</span><span id="line-557">   public Link onresize(String value) {</span>
-<span class="source-line-no">558</span><span id="line-558">      super.onresize(value);</span>
-<span class="source-line-no">559</span><span id="line-559">      return this;</span>
-<span class="source-line-no">560</span><span id="line-560">   }</span>
-<span class="source-line-no">561</span><span id="line-561"></span>
-<span class="source-line-no">562</span><span id="line-562">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">563</span><span id="line-563">   public Link onscroll(String value) {</span>
-<span class="source-line-no">564</span><span id="line-564">      super.onscroll(value);</span>
-<span class="source-line-no">565</span><span id="line-565">      return this;</span>
-<span class="source-line-no">566</span><span id="line-566">   }</span>
-<span class="source-line-no">567</span><span id="line-567"></span>
-<span class="source-line-no">568</span><span id="line-568">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">569</span><span id="line-569">   public Link onseeked(String value) {</span>
-<span class="source-line-no">570</span><span id="line-570">      super.onseeked(value);</span>
-<span class="source-line-no">571</span><span id="line-571">      return this;</span>
-<span class="source-line-no">572</span><span id="line-572">   }</span>
-<span class="source-line-no">573</span><span id="line-573"></span>
-<span class="source-line-no">574</span><span id="line-574">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">575</span><span id="line-575">   public Link onseeking(String value) {</span>
-<span class="source-line-no">576</span><span id="line-576">      super.onseeking(value);</span>
-<span class="source-line-no">577</span><span id="line-577">      return this;</span>
-<span class="source-line-no">578</span><span id="line-578">   }</span>
-<span class="source-line-no">579</span><span id="line-579"></span>
-<span class="source-line-no">580</span><span id="line-580">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">581</span><span id="line-581">   public Link onselect(String value) {</span>
-<span class="source-line-no">582</span><span id="line-582">      super.onselect(value);</span>
-<span class="source-line-no">583</span><span id="line-583">      return this;</span>
-<span class="source-line-no">584</span><span id="line-584">   }</span>
-<span class="source-line-no">585</span><span id="line-585"></span>
-<span class="source-line-no">586</span><span id="line-586">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">587</span><span id="line-587">   public Link onshow(String value) {</span>
-<span class="source-line-no">588</span><span id="line-588">      super.onshow(value);</span>
-<span class="source-line-no">589</span><span id="line-589">      return this;</span>
-<span class="source-line-no">590</span><span id="line-590">   }</span>
-<span class="source-line-no">591</span><span id="line-591"></span>
-<span class="source-line-no">592</span><span id="line-592">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">593</span><span id="line-593">   public Link onstalled(String value) {</span>
-<span class="source-line-no">594</span><span id="line-594">      super.onstalled(value);</span>
-<span class="source-line-no">595</span><span id="line-595">      return this;</span>
-<span class="source-line-no">596</span><span id="line-596">   }</span>
-<span class="source-line-no">597</span><span id="line-597"></span>
-<span class="source-line-no">598</span><span id="line-598">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">599</span><span id="line-599">   public Link onsubmit(String value) {</span>
-<span class="source-line-no">600</span><span id="line-600">      super.onsubmit(value);</span>
-<span class="source-line-no">601</span><span id="line-601">      return this;</span>
-<span class="source-line-no">602</span><span id="line-602">   }</span>
-<span class="source-line-no">603</span><span id="line-603"></span>
-<span class="source-line-no">604</span><span id="line-604">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">605</span><span id="line-605">   public Link onsuspend(String value) {</span>
-<span class="source-line-no">606</span><span id="line-606">      super.onsuspend(value);</span>
-<span class="source-line-no">607</span><span id="line-607">      return this;</span>
-<span class="source-line-no">608</span><span id="line-608">   }</span>
-<span class="source-line-no">609</span><span id="line-609"></span>
-<span class="source-line-no">610</span><span id="line-610">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">611</span><span id="line-611">   public Link ontimeupdate(String value) {</span>
-<span class="source-line-no">612</span><span id="line-612">      super.ontimeupdate(value);</span>
-<span class="source-line-no">613</span><span id="line-613">      return this;</span>
-<span class="source-line-no">614</span><span id="line-614">   }</span>
-<span class="source-line-no">615</span><span id="line-615"></span>
-<span class="source-line-no">616</span><span id="line-616">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">617</span><span id="line-617">   public Link ontoggle(String value) {</span>
-<span class="source-line-no">618</span><span id="line-618">      super.ontoggle(value);</span>
-<span class="source-line-no">619</span><span id="line-619">      return this;</span>
-<span class="source-line-no">620</span><span id="line-620">   }</span>
-<span class="source-line-no">621</span><span id="line-621"></span>
-<span class="source-line-no">622</span><span id="line-622">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">623</span><span id="line-623">   public Link onvolumechange(String value) {</span>
-<span class="source-line-no">624</span><span id="line-624">      super.onvolumechange(value);</span>
-<span class="source-line-no">625</span><span id="line-625">      return this;</span>
-<span class="source-line-no">626</span><span id="line-626">   }</span>
-<span class="source-line-no">627</span><span id="line-627"></span>
-<span class="source-line-no">628</span><span id="line-628">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">629</span><span id="line-629">   public Link onwaiting(String value) {</span>
-<span class="source-line-no">630</span><span id="line-630">      super.onwaiting(value);</span>
-<span class="source-line-no">631</span><span id="line-631">      return this;</span>
-<span class="source-line-no">632</span><span id="line-632">   }</span>
-<span class="source-line-no">633</span><span id="line-633"></span>
-<span class="source-line-no">634</span><span id="line-634">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">635</span><span id="line-635">   public Link spellcheck(Object value) {</span>
-<span class="source-line-no">636</span><span id="line-636">      super.spellcheck(value);</span>
-<span class="source-line-no">637</span><span id="line-637">      return this;</span>
-<span class="source-line-no">638</span><span id="line-638">   }</span>
-<span class="source-line-no">639</span><span id="line-639"></span>
-<span class="source-line-no">640</span><span id="line-640">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">641</span><span id="line-641">   public Link style(String value) {</span>
-<span class="source-line-no">642</span><span id="line-642">      super.style(value);</span>
-<span class="source-line-no">643</span><span id="line-643">      return this;</span>
-<span class="source-line-no">644</span><span id="line-644">   }</span>
-<span class="source-line-no">645</span><span id="line-645"></span>
-<span class="source-line-no">646</span><span id="line-646">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">647</span><span id="line-647">   public Link tabindex(Object value) {</span>
-<span class="source-line-no">648</span><span id="line-648">      super.tabindex(value);</span>
-<span class="source-line-no">649</span><span id="line-649">      return this;</span>
-<span class="source-line-no">650</span><span id="line-650">   }</span>
-<span class="source-line-no">651</span><span id="line-651"></span>
-<span class="source-line-no">652</span><span id="line-652">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">653</span><span id="line-653">   public Link title(String value) {</span>
-<span class="source-line-no">654</span><span id="line-654">      super.title(value);</span>
-<span class="source-line-no">655</span><span id="line-655">      return this;</span>
-<span class="source-line-no">656</span><span id="line-656">   }</span>
-<span class="source-line-no">657</span><span id="line-657"></span>
-<span class="source-line-no">658</span><span id="line-658">   @Override /* GENERATED - org.apache.juneau.bean.html5.HtmlElement */</span>
-<span class="source-line-no">659</span><span id="line-659">   public Link translate(Object value) {</span>
-<span class="source-line-no">660</span><span id="line-660">      super.translate(value);</span>
-<span class="source-line-no">661</span><span id="line-661">      return this;</span>
-<span class="source-line-no">662</span><span id="line-662">   }</span>
-<span class="source-line-no">663</span><span id="line-663"></span>
-<span class="source-line-no">664</span><span id="line-664">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">665</span><span id="line-665">}</span>
+<span class="source-line-no">094</span><span id="line-94">public class Link extends HtmlElementVoid {</span>
+<span class="source-line-no">095</span><span id="line-95"></span>
+<span class="source-line-no">096</span><span id="line-96">   /**</span>
+<span class="source-line-no">097</span><span id="line-97">    * Creates an empty {@link Link} element.</span>
+<span class="source-line-no">098</span><span id="line-98">    */</span>
+<span class="source-line-no">099</span><span id="line-99">   public Link() {}</span>
+<span class="source-line-no">100</span><span id="line-100"></span>
+<span class="source-line-no">101</span><span id="line-101">   /**</span>
+<span class="source-line-no">102</span><span id="line-102">    * Creates a {@link Link} element with the specified {@link Link#href(Object)} attribute.</span>
+<span class="source-line-no">103</span><span id="line-103">    *</span>
+<span class="source-line-no">104</span><span id="line-104">    * @param href The {@link Link#href(Object)} attribute.</span>
+<span class="source-line-no">105</span><span id="line-105">    */</span>
+<span class="source-line-no">106</span><span id="line-106">   public Link(Object href) {</span>
+<span class="source-line-no">107</span><span id="line-107">      href(href);</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   /**</span>
+<span class="source-line-no">111</span><span id="line-111">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-crossorigin"&gt;crossorigin&lt;/a&gt;</span>
+<span class="source-line-no">112</span><span id="line-112">    * attribute.</span>
+<span class="source-line-no">113</span><span id="line-113">    *</span>
+<span class="source-line-no">114</span><span id="line-114">    * &lt;p&gt;</span>
+<span class="source-line-no">115</span><span id="line-115">    * Specifies how the element handles cross-origin requests for CORS (Cross-Origin Resource Sharing).</span>
+<span class="source-line-no">116</span><span id="line-116">    *</span>
+<span class="source-line-no">117</span><span id="line-117">    * &lt;p&gt;</span>
+<span class="source-line-no">118</span><span id="line-118">    * Possible values:</span>
+<span class="source-line-no">119</span><span id="line-119">    * &lt;ul&gt;</span>
+<span class="source-line-no">120</span><span id="line-120">    *    &lt;li&gt;&lt;js&gt;"anonymous"&lt;/js&gt; - Cross-origin requests are made without credentials&lt;/li&gt;</span>
+<span class="source-line-no">121</span><span id="line-121">    *    &lt;li&gt;&lt;js&gt;"use-credentials"&lt;/js&gt; - Cross-origin requests include credentials&lt;/li&gt;</span>
+<span class="source-line-no">122</span><span id="line-122">    * &lt;/ul&gt;</span>
+<span class="source-line-no">123</span><span id="line-123">    *</span>
+<span class="source-line-no">124</span><span id="line-124">    * @param crossorigin How to handle cross-origin requests.</span>
+<span class="source-line-no">125</span><span id="line-125">    * @return This object.</span>
+<span class="source-line-no">126</span><span id="line-126">    */</span>
+<span class="source-line-no">127</span><span id="line-127">   public Link crossorigin(String value) {</span>
+<span class="source-line-no">128</span><span id="line-128">      attr("crossorigin", value);</span>
+<span class="source-line-no">129</span><span id="line-129">      return this;</span>
+<span class="source-line-no">130</span><span id="line-130">   }</span>
+<span class="source-line-no">131</span><span id="line-131"></span>
+<span class="source-line-no">132</span><span id="line-132">   /**</span>
+<span class="source-line-no">133</span><span id="line-133">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-href"&gt;href&lt;/a&gt; attribute.</span>
+<span class="source-line-no">134</span><span id="line-134">    *</span>
+<span class="source-line-no">135</span><span id="line-135">    * &lt;p&gt;</span>
+<span class="source-line-no">136</span><span id="line-136">    * Address of the hyperlink.</span>
+<span class="source-line-no">137</span><span id="line-137">    *</span>
+<span class="source-line-no">138</span><span id="line-138">    * &lt;p&gt;</span>
+<span class="source-line-no">139</span><span id="line-139">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
+<span class="source-line-no">140</span><span id="line-140">    * Strings must be valid URIs.</span>
+<span class="source-line-no">141</span><span id="line-141">    *</span>
+<span class="source-line-no">142</span><span id="line-142">    * &lt;p&gt;</span>
+<span class="source-line-no">143</span><span id="line-143">    * URIs defined by {@link UriResolver} can be used for values.</span>
+<span class="source-line-no">144</span><span id="line-144">    *</span>
+<span class="source-line-no">145</span><span id="line-145">    * @param href</span>
+<span class="source-line-no">146</span><span id="line-146">    *    The new value for this attribute.</span>
+<span class="source-line-no">147</span><span id="line-147">    *    Typically a {@link URL} or {@link String}.</span>
+<span class="source-line-no">148</span><span id="line-148">    * @return This object.</span>
+<span class="source-line-no">149</span><span id="line-149">    */</span>
+<span class="source-line-no">150</span><span id="line-150">   public Link href(Object value) {</span>
+<span class="source-line-no">151</span><span id="line-151">      attrUri("href", value);</span>
+<span class="source-line-no">152</span><span id="line-152">      return this;</span>
+<span class="source-line-no">153</span><span id="line-153">   }</span>
+<span class="source-line-no">154</span><span id="line-154"></span>
+<span class="source-line-no">155</span><span id="line-155">   /**</span>
+<span class="source-line-no">156</span><span id="line-156">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-hreflang"&gt;hreflang&lt;/a&gt;</span>
+<span class="source-line-no">157</span><span id="line-157">    * attribute.</span>
+<span class="source-line-no">158</span><span id="line-158">    *</span>
+<span class="source-line-no">159</span><span id="line-159">    * &lt;p&gt;</span>
+<span class="source-line-no">160</span><span id="line-160">    * Specifies the language of the linked resource. Used for SEO and accessibility purposes.</span>
+<span class="source-line-no">161</span><span id="line-161">    *</span>
+<span class="source-line-no">162</span><span id="line-162">    * &lt;p&gt;</span>
+<span class="source-line-no">163</span><span id="line-163">    * Examples:</span>
+<span class="source-line-no">164</span><span id="line-164">    * &lt;ul&gt;</span>
+<span class="source-line-no">165</span><span id="line-165">    *    &lt;li&gt;&lt;js&gt;"en"&lt;/js&gt; - English&lt;/li&gt;</span>
+<span class="source-line-no">166</span><span id="line-166">    *    &lt;li&gt;&lt;js&gt;"es"&lt;/js&gt; - Spanish&lt;/li&gt;</span>
+<span class="source-line-no">167</span><span id="line-167">    *    &lt;li&gt;&lt;js&gt;"fr"&lt;/js&gt; - French&lt;/li&gt;</span>
+<span class="source-line-no">168</span><span id="line-168">    *    &lt;li&gt;&lt;js&gt;"de"&lt;/js&gt; - German&lt;/li&gt;</span>
+<span class="source-line-no">169</span><span id="line-169">    *    &lt;li&gt;&lt;js&gt;"zh"&lt;/js&gt; - Chinese&lt;/li&gt;</span>
+<span class="source-line-no">170</span><span id="line-170">    *    &lt;li&gt;&lt;js&gt;"ja"&lt;/js&gt; - Japanese&lt;/li&gt;</span>
+<span class="source-line-no">171</span><span id="line-171">    * &lt;/ul&gt;</span>
+<span class="source-line-no">172</span><span id="line-172">    *</span>
+<span class="source-line-no">173</span><span id="line-173">    * @param hreflang The language code of the linked resource.</span>
+<span class="source-line-no">174</span><span id="line-174">    * @return This object.</span>
+<span class="source-line-no">175</span><span id="line-175">    */</span>
+<span class="source-line-no">176</span><span id="line-176">   public Link hreflang(String value) {</span>
+<span class="source-line-no">177</span><span id="line-177">      attr("hreflang", value);</span>
+<span class="source-line-no">178</span><span id="line-178">      return this;</span>
+<span class="source-line-no">179</span><span id="line-179">   }</span>
+<span class="source-line-no">180</span><span id="line-180"></span>
+<span class="source-line-no">181</span><span id="line-181">   /**</span>
+<span class="source-line-no">182</span><span id="line-182">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-media"&gt;media&lt;/a&gt; attribute.</span>
+<span class="source-line-no">183</span><span id="line-183">    *</span>
+<span class="source-line-no">184</span><span id="line-184">    * &lt;p&gt;</span>
+<span class="source-line-no">185</span><span id="line-185">    * Specifies which media types the linked resource applies to. Used primarily with stylesheets.</span>
+<span class="source-line-no">186</span><span id="line-186">    *</span>
+<span class="source-line-no">187</span><span id="line-187">    * &lt;p&gt;</span>
+<span class="source-line-no">188</span><span id="line-188">    * Common values:</span>
+<span class="source-line-no">189</span><span id="line-189">    * &lt;ul&gt;</span>
+<span class="source-line-no">190</span><span id="line-190">    *    &lt;li&gt;&lt;js&gt;"all"&lt;/js&gt; - All media types (default)&lt;/li&gt;</span>
+<span class="source-line-no">191</span><span id="line-191">    *    &lt;li&gt;&lt;js&gt;"screen"&lt;/js&gt; - Computer screens&lt;/li&gt;</span>
+<span class="source-line-no">192</span><span id="line-192">    *    &lt;li&gt;&lt;js&gt;"print"&lt;/js&gt; - Printers and print preview&lt;/li&gt;</span>
+<span class="source-line-no">193</span><span id="line-193">    *    &lt;li&gt;&lt;js&gt;"handheld"&lt;/js&gt; - Handheld devices&lt;/li&gt;</span>
+<span class="source-line-no">194</span><span id="line-194">    *    &lt;li&gt;&lt;js&gt;"projection"&lt;/js&gt; - Projectors&lt;/li&gt;</span>
+<span class="source-line-no">195</span><span id="line-195">    *    &lt;li&gt;&lt;js&gt;"(max-width: 768px)"&lt;/js&gt; - Media queries&lt;/li&gt;</span>
+<span class="source-line-no">196</span><span id="line-196">    * &lt;/ul&gt;</span>
+<span class="source-line-no">197</span><span id="line-197">    *</span>
+<span class="source-line-no">198</span><span id="line-198">    * @param media The media types the linked resource applies to.</span>
+<span class="source-line-no">199</span><span id="line-199">    * @return This object.</span>
+<span class="source-line-no">200</span><span id="line-200">    */</span>
+<span class="source-line-no">201</span><span id="line-201">   public Link media(String value) {</span>
+<span class="source-line-no">202</span><span id="line-202">      attr("media", value);</span>
+<span class="source-line-no">203</span><span id="line-203">      return this;</span>
+<span class="source-line-no">204</span><span id="line-204">   }</span>
+<span class="source-line-no">205</span><span id="line-205"></span>
+<span class="source-line-no">206</span><span id="line-206">   /**</span>
+<span class="source-line-no">207</span><span id="line-207">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-rel"&gt;rel&lt;/a&gt; attribute.</span>
+<span class="source-line-no">208</span><span id="line-208">    *</span>
+<span class="source-line-no">209</span><span id="line-209">    * &lt;p&gt;</span>
+<span class="source-line-no">210</span><span id="line-210">    * Specifies the relationship between the current document and the linked resource.</span>
+<span class="source-line-no">211</span><span id="line-211">    *</span>
+<span class="source-line-no">212</span><span id="line-212">    * &lt;p&gt;</span>
+<span class="source-line-no">213</span><span id="line-213">    * Common values:</span>
+<span class="source-line-no">214</span><span id="line-214">    * &lt;ul&gt;</span>
+<span class="source-line-no">215</span><span id="line-215">    *    &lt;li&gt;&lt;js&gt;"stylesheet"&lt;/js&gt; - External CSS stylesheet&lt;/li&gt;</span>
+<span class="source-line-no">216</span><span id="line-216">    *    &lt;li&gt;&lt;js&gt;"icon"&lt;/js&gt; - Favicon or site icon&lt;/li&gt;</span>
+<span class="source-line-no">217</span><span id="line-217">    *    &lt;li&gt;&lt;js&gt;"canonical"&lt;/js&gt; - Canonical URL for SEO&lt;/li&gt;</span>
+<span class="source-line-no">218</span><span id="line-218">    *    &lt;li&gt;&lt;js&gt;"alternate"&lt;/js&gt; - Alternative version of the page&lt;/li&gt;</span>
+<span class="source-line-no">219</span><span id="line-219">    *    &lt;li&gt;&lt;js&gt;"preload"&lt;/js&gt; - Resource to preload&lt;/li&gt;</span>
+<span class="source-line-no">220</span><span id="line-220">    *    &lt;li&gt;&lt;js&gt;"prefetch"&lt;/js&gt; - Resource to prefetch&lt;/li&gt;</span>
+<span class="source-line-no">221</span><span id="line-221">    *    &lt;li&gt;&lt;js&gt;"dns-prefetch"&lt;/js&gt; - DNS lookup to prefetch&lt;/li&gt;</span>
+<span class="source-line-no">222</span><span id="line-222">    *    &lt;li&gt;&lt;js&gt;"next"&lt;/js&gt; - Next page in a sequence&lt;/li&gt;</span>
+<span class="source-line-no">223</span><span id="line-223">    *    &lt;li&gt;&lt;js&gt;"prev"&lt;/js&gt; - Previous page in a sequence&lt;/li&gt;</span>
+<span class="source-line-no">224</span><span id="line-224">    * &lt;/ul&gt;</span>
+<span class="source-line-no">225</span><span id="line-225">    *</span>
+<span class="source-line-no">226</span><span id="line-226">    * @param rel The relationship between the document and linked resource.</span>
+<span class="source-line-no">227</span><span id="line-227">    * @return This object.</span>
+<span class="source-line-no">228</span><span id="line-228">    */</span>
+<span class="source-line-no">229</span><span id="line-229">   public Link rel(String value) {</span>
+<span class="source-line-no">230</span><span id="line-230">      attr("rel", value);</span>
+<span class="source-line-no">231</span><span id="line-231">      return this;</span>
+<span class="source-line-no">232</span><span id="line-232">   }</span>
+<span class="source-line-no">233</span><span id="line-233"></span>
+<span class="source-line-no">234</span><span id="line-234">   /**</span>
+<span class="source-line-no">235</span><span id="line-235">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-link-sizes"&gt;sizes&lt;/a&gt; attribute.</span>
+<span class="source-line-no">236</span><span id="line-236">    *</span>
+<span class="source-line-no">237</span><span id="line-237">    * &lt;p&gt;</span>
+<span class="source-line-no">238</span><span id="line-238">    * Specifies the sizes of icons for different device contexts. Used with &lt;c&gt;rel="icon"&lt;/c&gt; or &lt;c&gt;rel="apple-touch-icon"&lt;/c&gt;.</span>
+<span class="source-line-no">239</span><span id="line-239">    *</span>
+<span class="source-line-no">240</span><span id="line-240">    * &lt;p&gt;</span>
+<span class="source-line-no">241</span><span id="line-241">    * Common values:</span>
+<span class="source-line-no">242</span><span id="line-242">    * &lt;ul&gt;</span>
+<span class="source-line-no">243</span><span id="line-243">    *    &lt;li&gt;&lt;js&gt;"16x16"&lt;/js&gt; - Small favicon&lt;/li&gt;</span>
+<span class="source-line-no">244</span><span id="line-244">    *    &lt;li&gt;&lt;js&gt;"32x32"&lt;/js&gt; - Standard favicon&lt;/li&gt;</span>
+<span class="source-line-no">245</span><span id="line-245">    *    &lt;li&gt;&lt;js&gt;"180x180"&lt;/js&gt; - Apple touch icon&lt;/li&gt;</span>
+<span class="source-line-no">246</span><span id="line-246">    *    &lt;li&gt;&lt;js&gt;"192x192"&lt;/js&gt; - Android icon&lt;/li&gt;</span>
+<span class="source-line-no">247</span><span id="line-247">    *    &lt;li&gt;&lt;js&gt;"512x512"&lt;/js&gt; - Large icon&lt;/li&gt;</span>
+<span class="source-line-no">248</span><span id="line-248">    *    &lt;li&gt;&lt;js&gt;"any"&lt;/js&gt; - Any size&lt;/li&gt;</span>
+<span class="source-line-no">249</span><span id="line-249">    * &lt;/ul&gt;</span>
+<span class="source-line-no">250</span><span id="line-250">    *</span>
+<span class="source-line-no">251</span><span id="line-251">    * @param sizes The sizes of the linked icon resource.</span>
+<span class="source-line-no">252</span><span id="line-252">    * @return This object.</span>
+<span class="source-line-no">253</span><span id="line-253">    */</span>
+<span class="source-line-no">254</span><span id="line-254">   public Link sizes(String value) {</span>
+<span class="source-line-no">255</span><span id="line-255">      attr("sizes", value);</span>
+<span class="source-line-no">256</span><span id="line-256">      return this;</span>
+<span class="source-line-no">257</span><span id="line-257">   }</span>
+<span class="source-line-no">258</span><span id="line-258"></span>
+<span class="source-line-no">259</span><span id="line-259">   /**</span>
+<span class="source-line-no">260</span><span id="line-260">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-type"&gt;type&lt;/a&gt; attribute.</span>
+<span class="source-line-no">261</span><span id="line-261">    *</span>
+<span class="source-line-no">262</span><span id="line-262">    * &lt;p&gt;</span>
+<span class="source-line-no">263</span><span id="line-263">    * Specifies the MIME type of the linked resource. Helps browsers determine how to handle the resource.</span>
+<span class="source-line-no">264</span><span id="line-264">    *</span>
+<span class="source-line-no">265</span><span id="line-265">    * &lt;p&gt;</span>
+<span class="source-line-no">266</span><span id="line-266">    * Common values:</span>
+<span class="source-line-no">267</span><span id="line-267">    * &lt;ul&gt;</span>
+<span class="source-line-no">268</span><span id="line-268">    *    &lt;li&gt;&lt;js&gt;"text/css"&lt;/js&gt; - CSS stylesheet&lt;/li&gt;</span>
+<span class="source-line-no">269</span><span id="line-269">    *    &lt;li&gt;&lt;js&gt;"text/javascript"&lt;/js&gt; - JavaScript file&lt;/li&gt;</span>
+<span class="source-line-no">270</span><span id="line-270">    *    &lt;li&gt;&lt;js&gt;"application/json"&lt;/js&gt; - JSON data&lt;/li&gt;</span>
+<span class="source-line-no">271</span><span id="line-271">    *    &lt;li&gt;&lt;js&gt;"image/png"&lt;/js&gt; - PNG image&lt;/li&gt;</span>
+<span class="source-line-no">272</span><span id="line-272">    *    &lt;li&gt;&lt;js&gt;"image/jpeg"&lt;/js&gt; - JPEG image&lt;/li&gt;</span>
+<span class="source-line-no">273</span><span id="line-273">    *    &lt;li&gt;&lt;js&gt;"image/svg+xml"&lt;/js&gt; - SVG image&lt;/li&gt;</span>
+<span class="source-line-no">274</span><span id="line-274">    *    &lt;li&gt;&lt;js&gt;"font/woff2"&lt;/js&gt; - Web font&lt;/li&gt;</span>
+<span class="source-line-no">275</span><span id="line-275">    * &lt;/ul&gt;</span>
+<span class="source-line-no">276</span><span id="line-276">    *</span>
+<span class="source-line-no">277</span><span id="line-277">    * @param type The MIME type of the linked resource.</span>
+<span class="source-line-no">278</span><span id="line-278">    * @return This object.</span>
+<span class="source-line-no">279</span><span id="line-279">    */</span>
+<span class="source-line-no">280</span><span id="line-280">   public Link type(String value) {</span>
+<span class="source-line-no">281</span><span id="line-281">      attr("type", value);</span>
+<span class="source-line-no">282</span><span id="line-282">      return this;</span>
+<span class="source-line-no">283</span><span id="line-283">   }</span>
+<span class="source-line-no">284</span><span id="line-284"></span>
+<span class="source-line-no">285</span><span id="line-285">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">286</span><span id="line-286">   // Overridden methods</span>
+<span class="source-line-no">287</span><span id="line-287">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">288</span><span id="line-288">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">289</span><span id="line-289">   public Link _class(String value) {  // NOSONAR - Intentional naming.</span>
+<span class="source-line-no">290</span><span id="line-290">      super._class(value);</span>
+<span class="source-line-no">291</span><span id="line-291">      return this;</span>
+<span class="source-line-no">292</span><span id="line-292">   }</span>
+<span class="source-line-no">293</span><span id="line-293"></span>
+<span class="source-line-no">294</span><span id="line-294">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">295</span><span id="line-295">   public Link accesskey(String value) {</span>
+<span class="source-line-no">296</span><span id="line-296">      super.accesskey(value);</span>
+<span class="source-line-no">297</span><span id="line-297">      return this;</span>
+<span class="source-line-no">298</span><span id="line-298">   }</span>
+<span class="source-line-no">299</span><span id="line-299"></span>
+<span class="source-line-no">300</span><span id="line-300">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">301</span><span id="line-301">   public Link contenteditable(Object value) {</span>
+<span class="source-line-no">302</span><span id="line-302">      super.contenteditable(value);</span>
+<span class="source-line-no">303</span><span id="line-303">      return this;</span>
+<span class="source-line-no">304</span><span id="line-304">   }</span>
+<span class="source-line-no">305</span><span id="line-305"></span>
+<span class="source-line-no">306</span><span id="line-306">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">307</span><span id="line-307">   public Link dir(String value) {</span>
+<span class="source-line-no">308</span><span id="line-308">      super.dir(value);</span>
+<span class="source-line-no">309</span><span id="line-309">      return this;</span>
+<span class="source-line-no">310</span><span id="line-310">   }</span>
+<span class="source-line-no">311</span><span id="line-311"></span>
+<span class="source-line-no">312</span><span id="line-312">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">313</span><span id="line-313">   public Link hidden(Object value) {</span>
+<span class="source-line-no">314</span><span id="line-314">      super.hidden(value);</span>
+<span class="source-line-no">315</span><span id="line-315">      return this;</span>
+<span class="source-line-no">316</span><span id="line-316">   }</span>
+<span class="source-line-no">317</span><span id="line-317"></span>
+<span class="source-line-no">318</span><span id="line-318">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">319</span><span id="line-319">   public Link id(String value) {</span>
+<span class="source-line-no">320</span><span id="line-320">      super.id(value);</span>
+<span class="source-line-no">321</span><span id="line-321">      return this;</span>
+<span class="source-line-no">322</span><span id="line-322">   }</span>
+<span class="source-line-no">323</span><span id="line-323"></span>
+<span class="source-line-no">324</span><span id="line-324">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">325</span><span id="line-325">   public Link lang(String value) {</span>
+<span class="source-line-no">326</span><span id="line-326">      super.lang(value);</span>
+<span class="source-line-no">327</span><span id="line-327">      return this;</span>
+<span class="source-line-no">328</span><span id="line-328">   }</span>
+<span class="source-line-no">329</span><span id="line-329"></span>
+<span class="source-line-no">330</span><span id="line-330">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">331</span><span id="line-331">   public Link onabort(String value) {</span>
+<span class="source-line-no">332</span><span id="line-332">      super.onabort(value);</span>
+<span class="source-line-no">333</span><span id="line-333">      return this;</span>
+<span class="source-line-no">334</span><span id="line-334">   }</span>
+<span class="source-line-no">335</span><span id="line-335"></span>
+<span class="source-line-no">336</span><span id="line-336">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">337</span><span id="line-337">   public Link onblur(String value) {</span>
+<span class="source-line-no">338</span><span id="line-338">      super.onblur(value);</span>
+<span class="source-line-no">339</span><span id="line-339">      return this;</span>
+<span class="source-line-no">340</span><span id="line-340">   }</span>
+<span class="source-line-no">341</span><span id="line-341"></span>
+<span class="source-line-no">342</span><span id="line-342">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">343</span><span id="line-343">   public Link oncancel(String value) {</span>
+<span class="source-line-no">344</span><span id="line-344">      super.oncancel(value);</span>
+<span class="source-line-no">345</span><span id="line-345">      return this;</span>
+<span class="source-line-no">346</span><span id="line-346">   }</span>
+<span class="source-line-no">347</span><span id="line-347"></span>
+<span class="source-line-no">348</span><span id="line-348">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">349</span><span id="line-349">   public Link oncanplay(String value) {</span>
+<span class="source-line-no">350</span><span id="line-350">      super.oncanplay(value);</span>
+<span class="source-line-no">351</span><span id="line-351">      return this;</span>
+<span class="source-line-no">352</span><span id="line-352">   }</span>
+<span class="source-line-no">353</span><span id="line-353"></span>
+<span class="source-line-no">354</span><span id="line-354">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">355</span><span id="line-355">   public Link oncanplaythrough(String value) {</span>
+<span class="source-line-no">356</span><span id="line-356">      super.oncanplaythrough(value);</span>
+<span class="source-line-no">357</span><span id="line-357">      return this;</span>
+<span class="source-line-no">358</span><span id="line-358">   }</span>
+<span class="source-line-no">359</span><span id="line-359"></span>
+<span class="source-line-no">360</span><span id="line-360">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">361</span><span id="line-361">   public Link onchange(String value) {</span>
+<span class="source-line-no">362</span><span id="line-362">      super.onchange(value);</span>
+<span class="source-line-no">363</span><span id="line-363">      return this;</span>
+<span class="source-line-no">364</span><span id="line-364">   }</span>
+<span class="source-line-no">365</span><span id="line-365"></span>
+<span class="source-line-no">366</span><span id="line-366">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">367</span><span id="line-367">   public Link onclick(String value) {</span>
+<span class="source-line-no">368</span><span id="line-368">      super.onclick(value);</span>
+<span class="source-line-no">369</span><span id="line-369">      return this;</span>
+<span class="source-line-no">370</span><span id="line-370">   }</span>
+<span class="source-line-no">371</span><span id="line-371"></span>
+<span class="source-line-no">372</span><span id="line-372">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">373</span><span id="line-373">   public Link oncuechange(String value) {</span>
+<span class="source-line-no">374</span><span id="line-374">      super.oncuechange(value);</span>
+<span class="source-line-no">375</span><span id="line-375">      return this;</span>
+<span class="source-line-no">376</span><span id="line-376">   }</span>
+<span class="source-line-no">377</span><span id="line-377"></span>
+<span class="source-line-no">378</span><span id="line-378">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">379</span><span id="line-379">   public Link ondblclick(String value) {</span>
+<span class="source-line-no">380</span><span id="line-380">      super.ondblclick(value);</span>
+<span class="source-line-no">381</span><span id="line-381">      return this;</span>
+<span class="source-line-no">382</span><span id="line-382">   }</span>
+<span class="source-line-no">383</span><span id="line-383"></span>
+<span class="source-line-no">384</span><span id="line-384">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">385</span><span id="line-385">   public Link ondurationchange(String value) {</span>
+<span class="source-line-no">386</span><span id="line-386">      super.ondurationchange(value);</span>
+<span class="source-line-no">387</span><span id="line-387">      return this;</span>
+<span class="source-line-no">388</span><span id="line-388">   }</span>
+<span class="source-line-no">389</span><span id="line-389"></span>
+<span class="source-line-no">390</span><span id="line-390">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">391</span><span id="line-391">   public Link onemptied(String value) {</span>
+<span class="source-line-no">392</span><span id="line-392">      super.onemptied(value);</span>
+<span class="source-line-no">393</span><span id="line-393">      return this;</span>
+<span class="source-line-no">394</span><span id="line-394">   }</span>
+<span class="source-line-no">395</span><span id="line-395"></span>
+<span class="source-line-no">396</span><span id="line-396">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">397</span><span id="line-397">   public Link onended(String value) {</span>
+<span class="source-line-no">398</span><span id="line-398">      super.onended(value);</span>
+<span class="source-line-no">399</span><span id="line-399">      return this;</span>
+<span class="source-line-no">400</span><span id="line-400">   }</span>
+<span class="source-line-no">401</span><span id="line-401"></span>
+<span class="source-line-no">402</span><span id="line-402">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">403</span><span id="line-403">   public Link onerror(String value) {</span>
+<span class="source-line-no">404</span><span id="line-404">      super.onerror(value);</span>
+<span class="source-line-no">405</span><span id="line-405">      return this;</span>
+<span class="source-line-no">406</span><span id="line-406">   }</span>
+<span class="source-line-no">407</span><span id="line-407"></span>
+<span class="source-line-no">408</span><span id="line-408">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">409</span><span id="line-409">   public Link onfocus(String value) {</span>
+<span class="source-line-no">410</span><span id="line-410">      super.onfocus(value);</span>
+<span class="source-line-no">411</span><span id="line-411">      return this;</span>
+<span class="source-line-no">412</span><span id="line-412">   }</span>
+<span class="source-line-no">413</span><span id="line-413"></span>
+<span class="source-line-no">414</span><span id="line-414">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">415</span><span id="line-415">   public Link oninput(String value) {</span>
+<span class="source-line-no">416</span><span id="line-416">      super.oninput(value);</span>
+<span class="source-line-no">417</span><span id="line-417">      return this;</span>
+<span class="source-line-no">418</span><span id="line-418">   }</span>
+<span class="source-line-no">419</span><span id="line-419"></span>
+<span class="source-line-no">420</span><span id="line-420">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">421</span><span id="line-421">   public Link oninvalid(String value) {</span>
+<span class="source-line-no">422</span><span id="line-422">      super.oninvalid(value);</span>
+<span class="source-line-no">423</span><span id="line-423">      return this;</span>
+<span class="source-line-no">424</span><span id="line-424">   }</span>
+<span class="source-line-no">425</span><span id="line-425"></span>
+<span class="source-line-no">426</span><span id="line-426">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">427</span><span id="line-427">   public Link onkeydown(String value) {</span>
+<span class="source-line-no">428</span><span id="line-428">      super.onkeydown(value);</span>
+<span class="source-line-no">429</span><span id="line-429">      return this;</span>
+<span class="source-line-no">430</span><span id="line-430">   }</span>
+<span class="source-line-no">431</span><span id="line-431"></span>
+<span class="source-line-no">432</span><span id="line-432">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">433</span><span id="line-433">   public Link onkeypress(String value) {</span>
+<span class="source-line-no">434</span><span id="line-434">      super.onkeypress(value);</span>
+<span class="source-line-no">435</span><span id="line-435">      return this;</span>
+<span class="source-line-no">436</span><span id="line-436">   }</span>
+<span class="source-line-no">437</span><span id="line-437"></span>
+<span class="source-line-no">438</span><span id="line-438">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">439</span><span id="line-439">   public Link onkeyup(String value) {</span>
+<span class="source-line-no">440</span><span id="line-440">      super.onkeyup(value);</span>
+<span class="source-line-no">441</span><span id="line-441">      return this;</span>
+<span class="source-line-no">442</span><span id="line-442">   }</span>
+<span class="source-line-no">443</span><span id="line-443"></span>
+<span class="source-line-no">444</span><span id="line-444">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">445</span><span id="line-445">   public Link onload(String value) {</span>
+<span class="source-line-no">446</span><span id="line-446">      super.onload(value);</span>
+<span class="source-line-no">447</span><span id="line-447">      return this;</span>
+<span class="source-line-no">448</span><span id="line-448">   }</span>
+<span class="source-line-no">449</span><span id="line-449"></span>
+<span class="source-line-no">450</span><span id="line-450">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">451</span><span id="line-451">   public Link onloadeddata(String value) {</span>
+<span class="source-line-no">452</span><span id="line-452">      super.onloadeddata(value);</span>
+<span class="source-line-no">453</span><span id="line-453">      return this;</span>
+<span class="source-line-no">454</span><span id="line-454">   }</span>
+<span class="source-line-no">455</span><span id="line-455"></span>
+<span class="source-line-no">456</span><span id="line-456">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">457</span><span id="line-457">   public Link onloadedmetadata(String value) {</span>
+<span class="source-line-no">458</span><span id="line-458">      super.onloadedmetadata(value);</span>
+<span class="source-line-no">459</span><span id="line-459">      return this;</span>
+<span class="source-line-no">460</span><span id="line-460">   }</span>
+<span class="source-line-no">461</span><span id="line-461"></span>
+<span class="source-line-no">462</span><span id="line-462">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">463</span><span id="line-463">   public Link onloadstart(String value) {</span>
+<span class="source-line-no">464</span><span id="line-464">      super.onloadstart(value);</span>
+<span class="source-line-no">465</span><span id="line-465">      return this;</span>
+<span class="source-line-no">466</span><span id="line-466">   }</span>
+<span class="source-line-no">467</span><span id="line-467"></span>
+<span class="source-line-no">468</span><span id="line-468">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">469</span><span id="line-469">   public Link onmousedown(String value) {</span>
+<span class="source-line-no">470</span><span id="line-470">      super.onmousedown(value);</span>
+<span class="source-line-no">471</span><span id="line-471">      return this;</span>
+<span class="source-line-no">472</span><span id="line-472">   }</span>
+<span class="source-line-no">473</span><span id="line-473"></span>
+<span class="source-line-no">474</span><span id="line-474">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">475</span><span id="line-475">   public Link onmouseenter(String value) {</span>
+<span class="source-line-no">476</span><span id="line-476">      super.onmouseenter(value);</span>
+<span class="source-line-no">477</span><span id="line-477">      return this;</span>
+<span class="source-line-no">478</span><span id="line-478">   }</span>
+<span class="source-line-no">479</span><span id="line-479"></span>
+<span class="source-line-no">480</span><span id="line-480">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">481</span><span id="line-481">   public Link onmouseleave(String value) {</span>
+<span class="source-line-no">482</span><span id="line-482">      super.onmouseleave(value);</span>
+<span class="source-line-no">483</span><span id="line-483">      return this;</span>
+<span class="source-line-no">484</span><span id="line-484">   }</span>
+<span class="source-line-no">485</span><span id="line-485"></span>
+<span class="source-line-no">486</span><span id="line-486">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">487</span><span id="line-487">   public Link onmousemove(String value) {</span>
+<span class="source-line-no">488</span><span id="line-488">      super.onmousemove(value);</span>
+<span class="source-line-no">489</span><span id="line-489">      return this;</span>
+<span class="source-line-no">490</span><span id="line-490">   }</span>
+<span class="source-line-no">491</span><span id="line-491"></span>
+<span class="source-line-no">492</span><span id="line-492">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">493</span><span id="line-493">   public Link onmouseout(String value) {</span>
+<span class="source-line-no">494</span><span id="line-494">      super.onmouseout(value);</span>
+<span class="source-line-no">495</span><span id="line-495">      return this;</span>
+<span class="source-line-no">496</span><span id="line-496">   }</span>
+<span class="source-line-no">497</span><span id="line-497"></span>
+<span class="source-line-no">498</span><span id="line-498">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">499</span><span id="line-499">   public Link onmouseover(String value) {</span>
+<span class="source-line-no">500</span><span id="line-500">      super.onmouseover(value);</span>
+<span class="source-line-no">501</span><span id="line-501">      return this;</span>
+<span class="source-line-no">502</span><span id="line-502">   }</span>
+<span class="source-line-no">503</span><span id="line-503"></span>
+<span class="source-line-no">504</span><span id="line-504">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">505</span><span id="line-505">   public Link onmouseup(String value) {</span>
+<span class="source-line-no">506</span><span id="line-506">      super.onmouseup(value);</span>
+<span class="source-line-no">507</span><span id="line-507">      return this;</span>
+<span class="source-line-no">508</span><span id="line-508">   }</span>
+<span class="source-line-no">509</span><span id="line-509"></span>
+<span class="source-line-no">510</span><span id="line-510">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">511</span><span id="line-511">   public Link onmousewheel(String value) {</span>
+<span class="source-line-no">512</span><span id="line-512">      super.onmousewheel(value);</span>
+<span class="source-line-no">513</span><span id="line-513">      return this;</span>
+<span class="source-line-no">514</span><span id="line-514">   }</span>
+<span class="source-line-no">515</span><span id="line-515"></span>
+<span class="source-line-no">516</span><span id="line-516">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">517</span><span id="line-517">   public Link onpause(String value) {</span>
+<span class="source-line-no">518</span><span id="line-518">      super.onpause(value);</span>
+<span class="source-line-no">519</span><span id="line-519">      return this;</span>
+<span class="source-line-no">520</span><span id="line-520">   }</span>
+<span class="source-line-no">521</span><span id="line-521"></span>
+<span class="source-line-no">522</span><span id="line-522">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">523</span><span id="line-523">   public Link onplay(String value) {</span>
+<span class="source-line-no">524</span><span id="line-524">      super.onplay(value);</span>
+<span class="source-line-no">525</span><span id="line-525">      return this;</span>
+<span class="source-line-no">526</span><span id="line-526">   }</span>
+<span class="source-line-no">527</span><span id="line-527"></span>
+<span class="source-line-no">528</span><span id="line-528">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">529</span><span id="line-529">   public Link onplaying(String value) {</span>
+<span class="source-line-no">530</span><span id="line-530">      super.onplaying(value);</span>
+<span class="source-line-no">531</span><span id="line-531">      return this;</span>
+<span class="source-line-no">532</span><span id="line-532">   }</span>
+<span class="source-line-no">533</span><span id="line-533"></span>
+<span class="source-line-no">534</span><span id="line-534">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">535</span><span id="line-535">   public Link onprogress(String value) {</span>
+<span class="source-line-no">536</span><span id="line-536">      super.onprogress(value);</span>
+<span class="source-line-no">537</span><span id="line-537">      return this;</span>
+<span class="source-line-no">538</span><span id="line-538">   }</span>
+<span class="source-line-no">539</span><span id="line-539"></span>
+<span class="source-line-no">540</span><span id="line-540">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">541</span><span id="line-541">   public Link onratechange(String value) {</span>
+<span class="source-line-no">542</span><span id="line-542">      super.onratechange(value);</span>
+<span class="source-line-no">543</span><span id="line-543">      return this;</span>
+<span class="source-line-no">544</span><span id="line-544">   }</span>
+<span class="source-line-no">545</span><span id="line-545"></span>
+<span class="source-line-no">546</span><span id="line-546">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">547</span><span id="line-547">   public Link onreset(String value) {</span>
+<span class="source-line-no">548</span><span id="line-548">      super.onreset(value);</span>
+<span class="source-line-no">549</span><span id="line-549">      return this;</span>
+<span class="source-line-no">550</span><span id="line-550">   }</span>
+<span class="source-line-no">551</span><span id="line-551"></span>
+<span class="source-line-no">552</span><span id="line-552">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">553</span><span id="line-553">   public Link onresize(String value) {</span>
+<span class="source-line-no">554</span><span id="line-554">      super.onresize(value);</span>
+<span class="source-line-no">555</span><span id="line-555">      return this;</span>
+<span class="source-line-no">556</span><span id="line-556">   }</span>
+<span class="source-line-no">557</span><span id="line-557"></span>
+<span class="source-line-no">558</span><span id="line-558">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">559</span><span id="line-559">   public Link onscroll(String value) {</span>
+<span class="source-line-no">560</span><span id="line-560">      super.onscroll(value);</span>
+<span class="source-line-no">561</span><span id="line-561">      return this;</span>
+<span class="source-line-no">562</span><span id="line-562">   }</span>
+<span class="source-line-no">563</span><span id="line-563"></span>
+<span class="source-line-no">564</span><span id="line-564">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">565</span><span id="line-565">   public Link onseeked(String value) {</span>
+<span class="source-line-no">566</span><span id="line-566">      super.onseeked(value);</span>
+<span class="source-line-no">567</span><span id="line-567">      return this;</span>
+<span class="source-line-no">568</span><span id="line-568">   }</span>
+<span class="source-line-no">569</span><span id="line-569"></span>
+<span class="source-line-no">570</span><span id="line-570">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">571</span><span id="line-571">   public Link onseeking(String value) {</span>
+<span class="source-line-no">572</span><span id="line-572">      super.onseeking(value);</span>
+<span class="source-line-no">573</span><span id="line-573">      return this;</span>
+<span class="source-line-no">574</span><span id="line-574">   }</span>
+<span class="source-line-no">575</span><span id="line-575"></span>
+<span class="source-line-no">576</span><span id="line-576">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">577</span><span id="line-577">   public Link onselect(String value) {</span>
+<span class="source-line-no">578</span><span id="line-578">      super.onselect(value);</span>
+<span class="source-line-no">579</span><span id="line-579">      return this;</span>
+<span class="source-line-no">580</span><span id="line-580">   }</span>
+<span class="source-line-no">581</span><span id="line-581"></span>
+<span class="source-line-no">582</span><span id="line-582">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">583</span><span id="line-583">   public Link onshow(String value) {</span>
+<span class="source-line-no">584</span><span id="line-584">      super.onshow(value);</span>
+<span class="source-line-no">585</span><span id="line-585">      return this;</span>
+<span class="source-line-no">586</span><span id="line-586">   }</span>
+<span class="source-line-no">587</span><span id="line-587"></span>
+<span class="source-line-no">588</span><span id="line-588">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">589</span><span id="line-589">   public Link onstalled(String value) {</span>
+<span class="source-line-no">590</span><span id="line-590">      super.onstalled(value);</span>
+<span class="source-line-no">591</span><span id="line-591">      return this;</span>
+<span class="source-line-no">592</span><span id="line-592">   }</span>
+<span class="source-line-no">593</span><span id="line-593"></span>
+<span class="source-line-no">594</span><span id="line-594">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">595</span><span id="line-595">   public Link onsubmit(String value) {</span>
+<span class="source-line-no">596</span><span id="line-596">      super.onsubmit(value);</span>
+<span class="source-line-no">597</span><span id="line-597">      return this;</span>
+<span class="source-line-no">598</span><span id="line-598">   }</span>
+<span class="source-line-no">599</span><span id="line-599"></span>
+<span class="source-line-no">600</span><span id="line-600">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">601</span><span id="line-601">   public Link onsuspend(String value) {</span>
+<span class="source-line-no">602</span><span id="line-602">      super.onsuspend(value);</span>
+<span class="source-line-no">603</span><span id="line-603">      return this;</span>
+<span class="source-line-no">604</span><span id="line-604">   }</span>
+<span class="source-line-no">605</span><span id="line-605"></span>
+<span class="source-line-no">606</span><span id="line-606">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">607</span><span id="line-607">   public Link ontimeupdate(String value) {</span>
+<span class="source-line-no">608</span><span id="line-608">      super.ontimeupdate(value);</span>
+<span class="source-line-no">609</span><span id="line-609">      return this;</span>
+<span class="source-line-no">610</span><span id="line-610">   }</span>
+<span class="source-line-no">611</span><span id="line-611"></span>
+<span class="source-line-no">612</span><span id="line-612">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">613</span><span id="line-613">   public Link ontoggle(String value) {</span>
+<span class="source-line-no">614</span><span id="line-614">      super.ontoggle(value);</span>
+<span class="source-line-no">615</span><span id="line-615">      return this;</span>
+<span class="source-line-no">616</span><span id="line-616">   }</span>
+<span class="source-line-no">617</span><span id="line-617"></span>
+<span class="source-line-no">618</span><span id="line-618">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">619</span><span id="line-619">   public Link onvolumechange(String value) {</span>
+<span class="source-line-no">620</span><span id="line-620">      super.onvolumechange(value);</span>
+<span class="source-line-no">621</span><span id="line-621">      return this;</span>
+<span class="source-line-no">622</span><span id="line-622">   }</span>
+<span class="source-line-no">623</span><span id="line-623"></span>
+<span class="source-line-no">624</span><span id="line-624">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">625</span><span id="line-625">   public Link onwaiting(String value) {</span>
+<span class="source-line-no">626</span><span id="line-626">      super.onwaiting(value);</span>
+<span class="source-line-no">627</span><span id="line-627">      return this;</span>
+<span class="source-line-no">628</span><span id="line-628">   }</span>
+<span class="source-line-no">629</span><span id="line-629"></span>
+<span class="source-line-no">630</span><span id="line-630">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">631</span><span id="line-631">   public Link spellcheck(Object value) {</span>
+<span class="source-line-no">632</span><span id="line-632">      super.spellcheck(value);</span>
+<span class="source-line-no">633</span><span id="line-633">      return this;</span>
+<span class="source-line-no">634</span><span id="line-634">   }</span>
+<span class="source-line-no">635</span><span id="line-635"></span>
+<span class="source-line-no">636</span><span id="line-636">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">637</span><span id="line-637">   public Link style(String value) {</span>
+<span class="source-line-no">638</span><span id="line-638">      super.style(value);</span>
+<span class="source-line-no">639</span><span id="line-639">      return this;</span>
+<span class="source-line-no">640</span><span id="line-640">   }</span>
+<span class="source-line-no">641</span><span id="line-641"></span>
+<span class="source-line-no">642</span><span id="line-642">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">643</span><span id="line-643">   public Link tabindex(Object value) {</span>
+<span class="source-line-no">644</span><span id="line-644">      super.tabindex(value);</span>
+<span class="source-line-no">645</span><span id="line-645">      return this;</span>
+<span class="source-line-no">646</span><span id="line-646">   }</span>
+<span class="source-line-no">647</span><span id="line-647"></span>
+<span class="source-line-no">648</span><span id="line-648">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">649</span><span id="line-649">   public Link title(String value) {</span>
+<span class="source-line-no">650</span><span id="line-650">      super.title(value);</span>
+<span class="source-line-no">651</span><span id="line-651">      return this;</span>
+<span class="source-line-no">652</span><span id="line-652">   }</span>
+<span class="source-line-no">653</span><span id="line-653"></span>
+<span class="source-line-no">654</span><span id="line-654">   @Override /* Overridden from HtmlElement */</span>
+<span class="source-line-no">655</span><span id="line-655">   public Link translate(Object value) {</span>
+<span class="source-line-no">656</span><span id="line-656">      super.translate(value);</span>
+<span class="source-line-no">657</span><span id="line-657">      return this;</span>
+<span class="source-line-no">658</span><span id="line-658">   }</span>
+<span class="source-line-no">659</span><span id="line-659">}</span>
 
 
 

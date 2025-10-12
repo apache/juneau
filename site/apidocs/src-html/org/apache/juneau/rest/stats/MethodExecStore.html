@@ -81,175 +81,169 @@
 <span class="source-line-no">068</span><span id="line-68">   /**</span>
 <span class="source-line-no">069</span><span id="line-69">    * Builder class.</span>
 <span class="source-line-no">070</span><span id="line-70">    */</span>
-<span class="source-line-no">071</span><span id="line-71">   @FluentSetters</span>
-<span class="source-line-no">072</span><span id="line-72">   public static class Builder extends BeanBuilder&lt;MethodExecStore&gt; {</span>
-<span class="source-line-no">073</span><span id="line-73"></span>
-<span class="source-line-no">074</span><span id="line-74">      ThrownStore thrownStore;</span>
-<span class="source-line-no">075</span><span id="line-75">      Class&lt;? extends MethodExecStats&gt; statsImplClass;</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">      /**</span>
-<span class="source-line-no">078</span><span id="line-78">       * Constructor.</span>
-<span class="source-line-no">079</span><span id="line-79">       *</span>
-<span class="source-line-no">080</span><span id="line-80">       * @param beanStore The bean store to use for creating beans.</span>
-<span class="source-line-no">081</span><span id="line-81">       */</span>
-<span class="source-line-no">082</span><span id="line-82">      protected Builder(BeanStore beanStore) {</span>
-<span class="source-line-no">083</span><span id="line-83">         super(MethodExecStore.class, beanStore);</span>
-<span class="source-line-no">084</span><span id="line-84">      }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">      @Override /* BeanBuilder */</span>
-<span class="source-line-no">087</span><span id="line-87">      protected MethodExecStore buildDefault() {</span>
-<span class="source-line-no">088</span><span id="line-88">         return new MethodExecStore(this);</span>
-<span class="source-line-no">089</span><span id="line-89">      }</span>
-<span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">      //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">092</span><span id="line-92">      // Properties</span>
-<span class="source-line-no">093</span><span id="line-93">      //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">      /**</span>
-<span class="source-line-no">096</span><span id="line-96">       * Specifies a subclass of {@link MethodExecStats} to use for individual method statistics.</span>
-<span class="source-line-no">097</span><span id="line-97">       *</span>
-<span class="source-line-no">098</span><span id="line-98">       * @param value The new value for this setting.</span>
-<span class="source-line-no">099</span><span id="line-99">       * @return  This object.</span>
-<span class="source-line-no">100</span><span id="line-100">       */</span>
-<span class="source-line-no">101</span><span id="line-101">      public Builder statsImplClass(Class&lt;? extends MethodExecStats&gt; value) {</span>
-<span class="source-line-no">102</span><span id="line-102">         statsImplClass = value;</span>
-<span class="source-line-no">103</span><span id="line-103">         return this;</span>
-<span class="source-line-no">104</span><span id="line-104">      }</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">      /**</span>
-<span class="source-line-no">107</span><span id="line-107">       * Specifies the store to use for gathering statistics on thrown exceptions.</span>
-<span class="source-line-no">108</span><span id="line-108">       *</span>
-<span class="source-line-no">109</span><span id="line-109">       * &lt;p&gt;</span>
-<span class="source-line-no">110</span><span id="line-110">       * Can be used to capture thrown exception stats across multiple {@link MethodExecStore} objects.</span>
-<span class="source-line-no">111</span><span id="line-111">       *</span>
-<span class="source-line-no">112</span><span id="line-112">       * &lt;p&gt;</span>
-<span class="source-line-no">113</span><span id="line-113">       * If not specified, one will be created by default for the {@link MethodExecStore} object.</span>
-<span class="source-line-no">114</span><span id="line-114">       *</span>
-<span class="source-line-no">115</span><span id="line-115">       * @param value The store to use for gathering statistics on thrown exceptions.</span>
-<span class="source-line-no">116</span><span id="line-116">       * @return This object.</span>
-<span class="source-line-no">117</span><span id="line-117">       */</span>
-<span class="source-line-no">118</span><span id="line-118">      public Builder thrownStore(ThrownStore value) {</span>
-<span class="source-line-no">119</span><span id="line-119">         thrownStore = value;</span>
-<span class="source-line-no">120</span><span id="line-120">         return this;</span>
-<span class="source-line-no">121</span><span id="line-121">      }</span>
-<span class="source-line-no">122</span><span id="line-122"></span>
-<span class="source-line-no">123</span><span id="line-123">      /**</span>
-<span class="source-line-no">124</span><span id="line-124">       * Same as {@link #thrownStore(ThrownStore)} but only sets the new value if the current value is &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">125</span><span id="line-125">       *</span>
-<span class="source-line-no">126</span><span id="line-126">       * @param value The new value for this setting.</span>
-<span class="source-line-no">127</span><span id="line-127">       * @return This object.</span>
-<span class="source-line-no">128</span><span id="line-128">       */</span>
-<span class="source-line-no">129</span><span id="line-129">      public Builder thrownStoreOnce(ThrownStore value) {</span>
-<span class="source-line-no">130</span><span id="line-130">         if (thrownStore == null)</span>
-<span class="source-line-no">131</span><span id="line-131">            thrownStore = value;</span>
-<span class="source-line-no">132</span><span id="line-132">         return this;</span>
-<span class="source-line-no">133</span><span id="line-133">      }</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">      // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">136</span><span id="line-136"></span>
-<span class="source-line-no">137</span><span id="line-137">      @Override /* GENERATED - org.apache.juneau.BeanBuilder */</span>
-<span class="source-line-no">138</span><span id="line-138">      public Builder impl(Object value) {</span>
-<span class="source-line-no">139</span><span id="line-139">         super.impl(value);</span>
-<span class="source-line-no">140</span><span id="line-140">         return this;</span>
-<span class="source-line-no">141</span><span id="line-141">      }</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">      @Override /* GENERATED - org.apache.juneau.BeanBuilder */</span>
-<span class="source-line-no">144</span><span id="line-144">      public Builder type(Class&lt;?&gt; value) {</span>
-<span class="source-line-no">145</span><span id="line-145">         super.type(value);</span>
-<span class="source-line-no">146</span><span id="line-146">         return this;</span>
-<span class="source-line-no">147</span><span id="line-147">      }</span>
-<span class="source-line-no">148</span><span id="line-148"></span>
-<span class="source-line-no">149</span><span id="line-149">      // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">150</span><span id="line-150">   }</span>
-<span class="source-line-no">151</span><span id="line-151"></span>
-<span class="source-line-no">152</span><span id="line-152">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">153</span><span id="line-153">   // Instance</span>
-<span class="source-line-no">154</span><span id="line-154">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">155</span><span id="line-155"></span>
-<span class="source-line-no">156</span><span id="line-156">   private final ThrownStore thrownStore;</span>
-<span class="source-line-no">157</span><span id="line-157">   private final BeanStore beanStore;</span>
-<span class="source-line-no">158</span><span id="line-158">   private final Class&lt;? extends MethodExecStats&gt; statsImplClass;</span>
-<span class="source-line-no">159</span><span id="line-159">   private final ConcurrentHashMap&lt;Method,MethodExecStats&gt; db = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">   /**</span>
-<span class="source-line-no">162</span><span id="line-162">    * Constructor.</span>
-<span class="source-line-no">163</span><span id="line-163">    *</span>
-<span class="source-line-no">164</span><span id="line-164">    * @param builder The store to use for storing thrown exception statistics.</span>
-<span class="source-line-no">165</span><span id="line-165">    */</span>
-<span class="source-line-no">166</span><span id="line-166">   protected MethodExecStore(Builder builder) {</span>
-<span class="source-line-no">167</span><span id="line-167">      this.beanStore = builder.beanStore();</span>
-<span class="source-line-no">168</span><span id="line-168">      this.thrownStore = builder.thrownStore != null ? builder.thrownStore : beanStore.getBean(ThrownStore.class).orElseGet(ThrownStore::new);</span>
-<span class="source-line-no">169</span><span id="line-169">      this.statsImplClass = builder.statsImplClass;</span>
-<span class="source-line-no">170</span><span id="line-170">   }</span>
-<span class="source-line-no">171</span><span id="line-171"></span>
-<span class="source-line-no">172</span><span id="line-172">   /**</span>
-<span class="source-line-no">173</span><span id="line-173">    * Returns the statistics for the specified method.</span>
-<span class="source-line-no">174</span><span id="line-174">    *</span>
-<span class="source-line-no">175</span><span id="line-175">    * &lt;p&gt;</span>
-<span class="source-line-no">176</span><span id="line-176">    * Creates a new stats object if one has not already been created.</span>
-<span class="source-line-no">177</span><span id="line-177">    *</span>
-<span class="source-line-no">178</span><span id="line-178">    * @param m The method to return the statistics for.</span>
-<span class="source-line-no">179</span><span id="line-179">    * @return The statistics for the specified method.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">180</span><span id="line-180">    */</span>
-<span class="source-line-no">181</span><span id="line-181">   public MethodExecStats getStats(Method m) {</span>
-<span class="source-line-no">182</span><span id="line-182">      MethodExecStats stats = db.get(m);</span>
-<span class="source-line-no">183</span><span id="line-183">      if (stats == null) {</span>
-<span class="source-line-no">184</span><span id="line-184">         stats = MethodExecStats</span>
-<span class="source-line-no">185</span><span id="line-185">            .create(beanStore)</span>
-<span class="source-line-no">186</span><span id="line-186">            .type(statsImplClass)</span>
-<span class="source-line-no">187</span><span id="line-187">            .method(m)</span>
-<span class="source-line-no">188</span><span id="line-188">            .thrownStore(ThrownStore.create(beanStore).parent(thrownStore).build())</span>
-<span class="source-line-no">189</span><span id="line-189">            .build();</span>
-<span class="source-line-no">190</span><span id="line-190">         db.putIfAbsent(m, stats);</span>
-<span class="source-line-no">191</span><span id="line-191">         stats = db.get(m);</span>
-<span class="source-line-no">192</span><span id="line-192">      }</span>
-<span class="source-line-no">193</span><span id="line-193">      return stats;</span>
-<span class="source-line-no">194</span><span id="line-194">   }</span>
-<span class="source-line-no">195</span><span id="line-195"></span>
-<span class="source-line-no">196</span><span id="line-196">   /**</span>
-<span class="source-line-no">197</span><span id="line-197">    * Returns all the statistics in this store.</span>
-<span class="source-line-no">198</span><span id="line-198">    *</span>
-<span class="source-line-no">199</span><span id="line-199">    * @return All the statistics in this store.</span>
-<span class="source-line-no">200</span><span id="line-200">    */</span>
-<span class="source-line-no">201</span><span id="line-201">   public Collection&lt;MethodExecStats&gt; getStats() {</span>
-<span class="source-line-no">202</span><span id="line-202">      return db.values();</span>
-<span class="source-line-no">203</span><span id="line-203">   }</span>
-<span class="source-line-no">204</span><span id="line-204"></span>
-<span class="source-line-no">205</span><span id="line-205">   /**</span>
-<span class="source-line-no">206</span><span id="line-206">    * Returns timing information on all method executions on this class.</span>
-<span class="source-line-no">207</span><span id="line-207">    *</span>
-<span class="source-line-no">208</span><span id="line-208">    * @return A list of timing statistics ordered by average execution time descending.</span>
-<span class="source-line-no">209</span><span id="line-209">    */</span>
-<span class="source-line-no">210</span><span id="line-210">   public List&lt;MethodExecStats&gt; getStatsByTotalTime() {</span>
-<span class="source-line-no">211</span><span id="line-211">      return getStats().stream().sorted(Comparator.comparingLong(MethodExecStats::getTotalTime).reversed()).collect(toList());</span>
-<span class="source-line-no">212</span><span id="line-212">   }</span>
-<span class="source-line-no">213</span><span id="line-213"></span>
-<span class="source-line-no">214</span><span id="line-214">   /**</span>
-<span class="source-line-no">215</span><span id="line-215">    * Returns the timing information returned by {@link #getStatsByTotalTime()} in a readable format.</span>
-<span class="source-line-no">216</span><span id="line-216">    *</span>
-<span class="source-line-no">217</span><span id="line-217">    * @return A report of all method execution times ordered by .</span>
-<span class="source-line-no">218</span><span id="line-218">    */</span>
-<span class="source-line-no">219</span><span id="line-219">   public String getReport() {</span>
-<span class="source-line-no">220</span><span id="line-220">      StringBuilder sb = new StringBuilder()</span>
-<span class="source-line-no">221</span><span id="line-221">         .append(" Method                         Runs      Running   Errors   Avg          Total     \n")</span>
-<span class="source-line-no">222</span><span id="line-222">         .append("------------------------------ --------- --------- -------- ------------ -----------\n");</span>
-<span class="source-line-no">223</span><span id="line-223">      getStatsByTotalTime()</span>
-<span class="source-line-no">224</span><span id="line-224">         .stream()</span>
-<span class="source-line-no">225</span><span id="line-225">         .sorted(Comparator.comparingDouble(MethodExecStats::getTotalTime).reversed())</span>
-<span class="source-line-no">226</span><span id="line-226">         .forEach(x -&gt; sb.append(String.format("%30s %9d %9d %9d %10dms %10dms\n", x.getMethod(), x.getRuns(), x.getRunning(), x.getErrors(), x.getAvgTime(), x.getTotalTime())));</span>
-<span class="source-line-no">227</span><span id="line-227">      return sb.toString();</span>
-<span class="source-line-no">228</span><span id="line-228"></span>
-<span class="source-line-no">229</span><span id="line-229">   }</span>
-<span class="source-line-no">230</span><span id="line-230"></span>
-<span class="source-line-no">231</span><span id="line-231">   /**</span>
-<span class="source-line-no">232</span><span id="line-232">    * Returns the thrown exception store being used by this store.</span>
-<span class="source-line-no">233</span><span id="line-233">    *</span>
-<span class="source-line-no">234</span><span id="line-234">    * @return The thrown exception store being used by this store.</span>
-<span class="source-line-no">235</span><span id="line-235">    */</span>
-<span class="source-line-no">236</span><span id="line-236">   public ThrownStore getThrownStore() {</span>
-<span class="source-line-no">237</span><span id="line-237">      return thrownStore;</span>
-<span class="source-line-no">238</span><span id="line-238">   }</span>
-<span class="source-line-no">239</span><span id="line-239">}</span>
+<span class="source-line-no">071</span><span id="line-71">   public static class Builder extends BeanBuilder&lt;MethodExecStore&gt; {</span>
+<span class="source-line-no">072</span><span id="line-72"></span>
+<span class="source-line-no">073</span><span id="line-73">      ThrownStore thrownStore;</span>
+<span class="source-line-no">074</span><span id="line-74">      Class&lt;? extends MethodExecStats&gt; statsImplClass;</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">      /**</span>
+<span class="source-line-no">077</span><span id="line-77">       * Constructor.</span>
+<span class="source-line-no">078</span><span id="line-78">       *</span>
+<span class="source-line-no">079</span><span id="line-79">       * @param beanStore The bean store to use for creating beans.</span>
+<span class="source-line-no">080</span><span id="line-80">       */</span>
+<span class="source-line-no">081</span><span id="line-81">      protected Builder(BeanStore beanStore) {</span>
+<span class="source-line-no">082</span><span id="line-82">         super(MethodExecStore.class, beanStore);</span>
+<span class="source-line-no">083</span><span id="line-83">      }</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">      @Override /* BeanBuilder */</span>
+<span class="source-line-no">086</span><span id="line-86">      protected MethodExecStore buildDefault() {</span>
+<span class="source-line-no">087</span><span id="line-87">         return new MethodExecStore(this);</span>
+<span class="source-line-no">088</span><span id="line-88">      }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">      //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">091</span><span id="line-91">      // Properties</span>
+<span class="source-line-no">092</span><span id="line-92">      //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">093</span><span id="line-93"></span>
+<span class="source-line-no">094</span><span id="line-94">      /**</span>
+<span class="source-line-no">095</span><span id="line-95">       * Specifies a subclass of {@link MethodExecStats} to use for individual method statistics.</span>
+<span class="source-line-no">096</span><span id="line-96">       *</span>
+<span class="source-line-no">097</span><span id="line-97">       * @param value The new value for this setting.</span>
+<span class="source-line-no">098</span><span id="line-98">       * @return  This object.</span>
+<span class="source-line-no">099</span><span id="line-99">       */</span>
+<span class="source-line-no">100</span><span id="line-100">      public Builder statsImplClass(Class&lt;? extends MethodExecStats&gt; value) {</span>
+<span class="source-line-no">101</span><span id="line-101">         statsImplClass = value;</span>
+<span class="source-line-no">102</span><span id="line-102">         return this;</span>
+<span class="source-line-no">103</span><span id="line-103">      }</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">      /**</span>
+<span class="source-line-no">106</span><span id="line-106">       * Specifies the store to use for gathering statistics on thrown exceptions.</span>
+<span class="source-line-no">107</span><span id="line-107">       *</span>
+<span class="source-line-no">108</span><span id="line-108">       * &lt;p&gt;</span>
+<span class="source-line-no">109</span><span id="line-109">       * Can be used to capture thrown exception stats across multiple {@link MethodExecStore} objects.</span>
+<span class="source-line-no">110</span><span id="line-110">       *</span>
+<span class="source-line-no">111</span><span id="line-111">       * &lt;p&gt;</span>
+<span class="source-line-no">112</span><span id="line-112">       * If not specified, one will be created by default for the {@link MethodExecStore} object.</span>
+<span class="source-line-no">113</span><span id="line-113">       *</span>
+<span class="source-line-no">114</span><span id="line-114">       * @param value The store to use for gathering statistics on thrown exceptions.</span>
+<span class="source-line-no">115</span><span id="line-115">       * @return This object.</span>
+<span class="source-line-no">116</span><span id="line-116">       */</span>
+<span class="source-line-no">117</span><span id="line-117">      public Builder thrownStore(ThrownStore value) {</span>
+<span class="source-line-no">118</span><span id="line-118">         thrownStore = value;</span>
+<span class="source-line-no">119</span><span id="line-119">         return this;</span>
+<span class="source-line-no">120</span><span id="line-120">      }</span>
+<span class="source-line-no">121</span><span id="line-121"></span>
+<span class="source-line-no">122</span><span id="line-122">      /**</span>
+<span class="source-line-no">123</span><span id="line-123">       * Same as {@link #thrownStore(ThrownStore)} but only sets the new value if the current value is &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">124</span><span id="line-124">       *</span>
+<span class="source-line-no">125</span><span id="line-125">       * @param value The new value for this setting.</span>
+<span class="source-line-no">126</span><span id="line-126">       * @return This object.</span>
+<span class="source-line-no">127</span><span id="line-127">       */</span>
+<span class="source-line-no">128</span><span id="line-128">      public Builder thrownStoreOnce(ThrownStore value) {</span>
+<span class="source-line-no">129</span><span id="line-129">         if (thrownStore == null)</span>
+<span class="source-line-no">130</span><span id="line-130">            thrownStore = value;</span>
+<span class="source-line-no">131</span><span id="line-131">         return this;</span>
+<span class="source-line-no">132</span><span id="line-132">      }</span>
+<span class="source-line-no">133</span><span id="line-133">      @Override /* Overridden from BeanBuilder */</span>
+<span class="source-line-no">134</span><span id="line-134">      public Builder impl(Object value) {</span>
+<span class="source-line-no">135</span><span id="line-135">         super.impl(value);</span>
+<span class="source-line-no">136</span><span id="line-136">         return this;</span>
+<span class="source-line-no">137</span><span id="line-137">      }</span>
+<span class="source-line-no">138</span><span id="line-138"></span>
+<span class="source-line-no">139</span><span id="line-139">      @Override /* Overridden from BeanBuilder */</span>
+<span class="source-line-no">140</span><span id="line-140">      public Builder type(Class&lt;?&gt; value) {</span>
+<span class="source-line-no">141</span><span id="line-141">         super.type(value);</span>
+<span class="source-line-no">142</span><span id="line-142">         return this;</span>
+<span class="source-line-no">143</span><span id="line-143">      }</span>
+<span class="source-line-no">144</span><span id="line-144">   }</span>
+<span class="source-line-no">145</span><span id="line-145"></span>
+<span class="source-line-no">146</span><span id="line-146">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">147</span><span id="line-147">   // Instance</span>
+<span class="source-line-no">148</span><span id="line-148">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">149</span><span id="line-149"></span>
+<span class="source-line-no">150</span><span id="line-150">   private final ThrownStore thrownStore;</span>
+<span class="source-line-no">151</span><span id="line-151">   private final BeanStore beanStore;</span>
+<span class="source-line-no">152</span><span id="line-152">   private final Class&lt;? extends MethodExecStats&gt; statsImplClass;</span>
+<span class="source-line-no">153</span><span id="line-153">   private final ConcurrentHashMap&lt;Method,MethodExecStats&gt; db = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">154</span><span id="line-154"></span>
+<span class="source-line-no">155</span><span id="line-155">   /**</span>
+<span class="source-line-no">156</span><span id="line-156">    * Constructor.</span>
+<span class="source-line-no">157</span><span id="line-157">    *</span>
+<span class="source-line-no">158</span><span id="line-158">    * @param builder The store to use for storing thrown exception statistics.</span>
+<span class="source-line-no">159</span><span id="line-159">    */</span>
+<span class="source-line-no">160</span><span id="line-160">   protected MethodExecStore(Builder builder) {</span>
+<span class="source-line-no">161</span><span id="line-161">      this.beanStore = builder.beanStore();</span>
+<span class="source-line-no">162</span><span id="line-162">      this.thrownStore = builder.thrownStore != null ? builder.thrownStore : beanStore.getBean(ThrownStore.class).orElseGet(ThrownStore::new);</span>
+<span class="source-line-no">163</span><span id="line-163">      this.statsImplClass = builder.statsImplClass;</span>
+<span class="source-line-no">164</span><span id="line-164">   }</span>
+<span class="source-line-no">165</span><span id="line-165"></span>
+<span class="source-line-no">166</span><span id="line-166">   /**</span>
+<span class="source-line-no">167</span><span id="line-167">    * Returns the statistics for the specified method.</span>
+<span class="source-line-no">168</span><span id="line-168">    *</span>
+<span class="source-line-no">169</span><span id="line-169">    * &lt;p&gt;</span>
+<span class="source-line-no">170</span><span id="line-170">    * Creates a new stats object if one has not already been created.</span>
+<span class="source-line-no">171</span><span id="line-171">    *</span>
+<span class="source-line-no">172</span><span id="line-172">    * @param m The method to return the statistics for.</span>
+<span class="source-line-no">173</span><span id="line-173">    * @return The statistics for the specified method.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">174</span><span id="line-174">    */</span>
+<span class="source-line-no">175</span><span id="line-175">   public MethodExecStats getStats(Method m) {</span>
+<span class="source-line-no">176</span><span id="line-176">      MethodExecStats stats = db.get(m);</span>
+<span class="source-line-no">177</span><span id="line-177">      if (stats == null) {</span>
+<span class="source-line-no">178</span><span id="line-178">         stats = MethodExecStats</span>
+<span class="source-line-no">179</span><span id="line-179">            .create(beanStore)</span>
+<span class="source-line-no">180</span><span id="line-180">            .type(statsImplClass)</span>
+<span class="source-line-no">181</span><span id="line-181">            .method(m)</span>
+<span class="source-line-no">182</span><span id="line-182">            .thrownStore(ThrownStore.create(beanStore).parent(thrownStore).build())</span>
+<span class="source-line-no">183</span><span id="line-183">            .build();</span>
+<span class="source-line-no">184</span><span id="line-184">         db.putIfAbsent(m, stats);</span>
+<span class="source-line-no">185</span><span id="line-185">         stats = db.get(m);</span>
+<span class="source-line-no">186</span><span id="line-186">      }</span>
+<span class="source-line-no">187</span><span id="line-187">      return stats;</span>
+<span class="source-line-no">188</span><span id="line-188">   }</span>
+<span class="source-line-no">189</span><span id="line-189"></span>
+<span class="source-line-no">190</span><span id="line-190">   /**</span>
+<span class="source-line-no">191</span><span id="line-191">    * Returns all the statistics in this store.</span>
+<span class="source-line-no">192</span><span id="line-192">    *</span>
+<span class="source-line-no">193</span><span id="line-193">    * @return All the statistics in this store.</span>
+<span class="source-line-no">194</span><span id="line-194">    */</span>
+<span class="source-line-no">195</span><span id="line-195">   public Collection&lt;MethodExecStats&gt; getStats() {</span>
+<span class="source-line-no">196</span><span id="line-196">      return db.values();</span>
+<span class="source-line-no">197</span><span id="line-197">   }</span>
+<span class="source-line-no">198</span><span id="line-198"></span>
+<span class="source-line-no">199</span><span id="line-199">   /**</span>
+<span class="source-line-no">200</span><span id="line-200">    * Returns timing information on all method executions on this class.</span>
+<span class="source-line-no">201</span><span id="line-201">    *</span>
+<span class="source-line-no">202</span><span id="line-202">    * @return A list of timing statistics ordered by average execution time descending.</span>
+<span class="source-line-no">203</span><span id="line-203">    */</span>
+<span class="source-line-no">204</span><span id="line-204">   public List&lt;MethodExecStats&gt; getStatsByTotalTime() {</span>
+<span class="source-line-no">205</span><span id="line-205">      return getStats().stream().sorted(Comparator.comparingLong(MethodExecStats::getTotalTime).reversed()).collect(toList());</span>
+<span class="source-line-no">206</span><span id="line-206">   }</span>
+<span class="source-line-no">207</span><span id="line-207"></span>
+<span class="source-line-no">208</span><span id="line-208">   /**</span>
+<span class="source-line-no">209</span><span id="line-209">    * Returns the timing information returned by {@link #getStatsByTotalTime()} in a readable format.</span>
+<span class="source-line-no">210</span><span id="line-210">    *</span>
+<span class="source-line-no">211</span><span id="line-211">    * @return A report of all method execution times ordered by .</span>
+<span class="source-line-no">212</span><span id="line-212">    */</span>
+<span class="source-line-no">213</span><span id="line-213">   public String getReport() {</span>
+<span class="source-line-no">214</span><span id="line-214">      StringBuilder sb = new StringBuilder()</span>
+<span class="source-line-no">215</span><span id="line-215">         .append(" Method                         Runs      Running   Errors   Avg          Total     \n")</span>
+<span class="source-line-no">216</span><span id="line-216">         .append("------------------------------ --------- --------- -------- ------------ -----------\n");</span>
+<span class="source-line-no">217</span><span id="line-217">      getStatsByTotalTime()</span>
+<span class="source-line-no">218</span><span id="line-218">         .stream()</span>
+<span class="source-line-no">219</span><span id="line-219">         .sorted(Comparator.comparingDouble(MethodExecStats::getTotalTime).reversed())</span>
+<span class="source-line-no">220</span><span id="line-220">         .forEach(x -&gt; sb.append(String.format("%30s %9d %9d %9d %10dms %10dms\n", x.getMethod(), x.getRuns(), x.getRunning(), x.getErrors(), x.getAvgTime(), x.getTotalTime())));</span>
+<span class="source-line-no">221</span><span id="line-221">      return sb.toString();</span>
+<span class="source-line-no">222</span><span id="line-222"></span>
+<span class="source-line-no">223</span><span id="line-223">   }</span>
+<span class="source-line-no">224</span><span id="line-224"></span>
+<span class="source-line-no">225</span><span id="line-225">   /**</span>
+<span class="source-line-no">226</span><span id="line-226">    * Returns the thrown exception store being used by this store.</span>
+<span class="source-line-no">227</span><span id="line-227">    *</span>
+<span class="source-line-no">228</span><span id="line-228">    * @return The thrown exception store being used by this store.</span>
+<span class="source-line-no">229</span><span id="line-229">    */</span>
+<span class="source-line-no">230</span><span id="line-230">   public ThrownStore getThrownStore() {</span>
+<span class="source-line-no">231</span><span id="line-231">      return thrownStore;</span>
+<span class="source-line-no">232</span><span id="line-232">   }</span>
+<span class="source-line-no">233</span><span id="line-233">}</span>
 
 
 

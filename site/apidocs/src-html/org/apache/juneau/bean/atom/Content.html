@@ -34,145 +34,197 @@
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.net.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.internal.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.xml.annotation.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">/**</span>
-<span class="source-line-no">028</span><span id="line-28"> * Represents an &lt;c&gt;atomContent&lt;/c&gt; construct in the RFC4287 specification.</span>
-<span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='figure'&gt;Schema&lt;/h5&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;p class='bschema'&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> *    atomContent = atomInlineTextContent</span>
-<span class="source-line-no">033</span><span id="line-33"> *       | atomInlineXHTMLContent</span>
-<span class="source-line-no">034</span><span id="line-34"> *       | atomInlineOtherContent</span>
-<span class="source-line-no">035</span><span id="line-35"> *       | atomOutOfLineContent</span>
-<span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> *    atomInlineTextContent =</span>
-<span class="source-line-no">038</span><span id="line-38"> *       element atom:content {</span>
-<span class="source-line-no">039</span><span id="line-39"> *          atomCommonAttributes,</span>
-<span class="source-line-no">040</span><span id="line-40"> *          attribute type { "text" | "html" }?,</span>
-<span class="source-line-no">041</span><span id="line-41"> *          (text)*</span>
-<span class="source-line-no">042</span><span id="line-42"> *       }</span>
-<span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> *    atomInlineXHTMLContent =</span>
-<span class="source-line-no">045</span><span id="line-45"> *       element atom:content {</span>
-<span class="source-line-no">046</span><span id="line-46"> *          atomCommonAttributes,</span>
-<span class="source-line-no">047</span><span id="line-47"> *          attribute type { "xhtml" },</span>
-<span class="source-line-no">048</span><span id="line-48"> *          xhtmlDiv</span>
-<span class="source-line-no">049</span><span id="line-49"> *       }</span>
-<span class="source-line-no">050</span><span id="line-50"> *</span>
-<span class="source-line-no">051</span><span id="line-51"> *    atomInlineOtherContent =</span>
-<span class="source-line-no">052</span><span id="line-52"> *       element atom:content {</span>
-<span class="source-line-no">053</span><span id="line-53"> *          atomCommonAttributes,</span>
-<span class="source-line-no">054</span><span id="line-54"> *          attribute type { atomMediaType }?,</span>
-<span class="source-line-no">055</span><span id="line-55"> *          (text|anyElement)*</span>
-<span class="source-line-no">056</span><span id="line-56"> *    }</span>
-<span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> *    atomOutOfLineContent =</span>
-<span class="source-line-no">059</span><span id="line-59"> *       element atom:content {</span>
-<span class="source-line-no">060</span><span id="line-60"> *          atomCommonAttributes,</span>
-<span class="source-line-no">061</span><span id="line-61"> *          attribute type { atomMediaType }?,</span>
-<span class="source-line-no">062</span><span id="line-62"> *          attribute src { atomUri },</span>
-<span class="source-line-no">063</span><span id="line-63"> *          empty</span>
-<span class="source-line-no">064</span><span id="line-64"> *    }</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;/p&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> *</span>
-<span class="source-line-no">067</span><span id="line-67"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom"&gt;juneau-bean-atom&lt;/a&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;/ul&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> */</span>
-<span class="source-line-no">071</span><span id="line-71">@FluentSetters</span>
-<span class="source-line-no">072</span><span id="line-72">public class Content extends Text {</span>
-<span class="source-line-no">073</span><span id="line-73"></span>
-<span class="source-line-no">074</span><span id="line-74">   private URI src;</span>
-<span class="source-line-no">075</span><span id="line-75"></span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">   /**</span>
-<span class="source-line-no">078</span><span id="line-78">    * Normal content.</span>
-<span class="source-line-no">079</span><span id="line-79">    *</span>
-<span class="source-line-no">080</span><span id="line-80">    * @param type The content type of this content.</span>
-<span class="source-line-no">081</span><span id="line-81">    */</span>
-<span class="source-line-no">082</span><span id="line-82">   public Content(String type) {</span>
-<span class="source-line-no">083</span><span id="line-83">      super(type);</span>
-<span class="source-line-no">084</span><span id="line-84">   }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   /**</span>
-<span class="source-line-no">087</span><span id="line-87">    * Normal content.</span>
-<span class="source-line-no">088</span><span id="line-88">    */</span>
-<span class="source-line-no">089</span><span id="line-89">   public Content() {</span>
-<span class="source-line-no">090</span><span id="line-90">   }</span>
-<span class="source-line-no">091</span><span id="line-91"></span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">094</span><span id="line-94">   // Bean properties</span>
-<span class="source-line-no">095</span><span id="line-95">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">   /**</span>
-<span class="source-line-no">098</span><span id="line-98">    * Bean property getter:  &lt;property&gt;src&lt;/property&gt;.</span>
-<span class="source-line-no">099</span><span id="line-99">    *</span>
-<span class="source-line-no">100</span><span id="line-100">    * &lt;p&gt;</span>
-<span class="source-line-no">101</span><span id="line-101">    * The source URI.</span>
-<span class="source-line-no">102</span><span id="line-102">    *</span>
-<span class="source-line-no">103</span><span id="line-103">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">104</span><span id="line-104">    */</span>
-<span class="source-line-no">105</span><span id="line-105">   @Xml(format=ATTR)</span>
-<span class="source-line-no">106</span><span id="line-106">   public URI getSrc() {</span>
-<span class="source-line-no">107</span><span id="line-107">      return src;</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   /**</span>
-<span class="source-line-no">111</span><span id="line-111">    * Bean property setter:  &lt;property&gt;src&lt;/property&gt;.</span>
-<span class="source-line-no">112</span><span id="line-112">    *</span>
-<span class="source-line-no">113</span><span id="line-113">    * &lt;p&gt;</span>
-<span class="source-line-no">114</span><span id="line-114">    * The source URI.</span>
-<span class="source-line-no">115</span><span id="line-115">    *</span>
-<span class="source-line-no">116</span><span id="line-116">    * &lt;p&gt;</span>
-<span class="source-line-no">117</span><span id="line-117">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
-<span class="source-line-no">118</span><span id="line-118">    * Strings must be valid URIs.</span>
-<span class="source-line-no">119</span><span id="line-119">    *</span>
-<span class="source-line-no">120</span><span id="line-120">    * @param value</span>
-<span class="source-line-no">121</span><span id="line-121">    *    The new value for this property.</span>
-<span class="source-line-no">122</span><span id="line-122">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">123</span><span id="line-123">    * @return This object</span>
-<span class="source-line-no">124</span><span id="line-124">    */</span>
-<span class="source-line-no">125</span><span id="line-125">   public Content setSrc(Object value) {</span>
-<span class="source-line-no">126</span><span id="line-126">      this.src = toURI(value);</span>
-<span class="source-line-no">127</span><span id="line-127">      return this;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.xml.annotation.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">/**</span>
+<span class="source-line-no">027</span><span id="line-27"> * Represents the content of an Atom entry.</span>
+<span class="source-line-no">028</span><span id="line-28"> *</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * The content element contains or links to the complete content of an entry. It supports multiple </span>
+<span class="source-line-no">031</span><span id="line-31"> * content types and delivery methods:</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;&lt;b&gt;Inline text content&lt;/b&gt; - Plain text or HTML content embedded in the feed</span>
+<span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;&lt;b&gt;Inline XHTML content&lt;/b&gt; - Well-formed XHTML embedded in the feed</span>
+<span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;&lt;b&gt;Inline other content&lt;/b&gt; - Other media types (XML, base64-encoded binary, etc.)</span>
+<span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;&lt;b&gt;Out-of-line content&lt;/b&gt; - Link to external content via the &lt;c&gt;src&lt;/c&gt; attribute</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;/ul&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> *</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * The &lt;c&gt;type&lt;/c&gt; attribute indicates the media type of the content. Common values:</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;&lt;c&gt;"text"&lt;/c&gt; - Plain text (default)</span>
+<span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;&lt;c&gt;"html"&lt;/c&gt; - HTML, entity-escaped</span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;&lt;c&gt;"xhtml"&lt;/c&gt; - XHTML wrapped in a div element</span>
+<span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;Other MIME types - For multimedia content or base64-encoded data</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> *</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='figure'&gt;Schema&lt;/h5&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;p class='bschema'&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *    atomContent = atomInlineTextContent</span>
+<span class="source-line-no">052</span><span id="line-52"> *       | atomInlineXHTMLContent</span>
+<span class="source-line-no">053</span><span id="line-53"> *       | atomInlineOtherContent</span>
+<span class="source-line-no">054</span><span id="line-54"> *       | atomOutOfLineContent</span>
+<span class="source-line-no">055</span><span id="line-55"> *</span>
+<span class="source-line-no">056</span><span id="line-56"> *    atomInlineTextContent =</span>
+<span class="source-line-no">057</span><span id="line-57"> *       element atom:content {</span>
+<span class="source-line-no">058</span><span id="line-58"> *          atomCommonAttributes,</span>
+<span class="source-line-no">059</span><span id="line-59"> *          attribute type { "text" | "html" }?,</span>
+<span class="source-line-no">060</span><span id="line-60"> *          (text)*</span>
+<span class="source-line-no">061</span><span id="line-61"> *       }</span>
+<span class="source-line-no">062</span><span id="line-62"> *</span>
+<span class="source-line-no">063</span><span id="line-63"> *    atomInlineXHTMLContent =</span>
+<span class="source-line-no">064</span><span id="line-64"> *       element atom:content {</span>
+<span class="source-line-no">065</span><span id="line-65"> *          atomCommonAttributes,</span>
+<span class="source-line-no">066</span><span id="line-66"> *          attribute type { "xhtml" },</span>
+<span class="source-line-no">067</span><span id="line-67"> *          xhtmlDiv</span>
+<span class="source-line-no">068</span><span id="line-68"> *       }</span>
+<span class="source-line-no">069</span><span id="line-69"> *</span>
+<span class="source-line-no">070</span><span id="line-70"> *    atomInlineOtherContent =</span>
+<span class="source-line-no">071</span><span id="line-71"> *       element atom:content {</span>
+<span class="source-line-no">072</span><span id="line-72"> *          atomCommonAttributes,</span>
+<span class="source-line-no">073</span><span id="line-73"> *          attribute type { atomMediaType }?,</span>
+<span class="source-line-no">074</span><span id="line-74"> *          (text|anyElement)*</span>
+<span class="source-line-no">075</span><span id="line-75"> *    }</span>
+<span class="source-line-no">076</span><span id="line-76"> *</span>
+<span class="source-line-no">077</span><span id="line-77"> *    atomOutOfLineContent =</span>
+<span class="source-line-no">078</span><span id="line-78"> *       element atom:content {</span>
+<span class="source-line-no">079</span><span id="line-79"> *          atomCommonAttributes,</span>
+<span class="source-line-no">080</span><span id="line-80"> *          attribute type { atomMediaType }?,</span>
+<span class="source-line-no">081</span><span id="line-81"> *          attribute src { atomUri },</span>
+<span class="source-line-no">082</span><span id="line-82"> *          empty</span>
+<span class="source-line-no">083</span><span id="line-83"> *    }</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;/p&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> *</span>
+<span class="source-line-no">086</span><span id="line-86"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">087</span><span id="line-87"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> *    &lt;jc&gt;// Plain text content&lt;/jc&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> *    Content &lt;jv&gt;c1&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Content(&lt;js&gt;"text"&lt;/js&gt;)</span>
+<span class="source-line-no">090</span><span id="line-90"> *       .setText(&lt;js&gt;"This is plain text content"&lt;/js&gt;);</span>
+<span class="source-line-no">091</span><span id="line-91"> *</span>
+<span class="source-line-no">092</span><span id="line-92"> *    &lt;jc&gt;// HTML content&lt;/jc&gt;</span>
+<span class="source-line-no">093</span><span id="line-93"> *    Content &lt;jv&gt;c2&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Content(&lt;js&gt;"html"&lt;/js&gt;)</span>
+<span class="source-line-no">094</span><span id="line-94"> *       .setText(&lt;js&gt;"&amp;lt;p&amp;gt;This is &amp;lt;strong&amp;gt;HTML&amp;lt;/strong&amp;gt; content&amp;lt;/p&amp;gt;"&lt;/js&gt;);</span>
+<span class="source-line-no">095</span><span id="line-95"> *</span>
+<span class="source-line-no">096</span><span id="line-96"> *    &lt;jc&gt;// XHTML content&lt;/jc&gt;</span>
+<span class="source-line-no">097</span><span id="line-97"> *    Content &lt;jv&gt;c3&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Content(&lt;js&gt;"xhtml"&lt;/js&gt;)</span>
+<span class="source-line-no">098</span><span id="line-98"> *       .setText(&lt;js&gt;"&amp;lt;div xmlns='http://www.w3.org/1999/xhtml'&amp;gt;&amp;lt;p&amp;gt;XHTML content&amp;lt;/p&amp;gt;&amp;lt;/div&amp;gt;"&lt;/js&gt;);</span>
+<span class="source-line-no">099</span><span id="line-99"> *</span>
+<span class="source-line-no">100</span><span id="line-100"> *    &lt;jc&gt;// External content (out-of-line)&lt;/jc&gt;</span>
+<span class="source-line-no">101</span><span id="line-101"> *    Content &lt;jv&gt;c4&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Content()</span>
+<span class="source-line-no">102</span><span id="line-102"> *       .setType(&lt;js&gt;"video/mp4"&lt;/js&gt;)</span>
+<span class="source-line-no">103</span><span id="line-103"> *       .setSrc(&lt;js&gt;"http://example.org/movie.mp4"&lt;/js&gt;);</span>
+<span class="source-line-no">104</span><span id="line-104"> * &lt;/p&gt;</span>
+<span class="source-line-no">105</span><span id="line-105"> *</span>
+<span class="source-line-no">106</span><span id="line-106"> * &lt;h5 class='section'&gt;Specification:&lt;/h5&gt;</span>
+<span class="source-line-no">107</span><span id="line-107"> * &lt;p&gt;</span>
+<span class="source-line-no">108</span><span id="line-108"> * Represents an &lt;c&gt;atomContent&lt;/c&gt; construct in the </span>
+<span class="source-line-no">109</span><span id="line-109"> * &lt;a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.1.3"&gt;RFC 4287 - Section 4.1.3&lt;/a&gt; specification.</span>
+<span class="source-line-no">110</span><span id="line-110"> *</span>
+<span class="source-line-no">111</span><span id="line-111"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">112</span><span id="line-112"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom"&gt;juneau-bean-atom&lt;/a&gt;</span>
+<span class="source-line-no">113</span><span id="line-113"> *    &lt;li class='extlink'&gt;&lt;a class="doclink" href="https://tools.ietf.org/html/rfc4287"&gt;RFC 4287 - The Atom Syndication Format&lt;/a&gt;</span>
+<span class="source-line-no">114</span><span id="line-114"> * &lt;/ul&gt;</span>
+<span class="source-line-no">115</span><span id="line-115"> */</span>
+<span class="source-line-no">116</span><span id="line-116">public class Content extends Text {</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">   private URI src;</span>
+<span class="source-line-no">119</span><span id="line-119"></span>
+<span class="source-line-no">120</span><span id="line-120"></span>
+<span class="source-line-no">121</span><span id="line-121">   /**</span>
+<span class="source-line-no">122</span><span id="line-122">    * Normal content.</span>
+<span class="source-line-no">123</span><span id="line-123">    *</span>
+<span class="source-line-no">124</span><span id="line-124">    * @param type The content type of this content.</span>
+<span class="source-line-no">125</span><span id="line-125">    */</span>
+<span class="source-line-no">126</span><span id="line-126">   public Content(String type) {</span>
+<span class="source-line-no">127</span><span id="line-127">      super(type);</span>
 <span class="source-line-no">128</span><span id="line-128">   }</span>
 <span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">132</span><span id="line-132">   // Overridden setters (to simplify method chaining)</span>
-<span class="source-line-no">133</span><span id="line-133">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">   @Override /* Text */</span>
-<span class="source-line-no">136</span><span id="line-136">   public Content setText(String text) {</span>
-<span class="source-line-no">137</span><span id="line-137">      super.setText(text);</span>
-<span class="source-line-no">138</span><span id="line-138">      return this;</span>
-<span class="source-line-no">139</span><span id="line-139">   }</span>
+<span class="source-line-no">130</span><span id="line-130">   /**</span>
+<span class="source-line-no">131</span><span id="line-131">    * Normal content.</span>
+<span class="source-line-no">132</span><span id="line-132">    */</span>
+<span class="source-line-no">133</span><span id="line-133">   public Content() {</span>
+<span class="source-line-no">134</span><span id="line-134">   }</span>
+<span class="source-line-no">135</span><span id="line-135"></span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">138</span><span id="line-138">   // Bean properties</span>
+<span class="source-line-no">139</span><span id="line-139">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   @Override /* Text */</span>
-<span class="source-line-no">142</span><span id="line-142">   public Content setType(String type) {</span>
-<span class="source-line-no">143</span><span id="line-143">      super.setType(type);</span>
-<span class="source-line-no">144</span><span id="line-144">      return this;</span>
-<span class="source-line-no">145</span><span id="line-145">   }</span>
-<span class="source-line-no">146</span><span id="line-146"></span>
-<span class="source-line-no">147</span><span id="line-147">   // &lt;FluentSetters&gt;</span>
-<span class="source-line-no">148</span><span id="line-148"></span>
-<span class="source-line-no">149</span><span id="line-149">   @Override /* GENERATED - org.apache.juneau.bean.atom.Common */</span>
-<span class="source-line-no">150</span><span id="line-150">   public Content setBase(Object value) {</span>
-<span class="source-line-no">151</span><span id="line-151">      super.setBase(value);</span>
-<span class="source-line-no">152</span><span id="line-152">      return this;</span>
-<span class="source-line-no">153</span><span id="line-153">   }</span>
-<span class="source-line-no">154</span><span id="line-154"></span>
-<span class="source-line-no">155</span><span id="line-155">   @Override /* GENERATED - org.apache.juneau.bean.atom.Common */</span>
-<span class="source-line-no">156</span><span id="line-156">   public Content setLang(String value) {</span>
-<span class="source-line-no">157</span><span id="line-157">      super.setLang(value);</span>
-<span class="source-line-no">158</span><span id="line-158">      return this;</span>
-<span class="source-line-no">159</span><span id="line-159">   }</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">   // &lt;/FluentSetters&gt;</span>
-<span class="source-line-no">162</span><span id="line-162">}</span>
+<span class="source-line-no">141</span><span id="line-141">   /**</span>
+<span class="source-line-no">142</span><span id="line-142">    * Bean property getter:  &lt;property&gt;src&lt;/property&gt;.</span>
+<span class="source-line-no">143</span><span id="line-143">    *</span>
+<span class="source-line-no">144</span><span id="line-144">    * &lt;p&gt;</span>
+<span class="source-line-no">145</span><span id="line-145">    * Returns the URI of externally-hosted content (out-of-line content).</span>
+<span class="source-line-no">146</span><span id="line-146">    *</span>
+<span class="source-line-no">147</span><span id="line-147">    * &lt;p&gt;</span>
+<span class="source-line-no">148</span><span id="line-148">    * When &lt;c&gt;src&lt;/c&gt; is present, the content is not embedded in the feed but is instead </span>
+<span class="source-line-no">149</span><span id="line-149">    * referenced by URI. This is useful for large media files or content hosted elsewhere.</span>
+<span class="source-line-no">150</span><span id="line-150">    *</span>
+<span class="source-line-no">151</span><span id="line-151">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">152</span><span id="line-152">    */</span>
+<span class="source-line-no">153</span><span id="line-153">   @Xml(format=ATTR)</span>
+<span class="source-line-no">154</span><span id="line-154">   public URI getSrc() {</span>
+<span class="source-line-no">155</span><span id="line-155">      return src;</span>
+<span class="source-line-no">156</span><span id="line-156">   }</span>
+<span class="source-line-no">157</span><span id="line-157"></span>
+<span class="source-line-no">158</span><span id="line-158">   /**</span>
+<span class="source-line-no">159</span><span id="line-159">    * Bean property setter:  &lt;property&gt;src&lt;/property&gt;.</span>
+<span class="source-line-no">160</span><span id="line-160">    *</span>
+<span class="source-line-no">161</span><span id="line-161">    * &lt;p&gt;</span>
+<span class="source-line-no">162</span><span id="line-162">    * Sets the URI of externally-hosted content (out-of-line content).</span>
+<span class="source-line-no">163</span><span id="line-163">    *</span>
+<span class="source-line-no">164</span><span id="line-164">    * &lt;p&gt;</span>
+<span class="source-line-no">165</span><span id="line-165">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
+<span class="source-line-no">166</span><span id="line-166">    * Strings must be valid URIs.</span>
+<span class="source-line-no">167</span><span id="line-167">    *</span>
+<span class="source-line-no">168</span><span id="line-168">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">169</span><span id="line-169">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">170</span><span id="line-170">    *    &lt;jc&gt;// Link to external video&lt;/jc&gt;</span>
+<span class="source-line-no">171</span><span id="line-171">    *    Content &lt;jv&gt;content&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Content()</span>
+<span class="source-line-no">172</span><span id="line-172">    *       .setType(&lt;js&gt;"video/mp4"&lt;/js&gt;)</span>
+<span class="source-line-no">173</span><span id="line-173">    *       .setSrc(&lt;js&gt;"http://example.org/videos/intro.mp4"&lt;/js&gt;);</span>
+<span class="source-line-no">174</span><span id="line-174">    * &lt;/p&gt;</span>
+<span class="source-line-no">175</span><span id="line-175">    *</span>
+<span class="source-line-no">176</span><span id="line-176">    * @param value</span>
+<span class="source-line-no">177</span><span id="line-177">    *    The new value for this property.</span>
+<span class="source-line-no">178</span><span id="line-178">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">179</span><span id="line-179">    * @return This object.</span>
+<span class="source-line-no">180</span><span id="line-180">    */</span>
+<span class="source-line-no">181</span><span id="line-181">   public Content setSrc(Object value) {</span>
+<span class="source-line-no">182</span><span id="line-182">      this.src = toURI(value);</span>
+<span class="source-line-no">183</span><span id="line-183">      return this;</span>
+<span class="source-line-no">184</span><span id="line-184">   }</span>
+<span class="source-line-no">185</span><span id="line-185"></span>
+<span class="source-line-no">186</span><span id="line-186"></span>
+<span class="source-line-no">187</span><span id="line-187">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">188</span><span id="line-188">   // Overridden setters (to simplify method chaining)</span>
+<span class="source-line-no">189</span><span id="line-189">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">190</span><span id="line-190"></span>
+<span class="source-line-no">191</span><span id="line-191">   @Override /* Text */</span>
+<span class="source-line-no">192</span><span id="line-192">   public Content setText(String text) {</span>
+<span class="source-line-no">193</span><span id="line-193">      super.setText(text);</span>
+<span class="source-line-no">194</span><span id="line-194">      return this;</span>
+<span class="source-line-no">195</span><span id="line-195">   }</span>
+<span class="source-line-no">196</span><span id="line-196"></span>
+<span class="source-line-no">197</span><span id="line-197">   @Override /* Text */</span>
+<span class="source-line-no">198</span><span id="line-198">   public Content setType(String type) {</span>
+<span class="source-line-no">199</span><span id="line-199">      super.setType(type);</span>
+<span class="source-line-no">200</span><span id="line-200">      return this;</span>
+<span class="source-line-no">201</span><span id="line-201">   }</span>
+<span class="source-line-no">202</span><span id="line-202"></span>
+<span class="source-line-no">203</span><span id="line-203">   @Override /* Overridden from Common */</span>
+<span class="source-line-no">204</span><span id="line-204">   public Content setBase(Object value) {</span>
+<span class="source-line-no">205</span><span id="line-205">      super.setBase(value);</span>
+<span class="source-line-no">206</span><span id="line-206">      return this;</span>
+<span class="source-line-no">207</span><span id="line-207">   }</span>
+<span class="source-line-no">208</span><span id="line-208"></span>
+<span class="source-line-no">209</span><span id="line-209">   @Override /* Overridden from Common */</span>
+<span class="source-line-no">210</span><span id="line-210">   public Content setLang(String value) {</span>
+<span class="source-line-no">211</span><span id="line-211">      super.setLang(value);</span>
+<span class="source-line-no">212</span><span id="line-212">      return this;</span>
+<span class="source-line-no">213</span><span id="line-213">   }</span>
+<span class="source-line-no">214</span><span id="line-214">}</span>
 
 
 
