@@ -114,7 +114,7 @@ const config: Config = {
           position: 'right',
         },
         {
-          href: '/site/apidocs/index.html',
+          href: '/javadocs/',
           label: 'Javadocs',
           position: 'right',
         },
