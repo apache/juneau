@@ -31,7 +31,6 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-@FluentSetters
 public class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo> {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -262,14 +261,9 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 		}
 		return i;
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.reflect.ExecutableInfo */
+	@Override /* Overridden from ExecutableInfo */
 	public ConstructorInfo accessible() {
 		super.accessible();
 		return this;
 	}
-
-	// </FluentSetters>
 }

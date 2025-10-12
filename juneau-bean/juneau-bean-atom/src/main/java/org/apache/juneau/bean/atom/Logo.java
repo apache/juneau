@@ -23,11 +23,23 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * Represents an <c>atomLogo</c> construct in the RFC4287 specification.
+ * Represents a larger logo image for visual identification of a feed.
+ *
+ * <p>
+ * The logo element contains a URI reference to an image that provides visual identification 
+ * for the feed. Logos are typically larger than icons and are suitable for display in feed 
+ * readers, aggregators, and feed directories.
+ *
+ * <p>
+ * Per RFC 4287 recommendations:
+ * <ul class='spaced-list'>
+ * 	<li>Should have a 2:1 aspect ratio (twice as wide as tall)
+ * 	<li>Common formats: PNG, JPEG, GIF, SVG
+ * 	<li>Suitable for prominent display in feed readers
+ * </ul>
  *
  * <h5 class='figure'>Schema</h5>
  * <p class='bschema'>
@@ -37,12 +49,25 @@ import org.apache.juneau.xml.annotation.*;
  * 	}
  * </p>
  *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	Logo <jv>logo</jv> = <jk>new</jk> Logo(<js>"http://example.org/logo.png"</js>);
+ *
+ * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
+ * 		.setLogo(<jv>logo</jv>);
+ * </p>
+ *
+ * <h5 class='section'>Specification:</h5>
+ * <p>
+ * Represents an <c>atomLogo</c> construct in the 
+ * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.8">RFC 4287 - Section 4.2.8</a> specification.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
+ * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
 @Bean(typeName="logo")
-@FluentSetters
 public class Logo extends Common {
 
 	private URI uri;
@@ -80,7 +105,7 @@ public class Logo extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ELEMENTS)
+	@Xml(format=TEXT)
 	public URI getUri() {
 		return uri;
 	}
@@ -112,19 +137,15 @@ public class Logo extends Common {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
+	@Override /* Overridden from Common */
 	public Logo setBase(Object value) {
 		super.setBase(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
+	@Override /* Overridden from Common */
 	public Logo setLang(String value) {
 		super.setLang(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

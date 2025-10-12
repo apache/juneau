@@ -141,10 +141,6 @@ public class MarshalledAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

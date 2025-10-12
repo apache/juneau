@@ -88,10 +88,11 @@ class Tfoot_Test extends TestBase {
 			.tabindex("bh")
 			.title("bi")
 			.translate("bj")
+			.child("child1")
 			.children("bk", strong("bl"));
 
 		assertString(
-			"<tfoot class='a' accesskey='b' contenteditable='c' dir='d' hidden='e' id='f' lang='g' onabort='h' onblur='i' oncancel='j' oncanplay='k' oncanplaythrough='l' onchange='m' onclick='n' oncuechange='o' ondblclick='p' ondurationchange='q' onemptied='r' onended='s' onerror='t' onfocus='u' oninput='v' oninvalid='w' onkeydown='x' onkeypress='y' onkeyup='z' onload='aa' onloadeddata='ab' onloadedmetadata='ac' onloadstart='ad' onmousedown='ae' onmouseenter='af' onmouseleave='ag' onmousemove='ah' onmouseout='ai' onmouseover='aj' onmouseup='ak' onmousewheel='al' onpause='am' onplay='an' onplaying='ao' onprogress='ap' onratechange='aq' onreset='ar' onresize='as' onscroll='at' onseeked='au' onseeking='av' onselect='aw' onshow='ax' onstalled='ay' onsubmit='az' onsuspend='ba' ontimeupdate='bb' ontoggle='bc' onvolumechange='bd' onwaiting='be' spellcheck='bf' style='bg' tabindex='bh' title='bi' translate='bj'>bk<strong>bl</strong></tfoot>",
+			"<tfoot class='a' accesskey='b' contenteditable='c' dir='d' hidden='e' id='f' lang='g' onabort='h' onblur='i' oncancel='j' oncanplay='k' oncanplaythrough='l' onchange='m' onclick='n' oncuechange='o' ondblclick='p' ondurationchange='q' onemptied='r' onended='s' onerror='t' onfocus='u' oninput='v' oninvalid='w' onkeydown='x' onkeypress='y' onkeyup='z' onload='aa' onloadeddata='ab' onloadedmetadata='ac' onloadstart='ad' onmousedown='ae' onmouseenter='af' onmouseleave='ag' onmousemove='ah' onmouseout='ai' onmouseover='aj' onmouseup='ak' onmousewheel='al' onpause='am' onplay='an' onplaying='ao' onprogress='ap' onratechange='aq' onreset='ar' onresize='as' onscroll='at' onseeked='au' onseeking='av' onselect='aw' onshow='ax' onstalled='ay' onsubmit='az' onsuspend='ba' ontimeupdate='bb' ontoggle='bc' onvolumechange='bd' onwaiting='be' spellcheck='bf' style='bg' tabindex='bh' title='bi' translate='bj'>child1bk<strong>bl</strong></tfoot>",
 			x
 		);
 	}

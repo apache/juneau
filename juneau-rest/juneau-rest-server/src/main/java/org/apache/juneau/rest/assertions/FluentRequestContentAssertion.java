@@ -102,7 +102,6 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentRequestContentAssertion<R>")
 public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<RequestContent,R> {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -337,38 +336,33 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestContentAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestContentAssertion<R> setOut(PrintStream value) {
 		super.setOut(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestContentAssertion<R> setSilent() {
 		super.setSilent();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestContentAssertion<R> setStdOut() {
 		super.setStdOut();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestContentAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

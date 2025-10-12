@@ -42,7 +42,6 @@ import org.apache.juneau.internal.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
-@FluentSetters
 public class MovedPermanently extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -95,104 +94,99 @@ public class MovedPermanently extends BasicHttpResponse {
 	public MovedPermanently copy() {
 		return new MovedPermanently(this);
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setHeader2(Header value) {
 		super.setHeader2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setHeader2(String name, String value) {
 		super.setHeader2(name, value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setHeaders(List<Header> values) {
 		super.setHeaders(values);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setHeaders(HeaderList value) {
 		super.setHeaders(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setLocale2(Locale value) {
 		super.setLocale2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setLocation(String value) {
 		super.setLocation(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setLocation(URI value) {
 		super.setLocation(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setProtocolVersion(ProtocolVersion value) {
 		super.setProtocolVersion(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setReasonPhrase2(String value) {
 		super.setReasonPhrase2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setReasonPhraseCatalog(ReasonPhraseCatalog value) {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setStatusCode2(int value) {
 		super.setStatusCode2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setStatusLine(BasicStatusLine value) {
 		super.setStatusLine(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MovedPermanently setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
 	}
-
-	// </FluentSetters>
 }

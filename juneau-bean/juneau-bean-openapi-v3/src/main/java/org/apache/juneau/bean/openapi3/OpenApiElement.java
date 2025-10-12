@@ -21,12 +21,10 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.map;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -170,9 +168,6 @@ public abstract class OpenApiElement {
 
 	@Override /* Object */
 	public String toString() {
-		if (Modifier.isAbstract(getClass().getModifiers())) {
-			return JsonSerializer.DEFAULT_SORTED.toString(extra);
-		}
 		return JsonSerializer.DEFAULT_SORTED.toString(this);
 	}
 }

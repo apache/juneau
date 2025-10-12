@@ -43,7 +43,6 @@ import org.apache.juneau.internal.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
-@FluentSetters
 public class MultipleChoices extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -96,104 +95,99 @@ public class MultipleChoices extends BasicHttpResponse {
 	public MultipleChoices copy() {
 		return new MultipleChoices(this);
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setHeader2(Header value) {
 		super.setHeader2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setHeader2(String name, String value) {
 		super.setHeader2(name, value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setHeaders(List<Header> values) {
 		super.setHeaders(values);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setHeaders(HeaderList value) {
 		super.setHeaders(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setLocale2(Locale value) {
 		super.setLocale2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setLocation(String value) {
 		super.setLocation(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setLocation(URI value) {
 		super.setLocation(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setProtocolVersion(ProtocolVersion value) {
 		super.setProtocolVersion(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setReasonPhrase2(String value) {
 		super.setReasonPhrase2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setReasonPhraseCatalog(ReasonPhraseCatalog value) {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setStatusCode2(int value) {
 		super.setStatusCode2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setStatusLine(BasicStatusLine value) {
 		super.setStatusLine(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public MultipleChoices setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
 	}
-
-	// </FluentSetters>
 }

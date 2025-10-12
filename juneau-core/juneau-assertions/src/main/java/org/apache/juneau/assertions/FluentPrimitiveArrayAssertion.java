@@ -109,7 +109,6 @@ import org.apache.juneau.serializer.*;
  * @param <T> The array type.
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentPrimitiveArrayAssertion<E,T,R>")
 public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<T,R> {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -359,41 +358,35 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentPrimitiveArrayAssertion<E,T,R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentPrimitiveArrayAssertion<E,T,R> setOut(PrintStream value) {
 		super.setOut(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentPrimitiveArrayAssertion<E,T,R> setSilent() {
 		super.setSilent();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentPrimitiveArrayAssertion<E,T,R> setStdOut() {
 		super.setStdOut();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentPrimitiveArrayAssertion<E,T,R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}
-
-	// </FluentSetters>
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------

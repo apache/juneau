@@ -115,10 +115,6 @@ public class CsvAnnotation {
 			return new Impl(this);
 		}
 
-		// <FluentSetters>
-
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -566,86 +566,71 @@ public class XmlWriter extends SerializerWriter {
 		return this;
 	}
 
-	// <FluentSetters>
-
 	@Override /* SerializerWriter */
 	public XmlWriter cr(int depth) {
 		super.cr(depth);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter cre(int depth) {
 		super.cre(depth);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter appendln(int indent, String text) {
 		super.appendln(indent, text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter appendln(String text) {
 		super.appendln(text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter append(int indent, String text) {
 		super.append(indent, text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter append(int indent, char c) {
 		super.append(indent, c);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter s() {
 		super.s();
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter q() {
 		super.q();
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter i(int indent) {
 		super.i(indent);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter ie(int indent) {
 		super.ie(indent);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter nl(int indent) {
 		super.nl(indent);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter append(Object text) {
 		super.append(text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter append(String text) {
 		super.append(text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter append(char c) {
 		try {
@@ -655,20 +640,16 @@ public class XmlWriter extends SerializerWriter {
 		}
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter w(char c) {
 		super.w(c);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public XmlWriter w(String s) {
 		super.w(s);
 		return this;
 	}
-
-	// </FluentSetters>
 
 	@Override /* Object */
 	public String toString() {

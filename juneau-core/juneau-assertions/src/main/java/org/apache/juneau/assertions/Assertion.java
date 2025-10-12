@@ -57,7 +57,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem Overview</a>
  * </ul>
  */
-@FluentSetters
 public class Assertion {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -117,7 +116,6 @@ public class Assertion {
 	 * @param args Optional message arguments.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public Assertion setMsg(String msg, Object...args) {
 		this.msg = msg.replace("{msg}", "<<<MSG>>>");
 		this.msgArgs = args;
@@ -129,7 +127,6 @@ public class Assertion {
 	 *
 	 * @return This object.
 	 */
-	@FluentSetter
 	public Assertion setStdOut() {
 		return setOut(System.out);  // NOSONAR - Intentional.
 	}
@@ -142,7 +139,6 @@ public class Assertion {
 	 * 	Can be <jk>null</jk> to suppress output.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public Assertion setOut(PrintStream value) {
 		this.out = value;
 		return this;
@@ -156,7 +152,6 @@ public class Assertion {
 	 *
 	 * @return This object.
 	 */
-	@FluentSetter
 	public Assertion setSilent() {
 		return setOut(null);
 	}
@@ -187,7 +182,6 @@ public class Assertion {
 	 * @param value The new value for this setting.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public Assertion setThrowable(Class<? extends RuntimeException> value) {
 		this.throwable = value;
 		return this;
@@ -196,11 +190,6 @@ public class Assertion {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	// </FluentSetters>
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------

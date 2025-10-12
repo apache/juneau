@@ -44,7 +44,6 @@ import org.apache.juneau.internal.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
-@FluentSetters
 public class Ok extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -100,104 +99,99 @@ public class Ok extends BasicHttpResponse {
 	public Ok copy() {
 		return new Ok(this);
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setHeader2(Header value) {
 		super.setHeader2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setHeader2(String name, String value) {
 		super.setHeader2(name, value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setHeaders(List<Header> values) {
 		super.setHeaders(values);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setHeaders(HeaderList value) {
 		super.setHeaders(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setLocale2(Locale value) {
 		super.setLocale2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setLocation(String value) {
 		super.setLocation(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setLocation(URI value) {
 		super.setLocation(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setProtocolVersion(ProtocolVersion value) {
 		super.setProtocolVersion(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setReasonPhrase2(String value) {
 		super.setReasonPhrase2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setReasonPhraseCatalog(ReasonPhraseCatalog value) {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setStatusCode2(int value) {
 		super.setStatusCode2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setStatusLine(BasicStatusLine value) {
 		super.setStatusLine(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Ok setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
 	}
-
-	// </FluentSetters>
 }

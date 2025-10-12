@@ -28,7 +28,6 @@ import org.apache.juneau.internal.*;
  *
  * @param <B> The actual builder class.
  */
-@FluentSetters
 public class TargetedAnnotationBuilder<B extends TargetedAnnotationBuilder<B>> extends AnnotationBuilder<B> {
 
 	String[] on = {};
@@ -48,14 +47,9 @@ public class TargetedAnnotationBuilder<B extends TargetedAnnotationBuilder<B>> e
 	 * @param values The targets this annotation applies to.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public B on(String...values) {
 		for (String v : values)
 			on = ArrayUtils.append(on, v);
 		return asThis();
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

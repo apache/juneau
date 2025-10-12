@@ -57,7 +57,6 @@ public class MethodExecStats {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder extends BeanBuilder<MethodExecStats> {
 
 		Method method;
@@ -87,7 +86,6 @@ public class MethodExecStats {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder method(Method value) {
 			method = value;
 			return this;
@@ -99,27 +97,21 @@ public class MethodExecStats {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder thrownStore(ThrownStore value) {
 			thrownStore = value;
 			return this;
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

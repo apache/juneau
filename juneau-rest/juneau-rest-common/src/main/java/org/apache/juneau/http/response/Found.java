@@ -46,7 +46,6 @@ import org.apache.juneau.internal.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
-@FluentSetters
 public class Found extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -99,104 +98,99 @@ public class Found extends BasicHttpResponse {
 	public Found copy() {
 		return new Found(this);
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setHeader2(Header value) {
 		super.setHeader2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setHeader2(String name, String value) {
 		super.setHeader2(name, value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setHeaders(List<Header> values) {
 		super.setHeaders(values);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setHeaders(HeaderList value) {
 		super.setHeaders(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setLocale2(Locale value) {
 		super.setLocale2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setLocation(String value) {
 		super.setLocation(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setLocation(URI value) {
 		super.setLocation(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setProtocolVersion(ProtocolVersion value) {
 		super.setProtocolVersion(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setReasonPhrase2(String value) {
 		super.setReasonPhrase2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setReasonPhraseCatalog(ReasonPhraseCatalog value) {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setStatusCode2(int value) {
 		super.setStatusCode2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setStatusLine(BasicStatusLine value) {
 		super.setStatusLine(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public Found setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
 	}
-
-	// </FluentSetters>
 }

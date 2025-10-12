@@ -121,7 +121,6 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem Overview</a>
  * </ul>
  */
-@FluentSetters(returns="StringAssertion")
 public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -158,44 +157,39 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public StringAssertion setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public StringAssertion setOut(PrintStream value) {
 		super.setOut(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public StringAssertion setSilent() {
 		super.setSilent();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public StringAssertion setStdOut() {
 		super.setStdOut();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public StringAssertion setThrowable(Class<? extends java.lang.RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.FluentStringAssertion */
+	@Override /* Overridden from FluentStringAssertion */
 	public StringAssertion asJavaStrings() {
 		super.asJavaStrings();
 		return this;
 	}
-
-	// </FluentSetters>
 }

@@ -47,7 +47,6 @@ public abstract class ContextSession {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static abstract class Builder {
 		Context ctx;
 		JsonMap properties;
@@ -92,7 +91,6 @@ public abstract class ContextSession {
 		 * 	<br>Can be <jk>null</jk>.  Value will be ignored.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder debug(Boolean value) {
 			if (value != null)
 				debug = value;
@@ -107,7 +105,6 @@ public abstract class ContextSession {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder unmodifiable() {
 			unmodifiable = true;
 			return this;
@@ -125,7 +122,6 @@ public abstract class ContextSession {
 		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder properties(Map<String,Object> value) {
 			properties = JsonMap.of(value);
 			return this;
@@ -138,7 +134,6 @@ public abstract class ContextSession {
 		 * @param value The property value.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder property(String key, Object value) {
 			if (properties == null)
 				properties = JsonMap.create();
@@ -158,16 +153,11 @@ public abstract class ContextSession {
 		 * @param apply	The consumer to apply.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			if (type.isInstance(this))
 				apply.accept(type.cast(this));
 			return this;
 		}
-
-		// <FluentSetters>
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

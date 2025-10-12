@@ -404,7 +404,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters(ignore="debug")
 	public static class Builder extends RestClient.Builder {
 
 		Object restBean;
@@ -585,1248 +584,1243 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		public MockRestClient build() {
 			return build(MockRestClient.class);
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
 			super.cache(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder impl(Context value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanClassVisibility(Visibility value) {
 			super.beanClassVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanConstructorVisibility(Visibility value) {
 			super.beanConstructorVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanContext(BeanContext value) {
 			super.beanContext(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanContext(BeanContext.Builder value) {
 			super.beanContext(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanDictionary(java.lang.Class<?>...values) {
 			super.beanDictionary(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanFieldVisibility(Visibility value) {
 			super.beanFieldVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanMapPutReturnsOldValue() {
 			super.beanMapPutReturnsOldValue();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanMethodVisibility(Visibility value) {
 			super.beanMethodVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanProperties(Map<String,Object> values) {
 			super.beanProperties(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanProperties(Class<?> beanClass, String properties) {
 			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanProperties(String beanClassName, String properties) {
 			super.beanProperties(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
 			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
 			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
 			super.beanPropertiesExcludes(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
 			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
 			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
 			super.beanPropertiesReadOnly(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
 			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
 			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
 			super.beanPropertiesWriteOnly(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beansRequireDefaultConstructor() {
 			super.beansRequireDefaultConstructor();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beansRequireSerializable() {
 			super.beansRequireSerializable();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
 			super.dictionaryOn(on, values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableBeansRequireSomeProperties() {
 			super.disableBeansRequireSomeProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableIgnoreMissingSetters() {
 			super.disableIgnoreMissingSetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableIgnoreTransientFields() {
 			super.disableIgnoreTransientFields();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableIgnoreUnknownNullBeanProperties() {
 			super.disableIgnoreUnknownNullBeanProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableInterfaceProxies() {
 			super.disableInterfaceProxies();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public <T> Builder example(Class<T> pojoClass, T o) {
 			super.example(pojoClass, o);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public <T> Builder example(Class<T> pojoClass, String json) {
 			super.example(pojoClass, json);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder findFluentSetters() {
 			super.findFluentSetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder findFluentSetters(Class<?> on) {
 			super.findFluentSetters(on);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnGetters() {
 			super.ignoreInvocationExceptionsOnGetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnSetters() {
 			super.ignoreInvocationExceptionsOnSetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreUnknownBeanProperties() {
 			super.ignoreUnknownBeanProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreUnknownEnumValues() {
 			super.ignoreUnknownEnumValues();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
 			super.implClass(interfaceClass, implClass);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
 			super.implClasses(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
 			super.interfaceClass(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder interfaces(java.lang.Class<?>...value) {
 			super.interfaces(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder mediaType(MediaType value) {
 			super.mediaType(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder notBeanClasses(java.lang.Class<?>...values) {
 			super.notBeanClasses(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder notBeanPackages(String...values) {
 			super.notBeanPackages(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 			super.propertyNamer(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
 			super.propertyNamer(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sortProperties() {
 			super.sortProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sortProperties(java.lang.Class<?>...on) {
 			super.sortProperties(on);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder stopClass(Class<?> on, Class<?> value) {
 			super.stopClass(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder swaps(Object...values) {
 			super.swaps(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder timeZone(TimeZone value) {
 			super.timeZone(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder typeName(Class<?> on, String value) {
 			super.typeName(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder typePropertyName(String value) {
 			super.typePropertyName(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder typePropertyName(Class<?> on, String value) {
 			super.typePropertyName(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder useEnumNames() {
 			super.useEnumNames();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {
 			super.useJavaBeanIntrospector();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder accept(String value) {
 			super.accept(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder acceptCharset(String value) {
 			super.acceptCharset(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addBeanTypes() {
 			super.addBeanTypes();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addInterceptorFirst(HttpRequestInterceptor itcp) {
 			super.addInterceptorFirst(itcp);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addInterceptorFirst(HttpResponseInterceptor itcp) {
 			super.addInterceptorFirst(itcp);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addInterceptorLast(HttpRequestInterceptor itcp) {
 			super.addInterceptorLast(itcp);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addInterceptorLast(HttpResponseInterceptor itcp) {
 			super.addInterceptorLast(itcp);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addRootType() {
 			super.addRootType();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder backoffManager(BackoffManager backoffManager) {
 			super.backoffManager(backoffManager);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder basicAuth(String host, int port, String user, String pw) {
 			super.basicAuth(host, port, user, pw);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder callHandler(Class<? extends org.apache.juneau.rest.client.RestCallHandler> value) {
 			super.callHandler(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder clientVersion(String value) {
 			super.clientVersion(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder connectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
 			super.connectionBackoffStrategy(connectionBackoffStrategy);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder connectionManager(HttpClientConnectionManager value) {
 			super.connectionManager(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder connectionManagerShared(boolean shared) {
 			super.connectionManagerShared(shared);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder connectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
 			super.connectionReuseStrategy(reuseStrategy);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
 			super.connectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder console(PrintStream value) {
 			super.console(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
 			super.contentDecoderRegistry(contentDecoderMap);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder contentType(String value) {
 			super.contentType(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder debugOutputLines(int value) {
 			super.debugOutputLines(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
 			super.defaultAuthSchemeRegistry(authSchemeRegistry);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder defaultConnectionConfig(ConnectionConfig config) {
 			super.defaultConnectionConfig(config);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
 			super.defaultCookieSpecRegistry(cookieSpecRegistry);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder defaultCookieStore(CookieStore cookieStore) {
 			super.defaultCookieStore(cookieStore);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder defaultCredentialsProvider(CredentialsProvider credentialsProvider) {
 			super.defaultCredentialsProvider(credentialsProvider);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder defaultRequestConfig(RequestConfig config) {
 			super.defaultRequestConfig(config);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder defaultSocketConfig(SocketConfig config) {
 			super.defaultSocketConfig(config);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder detectLeaks() {
 			super.detectLeaks();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder detectRecursions() {
 			super.detectRecursions();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableAuthCaching() {
 			super.disableAuthCaching();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableAutomaticRetries() {
 			super.disableAutomaticRetries();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableConnectionState() {
 			super.disableConnectionState();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableContentCompression() {
 			super.disableContentCompression();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableCookieManagement() {
 			super.disableCookieManagement();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableRedirectHandling() {
 			super.disableRedirectHandling();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder errorCodes(Predicate<Integer> value) {
 			super.errorCodes(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder evictExpiredConnections() {
 			super.evictExpiredConnections();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
 			super.evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder executorService(ExecutorService executorService, boolean shutdownOnClose) {
 			super.executorService(executorService, shutdownOnClose);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder formData(NameValuePair...parts) {
 			super.formData(parts);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder formData(String name, String value) {
 			super.formData(name, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder formData(String name, Supplier<String> value) {
 			super.formData(name, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder header(String name, String value) {
 			super.header(name, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder header(String name, Supplier<String> value) {
 			super.header(name, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder headers(Header...parts) {
 			super.headers(parts);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder html() {
 			super.html();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder htmlDoc() {
 			super.htmlDoc();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder htmlStrippedDoc() {
 			super.htmlStrippedDoc();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder httpClient(CloseableHttpClient value) {
 			super.httpClient(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder httpClientBuilder(HttpClientBuilder value) {
 			super.httpClientBuilder(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder httpProcessor(HttpProcessor httpprocessor) {
 			super.httpProcessor(httpprocessor);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreErrors() {
 			super.ignoreErrors();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreRecursions() {
 			super.ignoreRecursions();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder initialDepth(int value) {
 			super.initialDepth(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder interceptors(java.lang.Class<?>...values) throws Exception{
 			super.interceptors(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder interceptors(Object...value) {
 			super.interceptors(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder json() {
 			super.json();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder keepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
 			super.keepAliveStrategy(keepAliveStrategy);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder keepHttpClientOpen() {
 			super.keepHttpClientOpen();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder keepNullProperties() {
 			super.keepNullProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder logRequests(DetailLevel detail, Level level, BiPredicate<RestRequest,RestResponse> test) {
 			super.logRequests(detail, level, test);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder logToConsole() {
 			super.logToConsole();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder logger(Logger value) {
 			super.logger(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder marshaller(Marshaller value) {
 			super.marshaller(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder marshallers(Marshaller...value) {
 			super.marshallers(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder maxConnPerRoute(int maxConnPerRoute) {
 			super.maxConnPerRoute(maxConnPerRoute);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder maxConnTotal(int maxConnTotal) {
 			super.maxConnTotal(maxConnTotal);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder maxDepth(int value) {
 			super.maxDepth(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder maxIndent(int value) {
 			super.maxIndent(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder mediaType(String value) {
 			super.mediaType(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder msgPack() {
 			super.msgPack();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder noTrace() {
 			super.noTrace();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder oapiCollectionFormat(HttpPartCollectionFormat value) {
 			super.oapiCollectionFormat(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder oapiFormat(HttpPartFormat value) {
 			super.oapiFormat(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder openApi() {
 			super.openApi();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder paramFormat(ParamFormat value) {
 			super.paramFormat(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder paramFormatPlain() {
 			super.paramFormatPlain();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder parser(Class<? extends org.apache.juneau.parser.Parser> value) {
 			super.parser(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder parser(Parser value) {
 			super.parser(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		@SuppressWarnings("unchecked")
 		public Builder parsers(java.lang.Class<? extends org.apache.juneau.parser.Parser>...value) {
 			super.parsers(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder parsers(Parser...value) {
 			super.parsers(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder partParser(Class<? extends org.apache.juneau.httppart.HttpPartParser> value) {
 			super.partParser(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder partParser(HttpPartParser value) {
 			super.partParser(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder partSerializer(Class<? extends org.apache.juneau.httppart.HttpPartSerializer> value) {
 			super.partSerializer(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder partSerializer(HttpPartSerializer value) {
 			super.partSerializer(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder pathData(NameValuePair...parts) {
 			super.pathData(parts);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder pathData(String name, String value) {
 			super.pathData(name, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder pathData(String name, Supplier<String> value) {
 			super.pathData(name, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder plainText() {
 			super.plainText();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder pooled() {
 			super.pooled();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder proxy(HttpHost proxy) {
 			super.proxy(proxy);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
 			super.proxyAuthenticationStrategy(proxyAuthStrategy);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
 			super.publicSuffixMatcher(publicSuffixMatcher);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder queryData(NameValuePair...parts) {
 			super.queryData(parts);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder queryData(String name, String value) {
 			super.queryData(name, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder queryData(String name, Supplier<String> value) {
 			super.queryData(name, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder quoteChar(char value) {
 			super.quoteChar(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder redirectStrategy(RedirectStrategy redirectStrategy) {
 			super.redirectStrategy(redirectStrategy);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder requestExecutor(HttpRequestExecutor requestExec) {
 			super.requestExecutor(requestExec);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder retryHandler(HttpRequestRetryHandler retryHandler) {
 			super.retryHandler(retryHandler);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder rootUrl(Object value) {
 			super.rootUrl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder routePlanner(HttpRoutePlanner routePlanner) {
 			super.routePlanner(routePlanner);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder schemePortResolver(SchemePortResolver schemePortResolver) {
 			super.schemePortResolver(schemePortResolver);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder serializer(Class<? extends org.apache.juneau.serializer.Serializer> value) {
 			super.serializer(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder serializer(Serializer value) {
 			super.serializer(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		@SuppressWarnings("unchecked")
 		public Builder serializers(java.lang.Class<? extends org.apache.juneau.serializer.Serializer>...value) {
 			super.serializers(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder serializers(Serializer...value) {
 			super.serializers(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
 			super.serviceUnavailableRetryStrategy(serviceUnavailStrategy);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder json5() {
 			super.json5();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder skipEmptyFormData() {
 			super.skipEmptyFormData();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder skipEmptyFormData(boolean value) {
 			super.skipEmptyFormData(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder skipEmptyHeaderData() {
 			super.skipEmptyHeaderData();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder skipEmptyHeaderData(boolean value) {
 			super.skipEmptyHeaderData(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder skipEmptyQueryData() {
 			super.skipEmptyQueryData();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder skipEmptyQueryData(boolean value) {
 			super.skipEmptyQueryData(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sortCollections() {
 			super.sortCollections();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sortMaps() {
 			super.sortMaps();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sq() {
 			super.sq();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sslContext(SSLContext sslContext) {
 			super.sslContext(sslContext);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
 			super.sslHostnameVerifier(hostnameVerifier);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
 			super.sslSocketFactory(sslSocketFactory);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder strict() {
 			super.strict();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
 			super.targetAuthenticationStrategy(targetAuthStrategy);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder trimEmptyCollections() {
 			super.trimEmptyCollections();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder trimEmptyMaps() {
 			super.trimEmptyMaps();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder trimStringsOnRead() {
 			super.trimStringsOnRead();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder trimStringsOnWrite() {
 			super.trimStringsOnWrite();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder uon() {
 			super.uon();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder uriContext(UriContext value) {
 			super.uriContext(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder uriRelativity(UriRelativity value) {
 			super.uriRelativity(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder uriResolution(UriResolution value) {
 			super.uriResolution(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder urlEnc() {
 			super.urlEnc();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder useSystemProperties() {
 			super.useSystemProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder useWhitespace() {
 			super.useWhitespace();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder userTokenHandler(UserTokenHandler userTokenHandler) {
 			super.userTokenHandler(userTokenHandler);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ws() {
 			super.ws();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
+		@Override /* Overridden from Builder */
 		public Builder xml() {
 			super.xml();
 			return this;
 		}
-
-		// </FluentSetters>
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------

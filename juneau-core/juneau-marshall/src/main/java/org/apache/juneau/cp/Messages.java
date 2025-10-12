@@ -162,7 +162,6 @@ public class Messages extends ResourceBundle {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder extends BeanBuilder<Messages> {
 
 		Class<?> forClass;
@@ -316,23 +315,17 @@ public class Messages extends ResourceBundle {
 			this.locations.add(0, Tuple2.of(forClass, bundlePath));
 			return this;
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
-
-		// </FluentSetters>
-
 		//-------------------------------------------------------------------------------------------------------------
 		// Other methods
 		//-------------------------------------------------------------------------------------------------------------

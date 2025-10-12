@@ -42,7 +42,6 @@ import org.apache.juneau.internal.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
-@FluentSetters
 public class EarlyHints extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -95,104 +94,99 @@ public class EarlyHints extends BasicHttpResponse {
 	public EarlyHints copy() {
 		return new EarlyHints(this);
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setHeader2(Header value) {
 		super.setHeader2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setHeader2(String name, String value) {
 		super.setHeader2(name, value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setHeaders(List<Header> values) {
 		super.setHeaders(values);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setHeaders(HeaderList value) {
 		super.setHeaders(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setLocale2(Locale value) {
 		super.setLocale2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setLocation(String value) {
 		super.setLocation(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setLocation(URI value) {
 		super.setLocation(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setProtocolVersion(ProtocolVersion value) {
 		super.setProtocolVersion(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setReasonPhrase2(String value) {
 		super.setReasonPhrase2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setReasonPhraseCatalog(ReasonPhraseCatalog value) {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setStatusCode2(int value) {
 		super.setStatusCode2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setStatusLine(BasicStatusLine value) {
 		super.setStatusLine(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
 	}
-
-	// </FluentSetters>
 }

@@ -131,7 +131,6 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentStringAssertion<R>")
 public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -208,7 +207,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 *
 	 * @return This object.
 	 */
-	@FluentSetter
 	public FluentStringAssertion<R> asJavaStrings() {
 		this.javaStrings = true;
 		return this;
@@ -633,41 +631,35 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentStringAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentStringAssertion<R> setOut(PrintStream value) {
 		super.setOut(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentStringAssertion<R> setSilent() {
 		super.setSilent();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentStringAssertion<R> setStdOut() {
 		super.setStdOut();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentStringAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}
-
-	// </FluentSetters>
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------

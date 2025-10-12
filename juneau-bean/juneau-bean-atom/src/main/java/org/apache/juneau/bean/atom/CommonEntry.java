@@ -25,13 +25,34 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * Parent class of {@link Entry}, {@link Feed}, and {@link Source}.
+ * Base class for feed-level and entry-level Atom elements.
+ *
+ * <p>
+ * This abstract class contains properties common to {@link Feed}, {@link Entry}, and {@link Source} 
+ * elements. These elements share a common set of metadata properties including authors, contributors, 
+ * categories, links, and timestamps.
+ *
+ * <p>
+ * Common properties include:
+ * <ul class='spaced-list'>
+ * 	<li><b>id</b> (required) - Permanent, unique identifier
+ * 	<li><b>title</b> (required) - Human-readable title
+ * 	<li><b>updated</b> (required) - Last modification timestamp
+ * 	<li><b>authors</b> - Author information
+ * 	<li><b>categories</b> - Classification/tagging information
+ * 	<li><b>contributors</b> - Contributor information
+ * 	<li><b>links</b> - Related resources
+ * 	<li><b>rights</b> - Copyright/rights information
+ * </ul>
+ *
+ * <p>
+ * This class extends {@link Common}, inheriting the <c>xml:base</c> and <c>xml:lang</c> attributes.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
+ * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
-@FluentSetters
 public class CommonEntry extends Common {
 
 	private Person[] authors;
@@ -98,7 +119,6 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@FluentSetter
 	public CommonEntry setAuthors(Person...value) {
 		this.authors = value;
 		return this;
@@ -128,7 +148,6 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@FluentSetter
 	public CommonEntry setCategories(Category...value) {
 		this.categories = value;
 		return this;
@@ -158,7 +177,6 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@FluentSetter
 	public CommonEntry setContributors(Person...value) {
 		this.contributors = value;
 		return this;
@@ -187,7 +205,6 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@FluentSetter
 	public CommonEntry setId(Id value) {
 		this.id = value;
 		return this;
@@ -204,7 +221,6 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public CommonEntry setId(String value) {
 		setId(new Id(value));
 		return this;
@@ -234,7 +250,6 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@FluentSetter
 	public CommonEntry setLinks(Link...value) {
 		this.links = value;
 		return this;
@@ -263,7 +278,6 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@FluentSetter
 	public CommonEntry setRights(Text value) {
 		this.rights = value;
 		return this;
@@ -280,7 +294,6 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public CommonEntry setRights(String value) {
 		setRights(new Text().setText(value));
 		return this;
@@ -309,7 +322,6 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@FluentSetter
 	public CommonEntry setTitle(Text value) {
 		this.title = value;
 		return this;
@@ -326,7 +338,6 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public CommonEntry setTitle(String value) {
 		setTitle(new Text().setText(value));
 		return this;
@@ -355,7 +366,6 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@FluentSetter
 	public CommonEntry setUpdated(Calendar value) {
 		this.updated = value;
 		return this;
@@ -372,25 +382,20 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public CommonEntry setUpdated(String value) {
 		setUpdated(parseDateTime(value));
 		return this;
 	}
 
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
+	@Override /* Overridden from Common */
 	public CommonEntry setBase(Object value) {
 		super.setBase(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
+	@Override /* Overridden from Common */
 	public CommonEntry setLang(String value) {
 		super.setLang(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

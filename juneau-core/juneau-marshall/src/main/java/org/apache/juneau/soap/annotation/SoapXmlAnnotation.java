@@ -115,10 +115,6 @@ public class SoapXmlAnnotation {
 			return new Impl(this);
 		}
 
-		// <FluentSetters>
-
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

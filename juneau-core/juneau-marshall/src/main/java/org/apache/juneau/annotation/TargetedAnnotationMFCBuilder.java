@@ -28,7 +28,6 @@ import org.apache.juneau.reflect.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-@FluentSetters
 public class TargetedAnnotationMFCBuilder extends TargetedAnnotationMFBuilder<TargetedAnnotationMFCBuilder> {
 
 	/**
@@ -46,15 +45,9 @@ public class TargetedAnnotationMFCBuilder extends TargetedAnnotationMFBuilder<Ta
 	 * @param value The values to append.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public TargetedAnnotationMFCBuilder on(Constructor<?>...value) {
 		for (Constructor<?> v : value)
 			on(ConstructorInfo.of(v).getFullName());
 		return this;
 	}
-
-	// <FluentSetters>
-
-
-	// </FluentSetters>
 }

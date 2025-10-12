@@ -115,10 +115,6 @@ public class PlainTextAnnotation {
 			return new Impl(this);
 		}
 
-		// <FluentSetters>
-
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

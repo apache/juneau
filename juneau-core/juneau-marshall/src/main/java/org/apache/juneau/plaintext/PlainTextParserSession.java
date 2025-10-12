@@ -62,7 +62,6 @@ public class PlainTextParserSession extends ReaderParserSession {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder extends ReaderParserSession.Builder {
 
 		PlainTextParser ctx;
@@ -81,112 +80,107 @@ public class PlainTextParserSession extends ReaderParserSession {
 		public PlainTextParserSession build() {
 			return new PlainTextParserSession(this);
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder debug(Boolean value) {
 			super.debug(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder properties(Map<String,Object> value) {
 			super.properties(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
 			super.property(key, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder unmodifiable() {
 			super.unmodifiable();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder localeDefault(Locale value) {
 			super.localeDefault(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder mediaType(MediaType value) {
 			super.mediaType(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder mediaTypeDefault(MediaType value) {
 			super.mediaTypeDefault(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder timeZone(TimeZone value) {
 			super.timeZone(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder timeZoneDefault(TimeZone value) {
 			super.timeZoneDefault(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.parser.ParserSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder javaMethod(Method value) {
 			super.javaMethod(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.parser.ParserSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder outer(Object value) {
 			super.outer(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.parser.ParserSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder schema(HttpPartSchema value) {
 			super.schema(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.parser.ParserSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder schemaDefault(HttpPartSchema value) {
 			super.schemaDefault(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.parser.ReaderParserSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder fileCharset(Charset value) {
 			super.fileCharset(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.parser.ReaderParserSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
 			return this;
 		}
-
-		// </FluentSetters>
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------

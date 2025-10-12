@@ -110,7 +110,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder extends HtmlStrippedDocSerializer.Builder {
 
 		private static final Cache<HashKey,HtmlDocSerializer> CACHE = Cache.of(HashKey.class, HtmlDocSerializer.class).build();
@@ -265,7 +264,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder aside(String...value) {
 			aside = merge(aside, value);
 			return this;
@@ -314,7 +312,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder asideFloat(AsideFloat value) {
 			asideFloat = value;
 			return this;
@@ -343,7 +340,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder footer(String...value) {
 			footer = merge(footer, value);
 			return this;
@@ -384,7 +380,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder head(String...value) {
 			head = merge(head, value);
 			return this;
@@ -426,7 +421,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder header(String...value) {
 			header = merge(header, value);
 			return this;
@@ -471,7 +465,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder nav(String...value) {
 			nav = merge(nav, value);
 			return this;
@@ -533,7 +526,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder navlinks(String...value) {
 			navlinks = mergeNavLinks(navlinks, value);
 			return this;
@@ -575,7 +567,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder noResultsMessage(String value) {
 			noResultsMessage = value;
 			return this;
@@ -589,7 +580,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder nowrap() {
 			return nowrap(true);
 		}
@@ -602,7 +592,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * @return This object.
 		 * @see #nowrap()
 		 */
-		@FluentSetter
 		public Builder nowrap(boolean value) {
 			nowrap = value;
 			return this;
@@ -613,7 +602,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder resolveBodyVars() {
 			return resolveBodyVars(true);
 		}
@@ -626,7 +614,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * @return This object.
 		 * @see #nowrap()
 		 */
-		@FluentSetter
 		public Builder resolveBodyVars(boolean value) {
 			resolveBodyVars = value;
 			return this;
@@ -648,7 +635,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	The value to add to this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder script(String...value) {
 			script = merge(script, value);
 			return this;
@@ -686,7 +672,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	The value to add to this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder style(String...value) {
 			style = merge(style, value);
 			return this;
@@ -717,7 +702,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	The value to add to this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder stylesheet(String...value) {
 			stylesheet = merge(stylesheet, value);
 			return this;
@@ -760,7 +744,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder template(Class<? extends HtmlDocTemplate> value) {
 			template = value;
 			return this;
@@ -815,7 +798,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * @param values The values to add to this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		@SuppressWarnings("unchecked")
 		public Builder widgets(Class<? extends HtmlWidget>...values) {
 			addAll(widgets(), values);
@@ -836,779 +818,773 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 				widgets = list();
 			return widgets;
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
 			super.cache(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder debug(boolean value) {
 			super.debug(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder impl(Context value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanClassVisibility(Visibility value) {
 			super.beanClassVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanConstructorVisibility(Visibility value) {
 			super.beanConstructorVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanContext(BeanContext value) {
 			super.beanContext(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanContext(BeanContext.Builder value) {
 			super.beanContext(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanDictionary(java.lang.Class<?>...values) {
 			super.beanDictionary(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanFieldVisibility(Visibility value) {
 			super.beanFieldVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanMapPutReturnsOldValue() {
 			super.beanMapPutReturnsOldValue();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanMethodVisibility(Visibility value) {
 			super.beanMethodVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanProperties(Map<String,Object> values) {
 			super.beanProperties(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanProperties(Class<?> beanClass, String properties) {
 			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanProperties(String beanClassName, String properties) {
 			super.beanProperties(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
 			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
 			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
 			super.beanPropertiesExcludes(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
 			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
 			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
 			super.beanPropertiesReadOnly(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
 			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
 			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
 			super.beanPropertiesWriteOnly(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beansRequireDefaultConstructor() {
 			super.beansRequireDefaultConstructor();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beansRequireSerializable() {
 			super.beansRequireSerializable();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
 			super.dictionaryOn(on, values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableBeansRequireSomeProperties() {
 			super.disableBeansRequireSomeProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableIgnoreMissingSetters() {
 			super.disableIgnoreMissingSetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableIgnoreTransientFields() {
 			super.disableIgnoreTransientFields();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableIgnoreUnknownNullBeanProperties() {
 			super.disableIgnoreUnknownNullBeanProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableInterfaceProxies() {
 			super.disableInterfaceProxies();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public <T> Builder example(Class<T> pojoClass, T o) {
 			super.example(pojoClass, o);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public <T> Builder example(Class<T> pojoClass, String json) {
 			super.example(pojoClass, json);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder findFluentSetters() {
 			super.findFluentSetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder findFluentSetters(Class<?> on) {
 			super.findFluentSetters(on);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnGetters() {
 			super.ignoreInvocationExceptionsOnGetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnSetters() {
 			super.ignoreInvocationExceptionsOnSetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreUnknownBeanProperties() {
 			super.ignoreUnknownBeanProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreUnknownEnumValues() {
 			super.ignoreUnknownEnumValues();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
 			super.implClass(interfaceClass, implClass);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
 			super.implClasses(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
 			super.interfaceClass(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder interfaces(java.lang.Class<?>...value) {
 			super.interfaces(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder mediaType(MediaType value) {
 			super.mediaType(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder notBeanClasses(java.lang.Class<?>...values) {
 			super.notBeanClasses(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder notBeanPackages(String...values) {
 			super.notBeanPackages(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 			super.propertyNamer(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
 			super.propertyNamer(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sortProperties() {
 			super.sortProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sortProperties(java.lang.Class<?>...on) {
 			super.sortProperties(on);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder stopClass(Class<?> on, Class<?> value) {
 			super.stopClass(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder swaps(Object...values) {
 			super.swaps(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder timeZone(TimeZone value) {
 			super.timeZone(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder typeName(Class<?> on, String value) {
 			super.typeName(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder typePropertyName(String value) {
 			super.typePropertyName(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder typePropertyName(Class<?> on, String value) {
 			super.typePropertyName(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder useEnumNames() {
 			super.useEnumNames();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {
 			super.useJavaBeanIntrospector();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanTraverseContext.Builder */
+		@Override /* Overridden from Builder */
 		public Builder detectRecursions() {
 			super.detectRecursions();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanTraverseContext.Builder */
+		@Override /* Overridden from Builder */
 		public Builder detectRecursions(boolean value) {
 			super.detectRecursions(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanTraverseContext.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreRecursions() {
 			super.ignoreRecursions();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanTraverseContext.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreRecursions(boolean value) {
 			super.ignoreRecursions(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanTraverseContext.Builder */
+		@Override /* Overridden from Builder */
 		public Builder initialDepth(int value) {
 			super.initialDepth(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanTraverseContext.Builder */
+		@Override /* Overridden from Builder */
 		public Builder maxDepth(int value) {
 			super.maxDepth(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder accept(String value) {
 			super.accept(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addBeanTypes() {
 			super.addBeanTypes();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addBeanTypes(boolean value) {
 			super.addBeanTypes(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addRootType() {
 			super.addRootType();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addRootType(boolean value) {
 			super.addRootType(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder keepNullProperties() {
 			super.keepNullProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder keepNullProperties(boolean value) {
 			super.keepNullProperties(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
 			super.listener(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder produces(String value) {
 			super.produces(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sortCollections() {
 			super.sortCollections();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sortCollections(boolean value) {
 			super.sortCollections(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sortMaps() {
 			super.sortMaps();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sortMaps(boolean value) {
 			super.sortMaps(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder trimEmptyCollections() {
 			super.trimEmptyCollections();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder trimEmptyCollections(boolean value) {
 			super.trimEmptyCollections(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder trimEmptyMaps() {
 			super.trimEmptyMaps();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder trimEmptyMaps(boolean value) {
 			super.trimEmptyMaps(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder trimStrings() {
 			super.trimStrings();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder trimStrings(boolean value) {
 			super.trimStrings(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder uriContext(UriContext value) {
 			super.uriContext(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder uriRelativity(UriRelativity value) {
 			super.uriRelativity(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.Serializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder uriResolution(UriResolution value) {
 			super.uriResolution(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.WriterSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder fileCharset(Charset value) {
 			super.fileCharset(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.WriterSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder maxIndent(int value) {
 			super.maxIndent(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.WriterSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder quoteChar(char value) {
 			super.quoteChar(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.WriterSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder quoteCharOverride(char value) {
 			super.quoteCharOverride(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.WriterSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sq() {
 			super.sq();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.WriterSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.WriterSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder useWhitespace() {
 			super.useWhitespace();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.WriterSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder useWhitespace(boolean value) {
 			super.useWhitespace(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.WriterSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ws() {
 			super.ws();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.xml.XmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addBeanTypesXml() {
 			super.addBeanTypesXml();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.xml.XmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addBeanTypesXml(boolean value) {
 			super.addBeanTypesXml(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.xml.XmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addNamespaceUrisToRoot() {
 			super.addNamespaceUrisToRoot();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.xml.XmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addNamespaceUrisToRoot(boolean value) {
 			super.addNamespaceUrisToRoot(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.xml.XmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder defaultNamespace(Namespace value) {
 			super.defaultNamespace(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.xml.XmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableAutoDetectNamespaces() {
 			super.disableAutoDetectNamespaces();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.xml.XmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableAutoDetectNamespaces(boolean value) {
 			super.disableAutoDetectNamespaces(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.xml.XmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder enableNamespaces() {
 			super.enableNamespaces();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.xml.XmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder enableNamespaces(boolean value) {
 			super.enableNamespaces(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.xml.XmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder namespaces(Namespace...values) {
 			super.namespaces(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.xml.XmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ns() {
 			super.ns();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.html.HtmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addBeanTypesHtml() {
 			super.addBeanTypesHtml();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.html.HtmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addBeanTypesHtml(boolean value) {
 			super.addBeanTypesHtml(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.html.HtmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addKeyValueTableHeaders() {
 			super.addKeyValueTableHeaders();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.html.HtmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder addKeyValueTableHeaders(boolean value) {
 			super.addKeyValueTableHeaders(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.html.HtmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableDetectLabelParameters() {
 			super.disableDetectLabelParameters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.html.HtmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableDetectLabelParameters(boolean value) {
 			super.disableDetectLabelParameters(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.html.HtmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableDetectLinksInStrings() {
 			super.disableDetectLinksInStrings();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.html.HtmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableDetectLinksInStrings(boolean value) {
 			super.disableDetectLinksInStrings(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.html.HtmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder labelParameter(String value) {
 			super.labelParameter(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.html.HtmlSerializer.Builder */
+		@Override /* Overridden from Builder */
 		public Builder uriAnchorText(AnchorText value) {
 			super.uriAnchorText(value);
 			return this;
 		}
-
-		// </FluentSetters>
-
 		//-----------------------------------------------------------------------------------------------------------------
 		// Helpers
 		//-----------------------------------------------------------------------------------------------------------------

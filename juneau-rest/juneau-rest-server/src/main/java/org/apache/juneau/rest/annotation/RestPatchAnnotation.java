@@ -379,10 +379,6 @@ public class RestPatchAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

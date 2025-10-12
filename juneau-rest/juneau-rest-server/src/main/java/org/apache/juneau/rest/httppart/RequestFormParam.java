@@ -210,19 +210,14 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 		return part.getSubmittedFileName();
 	}
 
-	// <FluentSetters>
-
 	@Override /* GENERATED */
 	public RequestFormParam schema(HttpPartSchema value) {
 		super.schema(value);
 		return this;
 	}
-
 	@Override /* GENERATED */
 	public RequestFormParam parser(HttpPartParserSession value) {
 		super.parser(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

@@ -107,261 +107,216 @@ public class HtmlWriter extends XmlWriter {
 		return this;
 	}
 
-	// <FluentSetters>
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter oTag(String ns, String name, boolean needsEncoding) {
 		super.oTag(ns, name, needsEncoding);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter oTag(String ns, String name) {
 		super.oTag(ns, name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter oTag(String name) {
 		super.oTag(name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter oTag(int indent, String ns, String name, boolean needsEncoding) {
 		super.oTag(indent, ns, name, needsEncoding);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter oTag(int indent, String ns, String name) {
 		super.oTag(indent, ns, name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter oTag(int indent, String name) {
 		super.oTag(indent, name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter tag(String ns, String name, boolean needsEncoding) {
 		super.tag(ns, name, needsEncoding);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter tag(String ns, String name) {
 		super.tag(ns, name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter tag(String name) {
 		super.tag(name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter tag(int indent, String name) {
 		super.tag(indent, name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter tag(int indent, String ns, String name, boolean needsEncoding) {
 		super.tag(indent, ns, name, needsEncoding);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter tag(int indent, String ns, String name) {
 		super.tag(indent, ns, name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter sTag(String ns, String name) {
 		super.sTag(ns, name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter sTag(String ns, String name, boolean needsEncoding) {
 		super.sTag(ns, name, needsEncoding);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter sTag(int indent, String ns, String name) {
 		super.sTag(indent, ns, name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter sTag(int indent, String name) {
 		super.sTag(indent, name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter sTag(String name) {
 		super.sTag(name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter sTag(int indent, String ns, String name, boolean needsEncoding) {
 		super.sTag(indent, ns, name, needsEncoding);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter eTag(String ns, String name) {
 		super.eTag(ns, name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter eTag(String ns, String name, boolean needsEncoding) {
 		super.eTag(ns, name, needsEncoding);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter eTag(int indent, String ns, String name) {
 		super.eTag(indent, ns, name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter eTag(int indent, String name) {
 		super.eTag(indent, name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter eTag(String name) {
 		super.eTag(name);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter eTag(int indent, String ns, String name, boolean needsEncoding) {
 		super.eTag(indent, ns, name, needsEncoding);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter attr(String name, Object value) {
 		super.attr(name, value);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter attr(String ns, String name, Object value) {
 		super.attr(ns, name, value);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter attr(String ns, String name, Object value, boolean valNeedsEncoding) {
 		super.attr(ns, name, value, valNeedsEncoding);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter attr(String name, Object value, boolean valNeedsEncoding) {
 		super.attr(null, name, value, valNeedsEncoding);
 		return this;
 	}
-
 	@Override /* XmlSerializerWriter */
 	public HtmlWriter oAttr(String ns, String name) {
 		super.oAttr(ns, name);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public HtmlWriter cr(int depth) {
 		if (depth > 0)
 			super.cr(depth);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public HtmlWriter cre(int depth) {
 		if (depth > 0)
 			super.cre(depth);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public HtmlWriter appendln(int indent, String text) {
 		super.appendln(indent, text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public HtmlWriter appendln(String text) {
 		super.appendln(text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public HtmlWriter append(int indent, String text) {
 		super.append(indent, text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public HtmlWriter append(int indent, char c) {
 		super.append(indent, c);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public HtmlWriter s() {
 		super.s();
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public HtmlWriter q() {
 		super.q();
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public HtmlWriter i(int indent) {
 		super.i(indent);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public HtmlWriter nl(int indent) {
 		super.nl(indent);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public HtmlWriter append(Object text) {
 		super.append(text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public HtmlWriter append(String text) {
 		super.append(text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public HtmlWriter append(char c) {
 		super.append(c);
 		return this;
 	}
-
-	// </FluentSetters>
 }

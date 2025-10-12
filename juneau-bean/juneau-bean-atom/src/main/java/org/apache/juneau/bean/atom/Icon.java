@@ -23,11 +23,23 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * Represents an <c>atomIcon</c> construct in the RFC4287 specification.
+ * Represents a small icon image for visual identification of a feed.
+ *
+ * <p>
+ * The icon element contains a URI reference to a small image that provides iconic visual 
+ * identification for the feed. Icons are typically small, square images suitable for display 
+ * in feed readers and aggregators.
+ *
+ * <p>
+ * Per RFC 4287 recommendations:
+ * <ul class='spaced-list'>
+ * 	<li>Should be square (aspect ratio of 1:1)
+ * 	<li>Should be small (e.g., 16x16, 32x32 pixels)
+ * 	<li>Common formats: PNG, ICO, GIF
+ * </ul>
  *
  * <h5 class='figure'>Schema</h5>
  * <p class='bschema'>
@@ -37,12 +49,25 @@ import org.apache.juneau.xml.annotation.*;
  * 	}
  * </p>
  *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	Icon <jv>icon</jv> = <jk>new</jk> Icon(<js>"http://example.org/icon.png"</js>);
+ *
+ * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
+ * 		.setIcon(<jv>icon</jv>);
+ * </p>
+ *
+ * <h5 class='section'>Specification:</h5>
+ * <p>
+ * Represents an <c>atomIcon</c> construct in the 
+ * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.5">RFC 4287 - Section 4.2.5</a> specification.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
+ * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
 @Bean(typeName="icon")
-@FluentSetters
 public class Icon extends Common {
 
 	private URI uri;
@@ -80,7 +105,7 @@ public class Icon extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ELEMENTS)
+	@Xml(format=TEXT)
 	public URI getUri() {
 		return uri;
 	}
@@ -109,19 +134,15 @@ public class Icon extends Common {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
+	@Override /* Overridden from Common */
 	public Icon setBase(Object value) {
 		super.setBase(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
+	@Override /* Overridden from Common */
 	public Icon setLang(String value) {
 		super.setLang(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

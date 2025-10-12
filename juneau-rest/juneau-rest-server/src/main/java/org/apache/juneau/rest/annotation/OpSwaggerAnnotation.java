@@ -221,9 +221,6 @@ public class OpSwaggerAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

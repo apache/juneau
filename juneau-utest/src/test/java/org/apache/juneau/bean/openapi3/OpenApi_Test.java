@@ -91,6 +91,30 @@ class OpenApi_Test extends TestBase {
 				"paths{/test{get{summary}}}",
 				"{{{a}}}"
 			);
+			
+			// Test addTags
+			var x1 = bean()
+				.addTags(tag("b1"), tag("b2"))
+				.addTags(list(tag("b3")));
+			assertBean(x1, "tags{#{name}}", "{[{b1},{b2},{b3}]}");
+			
+			// Test addServers
+			var x2 = bean()
+				.addServers(server().setUrl(URI.create("http://c1.com")), server().setUrl(URI.create("http://c2.com")))
+				.addServers(list(server().setUrl(URI.create("http://c3.com"))));
+			assertBean(x2, "servers{#{url}}", "{[{http://c1.com},{http://c2.com},{http://c3.com}]}");
+			
+			// Test addSecurity
+			var x3 = bean()
+				.addSecurity(securityRequirement().setRequirements(map("d1", list("d2"))))
+				.addSecurity(list(securityRequirement().setRequirements(map("d3", list("d4")))));
+			assertBean(x3, "security{#{requirements}}", "{[{{d1=[d2]}},{{d3=[d4]}}]}");
+		}
+
+		@Test void a09b_setTagsVarargs() {
+			// Test setTags(Tag...) varargs method to cover that code path
+			var x = bean().setTags(tag("t1"), tag("t2"), tag("t3"));
+			assertBean(x, "tags{#{name}}", "{[{t1},{t2},{t3}]}");
 		}
 
 		@Test void a10_asMap() {
@@ -144,6 +168,7 @@ class OpenApi_Test extends TestBase {
 
 			// Test addPath with null path (covers the null check branch)
 			assertThrows(IllegalArgumentException.class, () -> x.addPath(null, pathItem()));
+			assertThrows(IllegalArgumentException.class, () -> x.addPath("/test", null));
 		}
 	}
 
@@ -183,6 +208,13 @@ class OpenApi_Test extends TestBase {
 
 		@Test void b07_keySet() {
 			assertList(TESTER.bean().keySet(), "openapi");
+		}
+
+		@Test void b08_keySet_infoNull() {
+			// Explicitly test keySet when info is null to cover that branch
+			var x = bean().setOpenapi("3.0.0"); // info is null
+			assertList(x.keySet(), "openapi");
+			assertFalse(x.keySet().contains("info"));
 		}
 	}
 

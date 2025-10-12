@@ -41,7 +41,6 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @org.apache.juneau.html.annotation.Html(format=XML)
-@FluentSetters
 public abstract class HtmlElement {
 
 	private java.util.Map<String,Object> attrs;
@@ -157,7 +156,6 @@ public abstract class HtmlElement {
 	 * @param accesskey The keyboard shortcut character (e.g., <js>"a"</js>, <js>"1"</js>).
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement accesskey(String value) {
 		attr("accesskey", value);
 		return this;
@@ -173,7 +171,6 @@ public abstract class HtmlElement {
 	 * @param _class Space-separated CSS class names (e.g., <js>"btn btn-primary"</js>).
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement _class(String value) {  // NOSONAR - Intentional naming.
 		attr("class", value);
 		return this;
@@ -197,7 +194,6 @@ public abstract class HtmlElement {
 	 * @param contenteditable The editability state of the element.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement contenteditable(Object value) {
 		attr("contenteditable", value);
 		return this;
@@ -220,7 +216,6 @@ public abstract class HtmlElement {
 	 * @param dir The text direction for the element.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement dir(String value) {
 		attr("dir", value);
 		return this;
@@ -242,7 +237,6 @@ public abstract class HtmlElement {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement hidden(Object value) {
 		attr("hidden", deminimize(value, "hidden"));
 		return this;
@@ -258,7 +252,6 @@ public abstract class HtmlElement {
 	 * @param id A unique identifier for the element (e.g., <js>"header"</js>, <js>"main-content"</js>).
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement id(String value) {
 		attr("id", value);
 		return this;
@@ -274,7 +267,6 @@ public abstract class HtmlElement {
 	 * @param lang A language tag (e.g., <js>"en"</js>, <js>"en-US"</js>, <js>"es"</js>, <js>"fr-CA"</js>).
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement lang(String value) {
 		attr("lang", value);
 		return this;
@@ -289,7 +281,6 @@ public abstract class HtmlElement {
 	 * @param onabort JavaScript code to execute when the abort event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onabort(String value) {
 		attr("onabort", value);
 		return this;
@@ -314,7 +305,6 @@ public abstract class HtmlElement {
 	 * @param onblur JavaScript code to execute when the element loses focus.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onblur(String value) {
 		attr("onblur", value);
 		return this;
@@ -329,7 +319,6 @@ public abstract class HtmlElement {
 	 * @param oncancel JavaScript code to execute when the cancel event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement oncancel(String value) {
 		attr("oncancel", value);
 		return this;
@@ -344,7 +333,6 @@ public abstract class HtmlElement {
 	 * @param oncanplay JavaScript code to execute when the canplay event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement oncanplay(String value) {
 		attr("oncanplay", value);
 		return this;
@@ -360,7 +348,6 @@ public abstract class HtmlElement {
 	 * @param oncanplaythrough JavaScript code to execute when the canplaythrough event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement oncanplaythrough(String value) {
 		attr("oncanplaythrough", value);
 		return this;
@@ -385,7 +372,6 @@ public abstract class HtmlElement {
 	 * @param onchange JavaScript code to execute when the change event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onchange(String value) {
 		attr("onchange", value);
 		return this;
@@ -410,7 +396,6 @@ public abstract class HtmlElement {
 	 * @param onclick JavaScript code to execute when the click event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onclick(String value) {
 		attr("onclick", value);
 		return this;
@@ -426,7 +411,6 @@ public abstract class HtmlElement {
 	 * @param oncuechange JavaScript code to execute when the cuechange event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement oncuechange(String value) {
 		attr("oncuechange", value);
 		return this;
@@ -441,7 +425,6 @@ public abstract class HtmlElement {
 	 * @param ondblclick JavaScript code to execute when the dblclick event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement ondblclick(String value) {
 		attr("ondblclick", value);
 		return this;
@@ -457,7 +440,6 @@ public abstract class HtmlElement {
 	 * @param ondurationchange JavaScript code to execute when the durationchange event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement ondurationchange(String value) {
 		attr("ondurationchange", value);
 		return this;
@@ -472,7 +454,6 @@ public abstract class HtmlElement {
 	 * @param onemptied JavaScript code to execute when the emptied event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onemptied(String value) {
 		attr("onemptied", value);
 		return this;
@@ -487,7 +468,6 @@ public abstract class HtmlElement {
 	 * @param onended JavaScript code to execute when the ended event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onended(String value) {
 		attr("onended", value);
 		return this;
@@ -502,7 +482,6 @@ public abstract class HtmlElement {
 	 * @param onerror JavaScript code to execute when the error event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onerror(String value) {
 		attr("onerror", value);
 		return this;
@@ -527,7 +506,6 @@ public abstract class HtmlElement {
 	 * @param onfocus JavaScript code to execute when the focus event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onfocus(String value) {
 		attr("onfocus", value);
 		return this;
@@ -542,7 +520,6 @@ public abstract class HtmlElement {
 	 * @param oninput JavaScript code to execute when the input event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement oninput(String value) {
 		attr("oninput", value);
 		return this;
@@ -557,7 +534,6 @@ public abstract class HtmlElement {
 	 * @param oninvalid JavaScript code to execute when the invalid event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement oninvalid(String value) {
 		attr("oninvalid", value);
 		return this;
@@ -572,7 +548,6 @@ public abstract class HtmlElement {
 	 * @param onkeydown JavaScript code to execute when the keydown event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onkeydown(String value) {
 		attr("onkeydown", value);
 		return this;
@@ -587,7 +562,6 @@ public abstract class HtmlElement {
 	 * @param onkeypress JavaScript code to execute when the keypress event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onkeypress(String value) {
 		attr("onkeypress", value);
 		return this;
@@ -602,7 +576,6 @@ public abstract class HtmlElement {
 	 * @param onkeyup JavaScript code to execute when the keyup event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onkeyup(String value) {
 		attr("onkeyup", value);
 		return this;
@@ -627,7 +600,6 @@ public abstract class HtmlElement {
 	 * @param onload JavaScript code to execute when the load event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onload(String value) {
 		attr("onload", value);
 		return this;
@@ -643,7 +615,6 @@ public abstract class HtmlElement {
 	 * @param onloadeddata JavaScript code to execute when the loadeddata event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onloadeddata(String value) {
 		attr("onloadeddata", value);
 		return this;
@@ -659,7 +630,6 @@ public abstract class HtmlElement {
 	 * @param onloadedmetadata JavaScript code to execute when the loadedmetadata event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onloadedmetadata(String value) {
 		attr("onloadedmetadata", value);
 		return this;
@@ -675,7 +645,6 @@ public abstract class HtmlElement {
 	 * @param onloadstart JavaScript code to execute when the loadstart event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onloadstart(String value) {
 		attr("onloadstart", value);
 		return this;
@@ -691,7 +660,6 @@ public abstract class HtmlElement {
 	 * @param onmousedown JavaScript code to execute when the mousedown event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onmousedown(String value) {
 		attr("onmousedown", value);
 		return this;
@@ -706,7 +674,6 @@ public abstract class HtmlElement {
 	 * @param onmouseenter JavaScript code to execute when the mouseenter event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onmouseenter(String value) {
 		attr("onmouseenter", value);
 		return this;
@@ -722,7 +689,6 @@ public abstract class HtmlElement {
 	 * @param onmouseleave JavaScript code to execute when the mouseleave event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onmouseleave(String value) {
 		attr("onmouseleave", value);
 		return this;
@@ -738,7 +704,6 @@ public abstract class HtmlElement {
 	 * @param onmousemove JavaScript code to execute when the mousemove event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onmousemove(String value) {
 		attr("onmousemove", value);
 		return this;
@@ -753,7 +718,6 @@ public abstract class HtmlElement {
 	 * @param onmouseout JavaScript code to execute when the mouseout event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onmouseout(String value) {
 		attr("onmouseout", value);
 		return this;
@@ -779,7 +743,6 @@ public abstract class HtmlElement {
 	 * @param onmouseover JavaScript code to execute when the mouseover event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onmouseover(String value) {
 		attr("onmouseover", value);
 		return this;
@@ -794,7 +757,6 @@ public abstract class HtmlElement {
 	 * @param onmouseup JavaScript code to execute when the mouseup event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onmouseup(String value) {
 		attr("onmouseup", value);
 		return this;
@@ -810,7 +772,6 @@ public abstract class HtmlElement {
 	 * @param onmousewheel JavaScript code to execute when the mousewheel event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onmousewheel(String value) {
 		attr("onmousewheel", value);
 		return this;
@@ -825,7 +786,6 @@ public abstract class HtmlElement {
 	 * @param onpause JavaScript code to execute when the pause event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onpause(String value) {
 		attr("onpause", value);
 		return this;
@@ -840,7 +800,6 @@ public abstract class HtmlElement {
 	 * @param onplay JavaScript code to execute when the play event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onplay(String value) {
 		attr("onplay", value);
 		return this;
@@ -855,7 +814,6 @@ public abstract class HtmlElement {
 	 * @param onplaying JavaScript code to execute when the playing event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onplaying(String value) {
 		attr("onplaying", value);
 		return this;
@@ -870,7 +828,6 @@ public abstract class HtmlElement {
 	 * @param onprogress JavaScript code to execute when the progress event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onprogress(String value) {
 		attr("onprogress", value);
 		return this;
@@ -886,7 +843,6 @@ public abstract class HtmlElement {
 	 * @param onratechange JavaScript code to execute when the ratechange event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onratechange(String value) {
 		attr("onratechange", value);
 		return this;
@@ -901,7 +857,6 @@ public abstract class HtmlElement {
 	 * @param onreset JavaScript code to execute when the reset event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onreset(String value) {
 		attr("onreset", value);
 		return this;
@@ -916,7 +871,6 @@ public abstract class HtmlElement {
 	 * @param onresize JavaScript code to execute when the resize event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onresize(String value) {
 		attr("onresize", value);
 		return this;
@@ -931,7 +885,6 @@ public abstract class HtmlElement {
 	 * @param onscroll JavaScript code to execute when the scroll event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onscroll(String value) {
 		attr("onscroll", value);
 		return this;
@@ -946,7 +899,6 @@ public abstract class HtmlElement {
 	 * @param onseeked JavaScript code to execute when the seeked event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onseeked(String value) {
 		attr("onseeked", value);
 		return this;
@@ -961,7 +913,6 @@ public abstract class HtmlElement {
 	 * @param onseeking JavaScript code to execute when the seeking event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onseeking(String value) {
 		attr("onseeking", value);
 		return this;
@@ -976,7 +927,6 @@ public abstract class HtmlElement {
 	 * @param onselect JavaScript code to execute when the select event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onselect(String value) {
 		attr("onselect", value);
 		return this;
@@ -991,7 +941,6 @@ public abstract class HtmlElement {
 	 * @param onshow JavaScript code to execute when the show event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onshow(String value) {
 		attr("onshow", value);
 		return this;
@@ -1006,7 +955,6 @@ public abstract class HtmlElement {
 	 * @param onstalled JavaScript code to execute when the stalled event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onstalled(String value) {
 		attr("onstalled", value);
 		return this;
@@ -1031,7 +979,6 @@ public abstract class HtmlElement {
 	 * @param onsubmit JavaScript code to execute when the submit event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onsubmit(String value) {
 		attr("onsubmit", value);
 		return this;
@@ -1046,7 +993,6 @@ public abstract class HtmlElement {
 	 * @param onsuspend JavaScript code to execute when the suspend event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onsuspend(String value) {
 		attr("onsuspend", value);
 		return this;
@@ -1062,7 +1008,6 @@ public abstract class HtmlElement {
 	 * @param ontimeupdate JavaScript code to execute when the timeupdate event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement ontimeupdate(String value) {
 		attr("ontimeupdate", value);
 		return this;
@@ -1077,7 +1022,6 @@ public abstract class HtmlElement {
 	 * @param ontoggle JavaScript code to execute when the toggle event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement ontoggle(String value) {
 		attr("ontoggle", value);
 		return this;
@@ -1093,7 +1037,6 @@ public abstract class HtmlElement {
 	 * @param onvolumechange JavaScript code to execute when the volumechange event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onvolumechange(String value) {
 		attr("onvolumechange", value);
 		return this;
@@ -1108,7 +1051,6 @@ public abstract class HtmlElement {
 	 * @param onwaiting JavaScript code to execute when the waiting event occurs.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement onwaiting(String value) {
 		attr("onwaiting", value);
 		return this;
@@ -1130,7 +1072,6 @@ public abstract class HtmlElement {
 	 * @param spellcheck Whether spell checking should be enabled.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement spellcheck(Object value) {
 		attr("spellcheck", value);
 		return this;
@@ -1146,7 +1087,6 @@ public abstract class HtmlElement {
 	 * @param style Inline CSS styles (e.g., <js>"color: red; font-size: 14px;"</js>).
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement style(String value) {
 		attr("style", value);
 		return this;
@@ -1169,7 +1109,6 @@ public abstract class HtmlElement {
 	 * @param tabindex The tab order value for keyboard navigation.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement tabindex(Object value) {
 		attr("tabindex", value);
 		return this;
@@ -1185,7 +1124,6 @@ public abstract class HtmlElement {
 	 * @param title Tooltip text to display on hover (e.g., <js>"Click to submit form"</js>).
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement title(String value) {
 		attr("title", value);
 		return this;
@@ -1207,7 +1145,6 @@ public abstract class HtmlElement {
 	 * @param translate Whether the element content should be translated.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HtmlElement translate(Object value) {
 		attr("translate", value);
 		return this;
@@ -1228,11 +1165,6 @@ public abstract class HtmlElement {
 		}
 		return value;
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
-
 	@Override /* Object */
 	public String toString() {
 		return HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(this);

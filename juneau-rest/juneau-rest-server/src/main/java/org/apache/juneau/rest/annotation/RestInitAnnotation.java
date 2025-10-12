@@ -77,10 +77,6 @@ public class RestInitAnnotation {
 			return new Impl(this);
 		}
 
-		// <FluentSetters>
-
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

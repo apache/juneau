@@ -104,7 +104,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder extends Context.Builder {
 
 		RestContext restContext;
@@ -1760,7 +1759,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder clientVersion(String value) {
 			clientVersion = value;
 			return this;
@@ -1782,7 +1780,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder debug(Enablement value) {
 			debug = value;
 			return this;
@@ -1813,7 +1810,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder defaultCharset(Charset value) {
 			defaultCharset = value;
 			return this;
@@ -1874,7 +1870,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder httpMethod(String value) {
 			this.httpMethod = value;
 			return this;
@@ -1939,7 +1934,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	<br>The default is <js>"100M"</js>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder maxInput(String value) {
 			maxInput = StringUtils.parseLongWithSuffix(value);
 			return this;
@@ -1963,7 +1957,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @param values The new values for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder path(String...values) {
 			path = prependAll(path, values);
 			return this;
@@ -1995,7 +1988,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @param values The values to add to this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder produces(MediaType...values) {
 			produces = addAll(produces, values);
 			return this;
@@ -2028,7 +2020,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @param values The values to add to this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder rolesDeclared(String...values) {
 			rolesDeclared = addAll(rolesDeclared, values);
 			return this;
@@ -2080,7 +2071,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @param value The values to add to this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder roleGuard(String value) {
 			if (roleGuard == null)
 				roleGuard = Utils.set(value);
@@ -2113,70 +2103,63 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @param values The values to add to this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder consumes(MediaType...values) {
 			consumes = addAll(consumes, values);
 			return this;
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
 			super.cache(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder debug(boolean value) {
 			super.debug(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder impl(Context value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
 			return this;
 		}
-
-		// </FluentSetters>
-
 		//-----------------------------------------------------------------------------------------------------------------
 		// Helper methods.
 		//-----------------------------------------------------------------------------------------------------------------

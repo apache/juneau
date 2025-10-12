@@ -95,10 +95,11 @@ class Select_Test extends TestBase {
 			.tabindex("bo")
 			.title("bp")
 			.translate("bq")
+			.child("child1")
 			.children("bs", strong("bs"));
 
 		assertString(
-			"<select autofocus='a' disabled='b' form='c' multiple='d' name='e' required='f' size='g' class='h' accesskey='i' contenteditable='j' dir='k' hidden='l' id='m' lang='n' onabort='o' onblur='p' oncancel='q' oncanplay='r' oncanplaythrough='s' onchange='t' onclick='u' oncuechange='v' ondblclick='w' ondurationchange='x' onemptied='y' onended='y' onerror='aa' onfocus='ab' oninput='ac' oninvalid='ad' onkeydown='ae' onkeypress='af' onkeyup='ag' onload='ah' onloadeddata='ai' onloadedmetadata='aj' onloadstart='ak' onmousedown='al' onmouseenter='am' onmouseleave='an' onmousemove='ao' onmouseout='ap' onmouseover='aq' onmouseup='ar' onmousewheel='as' onpause='at' onplay='au' onplaying='av' onprogress='aw' onratechange='ax' onreset='ay' onresize='az' onscroll='ba' onseeked='bb' onseeking='bc' onselect='bd' onshow='be' onstalled='bf' onsubmit='bg' onsuspend='bh' ontimeupdate='bi' ontoggle='bj' onvolumechange='bk' onwaiting='bl' spellcheck='bm' style='bn' tabindex='bo' title='bp' translate='bq'>bs<strong>bs</strong></select>",
+			"<select autofocus='a' disabled='b' form='c' multiple='d' name='e' required='f' size='g' class='h' accesskey='i' contenteditable='j' dir='k' hidden='l' id='m' lang='n' onabort='o' onblur='p' oncancel='q' oncanplay='r' oncanplaythrough='s' onchange='t' onclick='u' oncuechange='v' ondblclick='w' ondurationchange='x' onemptied='y' onended='y' onerror='aa' onfocus='ab' oninput='ac' oninvalid='ad' onkeydown='ae' onkeypress='af' onkeyup='ag' onload='ah' onloadeddata='ai' onloadedmetadata='aj' onloadstart='ak' onmousedown='al' onmouseenter='am' onmouseleave='an' onmousemove='ao' onmouseout='ap' onmouseover='aq' onmouseup='ar' onmousewheel='as' onpause='at' onplay='au' onplaying='av' onprogress='aw' onratechange='ax' onreset='ay' onresize='az' onscroll='ba' onseeked='bb' onseeking='bc' onselect='bd' onshow='be' onstalled='bf' onsubmit='bg' onsuspend='bh' ontimeupdate='bi' ontoggle='bj' onvolumechange='bk' onwaiting='bl' spellcheck='bm' style='bn' tabindex='bo' title='bp' translate='bq'>child1bs<strong>bs</strong></select>",
 			x
 		);
 	}

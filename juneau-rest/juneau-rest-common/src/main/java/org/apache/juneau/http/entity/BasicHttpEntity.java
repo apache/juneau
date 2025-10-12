@@ -49,7 +49,6 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @BeanIgnore
-@FluentSetters
 public class BasicHttpEntity implements HttpEntity {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -132,7 +131,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 *
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpEntity setUnmodifiable() {
 		unmodifiable = true;
 		return this;
@@ -161,7 +159,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The entity content, can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpEntity setContent(Object value) {
 		assertModifiable();
 		this.content = value;
@@ -178,7 +175,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The entity content, can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpEntity setContent(Supplier<?> value) {
 		assertModifiable();
 		this.contentSupplier = value == null ? ()->null : value;
@@ -191,7 +187,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpEntity setContentType(String value) {
 		return setContentType(ContentType.of(value));
 	}
@@ -202,7 +197,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpEntity setContentType(ContentType value) {
 		assertModifiable();
 		contentType = value;
@@ -215,7 +209,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new <c>Content-Length</c> header value, or <c>-1</c> to unset.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpEntity setContentLength(long value) {
 		assertModifiable();
 		contentLength = value;
@@ -228,7 +221,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpEntity setContentEncoding(String value) {
 		return setContentEncoding(ContentEncoding.of(value));
 	}
@@ -239,7 +231,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpEntity setContentEncoding(ContentEncoding value) {
 		assertModifiable();
 		contentEncoding = value;
@@ -256,7 +247,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 *
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpEntity setChunked() {
 		return setChunked(true);
 	}
@@ -272,7 +262,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new value for this flag.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpEntity setChunked(boolean value) {
 		assertModifiable();
 		chunked = value;
@@ -286,7 +275,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @return This object.
 	 * @throws IOException If entity could not be read into memory.
 	 */
-	@FluentSetter
 	public BasicHttpEntity setCached() throws IOException {
 		assertModifiable();
 		cached = true;
@@ -308,7 +296,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new value.  If <jk>null</jk>, <c>UTF-8</c> is assumed.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpEntity setCharset(Charset value) {
 		assertModifiable();
 		this.charset = value;
@@ -333,7 +320,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 * @param value The new value.  The default is <c>-1</c> which means read everything.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpEntity setMaxLength(int value) {
 		assertModifiable();
 		this.maxLength = value;
@@ -486,8 +472,4 @@ public class BasicHttpEntity implements HttpEntity {
 
 	@Override /* HttpEntity */
 	public void writeTo(OutputStream outStream) throws IOException {}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

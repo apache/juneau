@@ -182,9 +182,6 @@ public class SwaggerAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

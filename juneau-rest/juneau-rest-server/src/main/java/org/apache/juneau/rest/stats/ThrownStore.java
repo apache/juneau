@@ -74,7 +74,6 @@ public class ThrownStore {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder extends BeanBuilder<ThrownStore> {
 
 		ThrownStore parent;
@@ -138,22 +137,17 @@ public class ThrownStore {
 			this.ignoreClasses = Utils.set(value);
 			return this;
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

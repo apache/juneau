@@ -84,6 +84,16 @@ class HeaderInfo_Test extends TestBase {
 			var x = bean();
 			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
 			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
+			assertThrows(IllegalArgumentException.class, () -> x.addExample(null, example()));
+			assertThrows(IllegalArgumentException.class, () -> x.addExample("test", null));
+		}
+
+		@Test void a08b_getSetRef() {
+			// Test get/set with "$ref" property to cover switch branches
+			var x = bean();
+			x.set("$ref", "#/components/headers/MyHeader");
+			assertEquals("#/components/headers/MyHeader", x.get("$ref", String.class));
+			assertEquals("#/components/headers/MyHeader", x.getRef());
 		}
 
 		@Test void a09_addMethods() {
@@ -272,6 +282,44 @@ class HeaderInfo_Test extends TestBase {
 			assertSame(header, result);
 			assertEquals("Test header", result.getDescription());
 			assertTrue(result.getRequired());
+		}
+
+		@Test void d05_resolveRefs_circularReference() {
+			// Test circular reference detection (covers the refStack.contains(ref) branch)
+			var openApi = openApi()
+				.setComponents(components().setSchemas(map(
+					"Header1", schemaInfo().setRef("#/components/schemas/Header2"),
+					"Header2", schemaInfo().setRef("#/components/schemas/Header1")
+				)));
+
+			var refStack = new ArrayDeque<String>();
+			refStack.add("#/components/schemas/Header1"); // Pre-populate to simulate circular reference
+			
+			var header = headerInfo().setRef("#/components/schemas/Header1");
+			var result = header.resolveRefs(openApi, refStack, 10);
+
+			// Should return the original object without resolving
+			assertSame(header, result);
+			assertEquals("#/components/schemas/Header1", result.getRef());
+		}
+
+		@Test void d06_resolveRefs_maxDepthDirect() {
+			// Test max depth directly (covers the refStack.size() >= maxDepth branch)
+			var openApi = openApi()
+				.setComponents(components().setSchemas(map("MyHeader", schemaInfo().setType("string"))));
+
+			// Create a refStack at max depth
+			var refStack = new ArrayDeque<String>();
+			refStack.add("dummy1");
+			refStack.add("dummy2");
+			refStack.add("dummy3");
+			
+			var header = headerInfo().setRef("#/components/schemas/MyHeader");
+			var result = header.resolveRefs(openApi, refStack, 3); // maxDepth = 3, refStack.size() = 3
+
+			// Should return the original object without resolving
+			assertSame(header, result);
+			assertEquals("#/components/schemas/MyHeader", result.getRef());
 		}
 	}
 

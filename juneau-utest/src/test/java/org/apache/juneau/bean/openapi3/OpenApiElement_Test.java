@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -31,5 +32,40 @@ class OpenApiElement_Test extends TestBase {
 		var x = new OpenApiElement() {};
 		x.set("a1", "a2");
 		assertString("{'a1':'a2'}".replace('\'','"'), x);
+	}
+
+	@Test void a02_strict_withNull() {
+		// Test strict(Object) with null value - should set strict to false
+		var x = new OpenApiElement() {};
+		x.strict(null);
+		assertFalse(x.isStrict());
+	}
+
+	@Test void a03_strict_withTrue() {
+		// Test strict(Object) with true value
+		var x = new OpenApiElement() {};
+		x.strict(true);
+		assertTrue(x.isStrict());
+	}
+
+	@Test void a04_strict_withFalse() {
+		// Test strict(Object) with false value
+		var x = new OpenApiElement() {};
+		x.strict(false);
+		assertFalse(x.isStrict());
+	}
+
+	@Test void a05_strict_withStringTrue() {
+		// Test strict(Object) with string "true"
+		var x = new OpenApiElement() {};
+		x.strict("true");
+		assertTrue(x.isStrict());
+	}
+
+	@Test void a06_strict_withStringFalse() {
+		// Test strict(Object) with string "false"
+		var x = new OpenApiElement() {};
+		x.strict("false");
+		assertFalse(x.isStrict());
 	}
 }

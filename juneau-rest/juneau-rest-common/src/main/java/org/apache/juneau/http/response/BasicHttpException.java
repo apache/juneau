@@ -56,7 +56,6 @@ import org.apache.juneau.internal.*;
  * @serial exclude
  */
 @BeanIgnore /* Use toString() to serialize */
-@FluentSetters(ignore="setUnmodifiable")
 public class BasicHttpException extends BasicRuntimeException implements HttpResponse {
 
 	private static final long serialVersionUID = 1L;
@@ -159,7 +158,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	@Override
-	@FluentSetter
 	public BasicHttpException setUnmodifiable() {
 		super.setUnmodifiable();
 		statusLine.setUnmodifiable();
@@ -179,7 +177,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpException setStatusLine(BasicStatusLine value) {
 		assertModifiable();
 		statusLine = value.copy();
@@ -193,7 +190,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 * @throws IllegalStateException If status code could not be set.
 	 */
-	@FluentSetter
 	public BasicHttpException setStatusCode2(int code) throws IllegalStateException {
 		setStatusCode(code);
 		return this;
@@ -208,7 +204,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpException setProtocolVersion(ProtocolVersion value) {
 		statusLine.setProtocolVersion(value);
 		return this;
@@ -224,7 +219,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpException setReasonPhrase2(String value) {
 		statusLine.setReasonPhrase(value);
 		return this;
@@ -239,7 +233,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpException setReasonPhraseCatalog(ReasonPhraseCatalog value) {
 		statusLine.setReasonPhraseCatalog(value);
 		return this;
@@ -254,7 +247,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpException setLocale2(Locale value) {
 		statusLine.setLocale(value);
 		return this;
@@ -280,7 +272,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpException setHeaders(HeaderList value) {
 		assertModifiable();
 		headers = value.copy();
@@ -294,7 +285,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param value The header value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpException setHeader2(String name, Object value) {
 		headers.set(name, value);
 		return this;
@@ -306,7 +296,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param values The headers to add.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpException setHeaders2(Header...values) {
 		headers.set(values);
 		return this;
@@ -585,14 +574,9 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public void setLocale(Locale loc) {
 		statusLine.setLocale(loc);
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	@Override /* Overridden from BasicRuntimeException */
 	public BasicHttpException setMessage(String message, Object...args) {
 		super.setMessage(message, args);
 		return this;
 	}
-
-	// </FluentSetters>
 }

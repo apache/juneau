@@ -135,7 +135,6 @@ public abstract class Context implements AnnotationProvider {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public abstract static class Builder {
 
 		private static final Map<Class<?>,ConstructorInfo> CONTEXT_CONSTRUCTORS = new ConcurrentHashMap<>();
@@ -249,7 +248,6 @@ public abstract class Context implements AnnotationProvider {
 		 * @param value The cache.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder cache(Cache<HashKey,? extends Context> value) {
 			this.cache = value;
 			return this;
@@ -295,7 +293,6 @@ public abstract class Context implements AnnotationProvider {
 		 * @param value The context class that this builder should create.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder type(Class<? extends Context> value) {
 			this.type = value;
 			return this;
@@ -316,7 +313,6 @@ public abstract class Context implements AnnotationProvider {
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder impl(Context value) {
 			impl = value;
 			return this;
@@ -362,7 +358,6 @@ public abstract class Context implements AnnotationProvider {
 		 * @param work The list of annotations and appliers to apply to this builder.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder apply(AnnotationWorkList work) {
 			applied.addAll(work);
 			work.forEach(x -> builders.forEach(x::apply));
@@ -479,7 +474,6 @@ public abstract class Context implements AnnotationProvider {
 		 *		<li>A collection/stream/array of anything on this list.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder applyAnnotations(Object...from) {
 			var work = AnnotationWorkList.create();
 			Arrays.stream(from).forEach(x -> traverse(work, x));
@@ -508,7 +502,6 @@ public abstract class Context implements AnnotationProvider {
 		 * @param from The classes or methods on which the annotations are defined.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder applyAnnotations(Class<?>...from) {
 			return applyAnnotations((Object[])from);
 		}
@@ -688,7 +681,6 @@ public abstract class Context implements AnnotationProvider {
 		 * 	The annotations to register with the context.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder annotations(Annotation...values) {
 			annotations = addAll(annotations, values);
 			return this;
@@ -701,7 +693,6 @@ public abstract class Context implements AnnotationProvider {
 		 * 	The annotations to register with the context.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder annotations(List<Annotation> values) {
 			annotations = addAll(annotations, values);
 			return this;
@@ -754,7 +745,6 @@ public abstract class Context implements AnnotationProvider {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder debug() {
 			return debug(true);
 		}
@@ -765,7 +755,6 @@ public abstract class Context implements AnnotationProvider {
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder debug(boolean value) {
 			debug = value;
 			return this;
@@ -779,10 +768,6 @@ public abstract class Context implements AnnotationProvider {
 		public boolean isDebug() {
 			return debug;
 		}
-
-		// <FluentSetters>
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

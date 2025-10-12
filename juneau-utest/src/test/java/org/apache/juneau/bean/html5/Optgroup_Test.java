@@ -90,10 +90,11 @@ class Optgroup_Test extends TestBase {
 			.tabindex("bj")
 			.title("bk")
 			.translate("bl")
+			.child("child1")
 			.children("bm", strong("bn"));
 
 		assertString(
-			"<optgroup disabled='a' label='b' class='c' accesskey='d' contenteditable='e' dir='f' hidden='g' id='h' lang='i' onabort='j' onblur='k' oncancel='l' oncanplay='m' oncanplaythrough='n' onchange='o' onclick='p' oncuechange='q' ondblclick='r' ondurationchange='s' onemptied='t' onended='u' onerror='v' onfocus='w' oninput='x' oninvalid='y' onkeydown='z' onkeypress='aa' onkeyup='ab' onload='ac' onloadeddata='ad' onloadedmetadata='ae' onloadstart='af' onmousedown='ag' onmouseenter='ah' onmouseleave='ai' onmousemove='aj' onmouseout='ak' onmouseover='al' onmouseup='am' onmousewheel='an' onpause='ao' onplay='ap' onplaying='aq' onprogress='ar' onratechange='as' onreset='at' onresize='au' onscroll='av' onseeked='aw' onseeking='ax' onselect='ay' onshow='az' onstalled='ba' onsubmit='bb' onsuspend='bc' ontimeupdate='bd' ontoggle='be' onvolumechange='bf' onwaiting='bg' spellcheck='bh' style='bi' tabindex='bj' title='bk' translate='bl'>bm<strong>bn</strong></optgroup>",
+			"<optgroup disabled='a' label='b' class='c' accesskey='d' contenteditable='e' dir='f' hidden='g' id='h' lang='i' onabort='j' onblur='k' oncancel='l' oncanplay='m' oncanplaythrough='n' onchange='o' onclick='p' oncuechange='q' ondblclick='r' ondurationchange='s' onemptied='t' onended='u' onerror='v' onfocus='w' oninput='x' oninvalid='y' onkeydown='z' onkeypress='aa' onkeyup='ab' onload='ac' onloadeddata='ad' onloadedmetadata='ae' onloadstart='af' onmousedown='ag' onmouseenter='ah' onmouseleave='ai' onmousemove='aj' onmouseout='ak' onmouseover='al' onmouseup='am' onmousewheel='an' onpause='ao' onplay='ap' onplaying='aq' onprogress='ar' onratechange='as' onreset='at' onresize='au' onscroll='av' onseeked='aw' onseeking='ax' onselect='ay' onshow='az' onstalled='ba' onsubmit='bb' onsuspend='bc' ontimeupdate='bd' ontoggle='be' onvolumechange='bf' onwaiting='bg' spellcheck='bh' style='bi' tabindex='bj' title='bk' translate='bl'>child1bm<strong>bn</strong></optgroup>",
 			x
 		);
 	}

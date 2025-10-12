@@ -90,10 +90,11 @@ class Canvas_Test extends TestBase {
 			.tabindex("bj")
 			.title("bk")
 			.translate("bl")
+			.child("child1")
 			.children("bm", strong("bn"));
 
 		assertString(
-			"<canvas height='a' width='b' class='c' accesskey='d' contenteditable='e' dir='f' hidden='g' id='h' lang='i' onabort='j' onblur='k' oncancel='l' oncanplay='m' oncanplaythrough='n' onchange='o' onclick='p' oncuechange='q' ondblclick='r' ondurationchange='s' onemptied='t' onended='u' onerror='v' onfocus='w' oninput='x' oninvalid='y' onkeydown='z' onkeypress='aa' onkeyup='ab' onload='ac' onloadeddata='ad' onloadedmetadata='ae' onloadstart='af' onmousedown='ag' onmouseenter='ah' onmouseleave='ai' onmousemove='aj' onmouseout='ak' onmouseover='al' onmouseup='am' onmousewheel='an' onpause='ao' onplay='ap' onplaying='aq' onprogress='ar' onratechange='as' onreset='at' onresize='au' onscroll='av' onseeked='aw' onseeking='ax' onselect='ay' onshow='az' onstalled='ba' onsubmit='bb' onsuspend='bc' ontimeupdate='bd' ontoggle='be' onvolumechange='bf' onwaiting='bg' spellcheck='bh' style='bi' tabindex='bj' title='bk' translate='bl'>bm<strong>bn</strong></canvas>",
+			"<canvas height='a' width='b' class='c' accesskey='d' contenteditable='e' dir='f' hidden='g' id='h' lang='i' onabort='j' onblur='k' oncancel='l' oncanplay='m' oncanplaythrough='n' onchange='o' onclick='p' oncuechange='q' ondblclick='r' ondurationchange='s' onemptied='t' onended='u' onerror='v' onfocus='w' oninput='x' oninvalid='y' onkeydown='z' onkeypress='aa' onkeyup='ab' onload='ac' onloadeddata='ad' onloadedmetadata='ae' onloadstart='af' onmousedown='ag' onmouseenter='ah' onmouseleave='ai' onmousemove='aj' onmouseout='ak' onmouseover='al' onmouseup='am' onmousewheel='an' onpause='ao' onplay='ap' onplaying='aq' onprogress='ar' onratechange='as' onreset='at' onresize='au' onscroll='av' onseeked='aw' onseeking='ax' onselect='ay' onshow='az' onstalled='ba' onsubmit='bb' onsuspend='bc' ontimeupdate='bd' ontoggle='be' onvolumechange='bf' onwaiting='bg' spellcheck='bh' style='bi' tabindex='bj' title='bk' translate='bl'>child1bm<strong>bn</strong></canvas>",
 			x
 		);
 	}
@@ -106,5 +107,23 @@ class Canvas_Test extends TestBase {
 		Canvas x1 = new Canvas(1, 1);
 		assertString("<canvas width='1' height='1'></canvas>", x1);
 
+	}
+
+	@Test void a04_fallbackContent() {
+		// Test canvas with text fallback content
+		Canvas x1 = canvas(300, 200)
+			.id("myCanvas")
+			.children("Your browser does not support the canvas element.");
+		assertString("<canvas width='300' height='200' id='myCanvas'>Your browser does not support the canvas element.</canvas>", x1);
+
+		// Test canvas with mixed fallback content (text + elements)
+		Canvas x2 = canvas(400, 300)
+			.id("chartCanvas")
+			.children(
+				"Your browser does not support canvas. ",
+				a("https://example.com/fallback", "View static chart"),
+				" instead."
+			);
+		assertString("<canvas width='400' height='300' id='chartCanvas'>Your browser does not support canvas.<sp> </sp><a href='https://example.com/fallback'>View static chart</a><sp> </sp>instead.</canvas>", x2);
 	}
 }

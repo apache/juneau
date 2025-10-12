@@ -33,7 +33,7 @@ public class OpenApiBuilder {
 	/**
 	 * Constructor.
 	 */
-	protected OpenApiBuilder() {}
+	private OpenApiBuilder() {}
 
 	/**
 	 * Creates an empty {@link Contact} element.

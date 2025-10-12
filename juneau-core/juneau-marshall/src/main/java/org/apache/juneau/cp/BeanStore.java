@@ -138,7 +138,6 @@ public class BeanStore {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder {
 
 		BeanStore parent;
@@ -198,7 +197,6 @@ public class BeanStore {
 		 * @param value The setting value.
 		 * @return  This object.
 		 */
-		@FluentSetter
 		public Builder parent(BeanStore value) {
 			parent = value;
 			return this;
@@ -212,7 +210,6 @@ public class BeanStore {
 		 *
 		 * @return  This object.
 		 */
-		@FluentSetter
 		public Builder readOnly() {
 			readOnly = true;
 			return this;
@@ -223,7 +220,6 @@ public class BeanStore {
 		 *
 		 * @return  This object.
 		 */
-		@FluentSetter
 		public Builder threadSafe() {
 			threadSafe = true;
 			return this;
@@ -238,7 +234,6 @@ public class BeanStore {
 		 * @param value The outer bean context.  Can be <jk>null</jk>.
 		 * @return  This object.
 		 */
-		@FluentSetter
 		public Builder outer(Object value) {
 			this.outer = value;
 			return this;
@@ -250,7 +245,6 @@ public class BeanStore {
 		 * @param value The bean to return from the {@link #build()} method.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder impl(BeanStore value) {
 			this.impl = value;
 			return this;
@@ -270,7 +264,6 @@ public class BeanStore {
 		 * @param value The bean store type.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder type(Class<? extends BeanStore> value) {
 			this.type = value;
 			return this;
@@ -684,11 +677,6 @@ public class BeanStore {
 	protected <T> BeanStoreEntry<T> createEntry(Class<T> type, Supplier<T> bean, String name) {
 		return BeanStoreEntry.create(type, bean, name);
 	}
-
-	// <FluentSetters>
-
-		// </FluentSetters>
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------

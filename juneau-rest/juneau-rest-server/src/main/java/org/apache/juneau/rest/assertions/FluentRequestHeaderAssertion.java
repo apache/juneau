@@ -129,7 +129,6 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentRequestHeaderAssertion<R>")
 public class FluentRequestHeaderAssertion <R> extends FluentStringAssertion<R> {
 
 	private final RequestHeader value;
@@ -248,44 +247,39 @@ public class FluentRequestHeaderAssertion <R> extends FluentStringAssertion<R> {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestHeaderAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestHeaderAssertion<R> setOut(PrintStream value) {
 		super.setOut(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestHeaderAssertion<R> setSilent() {
 		super.setSilent();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestHeaderAssertion<R> setStdOut() {
 		super.setStdOut();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestHeaderAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.FluentStringAssertion */
+	@Override /* Overridden from FluentStringAssertion */
 	public FluentRequestHeaderAssertion<R> asJavaStrings() {
 		super.asJavaStrings();
 		return this;
 	}
-
-	// </FluentSetters>
 }

@@ -172,10 +172,6 @@ public class ResponseAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

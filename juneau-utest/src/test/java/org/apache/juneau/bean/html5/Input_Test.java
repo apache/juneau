@@ -50,7 +50,7 @@ class Input_Test extends TestBase {
 			.name("v")
 			.pattern("w")
 			.placeholder("x")
-			.readonly(true)
+			.readonly("y")
 			.readonly(true)
 			.required("aa")
 			.size("ab")
@@ -123,7 +123,7 @@ class Input_Test extends TestBase {
 			.translate("cq");
 
 		assertString(
-			"<input accept='a' alt='b' autocomplete='c' autofocus='d' checked='e' dirname='f' disabled='g' form='h' formaction='i' formenctype='j' formmethod='k' formnovalidate='l' formtarget='m' height='n' inputmode='o' list='p' max='q' maxlength='r' min='s' minlength='t' multiple='u' name='v' pattern='w' placeholder='x' value='af' required='aa' size='ab' src='ac' step='ad' type='ae' width='ag' class='ah' accesskey='ai' contenteditable='aj' dir='ak' hidden='al' id='am' lang='an' onabort='ao' onblur='ap' oncancel='aq' oncanplay='ar' oncanplaythrough='as' onchange='at' onclick='au' oncuechange='av' ondblclick='aw' ondurationchange='ax' onemptied='ay' onended='az' onerror='ba' onfocus='bb' oninput='bc' oninvalid='bd' onkeydown='be' onkeypress='bf' onkeyup='bg' onload='bh' onloadeddata='bi' onloadedmetadata='bj' onloadstart='bk' onmousedown='bl' onmouseenter='bm' onmouseleave='bn' onmousemove='bo' onmouseout='bp' onmouseover='bq' onmouseup='br' onmousewheel='bs' onpause='bt' onplay='bu' onplaying='bv' onprogress='bw' onratechange='bx' onreset='by' onresize='bz' onscroll='ca' onseeked='cb' onseeking='cc' onselect='cd' onshow='ce' onstalled='cf' onsubmit='cg' onsuspend='ch' ontimeupdate='ci' ontoggle='cj' onvolumechange='ck' onwaiting='cl' spellcheck='cm' style='cn' tabindex='co' title='cp' translate='cq'/>",
+			"<input accept='a' alt='b' autocomplete='c' autofocus='d' checked='e' dirname='f' disabled='g' form='h' formaction='i' formenctype='j' formmethod='k' formnovalidate='l' formtarget='m' height='n' inputmode='o' list='p' max='q' maxlength='r' min='s' minlength='t' multiple='u' name='v' pattern='w' placeholder='x' readonly='y' value='af' required='aa' size='ab' src='ac' step='ad' type='ae' width='ag' class='ah' accesskey='ai' contenteditable='aj' dir='ak' hidden='al' id='am' lang='an' onabort='ao' onblur='ap' oncancel='aq' oncanplay='ar' oncanplaythrough='as' onchange='at' onclick='au' oncuechange='av' ondblclick='aw' ondurationchange='ax' onemptied='ay' onended='az' onerror='ba' onfocus='bb' oninput='bc' oninvalid='bd' onkeydown='be' onkeypress='bf' onkeyup='bg' onload='bh' onloadeddata='bi' onloadedmetadata='bj' onloadstart='bk' onmousedown='bl' onmouseenter='bm' onmouseleave='bn' onmousemove='bo' onmouseout='bp' onmouseover='bq' onmouseup='br' onmousewheel='bs' onpause='bt' onplay='bu' onplaying='bv' onprogress='bw' onratechange='bx' onreset='by' onresize='bz' onscroll='ca' onseeked='cb' onseeking='cc' onselect='cd' onshow='ce' onstalled='cf' onsubmit='cg' onsuspend='ch' ontimeupdate='ci' ontoggle='cj' onvolumechange='ck' onwaiting='cl' spellcheck='cm' style='cn' tabindex='co' title='cp' translate='cq'/>",
 			x
 		);
 	}

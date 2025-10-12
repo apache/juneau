@@ -103,10 +103,6 @@ public class NamePropertyAnnotation {
 			return new Impl(this);
 		}
 
-		// <FluentSetters>
-
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

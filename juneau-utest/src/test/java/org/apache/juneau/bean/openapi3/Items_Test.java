@@ -96,6 +96,14 @@ class Items_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
 		}
 
+		@Test void a08b_getSetRef() {
+			// Test get/set with "$ref" property to cover switch branches
+			var x = bean();
+			x.set("$ref", "#/components/schemas/MyItem");
+			assertEquals("#/components/schemas/MyItem", x.get("$ref", String.class));
+			assertEquals("#/components/schemas/MyItem", x.getRef());
+		}
+
 		@Test void a09_addMethods() {
 			assertBean(
 				bean()
@@ -417,6 +425,78 @@ class Items_Test extends TestBase {
 			assertSame(items, result);
 			assertEquals("string", result.getType());
 			assertEquals("text", result.getFormat());
+		}
+
+		@Test void d05_resolveRefs_circularReference() {
+			// Test circular reference detection in extra attributes
+			var openApi = openApi()
+				.setComponents(components().setSchemas(map(
+					"Item1", schemaInfo().setRef("#/components/schemas/Item2"),
+					"Item2", schemaInfo().setRef("#/components/schemas/Item1")
+				)));
+
+			var refStack = new ArrayDeque<String>();
+			refStack.add("#/components/schemas/Item1");
+			
+			var item = items()
+				.setType("object")
+				.set("properties", JsonMap.of("prop1", JsonMap.of("$ref", "#/components/schemas/Item1")));
+			var result = item.resolveRefs(openApi, refStack, 10);
+
+			// Should return object with unresolved circular ref in properties
+			assertSame(item, result);
+		}
+
+		@Test void d06_resolveRefs_maxDepthDirect() {
+			// Test max depth directly
+			var openApi = openApi()
+				.setComponents(components().setSchemas(map("MyItem", schemaInfo().setType("string"))));
+
+			var refStack = new ArrayDeque<String>();
+			refStack.add("dummy1");
+			refStack.add("dummy2");
+			refStack.add("dummy3");
+			
+			var item = items()
+				.setType("object")
+				.set("properties", JsonMap.of("prop1", JsonMap.of("$ref", "#/components/schemas/MyItem")));
+			var result = item.resolveRefs(openApi, refStack, 3);
+
+			// Should return object with unresolved ref due to max depth
+			assertSame(item, result);
+		}
+
+		@Test void d07_resolveRefs_withJsonList() {
+			// Test resolveRefs with JsonList to cover the instanceof JsonList branch
+			var openApi = openApi()
+				.setComponents(components().setSchemas(map("MyItem", schemaInfo().setType("string"))));
+
+			var item = items()
+				.setType("object")
+				.set("someList", JsonList.of(JsonMap.of("$ref", "#/components/schemas/MyItem")));
+			var result = item.resolveRefs(openApi, new ArrayDeque<>(), 10);
+
+			// JsonList should have its refs resolved
+			assertSame(item, result);
+		}
+
+		@Test void d08_resolveRefs_withPrimitiveValue() {
+			// Test resolveRefs with primitive values (not JsonMap or JsonList) to cover the false branch
+			var openApi = openApi()
+				.setComponents(components().setSchemas(map("MyItem", schemaInfo().setType("string"))));
+
+			var item = items()
+				.setType("object")
+				.set("someString", "plain string value")
+				.set("someNumber", 42)
+				.set("someBoolean", true);
+			var result = item.resolveRefs(openApi, new ArrayDeque<>(), 10);
+
+			// Primitive values should be unchanged
+			assertSame(item, result);
+			assertEquals("plain string value", item.get("someString", String.class));
+			assertEquals(42, item.get("someNumber", Integer.class));
+			assertEquals(true, item.get("someBoolean", Boolean.class));
 		}
 	}
 

@@ -25,63 +25,76 @@ import org.junit.jupiter.api.*;
 
 class HtmlElementContainer_Test extends TestBase {
 
-	@Test void a01_getChild_nullChildren() {
+	@Test void a01_getChild() {
 		Div x = new Div();
-		assertNull(x.getChild(0));
-	}
+		assertNull(new Div().getChild(0));
+		assertNull(x.getChild(String.class, 0));
 
-	@Test void a02_getChild_outOfBounds() {
-		Div x = div("child1");
+		x = div("child1");
 		assertNull(x.getChild(5));
 		assertNull(x.getChild(-1));
-	}
-
-	@Test void a03_getChild_valid() {
-		Div x = div("child1", "child2");
-		assertString("child1", x.getChild(0));
-		assertString("child2", x.getChild(1));
-	}
-
-	@Test void a04_getChild_typed_nullChildren() {
-		Div x = new Div();
-		assertNull(x.getChild(String.class, 0));
-	}
-
-	@Test void a05_getChild_typed_outOfBounds() {
-		Div x = div("child1");
 		assertNull(x.getChild(String.class, 5));
 		assertNull(x.getChild(String.class, -1));
-	}
 
-	@Test void a06_getChild_typed_valid() {
-		Div x = div("child1", "child2");
+		x = div("child1", "child2");
+		assertString("child1", x.getChild(0));
+		assertString("child2", x.getChild(1));
 		assertString("child1", x.getChild(String.class, 0));
 		assertString("child2", x.getChild(String.class, 1));
-	}
 
-	@Test void a07_getChildren() {
-		Div x1 = new Div();
-		assertNull(x1.getChildren());
-		
-		Div x2 = div("child1", "child2");
-		assertString("[child1,child2]", x2.getChildren());
-	}
-
-	@Test void a08_children_emptyArray() {
-		Div x = new Div();
+		x = new Div();
+		assertNull(x.getChildren());
 		x.children();
 		assertNull(x.getChildren());
-	}
 
-	@Test void a09_children_withValues() {
-		Div x = new Div();
-		x.children("child1", "child2");
+		x = div("child1", "child2");
 		assertString("[child1,child2]", x.getChildren());
-	}
+		x.children("child1", "child2");
+		assertString("[child1,child2,child1,child2]", x.getChildren());
 
-	@Test void a10_child_singleValue() {
-		Div x = new Div();
+		x = new Div();
 		x.child("child1");
 		assertString("[child1]", x.getChildren());
+
+		x = div("child1");
+		assertNull(x.getChild(new int[]{}));
+
+		x = div("child1", "child2");
+		assertString("child1", x.getChild(new int[]{0}));
+
+		x = div(
+			div(
+				div("text1", "text2"),
+				div("text3")
+			),
+			div("text4")
+		);
+
+		// Navigate to nested elements
+		assertString("text1", x.getChild(0, 0, 0));
+		assertString("text2", x.getChild(0, 0, 1));
+		assertString("text3", x.getChild(0, 1, 0));
+		assertString("text4", x.getChild(1, 0));
+
+		x = div("text");
+		assertNull(x.getChild(0, 0));// Try to get child of a text node (which is not a container)
+	}
+
+	@Test void a02_getChild_varargs_mixedElement() {
+		// Test navigation through HtmlElementMixed
+		P x = p(
+			span("text1"),
+			span("text2")
+		);
+
+		assertString("text1", x.getChild(0, 0));
+		assertString("text2", x.getChild(1, 0));
+	}
+
+	@Test void a03_setChildren() {
+		Div x = new Div();
+		java.util.List<Object> children = java.util.Arrays.asList("child1", "child2");
+		x.setChildren(children);
+		assertString("[child1,child2]", x.getChildren());
 	}
 }

@@ -44,7 +44,6 @@ import org.apache.juneau.internal.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
-@FluentSetters
 public class LoopDetected extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -129,74 +128,69 @@ public class LoopDetected extends BasicHttpException {
 	public LoopDetected copy() {
 		return new LoopDetected(this);
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	@Override /* Overridden from BasicRuntimeException */
 	public LoopDetected setMessage(String message, Object...args) {
 		super.setMessage(message, args);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	@Override /* Overridden from BasicRuntimeException */
 	public LoopDetected setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public LoopDetected setHeader2(String name, Object value) {
 		super.setHeader2(name, value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public LoopDetected setHeaders(HeaderList value) {
 		super.setHeaders(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public LoopDetected setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public LoopDetected setLocale2(Locale value) {
 		super.setLocale2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public LoopDetected setProtocolVersion(ProtocolVersion value) {
 		super.setProtocolVersion(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public LoopDetected setReasonPhrase2(String value) {
 		super.setReasonPhrase2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public LoopDetected setReasonPhraseCatalog(ReasonPhraseCatalog value) {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public LoopDetected setStatusCode2(int code) throws IllegalStateException{
 		super.setStatusCode2(code);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public LoopDetected setStatusLine(BasicStatusLine value) {
 		super.setStatusLine(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

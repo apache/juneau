@@ -44,7 +44,6 @@ import org.apache.juneau.internal.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
-@FluentSetters
 public class NotAcceptable extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -129,74 +128,69 @@ public class NotAcceptable extends BasicHttpException {
 	public NotAcceptable copy() {
 		return new NotAcceptable(this);
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	@Override /* Overridden from BasicRuntimeException */
 	public NotAcceptable setMessage(String message, Object...args) {
 		super.setMessage(message, args);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	@Override /* Overridden from BasicRuntimeException */
 	public NotAcceptable setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public NotAcceptable setHeader2(String name, Object value) {
 		super.setHeader2(name, value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public NotAcceptable setHeaders(HeaderList value) {
 		super.setHeaders(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public NotAcceptable setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public NotAcceptable setLocale2(Locale value) {
 		super.setLocale2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public NotAcceptable setProtocolVersion(ProtocolVersion value) {
 		super.setProtocolVersion(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public NotAcceptable setReasonPhrase2(String value) {
 		super.setReasonPhrase2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public NotAcceptable setReasonPhraseCatalog(ReasonPhraseCatalog value) {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public NotAcceptable setStatusCode2(int code) throws IllegalStateException{
 		super.setStatusCode2(code);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public NotAcceptable setStatusLine(BasicStatusLine value) {
 		super.setStatusLine(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

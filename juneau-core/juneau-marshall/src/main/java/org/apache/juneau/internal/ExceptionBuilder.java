@@ -27,7 +27,6 @@ import static org.apache.juneau.common.utils.ThrowableUtils.*;
  *
  * @param <T> The exception class.
  */
-@FluentSetters
 public class ExceptionBuilder<T extends Throwable> {
 
 	private final Class<T> type;
@@ -50,7 +49,6 @@ public class ExceptionBuilder<T extends Throwable> {
 	 * @param args The exception message arguments.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public ExceptionBuilder<T> message(String msg, Object...args) {
 		message = format(msg, args);
 		return this;
@@ -62,16 +60,10 @@ public class ExceptionBuilder<T extends Throwable> {
 	 * @param value The caused-by exception.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public ExceptionBuilder<T> causedBy(Throwable value) {
 		causedBy = value;
 		return this;
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
-
 	/**
 	 * Creates the exception.
 	 *

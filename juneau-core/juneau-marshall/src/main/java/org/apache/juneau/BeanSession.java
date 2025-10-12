@@ -80,7 +80,6 @@ public class BeanSession extends ContextSession {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder extends ContextSession.Builder {
 
 		BeanContext ctx;
@@ -130,7 +129,6 @@ public class BeanSession extends ContextSession {
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder locale(Locale value) {
 			if (value != null)
 				locale = value;
@@ -145,7 +143,6 @@ public class BeanSession extends ContextSession {
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder localeDefault(Locale value) {
 			if (value != null && locale == null)
 				locale = value;
@@ -171,7 +168,6 @@ public class BeanSession extends ContextSession {
 		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder mediaType(MediaType value) {
 			if (value != null)
 				mediaType = value;
@@ -186,7 +182,6 @@ public class BeanSession extends ContextSession {
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder mediaTypeDefault(MediaType value) {
 			if (value != null && mediaType == null)
 				mediaType = value;
@@ -212,7 +207,6 @@ public class BeanSession extends ContextSession {
 		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder timeZone(TimeZone value) {
 			if (value != null)
 				timeZone = value;
@@ -227,46 +221,40 @@ public class BeanSession extends ContextSession {
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder timeZoneDefault(TimeZone value) {
 			if (value != null && timeZone == null)
 				timeZone = value;
 			return this;
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder debug(Boolean value) {
 			super.debug(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder properties(Map<String,Object> value) {
 			super.properties(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
 			super.property(key, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder unmodifiable() {
 			super.unmodifiable();
 			return this;
 		}
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

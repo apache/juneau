@@ -70,7 +70,6 @@ public class ParserSession extends BeanSession {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder extends BeanSession.Builder {
 
 		Parser ctx;
@@ -102,7 +101,6 @@ public class ParserSession extends BeanSession {
 		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder javaMethod(Method value) {
 			this.javaMethod = value;
 			return this;
@@ -116,7 +114,6 @@ public class ParserSession extends BeanSession {
 		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder outer(Object value) {
 			this.outer = value;
 			return this;
@@ -133,7 +130,6 @@ public class ParserSession extends BeanSession {
 		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder schema(HttpPartSchema value) {
 			if (value != null)
 				this.schema = value;
@@ -148,82 +144,76 @@ public class ParserSession extends BeanSession {
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder schemaDefault(HttpPartSchema value) {
 			if (value != null && schema == null)
 				this.schema = value;
 			return this;
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder debug(Boolean value) {
 			super.debug(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder properties(Map<String,Object> value) {
 			super.properties(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
 			super.property(key, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder unmodifiable() {
 			super.unmodifiable();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder localeDefault(Locale value) {
 			super.localeDefault(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder mediaType(MediaType value) {
 			super.mediaType(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder mediaTypeDefault(MediaType value) {
 			super.mediaTypeDefault(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder timeZone(TimeZone value) {
 			super.timeZone(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder timeZoneDefault(TimeZone value) {
 			super.timeZoneDefault(value);
 			return this;
 		}
-
-		// </FluentSetters>
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------

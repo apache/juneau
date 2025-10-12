@@ -47,7 +47,6 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@FluentSetters
 public class PartList extends ControlledArrayList<NameValuePair> {
 
 	private static final long serialVersionUID = 1L;
@@ -276,7 +275,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param value The part to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList append(NameValuePair value) {
 		if (value != null)
 			add(value);
@@ -320,7 +318,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param values The parts to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList append(NameValuePair...values) {
 		if (values != null)
             for (NameValuePair value : values)
@@ -334,7 +331,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param values The parts to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList append(List<NameValuePair> values) {
 		if (values != null)
 			values.forEach(this::append);
@@ -347,7 +343,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param value The part to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList prepend(NameValuePair value) {
 		if (value != null)
 			add(0, value);
@@ -391,7 +386,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param values The parts to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList prepend(NameValuePair...values) {
 		if (values != null)
 			prepend(alist(values));
@@ -404,7 +398,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param values The parts to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList prepend(List<NameValuePair> values) {
 		if (values != null)
 			addAll(0, values);
@@ -417,7 +410,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param value The part to remove.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList remove(NameValuePair value) {
 		if (value != null)
 			removeIf(x -> eq(x.getName(), value.getName()) && eq(x.getValue(), value.getValue()));
@@ -430,7 +422,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param values The parts to remove.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList remove(NameValuePair...values) {
 		for (NameValuePair value : values)
             remove(value);
@@ -443,7 +434,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param values The parts to remove.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList remove(List<NameValuePair> values) {
 		if (values != null)
 			values.forEach(this::remove);
@@ -456,7 +446,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param name The part name.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList remove(String name) {
 		removeIf(x -> eq(x.getName(), name));
 		return this;
@@ -468,7 +457,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param names The part name.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList remove(String...names) {
 		if (names != null)
             for (String name : names)
@@ -485,7 +473,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param value The part to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList set(NameValuePair value) {
 		if (value != null) {
 			boolean replaced = false;
@@ -518,7 +505,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param values The part to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList set(NameValuePair...values) {
 		if (values != null)
 			set(alist(values));
@@ -556,7 +542,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @param values The parts to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public PartList set(List<NameValuePair> values) {
 
 		if (values != null) {
@@ -935,14 +920,9 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		});
 		return sb.toString();
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.collections.ControlledArrayList */
+	@Override /* Overridden from ControlledArrayList */
 	public PartList setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
 	}
-
-	// </FluentSetters>
 }

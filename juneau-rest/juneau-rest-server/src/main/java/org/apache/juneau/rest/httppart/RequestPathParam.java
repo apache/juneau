@@ -104,18 +104,14 @@ public class RequestPathParam extends RequestHttpPart implements NameValuePair {
 		this.value = value;
 	}
 
-	// <FluentSetters>
-
 	@Override /* GENERATED */
 	public RequestPathParam schema(HttpPartSchema value) {
 		super.schema(value);
 		return this;
 	}
-
 	@Override /* GENERATED */
 	public RequestPathParam parser(HttpPartParserSession value) {
 		super.parser(value);
 		return this;
 	}
-	// </FluentSetters>
 }

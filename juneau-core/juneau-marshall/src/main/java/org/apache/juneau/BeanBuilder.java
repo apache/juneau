@@ -30,7 +30,6 @@ import org.apache.juneau.internal.*;
  *
  * @param <T> The bean type that the builder creates.
  */
-@FluentSetters
 public class BeanBuilder<T> {
 
 	private Class<? extends T> type, defaultType;
@@ -117,7 +116,6 @@ public class BeanBuilder<T> {
 	 * @return  This object.
 	 */
 	@SuppressWarnings("unchecked")
-	@FluentSetter
 	public BeanBuilder<T> type(Class<?> value) {
 		type = (Class<T>)value;
 		return this;
@@ -141,7 +139,6 @@ public class BeanBuilder<T> {
 	 * @param value The setting value.
 	 * @return  This object.
 	 */
-	@FluentSetter
 	@SuppressWarnings("unchecked")
 	public BeanBuilder<T> impl(Object value) {
 		this.impl = (T)value;
@@ -165,8 +162,4 @@ public class BeanBuilder<T> {
 	public BeanStore beanStore() {
 		return beanStore;
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

@@ -33,7 +33,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@FluentSetters
 public class StringEntity extends BasicHttpEntity {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -143,86 +142,81 @@ public class StringEntity extends BasicHttpEntity {
 	public boolean isStreaming() {
 		return false;
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setCached() throws IOException{
 		super.setCached();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setCharset(Charset value) {
 		super.setCharset(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setChunked() {
 		super.setChunked();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setChunked(boolean value) {
 		super.setChunked(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setContent(Object value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setContent(Supplier<?> value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setContentEncoding(String value) {
 		super.setContentEncoding(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setContentEncoding(ContentEncoding value) {
 		super.setContentEncoding(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setContentLength(long value) {
 		super.setContentLength(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setContentType(String value) {
 		super.setContentType(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setContentType(ContentType value) {
 		super.setContentType(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setMaxLength(int value) {
 		super.setMaxLength(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
 	}
-
-	// </FluentSetters>
 }

@@ -22,11 +22,23 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.net.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * Represents an <c>atomCategory</c> construct in the RFC4287 specification.
+ * Represents a category or tag associated with a feed or entry.
+ *
+ * <p>
+ * Categories provide a way to classify or tag feeds and entries, enabling better organization 
+ * and discovery of content. Each category has a term (required) and optionally a scheme (for 
+ * namespacing) and a human-readable label.
+ *
+ * <p>
+ * Categories are commonly used for:
+ * <ul class='spaced-list'>
+ * 	<li>Tagging entries by topic (e.g., "technology", "sports")
+ * 	<li>Classifying content by category schemes (e.g., subject taxonomies)
+ * 	<li>Enabling feed filtering and organization
+ * </ul>
  *
  * <h5 class='figure'>Schema</h5>
  * <p class='bschema'>
@@ -40,12 +52,32 @@ import org.apache.juneau.xml.annotation.*;
  * 		}
  * </p>
  *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Simple category</jc>
+ * 	Category <jv>cat1</jv> = <jk>new</jk> Category(<js>"technology"</js>);
+ *
+ * 	<jc>// Category with scheme and label</jc>
+ * 	Category <jv>cat2</jv> = <jk>new</jk> Category(<js>"tech"</js>)
+ * 		.setScheme(<js>"http://example.org/categories"</js>)
+ * 		.setLabel(<js>"Technology"</js>);
+ *
+ * 	<jc>// Add to entry</jc>
+ * 	Entry <jv>entry</jv> = <jk>new</jk> Entry(...)
+ * 		.setCategories(<jv>cat1</jv>, <jv>cat2</jv>);
+ * </p>
+ *
+ * <h5 class='section'>Specification:</h5>
+ * <p>
+ * Represents an <c>atomCategory</c> construct in the 
+ * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.2">RFC 4287 - Section 4.2.2</a> specification.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
+ * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
 @Bean(typeName="category")
-@FluentSetters
 public class Category extends Common {
 
 	private String term;
@@ -165,19 +197,15 @@ public class Category extends Common {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
+	@Override /* Overridden from Common */
 	public Category setBase(Object value) {
 		super.setBase(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
+	@Override /* Overridden from Common */
 	public Category setLang(String value) {
 		super.setLang(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

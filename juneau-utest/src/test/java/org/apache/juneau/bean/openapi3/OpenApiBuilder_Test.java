@@ -113,5 +113,31 @@ class OpenApiBuilder_Test extends TestBase {
 		assertJson("{}", tag());
 		assertJson("{openapi:'3.0.0'}", openApi());
 		assertJson("{}", components());
+		assertJson("{}", xml());
+		assertJson("{}", requestBodyInfo());
+		assertJson("{}", example());
+		assertJson("{}", link());
+		assertJson("{}", callback());
+		assertJson("{}", discriminator());
+		assertJson("{}", encoding());
+		assertJson("{}", mediaType());
+		assertJson("{}", oAuthFlow());
+		assertJson("{}", oAuthFlows());
+		assertJson("{}", serverVariable());
+		assertJson("{}", items());
+	}
+
+	/**
+	 * Test single-parameter builders.
+	 */
+	@Test void a03_singleParameterBuilders() {
+		assertJson("{name:'a1'}", contact("a1"));
+		assertJson("{url:'a1'}", externalDocumentation("a1"));
+		assertJson("{type:'a1'}", items("a1"));
+		assertJson("{name:'a1'}", license("a1"));
+		assertJson("{info:{title:'a1',version:'a2'},openapi:'3.0.0'}", openApi(info("a1", "a2")));
+		assertJson("{propertyName:'a1'}", discriminator("a1"));
+		assertJson("{contentType:'a1'}", encoding("a1"));
+		assertJson("{'default':'a1'}", serverVariable("a1"));
 	}
 }

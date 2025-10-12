@@ -34,7 +34,6 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-@FluentSetters
 public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo> {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -748,14 +747,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		}
 		return i;
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.reflect.ExecutableInfo */
+	@Override /* Overridden from ExecutableInfo */
 	public MethodInfo accessible() {
 		super.accessible();
 		return this;
 	}
-
-	// </FluentSetters>
 }

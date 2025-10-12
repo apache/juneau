@@ -48,7 +48,6 @@ import org.apache.juneau.internal.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
-@FluentSetters
 public class Gone extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -133,74 +132,69 @@ public class Gone extends BasicHttpException {
 	public Gone copy() {
 		return new Gone(this);
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	@Override /* Overridden from BasicRuntimeException */
 	public Gone setMessage(String message, Object...args) {
 		super.setMessage(message, args);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	@Override /* Overridden from BasicRuntimeException */
 	public Gone setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public Gone setHeader2(String name, Object value) {
 		super.setHeader2(name, value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public Gone setHeaders(HeaderList value) {
 		super.setHeaders(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public Gone setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public Gone setLocale2(Locale value) {
 		super.setLocale2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public Gone setProtocolVersion(ProtocolVersion value) {
 		super.setProtocolVersion(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public Gone setReasonPhrase2(String value) {
 		super.setReasonPhrase2(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public Gone setReasonPhraseCatalog(ReasonPhraseCatalog value) {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public Gone setStatusCode2(int code) throws IllegalStateException{
 		super.setStatusCode2(code);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	@Override /* Overridden from BasicHttpException */
 	public Gone setStatusLine(BasicStatusLine value) {
 		super.setStatusLine(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

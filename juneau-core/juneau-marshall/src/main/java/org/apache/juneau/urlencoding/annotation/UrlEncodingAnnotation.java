@@ -131,10 +131,6 @@ public class UrlEncodingAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

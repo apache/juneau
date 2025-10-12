@@ -142,10 +142,6 @@ public class HtmlLinkAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

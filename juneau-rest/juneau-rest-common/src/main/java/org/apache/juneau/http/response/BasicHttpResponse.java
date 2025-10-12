@@ -50,7 +50,6 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @BeanIgnore /* Use toString() to serialize */
-@FluentSetters
 public class BasicHttpResponse implements HttpResponse {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -107,7 +106,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 *
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setUnmodifiable() {
 		unmodifiable = true;
 		return this;
@@ -143,7 +141,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setStatusLine(BasicStatusLine value) {
 		assertModifiable();
 		statusLine = value.copy();
@@ -159,7 +156,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setStatusCode2(int value) {
 		statusLine.setStatusCode(value);
 		return this;
@@ -174,7 +170,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setProtocolVersion(ProtocolVersion value) {
 		statusLine.setProtocolVersion(value);
 		return this;
@@ -190,7 +185,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setReasonPhrase2(String value) {
 		statusLine.setReasonPhrase(value);
 		return this;
@@ -205,7 +199,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setReasonPhraseCatalog(ReasonPhraseCatalog value) {
 		statusLine.setReasonPhraseCatalog(value);
 		return this;
@@ -220,7 +213,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setLocale2(Locale value) {
 		statusLine.setLocale(value);
 		return this;
@@ -245,7 +237,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setHeaders(HeaderList value) {
 		assertModifiable();
 		headers = value.copy();
@@ -258,7 +249,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The header to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setHeader2(Header value) {
 		headers.set(value);
 		return this;
@@ -271,7 +261,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The header value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setHeader2(String name, String value) {
 		headers.set(name, value);
 		return this;
@@ -283,7 +272,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setHeaders2(Header...values) {
 		headers.set(values);
 		return this;
@@ -295,7 +283,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setHeaders(List<Header> values) {
 		headers.set(values);
 		return this;
@@ -307,7 +294,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new header location.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setLocation(URI value) {
 		headers.set(Location.of(value));
 		return this;
@@ -319,7 +305,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The new header location.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setLocation(String value) {
 		headers.set(Location.of(value));
 		return this;
@@ -335,7 +320,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The body on this response.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setContent(String value) {
 		return setContent(stringEntity(value));
 	}
@@ -346,7 +330,6 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param value The body on this response.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicHttpResponse setContent(HttpEntity value) {
 		assertModifiable();
 		this.content = value;
@@ -513,8 +496,4 @@ public class BasicHttpResponse implements HttpResponse {
 	public void setLocale(Locale loc) {
 		statusLine.setLocale(loc);
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

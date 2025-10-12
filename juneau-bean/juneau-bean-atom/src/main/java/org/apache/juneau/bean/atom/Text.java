@@ -18,11 +18,29 @@ package org.apache.juneau.bean.atom;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * Represents an <c>atomTextConstruct</c> construct in the RFC4287 specification.
+ * Represents human-readable text in an Atom document.
+ *
+ * <p>
+ * Text constructs are used throughout Atom for elements that contain human-readable text 
+ * such as titles, summaries, rights statements, and subtitles. They support three content types:
+ *
+ * <ul class='spaced-list'>
+ * 	<li><c>"text"</c> - Plain text with no markup (default)
+ * 	<li><c>"html"</c> - HTML markup, entity-escaped
+ * 	<li><c>"xhtml"</c> - Well-formed XHTML in a div container
+ * </ul>
+ *
+ * <p>
+ * Text constructs are the base class for {@link Content} and are used directly for:
+ * <ul class='spaced-list'>
+ * 	<li><c>atom:title</c> - Entry and feed titles
+ * 	<li><c>atom:subtitle</c> - Feed subtitles
+ * 	<li><c>atom:summary</c> - Entry summaries
+ * 	<li><c>atom:rights</c> - Copyright and rights statements
+ * </ul>
  *
  * <h5 class='figure'>Schema</h5>
  * <p class='bschema'>
@@ -45,11 +63,31 @@ import org.apache.juneau.xml.annotation.*;
  * 	}
  * </p>
  *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Plain text</jc>
+ * 	Text <jv>t1</jv> = <jk>new</jk> Text(<js>"text"</js>)
+ * 		.setText(<js>"Plain text title"</js>);
+ *
+ * 	<jc>// HTML (entity-escaped)</jc>
+ * 	Text <jv>t2</jv> = <jk>new</jk> Text(<js>"html"</js>)
+ * 		.setText(<js>"Title with &lt;em&gt;emphasis&lt;/em&gt;"</js>);
+ *
+ * 	<jc>// XHTML</jc>
+ * 	Text <jv>t3</jv> = <jk>new</jk> Text(<js>"xhtml"</js>)
+ * 		.setText(<js>"&lt;div xmlns='http://www.w3.org/1999/xhtml'&gt;&lt;p&gt;XHTML title&lt;/p&gt;&lt;/div&gt;"</js>);
+ * </p>
+ *
+ * <h5 class='section'>Specification:</h5>
+ * <p>
+ * Represents an <c>atomTextConstruct</c> in the 
+ * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-3.1">RFC 4287 - Section 3.1</a> specification.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
+ * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
-@FluentSetters
 public class Text extends Common {
 
 	private String type;
@@ -143,19 +181,15 @@ public class Text extends Common {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
+	@Override /* Overridden from Common */
 	public Text setBase(Object value) {
 		super.setBase(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
+	@Override /* Overridden from Common */
 	public Text setLang(String value) {
 		super.setLang(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

@@ -343,6 +343,42 @@ class HeaderInfo_Test extends TestBase {
 			assertEquals("string", result.getItems().getType());
 			assertNull(result.getItems().getRef()); // ref should be resolved
 		}
+
+		@Test void d06_resolveRefs_circularReference() {
+			// Test circular reference detection (covers the refStack.contains(ref) branch)
+			var swagger = swagger()
+				.addDefinition("Header1", JsonMap.of("$ref", "#/definitions/Header2"))
+				.addDefinition("Header2", JsonMap.of("$ref", "#/definitions/Header1"));
+
+			var refStack = new ArrayDeque<String>();
+			refStack.add("#/definitions/Header1"); // Pre-populate the stack to simulate circular reference
+			
+			var header = headerInfo().setRef("#/definitions/Header1");
+			var result = header.resolveRefs(swagger, refStack, 10);
+
+			// Should return the original object without resolving (circular reference detected)
+			assertSame(header, result);
+			assertEquals("#/definitions/Header1", result.getRef());
+		}
+
+		@Test void d07_resolveRefs_maxDepthDirect() {
+			// Test max depth directly (covers the refStack.size() >= maxDepth branch directly)
+			var swagger = swagger()
+				.addDefinition("MyHeader", JsonMap.of("type", "string"));
+
+			// Create a refStack that's already at max depth
+			var refStack = new ArrayDeque<String>();
+			refStack.add("dummy1");
+			refStack.add("dummy2");
+			refStack.add("dummy3");
+			
+			var header = headerInfo().setRef("#/definitions/MyHeader");
+			var result = header.resolveRefs(swagger, refStack, 3); // maxDepth = 3, refStack.size() = 3
+
+			// Should return the original object without resolving (max depth reached)
+			assertSame(header, result);
+			assertEquals("#/definitions/MyHeader", result.getRef());
+		}
 	}
 
 	//---------------------------------------------------------------------------------------------

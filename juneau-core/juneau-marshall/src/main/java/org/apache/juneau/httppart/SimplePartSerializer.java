@@ -90,8 +90,8 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 			return new Builder(this);
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder cache(Cache<HashKey,? extends Context> value) {
+	@Override /* Overridden from Context */
+	public Builder cache(Cache<HashKey,? extends Context> value) {
 			super.cache(value);
 			return this;
 		}

@@ -28,7 +28,6 @@ import org.apache.juneau.internal.*;
  *
  * @param <B> The actual builder class.
  */
-@FluentSetters
 public class AnnotationBuilder<B extends AnnotationBuilder<B>> {
 
 	Class<? extends Annotation> annotationType;
@@ -53,9 +52,6 @@ public class AnnotationBuilder<B extends AnnotationBuilder<B>> {
     protected B asThis() {
         return (B) this;
     }
-
-    // <FluentSetters>
-
 	/**
      * Sets the {@link AnnotationImpl#description()} property on the target annotation.
      *
@@ -67,6 +63,4 @@ public class AnnotationBuilder<B extends AnnotationBuilder<B>> {
         this.description = value;
         return asThis();
     }
-
-	// </FluentSetters>
 }

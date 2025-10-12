@@ -73,6 +73,8 @@ class Callback_Test extends TestBase {
 			var x = bean();
 			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
 			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
+			assertThrows(IllegalArgumentException.class, () -> x.addCallback(null, pathItem()));
+			assertThrows(IllegalArgumentException.class, () -> x.addCallback("test", null));
 		}
 
 		@Test void a09_addMethods() {

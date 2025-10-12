@@ -28,7 +28,6 @@ import org.apache.juneau.internal.*;
  *
  * @param <B> The actual builder class.
  */
-@FluentSetters
 public class TargetedAnnotationTBuilder<B extends TargetedAnnotationTBuilder<B>> extends TargetedAnnotationBuilder<B> {
 
 	Class<?>[] onClass = {};
@@ -48,7 +47,6 @@ public class TargetedAnnotationTBuilder<B extends TargetedAnnotationTBuilder<B>>
 	 * @param value The values to append.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public B on(Class<?>... value) {
 		for (Class<?> v : value)
 			on = ArrayUtils.append(on, v.getName());
@@ -62,15 +60,9 @@ public class TargetedAnnotationTBuilder<B extends TargetedAnnotationTBuilder<B>>
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	@FluentSetter
 	public B onClass(Class<?>... value) {
 		for (Class<?> v : value)
 			onClass = ArrayUtils.append(onClass, v);
 		return asThis();
 	}
-
-	// <FluentSetters>
-
-
-	// </FluentSetters>
 }

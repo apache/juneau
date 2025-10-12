@@ -30,7 +30,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@FluentSetters
 public class StreamResource extends BasicResource {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -67,80 +66,75 @@ public class StreamResource extends BasicResource {
 	public StreamResource copy() {
 		return new StreamResource(this);
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	@Override /* Overridden from BasicResource */
 	public StreamResource setCached() throws IOException{
 		super.setCached();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	@Override /* Overridden from BasicResource */
 	public StreamResource setChunked() {
 		super.setChunked();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	@Override /* Overridden from BasicResource */
 	public StreamResource setChunked(boolean value) {
 		super.setChunked(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	@Override /* Overridden from BasicResource */
 	public StreamResource setContent(Object value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	@Override /* Overridden from BasicResource */
 	public StreamResource setContent(Supplier<?> value) {
 		super.setContent(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	@Override /* Overridden from BasicResource */
 	public StreamResource setContentEncoding(String value) {
 		super.setContentEncoding(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	@Override /* Overridden from BasicResource */
 	public StreamResource setContentEncoding(ContentEncoding value) {
 		super.setContentEncoding(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	@Override /* Overridden from BasicResource */
 	public StreamResource setContentLength(long value) {
 		super.setContentLength(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	@Override /* Overridden from BasicResource */
 	public StreamResource setContentType(String value) {
 		super.setContentType(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	@Override /* Overridden from BasicResource */
 	public StreamResource setContentType(ContentType value) {
 		super.setContentType(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	@Override /* Overridden from BasicResource */
 	public StreamResource setHeaders(HeaderList value) {
 		super.setHeaders(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	@Override /* Overridden from BasicResource */
 	public StreamResource setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
 	}
-
-	// </FluentSetters>
 }

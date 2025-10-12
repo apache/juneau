@@ -24,7 +24,28 @@ This document outlines the rules, guidelines, and best practices that Claude AI 
 - Include practical examples in documentation
 - Link to relevant specifications and resources
 
-### 4. HTML5 Bean Enhancement Rules
+### 4. Build and Compilation Issues
+
+**IMPORTANT: Maven vs IDE Compilation Divergence**
+
+When compiling code using Maven and the user compiles through their IDE (Eclipse), the compiled code can diverge, leading to unexpected behavior such as:
+- Code changes not being reflected in test runs
+- Old code behavior persisting despite source changes
+- Stale class files causing incorrect results
+
+**Resolution Strategy:**
+If you encounter situations where your code changes don't appear to be taking effect:
+1. **Immediately run** `mvn clean install` to clear all compiled artifacts and rebuild fresh
+2. This ensures Maven and IDE compiled code are synchronized
+3. Rerun tests after the clean build to verify changes are properly reflected
+
+**When to suspect this issue:**
+- Tests fail in unexpected ways after code changes
+- Behavior doesn't match recent code modifications
+- Test results seem to reflect old code despite edits
+- Compilation succeeds but runtime behavior is wrong
+
+### 5. HTML5 Bean Enhancement Rules
 
 #### Javadoc Enhancement for HTML5 Beans
 - **Class-level documentation**: Add comprehensive descriptions of the HTML element's purpose
@@ -900,5 +921,108 @@ In all cases, `assertBean` should be used to validate results.
     assertBean(b, "items{0=item3,1=item4}");
 }
 ```
+
+## Serializer and Parser Implementation Rules
+
+### Adding Settings to Serializers/Parsers
+
+When adding a new setting (configuration property) to a serializer or parser, follow these steps:
+
+#### 1. Add Field to Builder Class
+```java
+public static class Builder extends XmlSerializer.Builder {
+    String textNodeDelimiter;  // Add the field
+}
+```
+
+#### 2. Initialize in Constructor
+```java
+protected Builder() {
+    textNodeDelimiter = env("XmlSerializer.textNodeDelimiter", "");  // Set default
+}
+```
+
+#### 3. Add to Copy Constructors
+```java
+protected Builder(XmlSerializer copyFrom) {
+    super(copyFrom);
+    textNodeDelimiter = copyFrom.textNodeDelimiter;  // Copy from serializer
+}
+
+protected Builder(Builder copyFrom) {
+    super(copyFrom);
+    textNodeDelimiter = copyFrom.textNodeDelimiter;  // Copy from builder
+}
+```
+
+#### 4. Add Setter Method
+```java
+public Builder textNodeDelimiter(String value) {
+    textNodeDelimiter = value == null ? "" : value;
+    return this;
+}
+```
+
+#### 5. **CRITICAL: Update hashKey() Method**
+This is essential to prevent caching issues where different configurations would incorrectly share the same cached instance:
+
+```java
+@Override /* Context.Builder */
+public HashKey hashKey() {
+    return HashKey.of(
+        super.hashKey(),
+        addBeanTypesXml,
+        addNamespaceUrisToRoot,
+        // ... other fields ...
+        textNodeDelimiter  // ADD NEW SETTING HERE
+    );
+}
+```
+
+**Why this is critical**: Serializers and parsers use caching based on the hash key. If a new setting is not included in the hash key, two builders with different values for that setting will hash to the same key and incorrectly use the same cached instance, causing the second configuration to be ignored.
+
+#### 6. Add Field to Main Class
+```java
+public class XmlSerializer extends WriterSerializer {
+    final String textNodeDelimiter;  // Add to main class
+    
+    public XmlSerializer(Builder builder) {
+        super(builder);
+        textNodeDelimiter = builder.textNodeDelimiter;  // Initialize from builder
+    }
+}
+```
+
+#### 7. Pass to Session (if needed)
+If the setting needs to be accessed during serialization:
+
+```java
+public class XmlSerializerSession extends WriterSerializerSession {
+    private final String textNodeDelimiter;
+    
+    protected XmlSerializerSession(Builder builder) {
+        super(builder);
+        textNodeDelimiter = ctx.textNodeDelimiter;  // Get from context
+    }
+}
+```
+
+#### 8. Override in Subclasses (if needed)
+If the serializer has subclasses (e.g., `HtmlSerializer` extends `XmlSerializer`), override the setter to maintain fluent API:
+
+```java
+// In HtmlSerializer.Builder
+@Override
+public Builder textNodeDelimiter(String value) {
+    super.textNodeDelimiter(value);  // Call parent
+    return this;  // Return correct type
+}
+```
+
+### Common Pitfalls
+- ❌ **Forgetting to add the setting to `hashKey()`** - This causes caching bugs where different configurations share the same cached instance
+- ❌ Not copying the field in all copy constructors
+- ❌ Not overriding setter methods in subclass builders
+- ❌ Not passing the setting to the session if it's needed during serialization
 
 This document serves as the definitive guide for unit testing in the Apache Juneau project, ensuring consistency, maintainability, and comprehensive test coverage.

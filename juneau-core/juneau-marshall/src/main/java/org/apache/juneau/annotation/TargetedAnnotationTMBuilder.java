@@ -30,7 +30,6 @@ import org.apache.juneau.reflect.*;
  *
  * @param <B> The actual builder class.
  */
-@FluentSetters
 public class TargetedAnnotationTMBuilder<B extends TargetedAnnotationTMBuilder<B>> extends TargetedAnnotationTBuilder<B> {
 
 	/**
@@ -48,15 +47,9 @@ public class TargetedAnnotationTMBuilder<B extends TargetedAnnotationTMBuilder<B
 	 * @param value The values to append.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public B on(Method...value) {
 		for (Method v : value)
 			on(MethodInfo.of(v).getFullName());
 		return asThis();
 	}
-
-	// <FluentSetters>
-
-
-	// </FluentSetters>
 }

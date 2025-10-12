@@ -123,7 +123,6 @@ public interface FileFinder {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder extends BeanBuilder<FileFinder> {
 
 		final Set<LocalDir> roots;
@@ -160,7 +159,6 @@ public interface FileFinder {
 		 * @param recursive If <jk>true</jk>, also recursively adds all the paths of the parent classes as well.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder cp(Class<?> c, String path, boolean recursive) {
 			Utils.assertArgNotNull("c", c);
 			while (c != null) {
@@ -176,7 +174,6 @@ public interface FileFinder {
 		 * @param path The path relative to the working directory.  Must not be <jk>null</jk>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder dir(String path) {
 			Utils.assertArgNotNull("path", path);
 			return path(Paths.get(".").resolve(path));
@@ -188,7 +185,6 @@ public interface FileFinder {
 		 * @param path The directory path.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder path(Path path) {
 			roots.add(new LocalDir(path));
 			return this;
@@ -200,7 +196,6 @@ public interface FileFinder {
 		 * @param cachingLimit The maximum file size in bytes.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder caching(long cachingLimit) {
 			this.cachingLimit = cachingLimit;
 			return this;
@@ -214,7 +209,6 @@ public interface FileFinder {
 		 * 	<br>The default is <js>".*"</js>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder include(String...patterns) {
 			this.include = alist(patterns).stream().map(Pattern::compile).toArray(Pattern[]::new);
 			return this;
@@ -228,27 +222,21 @@ public interface FileFinder {
 		 * 	<br>If none are specified, no files will be excluded.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder exclude(String...patterns) {
 			this.exclude = alist(patterns).stream().map(Pattern::compile).toArray(Pattern[]::new);
 			return this;
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

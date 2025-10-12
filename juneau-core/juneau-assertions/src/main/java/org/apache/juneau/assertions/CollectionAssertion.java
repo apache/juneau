@@ -105,7 +105,6 @@ import org.apache.juneau.serializer.*;
  *
  * @param <E> The element type.
  */
-@FluentSetters(returns="CollectionAssertion<E>")
 public class CollectionAssertion<E> extends FluentCollectionAssertion<E,CollectionAssertion<E>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -143,38 +142,33 @@ public class CollectionAssertion<E> extends FluentCollectionAssertion<E,Collecti
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public CollectionAssertion<E> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public CollectionAssertion<E> setOut(PrintStream value) {
 		super.setOut(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public CollectionAssertion<E> setSilent() {
 		super.setSilent();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public CollectionAssertion<E> setStdOut() {
 		super.setStdOut();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public CollectionAssertion<E> setThrowable(Class<? extends java.lang.RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

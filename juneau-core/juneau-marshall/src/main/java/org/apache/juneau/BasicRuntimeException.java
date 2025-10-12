@@ -32,7 +32,6 @@ import org.apache.juneau.internal.*;
  *
  * @serial exclude
  */
-@FluentSetters
 public class BasicRuntimeException extends RuntimeException {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -89,7 +88,6 @@ public class BasicRuntimeException extends RuntimeException {
 	 *
 	 * @return This object.
 	 */
-	@FluentSetter
 	protected BasicRuntimeException setUnmodifiable() {
 		unmodifiable = true;
 		return this;
@@ -130,7 +128,6 @@ public class BasicRuntimeException extends RuntimeException {
 	 * @param args The message args.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicRuntimeException setMessage(String message, Object...args) {
 		assertModifiable();
 		this.message = format(message, args);
@@ -174,8 +171,4 @@ public class BasicRuntimeException extends RuntimeException {
 		Throwable t = getCause();
 		return t == null ? this : t;
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

@@ -98,6 +98,10 @@ class Operation_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, ()->x.getResponse(null));
 			assertThrows(IllegalArgumentException.class, () -> x.get(null, String.class));
 			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
+			assertThrows(IllegalArgumentException.class, () -> x.addResponse(null, response()));
+			assertThrows(IllegalArgumentException.class, () -> x.addResponse("200", null));
+			assertThrows(IllegalArgumentException.class, () -> x.addCallback(null, callback()));
+			assertThrows(IllegalArgumentException.class, () -> x.addCallback("test", null));
 		}
 
 		@Test void a10_collectionSetters() {
@@ -145,7 +149,26 @@ class Operation_Test extends TestBase {
 			assertFalse(bean().strict(false).isStrict());
 		}
 		
-		@Test void a14_collectionSetters() {
+		@Test void a14_addMethods() {
+			var x = bean()
+				.addTags("a1", "a2")
+				.addTags(list("a3"))
+				.addParameters(parameter().setIn("b1").setName("b2"))
+				.addParameters(list(parameter().setIn("b3").setName("b4")))
+				.addResponse("200", response().setDescription("c1"))
+				.addCallback("d1", callback())
+				.addSecurity(securityRequirement().setRequirements(map("e1", list("e2"))))
+				.addSecurity(list(securityRequirement().setRequirements(map("e3", list("e4")))))
+				.addServers(server().setUrl(URI.create("http://f1.com")))
+				.addServers(list(server().setUrl(URI.create("http://f2.com"))));
+
+			assertBean(x,
+				"tags,parameters{#{in,name}},responses{200{description}},callbacks{d1},security{#{requirements}},servers{#{url}}",
+				"[a1,a2,a3],{[{b1,b2},{b3,b4}]},{{c1}},{{}},{[{{e1=[e2]}},{{e3=[e4]}}]},{[{http://f1.com},{http://f2.com}]}"
+			);
+		}
+
+		@Test void a15_collectionSetters() {
 			var x = bean()
 				.setParameters(list(parameter().setIn("a1").setName("a2"), parameter().setIn("b1").setName("b2")))
 				.setSecurity(list(securityRequirement().setRequirements(map("c1", list("c2"))), securityRequirement().setRequirements(map("d1", list("d2")))))

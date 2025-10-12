@@ -60,7 +60,6 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@FluentSetters
 public class HeaderList extends ControlledArrayList<Header> {
 
 	private static final long serialVersionUID = 1L;
@@ -289,7 +288,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param value The header to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList append(Header value) {
 		if (value != null)
 			add(value);
@@ -333,7 +331,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList append(Header...values) {
 		if (values != null)
             for (Header value : values)
@@ -348,7 +345,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList append(List<Header> values) {
 		if (values != null)
 			values.forEach(this::append);
@@ -361,7 +357,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param value The header to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList prepend(Header value) {
 		if (value != null)
 			add(0, value);
@@ -405,7 +400,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList prepend(Header...values) {
 		if (values != null)
 			prepend(alist(values));
@@ -418,7 +412,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param values The headers to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList prepend(List<Header> values) {
 		if (values != null)
 			addAll(0, values);
@@ -431,7 +424,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param value The header to remove.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList remove(Header value) {
 		if (value != null)
 			removeIf(x -> eq(x.getName(), value.getName()) && eq(x.getValue(), value.getValue()));
@@ -444,7 +436,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList remove(Header...values) {
 		for (Header value : values)
             remove(value);
@@ -457,7 +448,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList remove(List<Header> values) {
 		if (values != null)
 			values.forEach(this::remove);
@@ -470,7 +460,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param name The header name.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList remove(String name) {
 		removeIf(x -> eq(x.getName(), name));
 		return this;
@@ -482,7 +471,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param names The header name.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList remove(String...names) {
 		if (names != null)
             for (String name : names)
@@ -509,7 +497,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param value The headers to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList set(Header value) {
 		if (value != null) {
 			boolean replaced = false;
@@ -542,7 +529,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList set(Header...values) {
 		if (values != null)
 			set(alist(values));
@@ -580,7 +566,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public HeaderList set(List<Header> values) {
 
 		if (values != null) {
@@ -953,14 +938,9 @@ public class HeaderList extends ControlledArrayList<Header> {
 	public String toString() {
 		return "[" + Utils.join(this, ", ") + "]";
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.collections.ControlledArrayList */
+	@Override /* Overridden from ControlledArrayList */
 	public HeaderList setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
 	}
-
-	// </FluentSetters>
 }

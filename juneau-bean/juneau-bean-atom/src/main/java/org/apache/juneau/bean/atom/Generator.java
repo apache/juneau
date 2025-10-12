@@ -22,11 +22,22 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.net.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * Represents an <c>atomGenerator</c> construct in the RFC4287 specification.
+ * Identifies the software agent used to generate an Atom feed.
+ *
+ * <p>
+ * The generator element provides information about the software that created the feed. This is 
+ * useful for debugging, analytics, and understanding the tools used in feed creation.
+ *
+ * <p>
+ * The generator has three components:
+ * <ul class='spaced-list'>
+ * 	<li><b>Text content</b> (required) - Human-readable name of the generating agent
+ * 	<li><b>uri attribute</b> (optional) - URI identifying or describing the generating agent
+ * 	<li><b>version attribute</b> (optional) - Version of the generating agent
+ * </ul>
  *
  * <h5 class='figure'>Schema</h5>
  * <p class='bschema'>
@@ -38,12 +49,27 @@ import org.apache.juneau.xml.annotation.*;
  * 	}
  * </p>
  *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	Generator <jv>gen</jv> = <jk>new</jk> Generator(<js>"My Blog Software"</js>)
+ * 		.setUri(<js>"http://www.myblogsoftware.com"</js>)
+ * 		.setVersion(<js>"2.0"</js>);
+ *
+ * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
+ * 		.setGenerator(<jv>gen</jv>);
+ * </p>
+ *
+ * <h5 class='section'>Specification:</h5>
+ * <p>
+ * Represents an <c>atomGenerator</c> construct in the 
+ * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.4">RFC 4287 - Section 4.2.4</a> specification.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
+ * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
 @Bean(typeName="generator")
-@FluentSetters
 public class Generator extends Common {
 
 	private URI uri;
@@ -163,19 +189,15 @@ public class Generator extends Common {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
+	@Override /* Overridden from Common */
 	public Generator setBase(Object value) {
 		super.setBase(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.bean.atom.Common */
+	@Override /* Overridden from Common */
 	public Generator setLang(String value) {
 		super.setLang(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

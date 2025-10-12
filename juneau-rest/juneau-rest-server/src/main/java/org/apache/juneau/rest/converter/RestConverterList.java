@@ -54,7 +54,6 @@ public class RestConverterList {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder extends BeanBuilder<RestConverterList> {
 
 		List<BeanCreator<RestConverter>> entries;
@@ -102,22 +101,17 @@ public class RestConverterList {
 				entries.add(beanStore().createBean(RestConverter.class).impl(v));
 			return this;
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

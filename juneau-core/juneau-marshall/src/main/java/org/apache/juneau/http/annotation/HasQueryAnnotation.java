@@ -97,8 +97,6 @@ public class HasQueryAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

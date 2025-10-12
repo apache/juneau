@@ -94,7 +94,6 @@ import org.apache.juneau.serializer.*;
  * @param <T> The value type
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentComparableAssertion<T,R>")
 @SuppressWarnings("rawtypes")
 public class FluentComparableAssertion<T extends Comparable,R> extends FluentObjectAssertion<T,R> {
 
@@ -238,38 +237,33 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentComparableAssertion<T,R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentComparableAssertion<T,R> setOut(PrintStream value) {
 		super.setOut(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentComparableAssertion<T,R> setSilent() {
 		super.setSilent();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentComparableAssertion<T,R> setStdOut() {
 		super.setStdOut();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentComparableAssertion<T,R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

@@ -183,91 +183,74 @@ public class UonWriter extends SerializerWriter {
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <FluentSetters>
-
 	@Override /* SerializerWriter */
 	public UonWriter cr(int depth) {
 		super.cr(depth);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public UonWriter cre(int depth) {
 		super.cre(depth);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public UonWriter appendln(int indent, String text) {
 		super.appendln(indent, text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public UonWriter appendln(String text) {
 		super.appendln(text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public UonWriter append(int indent, String text) {
 		super.append(indent, text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public UonWriter append(int indent, char c) {
 		super.append(indent, c);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public UonWriter q() {
 		super.q();
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public UonWriter i(int indent) {
 		super.i(indent);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public UonWriter nl(int indent) {
 		super.nl(indent);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public UonWriter append(Object text) {
 		super.append(text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public UonWriter append(String text) {
 		super.append(text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public UonWriter appendIf(boolean b, String text) {
 		super.appendIf(b, text);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public UonWriter appendIf(boolean b, char c) {
 		super.appendIf(b, c);
 		return this;
 	}
-
 	@Override /* SerializerWriter */
 	public UonWriter append(char c) {
 		super.append(c);
 		return this;
 	}
-
-	// </FluentSetters>
 }

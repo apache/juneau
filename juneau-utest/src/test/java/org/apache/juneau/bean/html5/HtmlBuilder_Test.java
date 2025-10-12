@@ -133,9 +133,6 @@ class HtmlBuilder_Test extends TestBase {
 		assertString("<var></var>", var());
 		assertString("<video></video>", video());
 		assertString("<wbr/>", wbr());
-	}
-
-	@Test void a02_parametrizedMethods() {
 		assertString("<a href='url'>text</a>", a("url", "text"));
 		assertString("<form action='submit'><input/></form>", form("submit", input()));
 		assertString("<button type='submit'>Click</button>", button("submit", "Click"));
@@ -160,9 +157,6 @@ class HtmlBuilder_Test extends TestBase {
 		assertString("<tr><td></td></tr>", tr(td()));
 		assertString("<ul><li></li></ul>", ul(li()));
 		assertString("<video src='test.mp4'></video>", video("test.mp4"));
-	}
-
-	@Test void a03_additionalParametrizedMethods() {
 		assertString("<abbr title='test'>content</abbr>", abbr("test", "content"));
 		assertString("<area shape='rect' coords='0,0,100,100' href='url'/>", area("rect", "0,0,100,100", "url"));
 		assertString("<bdo dir='rtl'>text</bdo>", bdo("rtl", "text"));
@@ -172,10 +166,25 @@ class HtmlBuilder_Test extends TestBase {
 		assertString("<source src='video.mp4' type='video/mp4'/>", source("video.mp4", "video/mp4"));
 		assertString("<template id='test'><p></p></template>", template("test", p()));
 		assertString("<track src='captions.vtt' kind='captions'/>", track("captions.vtt", "captions"));
-	}
-
-	@Test void a04_varargsChildren() {
 		assertString("<address>text<strong>bold</strong></address>", address("text", strong("bold")));
 		assertString("<time>10:00<span>AM</span></time>", time("10:00", span("AM")));
+		assertString("<bdi>text</bdi>", bdi("text"));
+		assertString("<button type='submit'></button>", button("submit"));
+		assertString("<col span='2'/>", col(2));
+		assertString("<form action='submit'></form>", form("submit"));
+		assertString("<embed src='file.swf'/>", embed("file.swf"));
+		assertString("<img src='image.jpg'/>", img("image.jpg"));
+		assertString("<link href='style.css'/>", link("style.css"));
+		assertString("<option>text</option>", option("text"));
+		assertString("<output name='result'></output>", output("result"));
+		assertString("<style>body { color: red; }</style>", style("body { color: red; }"));
+		assertString("<style>body { color: red; }\ndiv { color: blue; }</style>", style("body { color: red; }", "div { color: blue; }"));
+		assertString("<title>Page Title</title>", title("Page Title"));
+		assertString("<h1>Heading 1</h1>", h1("Heading 1"));
+		assertString("<h2>Heading 2</h2>", h2("Heading 2"));
+		assertString("<h3>Heading 3</h3>", h3("Heading 3"));
+		assertString("<h4>Heading 4</h4>", h4("Heading 4"));
+		assertString("<h5>Heading 5</h5>", h5("Heading 5"));
+		assertString("<h6>Heading 6</h6>", h6("Heading 6"));
 	}
 }

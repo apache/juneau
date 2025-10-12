@@ -90,4 +90,62 @@ class HtmlElementMixed_Test extends TestBase {
 		x.children("child1", "child2");
 		assertString("[child1,child2]", x.getChildren());
 	}
+
+	@Test void a12_getChild_varargs_emptyArray() {
+		P x = p("child1");
+		assertNull(x.getChild(new int[]{}));
+	}
+
+	@Test void a13_getChild_varargs_singleIndex() {
+		P x = p("child1", "child2");
+		assertString("child1", x.getChild(new int[]{0}));
+	}
+
+	@Test void a14_getChild_varargs_multipleIndices() {
+		// Create nested structure: p -> span -> strong -> "text"
+		P x = p(
+			span(
+				strong("text1"),
+				strong("text2")
+			),
+			span("text3")
+		);
+		
+		// Navigate to nested elements
+		assertString("text1", x.getChild(0, 0, 0));
+		assertString("text2", x.getChild(0, 1, 0));
+		assertString("text3", x.getChild(1, 0));
+	}
+
+	@Test void a15_getChild_varargs_invalidPath() {
+		P x = p("text");
+		// Try to get child of a text node (which is not a container or mixed element)
+		assertNull(x.getChild(0, 0));
+	}
+
+	@Test void a16_getChild_varargs_throughContainer() {
+		// Test navigation from Mixed through Container element
+		P x = p(
+			div(
+				span("nested")
+			)
+		);
+		
+		assertString("nested", x.getChild(0, 0, 0));
+	}
+
+	@Test void a17_setChildren() {
+		P x = new P();
+		java.util.List<Object> children = java.util.Arrays.asList("child1", "child2");
+		x.setChildren(children);
+		assertString("[child1,child2]", x.getChildren());
+	}
+
+	@Test void a18_child_withCollection_existingChildren() {
+		// Test adding a collection when children list already exists
+		P x = new P();
+		x.child("existing");  // Initialize children list
+		x.child(java.util.Arrays.asList("new1", "new2"));  // Add collection to existing list
+		assertString("<p>existingnew1new2</p>", x);
+	}
 }

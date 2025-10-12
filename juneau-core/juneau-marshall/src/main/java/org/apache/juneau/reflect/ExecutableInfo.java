@@ -34,7 +34,6 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-@FluentSetters
 public abstract class ExecutableInfo {
 
 	final ClassInfo declaringClass;
@@ -823,7 +822,6 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return This object.
 	 */
-	@FluentSetter
 	public ExecutableInfo accessible() {
 		setAccessible();
 		return this;
@@ -963,8 +961,4 @@ public abstract class ExecutableInfo {
 	public String toString() {
 		return getShortName();
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

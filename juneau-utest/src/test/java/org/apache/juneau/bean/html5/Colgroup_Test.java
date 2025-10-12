@@ -89,10 +89,11 @@ class Colgroup_Test extends TestBase {
 			.tabindex("bi")
 			.title("bj")
 			.translate("bk")
+			.child("child1")
 			.children("bl", strong("bm"));
 
 		assertString(
-			"<colgroup span='a' class='b' accesskey='c' contenteditable='d' dir='e' hidden='f' id='g' lang='h' onabort='i' onblur='j' oncancel='k' oncanplay='l' oncanplaythrough='m' onchange='n' onclick='o' oncuechange='p' ondblclick='q' ondurationchange='r' onemptied='s' onended='t' onerror='u' onfocus='v' oninput='w' oninvalid='x' onkeydown='y' onkeypress='z' onkeyup='aa' onload='ab' onloadeddata='ac' onloadedmetadata='ad' onloadstart='ae' onmousedown='af' onmouseenter='ag' onmouseleave='ah' onmousemove='ai' onmouseout='aj' onmouseover='ak' onmouseup='al' onmousewheel='am' onpause='an' onplay='ao' onplaying='ap' onprogress='aq' onratechange='ar' onreset='as' onresize='at' onscroll='au' onseeked='av' onseeking='aw' onselect='ax' onshow='ay' onstalled='az' onsubmit='ba' onsuspend='bb' ontimeupdate='bc' ontoggle='bd' onvolumechange='be' onwaiting='bf' spellcheck='bg' style='bh' tabindex='bi' title='bj' translate='bk'>bl<strong>bm</strong></colgroup>",
+			"<colgroup span='a' class='b' accesskey='c' contenteditable='d' dir='e' hidden='f' id='g' lang='h' onabort='i' onblur='j' oncancel='k' oncanplay='l' oncanplaythrough='m' onchange='n' onclick='o' oncuechange='p' ondblclick='q' ondurationchange='r' onemptied='s' onended='t' onerror='u' onfocus='v' oninput='w' oninvalid='x' onkeydown='y' onkeypress='z' onkeyup='aa' onload='ab' onloadeddata='ac' onloadedmetadata='ad' onloadstart='ae' onmousedown='af' onmouseenter='ag' onmouseleave='ah' onmousemove='ai' onmouseout='aj' onmouseover='ak' onmouseup='al' onmousewheel='am' onpause='an' onplay='ao' onplaying='ap' onprogress='aq' onratechange='ar' onreset='as' onresize='at' onscroll='au' onseeked='av' onseeking='aw' onselect='ax' onshow='ay' onstalled='az' onsubmit='ba' onsuspend='bb' ontimeupdate='bc' ontoggle='bd' onvolumechange='be' onwaiting='bf' spellcheck='bg' style='bh' tabindex='bi' title='bj' translate='bk'>child1bl<strong>bm</strong></colgroup>",
 			x
 		);
 	}

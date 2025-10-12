@@ -51,7 +51,6 @@ import org.apache.juneau.internal.*;
  *
  * @serial exclude
  */
-@FluentSetters
 @BeanIgnore
 public class BasicHeader implements Header, Cloneable, Serializable {
 
@@ -279,8 +278,4 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	public String toString() {
 		return getName() + ": " + getValue();
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

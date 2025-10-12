@@ -1071,7 +1071,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters(ignore={"beanMapPutReturnsOldValue","example","exampleJson","debug","mediaType"})
 	public static class Builder extends BeanContextable.Builder {
 
 		BeanStore beanStore = BeanStore.create().build();
@@ -1161,7 +1160,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder json() {
 			return serializer(JsonSerializer.class).parser(JsonParser.class);
 		}
@@ -1208,7 +1206,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder json5() {
 			return serializer(Json5Serializer.class).parser(Json5Parser.class);
 		}
@@ -1251,7 +1248,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder xml() {
 			return serializer(XmlSerializer.class).parser(XmlParser.class);
 		}
@@ -1297,7 +1293,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder html() {
 			return serializer(HtmlSerializer.class).parser(HtmlParser.class);
 		}
@@ -1343,7 +1338,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder htmlDoc() {
 			return serializer(HtmlDocSerializer.class).parser(HtmlParser.class);
 		}
@@ -1389,7 +1383,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder htmlStrippedDoc() {
 			return serializer(HtmlStrippedDocSerializer.class).parser(HtmlParser.class);
 		}
@@ -1436,7 +1429,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder plainText() {
 			return serializer(PlainTextSerializer.class).parser(PlainTextParser.class);
 		}
@@ -1482,7 +1474,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder msgPack() {
 			return serializer(MsgPackSerializer.class).parser(MsgPackParser.class);
 		}
@@ -1529,7 +1520,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder uon() {
 			return serializer(UonSerializer.class).parser(UonParser.class);
 		}
@@ -1574,7 +1564,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder urlEnc() {
 			return serializer(UrlEncodingSerializer.class).parser(UrlEncodingParser.class);
 		}
@@ -1623,7 +1612,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder openApi() {
 			return serializer(OpenApiSerializer.class).parser(OpenApiParser.class);
 		}
@@ -1747,7 +1735,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value The {@link HttpClientBuilder} that will be used to create the {@link HttpClient} used by {@link RestClient}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder httpClientBuilder(HttpClientBuilder value) {
 			this.httpClientBuilder = value;
 			return this;
@@ -1813,7 +1800,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value The {@link HttpClient} to be used to handle all HTTP communications with the target server.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder httpClient(CloseableHttpClient value) {
 			this.httpClient = value;
 			return this;
@@ -1877,7 +1863,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
-		@FluentSetter
 		public Builder serializer(Class<? extends Serializer> value) {
 			return serializers(value);
 		}
@@ -1911,7 +1896,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default is {@link JsonSerializer}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder serializer(Serializer value) {
 			return serializers(value);
 		}
@@ -1950,7 +1934,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
-		@FluentSetter
 		public Builder serializers(Class<? extends Serializer>...value) {
 			serializers().add(value);
 			return this;
@@ -1989,7 +1972,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default is {@link JsonSerializer}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder serializers(Serializer...value) {
 			serializers().add(value);
 			return this;
@@ -2049,7 +2031,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
-		@FluentSetter
 		public Builder parser(Class<? extends Parser> value) {
 			return parsers(value);
 		}
@@ -2083,7 +2064,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder parser(Parser value) {
 			return parsers(value);
 		}
@@ -2122,7 +2102,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
-		@FluentSetter
 		public Builder parsers(Class<? extends Parser>...value) {
 			parsers().add(value);
 			return this;
@@ -2161,7 +2140,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder parsers(Parser...value) {
 			parsers().add(value);
 			return this;
@@ -2214,7 +2192,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default value is {@link OpenApiSerializer}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder partSerializer(Class<? extends HttpPartSerializer> value) {
 			partSerializer().type(value);
 			return this;
@@ -2243,7 +2220,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default value is {@link OpenApiSerializer}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder partSerializer(HttpPartSerializer value) {
 			partSerializer().impl(value);
 			return this;
@@ -2296,7 +2272,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default value is {@link OpenApiParser}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder partParser(Class<? extends HttpPartParser> value) {
 			partParser().type(value);
 			return this;
@@ -2325,7 +2300,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default value is {@link OpenApiParser}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder partParser(HttpPartParser value) {
 			partParser().impl(value);
 			return this;
@@ -2439,7 +2413,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #headers()
 		 */
-		@FluentSetter
 		public Builder headers(Header...parts) {
 			headers().append(parts);
 			return this;
@@ -2490,7 +2463,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #headers()
 		 */
-		@FluentSetter
 		public Builder header(String name, String value) {
 			headers().append(name, value);
 			return this;
@@ -2515,7 +2487,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #headers()
 		 */
-		@FluentSetter
 		public Builder header(String name, Supplier<String> value) {
 			headers().append(name, value);
 			return this;
@@ -2534,7 +2505,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #headers()
 		 */
-		@FluentSetter
 		public Builder mediaType(String value) {
 			super.mediaType(MediaType.of(value));
 			return headers(Accept.of(value), ContentType.of(value));
@@ -2554,7 +2524,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @see #headers()
 		 */
 		@Override
-		@FluentSetter
 		public Builder mediaType(MediaType value) {
 			super.mediaType(value);
 			return headers(Accept.of(value), ContentType.of(value));
@@ -2571,7 +2540,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #headers()
 		 */
-		@FluentSetter
 		public Builder accept(String value) {
 			return headers(Accept.of(value));
 		}
@@ -2586,7 +2554,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #headers()
 		 */
-		@FluentSetter
 		public Builder acceptCharset(String value) {
 			return headers(AcceptCharset.of(value));
 		}
@@ -2601,7 +2568,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #headers()
 		 */
-		@FluentSetter
 		public Builder clientVersion(String value) {
 			return headers(ClientVersion.of(value));
 		}
@@ -2619,7 +2585,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #headers()
 		 */
-		@FluentSetter
 		public Builder contentType(String value) {
 			return headers(ContentType.of(value));
 		}
@@ -2634,7 +2599,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @see #headers()
 		 */
 		@Override
-		@FluentSetter
 		public Builder debug() {
 			super.debug();
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::debug);
@@ -2657,7 +2621,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #headers()
 		 */
-		@FluentSetter
 		public Builder noTrace() {
 			return headers(NoTrace.of(true));
 		}
@@ -2738,7 +2701,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #queryData()
 		 */
-		@FluentSetter
 		public Builder queryData(NameValuePair...parts) {
 			queryData().append(parts);
 			return this;
@@ -2789,7 +2751,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #queryData()
 		 */
-		@FluentSetter
 		public Builder queryData(String name, String value) {
 			queryData().append(name, value);
 			return this;
@@ -2814,7 +2775,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #queryData()
 		 */
-		@FluentSetter
 		public Builder queryData(String name, Supplier<String> value) {
 			queryData().append(name, value);
 			return this;
@@ -2896,7 +2856,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #formData()
 		 */
-		@FluentSetter
 		public Builder formData(NameValuePair...parts) {
 			formData().append(parts);
 			return this;
@@ -2947,7 +2906,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #formData()
 		 */
-		@FluentSetter
 		public Builder formData(String name, String value) {
 			formData().append(name, value);
 			return this;
@@ -2972,7 +2930,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #formData()
 		 */
-		@FluentSetter
 		public Builder formData(String name, Supplier<String> value) {
 			formData().append(name, value);
 			return this;
@@ -3054,7 +3011,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #pathData()
 		 */
-		@FluentSetter
 		public Builder pathData(NameValuePair...parts) {
 			pathData().append(parts);
 			return this;
@@ -3105,7 +3061,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #pathData()
 		 */
-		@FluentSetter
 		public Builder pathData(String name, String value) {
 			pathData().append(name, value);
 			return this;
@@ -3130,7 +3085,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #pathData()
 		 */
-		@FluentSetter
 		public Builder pathData(String name, Supplier<String> value) {
 			pathData().set(name, value);
 			return this;
@@ -3216,7 +3170,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see #callHandler()
 		 */
-		@FluentSetter
 		public Builder callHandler(Class<? extends RestCallHandler> value) {
 			callHandler().type(value);
 			return this;
@@ -3246,7 +3199,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default value is <code>x -&gt; x &gt;= 400</code>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder errorCodes(Predicate<Integer> value) {
 			errorCodes = Utils.assertArgNotNull("value", value);
 			return this;
@@ -3282,7 +3234,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value The logger to use for logging.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder logger(Logger value) {
 			logger = value;
 			return this;
@@ -3306,7 +3257,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder logToConsole() {
 			logToConsole = true;
 			return this;
@@ -3359,7 +3309,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param test A predicate to use per-request to see if the request should be logged.  If <jk>null</jk>, always logs.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder logRequests(DetailLevel detail, Level level, BiPredicate<RestRequest,RestResponse> test) {
 			logRequests = detail;
 			logRequestsLevel = level;
@@ -3416,7 +3365,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder pooled() {
 			this.pooled = true;
 			return this;
@@ -3429,7 +3377,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)
 		 */
-		@FluentSetter
 		public Builder connectionManager(HttpClientConnectionManager value) {
 			connectionManager = value;
 			httpClientBuilder().setConnectionManager(value);
@@ -3447,7 +3394,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionManagerShared(boolean)
 		 */
-		@FluentSetter
 		public Builder connectionManagerShared(boolean shared) {
 			httpClientBuilder().setConnectionManagerShared(shared);
 			return this;
@@ -3471,7 +3417,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param pw The password.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder basicAuth(String host, int port, String user, String pw) {
 			AuthScope scope = new AuthScope(host, port);
 			Credentials up = new UsernamePasswordCredentials(user, pw);
@@ -3495,7 +3440,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder console(PrintStream value) {
 			console = value;
 			return this;
@@ -3551,7 +3495,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param shutdownOnClose Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder executorService(ExecutorService executorService, boolean shutdownOnClose) {
 			this.executorService = executorService;
 			this.executorServiceShutdownOnClose = shutdownOnClose;
@@ -3578,7 +3521,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder keepHttpClientOpen() {
 			keepHttpClientOpen = true;
 			return this;
@@ -3607,7 +3549,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder ignoreErrors() {
 			ignoreErrors = true;
 			return this;
@@ -3664,7 +3605,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @throws Exception If one or more interceptors could not be created.
 		 */
-		@FluentSetter
 		public Builder interceptors(Class<?>...values) throws Exception {
 			for (Class<?> c : values) {
 				ClassInfo ci = ClassInfo.of(c);
@@ -3727,7 +3667,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder interceptors(Object...value) {
 			List<RestCallInterceptor> l = list();
 			for (Object o : value) {
@@ -3777,7 +3716,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder detectLeaks() {
 			detectLeaks = true;
 			return this;
@@ -3807,7 +3745,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value The values to add to this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder marshaller(Marshaller value) {
 			if (value != null)
 				serializer(value.getSerializer()).parser(value.getParser());
@@ -3838,7 +3775,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value The values to add to this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder marshallers(Marshaller...value) {
 			for (Marshaller m : value)
 				if (m != null)
@@ -3874,7 +3810,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>Usually a <c>String</c> but you can also pass in <c>URI</c> and <c>URL</c> objects as well.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder rootUrl(Object value) {
 			String s = s(value);
 			if (! isEmpty(s))
@@ -3916,7 +3851,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default is <jk>false</jk>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder skipEmptyFormData(boolean value) {
 			skipEmptyFormData = true;
 			return this;
@@ -3934,7 +3868,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder skipEmptyFormData() {
 			return skipEmptyFormData(true);
 		}
@@ -3954,7 +3887,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default is <jk>false</jk>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder skipEmptyHeaderData(boolean value) {
 			skipEmptyHeaderData = true;
 			return this;
@@ -3972,7 +3904,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder skipEmptyHeaderData() {
 			return skipEmptyHeaderData(true);
 		}
@@ -3992,7 +3923,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default is <jk>false</jk>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder skipEmptyQueryData(boolean value) {
 			skipEmptyQueryData = true;
 			return this;
@@ -4010,7 +3940,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder skipEmptyQueryData() {
 			return skipEmptyQueryData(true);
 		}
@@ -4067,7 +3996,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder detectRecursions() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::detectRecursions);
 			return this;
@@ -4120,7 +4048,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder ignoreRecursions() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::ignoreRecursions);
 			return this;
@@ -4165,7 +4092,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default is <c>0</c>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder initialDepth(int value) {
 			serializers().forEach(x -> x.initialDepth(value));
 			return this;
@@ -4202,7 +4128,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default is <c>100</c>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder maxDepth(int value) {
 			serializers().forEach(x -> x.maxDepth(value));
 			return this;
@@ -4260,7 +4185,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder addBeanTypes() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::addBeanTypes);
 			return this;
@@ -4314,7 +4238,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder addRootType() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::addRootType);
 			return this;
@@ -4356,7 +4279,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder keepNullProperties() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::keepNullProperties);
 			return this;
@@ -4395,7 +4317,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder sortCollections() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::sortCollections);
 			return this;
@@ -4434,7 +4355,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder sortMaps() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::sortMaps);
 			return this;
@@ -4480,7 +4400,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder trimEmptyCollections() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::trimEmptyCollections);
 			return this;
@@ -4525,7 +4444,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder trimEmptyMaps() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::trimEmptyMaps);
 			return this;
@@ -4561,7 +4479,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder trimStringsOnWrite() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::trimStrings);
 			return this;
@@ -4610,7 +4527,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder uriContext(UriContext value) {
 			serializers().forEach(x -> x.uriContext(value));
 			return this;
@@ -4647,7 +4563,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default is {@link UriRelativity#RESOURCE}
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder uriRelativity(UriRelativity value) {
 			serializers().forEach(x -> x.uriRelativity(value));
 			return this;
@@ -4686,7 +4601,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default is {@link UriResolution#NONE}
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder uriResolution(UriResolution value) {
 			serializers().forEach(x -> x.uriResolution(value));
 			return this;
@@ -4726,7 +4640,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default is <c>100</c>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder maxIndent(int value) {
 			serializers().forEachWS(x -> x.maxIndent(value));
 			return this;
@@ -4771,7 +4684,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default is <js>'"'</js>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder quoteChar(char value) {
 			serializers().forEachWS(x -> x.quoteChar(value));
 			return this;
@@ -4813,7 +4725,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder sq() {
 			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::sq);
 			return this;
@@ -4850,7 +4761,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder useWhitespace() {
 			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::useWhitespace);
 			return this;
@@ -4888,7 +4798,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder ws() {
 			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::ws);
 			return this;
@@ -4939,7 +4848,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default value is <c>5</c>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder debugOutputLines(int value) {
 			parsers().forEach(x -> x.debugOutputLines(value));
 			return this;
@@ -5005,7 +4913,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder strict() {
 			parsers().forEach(org.apache.juneau.parser.Parser.Builder::strict);
 			return this;
@@ -5043,7 +4950,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder trimStringsOnRead() {
 			parsers().forEach(org.apache.juneau.parser.Parser.Builder::trimStrings);
 			return this;
@@ -5111,7 +5017,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default value is {@link HttpPartFormat#NO_FORMAT}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder oapiFormat(HttpPartFormat value) {
 			serializers().forEach(OpenApiSerializer.Builder.class, x -> x.format(value));
 			parsers().forEach(OpenApiParser.Builder.class, x -> x.format(value));
@@ -5173,7 +5078,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<br>The default value is {@link HttpPartCollectionFormat#NO_COLLECTION_FORMAT}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder oapiCollectionFormat(HttpPartCollectionFormat value) {
 			serializers().forEach(OpenApiSerializer.Builder.class, x -> x.collectionFormat(value));
 			parsers().forEach(OpenApiParser.Builder.class, x -> x.collectionFormat(value));
@@ -5228,7 +5132,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder paramFormat(ParamFormat value) {
 			serializers().forEach(UonSerializer.Builder.class, x -> x.paramFormat(value));
 			return this;
@@ -5269,400 +5172,393 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder paramFormatPlain() {
 			serializers().forEach(UonSerializer.Builder.class, org.apache.juneau.uon.UonSerializer.Builder::paramFormatPlain);
 			return this;
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
 			super.cache(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder impl(Context value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanClassVisibility(Visibility value) {
 			super.beanClassVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanConstructorVisibility(Visibility value) {
 			super.beanConstructorVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanContext(BeanContext value) {
 			super.beanContext(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanContext(BeanContext.Builder value) {
 			super.beanContext(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanDictionary(java.lang.Class<?>...values) {
 			super.beanDictionary(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanFieldVisibility(Visibility value) {
 			super.beanFieldVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanMethodVisibility(Visibility value) {
 			super.beanMethodVisibility(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanProperties(Map<String,Object> values) {
 			super.beanProperties(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanProperties(Class<?> beanClass, String properties) {
 			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanProperties(String beanClassName, String properties) {
 			super.beanProperties(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
 			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
 			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
 			super.beanPropertiesExcludes(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
 			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
 			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
 			super.beanPropertiesReadOnly(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
 			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
 			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
 			super.beanPropertiesWriteOnly(beanClassName, properties);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beansRequireDefaultConstructor() {
 			super.beansRequireDefaultConstructor();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beansRequireSerializable() {
 			super.beansRequireSerializable();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
 			super.dictionaryOn(on, values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableBeansRequireSomeProperties() {
 			super.disableBeansRequireSomeProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableIgnoreMissingSetters() {
 			super.disableIgnoreMissingSetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableIgnoreTransientFields() {
 			super.disableIgnoreTransientFields();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableIgnoreUnknownNullBeanProperties() {
 			super.disableIgnoreUnknownNullBeanProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder disableInterfaceProxies() {
 			super.disableInterfaceProxies();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder findFluentSetters() {
 			super.findFluentSetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder findFluentSetters(Class<?> on) {
 			super.findFluentSetters(on);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnGetters() {
 			super.ignoreInvocationExceptionsOnGetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnSetters() {
 			super.ignoreInvocationExceptionsOnSetters();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreUnknownBeanProperties() {
 			super.ignoreUnknownBeanProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder ignoreUnknownEnumValues() {
 			super.ignoreUnknownEnumValues();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
 			super.implClass(interfaceClass, implClass);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
 			super.implClasses(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
 			super.interfaceClass(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder interfaces(java.lang.Class<?>...value) {
 			super.interfaces(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder notBeanClasses(java.lang.Class<?>...values) {
 			super.notBeanClasses(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder notBeanPackages(String...values) {
 			super.notBeanPackages(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 			super.propertyNamer(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
 			super.propertyNamer(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sortProperties() {
 			super.sortProperties();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder sortProperties(java.lang.Class<?>...on) {
 			super.sortProperties(on);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder stopClass(Class<?> on, Class<?> value) {
 			super.stopClass(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder swaps(Object...values) {
 			super.swaps(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder timeZone(TimeZone value) {
 			super.timeZone(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder typeName(Class<?> on, String value) {
 			super.typeName(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder typePropertyName(String value) {
 			super.typePropertyName(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder typePropertyName(Class<?> on, String value) {
 			super.typePropertyName(on, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder useEnumNames() {
 			super.useEnumNames();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {
 			super.useJavaBeanIntrospector();
 			return this;
 		}
-
-		// </FluentSetters>
-
 		//------------------------------------------------------------------------------------------------
 		// Passthrough methods for HttpClientBuilder.
 		//------------------------------------------------------------------------------------------------
@@ -5673,7 +5569,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#disableRedirectHandling()
 		 */
-		@FluentSetter
 		public Builder disableRedirectHandling() {
 			httpClientBuilder().disableRedirectHandling();
 			return this;
@@ -5690,7 +5585,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setRedirectStrategy(RedirectStrategy)
 		 */
-		@FluentSetter
 		public Builder redirectStrategy(RedirectStrategy redirectStrategy) {
 			httpClientBuilder().setRedirectStrategy(redirectStrategy);
 			return this;
@@ -5703,7 +5597,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultCookieSpecRegistry(Lookup)
 		 */
-		@FluentSetter
 		public Builder defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
 			httpClientBuilder().setDefaultCookieSpecRegistry(cookieSpecRegistry);
 			return this;
@@ -5716,7 +5609,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setRequestExecutor(HttpRequestExecutor)
 		 */
-		@FluentSetter
 		public Builder requestExecutor(HttpRequestExecutor requestExec) {
 			httpClientBuilder().setRequestExecutor(requestExec);
 			return this;
@@ -5734,7 +5626,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)
 		 */
-		@FluentSetter
 		public Builder sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
 			httpClientBuilder().setSSLHostnameVerifier(hostnameVerifier);
 			return this;
@@ -5751,7 +5642,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)
 		 */
-		@FluentSetter
 		public Builder publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
 			httpClientBuilder().setPublicSuffixMatcher(publicSuffixMatcher);
 			return this;
@@ -5769,7 +5659,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setSSLContext(SSLContext)
 		 */
-		@FluentSetter
 		public Builder sslContext(SSLContext sslContext) {
 			httpClientBuilder().setSSLContext(sslContext);
 			return this;
@@ -5786,7 +5675,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)
 		 */
-		@FluentSetter
 		public Builder sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
 			httpClientBuilder().setSSLSocketFactory(sslSocketFactory);
 			return this;
@@ -5803,7 +5691,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setMaxConnTotal(int)
 		 */
-		@FluentSetter
 		public Builder maxConnTotal(int maxConnTotal) {
 			httpClientBuilder().setMaxConnTotal(maxConnTotal);
 			return this;
@@ -5820,7 +5707,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setMaxConnPerRoute(int)
 		 */
-		@FluentSetter
 		public Builder maxConnPerRoute(int maxConnPerRoute) {
 			httpClientBuilder().setMaxConnPerRoute(maxConnPerRoute);
 			return this;
@@ -5837,7 +5723,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultSocketConfig(SocketConfig)
 		 */
-		@FluentSetter
 		public Builder defaultSocketConfig(SocketConfig config) {
 			httpClientBuilder().setDefaultSocketConfig(config);
 			return this;
@@ -5854,7 +5739,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)
 		 */
-		@FluentSetter
 		public Builder defaultConnectionConfig(ConnectionConfig config) {
 			httpClientBuilder().setDefaultConnectionConfig(config);
 			return this;
@@ -5872,7 +5756,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionTimeToLive(long,TimeUnit)
 		 */
-		@FluentSetter
 		public Builder connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
 			httpClientBuilder().setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
 			return this;
@@ -5885,7 +5768,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionReuseStrategy(ConnectionReuseStrategy)
 		 */
-		@FluentSetter
 		public Builder connectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
 			httpClientBuilder().setConnectionReuseStrategy(reuseStrategy);
 			return this;
@@ -5898,7 +5780,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setKeepAliveStrategy(ConnectionKeepAliveStrategy)
 		 */
-		@FluentSetter
 		public Builder keepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
 			httpClientBuilder().setKeepAliveStrategy(keepAliveStrategy);
 			return this;
@@ -5911,7 +5792,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setTargetAuthenticationStrategy(AuthenticationStrategy)
 		 */
-		@FluentSetter
 		public Builder targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
 			httpClientBuilder().setTargetAuthenticationStrategy(targetAuthStrategy);
 			return this;
@@ -5924,7 +5804,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setProxyAuthenticationStrategy(AuthenticationStrategy)
 		 */
-		@FluentSetter
 		public Builder proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
 			httpClientBuilder().setProxyAuthenticationStrategy(proxyAuthStrategy);
 			return this;
@@ -5941,7 +5820,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setUserTokenHandler(UserTokenHandler)
 		 */
-		@FluentSetter
 		public Builder userTokenHandler(UserTokenHandler userTokenHandler) {
 			httpClientBuilder().setUserTokenHandler(userTokenHandler);
 			return this;
@@ -5953,7 +5831,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#disableConnectionState()
 		 */
-		@FluentSetter
 		public Builder disableConnectionState() {
 			httpClientBuilder().disableConnectionState();
 			return this;
@@ -5966,7 +5843,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setSchemePortResolver(SchemePortResolver)
 		 */
-		@FluentSetter
 		public Builder schemePortResolver(SchemePortResolver schemePortResolver) {
 			httpClientBuilder().setSchemePortResolver(schemePortResolver);
 			return this;
@@ -5983,7 +5859,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)
 		 */
-		@FluentSetter
 		public Builder addInterceptorFirst(HttpResponseInterceptor itcp) {
 			httpClientBuilder().addInterceptorFirst(itcp);
 			return this;
@@ -6000,7 +5875,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)
 		 */
-		@FluentSetter
 		public Builder addInterceptorLast(HttpResponseInterceptor itcp) {
 			httpClientBuilder().addInterceptorLast(itcp);
 			return this;
@@ -6017,7 +5891,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)
 		 */
-		@FluentSetter
 		public Builder addInterceptorFirst(HttpRequestInterceptor itcp) {
 			httpClientBuilder().addInterceptorFirst(itcp);
 			return this;
@@ -6034,7 +5907,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)
 		 */
-		@FluentSetter
 		public Builder addInterceptorLast(HttpRequestInterceptor itcp) {
 			httpClientBuilder().addInterceptorLast(itcp);
 			return this;
@@ -6050,7 +5922,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#disableCookieManagement()
 		 */
-		@FluentSetter
 		public Builder disableCookieManagement() {
 			httpClientBuilder().disableCookieManagement();
 			return this;
@@ -6066,7 +5937,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#disableContentCompression()
 		 */
-		@FluentSetter
 		public Builder disableContentCompression() {
 			httpClientBuilder().disableContentCompression();
 			return this;
@@ -6082,7 +5952,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#disableAuthCaching()
 		 */
-		@FluentSetter
 		public Builder disableAuthCaching() {
 			httpClientBuilder().disableAuthCaching();
 			return this;
@@ -6095,7 +5964,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setHttpProcessor(HttpProcessor)
 		 */
-		@FluentSetter
 		public Builder httpProcessor(HttpProcessor httpprocessor) {
 			httpClientBuilder().setHttpProcessor(httpprocessor);
 			return this;
@@ -6112,7 +5980,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setRetryHandler(HttpRequestRetryHandler)
 		 */
-		@FluentSetter
 		public Builder retryHandler(HttpRequestRetryHandler retryHandler) {
 			httpClientBuilder().setRetryHandler(retryHandler);
 			return this;
@@ -6124,7 +5991,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#disableAutomaticRetries()
 		 */
-		@FluentSetter
 		public Builder disableAutomaticRetries() {
 			httpClientBuilder().disableAutomaticRetries();
 			return this;
@@ -6141,7 +6007,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setProxy(HttpHost)
 		 */
-		@FluentSetter
 		public Builder proxy(HttpHost proxy) {
 			httpClientBuilder().setProxy(proxy);
 			return this;
@@ -6154,7 +6019,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setRoutePlanner(HttpRoutePlanner)
 		 */
-		@FluentSetter
 		public Builder routePlanner(HttpRoutePlanner routePlanner) {
 			httpClientBuilder().setRoutePlanner(routePlanner);
 			return this;
@@ -6167,7 +6031,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionBackoffStrategy(ConnectionBackoffStrategy)
 		 */
-		@FluentSetter
 		public Builder connectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
 			httpClientBuilder().setConnectionBackoffStrategy(connectionBackoffStrategy);
 			return this;
@@ -6180,7 +6043,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setBackoffManager(BackoffManager)
 		 */
-		@FluentSetter
 		public Builder backoffManager(BackoffManager backoffManager) {
 			httpClientBuilder().setBackoffManager(backoffManager);
 			return this;
@@ -6193,7 +6055,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)
 		 */
-		@FluentSetter
 		public Builder serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
 			httpClientBuilder().setServiceUnavailableRetryStrategy(serviceUnavailStrategy);
 			return this;
@@ -6206,7 +6067,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultCookieStore(CookieStore)
 		 */
-		@FluentSetter
 		public Builder defaultCookieStore(CookieStore cookieStore) {
 			httpClientBuilder().setDefaultCookieStore(cookieStore);
 			return this;
@@ -6219,7 +6079,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultCredentialsProvider(CredentialsProvider)
 		 */
-		@FluentSetter
 		public Builder defaultCredentialsProvider(CredentialsProvider credentialsProvider) {
 			httpClientBuilder().setDefaultCredentialsProvider(credentialsProvider);
 			return this;
@@ -6232,7 +6091,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultAuthSchemeRegistry(Lookup)
 		 */
-		@FluentSetter
 		public Builder defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
 			httpClientBuilder().setDefaultAuthSchemeRegistry(authSchemeRegistry);
 			return this;
@@ -6245,7 +6103,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setContentDecoderRegistry(Map)
 		 */
-		@FluentSetter
 		public Builder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
 			httpClientBuilder().setContentDecoderRegistry(contentDecoderMap);
 			return this;
@@ -6258,7 +6115,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultRequestConfig(RequestConfig)
 		 */
-		@FluentSetter
 		public Builder defaultRequestConfig(RequestConfig config) {
 			httpClientBuilder().setDefaultRequestConfig(config);
 			return this;
@@ -6270,7 +6126,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#useSystemProperties()
 		 */
-		@FluentSetter
 		public Builder useSystemProperties() {
 			httpClientBuilder().useSystemProperties();
 			return this;
@@ -6288,7 +6143,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#evictExpiredConnections()
 		 */
-		@FluentSetter
 		public Builder evictExpiredConnections() {
 			httpClientBuilder().evictExpiredConnections();
 			return this;
@@ -6308,7 +6162,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 * @see HttpClientBuilder#evictIdleConnections(long,TimeUnit)
 		 */
-		@FluentSetter
 		public Builder evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
 			httpClientBuilder().evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
 			return this;

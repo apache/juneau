@@ -219,23 +219,17 @@ public class ResponseContent implements HttpEntity {
 			is = new EofSensorInputStream(is, new EofSensorWatcher() {
 				@Override
 				public boolean eofDetected(InputStream wrapped) throws IOException {
-					try {
-						response.close();
-					} catch (RestCallException e) {}
+					response.close();
 					return true;
 				}
 				@Override
 				public boolean streamClosed(InputStream wrapped) throws IOException {
-					try {
-						response.close();
-					} catch (RestCallException e) {}
+					response.close();
 					return true;
 				}
 				@Override
 				public boolean streamAbort(InputStream wrapped) throws IOException {
-					try {
-						response.close();
-					} catch (RestCallException e) {}
+					response.close();
 					return true;
 				}
 			});
@@ -243,7 +237,7 @@ public class ResponseContent implements HttpEntity {
 			isConsumed = true;
 
 			return is;
-		} catch (UnsupportedOperationException | RestCallException e) {
+		} catch (UnsupportedOperationException e) {
 			throw new IOException(e);
 		}
 	}

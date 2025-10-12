@@ -31,7 +31,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@FluentSetters
 public class BasicStatusLine implements StatusLine {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -109,7 +108,6 @@ public class BasicStatusLine implements StatusLine {
 	 *
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicStatusLine setUnmodifiable() {
 		unmodifiable = true;
 		return this;
@@ -137,7 +135,6 @@ public class BasicStatusLine implements StatusLine {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicStatusLine setProtocolVersion(ProtocolVersion value) {
 		assertModifiable();
 		this.protocolVersion = value;
@@ -158,7 +155,6 @@ public class BasicStatusLine implements StatusLine {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicStatusLine setStatusCode(int value) {
 		assertModifiable();
 		this.statusCode = value;
@@ -184,7 +180,6 @@ public class BasicStatusLine implements StatusLine {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicStatusLine setReasonPhrase(String value) {
 		assertModifiable();
 		this.reasonPhrase = value;
@@ -200,7 +195,6 @@ public class BasicStatusLine implements StatusLine {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicStatusLine setReasonPhraseCatalog(ReasonPhraseCatalog value) {
 		assertModifiable();
 		this.reasonPhraseCatalog = value;
@@ -225,7 +219,6 @@ public class BasicStatusLine implements StatusLine {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicStatusLine setLocale(Locale value) {
 		assertModifiable();
 		this.locale = value;
@@ -236,8 +229,4 @@ public class BasicStatusLine implements StatusLine {
 	public String toString() {
 		return BasicLineFormatter.INSTANCE.formatStatusLine(null, this).toString();
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

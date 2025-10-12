@@ -108,7 +108,6 @@ import org.apache.juneau.serializer.*;
  * @param <E> The array element type.
  * @param <T> The array type.
  */
-@FluentSetters(returns="PrimitiveArrayAssertion<E,T>")
 public class PrimitiveArrayAssertion<E,T> extends FluentPrimitiveArrayAssertion<E,T,PrimitiveArrayAssertion<E,T>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -147,38 +146,33 @@ public class PrimitiveArrayAssertion<E,T> extends FluentPrimitiveArrayAssertion<
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public PrimitiveArrayAssertion<E,T> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public PrimitiveArrayAssertion<E,T> setOut(PrintStream value) {
 		super.setOut(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public PrimitiveArrayAssertion<E,T> setSilent() {
 		super.setSilent();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public PrimitiveArrayAssertion<E,T> setStdOut() {
 		super.setStdOut();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public PrimitiveArrayAssertion<E,T> setThrowable(Class<? extends java.lang.RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

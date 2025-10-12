@@ -64,7 +64,6 @@ public interface StaticFiles extends FileFinder {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder extends BeanBuilder<StaticFiles> {
 
 		List<Header> headers;
@@ -101,7 +100,6 @@ public interface StaticFiles extends FileFinder {
 		 * @param headers The headers to add.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder headers(Header...headers) {
 			addAll(this.headers, headers);
 			return this;
@@ -113,7 +111,6 @@ public interface StaticFiles extends FileFinder {
 		 * @param mimeTypes A .mime.types formatted string of entries.  See {@link MimetypesFileTypeMap#addMimeTypes(String)}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder addMimeTypes(String mimeTypes) {
 			this.mimeTypes.addMimeTypes(mimeTypes);
 			return this;
@@ -125,7 +122,6 @@ public interface StaticFiles extends FileFinder {
 		 * @param mimeTypes The new MIME types registry.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder mimeTypes(MimetypesFileTypeMap mimeTypes) {
 			this.mimeTypes = mimeTypes;
 			return this;
@@ -137,7 +133,6 @@ public interface StaticFiles extends FileFinder {
 		 * @param cachingLimit The maximum file size in bytes.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder caching(long cachingLimit) {
 			fileFinder.caching(cachingLimit);
 			return this;
@@ -151,7 +146,6 @@ public interface StaticFiles extends FileFinder {
 		 * @param recursive If <jk>true</jk>, also recursively adds all the paths of the parent classes as well.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder cp(Class<?> c, String path, boolean recursive) {
 			fileFinder.cp(c, path, recursive);
 			return this;
@@ -163,7 +157,6 @@ public interface StaticFiles extends FileFinder {
 		 * @param path The path relative to the working directory.  Must not be <jk>null</jk>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder dir(String path) {
 			fileFinder.dir(path);
 			return this;
@@ -177,7 +170,6 @@ public interface StaticFiles extends FileFinder {
 		 * 	<br>If none are specified, no files will be excluded.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder exclude(String...patterns) {
 			fileFinder.exclude(patterns);
 			return this;
@@ -191,7 +183,6 @@ public interface StaticFiles extends FileFinder {
 		 * 	<br>The default is <js>".*"</js>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder include(String...patterns) {
 			fileFinder.include(patterns);
 			return this;
@@ -203,27 +194,21 @@ public interface StaticFiles extends FileFinder {
 		 * @param path The directory path.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder path(Path path) {
 			fileFinder.path(path);
 			return this;
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

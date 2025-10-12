@@ -103,18 +103,14 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 		super(QUERY, request, name, value);
 	}
 
-	// <FluentSetters>
-
 	@Override /* GENERATED */
 	public RequestQueryParam schema(HttpPartSchema value) {
 		super.schema(value);
 		return this;
 	}
-
 	@Override /* GENERATED */
 	public RequestQueryParam parser(HttpPartParserSession value) {
 		super.parser(value);
 		return this;
 	}
-	// </FluentSetters>
 }

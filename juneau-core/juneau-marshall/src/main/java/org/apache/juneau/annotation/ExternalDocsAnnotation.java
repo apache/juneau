@@ -119,8 +119,6 @@ public class ExternalDocsAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

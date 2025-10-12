@@ -43,12 +43,38 @@ import org.apache.juneau.rest.client.assertion.*;
  * <p>
  * Instances of this class are created by calling the {@link RestRequest#run()} method.
  *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create a request and response, automatically closing both.</jc>
+ * 	<jk>try</jk> (
+ * 		<jv>RestRequest</jv> <jv>req</jv> = <jv>client</jv>.get(<js>"/myResource"</js>);
+ * 		<jv>RestResponse</jv> <jv>res</jv> = <jv>req</jv>.run()
+ * 	) {
+ * 		String <jv>body</jv> = <jv>res</jv>.getContent().asString();
+ * 	}
+ * </p>
+ *
+ * <p>
+ * Alternatively, you can rely on {@link RestRequest#close()} to automatically close the response:
+ *
+ * <p class='bjava'>
+ * 	<jc>// Only specify RestRequest - it will close the response automatically.</jc>
+ * 	<jk>try</jk> (<jv>RestRequest</jv> <jv>req</jv> = <jv>client</jv>.get(<js>"/myResource"</js>)) {
+ * 		String <jv>body</jv> = <jv>req</jv>.run().getContent().asString();
+ * 	}
+ * </p>
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='note'>This class implements {@link AutoCloseable} and can be used in try-with-resources blocks.
+ * 		The {@link #close()} method allows unchecked exceptions to propagate for debuggability, 
+ * 		while catching and logging checked exceptions to follow AutoCloseable best practices.
+ * </ul>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
-@FluentSetters
-public class RestResponse implements HttpResponse {
+public class RestResponse implements HttpResponse, AutoCloseable {
 
 	private final RestClient client;
 	private final RestRequest request;
@@ -97,11 +123,12 @@ public class RestResponse implements HttpResponse {
 	 * <p>
 	 * This is equivalent to closing the input stream.
 	 *
+	 * <p>
+	 * Any exceptions thrown during close are logged but not propagated.
+	 *
 	 * @return This object.
-	 * @throws RestCallException If one of the {@link RestCallInterceptor RestCallInterceptors} threw an exception.
 	 */
-	@FluentSetter
-	public RestResponse consume() throws RestCallException {
+	public RestResponse consume() {
 		close();
 		return this;
 	}
@@ -428,7 +455,6 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * @return The body of the response.
 	 */
-	@FluentSetter
 	public RestResponse cacheContent() {
 		responseContent.cache();
 		return this;
@@ -835,56 +861,85 @@ public class RestResponse implements HttpResponse {
 		response.setParams(params);
 	}
 
-	void close() throws RestCallException {
+	/**
+	 * Closes this response.
+	 *
+	 * <p>
+	 * This method is idempotent and can be called multiple times without side effects.
+	 *
+	 * <h5 class='section'>Implementation Notes:</h5>
+	 * <p>
+	 * This implementation represents a compromise between strict AutoCloseable compliance and debuggability:
+	 * <ul>
+	 * 	<li>Unchecked exceptions ({@link RuntimeException} and {@link Error}) from interceptors are allowed to propagate.
+	 * 		This ensures programming errors and serious issues are visible during development and testing.
+	 * 	<li>Checked exceptions (including {@link RestCallException}) are caught and logged but not thrown. 
+	 * 		This follows AutoCloseable best practices and prevents close exceptions from interfering with 
+	 * 		try-with-resources cleanup or masking the original exception.
+	 * </ul>
+	 */
+	@Override /* AutoCloseable */
+	public void close() {
 		if (isClosed)
 			return;
 		isClosed = true;
-		EntityUtils.consumeQuietly(response.getEntity());
 
-		if (!request.isLoggingSuppressed() && (request.isDebug() || client.logRequestsPredicate.test(request, this))) {
-			if (client.logRequests == DetailLevel.SIMPLE) {
-				client.log(client.logRequestsLevel, "HTTP {0} {1}, {2}", request.getMethod(), request.getURI(), this.getStatusLine());
-			} else if (request.isDebug() || client.logRequests == DetailLevel.FULL) {
-				String output = getContent().asString();
-				StringBuilder sb = new StringBuilder();
-				sb.append("\n=== HTTP Call (outgoing) ======================================================");
-				sb.append("\n=== REQUEST ===\n");
-				sb.append(request.getMethod()).append(" ").append(request.getURI());
-				sb.append("\n---request headers---");
-				request.getHeaders().forEach(x -> sb.append("\n\t").append(x));
-				if (request.hasHttpEntity()) {
-					sb.append("\n---request entity---");
-					HttpEntity e = request.getHttpEntity();
-					if (e.getContentType() != null)
-						sb.append("\n\t").append(e.getContentType());
-					if (e.isRepeatable()) {
-						try {
-							sb.append("\n---request content---\n").append(EntityUtils.toString(e));
-						} catch (Exception ex) {
-							sb.append("\n---request content exception---\n").append(ex.getMessage());
+		try {
+			EntityUtils.consumeQuietly(response.getEntity());
+
+			if (!request.isLoggingSuppressed() && (request.isDebug() || client.logRequestsPredicate.test(request, this))) {
+				if (client.logRequests == DetailLevel.SIMPLE) {
+					client.log(client.logRequestsLevel, "HTTP {0} {1}, {2}", request.getMethod(), request.getURI(), this.getStatusLine());
+				} else if (request.isDebug() || client.logRequests == DetailLevel.FULL) {
+					String output = getContent().asString();
+					StringBuilder sb = new StringBuilder();
+					sb.append("\n=== HTTP Call (outgoing) ======================================================");
+					sb.append("\n=== REQUEST ===\n");
+					sb.append(request.getMethod()).append(" ").append(request.getURI());
+					sb.append("\n---request headers---");
+					request.getHeaders().forEach(x -> sb.append("\n\t").append(x));
+					if (request.hasHttpEntity()) {
+						sb.append("\n---request entity---");
+						HttpEntity e = request.getHttpEntity();
+						if (e.getContentType() != null)
+							sb.append("\n\t").append(e.getContentType());
+						if (e.isRepeatable()) {
+							try {
+								sb.append("\n---request content---\n").append(EntityUtils.toString(e));
+							} catch (Exception ex) {
+								sb.append("\n---request content exception---\n").append(ex.getMessage());
+							}
 						}
 					}
+					sb.append("\n=== RESPONSE ===\n").append(getStatusLine());
+					sb.append("\n---response headers---");
+					for (Header h : getAllHeaders())
+						sb.append("\n\t").append(h);
+					sb.append("\n---response content---\n").append(output);
+					sb.append("\n=== END =======================================================================");
+					client.log(client.logRequestsLevel, sb.toString());
 				}
-				sb.append("\n=== RESPONSE ===\n").append(getStatusLine());
-				sb.append("\n---response headers---");
-				for (Header h : getAllHeaders())
-					sb.append("\n\t").append(h);
-				sb.append("\n---response content---\n").append(output);
-				sb.append("\n=== END =======================================================================");
-				client.log(client.logRequestsLevel, sb.toString());
 			}
-		}
 
-		for (RestCallInterceptor r : request.interceptors) {
-			try {
-				r.onClose(request, this);
-			} catch (RuntimeException | RestCallException e) {
-				throw e;
-			} catch (Exception e) {
-				throw new RestCallException(this, e, "Interceptor throw exception on close");
+			for (RestCallInterceptor r : request.interceptors) {
+				try {
+					r.onClose(request, this);
+				} catch (RuntimeException | Error e) {
+					// Let unchecked exceptions propagate - these indicate programming errors that should be visible
+					throw e;
+				} catch (Exception e) {
+					// Wrap checked exceptions from interceptors (including RestCallException)
+					throw new RestCallException(this, e, "Interceptor throw exception on close");
+				}
 			}
+			client.onCallClose(request, this);
+		} catch (RuntimeException | Error e) {
+			// Let unchecked exceptions propagate for debuggability
+			throw e;
+		} catch (Exception e) {
+			// Log checked exceptions but don't throw - follows AutoCloseable best practices
+			client.log(Level.WARNING, e, "Error during RestResponse close");
 		}
-		client.onCallClose(request, this);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -924,8 +979,4 @@ public class RestResponse implements HttpResponse {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

@@ -91,10 +91,11 @@ class Ol_Test extends TestBase {
 			.tabindex("bk")
 			.title("bl")
 			.translate("bm")
+			.child("child1")
 			.children("bn", strong("bo"));
 
 		assertString(
-			"<ol reversed='a' start='b' type='c' class='d' accesskey='e' contenteditable='f' dir='g' hidden='h' id='i' lang='j' onabort='k' onblur='l' oncancel='m' oncanplay='n' oncanplaythrough='o' onchange='p' onclick='q' oncuechange='r' ondblclick='s' ondurationchange='t' onemptied='u' onended='v' onerror='w' onfocus='x' oninput='y' oninvalid='z' onkeydown='aa' onkeypress='ab' onkeyup='ac' onload='ad' onloadeddata='ae' onloadedmetadata='af' onloadstart='ag' onmousedown='ah' onmouseenter='ai' onmouseleave='aj' onmousemove='ak' onmouseout='al' onmouseover='am' onmouseup='an' onmousewheel='ao' onpause='ap' onplay='aq' onplaying='ar' onprogress='as' onratechange='at' onreset='au' onresize='av' onscroll='aw' onseeked='ax' onseeking='ay' onselect='az' onshow='ba' onstalled='bb' onsubmit='bc' onsuspend='bd' ontimeupdate='be' ontoggle='bf' onvolumechange='bg' onwaiting='bh' spellcheck='bi' style='bj' tabindex='bk' title='bl' translate='bm'>bn<strong>bo</strong></ol>",
+			"<ol reversed='a' start='b' type='c' class='d' accesskey='e' contenteditable='f' dir='g' hidden='h' id='i' lang='j' onabort='k' onblur='l' oncancel='m' oncanplay='n' oncanplaythrough='o' onchange='p' onclick='q' oncuechange='r' ondblclick='s' ondurationchange='t' onemptied='u' onended='v' onerror='w' onfocus='x' oninput='y' oninvalid='z' onkeydown='aa' onkeypress='ab' onkeyup='ac' onload='ad' onloadeddata='ae' onloadedmetadata='af' onloadstart='ag' onmousedown='ah' onmouseenter='ai' onmouseleave='aj' onmousemove='ak' onmouseout='al' onmouseover='am' onmouseup='an' onmousewheel='ao' onpause='ap' onplay='aq' onplaying='ar' onprogress='as' onratechange='at' onreset='au' onresize='av' onscroll='aw' onseeked='ax' onseeking='ay' onselect='az' onshow='ba' onstalled='bb' onsubmit='bc' onsuspend='bd' ontimeupdate='be' ontoggle='bf' onvolumechange='bg' onwaiting='bh' spellcheck='bi' style='bj' tabindex='bk' title='bl' translate='bm'>child1bn<strong>bo</strong></ol>",
 			x
 		);
 	}

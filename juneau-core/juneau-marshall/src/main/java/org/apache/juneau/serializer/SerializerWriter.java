@@ -39,7 +39,6 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
-@FluentSetters
 public class SerializerWriter extends Writer {
 
 	/** The underlying writer. */
@@ -102,7 +101,6 @@ public class SerializerWriter extends Writer {
 	 * @param depth The indentation.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter cr(int depth) {
 		if (useWhitespace && depth <= maxIndent)
 			return nl(depth).i(depth);
@@ -118,7 +116,6 @@ public class SerializerWriter extends Writer {
 	 * @param depth The indentation.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter cre(int depth) {
 		if (useWhitespace && depth <= maxIndent-1)
 			return nl(depth).i(depth);
@@ -133,7 +130,6 @@ public class SerializerWriter extends Writer {
 	 * @param value The text to write.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter appendln(int indent, String value) {
 		return append(indent, true, value);
 	}
@@ -144,7 +140,6 @@ public class SerializerWriter extends Writer {
 	 * @param value The text to write.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter appendln(String value) {
 		return append(0, true, value);
 	}
@@ -156,7 +151,6 @@ public class SerializerWriter extends Writer {
 	 * @param value The text to write.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter append(int indent, String value) {
 		return append(indent, false, value);
 	}
@@ -168,7 +162,6 @@ public class SerializerWriter extends Writer {
 	 * @param value The character to write.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter append(int indent, char value) {
 		return i(indent).w(value);
 	}
@@ -217,7 +210,6 @@ public class SerializerWriter extends Writer {
 	 * @param value The URI to serialize.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter appendUri(Object value) {
 		uriResolver.append(this, value);
 		return this;
@@ -229,7 +221,6 @@ public class SerializerWriter extends Writer {
 	 * @param value The characters to append to this writer.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter append(char[] value) {
 		for (char c : value)
 			w(c);
@@ -241,7 +232,6 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter s() {
 		if (useWhitespace)
 			w(' ');
@@ -253,7 +243,6 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter q() {
 		w(quoteChar);
 		return this;
@@ -265,7 +254,6 @@ public class SerializerWriter extends Writer {
 	 * @param indent The number of tabs to indent.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter i(int indent) {
 		if (useWhitespace && indent <= maxIndent)
 			for (int i = 0; i < indent; i++)
@@ -279,7 +267,6 @@ public class SerializerWriter extends Writer {
 	 * @param indent The number of tabs to indent.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter ie(int indent) {
 		if (useWhitespace && indent <= maxIndent-1)
 			for (int i = 0; i < indent; i++)
@@ -293,7 +280,6 @@ public class SerializerWriter extends Writer {
 	 * @param indent The current indentation level.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter nl(int indent) {
 		if (useWhitespace && indent <= maxIndent)
 			w('\n');
@@ -310,7 +296,6 @@ public class SerializerWriter extends Writer {
 	 * @param flag The boolean flag.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter sIf(boolean flag) {
 		if (flag && ! useWhitespace)
 			w(' ');
@@ -324,7 +309,6 @@ public class SerializerWriter extends Writer {
 	 * @param indent The current indentation level.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter nlIf(boolean flag, int indent) {
 		if (flag && useWhitespace && indent <= maxIndent)
 			w('\n');
@@ -337,7 +321,6 @@ public class SerializerWriter extends Writer {
 	 * @param value The text to write.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter append(Object value) {
 		w(value == null ? null : value.toString());
 		return this;
@@ -349,7 +332,6 @@ public class SerializerWriter extends Writer {
 	 * @param value The text to write.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter append(String value) {
 		if (value != null)
 			w(value);
@@ -363,7 +345,6 @@ public class SerializerWriter extends Writer {
 	 * @param value The text to write.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter appendIf(boolean flag, String value) {
 		if (flag)
 			w(value);
@@ -377,7 +358,6 @@ public class SerializerWriter extends Writer {
 	 * @param value The text to write.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter appendIf(boolean flag, char value) {
 		if (flag)
 			w(value);
@@ -390,7 +370,6 @@ public class SerializerWriter extends Writer {
 	 * @param value The character to write.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter w(char value) {
 		try {
 			out.write(value);
@@ -406,7 +385,6 @@ public class SerializerWriter extends Writer {
 	 * @param value The string to write.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public SerializerWriter w(String value) {
 		try {
 			out.write(value);
@@ -448,8 +426,4 @@ public class SerializerWriter extends Writer {
 	public void close() throws IOException {
 		out.close();
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

@@ -214,19 +214,14 @@ public class RequestHeader extends RequestHttpPart implements Header {
 		return getName() + ": " + getValue();
 	}
 
-	// <FluentSetters>
-
 	@Override /* GENERATED */
 	public RequestHeader schema(HttpPartSchema value) {
 		super.schema(value);
 		return this;
 	}
-
 	@Override /* GENERATED */
 	public RequestHeader parser(HttpPartParserSession value) {
 		super.parser(value);
 		return this;
 	}
-
-	// </FluentSetters>
 }

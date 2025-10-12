@@ -52,7 +52,6 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
-@FluentSetters
 public class RequestHttpPart {
 
 	private final HttpPartType partType;
@@ -92,7 +91,6 @@ public class RequestHttpPart {
 	 * 	The part schema.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public RequestHttpPart schema(HttpPartSchema value) {
 		this.schema = value;
 		return this;
@@ -109,7 +107,6 @@ public class RequestHttpPart {
 	 * 	<br>If <jk>null</jk>, {@link SimplePartParser#DEFAULT} will be used.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public RequestHttpPart parser(HttpPartParserSession value) {
 		this.parser = value == null ? SimplePartParser.DEFAULT_SESSION : value;
 		return this;
@@ -553,8 +550,4 @@ public class RequestHttpPart {
 	public String toString() {
 		return getName() + "=" + getValue();
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

@@ -97,8 +97,6 @@ public class HasFormDataAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

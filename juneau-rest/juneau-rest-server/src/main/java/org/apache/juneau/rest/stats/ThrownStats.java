@@ -56,7 +56,6 @@ public class ThrownStats implements Cloneable {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder {
 
 		final BeanStore beanStore;
@@ -92,7 +91,6 @@ public class ThrownStats implements Cloneable {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder type(Class<? extends ThrownStats> value) {
 			creator.type(value == null ? ThrownStats.class : value);
 			return this;
@@ -104,7 +102,6 @@ public class ThrownStats implements Cloneable {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder throwable(Throwable value) {
 			this.throwable = value;
 			return this;
@@ -116,7 +113,6 @@ public class ThrownStats implements Cloneable {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder hash(long value) {
 			this.hash = value;
 			return this;
@@ -128,7 +124,6 @@ public class ThrownStats implements Cloneable {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder stackTrace(List<String> value) {
 			this.stackTrace = value;
 			return this;
@@ -140,15 +135,10 @@ public class ThrownStats implements Cloneable {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder causedBy(ThrownStats value) {
 			this.causedBy = value;
 			return this;
 		}
-
-		// <FluentSetters>
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

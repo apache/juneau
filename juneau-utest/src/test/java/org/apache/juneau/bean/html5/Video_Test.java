@@ -99,10 +99,11 @@ class Video_Test extends TestBase {
 			.tabindex("bs")
 			.title("bt")
 			.translate("bu")
+			.child("child1")
 			.children("bv", strong("bw"));
 
 		assertString(
-			"<video autoplay='a' controls='b' crossorigin='c' height='d' loop='e' mediagroup='f' muted='g' poster='h' preload='i' src='j' width='k' class='l' accesskey='m' contenteditable='n' dir='o' hidden='p' id='q' lang='r' onabort='s' onblur='t' oncancel='u' oncanplay='v' oncanplaythrough='w' onchange='x' onclick='y' oncuechange='z' ondblclick='aa' ondurationchange='ab' onemptied='ac' onended='ad' onerror='ae' onfocus='af' oninput='ag' oninvalid='ah' onkeydown='ai' onkeypress='aj' onkeyup='ak' onload='al' onloadeddata='am' onloadedmetadata='an' onloadstart='ao' onmousedown='ap' onmouseenter='aq' onmouseleave='ar' onmousemove='as' onmouseout='at' onmouseover='au' onmouseup='av' onmousewheel='aw' onpause='ax' onplay='ay' onplaying='az' onprogress='ba' onratechange='bb' onreset='bc' onresize='bd' onscroll='be' onseeked='bf' onseeking='bg' onselect='bh' onshow='bi' onstalled='bj' onsubmit='bk' onsuspend='bl' ontimeupdate='bm' ontoggle='bn' onvolumechange='bo' onwaiting='bp' spellcheck='bq' style='br' tabindex='bs' title='bt' translate='bu'>bv<strong>bw</strong></video>",
+			"<video autoplay='a' controls='b' crossorigin='c' height='d' loop='e' mediagroup='f' muted='g' poster='h' preload='i' src='j' width='k' class='l' accesskey='m' contenteditable='n' dir='o' hidden='p' id='q' lang='r' onabort='s' onblur='t' oncancel='u' oncanplay='v' oncanplaythrough='w' onchange='x' onclick='y' oncuechange='z' ondblclick='aa' ondurationchange='ab' onemptied='ac' onended='ad' onerror='ae' onfocus='af' oninput='ag' oninvalid='ah' onkeydown='ai' onkeypress='aj' onkeyup='ak' onload='al' onloadeddata='am' onloadedmetadata='an' onloadstart='ao' onmousedown='ap' onmouseenter='aq' onmouseleave='ar' onmousemove='as' onmouseout='at' onmouseover='au' onmouseup='av' onmousewheel='aw' onpause='ax' onplay='ay' onplaying='az' onprogress='ba' onratechange='bb' onreset='bc' onresize='bd' onscroll='be' onseeked='bf' onseeking='bg' onselect='bh' onshow='bi' onstalled='bj' onsubmit='bk' onsuspend='bl' ontimeupdate='bm' ontoggle='bn' onvolumechange='bo' onwaiting='bp' spellcheck='bq' style='br' tabindex='bs' title='bt' translate='bu'>child1bv<strong>bw</strong></video>",
 			x
 		);
 	}

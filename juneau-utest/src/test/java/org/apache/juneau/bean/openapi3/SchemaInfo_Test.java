@@ -104,13 +104,24 @@ class SchemaInfo_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, () -> x.set(null, "value"));
 		}
 
+		@Test void a08b_getSetRef() {
+			// Test get/set with "$ref" property to cover switch branches
+			var x = bean();
+			x.set("$ref", "#/components/schemas/MySchema");
+			assertEquals("#/components/schemas/MySchema", x.get("$ref", String.class));
+			assertEquals("#/components/schemas/MySchema", x.getRef());
+		}
+
 		@Test void a09_addMethods() {
 			assertBean(
 				bean()
 					.addEnum("a1", "a2")
-					.addRequired("b1", "b2"),
-				"enum,required",
-				"[a1,a2],[b1,b2]"
+					.addRequired("b1", "b2")
+					.addAllOf(schemaInfo("c1"), schemaInfo("c2"))
+					.addAnyOf(schemaInfo("d1"), schemaInfo("d2"))
+					.addOneOf(schemaInfo("e1"), schemaInfo("e2")),
+				"enum,required,allOf{#{type}},anyOf{#{type}},oneOf{#{type}}",
+				"[a1,a2],[b1,b2],{[{c1},{c2}]},{[{d1},{d2}]},{[{e1},{e2}]}"
 			);
 		}
 
@@ -362,6 +373,43 @@ class SchemaInfo_Test extends TestBase {
 			assertSame(schema, result);
 			assertEquals("string", result.getType());
 			assertEquals("Test schema", result.getDescription());
+		}
+
+		@Test void d06_resolveRefs_maxDepthDirect() {
+			// Test max depth directly (covers the refStack.size() >= maxDepth branch)
+			var openApi = openApi()
+				.setComponents(components().setSchemas(map("MySchema", schemaInfo().setType("string"))));
+
+			var refStack = new ArrayDeque<String>();
+			refStack.add("dummy1");
+			refStack.add("dummy2");
+			refStack.add("dummy3");
+			
+			var schema = schemaInfo().setRef("#/components/schemas/MySchema");
+			var result = schema.resolveRefs(openApi, refStack, 3);
+
+			// Should return the original object without resolving
+			assertSame(schema, result);
+			assertEquals("#/components/schemas/MySchema", result.getRef());
+		}
+
+		@Test void d07_resolveRefs_additionalProperties() {
+			// Test resolveRefs with additionalProperties to cover that branch
+			var openApi = openApi()
+				.setComponents(components().setSchemas(map(
+					"MyAdditional", schemaInfo().setType("string").setDescription("Additional property schema")
+				)));
+
+			var schema = schemaInfo()
+				.setType("object")
+				.setAdditionalProperties(schemaInfo().setRef("#/components/schemas/MyAdditional"));
+			var result = schema.resolveRefs(openApi, new ArrayDeque<>(), 10);
+
+			// additionalProperties should have its ref resolved
+			assertSame(schema, result);
+			assertNotNull(result.getAdditionalProperties());
+			assertEquals("string", result.getAdditionalProperties().getType());
+			assertNull(result.getAdditionalProperties().getRef());
 		}
 	}
 

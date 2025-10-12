@@ -119,9 +119,6 @@ public class ContactAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

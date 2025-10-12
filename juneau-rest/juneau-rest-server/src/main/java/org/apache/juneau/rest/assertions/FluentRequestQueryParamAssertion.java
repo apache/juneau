@@ -130,7 +130,6 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentRequestQueryParamAssertion<R>")
 public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R> {
 
 	private final RequestQueryParam value;
@@ -249,44 +248,39 @@ public class FluentRequestQueryParamAssertion<R> extends FluentStringAssertion<R
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestQueryParamAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestQueryParamAssertion<R> setOut(PrintStream value) {
 		super.setOut(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestQueryParamAssertion<R> setSilent() {
 		super.setSilent();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestQueryParamAssertion<R> setStdOut() {
 		super.setStdOut();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
+	@Override /* Overridden from Assertion */
 	public FluentRequestQueryParamAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.assertions.FluentStringAssertion */
+	@Override /* Overridden from FluentStringAssertion */
 	public FluentRequestQueryParamAssertion<R> asJavaStrings() {
 		super.asJavaStrings();
 		return this;
 	}
-
-	// </FluentSetters>
 }

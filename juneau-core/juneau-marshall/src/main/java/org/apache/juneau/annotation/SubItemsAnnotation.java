@@ -507,8 +507,6 @@ public class SubItemsAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

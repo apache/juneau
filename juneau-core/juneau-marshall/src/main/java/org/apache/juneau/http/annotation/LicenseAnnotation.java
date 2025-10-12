@@ -108,9 +108,6 @@ public class LicenseAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

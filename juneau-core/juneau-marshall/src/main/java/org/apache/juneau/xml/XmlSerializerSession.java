@@ -73,7 +73,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters
 	public static class Builder extends WriterSerializerSession.Builder {
 
 		XmlSerializer ctx;
@@ -92,124 +91,119 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		public XmlSerializerSession build() {
 			return new XmlSerializerSession(this);
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder debug(Boolean value) {
 			super.debug(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder properties(Map<String,Object> value) {
 			super.properties(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
 			super.property(key, value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.ContextSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder unmodifiable() {
 			super.unmodifiable();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder localeDefault(Locale value) {
 			super.localeDefault(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder mediaType(MediaType value) {
 			super.mediaType(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder mediaTypeDefault(MediaType value) {
 			super.mediaTypeDefault(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder timeZone(TimeZone value) {
 			super.timeZone(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.BeanSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder timeZoneDefault(TimeZone value) {
 			super.timeZoneDefault(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.SerializerSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder javaMethod(Method value) {
 			super.javaMethod(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.SerializerSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder resolver(VarResolverSession value) {
 			super.resolver(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.SerializerSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder schema(HttpPartSchema value) {
 			super.schema(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.SerializerSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder schemaDefault(HttpPartSchema value) {
 			super.schemaDefault(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.SerializerSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder uriContext(UriContext value) {
 			super.uriContext(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.WriterSerializerSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder fileCharset(Charset value) {
 			super.fileCharset(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.WriterSerializerSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.serializer.WriterSerializerSession.Builder */
+		@Override /* Overridden from Builder */
 		public Builder useWhitespace(Boolean value) {
 			super.useWhitespace(value);
 			return this;
 		}
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -220,6 +214,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	private Namespace
 		defaultNamespace;
 	private Namespace[] namespaces = {};
+	private final String textNodeDelimiter;
 
 	/**
 	 * Constructor.
@@ -231,6 +226,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		ctx = builder.ctx;
 		namespaces = ctx.getNamespaces();
 		defaultNamespace = findDefaultNamespace(ctx.getDefaultNamespace());
+		textNodeDelimiter = ctx.textNodeDelimiter;
 	}
 
 	private Namespace findDefaultNamespace(Namespace n) {
@@ -823,13 +819,27 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			if (contentType == null) {
 			} else if (contentType.isCollection()) {
 				Collection c = (Collection)content;
+				boolean previousWasTextNode = false;
 				for (Object value : c) {
+					boolean currentIsTextNode = isTextNode(value);
+					// Insert delimiter between consecutive text nodes
+					if (previousWasTextNode && currentIsTextNode && textNodeDelimiter != null && !textNodeDelimiter.isEmpty()) {
+						out.append(textNodeDelimiter);
+					}
 					serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
+					previousWasTextNode = currentIsTextNode;
 				}
 			} else if (contentType.isArray()) {
 				Collection c = toList(Object[].class, content);
+				boolean previousWasTextNode = false;
 				for (Object value : c) {
+					boolean currentIsTextNode = isTextNode(value);
+					// Insert delimiter between consecutive text nodes
+					if (previousWasTextNode && currentIsTextNode && textNodeDelimiter != null && !textNodeDelimiter.isEmpty()) {
+						out.append(textNodeDelimiter);
+					}
 					serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
+					previousWasTextNode = currentIsTextNode;
 				}
 		} else {
 			serializeAnything(out, content, contentType, null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
@@ -860,9 +870,33 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			eNs.set(bpXml.getNamespace());
 		}
 
-		forEachEntry(c, x -> serializeAnything(out, x, eeType, null, eName.get(), eNs.get(), false, XmlFormat.DEFAULT, isMixed, false, null));
+		// Track if previous element was a text node for delimiter insertion
+		Value<Boolean> previousWasTextNode = Value.of(false);
+
+		forEachEntry(c, x -> {
+			boolean currentIsTextNode = isTextNode(x);
+
+			// Insert delimiter between consecutive text nodes
+			if (previousWasTextNode.get() && currentIsTextNode && textNodeDelimiter != null && !textNodeDelimiter.isEmpty()) {
+				out.append(textNodeDelimiter);
+			}
+
+			serializeAnything(out, x, eeType, null, eName.get(), eNs.get(), false, XmlFormat.DEFAULT, isMixed, false, null);
+			previousWasTextNode.set(currentIsTextNode);
+		});
 
 		return out;
+	}
+	
+	/**
+	 * Checks if an object is a text node (String or primitive type).
+	 */
+	private boolean isTextNode(Object o) {
+		if (o == null)
+			return false;
+		Class<?> c = o.getClass();
+		// Text nodes are strings and primitives (not beans, collections, arrays, or other complex types)
+		return CharSequence.class.isAssignableFrom(c) || Number.class.isAssignableFrom(c) || Boolean.class.isAssignableFrom(c) || c.isPrimitive();
 	}
 
 	enum JsonType {

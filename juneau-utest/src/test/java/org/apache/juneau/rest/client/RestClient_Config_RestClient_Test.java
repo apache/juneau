@@ -210,7 +210,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 		public void onConnect(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
 		@Override
 		public void onClose(RestRequest req, RestResponse res) throws Exception {
-			throw new RestCallException(null,null,"foo");
+			throw new RuntimeException("foo");
 		}
 	}
 
@@ -239,7 +239,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 		public void onConnect(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
 		@Override
 		public void onClose(RestRequest req, RestResponse res) throws Exception {
-			throw new IOException("foo");
+			throw new RuntimeException("foo");
 		}
 	}
 
@@ -265,23 +265,23 @@ class RestClient_Config_RestClient_Test extends TestBase {
 
 		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(A5d.class).build().get("/checkHeader"));
 		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(A5e.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run());
-		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(A5f.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").interceptors(A5f.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
 		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5d()).build().get("/checkHeader"));
 		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5e()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run());
-		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5f()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5f()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
 		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5d()));
 		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5e()).header("Check","foo").header("Foo","f3").run());
-		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5f()).header("Check","foo").header("Foo","f3").run().close());
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5f()).header("Check","foo").header("Foo","f3").run().close());
 
 		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(A5g.class).build().get("/checkHeader"));
 		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(A5h.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run());
-		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(A5i.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").interceptors(A5i.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
 		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5g()).build().get("/checkHeader"));
 		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5h()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run());
-		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5i()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5i()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
 		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5g()));
 		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5h()).header("Check","foo").header("Foo","f3").run());
-		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5i()).header("Check","foo").header("Foo","f3").run().close());
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5i()).header("Check","foo").header("Foo","f3").run().close());
 
 		assertThrowsWithMessage(ConfigException.class, "Invalid class of type 'java.lang.String' passed to interceptors().", ()->client().interceptors(String.class));
 		assertThrowsWithMessage(ConfigException.class, "Invalid object of type 'java.lang.String' passed to interceptors().", ()->client().interceptors(""));

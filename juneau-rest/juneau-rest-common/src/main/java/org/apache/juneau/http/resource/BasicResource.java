@@ -48,7 +48,6 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @BeanIgnore  /* Use toString() to serialize */
-@FluentSetters
 public class BasicResource implements HttpResource {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -130,7 +129,6 @@ public class BasicResource implements HttpResource {
 	 *
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicResource setUnmodifiable() {
 		unmodifiable = true;
 		entity.setUnmodifiable();
@@ -170,7 +168,6 @@ public class BasicResource implements HttpResource {
 	 * @param value The entity content, can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicResource setContent(Object value) {
 		entity.setContent(value);
 		return this;
@@ -186,7 +183,6 @@ public class BasicResource implements HttpResource {
 	 * @param value The entity content, can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicResource setContent(Supplier<?> value) {
 		entity.setContent(value);
 		return this;
@@ -198,7 +194,6 @@ public class BasicResource implements HttpResource {
 	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicResource setContentType(String value) {
 		entity.setContentType(value);
 		return this;
@@ -210,7 +205,6 @@ public class BasicResource implements HttpResource {
 	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicResource setContentType(ContentType value) {
 		entity.setContentType(value);
 		return this;
@@ -222,7 +216,6 @@ public class BasicResource implements HttpResource {
 	 * @param value The new <c>Content-Length</c> header value, or <c>-1</c> to unset.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicResource setContentLength(long value) {
 		entity.setContentLength(value);
 		return this;
@@ -234,7 +227,6 @@ public class BasicResource implements HttpResource {
 	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicResource setContentEncoding(String value) {
 		entity.setContentEncoding(value);
 		return this;
@@ -246,7 +238,6 @@ public class BasicResource implements HttpResource {
 	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicResource setContentEncoding(ContentEncoding value) {
 		entity.setContentEncoding(value);
 		return this;
@@ -262,7 +253,6 @@ public class BasicResource implements HttpResource {
 	 *
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicResource setChunked() {
 		entity.setChunked();
 		return this;
@@ -279,7 +269,6 @@ public class BasicResource implements HttpResource {
 	 * @param value The new value for this flag.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicResource setChunked(boolean value) {
 		entity.setChunked(value);
 		return this;
@@ -292,7 +281,6 @@ public class BasicResource implements HttpResource {
 	 * @return This object.
 	 * @throws IOException If entity could not be read into memory.
 	 */
-	@FluentSetter
 	public BasicResource setCached() throws IOException {
 		entity.setCached();
 		return this;
@@ -340,7 +328,6 @@ public class BasicResource implements HttpResource {
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	@FluentSetter
 	public BasicResource setHeaders(HeaderList value) {
 		headers = value.copy();
 		return this;
@@ -505,8 +492,4 @@ public class BasicResource implements HttpResource {
 	public HeaderList getHeaders() {
 		return headers;
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

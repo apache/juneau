@@ -51,7 +51,6 @@ public abstract class BeanContextable extends Context {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters(ignore={"annotations","debug"})
 	public abstract static class Builder extends Context.Builder {
 
 		BeanContext.Builder bcBuilder;
@@ -137,7 +136,6 @@ public abstract class BeanContextable extends Context {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanContext(BeanContext.Builder value) {
 			this.bcBuilder = value;
 			return this;
@@ -154,7 +152,6 @@ public abstract class BeanContextable extends Context {
 		 * @param value The bean context to use.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanContext(BeanContext value) {
 			this.bc = value;
 			return this;
@@ -202,7 +199,6 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>The default is {@link Visibility#PUBLIC}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanClassVisibility(Visibility value) {
 			bcBuilder.beanClassVisibility(value);
 			return this;
@@ -251,7 +247,6 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>The default is {@link Visibility#PUBLIC}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanConstructorVisibility(Visibility value) {
 			bcBuilder.beanConstructorVisibility(value);
 			return this;
@@ -309,7 +304,6 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>The default is {@link Visibility#PUBLIC}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanFieldVisibility(Visibility value) {
 			bcBuilder.beanFieldVisibility(value);
 			return this;
@@ -365,7 +359,6 @@ public abstract class BeanContextable extends Context {
 		 * 	The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
 			bcBuilder.beanInterceptor(on, value);
 			return this;
@@ -401,7 +394,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanMapPutReturnsOldValue() {
 			bcBuilder.beanMapPutReturnsOldValue();
 			return this;
@@ -449,7 +441,6 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>The default is {@link Visibility#PUBLIC}
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanMethodVisibility(Visibility value) {
 			bcBuilder.beanMethodVisibility(value);
 			return this;
@@ -503,7 +494,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beansRequireDefaultConstructor() {
 			bcBuilder.beansRequireDefaultConstructor();
 			return this;
@@ -552,7 +542,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beansRequireSerializable() {
 			bcBuilder.beansRequireSerializable();
 			return this;
@@ -599,7 +588,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beansRequireSettersForGetters() {
 			bcBuilder.beansRequireSettersForGetters();
 			return this;
@@ -643,7 +631,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder disableBeansRequireSomeProperties() {
 			bcBuilder.disableBeansRequireSomeProperties();
 			return this;
@@ -704,7 +691,6 @@ public abstract class BeanContextable extends Context {
 		 * @param properties Comma-delimited list of property names.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanProperties(Class<?> beanClass, String properties) {
 			bcBuilder.beanProperties(beanClass, properties);
 			return this;
@@ -767,7 +753,6 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanProperties(Map<String,Object> values) {
 			bcBuilder.beanProperties(values);
 			return this;
@@ -830,7 +815,6 @@ public abstract class BeanContextable extends Context {
 		 * @param properties Comma-delimited list of property names.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanProperties(String beanClassName, String properties) {
 			bcBuilder.beanProperties(beanClassName, properties);
 			return this;
@@ -883,7 +867,6 @@ public abstract class BeanContextable extends Context {
 		 * @param properties Comma-delimited list of property names.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
 			bcBuilder.beanPropertiesExcludes(beanClass, properties);
 			return this;
@@ -938,7 +921,6 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
 			bcBuilder.beanPropertiesExcludes(values);
 			return this;
@@ -993,7 +975,6 @@ public abstract class BeanContextable extends Context {
 		 * @param properties Comma-delimited list of property names.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
 			bcBuilder.beanPropertiesExcludes(beanClassName, properties);
 			return this;
@@ -1049,7 +1030,6 @@ public abstract class BeanContextable extends Context {
 		 * @param properties Comma-delimited list of property names.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
 			bcBuilder.beanPropertiesReadOnly(beanClass, properties);
 			return this;
@@ -1107,7 +1087,6 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
 			bcBuilder.beanPropertiesReadOnly(values);
 			return this;
@@ -1165,7 +1144,6 @@ public abstract class BeanContextable extends Context {
 		 * @param properties Comma-delimited list of property names.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
 			bcBuilder.beanPropertiesReadOnly(beanClassName, properties);
 			return this;
@@ -1220,7 +1198,6 @@ public abstract class BeanContextable extends Context {
 		 * @param properties Comma-delimited list of property names.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
 			bcBuilder.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
@@ -1277,7 +1254,6 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
 			bcBuilder.beanPropertiesWriteOnly(values);
 			return this;
@@ -1334,7 +1310,6 @@ public abstract class BeanContextable extends Context {
 		 * @param properties Comma-delimited list of property names.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
 			bcBuilder.beanPropertiesWriteOnly(beanClassName, properties);
 			return this;
@@ -1429,7 +1404,6 @@ public abstract class BeanContextable extends Context {
 		 * 	The values to add to this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder beanDictionary(Class<?>...values) {
 			bcBuilder.beanDictionary(values);
 			return this;
@@ -1478,7 +1452,6 @@ public abstract class BeanContextable extends Context {
 		 * 	The new values for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder dictionaryOn(Class<?> on, Class<?>...values) {
 			bcBuilder.dictionaryOn(on, values);
 			return this;
@@ -1528,7 +1501,6 @@ public abstract class BeanContextable extends Context {
 		 * 	An instance of the POJO class used for examples.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public <T> Builder example(Class<T> pojoClass, T o) {
 			bcBuilder.example(pojoClass, o);
 			return this;
@@ -1578,7 +1550,6 @@ public abstract class BeanContextable extends Context {
 		 * @param json The JSON 5 representation of the example.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public <T> Builder example(Class<T> pojoClass, String json) {
 			bcBuilder.example(pojoClass, json);
 			return this;
@@ -1629,7 +1600,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder findFluentSetters() {
 			bcBuilder.findFluentSetters();
 			return this;
@@ -1670,7 +1640,6 @@ public abstract class BeanContextable extends Context {
 		 * @param on The class that this applies to.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder findFluentSetters(Class<?> on) {
 			bcBuilder.findFluentSetters(on);
 			return this;
@@ -1709,7 +1678,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder ignoreInvocationExceptionsOnGetters() {
 			bcBuilder.ignoreInvocationExceptionsOnGetters();
 			return this;
@@ -1748,7 +1716,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder ignoreInvocationExceptionsOnSetters() {
 			bcBuilder.ignoreInvocationExceptionsOnSetters();
 			return this;
@@ -1791,7 +1758,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder disableIgnoreMissingSetters() {
 			bcBuilder.disableIgnoreMissingSetters();
 			return this;
@@ -1831,7 +1797,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder disableIgnoreTransientFields() {
 			bcBuilder.disableIgnoreTransientFields();
 			return this;
@@ -1868,7 +1833,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder ignoreUnknownBeanProperties() {
 			bcBuilder.ignoreUnknownBeanProperties();
 			return this;
@@ -1887,7 +1851,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder ignoreUnknownEnumValues() {
 			bcBuilder.ignoreUnknownEnumValues();
 			return this;
@@ -1924,7 +1887,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder disableIgnoreUnknownNullBeanProperties() {
 			bcBuilder.disableIgnoreUnknownNullBeanProperties();
 			return this;
@@ -1964,7 +1926,6 @@ public abstract class BeanContextable extends Context {
 		 * @param implClass The implementation class.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
 			bcBuilder.implClass(interfaceClass, implClass);
 			return this;
@@ -2004,7 +1965,6 @@ public abstract class BeanContextable extends Context {
 		 * 	The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
 			bcBuilder.implClasses(values);
 			return this;
@@ -2051,7 +2011,6 @@ public abstract class BeanContextable extends Context {
 		 * 	The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
 			bcBuilder.interfaceClass(on, value);
 			return this;
@@ -2097,7 +2056,6 @@ public abstract class BeanContextable extends Context {
 		 * 	The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder interfaces(Class<?>...value) {
 			bcBuilder.interfaces(value);
 			return this;
@@ -2141,7 +2099,6 @@ public abstract class BeanContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder locale(Locale value) {
 			bcBuilder.locale(value);
 			return this;
@@ -2185,7 +2142,6 @@ public abstract class BeanContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder mediaType(MediaType value) {
 			bcBuilder.mediaType(value);
 			return this;
@@ -2245,7 +2201,6 @@ public abstract class BeanContextable extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder notBeanClasses(Class<?>...values) {
 			bcBuilder.notBeanClasses(values);
 			return this;
@@ -2291,7 +2246,6 @@ public abstract class BeanContextable extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder notBeanPackages(String...values) {
 			bcBuilder.notBeanPackages(values);
 			return this;
@@ -2338,7 +2292,6 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>The default is {@link BasicPropertyNamer}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
 			bcBuilder.propertyNamer(value);
 			return this;
@@ -2379,7 +2332,6 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>The default is {@link BasicPropertyNamer}.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
 			bcBuilder.propertyNamer(on, value);
 			return this;
@@ -2428,7 +2380,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder sortProperties() {
 			bcBuilder.sortProperties();
 			return this;
@@ -2467,7 +2418,6 @@ public abstract class BeanContextable extends Context {
 		 * @param on The bean classes to sort properties on.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder sortProperties(Class<?>...on) {
 			bcBuilder.sortProperties(on);
 			return this;
@@ -2513,7 +2463,6 @@ public abstract class BeanContextable extends Context {
 		 * 	The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder stopClass(Class<?> on, Class<?> value) {
 			bcBuilder.stopClass(on, value);
 			return this;
@@ -2604,7 +2553,6 @@ public abstract class BeanContextable extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder swaps(Object...values) {
 			bcBuilder.swaps(values);
 			return this;
@@ -2622,7 +2570,6 @@ public abstract class BeanContextable extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder swaps(Class<?>...values) {
 			bcBuilder.swaps(values);
 			return this;
@@ -2647,7 +2594,6 @@ public abstract class BeanContextable extends Context {
 		 * @param swapFunction The function to convert the object.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			bcBuilder.swap(normalClass, swappedClass, swapFunction);
 			return this;
@@ -2673,7 +2619,6 @@ public abstract class BeanContextable extends Context {
 		 * @param unswapFunction The function to convert the object during parsing.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			bcBuilder.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
@@ -2716,7 +2661,6 @@ public abstract class BeanContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder timeZone(TimeZone value) {
 			bcBuilder.timeZone(value);
 			return this;
@@ -2763,7 +2707,6 @@ public abstract class BeanContextable extends Context {
 		 * 	The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder typeName(Class<?> on, String value) {
 			bcBuilder.typeName(on, value);
 			return this;
@@ -2821,7 +2764,6 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>The default is <js>"_type"</js>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder typePropertyName(String value) {
 			bcBuilder.typePropertyName(value);
 			return this;
@@ -2868,7 +2810,6 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>The default is <js>"_type"</js>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder typePropertyName(Class<?> on, String value) {
 			bcBuilder.typePropertyName(on, value);
 			return this;
@@ -2914,7 +2855,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder useEnumNames() {
 			bcBuilder.useEnumNames();
 			return this;
@@ -2935,7 +2875,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder disableInterfaceProxies() {
 			bcBuilder.disableInterfaceProxies();
 			return this;
@@ -2963,7 +2902,6 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder useJavaBeanIntrospector() {
 			bcBuilder.useJavaBeanIntrospector();
 			return this;
@@ -2982,46 +2920,41 @@ public abstract class BeanContextable extends Context {
 			super.debug();
 			return this;
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
 			super.cache(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder impl(Context value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
 			return this;
 		}
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

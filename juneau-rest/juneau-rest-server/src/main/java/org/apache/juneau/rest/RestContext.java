@@ -168,7 +168,6 @@ public class RestContext extends Context {
 	/**
 	 * Builder class.
 	 */
-	@FluentSetters(ignore={"set"})
 	public static class Builder extends Context.Builder implements ServletConfig {
 
 		private static final Set<Class<?>> DELAYED_INJECTION = Utils.set(
@@ -908,7 +907,6 @@ public class RestContext extends Context {
 		 * @param config The new config file.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder config(Config config) {
 			this.config = config;
 			return this;
@@ -2861,7 +2859,6 @@ public class RestContext extends Context {
 		 * @param values The headers to add.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder defaultRequestHeaders(Header...values) {
 			defaultRequestHeaders().setDefault(values);
 			return this;
@@ -2875,7 +2872,6 @@ public class RestContext extends Context {
 		 * 	<br>Ignored if <jk>null</jk> or empty.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder defaultAccept(String value) {
 			if (Utils.isNotEmpty(value))
 				defaultRequestHeaders(accept(value));
@@ -2890,7 +2886,6 @@ public class RestContext extends Context {
 		 * 	<br>Ignored if <jk>null</jk> or empty.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder defaultContentType(String value) {
 			if (Utils.isNotEmpty(value))
 				defaultRequestHeaders(contentType(value));
@@ -2994,7 +2989,6 @@ public class RestContext extends Context {
 		 * @param values The headers to add.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder defaultResponseHeaders(Header...values) {
 			defaultResponseHeaders().setDefault(values);
 			return this;
@@ -3094,7 +3088,6 @@ public class RestContext extends Context {
 		 * @param values The attributes.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder defaultRequestAttributes(NamedAttribute...values) {
 			defaultRequestAttributes().add(values);
 			return this;
@@ -3158,7 +3151,6 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		@SafeVarargs
-		@FluentSetter
 		public final Builder restOpArgs(Class<? extends RestOpArg>...value) {
 			restOpArgs().add(value);
 			return this;
@@ -3292,7 +3284,6 @@ public class RestContext extends Context {
 		 * @param value The debug default value.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder debugDefault(Enablement value) {
 			defaultSettings().set("RestContext.debugDefault", value);
 			return this;
@@ -3981,7 +3972,6 @@ public class RestContext extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder allowedHeaderParams(String value) {
 			allowedHeaderParams = value;
 			return this;
@@ -4044,7 +4034,6 @@ public class RestContext extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder allowedMethodHeaders(String value) {
 			allowedMethodHeaders = value;
 			return this;
@@ -4117,7 +4106,6 @@ public class RestContext extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder allowedMethodParams(String value) {
 			allowedMethodParams = value;
 			return this;
@@ -4189,7 +4177,6 @@ public class RestContext extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder clientVersionHeader(String value) {
 			clientVersionHeader = value;
 			return this;
@@ -4241,7 +4228,6 @@ public class RestContext extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder defaultCharset(Charset value) {
 			defaultCharset = value;
 			return this;
@@ -4289,7 +4275,6 @@ public class RestContext extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder disableContentParam() {
 			return disableContentParam(true);
 		}
@@ -4303,7 +4288,6 @@ public class RestContext extends Context {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder disableContentParam(boolean value) {
 			disableContentParam = value;
 			return this;
@@ -4368,7 +4352,6 @@ public class RestContext extends Context {
 		 * 	<br>The default is <js>"100M"</js>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder maxInput(String value) {
 			maxInput = StringUtils.parseLongWithSuffix(value);
 			return this;
@@ -4385,7 +4368,6 @@ public class RestContext extends Context {
 		 * 	<br>The default is <jk>false</jk>.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder renderResponseStackTraces(boolean value) {
 			renderResponseStackTraces = value;
 			return this;
@@ -4399,7 +4381,6 @@ public class RestContext extends Context {
 		 *
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder renderResponseStackTraces() {
 			renderResponseStackTraces = true;
 			return this;
@@ -4470,7 +4451,6 @@ public class RestContext extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder uriAuthority(String value) {
 			uriAuthority = value;
 			return this;
@@ -4531,7 +4511,6 @@ public class RestContext extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder uriContext(String value) {
 			uriContext = value;
 			return this;
@@ -4590,7 +4569,6 @@ public class RestContext extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder uriRelativity(UriRelativity value) {
 			uriRelativity = value;
 			return this;
@@ -4649,7 +4627,6 @@ public class RestContext extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder uriResolution(UriResolution value) {
 			uriResolution = value;
 			return this;
@@ -4833,7 +4810,6 @@ public class RestContext extends Context {
 		 * 	</ul>
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder children(Object...values) {
 			addAll(children, values);
 			return this;
@@ -4852,7 +4828,6 @@ public class RestContext extends Context {
 		 * @param child The child to add to this resource.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder child(String path, Object child) {
 			children.add(new RestChild(path, child));
 			return this;
@@ -4871,7 +4846,6 @@ public class RestContext extends Context {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder parserListener(Class<? extends ParserListener> value) {
 			if (isNotVoid(value))
 				parsers.forEach(x -> x.listener(value));
@@ -4934,7 +4908,6 @@ public class RestContext extends Context {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder path(String value) {
 			value = trimLeadingSlashes(value);
 			if (Utils.isNotEmpty(value))
@@ -4993,7 +4966,6 @@ public class RestContext extends Context {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder restChildrenClass(Class<? extends RestChildren> value) {
 			childrenClass = value;
 			return this;
@@ -5058,7 +5030,6 @@ public class RestContext extends Context {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder restOpContextClass(Class<? extends RestOpContext> value) {
 			opContextClass = value;
 			return this;
@@ -5115,7 +5086,6 @@ public class RestContext extends Context {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder restOperationsClass(Class<? extends RestOperations> value) {
 			operationsClass = value;
 			return this;
@@ -5134,7 +5104,6 @@ public class RestContext extends Context {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder serializerListener(Class<? extends SerializerListener> value) {
 			if (isNotVoid(value))
 				serializers.forEach(x -> x.listener(value));
@@ -5188,7 +5157,6 @@ public class RestContext extends Context {
 		 * @param values The values to add to this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder produces(MediaType...values) {
 			produces = addAll(produces, values);
 			return this;
@@ -5248,7 +5216,6 @@ public class RestContext extends Context {
 		 * @param values The values to add to this setting.
 		 * @return This object.
 		 */
-		@FluentSetter
 		public Builder consumes(MediaType...values) {
 			consumes = addAll(consumes, values);
 			return this;
@@ -5262,65 +5229,59 @@ public class RestContext extends Context {
 		public Optional<List<MediaType>> consumes() {
 			return Utils.opt(consumes);
 		}
-
-		// <FluentSetters>
-
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
 			super.cache(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder debug(boolean value) {
 			super.debug(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder impl(Context value) {
 			super.impl(value);
 			return this;
 		}
 
-		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
 			return this;
 		}
-
-		// </FluentSetters>
-
 		//----------------------------------------------------------------------------------------------------
 		// Helper methods
 		//----------------------------------------------------------------------------------------------------

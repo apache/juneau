@@ -49,7 +49,6 @@ import org.apache.juneau.reflect.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@FluentSetters
 @BeanIgnore
 public class BasicPart implements NameValuePair, Headerable {
 	private final String name;
@@ -196,8 +195,4 @@ public class BasicPart implements NameValuePair, Headerable {
 			o = ((Supplier<?>)o).get();
 		return o;
 	}
-
-	// <FluentSetters>
-
-	// </FluentSetters>
 }

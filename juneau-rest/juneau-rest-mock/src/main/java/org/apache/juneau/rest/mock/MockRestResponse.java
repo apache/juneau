@@ -28,7 +28,6 @@ import org.apache.juneau.rest.client.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
  * </ul>
 */
-@FluentSetters
 public class MockRestResponse extends org.apache.juneau.rest.client.RestResponse {
 
 	/**
@@ -43,20 +42,15 @@ public class MockRestResponse extends org.apache.juneau.rest.client.RestResponse
 		super(client, request, response, parser);
 		((MockRestClient)client).currentResponse(this);
 	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.rest.client.RestResponse */
+	@Override /* Overridden from RestResponse */
 	public MockRestResponse cacheContent() {
 		super.cacheContent();
 		return this;
 	}
 
-	@Override /* GENERATED - org.apache.juneau.rest.client.RestResponse */
-	public MockRestResponse consume() throws RestCallException{
+	@Override /* Overridden from RestResponse */
+	public MockRestResponse consume() {
 		super.consume();
 		return this;
 	}
-
-	// </FluentSetters>
 }

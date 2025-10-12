@@ -170,39 +170,31 @@ public class RdfAnnotation {
 			return this;
 		}
 
-		// <FluentSetters>
-
 		@Override /* GENERATED - TargetedAnnotationBuilder */
 		public Builder on(String...values) {
 			super.on(values);
 			return this;
 		}
-
 		@Override /* GENERATED - TargetedAnnotationTBuilder */
 		public Builder on(Class<?>...value) {
 			super.on(value);
 			return this;
 		}
-
 		@Override /* GENERATED - TargetedAnnotationTBuilder */
 		public Builder onClass(Class<?>...value) {
 			super.onClass(value);
 			return this;
 		}
-
 		@Override /* GENERATED - TargetedAnnotationTMFBuilder */
 		public Builder on(Field...value) {
 			super.on(value);
 			return this;
 		}
-
 		@Override /* GENERATED - TargetedAnnotationTMFBuilder */
 		public Builder on(Method...value) {
 			super.on(value);
 			return this;
 		}
-
-		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
